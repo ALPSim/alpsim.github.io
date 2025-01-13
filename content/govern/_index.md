@@ -10,7 +10,7 @@ ALPS aims to house and distribute software for simulation of correlated quantum 
 
 We are currently reworking the governance of ALPS. Work on the future structure will be performed at our workshops and announced here. If you are interesteed in getting involved please let the current leadership know.
 
-## ALPS Community Steering Committee:
+## ALPS Community Steering Council:
 
 <br>
 
