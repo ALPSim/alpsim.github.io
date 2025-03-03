@@ -6,7 +6,6 @@ toc: true
 weight: 11
 ---
 
-In [1]:
 
     import numpy as np
     matplotlib inline
@@ -17,19 +16,13 @@ In [1]:
     import pyalps
     from pyalps.plot import plot
 
-    /opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/__init__.py:1318: UserWarning:  This call to matplotlib.use() has no effect because the backend has already been chosen;
-    matplotlib.use() must be called *before* pylab, matplotlib.pyplot,
-    or matplotlib.backends is imported for the first time.
-
-    warnings.warn(_use_error_msg)
-
 ## Heisenberg chain
 
 In this first section, we calculate the magnetization curve of the  $S=1/2$  Heisenberg chain:
 $$
 H=\sum\_{i}^{L}\vec{S}\_i\cdot\vec{S}\_{i+1}+h\sum\_{i=1}^LS_i^z
 $$
-where we use periodic boundary conditions, i.e. we identify $\vec{S}\_{L+1}=\vec{S}\_1$.
+where we use the periodic boundary conditions, i.e. we identify $\vec{S}\_{L+1}=\vec{S}\_1$.
 We would like to calculate the magnetization curve in the ground state. However, our choice of method here is a path-integral Quantum Monte Carlo method that operates at finite temperature. We therefore simulate a thermal ensemble and choose a temperature that is sufficiently low compared to the other energy scales of the problem.
 
 The thermal expectation value of the magnetization per site is defined as
@@ -60,8 +53,6 @@ The parameters we need to pass to the Directed Loop SSE code fall into four cate
 
 - Can you think of a guideline for choosing the temperature low enough to obtain ground-state physics?
 
-In [14]:
-
     chain_parms = []
     for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
         chain_parms.append({
@@ -88,8 +79,6 @@ In [14]:
 
 The simulation is performed using the directed loop SSE code, which is best suited to simulate a spin model (with a small number of states per site) in an external magnetic field.
 
-In [16]:
-
     # Write the input files for the ALPS codes.
     # All the filenames will begin with the prefix chain_prefix='qmc_chain'.
     input_file = pyalps.writeInputFiles(chain_prefix, chain_parms)
@@ -102,8 +91,6 @@ In [16]:
 ### Analyze the results
 
 For the data analysis, we rely on the methods available as part of the `pyalps` package, as well as the `matplotlib` library.
-
-In [17]:
 
     # Load the raw measurement data. We only load the "Magnetization Density" and not all the other
     # quantities measured by the QMC code.
@@ -118,8 +105,6 @@ In [17]:
     plt.ylabel('Magnetization $m$')
     plt.title('Quantum Heisenberg chain')
 
-
-Out[17]:
     
 ![](qmcmagchain.png)
 
@@ -139,8 +124,6 @@ Notice the difference in lattice and model parameters:
 - The model now takes two parameters J0 and J1, where J0 is the coupling along the chains and J1 the coupling on the rungs. It is important to specify both parameters, otherwise they default to 0.
 
 We keep all other parameters the same.
-
-In [15]:
 
     ladder_parms = []
     for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
@@ -168,14 +151,11 @@ In [15]:
         )
     ladder_prefix = 'qmc_ladder'
     
-In [18]:
 
     input_file = pyalps.writeInputFiles(ladder_prefix, ladder_parms)
     res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
     
     dirloop_sse qmc_ladder.in.xml --Tmin 5
-
-In [19]:
 
     data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
 
@@ -185,8 +165,6 @@ In [19]:
     plt.xlabel('Field $h$')
     plt.ylabel('Magnetization $m$')
     plt.title('Quantum Heisenberg ladder')
-
-Out[19]: 
 
 ![](qmcmagladder.png)
 
@@ -198,8 +176,6 @@ We now compare the results for the chain and the ladder. For this, we do not nee
 - What is the physical interpretation of these differences? What is their origin in the spectrum of the system?
 
 We will revisit these questions in the DMRG/MPS tutorial.
-
-In [21]:
 
     data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
     data += pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
@@ -214,7 +190,6 @@ In [21]:
     plt.ylabel('Magnetization $m$')
     plt.title('Quantum Heisenberg chain and ladder')
     plt.legend(loc=0, frameon=False)
-    Out[21]: 
 
 ![](qmcmagchainandladder.png)
 
