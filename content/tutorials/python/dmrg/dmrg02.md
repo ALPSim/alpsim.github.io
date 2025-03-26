@@ -19,11 +19,11 @@ $$
 \Delta(L) = E_1 (L) - E_0 (L)
 $$
 
-for finite system sizes and (ii) extrapolate $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of its preference for open boundary conditions somewhat more complicated than in the more usual case of periodic boundary conditions.
+for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of DMRG's preference for open boundary conditions it is somewhat more complicated than in the more usual case of periodic boundary conditions.
 
 ### Getting The Gap For Finite Systems
 
-Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, one which works always, but is not as neat, and another one, which is very clean, but does not work under all circumstances.
+Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
 
 1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described well.
 
@@ -35,7 +35,7 @@ Let us do this calculation first for the spin-1/2 chain:
 
 ##### Using parameter files
 
-In this example below, we include a line in the parameter file for the spin S=1/2 chain `spin_one_half_gap` to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap.
+In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap.
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -52,7 +52,7 @@ It is important to notice that the entanglement entropy in this example is total
 
 ##### Using Python
 
-The script `spin_one_half_gap.py` runs the same simulation as the spin-1/2 script from the DMRG-01 tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates.
+The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the DMRG-01 tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates.
 
     import pyalps
     import numpy as np
@@ -107,11 +107,11 @@ This means that we only need to change the value of Sz_total in the spin_one_hal
     J=1
     {L=32, MAXSTATES=40}
 
-You can download this file from here: `spin_one_half_triplet`.
+You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
 
 ##### Using Python
 
-The script `spin_one_half_triplet.py` runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters.
+The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters.
 
     parms = []
     for sz in [0,1]:
@@ -149,20 +149,20 @@ In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,6
 
 In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error). What does the plot of the gap versus $1/L$ look like now?
 
-Modify the file `spin_one_half_multiple` to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
+Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
 
 The case of the spin-1/2 chain is a bit frustrating, because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
 
 Let us therefore turn to a more rewarding question, what is the gap of the spin-1 antiferromagnetic Heisenberg chain?
 
-Here, there is a nasty twist, which we will at the moment only state and act on, but explain only later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
+Here, there is a nasty twist, which we will only state and perform at the moment, but explain later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
 
 Assume you have $\Delta (L)$ with machine precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ with $D=300$ states each and 5 sweeps.
 
 As the effects of the open ends will decrease as $1/L$, it always makes sense to first plot the gaps $\Delta (L)$ versus $1/L$, as was already done in the spin-1/2 case. Produce such a plot.
 
-What you see, is a curve that is quite straight for small L and then starts bending upward. What gap would you obtain if you extrapolate the linear part of the curve naively? (This question is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.) Is it over- or underestimated?
+What you see is a curve that is quite straight for small L and then starts bending upward. What gap would you obtain if you extrapolate the linear part of the curve naively? (This question is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.) Is it over- or underestimated?
 
 What gap do you read off if you take the longest chain you have? Is it over- or underestimated?
 
@@ -182,4 +182,4 @@ $$
 
 and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$. How close do you get to the result $\Delta=0.41052$?
 
-For those, that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted and start worrying: why is the finite gap the right one and the vanishing gap the wrong one? Is this a physics lottery? In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted and start worrying: why is the finite gap the right one and the vanishing gap the wrong one? Is this a physics lottery? In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
