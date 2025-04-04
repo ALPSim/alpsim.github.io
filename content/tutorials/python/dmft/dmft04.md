@@ -9,9 +9,9 @@ toc: true
 
 Mott transitions are metal insulator transitions (MIT) that occur in many materials, e.g. transition metal compounds, as a function of pressure or doping. The review by Imada et al. gives an excellent introduction to the subject and mentions $V_2O_3$ and the organics as typical examples.
 
-MIT are easily investigated by DMFT as the relevant physics is essentially local (or k-independent): At half filling the MIT can be modeled by a self energy with a pole at $\omega=0$ which splits the noninteracting band into an upper and a lower Hubbard band. In this context it is instructive to suppress antiferromagnetic long range order and enforce a paramagnetic solution in the DMFT simulation, to mimic the paramagnetic insulating phase. For this the up and down spin of the Green's functions are symmetrized (parameter SYMMETRIZATION = 1;).
+MIT are easily investigated by DMFT as the relevant physics is essentially local (or k-independent): At half filling the MIT can be modeled by a self energy with a pole at $\omega=0$ which splits the noninteracting band into an upper and a lower Hubbard band. In this context it is instructive to suppress antiferromagnetic long range order and enforce a paramagnetic solution in the DMFT simulation, to mimic the paramagnetic insulating phase. For this the up and down spin of the Green's functions are symmetrized (parameter `SYMMETRIZATION = 1;`).
 
-In order to run the simulations in python type or use `tutorial4a.py`:
+In order to run the simulations in python use [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py):
 
 ```    
 import pyalps
@@ -82,7 +82,7 @@ plt.show()
 
 You should observe that at small $U$ you find metallic solution and an insulating solution at large $U$, at fixed $\beta$. The largest value of $U$ is deep within the insulating phase.
 
-The convergence may be checked by `tutorial4b.py`:
+The convergence may be checked by [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py):
 
 ```
 import pyalps
@@ -120,10 +120,4 @@ for sim in grouped:
 
 plt.show()
 ```
-
-Tutorial by Emanuel - Please don't hesitate to ask!
-
-## Contributors
-
-- Emanuel Gull
 

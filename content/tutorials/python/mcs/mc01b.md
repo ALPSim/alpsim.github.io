@@ -14,7 +14,7 @@ As an example, we will implement a classical Monte Carlo simulation implemented 
 
 ### Preparing and running the simulation from the command line
 
-The parameter file `parm1a`:
+The parameter file <a href="../codes/mc-01b-equilibration-and-convergence/parm1a" download>`parm1a`</a>:
 
     LATTICE="square lattice"
     T=2.269186
@@ -32,7 +32,7 @@ We first convert the input parameters to XML and then run the application `spinm
 
 ### Preparing and running the simulation using Python
 
-The following describes what is going on within the script file `tutorial1a.py`.
+The following describes what is going on within the script file <a href="../codes/mc-01b-equilibration-and-convergence/tutorial1a.py" download>`tutorial1a.py`</a>.
 The headers:
 
     import pyalps
@@ -103,6 +103,6 @@ Implementation in Python is straightforward.
 
 - Matthias Troyer
 - Ping Nang Ma
-
+- Abdullah "Amina" Al-Harbi
 
 

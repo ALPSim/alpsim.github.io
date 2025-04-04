@@ -37,7 +37,7 @@ What you should see, is a power law on short distances, but a faster (in fact, e
 
 #### Using parameter files
 
-The following parameter file `spin_one_half` will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric.
+The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half) will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric.
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -58,7 +58,7 @@ The following parameter file `spin_one_half` will setup this run for us (once ag
 
 #### Using Python
 
-The script `spin_one_half.py` sets up three runs with different numbers of states $D$ and loads the results.
+The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) sets up three runs with different numbers of states $D$ and loads the results.
 
     import pyalps
     import numpy as np
@@ -131,7 +131,7 @@ In fact, the calculation of correlation lengths is much harder to converge than 
 
 #### Using parameter files
 
-The parameter file `spin_one` looks much like the one for the previous example, but replacing the lattice and the model as follows:
+The parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one) looks much like the one for the previous example, but replacing the lattice and the model as follows:
 
     LATTICE_LIBRARY="my_lattices.xml"
     LATTICE="open chain lattice with special edges 32"
@@ -154,7 +154,7 @@ The parameter file `spin_one` looks much like the one for the previous example, 
 
 #### Using Python
 
-The main difference of the script `spin_one.py` with respect to the previous one is the definition of lattice and model.
+The main difference of the script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) with respect to the previous one is the definition of lattice and model.
 
     parms = []
     L = 32
