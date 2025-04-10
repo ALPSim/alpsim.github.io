@@ -153,7 +153,7 @@ The first example consists of setting up a simulation for a spin-1/2 Heisenberg 
 
 ###### Using parameter files
 
-The parameter file `spin_one_half` sets the most important parameters.
+The parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half.py) sets the most important parameters.
 
     LATTICE="open chain lattice"
     MODEL="spin" 
@@ -176,7 +176,7 @@ DMRG will perform four sweeps, (four half-sweps from left to right and four half
 
 ###### Using Python
 
-To set up and run the simulation in Python we use the script `spin_one_half.py`. The first parts of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application.
+To set up and run the simulation in Python we use the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half.py). The first parts of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application.
 
     import pyalps
     import numpy as np
@@ -234,7 +234,7 @@ allowing us to look at how the DMRG algorithm converged to the final results.
 
 ###### Using parameter files
 
-We now proceed to illustrate how to setup several runs in a single parameter file `spin_one_half_multiple`. We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
+We now proceed to illustrate how to setup several runs in a single parameter file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple). We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
 
     LATTICE="open chain lattice"
     CONSERVED_QUANTUMNUMBERS="N,Sz"
@@ -257,7 +257,7 @@ In this case, we will find five output files `spin_one_half_multiple.task#.out.x
 
 ###### Using Python
 
-The script `spin_one_half_multiple.py` sets up three Python dictionaries of parameters with differing MAXSTATES
+The script [`spin_one_half_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple.py) sets up three Python dictionaries of parameters with differing MAXSTATES
 
     parms= []
     for m in [20,40,60]:
@@ -281,7 +281,7 @@ After writing parameter files, running the dmrg application and loading the resu
 
 #### The one dimensional S=1 Heisenberg chain
 
-The S=1 Heisenberg chain will require some special treatment due to the open boundary conditions. As explained above, we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script `build_lattice.py` that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing
+The S=1 Heisenberg chain will require some special treatment due to the open boundary conditions. As explained above, we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing
 
     $ alpspython build_lattice.py 6
 
@@ -316,7 +316,7 @@ To run a lattice with 32 sites we shall then type
 
 ##### Using parameter files
 
-Let us see how the final parameter file `spin_one` should look like:
+Let us see how the final parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one) should look like:
 
     LATTICE_LIBRARY="my_lattice.xml"
     LATTICE="open chain lattice with special edges"
@@ -330,7 +330,7 @@ Let us see how the final parameter file `spin_one` should look like:
     NUMBER_EIGENVALUES=1
     {MAXSTATES=100}
 
-Clearly, it will result cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler one is to define all the lattices we need in a lattice library. We have included a `my_lattices.xml` file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
+Clearly, it will result cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler one is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
 
     LATTICE_LIBRARY="my_lattices.xml"
     LATTICE="open chain lattice with special edges 32"
@@ -339,7 +339,7 @@ where we have included the lattice size in the name.
 
 ##### Using Python
 
-The script `spin_one.py` defines the parameters in a Python dictionary.
+The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one.py) defines the parameters in a Python dictionary.
 
     parms = [ { 
         'LATTICE_LIBRARY'           : 'my_lattice.xml',
@@ -361,7 +361,7 @@ Apart from parameter and file name changes, it is the same as the `spin_one_half
 
 ###### Using parameter files
 
-Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file as follows:
+Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named [`spin_one_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple.py) as follows:
 
     LATTICE_LIBRARY="my_lattices.xml"
     LATTICE="open chain lattice with special edges 32"
@@ -379,7 +379,7 @@ Same as for the spin S=1/2 case, we can now setup multiple runs in a single para
 
 ###### Using Python
 
-The same runs can be set up with the script `spin_one_multiple.py`, which can be obtained from the corresponding spin 1/2 script by replacing the parameters.
+The same runs can be set up with the script [`spin_one_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple.py), which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
 
 ### Ground State Energies Per Site (Bond)
 
