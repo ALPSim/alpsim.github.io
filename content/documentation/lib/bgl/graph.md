@@ -153,7 +153,7 @@ As a first example, we take two uncolored graphs with 4 vertices and 5 edges. We
 
 [cg_simple]
 
-The output shows that the two graphs are isomorphic. In this simple example, we can construct the isomorphism by hand. The vertices with valance two and the vertices with valance three must map onto each other.
+The output shows that the two graphs are isomorphic. In this simple example, we can construct the isomorphism by hand. The vertices with valence two and the vertices with valence three must map onto each other.
 
     The two graphs are isomorphic.
 
