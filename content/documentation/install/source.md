@@ -8,53 +8,73 @@ cascade:
     type: docs
 ---
 
+For most cases, it is preferred to [install ALPS from Binaries](./binary.md). However, for more user control and configuration, installing from Sources could be a better approach. 
 {{% steps %}}
 
-### Prerequisites: HPC libraries and tools
-Please make sure to have the following third-party software installed and available:
+### Install Required Dependencies
 
-  * Third-Party Dependencies
-    - MPI
-    - HDF5 >= 1.10.0
-    - BLAS
-    - CMake >= 2.8
-    - Python >= 3.9 (if Python bindings are enabled)
-    - Boost sources >= 1.68
-      - Boost 1.87.0 is needed if you have numpy 2.0 and newer or Python 3.13 and newer
+ALPS relies on a handful of external libraries. 
+Choose **one** MPI and **one** BLAS provider that fit your system:
 
-  These packages are external to ALPS. Their installation will depend on your computer. MPI is the Message Passing Interface, several standard implementations exist, including [OpenMPI](https://www.open-mpi.org/) and [MPICH](https://www.mpich.org/).
-  High performance computers will have proprietary MPI installations, and most clusters provide a version for all users. [HDF5](https://www.hdfgroup.org/solutions/hdf5/) is a library for binary data storage. 
-  More information on BLAS, the Basic Linear Algebra System, can be found on [netlib.org](netlib.org). However, most computers provide highly optimized versions tuned for their respective hardware. 
-  Do NOT install the reference BLAS from netlib but instead have a look at a generic high-performance implementation from [OpenBLAS](https://www.openblas.net/) and the hardware-specific vendor libraries 
-  (among many others: [Apple](https://developer.apple.com/documentation/accelerate/blas/), [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html),
-  [IBM ESSL](https://www.ibm.com/docs/en/essl/6.2?topic=whats-new)). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
+| Dependency | Minimum version | Packages
+|----------|--------------------|---------------------------|
+| HDF5     | 1.10.0 | `libhdf5-dev`|
+| CMake | 2.8 | `cmake`|
+| C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` |
+| Boost | 1.76 <br>*(1.87 if NumPy >= 2.0 / Python >= 3.13)* | see below |
+| MPI | OpenMPI 4.0 **or** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev`|
+| BLAS | 0.3 | `libopenblas-dev`
+| Python | 3.9 | [python.org](https://www.python.org/) |
 
-### Prerequisites: Python Libraries
-Please make sure to have python and the following dependencies:
 
-   * Third-Party Python Dependencies
-     - numpy
-     - scipy
-
-  These are third-party packages that you can install using your favorite python package manager, such as pip:
+<br>
+      
+<details>
+<summary><strong> Ubuntu / Debian / WSL</strong> </summary>
+ 
+ 
   ```ShellSession
-  $ pip install numpy scipy
-  ```
+$ sudo-apt update
+$ sudo apt install build-essential cmake \
+                   libhdf5-dev \
+                   libopenblas-dev \
+                   libopenmpi-dev openmpi-bin # or: libpich-dev mpich
 
-  The minimal supported python version is 3.9 (any minor version up to 3.12.x should work). Note that some installations use pip3 instead of pip, for help on python package installation see https://pypi.org/project/pip/ .
+# download and install Boost v1.81.0:
+$ wget https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
+$ tar -xzf boost_1_81_0.tar.gz
 
-### Prerequisites: Boost sources
+# install Python libs:
+$ pip install numpy scipy # python libraries
+```
+</details>
+<details>
+<summary><strong> macOS (via Homebrew)</strong> </summary>
 
-Download and unpack boost library. The following will download and unpack Boost `v1.81.0`
-  ```ShellSession
-  $ wget https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
-  $ tar -xzf boost_1_81_0.tar.gz
-  ```
+ ```ShellSession
+$ brew update
+$ brew install cmake hdf5 \
+               openblas open-mpi # or: mpich
 
-We have tested building `ALPS` with `Boost` versions `1.76.0` through `1.81.0` (please refere to the [build notes](#build-notes) for the combination of supported `boost` versions with different compilers and Python version)
+# download and install Boost:
+$ brew install boost
+
+# install Python libs:
+$ pip3 install numpy scipy 
+```
+</details>
+
+### Verify Dependencies
+
+ ```ShellSession
+$ g++ -version #  must be >= 10.5.0
+$ cmake --version # must be >= 3.18
+$ mpirun --version # OpenMPI 4.0 or MPICH 4
+```
 
 ### Download and Build
-The following instructions will download and build `ALPS` (replace /path/to/install/directory with the directory where you'd like to install the code):
+We can now proceed to download and build the `ALPS` library. <br>
+In the snippet below, please replace `/path/to/install/directory` with the actual directory on your system you want ALPS to be installed.
 
   ```ShellSession
   $ git clone https://github.com/alpsim/ALPS alps-src
@@ -67,11 +87,21 @@ The following instructions will download and build `ALPS` (replace /path/to/inst
   $ cmake --build alps-build -t test
   ```
 
+<details>
+<summary><strong>Troubleshooting</strong></summary>
+
+* **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), [IBM ESSL](https://www.ibm.com/docs/en/essl/6.2?topic=whats-new), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
+* **Python errors** <br> Ensure you are using Python 3.9 at a minimum. Note: some installations (e.g. macOS) use `pip3` instead of pip. Refer to the [python website](https://www.python.org/) for support in installing the correct version.
+* **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
+* **Boost errors** <br > We have tested building `ALPS` with `Boost` versions `1.76.0` through `1.81.0` (please refere to the [build notes](#build-notes) for the combination of supported `boost` versions with different compilers and Python version)
+
+</details>
+
 #### Build notes
 
 {{% tabs items="Linux,Mac" %}}
 {{% tab %}}
-The following combinations of `Boost`, Python and c++ compiler have been tested:
+The following combinations of `Boost`, Python and the C++ compiler have been tested:
   - GCC 10.5.0, Python 3.9.19 and `Boost` 1.76.0
   - GCC 11.4.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
   - GCC 12.3.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
@@ -80,8 +110,8 @@ The following combinations of `Boost`, Python and c++ compiler have been tested:
   - Clang 15.0.7, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
 {{% /tab %}}
 {{% tab %}}
-`ALPS` has been tested on ARM-based MacOS using both default compiler and `Homebrew` gcc compiler with `Boost` 1.86.0.
-On MacOS >=14.6 in order to succesfully build `ALPS` using Homebrew gcc compiler, the following environment variable have to be set:
+ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0).
+On MacOS >=14.6 in order to succesfully build ALPS using Homebrew gcc compiler, the following environment variable have to be set:
 
 ```ShellSession
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
@@ -98,8 +128,8 @@ If you have a non-standard installation location of the dependent packages insta
 
 ***
 
-After successfully building the code, you will need to install it. The install location is specified with `-DCMAKE_INSTALL_PREFIX=/path/to/install/directory` as a cmake command during configuration or can be 
-changed by explicitly providing a new installation path to the `--prefix` parameter during the installation phase (see [cmake manual](https://cmake.org/cmake/help/latest/manual/cmake.1.html#cmdoption-cmake--install-0)).
+After successfully building the code, you will need to install it. The install location is specified with `-DCMAKE_INSTALL_PREFIX=/path/to/install/directory` as a cmake command during configuration. Alternatively, it can be changed by explicitly providing a new installation path to the `--prefix` parameter during the installation phase (see [cmake manual](https://cmake.org/cmake/help/latest/manual/cmake.1.html#cmdoption-cmake--install-0)).
+<br>
 To install the code run:
 
   ```ShellSession
