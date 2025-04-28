@@ -34,7 +34,7 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
  
  
   ```ShellSession
-$ sudo-apt update
+$ sudo apt update
 $ sudo apt install build-essential cmake \
                    libhdf5-dev \
                    libopenblas-dev \
@@ -45,7 +45,9 @@ $ wget https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
 $ tar -xzf boost_1_81_0.tar.gz
 
 # install Python libs:
-$ pip install numpy scipy # python libraries
+$ pip install numpy scipy # python libraries 
+# or 
+$ python3 -m pip install numpy scipy
 ```
 </details>
 <details>
@@ -67,7 +69,7 @@ $ pip3 install numpy scipy
 ### Verify Dependencies
 
  ```ShellSession
-$ g++ -version #  must be >= 10.5.0
+$ gcc -v #  must be >= 10.5.0
 $ cmake --version # must be >= 3.18
 $ mpirun --version # OpenMPI 4.0 or MPICH 4
 ```
@@ -86,6 +88,12 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
   $ cmake --build alps-build -j 8
   $ cmake --build alps-build -t test
   ```
+
+### Video Walkthrough
+<br>
+
+{{< youtube id="MDjmNiEZFT4" >}}
+
 
 <details>
 <summary><strong>Troubleshooting</strong></summary>
