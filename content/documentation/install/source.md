@@ -8,7 +8,7 @@ cascade:
     type: docs
 ---
 
-For most cases, it is preferred to [install ALPS from Binaries](./binary.md). However, for more user control and configuration, installing from Sources could be a better approach. 
+For most cases, it is preferred to [install ALPS from Binaries](../binary). However, for more user control and configuration, installing from Sources could be a better approach. 
 {{% steps %}}
 
 ### Install Required Dependencies
