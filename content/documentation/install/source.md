@@ -92,7 +92,7 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 ### Video Walkthrough
 <br>
 
-{{< youtube id="MDjmNiEZFT4" >}}
+{{< youtube id="OHQGfDDaRMk" >}}
 
 
 <details>
