@@ -27,7 +27,7 @@ We might also be able to cover some of your local expenses (we suggest you keep 
 
 The workshop will begin in the morning of the 24th, and end in the afternoon of the 26th. We may arrange for a small reception on the evening of the 23rd. We also plan a “banquet” at a local sidreria.  Updates forthcoming. 
 
-Tentative talks:
+Tentative list of talks:
 
   -Fabien Alet: Measuring the correlation density matrix with quantum Monte Carlo
   
