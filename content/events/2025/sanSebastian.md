@@ -25,9 +25,23 @@ We might also be able to cover some of your local expenses (we suggest you keep 
 
 ## Meeting Schedule
 
-The workshop will begin in the morning of the 24th, and end in the afternoon of the 26th. We may arrange for a small reception on the evening of the 23rd. We also plan a “banquet” at a local sidreria.
+The workshop will begin in the morning of the 24th, and end in the afternoon of the 26th. We may arrange for a small reception on the evening of the 23rd. We also plan a “banquet” at a local sidreria.  Updates forthcoming. 
 
-We will post detailed meeting schedule once we know talk topics from all participants.
+Tentative talks:
+
+  -Fabien Alet: Measuring the correlation density matrix with quantum Monte Carlo
+  
+  -Synge Todo: Markov chain Monte Carlo in tensor network representation
+ 
+  -Markus Wallenberger: Lines of communication in scientific software
+  
+  -Herbert Fotso: Characterizing the nonequilibrium dynamics of disordered and correlated many-particle systems
+  
+  -Guy Cohen:Inchworm Monte Carlo: recent advances and applications
+  
+  -Simon Trebst: Quantum Computational Physics (or how we can harness today’s quantum computers for “quantum-on-quantum computational physics simulations
+  
+  -Hiroshi Shinaoka: Dimensionality reduction technologies for quantum field theories
 
 ## Before the Meeting
 
