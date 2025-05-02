@@ -38,10 +38,14 @@ Tentative list of talks:
   -Herbert Fotso: Characterizing the nonequilibrium dynamics of disordered and correlated many-particle systems
   
   -Guy Cohen:Inchworm Monte Carlo: recent advances and applications
+
+  - Adrian Del MAestro: Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
   
   -Simon Trebst: Quantum Computational Physics (or how we can harness today’s quantum computers for “quantum-on-quantum computational physics simulations
   
   -Hiroshi Shinaoka: Dimensionality reduction technologies for quantum field theories
+
+ -Adrian Feiguin: Time-dependent scattering approach to non-equilibrium spectroscopies.
 
 ## Before the Meeting
 
@@ -63,6 +67,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 - Adrian Feiguin
 - Hebert Fotso
 - Emanuel Gull
+- Guy Cohen
 - Andreas Lauchli 
 - Thomas Maier 
 - Vito Scarola
