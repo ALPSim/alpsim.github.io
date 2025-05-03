@@ -62,20 +62,20 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 
 ## Meeting Participants (quasi-confirmed)
 
-- Fabien Alet
-- Adrian Del Maestro
-- Adrian Feiguin
-- Hebert Fotso
-- Emanuel Gull
-- Guy Cohen
-- Andreas Lauchli 
-- Thomas Maier 
-- Vito Scarola
-- Hiroshi Shinaoka
-- Synge Todo
-- Simon Trebst
-- Matthias Troyer
-- Markus Wallerberger
+- Fabien Alet (Laboratoire de Physique Théorique, Toulouse)
+- Guy Cohen (Tel Aviv University)
+- Adrian Del Maestro (University of Tennessee, Knoxville)
+- Adrian Feiguin (Northeastern University, USA)
+- Hebert Fotso (SUNY Buffalo)
+- Emanuel Gull (University of Michigan, Ann Arbor)
+- Andreas Lauchli (Paul Scherrer Institute, Switzerland)
+- Thomas Maier (Oak Ridge National Lab)
+- Vito Scarola (Virginia Tech)
+- Hiroshi Shinaoka (Saitama University, Japan)
+- Synge Todo (University of Tokyo)
+- Simon Trebst (University of Cologne)
+- Matthias Troyer (Microsoft)
+- Markus Wallerberger (TU Wien)
 
 ## Travel Info and Location Trivia
 
