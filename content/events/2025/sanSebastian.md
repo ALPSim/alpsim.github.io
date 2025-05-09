@@ -39,13 +39,15 @@ Tentative list of talks:
   
   -Guy Cohen:Inchworm Monte Carlo: recent advances and applications
 
-  - Adrian Del MAestro: Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
+  -Adrian Del MAestro: Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
   
   -Simon Trebst: Quantum Computational Physics (or how we can harness today’s quantum computers for “quantum-on-quantum computational physics simulations
   
   -Hiroshi Shinaoka: Dimensionality reduction technologies for quantum field theories
 
  -Adrian Feiguin: Time-dependent scattering approach to non-equilibrium spectroscopies.
+
+ -Lode Polet (TBA)
 
 ## Before the Meeting
 
@@ -60,7 +62,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 - Staying at the Oralain or making own arrangements:
 - Sharing the room with:
 
-## Meeting Participants (quasi-confirmed)
+## Meeting Participants (confirmed)
 
 - Fabien Alet (Laboratoire de Physique Théorique, Toulouse)
 - Guy Cohen (Tel Aviv University)
@@ -70,6 +72,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 - Emanuel Gull (University of Michigan, Ann Arbor)
 - Andreas Lauchli (Paul Scherrer Institute, Switzerland)
 - Thomas Maier (Oak Ridge National Lab)
+- Lode Polet (Ludwig-Maximillians University, Munich)
 - Vito Scarola (Virginia Tech)
 - Hiroshi Shinaoka (Saitama University, Japan)
 - Synge Todo (University of Tokyo)
