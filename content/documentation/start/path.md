@@ -4,6 +4,8 @@ description: "How to use ALPS"
 weight: 3
 ---
 
+## Setting the Path for Executables in Binary Installation
+
 Once `pyalps` is successfully installed through the binary installation, we can start to use it by importing it into `python`. However, the system might not know the path to the `python` command. Here is an example of how to set the correct path in the `.bash_profile` file for a Mac system. For a Linux system, the corresponding file is `.bashrc`.
 
 ### Check your `python` installation directory with an `ls` command in your terminal.
@@ -47,7 +49,9 @@ You can now run any `Python` files. Your `pyalps` library is probably installed 
 
 Use `ls` in the above or a similar directory to check if the package is correctly installed.
 
+## Setting the Path for Executables in Source Installation
+If you have done an ALPS source installation, the program executables are located at the /bin folder of your installed ALPS directory. The following path should be set in the .bash_profile for Mac or .bashrc for Linux systems.
 
-
+`export PATH="$PATH:<your installed ALPS directory>/bin"`
 
 
