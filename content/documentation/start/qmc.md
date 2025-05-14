@@ -1,5 +1,5 @@
 ---
-title: Running QMC simulation
+title: Quantum Monte Carlo Simulations
 linkTitle: Quantum Monte Carlo
 description: "How to use ALPS"
 weight: 5

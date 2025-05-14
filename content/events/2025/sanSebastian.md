@@ -71,6 +71,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 - Hebert Fotso (SUNY Buffalo)
 - Emanuel Gull (University of Michigan, Ann Arbor)
 - Andreas Lauchli (Paul Scherrer Institute, Switzerland)
+- Fei Lin (Virginia Tech)
 - Thomas Maier (Oak Ridge National Lab)
 - Lode Polet (Ludwig-Maximillians University, Munich)
 - Vito Scarola (Virginia Tech)

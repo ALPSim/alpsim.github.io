@@ -1,6 +1,6 @@
 ---
 linkTitle: Classical Monte Carlo
-title: Running Classical Monte Carlo
+title: Classical Monte Carlo Simulations
 description: "How to use ALPS"
 weight: 4
 math: true

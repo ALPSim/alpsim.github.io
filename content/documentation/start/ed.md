@@ -1,5 +1,5 @@
 ---
-title: Running ED simulation
+title: Exact Diagonaliztion
 linkTitle: Exact Diagonaliztion
 description: "How to use ALPS"
 weight: 6

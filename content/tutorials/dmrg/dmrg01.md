@@ -20,7 +20,7 @@ The reason why we are choosing these two models, which you may already know from
 The ground state of the spin-1/2 chain can be constructed exactly by the Bethe ansatz; we therefore know its ground state energy exactly. In the thermodynamic limit $L\rightarrow\infty$ the energy per site is given by
 
 $$
-E_0 = 1/4 - \ln 2 = -0,4431471805599... 
+E_0 = 1/4 - \ln 2 = -0.4431471805599... 
 $$
 
 Ground state energies as such are of limited interest if not compared to other energies. But this one can serve as a beautiful benchmark of the DMRG method. Of more interest is whether the ground state is separated from the excited states by an energy difference that survives also in the thermodynamic limit, i.e. whether the *gap* is vanishing or not. For the spin-1/2 chain, the gap is 0.
@@ -65,7 +65,7 @@ The spin-1 chain is therefore a prime example for a *non-critical* quantum syste
 
 ### Plan Of The Tutorial
 
-What we want to achieve in the following tutorial, is to be able to calculate all the above quantities on our own using ALPS DMRG while learning about the principal pitfalls in this numerical project.
+What we want to achieve in the following tutorial, is to be able to calculate all the above quantities using ALPS DMRG while learning about the principal pitfalls in this numerical project.
 
 ### Vive la difference ...
 
@@ -75,22 +75,22 @@ The most important difference to other numerical methods is that DMRG prefers op
 
 ### General Remarks
 
-Before we start, let us briefly discuss the inner logic of the DMRG algorithm without discussing it in full detail. Given a one-dimensional quantum system with local state spaces of dimension $d$, where $d=2S+1$ for spins of length $S$, the Hilbert space dimension explodes exponentially as $d^L$ with system size $L$. Exact diagonalization achieves exact results in this exponentially large Hilbert space, at the price of small system sizes. Quantum Monte Carlo gives approximate results by stochastically sampling this large space, reaching much larger system sizes. The density-matrix renormalization group (DMRG) tries yet another approach, namely to identify very small subspaces of the exponentially large Hilbert space which are hoped to contain good, very good, even excellent approximations to the states of interest such as the ground state.
+Before we start, let us briefly discuss the inner logic of the DMRG algorithm without discussing it in full detail. Given a one-dimensional quantum system with local state spaces of dimension $d$, where $d=2S+1$ for spins of magnitude $S$, the Hilbert space dimension increases exponentially as $d^L$ with system size $L$. Exact diagonalization achieves exact results in this exponentially large Hilbert space, at the price of small system sizes. Quantum Monte Carlo gives approximate results by stochastically sampling this large space, reaching much larger system sizes. The density-matrix renormalization group (DMRG) tries yet another approach, namely to identify very small subspaces of size $D$ of the exponentially large Hilbert space which are hoped to contain good, very good, even excellent approximations to the states of interest such as the ground state.
 
-A first key control parameter is therefore $D$, which controls the number of states in the subspace. DMRG is monotonic in this parameter: the larger it is, the larger is the subspace and the better the approximation can be. There is also an exact limit: if $D\rightarrow d^L$, no states are discarded and the solution would be exact. This is however of no practical relevance; if such a large number of states could be achieved on the computer, exact diagonalization is a superior alternative. A remark on notation: given DMRG history, $D$ comes under various names, like *matrix dimension* or *number of block states*.
+A first key control parameter is, therefore, $D$, called *matrix dimension* or *number of block states*. The parameter $D$ controls the number of states in the subspace. DMRG is monotonic in this parameter: the larger it is, the larger the subspace is and the better the approximation can be. There is also an exact limit: if $D\rightarrow d^L$, no states are discarded and the solution would be exact. This is, however, of no practical relevance; if such a large number of states could be achieved on the computer, exact diagonalization would be a superior alternative. 
 
-The second key control parameter is of course system size $L$.
+The second key control parameter is of course the system size $L$.
 
 The third control parameter(s) can only be understood by looking even closer at the DMRG algorithm. In order to find the best approximation to a state, DMRG proceeds in two steps:
 
 1. In a first step (so-called *infinite-system* DMRG) the algorithm tries to find good subspaces by iteratively analyzing chains of length 2, 4, 6, until the desired system size $L$ is reached. The procedure consists of splitting the chain in every iteration and insert two new sites at the center; the name comes from the fact that this procedure can of course be carried on infinitely, to take $L$ to infinity; but don't expect very meaningful results as you approach infinity! A second remark is that this procedure favours chains of even length for DMRG treatment.
-2. In a second step (so-called *finite-system* DMRG) DMRG deals with the fact that the subspace selection for shorter chains could not yet take into account all the quantum fluctuations and correlations that would be present in the chain of final length $L$. What the method does, is to go through a series of further iterations to improve the quality of the subspaces. One such iteration looking at all sites of a chain is referred to as a *sweep* in DMRG. The number of sweeps is the last important control parameter: if it is chosen to small, the precision reachable for a given $D$ is not achieved; if it is chosen too large, calculational effort is wasted, although it is of course always good to err on the safe side.
+2. In a second step (so-called *finite-system* DMRG) DMRG deals with the fact that the subspace selection for shorter chains could not yet take into account all the quantum fluctuations and correlations that would be present in the chain of final length $L$. What the method does, is to go through a series of further iterations to improve the quality of the subspaces. One such iteration visiting all sites of a chain is referred to as a *sweep* in DMRG. The number of sweeps is the last important control parameter: if it is too small, the precision of the results for a given $D$ is not achieved; if it is too large, the calculational effort could be wasted, although it is of course always good to err on the safe side.
 
-In a last remark, let us consider the *truncation error*, which is a good indicator of the accuracy achieved by a DMRG run. In a simplified perspective, at each point in the algorithm DMRG makes one step in the direction of exponential growth of state space and then asks how much accuracy can be retained if not allowing that step, by means of an analysis of a density matrix regarding the distribution of weights (eigenvalues) corresponding to its eigenstates. The approximations of DMRG are then reflected in the fact that some statistical weight has to be discarded, which is the so-called truncation error. In many DMRG applications, it can be as small as $10^{-12}$, showing that the approximations made by DMRG are extremely light, which is the reason for the enormous success of the method. For the purpose of the tutorial it is important to know that the error in local quantities (energies, magnetizations, ...) is roughly proportional to (but usually quite a bit larger than) the truncation error, provided we are converged in the number of sweeps.
+In a last remark, let us consider the *truncation error*, which is a good indicator of the accuracy achieved by a DMRG run. In a simplified perspective, at each point in the algorithm DMRG makes one step in the direction of exponential growth of state space and then asks how much accuracy can be retained if not allowing that step, by means of an analysis of a density matrix regarding the distribution of weights (eigenvalues) corresponding to its eigenstates. The approximations of DMRG are then reflected in the fact that some statistical weight has to be discarded, which is the so-called truncation error. In many DMRG applications, it can be as small as $10^{-12}$, showing that the approximations made by DMRG are extremely light, which is the reason for the enormous success of the method. For the purpose of the tutorial it is important to know that the error in local quantities (energies, magnetizations, ...) is roughly proportional to (but usually quite a bit larger than) the truncation error, provided that the number of sweeps is large enough.
 
 ### The ALPS DMRG Code and Its Control Parameters
 
-Besides inputs such as the Hamiltonian and lattice geometry, the DMRG simulation requires a set of specific control parameters. Some of these are listed below. We refer the user to the DMRG reference page for further details.
+Besides inputs such as the Hamiltonian and lattice geometry, the DMRG simulation requires a set of specific control parameters. Some of these are listed below. We refer the users to the DMRG reference page for further details.
 
 #### DMRG-specific parameters
 
@@ -113,25 +113,25 @@ Maximum number of DMRG states kept. The user may choose to specify either STATES
 Constant number of DMRG states kept for all sweeps.
 
 **TRUNCATION_ERROR** 
-The user can choose to set the tolerance for the simulation, instead of the number of states. The program will automagically determine how many states to keep in order to satisfy this tolerance. Care must be taken, since this could lead to an uncontrollable growth in the basis size, and a crash as a consequence. It is therefore advisable to also specify the maximum number of states as a constraint, using either MAXSTATES or NUMSTATES, as explained before.
+Users can choose to set the tolerance for the simulation, instead of the number of states. The program will automatically determine how many states to keep in order to satisfy this tolerance. Care must be taken, since this could lead to an uncontrollable growth in the basis size, and a crash as a consequence. It is therefore advisable to also specify the maximum number of states as a constraint, using either MAXSTATES or NUMSTATES, as explained above.
 
 **LANCZOS_TOLERANCE** 
-Tolerance for the diagonalization (Davidson/Lanczos) piece of the code. the default value is 10^-7.
+Tolerance for the diagonalization (Davidson/Lanczos) part of the code. the default value is 10^-7.
 
 **CONSERVED_QUANTUMNUMBERS**
-Quantum numbers conserved by the model of interest. They will be used in the code in order to reduce matrices in block form. If no value is specified for a particular quantum number, the program will work in the grand canonical. For instance in spin chains if you do not declare Sz_total, the program will run using a Hilbert space with dim=2^N states. Running in the "canonical" (by setting Sz_total=0, for instance) will improve performance considerably by working in a subspace with a reduced dimension. For an example of how to do this, take a look at the parms file included with the dmrg code.
+Quantum numbers conserved by the model of interest. They will be used in the code in order to reduce matrices into block forms. If no value is specified for a particular quantum number, the program will work in the grand canonical ensemble. For instance, for spin chains if you do not specify Sz_total, the program will use a Hilbert space with dim=2^N states. Running in the "canonical" (by setting Sz_total=0, for instance) will improve performance considerably by working in a subspace with the reduced dimension. For an example of how to do this, take a look at the parms file included with the dmrg code.
 
 #### How to choose the right parameters
 
-It is not recommendable to use the default input values. DMRG convergence is strongly affected by the number of states used in the warmup, the number of sweeps, and the maximum number of states kept. Good practice involves looking at the convergence of the ground-state energy and truncation error as a function of the number of states. This will indicate an optimal number of states to be kept in order to maintain the errors below certain tolerance.
+Default input values are not recommended. DMRG convergence is strongly affected by the number of states used in the warmup, the number of sweeps, and the maximum number of states kept for each iteration. It is a good practice to look at the convergence of the ground-state energy and truncation error as a function of the number of states. This will indicate an optimal number of states to be kept in order to maintain the errors below a certain tolerance.
 
-In order to determine if enough sweeps have been performed, it is recommendable to look at the spatial distribution of the correlations, or local quantities such as the Sz projection of the spin, or the particle density. For instance, in a model that is symmetric under reflections, we should expect that these observables will also be symmetric. Another quantity that should be symmetric is the entanglement entropy. If this behavior is not reflected in the results, it is likely that this is due to running not enough sweeps (another plausible scenario is phase separation).
+In order to determine if enough sweeps have been performed, one could look at the spatial distribution of the correlations, or local quantities such as the spin magnetication, or the particle density. For instance, in a model that is symmetric under reflections, we should expect that these observables will also be symmetric. Another quantity that should be symmetric is the entanglement entropy. If this behavior is not reflected in the results, it is likely that this is due to not having enough sweeps in the calculation (another plausible scenario is phase separation).
 
-If the Hamiltonian preserves quantum numbers, such as Sz or N, it is then possible to fix these values to run the simulation in a subspace of reduced dimension. This results in much faster runs, and optimal memory usage.
+If the Hamiltonian preserves quantum numbers, such as Sz or N, it is then possible to fix these values to run the simulation in a subspace of reduced dimension. This results in much faster runs, and reduced memory usage.
 
 ## Ground State Energies
 
-The first question we usually ask is for the ground state $| \psi_0 \rangle$ and its energy $E_0$. Here we have to distinguish two cases.
+The first question we usually ask is about the ground state $| \psi_0 \rangle$ and its energy $E_0$. Here we have to distinguish two cases.
 
 First, we might be interested in the ground state energy for a given Hamiltonian on a chain of a given length $L$. Secondly, we might be interested in the energy per site (or per bond) in the thermodynamic limit.
 
@@ -139,9 +139,9 @@ First, we might be interested in the ground state energy for a given Hamiltonian
 
 Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up ground state energy calculations for numbers of states $D=50,100,150,200,300$. For each length, tabulate the truncation error and the ground state energies as a function of $D$. Experiment carefully with the number of sweeps to assure that for a given length and number of states your result is actually converged.
 
-1. For each system length and spin length, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
+1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
 
-2. Observe how the convergence in $D$ deteriorates with length for spin-1/2 and spin-1. Apart from a global factor of order of the length, do you see a difference between the convergence behaviour in the two cases? *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
+2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1. Apart from a global factor of order of the length, do you see a difference between the convergence behaviour in the two cases? *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
 
 3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
 
@@ -153,22 +153,26 @@ The first example consists of setting up a simulation for a spin-1/2 Heisenberg 
 
 ###### Using parameter files
 
-The parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half.py) sets the most important parameters.
+The parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half) sets the most important parameters.
 
-    LATTICE="open chain lattice"
-    MODEL="spin" 
-    CONSERVED_QUANTUMNUMBERS="N,Sz" 
-    Sz_total=0
-    J=1
-    SWEEPS=4
-    NUMBER_EIGENVALUES=1
-    L=32 
-    {MAXSTATES=100}
+```python
+LATTICE="open chain lattice"
+MODEL="spin" 
+CONSERVED_QUANTUMNUMBERS="N,Sz" 
+Sz_total=0
+J=1
+SWEEPS=4
+NUMBER_EIGENVALUES=1
+L=32 
+{MAXSTATES=100}
+```
 
 Using the following sequence of commands you can first convert the input parameters to XML and then run the application `dmrg`:
 
-    parameter2xml spin_one_half
-    dmrg --write-xml spin_one_half.in.xml
+```python
+parameter2xml spin_one_half
+dmrg --write-xml spin_one_half.in.xml
+```
 
 The output file `spin_one_half.task1.out.xml` contains all the computed quantities and can be viewed with a standard internet browser.
 
@@ -176,13 +180,15 @@ DMRG will perform four sweeps, (four half-sweps from left to right and four half
 
 ###### Using Python
 
-To set up and run the simulation in Python we use the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half.py). The first parts of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application.
+To set up and run the simulation in Python we use the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half.py). The first part of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application.
 
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = [ { 
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
+
+parms = [ { 
         'LATTICE'                   : "open chain lattice", 
         'MODEL'                     : "spin",
         'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
@@ -192,43 +198,57 @@ To set up and run the simulation in Python we use the script [`spin_one_half.py`
         'NUMBER_EIGENVALUES'        : 1,
         'L'                         : 32,
         'MAXSTATES'                 : 100
-        } ]
-    input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
+       } ]
 
-To run this, launch your python interpreter using the convenience scripts `alpspython` or `vispython`. We now have the same output files as in the command line version.
+input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```
+
+To run this, in your computer terminal type
+```python 
+python spin_one_half.py
+```
+We now have the same output files as in the command line version.
 
 Next, we load the properties of the ground state measured by the DMRG code
 
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```python
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```
+and print them to the terminal.
 
-and print them to the command line.
+```python
+for s in data[0]:
+    print s.props['observable'], ' : ', s.y[0]
+```
 
-    for s in data[0]:
-        print s.props['observable'], ' : ', s.y[0]
+Additionally, we can load detailed data for each iteration step.
 
-Additionally, we can load detailed data for each iteration step
+```python
+iter = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'),
+                          what=['Iteration Energy','Iteration Truncation Error'])
+```
 
-    iter = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'),
-                               what=['Iteration Energy','Iteration Truncation Error'])
+The above allows us to look at how the DMRG algorithm converged to the final results.
 
-allowing us to look at how the DMRG algorithm converged to the final results.
+We finally plot the convergence of various quantities as functions of iterations.
+```python
+plt.figure()
+pyalps.plot.plot(iter[0][0])
+plt.title('Iteration history of ground state energy (S=1/2)')
+plt.ylim(-15,0)
+plt.ylabel('$E_0$')
+plt.xlabel('iteration')
 
-    plt.figure()
-    pyalps.plot.plot(iter[0][1])
-    plt.title('Iteration history of ground state energy (S=1/2)')
-    plt.ylim(-15,0)
-    plt.ylabel('$E_0$')
-    plt.xlabel('iteration')
+plt.figure()
+pyalps.plot.plot(iter[0][1])
+plt.title('Iteration history of truncation error (S=1/2)')
+plt.yscale('log')
+plt.ylabel('error')
+plt.xlabel('iteration')
 
-    plt.figure()
-    pyalps.plot.plot(iter[0][1])
-    plt.title('Iteration history of truncation error (S=1/2)')
-    plt.yscale('log')
-    plt.ylabel('error')
-    plt.xlabel('iteration')
-
-    plt.show()
+plt.show()
+```
 
 ##### Multiple runs
 
@@ -236,31 +256,35 @@ allowing us to look at how the DMRG algorithm converged to the final results.
 
 We now proceed to illustrate how to setup several runs in a single parameter file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple). We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
 
-    LATTICE="open chain lattice"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    MODEL="spin"
-    Sz_total=0
-    J=1
-    NUMBER_EIGENVALUES=1
-    SWEEPS=4
-    L=32
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+```python
+LATTICE="open chain lattice"
+SWEEPS=4
+CONSERVED_QUANTUMNUMBERS="Sz"
+MODEL="spin", Sz_total=0
+J=1
+NUMBER_EIGENVALUES=1
+L=32
+{ MAXSTATES=20 }
+{ MAXSTATES=40 }
+{ MAXSTATES=60 }
+```
 
-As we can see, the main difference with the previous example consists in the parameters encoded in brackets. As before, we run:
+As we can see, the main difference with the previous example exists in the parameters encoded in the brackets. As before, we run:
 
-    parameter2xml spin_one_half_multiple
-    dmrg --write-xml spin_one_half_multiple.in.xml
+```python
+parameter2xml spin_one_half_multiple
+dmrg --write-xml spin_one_half_multiple.in.xml
+```
 
-In this case, we will find five output files `spin_one_half_multiple.task#.out.xml` containing the results.
+In this case, we will find three output files `spin_one_half_multiple.task#.out.xml` containing the results.
 
 ###### Using Python
 
 The script [`spin_one_half_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple.py) sets up three Python dictionaries of parameters with differing MAXSTATES
 
-    parms= []
-    for m in [20,40,60]:
+```python
+parms= []
+for m in [20,40,60]:
     parms.append({ 
         'LATTICE'                   : "open chain lattice", 
         'MODEL'                     : "spin",
@@ -271,77 +295,93 @@ The script [`spin_one_half_multiple.py`](https://github.com/ALPSim/ALPS/blob/mas
         'NUMBER_EIGENVALUES'        : 1,
         'L'                         : 32,
         'MAXSTATES'                 : m
-        })
+       })
 
-After writing parameter files, running the dmrg application and loading the results in the same way as for the single run above, we can print the measurements from all runs.
+```
 
-    for run in data:
-        for s in run:
-            print s.props['observable'], ' : ', s.y[0]
+After writing parameter files, running the dmrg application, and loading the results in the same way as for the single run above, we can print the measurements from all runs.
+
+```python
+for run in data:
+    for s in run:
+        print s.props['observable'], ' : ', s.y[0]
+```
 
 #### The one dimensional S=1 Heisenberg chain
 
-The S=1 Heisenberg chain will require some special treatment due to the open boundary conditions. As explained above, we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing
+The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained above, we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing
 
-    $ alpspython build_lattice.py 6
+```python
+python build_lattice.py 6
+```
 
 we shall obtain the output
 
-    <LATTICES>
-    <GRAPH name = "open chain lattice with special edges" dimension="1" vertices="6" edges="5">
-    <VERTEX id="1" type="0"><COORDINATE>0</COORDINATE></VERTEX>
-    <VERTEX id="2" type="1"><COORDINATE>2</COORDINATE></VERTEX>
-    <VERTEX id="3" type="1"><COORDINATE>3</COORDINATE></VERTEX>
-    <VERTEX id="4" type="1"><COORDINATE>4</COORDINATE></VERTEX>
-    <VERTEX id="5" type="1"><COORDINATE>5</COORDINATE></VERTEX>
-    <VERTEX id="6" type="0"><COORDINATE>6</COORDINATE></VERTEX>
-    <EDGE source="1" target="2" id="1" type="0" vector="1"/>
-    <EDGE source="2" target="3" id="2" type="0" vector="1"/>
-    <EDGE source="3" target="4" id="3" type="0" vector="1"/>
-    <EDGE source="4" target="5" id="4" type="0" vector="1"/>
-    <EDGE source="5" target="6" id="5" type="0" vector="1"/>
-    </GRAPH>
-    </LATTICES>
+```python
+<LATTICES>
+<GRAPH name = "open chain lattice with special edges" dimension="1" vertices="6" edges="5">
+<VERTEX id="1" type="0"><COORDINATE>0</COORDINATE></VERTEX>
+<VERTEX id="2" type="1"><COORDINATE>2</COORDINATE></VERTEX>
+<VERTEX id="3" type="1"><COORDINATE>3</COORDINATE></VERTEX>
+<VERTEX id="4" type="1"><COORDINATE>4</COORDINATE></VERTEX>
+<VERTEX id="5" type="1"><COORDINATE>5</COORDINATE></VERTEX>
+<VERTEX id="6" type="0"><COORDINATE>6</COORDINATE></VERTEX>
+<EDGE source="1" target="2" id="1" type="0" vector="1"/>
+<EDGE source="2" target="3" id="2" type="0" vector="1"/>
+<EDGE source="3" target="4" id="3" type="0" vector="1"/>
+<EDGE source="4" target="5" id="4" type="0" vector="1"/>
+<EDGE source="5" target="6" id="5" type="0" vector="1"/>
+</GRAPH>
+</LATTICES>
+```
 
 As we can see, the lattice is defined as a one-dimensional graph that contains six vertices, and edges connecting nearest neighbors. The first and last vertices are of type "0", while the others are of type "1". We shall use this definition to implement the model on top of this lattice, which should contain information about the degrees of freedom living on these vertices.
 
 The way to do this is by specifying the parameters:
 
-    local_S0=0.5
-    local_S1=1
+```python
+local_S0=0.5
+local_S1=1
+```
 
 To run a lattice with 32 sites we shall then type
 
-    $ alpspython build_lattice.py 32 > my_lattice.xml
+```python
+python build_lattice.py 32 > my_lattice.xml
+```
 
 ##### Using parameter files
 
 Let us see how the final parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one) should look like:
 
-    LATTICE_LIBRARY="my_lattice.xml"
-    LATTICE="open chain lattice with special edges"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    J=1
-    SWEEPS=4
-    NUMBER_EIGENVALUES=1
-    {MAXSTATES=100}
+```python
+LATTICE_LIBRARY="my_lattice.xml"
+LATTICE="open chain lattice with special edges"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+J=1
+SWEEPS=4
+NUMBER_EIGENVALUES=1
+{MAXSTATES=100}
+```
 
-Clearly, it will result cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler one is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
+Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler one is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modifing the previous parameter file by replacing the lattice definition as follows:
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-
+```python
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 32"
+```
 where we have included the lattice size in the name.
 
 ##### Using Python
 
 The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one.py) defines the parameters in a Python dictionary.
 
-    parms = [ { 
+```python
+parms = [ { 
         'LATTICE_LIBRARY'           : 'my_lattice.xml',
         'LATTICE'                   : 'open chain lattice with special edges',
         'MODEL'                     : 'spin',
@@ -353,7 +393,8 @@ The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/
         'SWEEPS'                    : 4,
         'NUMBER_EIGENVALUES'        : 1,
         'MAXSTATES'                 : 100
-        } ]
+       } ]
+```
 
 Apart from parameter and file name changes, it is the same as the `spin_one_half.py` script explained above.
 
@@ -361,21 +402,23 @@ Apart from parameter and file name changes, it is the same as the `spin_one_half
 
 ###### Using parameter files
 
-Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named [`spin_one_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple.py) as follows:
+Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named [`spin_one_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple) as follows:
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    J=1 
-    NUMBER_EIGENVALUES=1 
-    SWEEPS=4
-    { MAXSTATES=20 } 
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+```python
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 32"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="Sz"
+Sz_total=0
+J=1 
+NUMBER_EIGENVALUES=1 
+SWEEPS=4
+{ MAXSTATES=20 } 
+{ MAXSTATES=40 }
+{ MAXSTATES=60 }
+```
 
 ###### Using Python
 
@@ -383,19 +426,19 @@ The same runs can be set up with the script [`spin_one_multiple.py`](https://git
 
 ### Ground State Energies Per Site (Bond)
 
-If we look closely at the Hamiltonian, the energy of a chain of length $L$ does not sit on the $L$ sites, but on the $L-1$ bonds. A first (naive) attempt therefore consists in taking the results of the last simulations and calculating
+If we look closely at the Hamiltonian, the energy of a chain of length $L$ does not sit on the $L$ sites, but on the $L-1$ bonds. A first (naive) attempt therefore consists of taking the results of the last simulations and calculating
 
 $$
 e_0 = \frac{E_0(L)}{L-1}.
 $$
 
-Do you get really close to the values listed in the introduction? What is the wrong underlying assumption?
+Do you get values really close to the ones listed in the introduction? What is wrong with the underlying assumption?
 
 The correct way is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing it.
 
 1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0 = (E_0(L+2) - E_0 (L))/2$ as the energy per bond. What do the results look like now?
 
-2. The less costly and usual way would be to use correlators (as discussed further below, so postpone this exercise until then) between neighbouring sites and use
+2. The less costly and usual way would be to use correlators (as discussed further below, so we postpone this exercise until then) between neighbouring sites and use
 $$
 e_0 = \frac{1}{2} (\langle S^+\_i S^-\_{i+1}\rangle  + \langle S^-\_i S^+\_{i+1}\rangle ) + \langle S^z_i S^z\_{i+1} \rangle 
 $$
