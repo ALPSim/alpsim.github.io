@@ -3,7 +3,7 @@ title: Energy Spectrums of Qbits
 description: "Jupyter md file for qbit energy"
 toc: true
 math: true
-weight: 21
+weight: 61
 cascade:
     type: docs
 ---
