@@ -27,7 +27,7 @@ Obviously, we have to be able to get access to the first excited state and its e
 
 1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described well.
 
-2. The smarter way reduces the gap calculation to the calculation of two ground states. In many quantum systems, the ground state and the first excited state differ by a good quantum number and therefore are both ground states in the respective sectors. For example, for the spin-1/2 chain, the ground state is a singlet of total spin 0, and hence the ground state in the sector of magnetization 0. The first excited state is a triplet of total spin 1, i.e. consists of one excited state of magnetization 0, and the ground states of the sectors of magnetization +1 and -1 respectively. It can therefore be calculated as the ground state in magnetization sector +1.
+2. The smarter way reduces the gap calculation to the calculation of two ground states. In many quantum systems, the ground state and the first excited state differ by a good quantum number and therefore are both ground states in the respective sectors. For example, for the spin-1/2 chain, the ground state is a singlet of total spin 0, and hence the ground state in the sector of magnetization 0. The first excited state is a triplet of total spin 1, i.e. consists of one excited state of magnetization 0, and the ground states of the sectors of magnetization +1 and -1, respectively. It can, therefore, be calculated as the ground state in magnetization sector +1.
 
 Let us do this calculation first for the spin-1/2 chain:
 
@@ -37,14 +37,16 @@ Let us do this calculation first for the spin-1/2 chain:
 
 In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap.
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    J=1
-    SWEEPS=4
-    {L=32, MAXSTATES=40
-    NUMBER_EIGENVALUES=2}
+```python
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+J=1
+SWEEPS=4
+{L=32, MAXSTATES=40
+NUMBER_EIGENVALUES=2}
+```
     
 Notice that we only added the last line, specifying the number of eigenstates to calculate. By targeting both states, the algorithm ensures that both are represented accurately. However, this is not quite true if we keep only 100 states. Compare the energy for the ground-state obtained with the present parameter file, and the previous simulation targeting only the ground state.
 
@@ -54,11 +56,13 @@ It is important to notice that the entanglement entropy in this example is total
 
 The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the DMRG-01 tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates.
 
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = [ { 
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
+
+parms = [ { 
         'LATTICE'                   : "open chain lattice", 
         'MODEL'                     : "spin",
         'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
@@ -68,28 +72,34 @@ The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d18
         'L'                         : 32,
         'MAXSTATES'                 : 100,
         'NUMBER_EIGENVALUES'        : 2
-        } ]
-    input_file = pyalps.writeInputFiles('parm_spin_one_half_gap',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
-    
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
+       } ]
+
+input_file = pyalps.writeInputFiles('parm_spin_one_half_gap',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
+```
 
 While iterating over all measurements, we then extract the energies
 
-    energies = np.empty(0)
-    for s in data[0]:
+```python
+energies = np.empty(0)
+for s in data[0]:
     if s.props['observable'] == 'Energy':
         energies = s.y
     else:
-        print s.props['observable'], ':', s.y[0]
+        print(s.props['observable'], ':', s.y[0])
+```
 
 and calculate the gap.
 
-    energies.sort()
-    print 'Energies:',
-    for e in energies:
-        print e,
-    print '\nGap:', abs(energies[1]-energies[0])
+```python
+energies.sort()
+print('Energies:', end=' ')
+for e in energies:
+    print(e, end=' ')
+print('\nGap:', abs(energies[1]-energies[0]))
+```
 
 #### Example: with quantum numbers
 
@@ -99,13 +109,15 @@ To calculate the singlet-triplet gap taking advantage of quantum number conserva
 
 This means that we only need to change the value of Sz_total in the spin_one_half parameter file:
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=1
-    SWEEPS=4
-    J=1
-    {L=32, MAXSTATES=40}
+```python
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=1
+SWEEPS=4
+J=1
+{L=32, MAXSTATES=40}
+```
 
 You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
 
@@ -113,8 +125,14 @@ You can download this file from here: [`spin_one_half_triplet`](https://github.c
 
 The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters.
 
-    parms = []
-    for sz in [0,1]:
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
+
+parms = []
+for sz in [0,1]:
     parms.append( { 
         'LATTICE'                   : "open chain lattice", 
         'MODEL'                     : "spin",
@@ -122,26 +140,36 @@ The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd84
         'Sz_total'                  : sz,
         'J'                         : 1,
         'SWEEPS'                    : 4,
-        'NUMBER_EIGENVALUES'        : 1,
         'L'                         : 32,
         'MAXSTATES'                 : 40,
         'NUMBER_EIGENVALUES'        : 1
-        } )
+       } )
+       
+input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```
 
 After loading the results in the usual way we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary.
 
-    energies = {}
-    for run in data:
-    print 'S_z =', run[0].props['Sz_total']
+```python
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
+
+# print results:
+energies = {}
+for run in data:
+    print('S_z =', run[0].props['Sz_total'])
     for s in run:
-        print '\t', s.props['observable'], ':', s.y[0]
+        print('\t', s.props['observable'], ':', s.y[0])
         if s.props['observable'] == 'Energy':
             sz = s.props['Sz_total']
             energies[sz] = s.y[0]
+```
 
 Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors
 
-    print 'Gap:', energies[1]-energies[0]
+```python
+print 'Gap:', energies[1]-energies[0]
+```
 
 ### Extrapolating The Gap To The Thermodynamic Limit
 
@@ -180,6 +208,6 @@ $$
 \Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 
 $$
 
-and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$. How close do you get to the result $\Delta=0.41052$?
+and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$. How close do you get to the result $\Delta/J=0.41052$?
 
 For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted and start worrying: why is the finite gap the right one and the vanishing gap the wrong one? Is this a physics lottery? In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.

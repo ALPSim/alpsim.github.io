@@ -10,7 +10,7 @@ toc: true
 For applications of DMRG, we consider two models, namely the spin-1/2 and the spin-1 antiferromagnetic Heisenberg chains of length L given by the following Hamiltonian,
 
 $$
-H = \sum\_{i=1}^{L-1} \frac{1}{2} (S^+\_i S^-\_{i+1} + S^-\_i S^+\_{i+1}) + S^z_i S^z\_{i+1} .
+H = J\sum\_{i=1}^{L-1} \[\frac{1}{2} (S^+\_i S^-\_{i+1} + S^-\_i S^+\_{i+1}) + S^z_i S^z\_{i+1}\] .
 $$
 
 The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behaviour and pose very different challenges to the DMRG algorithm. Let us briefly review their physical properties.
@@ -20,7 +20,7 @@ The reason why we are choosing these two models, which you may already know from
 The ground state of the spin-1/2 chain can be constructed exactly by the Bethe ansatz; we therefore know its ground state energy exactly. In the thermodynamic limit $L\rightarrow\infty$ the energy per site is given by
 
 $$
-E_0 = 1/4 - \ln 2 = -0.4431471805599... 
+E_0/J = 1/4 - \ln 2 = -0.4431471805599... 
 $$
 
 Ground state energies as such are of limited interest if not compared to other energies. But this one can serve as a beautiful benchmark of the DMRG method. Of more interest is whether the ground state is separated from the excited states by an energy difference that survives also in the thermodynamic limit, i.e. whether the *gap* is vanishing or not. For the spin-1/2 chain, the gap is 0.
@@ -29,7 +29,7 @@ At the same time, one may ask what the correlation between spins on different si
 
 $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
- $$
+$$
 
 This means that the spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*; in this case the exponent of the power law is obviously $-1$. There is also an additional square root of a logarithm correction which can be beautifully verified by DMRG calculations on very long chains, but given the very slow increase of the logarithm with its argument, we can ignore it in a first go.
 
@@ -42,13 +42,13 @@ Unlike the spin-1/2 chain, the spin-1 chain has no properties that can be calcul
 The ground state energy per site is given by
 
 $$
- E_0 = -1.401484039 ... .
+ E_0/J = -1.401484039 ... .
  $$
 
 Again, the question of the existence of a gap is more important, and here one of the big differences to the spin-1/2 chain becomes visible: in the thermodynamic limit, the gap in the spin-1 chain is finite and given by
 
 $$
- \Delta = 0.41052 
+ \Delta/J = 0.41052 
  $$
 
 to five-digit accuracy.
@@ -61,7 +61,7 @@ $$
 
 The dominant contribution is now the exponential decay which happens on a length scale $\xi$, the *correlation length* which in this particular case is found numerically to be $\xi=6.02$. There is an analytic (power law) correction by a square root of the distance in the denominator, but this is often neglected in calculations of the correlation length, as it is a slow contribution compared to the fast exponential decay. It would matter, of course, if the correlation length were much larger.
 
-The spin-1 chain is therefore a prime example for a *non-critical* quantum system with finite gap and exponentially decaying correlations. As it will turn out, for DMRG this type of system is much easier to do.
+The spin-1 chain is therefore a prime example for a *non-critical* quantum system with finite gap and exponentially decaying correlations. As it will turn out, for DMRG this type of system is much easier to simulate.
 
 ### Plan Of The Tutorial
 
@@ -429,18 +429,18 @@ The same runs can be set up with the script [`spin_one_multiple.py`](https://git
 If we look closely at the Hamiltonian, the energy of a chain of length $L$ does not sit on the $L$ sites, but on the $L-1$ bonds. A first (naive) attempt therefore consists of taking the results of the last simulations and calculating
 
 $$
-e_0 = \frac{E_0(L)}{L-1}.
+e_0/J = \frac{E_0(L)}{L-1}.
 $$
 
 Do you get values really close to the ones listed in the introduction? What is wrong with the underlying assumption?
 
 The correct way is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing it.
 
-1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0 = (E_0(L+2) - E_0 (L))/2$ as the energy per bond. What do the results look like now?
+1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond. What do the results look like now?
 
 2. The less costly and usual way would be to use correlators (as discussed further below, so we postpone this exercise until then) between neighbouring sites and use
 $$
-e_0 = \frac{1}{2} (\langle S^+\_i S^-\_{i+1}\rangle  + \langle S^-\_i S^+\_{i+1}\rangle ) + \langle S^z_i S^z\_{i+1} \rangle 
+e_0/J = \frac{1}{2} (\langle S^+\_i S^-\_{i+1}\rangle  + \langle S^-\_i S^+\_{i+1}\rangle ) + \langle S^z_i S^z\_{i+1} \rangle 
 $$
 
 for sites $i,i+1$ at the chain center.
