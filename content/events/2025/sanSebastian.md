@@ -33,13 +33,13 @@ Tentative list of talks:
   
   -Synge Todo: Markov chain Monte Carlo in tensor network representation
  
-  -Markus Wallenberger: Lines of communication in scientific software
+  -Markus Wallerberger: Lines of communication in scientific software
   
   -Herbert Fotso: Characterizing the nonequilibrium dynamics of disordered and correlated many-particle systems
   
   -Guy Cohen:Inchworm Monte Carlo: recent advances and applications
 
-  -Adrian Del MAestro: Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
+  -Adrian Del Maestro: Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
   
   -Simon Trebst: Quantum Computational Physics (or how we can harness today’s quantum computers for “quantum-on-quantum computational physics simulations
   
@@ -47,7 +47,7 @@ Tentative list of talks:
 
  -Adrian Feiguin: Time-dependent scattering approach to non-equilibrium spectroscopies.
 
- -Lode Polet (TBA)
+ -Lode Polet: Many-body physics with Rydberg atoms
 
 ## Before the Meeting
 
