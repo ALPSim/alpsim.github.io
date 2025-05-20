@@ -27,27 +27,31 @@ We might also be able to cover some of your local expenses (we suggest you keep 
 
 The workshop will begin in the morning of the 24th, and end in the afternoon of the 26th. We may arrange for a small reception on the evening of the 23rd. We also plan a “banquet” at a local sidreria.  Updates forthcoming. 
 
-Tentative list of talks:
+### Preliminary Schedule: <a href="../Agenda_SS.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-  -Fabien Alet: Measuring the correlation density matrix with quantum Monte Carlo
-  
-  -Synge Todo: Markov chain Monte Carlo in tensor network representation
+### Tentative list of talks:
+
+  - **Fabien Alet:** Measuring the correlation density matrix with quantum Monte Carlo
  
-  -Markus Wallenberger: Lines of communication in scientific software
+  - **Markus Wallenberger:** Lines of communication in scientific software
   
-  -Herbert Fotso: Characterizing the nonequilibrium dynamics of disordered and correlated many-particle systems
+  - **Guy Cohen:** Inchworm Monte Carlo: recent advances and applications
   
-  -Guy Cohen:Inchworm Monte Carlo: recent advances and applications
+  - **Herbert Fotso:** Characterizing the nonequilibrium dynamics of disordered and correlated many-particle systems
+  
+  - **Synge Todo:** Markov chain Monte Carlo in tensor network representation
+  
+  - **Simon Trebst:** Quantum Computational Physics (or how we can harness today’s quantum computers for “quantum-on-quantum computational physics simulations
+  
+  - **Hiroshi Shinaoka:** Dimensionality reduction technologies for quantum field theories
 
-  -Adrian Del MAestro: Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
+  - **Adrian Del MAestro:** Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
   
-  -Simon Trebst: Quantum Computational Physics (or how we can harness today’s quantum computers for “quantum-on-quantum computational physics simulations
+  - **Lode Polet:** (TBA)
   
-  -Hiroshi Shinaoka: Dimensionality reduction technologies for quantum field theories
+  - **Adrian Feiguin:** Time-dependent scattering approach to non-equilibrium spectroscopies.
 
- -Adrian Feiguin: Time-dependent scattering approach to non-equilibrium spectroscopies.
-
- -Lode Polet (TBA)
+  
 
 ## Before the Meeting
 
