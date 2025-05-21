@@ -19,6 +19,7 @@ Below are a collection of ALPS simulations in Jupyter notebooks. You can learn a
 
 - [Ground State Energy of a Spin Chain](pages/dmrg/groundstatespinchain) <a href = "codes/dmrg/groundstatespinchain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 - [Energy Gap of a Spin-1/2 Chain](pages/dmrg/energygapspinhalf) <a href = "codes/dmrg/energygapspinhalf.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [Extrapolation of Energy Gap of a Spin-1/2 Chain](pages/dmrg/extrapolationenergygapspinhalfchain) <a href = "codes/dmrg/extrapolationenergygapspinhalfchain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
 ## Time-evolving Block Decimation
 
