@@ -64,7 +64,7 @@ for e in energies:
 print('\nGap:', abs(energies[1]-energies[0]))
 ```
 
-### Method 2: Use Quantum Numbers
+### Method 2: Using Quantum Numbers
 
 As we know, the ground state of a spin-1/2 chain exists in the spin-singlet sector. So, if we restrict the simulation in the magnetization `Sz_total = 0` sector, the lowest energy from the DMRG simulation will produce the spin-singlet ground state energy of the spin-1/2 chain. This is what we did in the previous simulation. If we restrict the simulation in the magnetization `Sz_total = 1` sector, the lowest energy from the DMRG simulation can only come from the spin-triplet state. Of course, the lowest energy from the `Sz_total = 1` sector will be the same as the first excited state energy from the `Sz_total = 0` sector, since without external magnetic fields, the 3 subsectors (`Sz_total = -1`, `Sz_total = 0`, and `Sz_total = 1`) of the triplet sector are degenerate.
 
