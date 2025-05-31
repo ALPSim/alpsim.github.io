@@ -3,7 +3,7 @@ title: Energy Gap of a Spin-1 Chain
 description: "Jupyter md file for dmrg energy gap of spin-one chain"
 toc: true
 math: true
-weight: 43
+weight: 44
 cascade:
     type: docs
 ---

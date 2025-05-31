@@ -27,6 +27,8 @@ Below are a collection of ALPS simulations in Jupyter notebooks. You can learn a
 
 - [Energy Gap of a Spin-1 Chain](pages/dmrg/energygapspinone) <a href = "codes/dmrg/energygapspinone.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
+- [Extrapolation of Energy Gap of a Spin-1 Chain](pages/dmrg/extrapolationenergygapspinonechain) <a href = "codes/dmrg/extrapolationenergygapspinonechain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+
 
 ## Time-evolving Block Decimation
 
