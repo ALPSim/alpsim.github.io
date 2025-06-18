@@ -27,7 +27,7 @@ We might also be able to cover some of your local expenses (we suggest you keep 
 
 The workshop will begin in the morning of the 24th, and end in the afternoon of the 26th. We may arrange for a small reception on the evening of the 23rd. We also plan a “banquet” at a local sidreria.  Updates forthcoming. 
 
-### Preliminary Schedule: <a href="../Agenda_SS.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+### Schedule: <a href="../Agenda_SS.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
 ### Tentative list of talks:
 
