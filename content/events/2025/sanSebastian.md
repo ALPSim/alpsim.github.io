@@ -51,6 +51,8 @@ The workshop will begin in the morning of the 24th, and end in the afternoon of 
   
   - **Adrian Feiguin:** Time-dependent scattering approach to non-equilibrium spectroscopies.
 
+  - **Vito Scarola:** Title: A Collisional Model Algorithm for Dynamics of Open Quantum Systems:
+Application to the Dynamics of Supersymmetric XXZ Chains
 
 ## Before the Meeting
 
