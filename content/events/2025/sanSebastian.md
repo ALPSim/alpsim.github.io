@@ -15,7 +15,7 @@ The workshop will take place at
 Faculty of Chemistry UPV/EHU
 Paseo Manuel de Lardizábal, 3. 20018 DONOSTIA/SAN SEBASTIAN
 Meeting point:  Hall of the faculty at 8:50h, or else, ask at reception for “AULA 2 BIS”.
-GOOGLE MAPS LINK
+[GOOGLE MAPS LINK](https://www.google.com/maps/place/Kimika+Fakultatea+EHU/@43.30626,-2.01005,17z/data=!3m1!4b1!4m6!3m5!1s0xd51b07376515dbb:0xc88d171cc0d2c0c0!8m2!3d43.30626!4d-2.01005!16s%2Fg%2F11b8_pxz2z?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D)
 
 ## Accommodations
 
