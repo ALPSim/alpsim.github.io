@@ -11,6 +11,12 @@ weight: 2
 
 The meeting will be held at Facultad de Ciencias Químicas, UPV/EHU, in San Sebastian, Spain. 
 
+The workshop will take place at
+Faculty of Chemistry UPV/EHU
+Paseo Manuel de Lardizábal, 3. 20018 DONOSTIA/SAN SEBASTIAN
+Meeting point:  Hall of the faculty at 8:50h, or else, ask at reception for “AULA 2 BIS”.
+GOOGLE MAPS LINK
+
 ## Accommodations
 
 We will provide accommodations at the [Hotel Olarain](https://www.olarain.com). The rooms are reserved for June 23-26. These are shared rooms for two participants. We suggest you contact other workshop participants and let us know who you want to share the room with. We include a list of participants below. 
