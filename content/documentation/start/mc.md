@@ -18,6 +18,7 @@ import pyalps.plot
 ```
 
 Then we prepare the input parameters. Here we consider lattices of sizes $4\times 4$, $8\times 8$, $16\times 16$, for different temperatures.
+
 ```Python
 parms = []
 for l in [4,8,16]:

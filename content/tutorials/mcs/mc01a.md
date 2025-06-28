@@ -17,46 +17,58 @@ This tutorial can be run either on the command line or in Python. We recommend t
 
 To set up and run the simulation on the command line, we first create a parameter file that specifies the parameters of the simulation(s). Ours will be titled `parm1a` and its contents shall be:
 
-    LATTICE="square lattice"
-    T=2.269186
-    J=1
-    THERMALIZATION=10000
-    SWEEPS=50000  
-    UPDATE="local"
-    MODEL="Ising"
-    {L=2;}
-    {L=4;}
-    {L=8;}
-    {L=16;}
-    {L=32;}
-    {L=48;}
+```Python
+LATTICE="square lattice"
+T=2.269186
+J=1
+THERMALIZATION=10000
+SWEEPS=50000  
+UPDATE="local"
+MODEL="Ising"
+{L=2;}
+{L=4;}
+{L=8;}
+{L=16;}
+{L=32;}
+{L=48;}
+```
 
 This actually specifies six simulation tasks in one simulation job, all tasks having identical parameters except for the lattice length `L`.
 
 ALPS expects one *job file* to specify the job as a whole and a *task file* for each simulation task within it, all in XML format. So in order to run the simulation, we first need to convert this parameter file. ALPS provides a simple tool to do this: We can just run
 
-    parameter2xml parm1a
+```Python
+parameter2xml parm1a
+```
 
 in the folder of the parameter file. This will generate six task files (one for each length L) named `parm1a.task1.in.xml` through `parm1a.task6.in.xml` and a job description file `parm1a.in.xml`. We can open the job file with an XML browser to check the status of our simulation once we have started it.
 
 The simulation can be started on a single processor by running
 
-    spinmc --Tmin 10 --write-xml parm1a.in.xml
+```Python
+spinmc --Tmin 10 --write-xml parm1a.in.xml
+```
 
 or on multiple processors (in our example 8) using MPI by
 
-    mpirun -np 8 spinmc --mpi  --Tmin 10 --write-xml parm1a.in.xml 
+```Python
+mpirun -np 8 spinmc --mpi  --Tmin 10 --write-xml parm1a.in.xml 
+```
 
 (In the following examples we will refer to the single processor commands only.) By setting the argument `--Tmin 10`, we tell the scheduler to check if the simulation is finished every 10 seconds initially. (The time is then dynamically adapted by the scheduler according to the needs of the simulation.)
 
 The progress of a simulation is saved in the XML output file as the simulation is run. If a simulation is halted, such as due to pressing Ctrl-C or reaching the CPU time limit, it may be continued by starting the simulation with the XML output file instead of the input job file. Since our input job file was named `parm1a.in.xml`, the output file will be named `parm1a.out.xml` and we may restart the simulation by running
 
-    spinmc --Tmin 10 --write-xml parm1a.out.xml
+```Python
+spinmc --Tmin 10 --write-xml parm1a.out.xml
+```
 
 The option "--write-xml" tells the simulation to store the results of each simulation also in an XML output file (`parm1a.task\[1-5\].out.xml`) which you can open from the job description file parm1a.out.xml using your XML browser or alternatively by converting the output to a text file using one of the following commands:
 
-    firefox ./parm1a.out.xml
-    convert2text parm1a.out.xml
+```Python
+firefox ./parm1a.out.xml
+convert2text parm1a.out.xml
+```
 
 The results of a single task stored, for example, in `parm1a.task1.out.xml`, can be displayed by using either of the following commands:
 
@@ -69,7 +81,9 @@ Note that writing XML files can be very slow if you perform many measurements, a
 
 To obtain more detailed information on the simulation runs, such as to check the convergence of errors, we can convert the run files of the tasks (`parm1a.task\[1-6\].out.run1`) into XML files by typing
 
-    convert2xml parm1a.task*.out.run1
+```Python
+convert2xml parm1a.task*.out.run1
+```
 
 which will generate the XML output files `parm1a.task\[1-6\].out.run1.xml` which we may open or convert to text just like the output XML files.
 
@@ -81,12 +95,13 @@ The `pyalps` package is a wrapper for ALPS: All it does is call the commands des
 
 To set up and run the simulation in Python, we create a script named `tutorial1a.py`. The first part of this script must import the required modules and prepare the input job and task files. Instead of writing a parameter file and using `convert2xml`, we store a list containing each task's parameters as a dictionary, like so:
 
-    import pyalps
-    import matplotlib.pyplot as plt
-    import pyalps.plot
+```Python
+import pyalps
+import matplotlib.pyplot as plt
+import pyalps.plot
 
-    parms = []
-    for l in [2,4,8,16,32,48]:
+parms = []
+for l in [2,4,8,16,32,48]:
     parms.append(
         {
             'LATTICE'        : "square lattice",
@@ -99,46 +114,59 @@ To set up and run the simulation in Python, we create a script named `tutorial1a
             'L'              : l
         }
     )
+```
 
 and convert this into an XML job file with the function
 
-    input_file = pyalps.writeInputFiles('parm1a',parms)
+```Python
+input_file = pyalps.writeInputFiles('parm1a',parms)
+```
 
 The input_file variable may be used as an input for `pyalps.runApplication` as shown below:
 
-    pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
+```Python
+pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
+```
 
 `spinmc` is the name of the terminal command to be called. The option `writexml=True` tells ALPS to write XML files, `input_file` is the path to the XML job input file, and `Tmin=5` again tells ALPS to check every 5 seconds for completion of the simulation.
 
 We next load the binning analysis for the absolute value of the magnetization from the output files using `pyalps.loadBinningAnalysis`, and flatten the list of lists we get with `pyalps.flatten`:
 
-    binning = pyalps.loadBinningAnalysis(pyalps.getResultFiles(prefix='parm1a'),'|Magnetization|')
-    binning = pyalps.flatten(binning)
+```Python
+binning = pyalps.loadBinningAnalysis(pyalps.getResultFiles(prefix='parm1a'),'|Magnetization|')
+binning = pyalps.flatten(binning)
+```
 
 We may give each data set a label which will be displayed in any graph specifying the lattice size:
 
-    for dataset in binning:
-        dataset.props['label'] = 'L='+str(dataset.props['L'])
+```Python
+for dataset in binning:
+    dataset.props['label'] = 'L='+str(dataset.props['L'])
+```
 
-`pyalps.plot` functions will respect this.And finally we create a plot showing the binning analysis graphically:
+`pyalps.plot` functions will respect this. And finally we create a plot showing the binning analysis graphically:
 
-    plt.figure()
-    plt.xlabel('binning level')
-    plt.ylabel('Error of |Magnetization|')
-    pyalps.plot.plot(binning)
-    plt.legend()
-    plt.show()
+```Python
+plt.figure()
+plt.xlabel('binning level')
+plt.ylabel('Error of |Magnetization|')
+pyalps.plot.plot(binning)
+plt.legend()
+plt.show()
+```
 
 To make separate plots for each system size we make a loop over all data sets:
 
-    for dataset in binning:
-        plt.figure()
-        plt.title('Binning analysis for L='+str(dataset.props['L']))
-        plt.xlabel('binning level')
-        plt.ylabel('Error of |Magnetization|')
-        pyalps.plot.plot(dataset)
+```Python
+for dataset in binning:
+    plt.figure()
+    plt.title('Binning analysis for L='+str(dataset.props['L']))
+    plt.xlabel('binning level')
+    plt.ylabel('Error of |Magnetization|')
+    pyalps.plot.plot(dataset)
     
-    plt.show()
+plt.show()
+```
 
 You can clearly see that the errors do not converge for large system sizes.
 
@@ -168,14 +196,6 @@ You will get curves looking like the ones below. Now the errors have converged a
 - On what system parameters do the autocorrelation times depend on? Check by changing parameters in the input file.
 - Can you explain why cluster updates are more efficient than local updates?
 
-
-## Contributors
-
-- Simon Trebst
-- Fabien Alet
-- Matthias Troyer
-- Synge Todo 
-- Emanuel Gull
 
 
 
