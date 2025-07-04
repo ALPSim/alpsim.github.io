@@ -6,15 +6,16 @@ toc: true
 weight: 11
 ---
 
+```
+import numpy as np
+matplotlib inline
+import matplotlib as mpl
+mpl.rc("savefig", dpi=120)
+import matplotlib.pyplot as plt
 
-    import numpy as np
-    matplotlib inline
-    import matplotlib as mpl
-    mpl.rc("savefig", dpi=120)
-    import matplotlib.pyplot as plt
-
-    import pyalps
-    from pyalps.plot import plot
+import pyalps
+from pyalps.plot import plot
+```
 
 ## Heisenberg chain
 
@@ -53,59 +54,70 @@ The parameters we need to pass to the Directed Loop SSE code fall into four cate
 
 - Can you think of a guideline for choosing the temperature low enough to obtain ground-state physics?
 
-    chain_parms = []
-    for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
-        chain_parms.append({
-            # lattice parameters
-            'LATTICE'        : "chain lattice", 
-            'L'              : 20,
+```
+chain_parms = []
+for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
+    chain_parms.append({
+        # lattice parameters
+        'LATTICE'        : "chain lattice", 
+        'L'              : 20,
 
-            # model parameters
-            'MODEL'          : "spin",
-            'local_S'        : 0.5,
-            'J'              : 1,
-            'h'              : h,
+        # model parameters
+        'MODEL'          : "spin",
+        'local_S'        : 0.5,
+        'J'              : 1,
+        'h'              : h,
 
-            # ensemble parameter
-            'T'              : 0.08,
+        # ensemble parameter
+        'T'              : 0.08,
 
-            # QMC parameters
-            'THERMALIZATION' : 1000,
-            'SWEEPS'         : 5000,
-        })
-    chain_prefix = 'qmc_chain'
+        # QMC parameters
+        'THERMALIZATION' : 1000,
+        'SWEEPS'         : 5000,
+    })
+chain_prefix = 'qmc_chain'
+```
 
 ### Run the simulation
 
 The simulation is performed using the directed loop SSE code, which is best suited to simulate a spin model (with a small number of states per site) in an external magnetic field.
 
-    # Write the input files for the ALPS codes.
-    # All the filenames will begin with the prefix chain_prefix='qmc_chain'.
-    input_file = pyalps.writeInputFiles(chain_prefix, chain_parms)
+```
+# Write the input files for the ALPS codes.
+# All the filenames will begin with the prefix chain_prefix='qmc_chain'.
+input_file = pyalps.writeInputFiles(chain_prefix, chain_parms)
 
-    # The following command runs the applications.
-    res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
+# The following command runs the applications.
+res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
+```
 
-    dirloop_sse qmc_chain.in.xml --Tmin 5
+The above lines can be saved in a script and run with python command in your terminal. Or the input file can be run with the following command line in your terminal:
+
+```
+dirloop_sse qmc_chain.in.xml --Tmin 5
+```
 
 ### Analyze the results
 
 For the data analysis, we rely on the methods available as part of the `pyalps` package, as well as the `matplotlib` library.
 
-    # Load the raw measurement data. We only load the "Magnetization Density" and not all the other
-    # quantities measured by the QMC code.
-    data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
+```
+# Load the raw measurement data. We only load the "Magnetization Density" and not all the other
+# quantities measured by the QMC code.
+data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
 
-    # The pyalps.collectXY function takes a set of data points and extracts plots
-    # of the form "Y vs X".
-    magnetization = pyalps.collectXY(data, x='h', y='Magnetization Density')
+# The pyalps.collectXY function takes a set of data points and extracts plots
+# of the form "Y vs X".
+magnetization = pyalps.collectXY(data, x='h', y='Magnetization Density')
 
-    plot(magnetization)
-    plt.xlabel('Field $h$')
-    plt.ylabel('Magnetization $m$')
-    plt.title('Quantum Heisenberg chain')
+plot(magnetization)
+plt.xlabel('Field $h$')
+plt.ylabel('Magnetization $m$')
+plt.title('Quantum Heisenberg chain')
+plt.show()
+```
 
-    
+The resulting picutre show look like the following:    
 ![](qmcmagchain.png)
 
 ## Heisenberg ladder
@@ -125,46 +137,45 @@ Notice the difference in lattice and model parameters:
 
 We keep all other parameters the same.
 
-    ladder_parms = []
-    for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
-        ladder_parms.append(
-            { 
-                # lattice parameters
-                'LATTICE'        : "ladder", 
-                'L'              : 20,
-                'W'              : 2,
+```
+ladder_parms = []
+for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
+    ladder_parms.append(
+        { 
+            # lattice parameters
+            'LATTICE'        : "ladder", 
+            'L'              : 20,
+            'W'              : 2,
          
-                # model parameters
-                'MODEL'          : "spin",
-                'local_S'        : 0.5,
-                'J0'             : 1,
-                'J1'             : 1,
-                'h'              : h,
+            # model parameters
+            'MODEL'          : "spin",
+            'local_S'        : 0.5,
+            'J0'             : 1,
+            'J1'             : 1,
+            'h'              : h,
          
-                # ensemble parameter
-                'T'              : 0.08,
+            # ensemble parameter
+            'T'              : 0.08,
     
-                # QMC parameters
-                'THERMALIZATION' : 1000, # 1000
-                'SWEEPS'         : 5000, # 20000
-            }
-        )
-    ladder_prefix = 'qmc_ladder'
+            # QMC parameters
+            'THERMALIZATION' : 1000, # 1000
+            'SWEEPS'         : 5000, # 20000
+        }
+    )
+ladder_prefix = 'qmc_ladder'
     
+input_file = pyalps.writeInputFiles(ladder_prefix, ladder_parms)
+res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
 
-    input_file = pyalps.writeInputFiles(ladder_prefix, ladder_parms)
-    res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
-    
-    dirloop_sse qmc_ladder.in.xml --Tmin 5
+data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
 
-    data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
+magnetization = pyalps.collectXY(data,x='h',y='Magnetization Density')
 
-    magnetization = pyalps.collectXY(data,x='h',y='Magnetization Density')
-
-    plot(magnetization)
-    plt.xlabel('Field $h$')
-    plt.ylabel('Magnetization $m$')
-    plt.title('Quantum Heisenberg ladder')
+plot(magnetization)
+plt.xlabel('Field $h$')
+plt.ylabel('Magnetization $m$')
+plt.title('Quantum Heisenberg ladder')
+```
 
 ![](qmcmagladder.png)
 
@@ -177,19 +188,21 @@ We now compare the results for the chain and the ladder. For this, we do not nee
 
 We will revisit these questions in the DMRG/MPS tutorial.
 
-    data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
-    data += pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
+```
+data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
+data += pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
 
-    # We here use the fourth, optional, parameter of the collectXY function, allowing
-    # us to pass a list of parameters such that collectXY creates a separate plot for
-    # each value of the parameters.
-    magnetization = pyalps.collectXY(data, 'h', 'Magnetization Density', ['LATTICE'])
+# We here use the fourth, optional, parameter of the collectXY function, allowing
+# us to pass a list of parameters such that collectXY creates a separate plot for
+# each value of the parameters.
+magnetization = pyalps.collectXY(data, 'h', 'Magnetization Density', ['LATTICE'])
 
-    plot(magnetization)
-    plt.xlabel('Field $h$')
-    plt.ylabel('Magnetization $m$')
-    plt.title('Quantum Heisenberg chain and ladder')
-    plt.legend(loc=0, frameon=False)
+plot(magnetization)
+plt.xlabel('Field $h$')
+plt.ylabel('Magnetization $m$')
+plt.title('Quantum Heisenberg chain and ladder')
+plt.legend(loc=0, frameon=False)
+```
 
 ![](qmcmagchainandladder.png)
 
