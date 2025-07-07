@@ -18,7 +18,7 @@ We will provide accommodations at the [Bevidere 60 residence](https://housing.no
 
 ## Before the Meeting
 
-We will be sending detailed information about the workshop logistics soon. At this moment, **We kindly ask you to send us a title for your talk, if you intend to give one,** so we can put together the program. The program will follow a similar format as our past workshop in Spain (you can find it [here](../sanSebastian)).
+We will be sending detailed information about the workshop logistics soon. At this moment, **We kindly ask you to send us a title for your talk, if you intend to give one,** so we can put together the program. The program will follow a similar format as our past workshop in Spain (you can find it [here](../sansebastian)).
 
 The easiest would be for you to send an email to Adrian Feiguin at <a href="mailto:adrianfeiguin@gmail.com">adrianfeiguin@gmail.com</a>, answering these questions:
 
