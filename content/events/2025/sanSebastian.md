@@ -9,9 +9,10 @@ weight: 2
 ---
 ## Location
 
-The meeting will be held at Facultad de Ciencias Químicas, UPV/EHU, in San Sebastian, Spain. 
+The meeting has been held at Facultad de Ciencias Químicas, UPV/EHU, in San Sebastian, Spain. 
 
-The workshop will take place at
+The address of the meeting:
+
 Faculty of Chemistry UPV/EHU
 Paseo Manuel de Lardizábal, 3. 20018 DONOSTIA/SAN SEBASTIAN
 Meeting point:  Hall of the faculty at 8:50h, or else, ask at reception for “AULA 2 BIS”.
