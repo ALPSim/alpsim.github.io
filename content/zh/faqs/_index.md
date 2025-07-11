@@ -1,28 +1,26 @@
 ---
-title: Frequently Asked Questions
-description: "FAQs about ALPS"
+title: 常见问题
+description: "ALPS 常见问题解答"
 toc: false
 ---
 
-### How can I cite ALPS in my research publication?
+### 如何在研究论文中引用 ALPS？
 
-Our software release publications are shown on [this page](../documentation/pubs/papers). For specific numerical methods, please refer to our ["Code and Method References" page](../documentation/pubs/refs). The citation requirement is discussed on the [citation page](../documentation/pubs/citations).
+我们的软件发布出版物详见[本页面](../documentation/pubs/papers)。特定数值方法请参考[代码与方法参考文献](../documentation/pubs/refs)。引用要求在[引用说明页](../documentation/pubs/citations)有详细说明。
 
-### Where can I ask questions about ALPS installation, documnetation, or tutorials?
+### 关于 ALPS 安装、文档或教程的问题应咨询何处？
 
-We created a discord channel for community discussions. You can ask your questions in our [Github repository discussions](https://github.com/ALPSim/ALPS/discussions/categories/q-a) or in our [Discord channel](https://discord.gg/JRNWnnva9g).
+我们创建了 Discord 频道供社区讨论。您可以在[Github 仓库讨论区](https://github.com/ALPSim/ALPS/discussions/categories/q-a)或[Discord 频道](https://discord.gg/JRNWnnva9g)提问。
 
-### How can I report a bug in the codes?
+### 如何报告代码中的错误？
 
-We encourage you to report the bug in the [issues section of our Github repository](https://github.com/ALPSim/ALPS/issues). The potential bug will be immediately investigated by one of our developers.
+欢迎在[Github 仓库的问题区](https://github.com/ALPSim/ALPS/issues)提交错误报告。我们的开发人员将立即调查潜在问题。
 
-### How can I install ALPS?
+### 如何安装 ALPS？
 
-Please follow the instructions on our [installation page](../documentation/install/) for Linux and Mac systems. Currently we do not support Windows system.
+最简便的安装方式是在 Linux/Mac 系统或 Windows 的 Linux 子系统中使用[pyalps 二进制安装](../documentation/install/binary)。如需源码安装，请遵循[安装指南](../documentation/install/)中的 Linux/Mac 系统说明。
 
+### 如何为 ALPS 贡献代码？
 
-### How can I contribute to ALPS?
-
-Please [contact](../govern#alps-community-steering-committee) one of our leaderships for further information. We will be happy to talk to you about your project.
-If you are a student and are interested in contributing to ALPS while you are in the process of learning about ALPS, we have an [onboarding statement](../../govern/onboard) for you.
-
+请[联系](../govern#alps-community-steering-committee)我们的领导团队成员获取详情。我们很乐意探讨您的项目方案。
+如果您是学生，希望在了解 ALPS 的过程中参与贡献，请参阅我们的[新人指南](../../govern/onboard)。
