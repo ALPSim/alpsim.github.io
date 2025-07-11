@@ -1,0 +1,10 @@
+<header>
+  {{ if templates.Exists "partials/header/items/i18n.html" }}
+    {{ partial "header/items/i18n.html" . }}
+  {{ else }}
+    <div style="background: red; padding: 10px;">
+      MISSING I18N TEMPLATE
+    </div>
+  {{ end }}
+  {{ partial "header/default.html" . }}
+</header>

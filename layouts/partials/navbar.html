@@ -33,6 +33,21 @@
         {{- partial "search.html" (dict "params" .Params) -}}
       {{- else if eq .Params.type "toggle" -}}
         {{- partial "toggle.html" (dict "params" .Params) -}}
+      {{- else if eq .Params.type "language" -}}
+        {{/* Language Switcher */}}
+        <div class="language-dropdown-container relative inline-block -ml-2 p-2 md:inline-block">
+          <button class="inline-flex items-center font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600">
+           🌐
+           <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.943l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0l-4.25-4.25a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+           </svg>
+          </button>
+          <div class="language-dropdown absolute hidden right-0 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg z-[1000] w-40 border border-gray-200 dark:border-gray-700">
+            <a href="/en/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">English</a>
+            <a href="/zh/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">中文</a>
+          </div>
+        </div>
+
       {{- else -}}
         {{- $link := .URL -}}
         {{- $external := strings.HasPrefix $link "http" -}}
@@ -76,9 +91,9 @@
       {{- end -}}
     {{- end -}}
 
-
     <button type="button" aria-label="Menu" class="hamburger-menu -mr-2 rounded p-2 active:bg-gray-400/20 md:hidden">
       {{- partial "utils/icon.html" (dict "name" "hamburger-menu" "attributes" "height=24") -}}
     </button>
   </nav>
 </div>
+

@@ -7,7 +7,7 @@ enableGitInfo: true
 enableEmoji: true
 hasCJKLanguage: true
 enableInlineShortcodes: true
-copyright: "ALPS Collaboration"
+#copyright: "ALPS Collaboration"
 
 outputs:
   home: [HTML]
@@ -15,6 +15,18 @@ outputs:
   section: [HTML, RSS]
 
 defaultContentLanguage: en
+    
+languages:
+  en:
+    languageName: English
+    contentDir: content/en
+    languageCode: en
+    weight: 1
+  zh:
+    languageName: 中文
+    contentDir: content/zh
+    languageCode: zh-cn
+    weight: 2
 
 module:
   hugoVersion:
@@ -50,6 +62,8 @@ params:
       width: 48px
   footer:
     displayCopyright: true
+  i18n:
+    enable: true
 
 menu:
   main:
@@ -100,3 +114,9 @@ menu:
       params:
         type: toggle
         icon: sun
+    - identifier: language
+      name: 🌐 Language
+      weight: 20
+      params:
+        type: language
+

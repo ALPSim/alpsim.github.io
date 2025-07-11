@@ -1,0 +1,24 @@
+- id: copyright
+  translation: "ALPS 合作"
+- id: searchPlaceholder
+  translation: "搜索..."
+- id: changeTheme
+  translation: "切换主题"
+- id: light
+  translation: "亮色"
+- id: dark
+  translation: "暗色"
+- id: poweredBy
+  translation: "技术支持"
+- id: noResultsFound
+  translation: "未找到结果"
+- id: lastUpdated
+  translation: "最后更新"
+- id: changeLanguage
+  translation: "切换语言"
+- id: onThisPage
+  translation: "本页内容"
+- id: editThisPage
+  translation: "编辑本页"
+- id: backToTop
+  translation: "返回顶部"

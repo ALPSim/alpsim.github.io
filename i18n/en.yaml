@@ -1,1 +1,25 @@
-copyright: ALPS Collaboration
+- id: copyright
+  translation: "ALPS Collaboration"
+- id: searchPlaceholder
+  translation: "Search..."
+- id: changeTheme
+  translation: "Change theme"
+- id: light
+  translation: "Light"
+- id: dark
+  translation: "Dark"
+- id: poweredBy
+  translation: "Powered by"
+- id: noResultsFound
+  translation: "No results found"
+- id: lastUpdated
+  translation: "Last updated"
+- id: changeLanguage
+  translation: "Change language"
+- id: onThisPage
+  translation: "On this page"
+- id: editThisPage
+  translation: "Edit this page"
+- id: backToTop
+  translation: "Back to top"
+

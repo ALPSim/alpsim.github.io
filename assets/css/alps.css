@@ -221,3 +221,9 @@
         color: rgb(247 247 247 / var(--tw-text-opacity)) !important;
     }
 }
+
+/* Add to custom CSS file for language-dropdown */
+.language-dropdown-container:hover .language-dropdown {
+  display: block !important;
+}
+
