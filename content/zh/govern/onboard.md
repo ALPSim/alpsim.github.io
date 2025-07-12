@@ -1,68 +1,66 @@
 ---
-title: Onboarding Statement for Students
-description: "ALPS Onboarding Statement"
+title: 学生参与指南
+description: "ALPS 项目参与说明"
 toc: false
 ---
 
-Dear Students,
+亲爱的同学们：
 
-We are excited to invite you to contribute to the ALPS (Algorithms and Libraries for Physics Simulations) project, a powerful and widely used software package for simulating quantum and classical many-body systems. ALPS provides state-of-the-art algorithms and libraries for researchers in condensed matter physics, statistical mechanics, and related fields. Your contributions can help improve the accessibility, usability, and functionality of ALPS, benefiting the global scientific community.
+我们诚挚邀请您参与 ALPS（物理模拟算法与程序库）项目的贡献。作为广泛应用于量子与经典多体系统模拟的软件包，ALPS 为凝聚态物理、统计力学及相关领域研究者提供前沿算法与工具库。您的贡献将提升 ALPS 的易用性、可访问性和功能性，惠及全球科学社群。
 
-## We Could Use Your Help!
+## 我们需要您的力量！
 
-There are several ways you can get involved, depending on your interests and skill level. Below are the tasks we are currently working on, with opportunities for students at all levels of expertise:
+根据兴趣与技能水平，您可通过多种方式参与。以下是我们当前推进的任务，为不同专业水平的学生提供机会：
 
-### Level 1: Webpage Design and Installation Feedback
-- Task: Install ALPS on your system and document your experience. Provide feedback on the installation process, including any issues you encounter and suggestions for improvement.
-- Goal: Help us streamline the installation process and improve the user experience for new ALPS users.
-- Outcome: Your feedback will directly contribute to improving the ALPS documentation and installation guides.
+### 级别 1：网页设计与安装反馈
+- **任务**：在本地系统安装 ALPS 并记录体验，提供安装流程改进建议及问题反馈。
+- **目标**：优化安装流程，提升新用户体验。
+- **成果**：您的反馈将直接完善 ALPS 文档与安装指南。
 
-### Level 2: Tutorial Construction
-- Task: Develop tutorials for ALPS, including setting up simulations, running algorithms (e.g., Monte Carlo), and analyzing results. Write clear, step-by-step guides for the ALPS webpage.
-- Goal: Make ALPS more accessible to new users by providing high-quality educational resources.
-- Outcome: With serious commitment, your work on tutorials can lead to co-authorship on our next release paper.
+### 级别 2：教程构建
+- **任务**：开发 ALPS 教程，涵盖模拟设置、算法运行（如蒙特卡洛）及结果分析，撰写清晰的分步指南。
+- **目标**：通过高质量教育资源降低新用户使用门槛。
+- **成果**：持续投入可获得下版发布论文的合著者资格。
 
-### Level 3: Code and Library Management/Maintenance
-- Task: Assist with code maintenance, bug fixes, and library management. Help improve the efficiency and reliability of ALPS algorithms and libraries.
-- Goal: Ensure that ALPS remains a robust and reliable tool for researchers worldwide.
-- Outcome: Gain hands-on experience with software development and contribute to a widely used scientific tool.
+### 级别 3：代码与程序库管理/维护
+- **任务**：参与代码维护、漏洞修复及程序库管理，提升算法效率与可靠性。
+- **目标**：确保 ALPS 持续成为全球研究者的实用工具。
+- **成果**：获得软件开发实战经验，并为广泛应用的科学工具做出贡献。
 
-### Level 4: Research Code Contribution
-- Task: Contribute to the development of new algorithms, libraries, or research codes within ALPS. Work on cutting-edge problems in computational physics.
-- Goal: Expand the capabilities of ALPS and push the boundaries of what is possible in computational physics.
-- Outcome: Collaborate with researchers worldwide and make significant contributions to the field.
+### 级别 4：研究代码贡献
+- **任务**：开发 ALPS 新算法、工具库或研究代码，攻克计算物理前沿问题。
+- **目标**：拓展 ALPS 应用边界，推动计算物理发展。
+- **成果**：与全球研究者协作，在领域内作出重要贡献。
 
-## How to Get Started
+## 参与路径
 
-1. Begin with Level 1: Install ALPS on your system and document your experience. Share your feedback and suggestions for improvement. This is a great way to familiarize yourself with the software and contribute meaningfully.
+1. **从级别1起步**：安装 ALPS 并记录体验，分享改进建议。这是熟悉软件并做出实质贡献的理想起点。
    
-2. Move to Level 2: Once you are comfortable with ALPS, you can start working on tutorials. Learn more about Monte Carlo algorithms (or other methods if interested) and create educational materials for the ALPS webpage.
+2. **进阶级别2**：掌握基础后开始构建教程。学习蒙特卡洛等算法，为网站创建教学材料。
 
-3. Advance to Higher Levels: If you are interested in software development or research, you can contribute to code maintenance, library management, or even develop new algorithms.
+3. **挑战更高阶**：若对开发或研究感兴趣，可参与代码维护、库管理或新算法开发。
 
-## Collaboration and Recognition
+## 协作与认可
 
-- Primary Platform: We work primarily via GitHub, where you can collaborate with the ALPS team and other contributors from around the world.
-- Co-Authorship: With serious commitment to Level 2 or higher, you will have the opportunity to be a co-author on our next release paper.
-- Learning Opportunities: Gain hands-on experience with Monte Carlo simulations (or other methods in ALPS), software development, and scientific research.
+- **主要平台**：通过 GitHub 与全球 ALPS 团队及贡献者协作。
+- **合著机会**：持续投入级别2及以上任务，可成为发布论文合著者。
+- **学习资源**：获得蒙特卡洛模拟（及 ALPS 其他方法）、软件开发与科研的实战经验。
 
-## Why Join ALPS?
+## 加入 ALPS 的意义
 
-- Impact: Your contributions will directly impact the global scientific community by improving a widely used tool for computational physics.
-- Skill Development: Learn valuable skills in software development, scientific computing, and collaborative research.
-- Networking: Collaborate with researchers and students from around the world.
+- **影响力**：您的工作将直接改善全球计算物理研究者的核心工具。
+- **技能成长**：掌握软件开发、科学计算与协作研究的宝贵技能。
+- **学术网络**：与全球研究者及学生建立协作关系。
 
-## Ready to Get Started?
+## 立即启程
 
-If you are interested in joining the ALPS collaboration, please reach out to us via GitHub or contact a member of the [ALPS Governing Council](../../govern#alps-community-steering-committee) directly. We look forward to working with you and seeing your contributions to this exciting project!
+若有意加入 ALPS 协作，请通过 GitHub 联系我们，或直接联系 [ALPS 管理委员会](../../govern#alps-community-steering-committee)成员。期待与您携手推动这一激动人心的项目！
 
-Best regards,  
-The ALPS Collaboration
+此致  
+ALPS 合作组
 
 ---
 
-ALPS Website: [http://alps.comp-phys.org](http://alps.comp-phys.org)  
-ALPS GitHub Repository: [https://github.com/ALPSim/ALPS](https://github.com/ALPSim/ALPS)  
-ALPS Website Repository: [https://github.com/ALPSim/alpsim.github.io](https://github.com/ALPSim/alpsim.github.io)
- 
-
+ALPS 官网：[http://alps.comp-phys.org](http://alps.comp-phys.org)  
+ALPS 代码仓库：[https://github.com/ALPSim/ALPS](https://github.com/ALPSim/ALPS)  
+ALPS 网站源码：[https://github.com/ALPSim/alpsim.github.io](https://github.com/ALPSim/alpsim.github.io)

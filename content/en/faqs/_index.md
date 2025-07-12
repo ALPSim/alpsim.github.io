@@ -24,5 +24,4 @@ Please follow the instructions on our [installation page](../documentation/insta
 ### How can I contribute to ALPS?
 
 Please [contact](../govern#alps-community-steering-committee) one of our leaderships for further information. We will be happy to talk to you about your project.
-If you are a student and are interested in contributing to ALPS while you are in the process of learning about ALPS, we have an [onboarding statement](../../govern/onboard) for you.
-
+If you are a student and are interested in contributing to ALPS while you are in the process of learning about ALPS, we have an [onboarding statement](../govern/onboard) for you.

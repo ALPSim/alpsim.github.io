@@ -1,18 +1,19 @@
 ---
-title: Events
-description: "Developer Meetings and User Workshops"
+title: 活动日程
+description: "开发者会议与用户研讨会"
 toc: false
 sidebar:
   exclude: true
 icon: event
 ---
 
-ALPS constantly organizes developer meetings and user workshops.
-## Upcoming Developer Meetings
+ALPS 定期举办开发者会议和用户研讨会。
 
-- July 30 - August 1, 2025 at Northeastern University, Boston, MA: [more info](2025/northeastern)
+## 即将召开的开发者会议
 
-## Past Meetings
+- **2025年7月30日-8月1日**：马萨诸塞州波士顿市东北大学 [详情](2025/northeastern)
 
-- June 23-26, 2025 in San Sebastian, Spain: [more info](2025/sansebastian)
-- January 13-15, 2025 at University of Michigan: [more info](2025/michigan)
+## 往期会议回顾
+
+- **2025年6月23-26日**：西班牙圣塞巴斯蒂安 [详情](2025/sansebastian)
+- **2025年1月13-15日**：密歇根大学 [详情](2025/michigan)

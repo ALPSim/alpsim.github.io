@@ -1,36 +1,35 @@
-
 ---
-title: ALPS Installation on Mac/Linux from Binaries
-description: "ALPS Binary Installation"
+title: 在 Mac/Linux 上通过二进制安装 ALPS
+description: "ALPS 二进制安装指南"
 weight: 1
 toc: true
 cascade:
     type: docs
 ---
 
-The prebuilt binary [`pyALPS`](https://pypi.org/project/pyalps/) can be installed on most Linux and MacOS mcachines. `pyALPS` can be installed using pip Python package manager:
+预编译的二进制文件 [`pyALPS`](https://pypi.org/project/pyalps/) 支持大多数 Linux 和 macOS 系统。可通过 pip 包管理器安装：
 
     pip install pyalps
 
-Please make sure your version of Python is Python >= 3.9.
+请确保您的 Python 版本 ≥ 3.9。
 
-## Walkthrough Video
+## 安装视频指南
 
-For Windows computers one can either first install a Linux subsystem and then install ALPS or install ALPS in a virtual box environment.
+Windows 用户可选择以下任一方式：
+1. 先安装 Linux 子系统再安装 ALPS
+2. 在虚拟箱环境中安装 ALPS
 
-### Installation of Windows Subsystem for Linux (WSL).
+### 安装 Windows Linux 子系统 (WSL)
 <br>
 
 {{< youtube id="hEYWDLJmNpc" >}}
 
-### Installation of ALPS in WSL.
+### 在 WSL 中安装 ALPS
 <br>
 
 {{< youtube id="FevhLNcQCHY" >}}
 
-### Installation of ALPS in a virtual box environment for Windows.
+### 在 Windows 虚拟箱环境中安装 ALPS
 <br>
 
 {{< youtube id="Te6IApFjHJs" >}}
-
-

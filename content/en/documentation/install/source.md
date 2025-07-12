@@ -143,7 +143,7 @@ To install the code run:
   ```ShellSession
   $ cmake --install alps-build
   ```
-Your install directory will be created; if everything was successful you can find ALPS executables such as `mc` or `fulldiag` under the bin directory of your installation path.
+Your install directory will be created; if everything was successful you can find ALPS executables such as `spinmc` or `fulldiag` under the bin directory of your installation path.
 
 {{% /steps %}}
 

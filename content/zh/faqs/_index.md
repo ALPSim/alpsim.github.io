@@ -23,4 +23,4 @@ toc: false
 ### 如何为 ALPS 贡献代码？
 
 请[联系](../govern#alps-community-steering-committee)我们的领导团队成员获取详情。我们很乐意探讨您的项目方案。
-如果您是学生，希望在了解 ALPS 的过程中参与贡献，请参阅我们的[新人指南](../../govern/onboard)。
+如果您是学生，希望在了解 ALPS 的过程中参与贡献，请参阅我们的[新人指南](../govern/onboard)。
