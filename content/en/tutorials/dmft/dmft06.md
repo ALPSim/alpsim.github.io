@@ -11,11 +11,15 @@ In this example we simulate the Hubbard model on the Bethe lattice with interact
 
 The parameter files and python scripts are located in the subdirectories `hyb` and `int` of the directory `tutorials/dmft-06-paramagnet` in your ALPS install directory. You can run the simulations by executing (for the hybridization expansion version)
 
-    alpspython tutorial6a.py
+```
+python tutorial6a.py
+```
 
 and (for the interaction expansion version)
 
-    alpspython tutorial6b.py
+```
+python tutorial6b.py
+```
     
 At each DMFT iteration i the self-energy is written to the file `selfenergy_i`. Plot the converged self-energy and compare your results to Fig. 15 in [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). Alternatively you may use the python script for this task as it is done in the tutorial [ALPS 2 Tutorials:DMFT-02 Hybridization](../dmft02).
 
