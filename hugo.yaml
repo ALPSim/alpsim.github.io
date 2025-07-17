@@ -137,6 +137,66 @@ languages:
           params:
             type: language
 
+  ja:
+    languageName: 日本語
+    contentDir: content/ja
+    languageCode: ja
+    weight: 3
+    menu:
+      main:
+        - identifier: about
+          name: 概要
+          pageRef: /about
+          weight: 1
+        - identifier: installation
+          name: インストール
+          pageRef: /documentation/install
+          weight: 2
+        - identifier: documentation
+          name: ドキュメント
+          pageRef: /documentation
+          weight: 3
+        - identifier: tutorials
+          name: チュートリアル
+          pageRef: /tutorials
+          weight: 4
+        - identifier: events
+          name: イベント
+          pageRef: /events
+          weight: 5
+        - identifier: govern
+          name: 運営体制
+          pageRef: /govern
+          weight: 6
+        - identifier: faqs
+          name: よくある質問
+          pageRef: /faqs
+          weight: 7
+        - name: 検索
+          weight: 8
+          params:
+            type: search
+        - name: GitHub
+          weight: 9
+          url: "https://github.com/ALPSim"
+          params:
+            icon: github
+        - name: Discord
+          weight: 10
+          url: "https://discord.gg/JRNWnnva9g"
+          params:
+            icon: discord
+        - name: モード切替
+          weight: 11
+          params:
+            type: toggle
+            icon: sun
+        - identifier: language
+          name: 🌐 言語
+          weight: 20
+          params:
+            type: language
+
 module:
   hugoVersion:
     extended: true

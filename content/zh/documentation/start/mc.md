@@ -1,15 +1,14 @@
 ---
-linkTitle: Classical Monte Carlo
-title: Classical Monte Carlo Simulations
-description: "How to use ALPS"
+linkTitle: 经典蒙特卡洛
+title: 经典蒙特卡洛模拟
+description: "如何使用 ALPS"
 weight: 4
 math: true
 ---
 
-As a simple example for classical Monte Carlo we consider obtaining a phase transition in
-2D Ising model.
+作为经典蒙特卡洛的简单示例，我们考虑在二维伊辛模型中通过数值模拟来揭示其在低温下的相变。
 
-First, we need to import required packages.
+首先，我们需要导入所需的包。
 
 ```Python
 import pyalps
@@ -17,7 +16,7 @@ import matplotlib.pyplot as plt
 import pyalps.plot
 ```
 
-Then we prepare the input parameters. Here we consider lattices of sizes $4\times 4$, $8\times 8$, $16\times 16$, for different temperatures.
+然后我们准备输入参数。这里我们考虑不同温度下的 $4\times 4$、$8\times 8$、$16\times 16$ 尺寸的晶格。
 
 ```Python
 parms = []
@@ -49,38 +48,40 @@ for l in [4,8,16]:
             }
     )
 ```
-After that, we write the input into the format ALPS expects using Python, and tell it to run a spin Monte Carlo simulation (`spinmc`) using the input file:
+
+之后，我们使用 Python 来输入 ALPS 预期的运行参数格式，并告诉它使用输入文件运行自旋蒙特卡洛模拟（`spinmc`）：
+
 ```Python
-#write the input file and run the simulation
+#写入输入文件并运行模拟
 input_file = pyalps.writeInputFiles('parm7a',parms)
 pyalps.runApplication('spinmc',input_file,Tmin=5)
 ```
 
-After the simulation is finished, we can evaluate and plot the results.
+模拟完成后，我们可以评估和绘制结果。
+
 ```Python
 pyalps.evaluateSpinMC(pyalps.getResultFiles(prefix='parm7a'))
 
-#load the susceptibility and collect it as function of temperature T
+#加载磁化强度并将其作为温度 T 的函数收集
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm7a'),['|Magnetization|'])
 magnetization_abs = pyalps.collectXY(data,x='T',y='|Magnetization|',foreach=['L'])
 
-#make plots
+#制作图表
 plt.figure()
 pyalps.plot.plot(magnetization_abs)
-plt.xlabel('Temperature $T$')
-plt.ylabel('Magnetization $|m|$')
-plt.title('2D Ising model')
+plt.xlabel('温度 $T$')
+plt.ylabel('磁化强度 $|m|$')
+plt.title('二维伊辛模型')
 plt.show()
 ```
 
-We should obtain the following figure for magnetization in the 2D Ising model:
+我们应该得到以下二维伊辛模型磁化强度的图形：
 
 ![alt text](/figs/Ising_2D_m.png)
 
 
-## Walkthrough Video
+## 演示视频
 
 <br>
 
 {{< youtube id="3_4WCeKDtKc" >}}
-
