@@ -1,4 +1,3 @@
-
 ---
 title: DWA-01 Revisiting MC05
 math: true
@@ -153,5 +152,6 @@ Note the legend and labels that are nicely set up.
 
 - Matthias Troyer
 - Ping Nang Ma
+
 
 
