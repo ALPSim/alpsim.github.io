@@ -1,13 +1,13 @@
 ---
-title: Exact Diagonaliztion
-linkTitle: Exact Diagonaliztion
-description: "How to use ALPS"
+title: 精确对角化
+linkTitle: 精确对角化
+description: "如何使用 ALPS"
 weight: 6
 ---
 
-As an example of the sparse exact diagonalization method, we will obtain the triplet gap as a function of system size for the spin chain model.
+作为稀疏矩阵精确对角化方法的示例，我们将获得自旋链模型的三重态能隙作为系统大小的函数。
 
-First step is import required packages.
+第一步是导入所需的包。
 
 ```Python
 import pyalps
@@ -17,7 +17,7 @@ import pyalps.plot
 import pyalps.fit_wrapper as fw
 ```
 
-Then we prepare each set of input parameters and write them into the format `ALPS` expects.
+然后我们准备每组输入参数并将它们写入 `ALPS` 期望的格式。
 ```Python
 parms = []
 for l in [4, 6, 8, 10, 12, 14, 16]:
@@ -34,21 +34,21 @@ for l in [4, 6, 8, 10, 12, 14, 16]:
         }
       )
 
-#write the input file and run the simulation
+#写入输入文件并运行模拟
 input_file = pyalps.writeInputFiles('parm2a',parms)
 ```
 
-Then we run sparsediag for each set of parameters:
+然后我们对每组参数运行 sparsediag：
 ```Python
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-We then load measurements for all states:
+我们随后加载所有状态的测量数据：
 ```Python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm2a'))
 ```
 
-And extract the ground state energies over all momenta for every simulation.
+并提取每个模拟中所有动量的基态能量。
 ```Python
 lengths = []
 min_energies = {}
@@ -62,13 +62,13 @@ for sim in data:
   min_energies[(l,sz)]= np.min(all_energies)
 ```
 
-Finally, we make a plot of the triplet gap as a function of system size.
+最后，我们绘制三重态能隙作为系统大小函数的图表。
 ```Python
 gapplot = pyalps.DataSet()
 gapplot.x = 1./np.sort(lengths)
 gapplot.y = [min_energies[(l,1)] -min_energies[(l,0)] for l in np.sort(lengths)]
 gapplot.props['xlabel']='$1/L$'
-gapplot.props['ylabel']='Triplet gap $\Delta/J$'
+gapplot.props['ylabel']='三重态能隙 $\Delta/J$'
 gapplot.props['label']='S=1'
 gapplot.props['line']='.'
 
@@ -80,7 +80,7 @@ plt.ylim(0,1.0)
 
 pars = [fw.Parameter(0.411), fw.Parameter(1000), fw.Parameter(1)]
 f = lambda self, x, p: p[0]()+p[1]()*np.exp(-x/p[2]())
-# we fit only a range from 8 to 16
+# 我们只拟合从 8 到 16 的范围
 fw.fit(None, f, pars, np.array(gapplot.y)[2:], np.sort(lengths)[2:])
 
 x = np.linspace(0.0001, 1./min(lengths), 100)
@@ -89,8 +89,5 @@ plt.plot(x, f(None, 1/x, pars))
 plt.show()
 ```
 
-The final result should look like this:
+最终结果应该如下所示：
 ![ED](/figs/ED_spin.png)
-
-
-
