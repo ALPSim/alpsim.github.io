@@ -90,6 +90,8 @@ In the parameter file `parm1b`, we focus on the region around the critical point
     THERMALIZATION=150000;
     SKIP=500;
 
+    MEASURE[Winding Number]=1;
+
     { L=4; t=0.01; }
     { L=4; t=0.02; }
     { L=4; t=0.03; }
