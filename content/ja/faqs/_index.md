@@ -1,27 +1,26 @@
 ---
-title: Frequently Asked Questions
-description: "FAQs about ALPS"
+title: よくある質問
+description: "ALPSに関するFAQ"
 toc: false
 ---
 
-### How can I cite ALPS in my research publication?
+### 研究論文でALPSを引用する方法は？
 
-Our software release publications are shown on [this page](../documentation/pubs/papers). For specific numerical methods, please refer to our ["Code and Method References" page](../documentation/pubs/refs). The citation requirement is discussed on the [citation page](../documentation/pubs/citations).
+ソフトウェアリリース論文は[こちらのページ](../documentation/pubs/papers)に掲載しています。特定の数値手法については["コードと手法参考文献"ページ](../documentation/pubs/refs)をご参照ください。引用要件に関する詳細は[引用ガイドページ](../documentation/pubs/citations)で解説しています。
 
-### Where can I ask questions about ALPS installation, documnetation, or tutorials?
+### ALPSのインストール、ドキュメント、チュートリアルに関する質問はどこでできますか？
 
-We created a discord channel for community discussions. You can ask your questions in our [Github repository discussions](https://github.com/ALPSim/ALPS/discussions/categories/q-a) or in our [Discord channel](https://discord.gg/JRNWnnva9g).
+コミュニティディスカッション用にDiscordチャンネルを設けています。質問は[GitHubリポジトリのディスカッション](https://github.com/ALPSim/ALPS/discussions/categories/q-a)または[Discordチャンネル](https://discord.gg/JRNWnnva9g)でお受けしています。
 
-### How can I report a bug in the codes?
+### コードのバグを報告する方法は？
 
-We encourage you to report the bug in the [issues section of our Github repository](https://github.com/ALPSim/ALPS/issues). The potential bug will be immediately investigated by one of our developers.
+[GitHubリポジトリのIssuesセクション](https://github.com/ALPSim/ALPS/issues)でバグ報告をお願いします。報告された潜在的なバグは、開発チームが直ちに調査します。
 
-### How can I install ALPS?
+### ALPSのインストール方法は？
 
-Please follow the instructions on our [installation page](../documentation/install/) for Linux and Mac systems. Currently we do not support Windows system.
+LinuxおよびMacシステム向けのインストール手順は[インストールガイドページ](../documentation/install/)をご参照ください。現在Windowsシステムはサポートしておりません。
 
+### ALPSへの貢献方法は？
 
-### How can I contribute to ALPS?
-
-Please [contact](../govern#alps-community-steering-committee) one of our leaderships for further information. We will be happy to talk to you about your project.
-If you are a student and are interested in contributing to ALPS while you are in the process of learning about ALPS, we have an [onboarding statement](../govern/onboard) for you.
+詳細については[運営委員会メンバー](../govern#alps-community-steering-committee)までお問い合わせください。プロジェクト内容について喜んでご相談させていただきます。
+学生の方でALPSの学習過程における貢献にご関心のある場合は、[オンボーディングステートメント](../govern/onboard)をご覧ください。

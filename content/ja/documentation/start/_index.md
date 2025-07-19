@@ -1,6 +1,5 @@
-
 ---
-title: Getting Started
-description: "How to use ALPS"
+title: はじめに
+description: "ALPSの使用方法"
 weight: 1
 ---

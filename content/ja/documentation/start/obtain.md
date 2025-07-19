@@ -1,20 +1,18 @@
 ---
-title: Obtaining ALPS
-description: "How to use ALPS"
+title: ALPSの入手方法
+description: "ALPSの使用方法"
 weight: 2
 ---
 
+`ALPS`を使用する最も簡単な方法は、`pypi.org`からプリビルド済みの`Python`パッケージをインストールすることです：
 
-The simplest way to start using `ALPS` is to install a prebuilt `Python` package from `pypi.org`:
-
-  ```ShellSession
-  $ pip install pyalps
-  ```
-This will install the `ALPS` python package that can be imported in either `Python` script or a `Jupyter` notebook.
-
+```ShellSession
+$ pip install pyalps
+```
+これにより、PythonスクリプトやJupyterノートブックでインポート可能なALPS Pythonパッケージがインストールされます。
 
 ---
-Alternatively, you can build ALPS from sources by following the instruction below:
+または、以下の手順に従ってソースからALPSをビルドすることもできます：
 
   ```ShellSession
   $ git clone https://github.com/alpsim/ALPS alps-src
@@ -27,6 +25,6 @@ Alternatively, you can build ALPS from sources by following the instruction belo
   $ cmake --build alps-build -t test
   $ cmake --install alps-build
   ```
+この操作により、指定したパスにALPSのダウンロード、ビルド、テスト、インストールが行われます。
+より詳細な手順やトラブルシューティングについては、[インストールガイド](/documentation/install)をご覧ください。
 
-This will download, build, test and install `ALPS` into a specified path.
-For more detailed instructions and troubleshootings, please check out the [installation page](/documentation/install).

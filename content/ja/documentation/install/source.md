@@ -1,29 +1,28 @@
-
 ---
-title: ALPS Installation on Mac/Linux from Sources
-description: "ALPS Installation"
+title: ソースからのMac/LinuxへのALPSインストール
+description: "ALPSインストールガイド"
 weight: 2
 toc: true
 cascade:
     type: docs
 ---
 
-For most cases, it is preferred to [install ALPS from Binaries](../binary). However, for more user control and configuration, installing from Sources could be a better approach. 
+多くの場合、[バイナリからのALPSインストール](../binary)が推奨されます。ただし、より高度な制御と設定が必要な場合は、ソースからのインストールが適切な選択肢となります。
 {{% steps %}}
 
-### Install Required Dependencies
+### 必要な依存関係のインストール
 
-ALPS relies on a handful of external libraries. 
-Choose **one** MPI and **one** BLAS provider that fit your system:
+ALPSはいくつかの外部ライブラリに依存しています。<br>
+システムに適した **1つ** のMPI実装と **1つ** のBLASプロバイダを選択してください：
 
-| Dependency | Minimum version | Packages
-|----------|--------------------|---------------------------|
-| HDF5     | 1.10.0 | `libhdf5-dev`|
-| CMake | 2.8 | `cmake`|
-| C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` |
-| Boost | 1.76 <br>*(1.87 if NumPy >= 2.0 / Python >= 3.13)* | see below |
-| MPI | OpenMPI 4.0 **or** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev`|
-| BLAS | 0.3 | `libopenblas-dev`
+| 依存関係 | 最低バージョン | インストールパッケージ |
+|----------|----------------|------------------------|
+| HDF5     | 1.10.0 | `libhdf5-dev` |
+| CMake | 2.8 | `cmake` |
+| C++ コンパイラ | GCC 10.5.0 または Clang 13.0.1 | `build-essential` |
+| Boost | 1.76 <br>*(NumPy ≥ 2.0 / Python ≥ 3.13 の場合は 1.87)* | 下記参照 |
+| MPI | OpenMPI 4.0 **または** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
+| BLAS | 0.3 | `libopenblas-dev` |
 | Python | 3.9 | [python.org](https://www.python.org/) |
 
 
@@ -32,119 +31,126 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 <details>
 <summary><strong> Ubuntu / Debian / WSL</strong> </summary>
  
- 
-  ```ShellSession
+```ShellSession
 $ sudo apt update
 $ sudo apt install build-essential cmake \
                    libhdf5-dev \
                    libopenblas-dev \
-                   libopenmpi-dev openmpi-bin # or: libpich-dev mpich
+                   libopenmpi-dev openmpi-bin # または: libmpich-dev mpich
 
-# download and install Boost v1.81.0:
+# Boost v1.81.0のダウンロードとインストール:
 $ wget https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
 $ tar -xzf boost_1_81_0.tar.gz
 
-# install Python libs:
-$ pip install numpy scipy # python libraries 
-# or 
+# Pythonライブラリのインストール:
+$ pip install numpy scipy # Pythonライブラリ
+# または
 $ python3 -m pip install numpy scipy
 ```
-</details>
-<details>
-<summary><strong> macOS (via Homebrew)</strong> </summary>
+</details> 
 
- ```ShellSession
+<details> <summary><strong> macOS (Homebrew経由)</strong> </summary>
+
+```
 $ brew update
 $ brew install cmake hdf5 \
-               openblas open-mpi # or: mpich
+               openblas open-mpi # または: mpich
 
-# download and install Boost:
+# Boostのインストール:
 $ brew install boost
 
-# install Python libs:
+# Pythonライブラリのインストール:
 $ pip3 install numpy scipy 
 ```
 </details>
 
-### Verify Dependencies
-
- ```ShellSession
-$ gcc -v #  must be >= 10.5.0
-$ cmake --version # must be >= 3.18
-$ mpirun --version # OpenMPI 4.0 or MPICH 4
+### 依存関係の確認
+```
+$ gcc -v # 10.5.0以上である必要あり
+$ cmake --version # 3.18以上である必要あり
+$ mpirun --version # OpenMPI 4.0 または MPICH 4
 ```
 
-### Download and Build
-We can now proceed to download and build the `ALPS` library. <br>
-In the snippet below, please replace `/path/to/install/directory` with the actual directory on your system you want ALPS to be installed.
+### ダウンロードとビルド
 
-  ```ShellSession
-  $ git clone https://github.com/alpsim/ALPS alps-src
-  $ cmake -S alps-src -B alps-build                                     \
+ALPSライブラリのダウンロードとビルドを開始します。
+以下のコマンドでは、/path/to/install/directoryを実際のインストールディレクトリに置き換えてください。
+
+```
+$ git clone https://github.com/alpsim/ALPS alps-src
+$ cmake -S alps-src -B alps-build                                     \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
          -DBoost_SRC_DIR=</directory/with/boost/sources>/boost_1_81_0  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
-  $ cmake --build alps-build -j 8
-  $ cmake --build alps-build -t test
-  ```
+$ cmake --build alps-build -j 8
+$ cmake --build alps-build -t test
+```
 
-### Video Walkthrough
-<br>
+### ビデオチュートリアル
 
 {{< youtube id="OHQGfDDaRMk" >}}
 
+<details> 
+<summary><strong>トラブルシューティング</strong></summary>
+* **別のMPI/BLASが必要ですか？**
+上記のパッケージ名をクラスタのモジュール（例: Intel MKL/OneAPI, AMD AOCL, IBM ESSL 等）に置き換えてください。CMakeはこれらのパッケージの位置を自動検出し、Makefileにコンパイル指示を生成します。
 
-<details>
-<summary><strong>Troubleshooting</strong></summary>
+* **Pythonエラー**
+Python 3.9以上を使用していることを確認してください。注意：一部の環境（macOSなど）ではpipの代わりにpip3を使用します。正しいバージョンのインストールサポートについてはPython公式サイトを参照してください。
 
-* **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), [IBM ESSL](https://www.ibm.com/docs/en/essl/6.2?topic=whats-new), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
-* **Python errors** <br> Ensure you are using Python 3.9 at a minimum. Note: some installations (e.g. macOS) use `pip3` instead of pip. Refer to the [python website](https://www.python.org/) for support in installing the correct version.
-* **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
-* **Boost errors** <br > We have tested building `ALPS` with `Boost` versions `1.76.0` through `1.81.0` (please refere to the [build notes](#build-notes) for the combination of supported `boost` versions with different compilers and Python version)
+* **MPIのバージョン不一致？**
+CMakeが使用するMPIバージョンがmpirun --versionの結果と一致していることを確認してください。
+
+* **Boostエラー**
+ALPSはBoostバージョン1.76.0から1.81.0でビルドテスト済みです（サポートされるboostバージョンとコンパイラ・Pythonバージョンの組み合わせについてはビルド注意事項を参照）。
 
 </details>
 
-#### Build notes
-
+#### ビルド注意事項
 {{% tabs items="Linux,Mac" %}}
 {{% tab %}}
-The following combinations of `Boost`, Python and the C++ compiler have been tested:
-  - GCC 10.5.0, Python 3.9.19 and `Boost` 1.76.0
-  - GCC 11.4.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - GCC 12.3.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 13.0.1, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 14.0.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 15.0.7, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
+以下のBoost、Python、C++コンパイラの組み合わせがテスト済みです：
+- GCC 10.5.0, Python 3.9.19, Boost 1.76.0
+
+- GCC 11.4.0, Python 3.10.14, Boost 1.81.0, 1.86.0
+
+- GCC 12.3.0, Python 3.10.14, Boost 1.81.0, 1.86.0
+
+- Clang 13.0.1, Python 3.10.14, Boost 1.81.0, 1.86.0
+
+- Clang 14.0.0, Python 3.10.14, Boost 1.81.0, 1.86.0
+
+- Clang 15.0.7, Python 3.10.14, Boost 1.81.0, 1.86.0
 {{% /tab %}}
 {{% tab %}}
-ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0).
-On MacOS >=14.6 in order to succesfully build ALPS using Homebrew gcc compiler, the following environment variable have to be set:
 
-```ShellSession
+ALPSはARMベースのMacOSシステムで、デフォルトコンパイラとHomebrewのgccコンパイラ（Boost 1.86.0使用）の両方でテスト済みです。
+MacOS ≥14.6でHomebrew gccコンパイラを使用してALPSをビルドする場合、以下の環境変数を設定する必要があります：
+
+```
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
 ```
-
 {{% /tab %}}
-
 {{% /tabs %}}
 
-If you have a non-standard installation location of the dependent packages installed in step 1, cmake will fail to find the package. ALPS uses the standard cmake mechanism (FindXXX.cmake) to find packages. The following pointers may help:
-  - For MPI: Follow the instructions on [cmake with mpi](https://cmake.org/cmake/help/latest/module/FindMPI.html)
-  - For BLAS: Follow the instructions on [cmake with BLAS](https://cmake.org/cmake/help/latest/module/FindBLAS.html)
-  - For HDF5: Follow the instructions on [cmake with HDF5](https://cmake.org/cmake/help/latest/module/FindHDF5.html)
+ステップ1で依存パッケージを非標準の場所にインストールした場合、CMakeがパッケージを見つけられない可能性があります。ALPSは標準のCMakeメカニズム（FindXXX.cmake）を使用してパッケージを検索します。以下の情報が役立つ場合があります：
+
+  - MPI: [CMake MPIドキュメント](https://cmake.org/cmake/help/latest/module/FindMPI.html)
+  - BLAS: [CMake BLASドキュメント](https://cmake.org/cmake/help/latest/module/FindBLAS.html)
+  - HDF5: [CMake HDF5ドキュメント](https://cmake.org/cmake/help/latest/module/FindHDF5.html)
 
 ***
 
-After successfully building the code, you will need to install it. The install location is specified with `-DCMAKE_INSTALL_PREFIX=/path/to/install/directory` as a cmake command during configuration. Alternatively, it can be changed by explicitly providing a new installation path to the `--prefix` parameter during the installation phase (see [cmake manual](https://cmake.org/cmake/help/latest/manual/cmake.1.html#cmdoption-cmake--install-0)).
-<br>
-To install the code run:
+コードのビルドに成功したら、インストールを実行する必要があります。インストール先は設定時に-DCMAKE_INSTALL_PREFIX=/path/to/install/directoryパラメータで指定します。または、インストール段階で--prefixパラメータに新しいパスを明示的に指定することも可能です（[CMakeマニュアル参照](https://cmake.org/cmake/help/latest/manual/cmake.1.html#cmdoption-cmake--install-0)）。
 
-  ```ShellSession
-  $ cmake --install alps-build
-  ```
-Your install directory will be created; if everything was successful you can find ALPS executables such as `spinmc` or `fulldiag` under the bin directory of your installation path.
+インストールコマンド：
+
+```ShellSession
+$ cmake --install alps-build
+```
+
+インストールディレクトリが作成されます。すべてが正常に完了した場合、インストールパスのbinディレクトリにspinmcやfulldiagなどのALPS実行ファイルが見つかります。
 
 {{% /steps %}}
-
 

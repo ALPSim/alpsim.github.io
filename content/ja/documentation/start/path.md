@@ -1,57 +1,52 @@
 ---
-title: Setting the Path
-description: "How to use ALPS"
+title: パスの設定
+description: "ALPSの使用方法"
 weight: 3
 ---
 
-## Setting the Path for Executables in Binary Installation
+## バイナリインストールにおける実行ファイルのパス設定
 
-Once `pyalps` is successfully installed through the binary installation, we can start to use it by importing it into `python`. However, the system might not know the path to the `python` command. Here is an example of how to set the correct path in the `.bash_profile` file for a Mac system. For a Linux system, the corresponding file is `.bashrc`.
+バイナリインストールで`pyalps`のインストールが成功したら、`python`にインポートして使用を開始できます。ただし、システムが`python`コマンドのパスを認識していない可能性があります。以下に、Macシステムで`.bash_profile`ファイルに正しいパスを設定する例を示します。Linuxシステムの場合は、対応するファイルとして`.bashrc`を使用します。
 
-### Check your `python` installation directory with an `ls` command in your terminal.
+### ターミナルで`ls`コマンドを使用して`python`のインストールディレクトリを確認
 
-It is usually installed in a directory like the following:
-
+通常、以下のようなディレクトリにインストールされています：
 ```
 ls /Library/Frameworks/Python.framework/Versions/3.12
 ```
 
-Within the `bin` directory, there are `python3` and `pip3`, as well as other binaries. To run the binaries from this folder with the usual `python` or `pip` commands from your terminal, we need to let the system know the path to the binaries and set aliases for the commands.
+`bin`ディレクトリ内には`python3`、`pip3`、その他のバイナリファイルがあります。ターミナルから通常の`python`や`pip`コマンドでこれらのバイナリを実行するには、システムにバイナリのパスを知らせ、コマンドのエイリアスを設定する必要があります。
 
-### Find or create a `.bash_profile` file.
+### `.bash_profile`ファイルの検索または作成
 
-- At your home directory, execute `ls -a`, or from any directory, excute `ls -a ~`.
+- ホームディレクトリで`ls -a`を実行、または任意のディレクトリから`ls -a ~`を実行
 
-- Edit or create `.bash_profile` with the `vim` editor:
-`vi ~/.bash_profile`
+- `vim`エディタで`.bash_profile`を編集または作成：
+  `vi ~/.bash_profile`
 
-- Switch to the editing mode by entering `i`.
+- `i`キーを押して編集モードに切り替え
 
-- Add the following line for the binary path to the file:
-
+- バイナリパスをファイルに追加：
 `export PATH="$PATH:/Library/Frameworks/Python.framework/Versions/3.12/bin"`
 
-- Add the following lines to create aliases for the commands:
-
+- コマンドのエイリアスを作成：
 `alias python="python3"`
-
 `alias pip="pip3"`
 
-- Save the changes to your file:
-Press the `esc` key and enter `:x`. This will save your changes to the file and exit the `vim`.
+- 変更を保存：
+`esc`キーを押した後、`:x`と入力。これで変更が保存され、`vim`が終了します。
 
-### Tell the system your path and aliases for the binaries:
-In your terminal, type `source ~/.bash_profile`.
+### バイナリのパスとエイリアスをシステムに反映
+ターミナルで以下を入力：`source ~/.bash_profile`
 
-You can now run any `Python` files. Your `pyalps` library is probably installed in the following directory:
+これで任意の`Python`ファイルを実行できるようになります。`pyalps`ライブラリは通常、以下のディレクトリにインストールされます：
 
 `/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages` 
 
-Use `ls` in the above or a similar directory to check if the package is correctly installed.
+上記または類似のディレクトリで`ls`を使用し、パッケージが正しくインストールされていることを確認してください。
 
-## Setting the Path for Executables in Source Installation
-If you have done an ALPS source installation, the program executables are located at the /bin folder of your installed ALPS directory. The following path should be set in the .bash_profile for Mac or .bashrc for Linux systems.
+## ソースインストールにおける実行ファイルのパス設定
+ALPSをソースからインストールした場合、プログラムの実行ファイルはインストールディレクトリの/binフォルダに配置されます。以下のパスをMacの.bash_profileまたはLinuxの.bashrcに設定する必要があります。
 
-`export PATH="$PATH:<your installed ALPS directory>/bin"`
-
+`export PATH="$PATH:<ALPSのインストールディレクトリ>/bin"`
 
