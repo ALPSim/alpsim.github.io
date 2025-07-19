@@ -1,22 +1,21 @@
-
 ---
-title: ALPS installation
-description: "ALPS Installation"
+title: ALPSインストール方法
+description: "ALPSのインストール"
 toc: true
 cascade:
     type: docs
 weight: 2
 ---
 
-We support ALPS installations on Mac/Linux machines with the following two methods:<br><br>
+ALPSは以下の2つの方法でMac/Linuxマシンにインストールできます：<br><br>
 
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
-    title="Binary Installations"
+    title="バイナリインストール"
     link="binary"
   >}}
     {{< hextra/feature-card
-    title="Source Installations"
+    title="ソースからのインストール"
     link="source"
   >}}
 {{< /hextra/feature-grid >}}

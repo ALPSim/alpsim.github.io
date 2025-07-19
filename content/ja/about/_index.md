@@ -1,18 +1,18 @@
 ---
-title: About
-description: "About ALPS"
+title: ALPSについて
+description: "ALPSの概要"
 layout: alps-home 
 toc: true  
 ---
 
-ALPS is a software package for simulating correlated systems, with codes for classical spin systems, quantum spin systems, bosonic systems, and fermion systems.
+ALPSは、古典スピン系、量子スピン系、ボソン系、フェルミオン系など、相関システムのシミュレーション向けソフトウェアパッケージです。
 
-## Licensing
+## ライセンス
 
-All codes under ALPS framework are released under the MIT open-source license.
+ALPSフレームワーク下の全コードは、MITオープンソースライセンスで公開されています。
 
-## Acknowledgements
+## 謝辞
 
-ALPS software package results from the contributions of numerous researchers around the world in the past 20+ years. Without their efforts, the current state of the software is impossible to exist. We hope that more researchers will join us in promoting and developing this open source ecosystem to further advance ALPS's capabilities in research and education.
+ALPSソフトウェアパッケージは、過去20年以上にわたり世界中の数多くの研究者の貢献によって実現しました。彼らの尽力なくして、本ソフトウェアの現状は存在し得ませんでした。より多くの研究者にこのオープンソースエコシステムへの参加を呼びかけ、ALPSの研究・教育機能のさらなる発展を推進したいと考えています。
 
-ALPS has been funded by many funding sources from various international funding agencies over the years. Currently, work on the maintenance of ALPS is sponsored by a grant from the US National Science Foundation under the award NSF No. 2345575.
+ALPSはこれまで、様々な国際的な資金提供機関から多くの資金援助を受けてきました。現在、ALPSのメンテナンス作業は、米国国立科学財団（NSF）の助成金（Award No. NSF 2345575）によって支援されています。

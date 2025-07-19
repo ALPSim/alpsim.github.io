@@ -1,43 +1,38 @@
-
 ---
-title: Tutorials
+title: チュートリアル
 icon: school
-description: "Tutorials for ALPS"
+description: "ALPSのチュートリアル"
 toc: true
 cascade:
     type: docs
 ---
-The following tutorials illustrate how to set up input parameters and collect simulation data. The example simulations are for small system sizes, so the results can be obtained in minutes.
-The tutorials are available in both Python scripts and Jupyter notebooks (work in progress).
+以下のチュートリアルでは、入力パラメータの設定方法とシミュレーションデータの収集方法を解説します。例示するシミュレーションは小規模システム向けのため、数分で結果を得ることができます。
+チュートリアルはPythonスクリプトとJupyterノートブックの両方で利用可能です（現在準備中）。
 
 <br>
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
-    title="Monte Carlo"
+    title="モンテカルロ法"
     link="mcs"
   >}}
   {{< hextra/feature-card
-    title="Exact Diagonalization"
+    title="厳密対角化法"
     link="ed"
   >}}
   {{< hextra/feature-card
-    title="Density Matrix Renormalization Group (DMRG)"
+    title="密度行列繰り込み群 (DMRG)"
     link="dmrg"
   >}}
   {{< hextra/feature-card
-    title="Dynamical Mean Field Theory (DMFT)"
+    title="動的平均場理論 (DMFT)"
     link="dmft"
   >}}
   {{< hextra/feature-card
-    title="Time-Evolving Block Decimation (TEBD)"
+    title="時間発展ブロックデシメーション (TEBD)"
     link="tebd"
   >}}
   {{< hextra/feature-card
-    title="Jupyter Notebooks"
+    title="Jupyterノートブック"
     link="jupyter"
   >}}
 {{< /hextra/feature-grid >}}
-
-
-
-

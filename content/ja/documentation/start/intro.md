@@ -1,9 +1,12 @@
 ---
-title: Introduction
-description: "How to use ALPS"
+title: イントロダクション
+description: "ALPSの使用方法"
 weight: 1
 ---
 
-ALPS is a software package for simulating correlated systems. 
-It provides programs for [Classical Monte Carlo](../mc), [Quantum Monte Carlo](../qmc), [Exact Diagonalization](../ed), and [Density Matrix Renormalization Group](../dmrg) simulations.
-
+ALPSは相関システムのシミュレーション向けソフトウェアパッケージです。  
+以下のシミュレーション手法を提供しています：
+- [古典モンテカルロ法](../mc)
+- [量子モンテカルロ法](../qmc)
+- [厳密対角化法](../ed)
+- [密度行列繰り込み群法](../dmrg)

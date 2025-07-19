@@ -1,68 +1,66 @@
 ---
-title: Onboarding Statement for Students
-description: "ALPS Onboarding Statement"
+title: 学生向けオンボーディングステートメント
+description: "ALPS参加ガイド"
 toc: false
 ---
 
-Dear Students,
+学生の皆様へ
 
-We are excited to invite you to contribute to the ALPS (Algorithms and Libraries for Physics Simulations) project, a powerful and widely used software package for simulating quantum and classical many-body systems. ALPS provides state-of-the-art algorithms and libraries for researchers in condensed matter physics, statistical mechanics, and related fields. Your contributions can help improve the accessibility, usability, and functionality of ALPS, benefiting the global scientific community.
+ALPS（Algorithms and Libraries for Physics Simulations）プロジェクトへの貢献にぜひご参加ください。ALPSは量子系や古典多体系のシミュレーション向けに広く利用されている強力なソフトウェアパッケージです。凝縮系物理学、統計力学、関連分野の研究者向けに最先端のアルゴリズムとライブラリを提供しています。皆様の貢献がALPSのアクセシビリティ、使いやすさ、機能性を向上させ、世界の科学コミュニティに貢献することにつながります。
 
-## We Could Use Your Help!
+## 皆様の力を必要としています！
 
-There are several ways you can get involved, depending on your interests and skill level. Below are the tasks we are currently working on, with opportunities for students at all levels of expertise:
+関心とスキルレベルに応じて、以下のような参加方法があります。専門知識のレベルに応じた様々なタスクを用意しています：
 
-### Level 1: Webpage Design and Installation Feedback
-- Task: Install ALPS on your system and document your experience. Provide feedback on the installation process, including any issues you encounter and suggestions for improvement.
-- Goal: Help us streamline the installation process and improve the user experience for new ALPS users.
-- Outcome: Your feedback will directly contribute to improving the ALPS documentation and installation guides.
+### レベル1：ウェブページデザインとインストレーションフィードバック
+- タスク：ご自身のシステムにALPSをインストールし、体験を記録。インストールプロセスに関する問題点や改善提案を提供
+- 目的：インストールプロセスの効率化と新規ユーザー体験の向上
+- 成果：フィードバックがALPSドキュメントとインストールガイドの改善に直接反映
 
-### Level 2: Tutorial Construction
-- Task: Develop tutorials for ALPS, including setting up simulations, running algorithms (e.g., Monte Carlo), and analyzing results. Write clear, step-by-step guides for the ALPS webpage.
-- Goal: Make ALPS more accessible to new users by providing high-quality educational resources.
-- Outcome: With serious commitment, your work on tutorials can lead to co-authorship on our next release paper.
+### レベル2：チュートリアル構築
+- タスク：シミュレーション設定、アルゴリズム実行（例：モンテカルロ法）、結果分析を含むALPSチュートリアル開発。ALPSウェブページ向けに段階的なガイドを作成
+- 目的：高品質な教育リソース提供による新規ユーザーの円滑な導入
+- 成果：本格的な取り組みにより、次期リリース論文の共著者となる可能性
 
-### Level 3: Code and Library Management/Maintenance
-- Task: Assist with code maintenance, bug fixes, and library management. Help improve the efficiency and reliability of ALPS algorithms and libraries.
-- Goal: Ensure that ALPS remains a robust and reliable tool for researchers worldwide.
-- Outcome: Gain hands-on experience with software development and contribute to a widely used scientific tool.
+### レベル3：コード・ライブラリ管理/メンテナンス
+- タスク：コード保守、バグ修正、ライブラリ管理の支援。ALPSアルゴリズムとライブラリの効率性・信頼性向上
+- 目的：世界中の研究者向けに堅牢で信頼性の高いツールを維持
+- 成果：ソフトウェア開発の実践経験獲得と広く利用される科学ツールへの貢献
 
-### Level 4: Research Code Contribution
-- Task: Contribute to the development of new algorithms, libraries, or research codes within ALPS. Work on cutting-edge problems in computational physics.
-- Goal: Expand the capabilities of ALPS and push the boundaries of what is possible in computational physics.
-- Outcome: Collaborate with researchers worldwide and make significant contributions to the field.
+### レベル4：研究コード貢献
+- タスク：ALPS内の新規アルゴリズム、ライブラリ、研究コード開発への貢献。計算物理学の最先端課題に取り組む
+- 目的：ALPSの機能拡張と計算物理学の可能性の追求
+- 成果：世界中の研究者との協働と分野への重要な貢献
 
-## How to Get Started
+## 始め方
 
-1. Begin with Level 1: Install ALPS on your system and document your experience. Share your feedback and suggestions for improvement. This is a great way to familiarize yourself with the software and contribute meaningfully.
+1. レベル1から開始：ALPSをインストールし、体験を記録。フィードバックと改善提案を共有。ソフトウェアに慣れながら有意義な貢献ができる最適な方法です。
    
-2. Move to Level 2: Once you are comfortable with ALPS, you can start working on tutorials. Learn more about Monte Carlo algorithms (or other methods if interested) and create educational materials for the ALPS webpage.
+2. レベル2に移行：ALPSに慣れたらチュートリアル作成を開始。モンテカルロアルゴリズム（または関心のある他の手法）について学び、教育教材を開発。
 
-3. Advance to Higher Levels: If you are interested in software development or research, you can contribute to code maintenance, library management, or even develop new algorithms.
+3. 上位レベルへ発展：ソフトウェア開発や研究に関心があれば、コード保守、ライブラリ管理、さらには新規アルゴリズム開発に貢献。
 
-## Collaboration and Recognition
+## 協働と評価
 
-- Primary Platform: We work primarily via GitHub, where you can collaborate with the ALPS team and other contributors from around the world.
-- Co-Authorship: With serious commitment to Level 2 or higher, you will have the opportunity to be a co-author on our next release paper.
-- Learning Opportunities: Gain hands-on experience with Monte Carlo simulations (or other methods in ALPS), software development, and scientific research.
+- 主要プラットフォーム：GitHubを中心に、世界中のALPSチームや貢献者と協働
+- 共著権：レベル2以上の本格的な取り組みにより、次期リリース論文の共著者となる機会
+- 学習機会：モンテカルロシミュレーション（またはALPSの他の手法）、ソフトウェア開発、科学研究の実践経験獲得
 
-## Why Join ALPS?
+## ALPSに参加する理由
 
-- Impact: Your contributions will directly impact the global scientific community by improving a widely used tool for computational physics.
-- Skill Development: Learn valuable skills in software development, scientific computing, and collaborative research.
-- Networking: Collaborate with researchers and students from around the world.
+- 影響力：計算物理学で広く利用されるツールの改善を通じ、世界の科学コミュニティに直接貢献
+- スキル開発：ソフトウェア開発、科学計算、共同研究における貴重なスキル習得
+- ネットワーキング：世界中の研究者や学生との協働機会
 
-## Ready to Get Started?
+## 参加準備はできましたか？
 
-If you are interested in joining the ALPS collaboration, please reach out to us via GitHub or contact a member of the [ALPS Governing Council](../../govern#alps-community-steering-committee) directly. We look forward to working with you and seeing your contributions to this exciting project!
+ALPSコラボレーションへの参加にご関心があれば、GitHub経由でお問い合わせいただくか、[ALPS運営委員会](../../govern#alps-community-steering-committee)のメンバーに直接ご連絡ください。皆様との協働と、このエキサイティングなプロジェクトへの貢献を楽しみにしています！
 
-Best regards,  
-The ALPS Collaboration
+敬具  
+ALPSコラボレーション
 
 ---
 
-ALPS Website: [http://alps.comp-phys.org](http://alps.comp-phys.org)  
-ALPS GitHub Repository: [https://github.com/ALPSim/ALPS](https://github.com/ALPSim/ALPS)  
-ALPS Website Repository: [https://github.com/ALPSim/alpsim.github.io](https://github.com/ALPSim/alpsim.github.io)
- 
-
+ALPSウェブサイト: [http://alps.comp-phys.org](http://alps.comp-phys.org)  
+ALPS GitHubリポジトリ: [https://github.com/ALPSim/ALPS](https://github.com/ALPSim/ALPS)  
+ALPSウェブサイトリポジトリ: [https://github.com/ALPSim/alpsim.github.io](https://github.com/ALPSim/alpsim.github.io)

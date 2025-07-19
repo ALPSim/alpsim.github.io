@@ -1,16 +1,16 @@
 ---
-title: Governance
-description: "ALPS Governance"
+title: ガバナンス
+description: "ALPSのガバナンス体制"
 toc: false
 ---
 
-## ALPS Mission
+## ALPSのミッション
 
-ALPS aims to house and distribute software for simulation of correlated quantum systems.
+ALPSは、相関量子システムのシミュレーション向けソフトウェアを統合・配布することを目的としています。
 
-We are currently reworking the governance of ALPS. Work on the future structure will be performed at our workshops and announced here. If you are interesteed in getting involved please let the current leadership know.
+現在、ALPSのガバナンス体制の再構築を進めています。今後の構造に関する作業はワークショップで実施され、こちらで発表されます。参加にご関心のある方は、現在のリーダーシップまでお知らせください。
 
-## ALPS Community Steering Committee
+## ALPSコミュニティ運営委員会
 
 <br>
 
@@ -51,22 +51,22 @@ h4 {
 
   <div>
     <h4><a href="https://cos.northeastern.edu/people/adrian-feiguin/">Adrian Feiguin</a></h4>
-    <h6>Professor of Physics<br>
-    Northeastern University
+    <h6>物理学教授<br>
+    ノースイースタン大学
     </h6>
   </div>
   
   <div>
     <h4><a href="https://lsa.umich.edu/physics/people/faculty/egull.html">Emanuel Gull</a></h4>
-    <h6>Professor of Physics<br>
-    University of Michigan
+    <h6>物理学教授<br>
+    ミシガン大学
     </h6>
   </div>
   
   <div>
     <h4><a href="https://scarola.phys.vt.edu/">Vito Scarola</a></h4>
-    <h6>Professor of Physics<br>
-    Virginia Tech
+    <h6>物理学教授<br>
+    バージニア工科大学
     </h6>
   </div>
   
@@ -91,7 +91,7 @@ h4 {
 </div>
 
 
-## ALPS External Advisory Board
+## ALPS外部諮問委員会
 
 <br>
 <div class="mycontainer">
@@ -128,22 +128,22 @@ h4 {
 <div class="mycontainer">
   <div>
     <h6>
-    Professor of Physics <br>
-    Boston University
+    物理学教授 <br>
+    ボストン大学
     </h6>
   </div>
 
   <div>
-    <h6>Professor<br>
-    Department of Physics & Astronomy and <br> 
-    Department of Electrical Engineering and Computer Science <br>
-    University of Tennessee<br>
+    <h6>教授<br>
+    物理学・天文学科 および <br> 
+    電気工学・コンピューター科学科 <br>
+    テネシー大学<br>
     </h6>
   </div>
 
   <div>
-    <h6>Distinguished Research Staff and Section Head<br>
-    Oak Ridge National Lab<br>
+    <h6>上級研究員・部門長<br>
+    オークリッジ国立研究所<br>
     </h6>
   </div>
 
@@ -181,8 +181,8 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    <h6>Technical Fellow and Corporate Vice President of Quantum<br>
-    Microsoft<br>
+    <h6>テクニカルフェロー兼量子担当副社長<br>
+    マイクロソフト<br>
     </h6>
   </div>
   
@@ -195,64 +195,62 @@ h4 {
   
 </div>
 
-## ALPS Governance Documents
+## ALPSガバナンス文書
 
-### Overview 
+### 概要 
 
-The ALPS software suite (Applications and Libraries for Physics Simulations), provides an open source ecosystem of algorithms with applications in condensed matter, quantum computing, quantum information, and related fields. This project supports the scientific community of users by providing a maintainable and sustainable open source infrastructure for ALPS, along with community building efforts.
-ALPS is governed by [a self elected council](#alps-community-steering-committee).  ALPS releases will be under the open source MIT License.  To become involved with the development of the project, [email a member of the governing council](#alps-community-steering-committee).
+ALPSソフトウェアスイート（Applications and Libraries for Physics Simulations）は、凝縮系物理、量子コンピューティング、量子情報、関連分野向けのオープンソースアルゴリズムエコシステムを提供します。本プロジェクトは、保守可能かつ持続可能なALPSのオープンソースインフラとコミュニティ構築活動を通じて、科学コミュニティを支援します。
+ALPSは[自律選出委員会](#alps-community-steering-committee)によって運営されています。ALPSリリースはオープンソースのMITライセンス下で提供されます。プロジェクト開発への参加については、[運営委員会メンバー](#alps-community-steering-committee)までメールでお問い合わせください。
 
-### Roles and Responsibilities 
+### 役割と責任 
 
-ALPS adopts a hierarchical shared governance structure for each of its technical roles.
-A community of developers/contributors files issues, makes pull requests, and contributes to the project via [GitHub](https://github.com/ALPSim/ALPS).
-A set of maintainers, at least one for each simulation code, drives each contribution to the ALPS project.
-They are certified by core maintainers who impose commitment requirements and respond to community issues.
-The governing council drives the overall project direction, establishes code commitment requirements, and makes deprecation decisions. 
-The external advisory board makes recommendations regarding direction and approaches for community engagement.
+ALPSは各技術的役割に対して階層的な共有ガバナンス構造を採用しています。
+開発者/貢献者コミュニティは、[GitHub](https://github.com/ALPSim/ALPS)を通じて課題を提出し、プルリクエストを作成し、プロジェクトに貢献します。
+各シミュレーションコードには少なくとも1人のメンテナーが存在し、ALPSプロジェクトへの貢献を推進します。
+彼らはコアメンテナーによって認定され、コアメンテナーはコミットメント要件を課し、コミュニティ課題に対応します。
+運営委員会はプロジェクト全体の方向性を決定し、コードコミットメント要件を確立し、廃止決定を行います。
+外部諮問委員会はコミュニティ関与の方向性とアプローチについて助言します。
 
-#### Maintainers:
+#### メンテナー:
 
-Each code has a maintainer group that uses GitHub to submit change requests. Maintainer groups are responsible for making GitHub pull requests and changing the scope of their code.  Each maintainer group is responsible for selecting one or more members to commit time as a core maintainer.  The governing council decides on the extent of the commitment. 
+各コードには変更リクエストをGitHubで提出するメンテナグループがあります。メンテナグループはGitHubプルリクエストの作成とコード範囲の変更を担当します。各メンテナグループは1名以上のメンバーをコアメンテナーとして選出する責任があります。運営委員会がコミットメントの範囲を決定します。
 
-#### Core Maintainers:
+#### コアメンテナー:
     
-The core maintainers have two primary roles.  1) They respond to issues from the community.  These include bug fixes and pull requests. 2) They certify requests for changes and pull requests made by maintainers.    These certifications include validating runs, compiling, and bug checking. 
+コアメンテナーには2つの主要な役割があります：1) コミュニティからの課題（バグ修正やプルリクエストなど）に対応します。2) メンテナーによる変更リクエストやプルリクエストを検証します。これには実行検証、コンパイル、バグチェックが含まれます。
 
-#### Governing Council:
+#### 運営委員会:
     
-The [governing council](#alps-community-steering-committee) steers the overall trajectory of the ALPS project with advice from the [external advisory board](#alps-external-advisory-board).  The tasks of the council include:
+[運営委員会](#alps-community-steering-committee)は、[外部諮問委員会](#alps-external-advisory-board)の助言を受けながらALPSプロジェクトの全体像を主導します。委員会の任務は以下の通りです：
 
-- Nominating, confirming and removing maintainers and core maintainers
-- Establishing road maps for codes, libraries, and dependencies to be used by maintainers
-- Electing and removing members to the council and the advisory board
-- Leading the publishing process for ALPS release papers
+- メンテナーとコアメンテナーの指名、承認、解任
+- メンテナーが使用するコード、ライブラリ、依存関係のロードマップ確立
+- 委員会と諮問委員会のメンバー選出と解任
+- ALPSリリース論文の出版プロセス主導
 
-#### External Advisory Board:
+#### 外部諮問委員会:
 
-The external advisory board will recommend: 
+外部諮問委員会は以下を推奨します：
 
-- General directions for the ALPS project
-- Directions for community growth and maintenance
+- ALPSプロジェクトの全般的な方向性
+- コミュニティ成長と維持の方向性
 
-### Support 
+### サポート 
 
-- To report a bug or request a feature please visit our GitHub [repository](https://github.com/ALPSim/ALPS/issues). 
+- バグ報告や機能リクエストは、GitHub[リポジトリ](https://github.com/ALPSim/ALPS/issues)までお願いします。
 
-- To get help with using ALPS please visit our user forum on [Discord](https://discord.gg/JRNWnnva9g).
+- ALPSの使用に関するヘルプは、[Discord](https://discord.gg/JRNWnnva9g)のユーザーフォーラムをご利用ください。
 
-    
-- To contribute to ALPS please contact a member of the [Governing Council](#alps-community-steering-committee).
+- ALPSへの貢献については、[運営委員会](#alps-community-steering-committee)メンバーまでご連絡ください。
 
-### Decision Making Process 
+### 意思決定プロセス 
 
-Contributions and changes to ALPS occur using a consensus model.  Proposals for modifications will be reviewed by both maintainers and core maintainers once posted to the GitHub repository.  Modifications will be accepted if no comments are made within 6 weeks or if all maintainers agree on the modifications.  Controversial proposals decisions can be appealed to the governing council.
+ALPSへの貢献と変更は合意形成モデルで行われます。変更提案はGitHubリポジトリに投稿されると、メンテナーとコアメンテナーの両方によってレビューされます。6週間以内にコメントがない場合、またはすべてのメンテナーが変更に同意した場合、変更は承認されます。論争のある提案の決定は運営委員会に上訴できます。
 
-### Contribution Process
+### 貢献プロセス
 
-Developers wishing to make ALPS contributions should contact a member of the [Governing Council](#alps-community-steering-committee), who will discuss onboarding.  Contributors and their group members will join the ALPS team by contributing code to integrate into the package using GitHub.  Codes will be released under the MIT open source license.  Community engagement will take place through regular [ALPS workshops](https://alps.comp-phys.com/events/). 
+ALPSへの貢献を希望する開発者は、[運営委員会](#alps-community-steering-committee)メンバーに連絡し、オンボーディングについて協議します。貢献者とそのグループメンバーは、GitHubを使用してパッケージに統合するコードを提供することでALPSチームに参加します。コードはMITオープンソースライセンスでリリースされます。コミュニティとの交流は定期的な[ALPSワークショップ](https://alps.comp-phys.com/events/)を通じて行われます。
 
-Contributors will arrange for a maintenance time commitment that will help sustain ALPS.  Maintenance will include updating existing codes, help with the website, responding to forum help requests and other ALPS community maintenance tasks.  The time commitment will be monitored using GitHub and Discord.  
+貢献者はALPSを維持するための時間的コミットメントを調整します。メンテナンスには既存コードの更新、ウェブサイトの支援、フォーラムヘプルリクエストへの対応、その他のALPSコミュニティメンテナンスタスクが含まれます。時間的コミットメントはGitHubとDiscordで監視されます。
 
-ALPS releases will be accompanied by an announcement publication. Active contributors to ALPS will be added as coauthors.  The Governing Council will be responsible for deciding the author list.
-
+ALPSリリースには発表論文が伴います。ALPSへの積極的な貢献者は共著者として追加されます。著者リストの決定は運営委員会が責任を負います。
