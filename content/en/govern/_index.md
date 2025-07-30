@@ -95,7 +95,8 @@ h4 {
   
   <div>
     <h4><a href="https://www.kent.ac.uk/physics-astronomy/people/466/möller-gunnar">Gunnar Möller</a></h4>
-    <h6>Royal Society University Research Fellow<br>
+    <h6>Senior Lecturer<br>
+    Head of Physics of Quantum & Materials Group<br>
     University of Kent
     </h6>
   </div>

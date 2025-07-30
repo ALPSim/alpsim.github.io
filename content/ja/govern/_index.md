@@ -95,7 +95,8 @@ h4 {
   
   <div>
     <h4><a href="https://www.kent.ac.uk/physics-astronomy/people/466/möller-gunnar">Gunnar Möller</a></h4>
-    <h6>王立協会大学リサーチフェロー<br>
+    <h6>上級講師<br>
+    量子・材料物理研究グループ主任<br>
     ケント大学
     </h6>
   </div>

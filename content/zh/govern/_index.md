@@ -48,14 +48,14 @@ h4 {
   <div>
     <h4><a href="https://cos.northeastern.edu/people/adrian-feiguin/">Adrian Feiguin</a></h4>
     <h6>物理学教授<br>
-    美国东北大学 (Northeastern University)
+    美国东北大学
     </h6>
   </div>
   
   <div>
     <h4><a href="https://lsa.umich.edu/physics/people/faculty/egull.html">Emanuel Gull</a></h4>
     <h6>物理学教授<br>
-    美国密歇根大学 (University of Michigan)
+    美国密歇根大学
     </h6>
   </div>
   
@@ -94,15 +94,16 @@ h4 {
   
   <div>
     <h4><a href="https://www.kent.ac.uk/physics-astronomy/people/466/möller-gunnar">Gunnar Möller</a></h4>
-    <h6>英国皇家学会大学研究研究员<br>
-    英国肯特大学 (University of Kent)
+    <h6>高级讲师<br>
+    量子与材料物理研究组负责人<br>
+    英国肯特大学
     </h6>
   </div>
   
   <div>
     <h4><a href="https://scarola.phys.vt.edu/">Vito Scarola</a></h4>
     <h6>物理学教授<br>
-    美国弗吉尼亚理工大学 (Virginia Tech)
+    美国弗吉尼亚理工大学
     </h6>
   </div>
   
@@ -153,7 +154,7 @@ h4 {
   <div>
     <h6>
     物理学教授 <br>
-    美国波士顿大学 (Boston University)
+    美国波士顿大学
     </h6>
   </div>
 
@@ -161,7 +162,7 @@ h4 {
     <h6>教授<br>
     物理学与天文学系 及 <br>
     电气工程与计算机科学系 <br>
-    美国田纳西大学 (University of Tennessee)<br>
+    美国田纳西大学<br>
     </h6>
   </div>
 
@@ -206,13 +207,13 @@ h4 {
 
   <div>
     <h6>杰出研究员及部门主管<br>
-    美国橡树岭国家实验室 (Oak Ridge National Lab)<br>
+    美国橡树岭国家实验室<br>
     </h6>
   </div>
 
   <div>
     <h6>技术院士兼量子计算企业副总裁<br>
-    微软 (Microsoft)<br>
+    微软 <br>
     </h6>
   </div>
   
