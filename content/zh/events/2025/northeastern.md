@@ -26,7 +26,7 @@ The dorm is at an exceptional location, at the heart of Back Bay. You can go to 
 
 **Very important: If you are leaving on the 2nd, the dorm closes for the summer at 12-noon. You need to leave the building before then.**
 
-## Direction from the Airport
+## Directions from the Airport
 
 From Logan airport, you can use Uber, or public transportation. At your terminal you can take the Silver Line SL1 (free) to South Station; from there you transfer to the Red Line (direction Alewife) for two stops to Park St, and transfer again to the E line, direction Heath Street. You should get off at Prudential, exit to the left, and walk around the corner for 100 meters.
 
@@ -49,20 +49,18 @@ The workshop will begin in the morning of Jul. 30th, and end in the afternoon of
  
 ## List of Participants
  
+  - **Kipton Barros** LANL
   - **Claudio Chamon:** Boston University/Purdue
   - **Tianran Chen:** West Chester
-  - **Adrian del Maestro:** Tennessee
   - **Adrian Feiguin:** Northeastern
   - **Emanuel Gull:** Michigan
   - **Fei Lin:** Virginia Tech
   - **Roger Melko:** Waterloo/Perimeter
   - **Thomas Maier:** ORNL
-  - **Addison Richards:** McMaster/NVIDIA
   - **Vito Scarola:** Virginia Tech
   - **Hanna Terletska:** Middle Tennessee State
   - **Synge Todo:** Tokyo
   - **Timo Vekua:** Mathworks
-  - **Yang Zhang:** Tennessee
   
   
 ## Things to Do Near Campus

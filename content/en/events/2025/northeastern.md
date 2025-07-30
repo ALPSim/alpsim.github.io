@@ -49,20 +49,18 @@ The workshop will begin in the morning of Jul. 30th, and end in the afternoon of
  
 ## List of Participants
  
+  - **Kipton Barros** LANL
   - **Claudio Chamon:** Boston University/Purdue
   - **Tianran Chen:** West Chester
-  - **Adrian del Maestro:** Tennessee
   - **Adrian Feiguin:** Northeastern
   - **Emanuel Gull:** Michigan
   - **Fei Lin:** Virginia Tech
   - **Roger Melko:** Waterloo/Perimeter
   - **Thomas Maier:** ORNL
-  - **Addison Richards:** McMaster/NVIDIA
   - **Vito Scarola:** Virginia Tech
   - **Hanna Terletska:** Middle Tennessee State
   - **Synge Todo:** Tokyo
   - **Timo Vekua:** Mathworks
-  - **Yang Zhang:** Tennessee
   
   
 ## Things to Do Near Campus
