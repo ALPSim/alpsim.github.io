@@ -82,7 +82,7 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="moller150.png" width="150" height="150">}}
+    {{< figure src="moller.png" width="150" height="150">}}
   </div>
   
   <div>
