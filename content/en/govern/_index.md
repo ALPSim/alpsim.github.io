@@ -20,7 +20,7 @@ div.mycontainer {
   overflow:auto;
 }
 div.mycontainer div {
-  width: 33%;  
+  width: 50%;  
   float: left;
   display: inline-block;
   text-align: center;
@@ -41,10 +41,6 @@ h4 {
     {{< figure src="gull.jpeg" width="150" height="150">}}
   </div>
   
-  <div>
-    {{< figure src="scarola.jpeg" width="150" height="150">}}
-  </div>
-  
 </div>
 
 <div class="mycontainer">
@@ -63,13 +59,6 @@ h4 {
     </h6>
   </div>
   
-  <div>
-    <h4><a href="https://scarola.phys.vt.edu/">Vito Scarola</a></h4>
-    <h6>Professor of Physics<br>
-    Virginia Tech
-    </h6>
-  </div>
-  
 </div>
 
 <div class="mycontainer">
@@ -81,6 +70,50 @@ h4 {
   <div>
     <p>
     <a href="mailto:egull@umich.edu">egull@umich.edu</a>
+    </p>
+  </div>
+  
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="mycontainer">
+
+  <div>
+    {{< figure src="moller150.png" width="150" height="150">}}
+  </div>
+  
+  <div>
+    {{< figure src="scarola.jpeg" width="150" height="150">}}
+  </div>
+  
+</div>
+
+<div class="mycontainer">
+  
+  <div>
+    <h4><a href="https://www.kent.ac.uk/physics-astronomy/people/466/möller-gunnar">Gunnar Möller</a></h4>
+    <h6>Royal Society University Research Fellow<br>
+    University of Kent
+    </h6>
+  </div>
+  
+  <div>
+    <h4><a href="https://scarola.phys.vt.edu/">Vito Scarola</a></h4>
+    <h6>Professor of Physics<br>
+    Virginia Tech
+    </h6>
+  </div>
+  
+</div>
+
+
+<div class="mycontainer">
+  <div>
+    <p>
+    <a href="mailto:g.moller@kent.ac.uk">g.moller@kent.ac.uk</a>
     </p>
   </div>
   <div>
@@ -104,10 +137,6 @@ h4 {
     {{< figure src="maestro150.png" width="150" height="150">}}
   </div>
   
-  <div>
-    {{< figure src="maier150.png" height="150">}}
-  </div>
-  
 </div>
 
 <div class="mycontainer">
@@ -117,10 +146,6 @@ h4 {
 
   <div>
     <h4><a href="https://quantum.utk.edu/people/adrian-del-maestro-2/">Adrian Del Maestro</a></h4>
-  </div>
-
-  <div>
-    <h4><a href="https://www.ornl.gov/staff-profile/thomas-maier">Thomas Maier</a></h4>
   </div>
 
 </div>
@@ -141,12 +166,6 @@ h4 {
     </h6>
   </div>
 
-  <div>
-    <h6>Distinguished Research Staff and Section Head<br>
-    Oak Ridge National Lab<br>
-    </h6>
-  </div>
-
 </div>
 
 
@@ -158,14 +177,16 @@ h4 {
   <div>
     {{< figure src="utk_logo_maestro.jpeg" width="150" height="150">}}
   </div>
-  <div>
-    {{< figure src="ornl_logo_maier.png" width="150" height="150">}}
-  </div>
+  
 </div>
 
 <br>
+<br>
 
 <div class="mycontainer">
+  <div>
+    {{< figure src="maier150.png" height="150">}}
+  </div>
   <div>
     {{< figure src="m_troyer150.png" width="150" height="150">}}
   </div>
@@ -174,11 +195,21 @@ h4 {
 <div class="mycontainer">
 
   <div>
+    <h4><a href="https://www.ornl.gov/staff-profile/thomas-maier">Thomas Maier</a></h4>
+  </div>
+
+  <div>
     <h4><a href="https://www.microsoft.com/en-us/research/people/mtroyer/">Matthias Troyer</a></h4>
   </div>
 
 </div>
 <div class="mycontainer">
+
+  <div>
+    <h6>Distinguished Research Staff and Section Head<br>
+    Oak Ridge National Lab<br>
+    </h6>
+  </div>
 
   <div>
     <h6>Technical Fellow and Corporate Vice President of Quantum<br>
@@ -189,6 +220,11 @@ h4 {
 </div>
 
 <div class="mycontainer">
+
+  <div>
+    {{< figure src="ornl_logo_maier.png" width="150" height="150">}}
+  </div>
+  
   <div>
     {{< figure src="microsoft_logo_troyer.png" width="150" height="150">}}
   </div>
