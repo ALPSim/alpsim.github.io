@@ -123,6 +123,38 @@ h4 {
   </div>
 </div>
 
+<br>
+<br>
+
+<div class="mycontainer">
+
+  <div>
+    {{< figure src="todo150.png" width="150" height="150">}}
+  </div>
+  
+</div>
+
+<div class="mycontainer">
+  
+  <div>
+    <h4><a href="https://www.s.u-tokyo.ac.jp/en/people/todo_synge/">Synge Todo</a></h4>
+    <h6>物理学教授<br>
+    东京大学
+    </h6>
+  </div>
+  
+</div>
+
+
+<div class="mycontainer">
+  <div>
+    <p>
+    <a href="mailto:wistaria@phys.s.u-tokyo.ac.jp">wistaria@phys.s.u-tokyo.ac.jp</a>
+    </p>
+  </div>
+
+</div>
+
 
 ## ALPS 外部顾问委员会
 
