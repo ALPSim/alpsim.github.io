@@ -7,15 +7,15 @@ weight: 1
 
 ## Quantum phase transitions in the Bose-Hubbard model
 
-**Attention:** this implementation of the directed worm algorithm is an experimental code and should be used only for the Bose Hubbard model without interactions between neighbors. Otherwise the code may crash or yield incorrect results.
+**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only. Vistrails input files are not available. 
 
-As an example of the directed worm algorithm QMC code, we will study a quantum phase transition in the Bose-Hubbard mode.
+As an example of the directed worm algorithm QMC code, we will study a quantum phase transition in the Bose-Hubbard model.
 
-## Superfluid density in the Bose Hubbard model
+## Superfluid density in the Bose-Hubbard model
 
 ### Preparing and running the simulation from the command line
 
-We create the parameter file `parm1a` to set up Monte Carlo simulations of the quantum Bose Hubbard model on a square lattice with 4x4 sites for a couple of hopping parameters (t=0.01, 0.02, ..., 0.1) using the dwa code.
+We create the parameter file `parm1a` to set up Monte Carlo simulations of the Bose-Hubbard model on a square lattice with 4x4 sites for a couple of hopping parameters ($t=0.01, 0.02, ..., 0.1$) using the dwa code. It is the same parameter file that was used for the ALPS worm [MCO5](../mc05.md) tutorial.
 
     LATTICE="square lattice";
     L=4;
@@ -27,7 +27,7 @@ We create the parameter file `parm1a` to set up Monte Carlo simulations of the q
  
     T    = 0.1;
  
-    SWEEPS=5000000;
+    SWEEPS=20000000;
     THERMALIZATION=100000;
     SKIP=500;
  
@@ -70,11 +70,11 @@ We load the results from all output files starting with `parm1a` and collect the
 
 ## The transition from the Mott insulator to the superfluid
 
-We next want to pin down the location of the phase transition more accurately. For this we simulate a two-dimensional square lattice for various system sizes and look for a crossing of the quantity $\rho_s L$.
+We next want obtain a better location of the phase transition. For this we simulate a two-dimensional square lattice for various system sizes and look for a crossing of the quantity $\rho_s L$.
 
 ### Preparing and running the simulation from the command line
 
-In the parameter file `parm1b`, we focus on the region around the critical point for three system sizes L=4,6, and 8:
+In the parameter file `parm1b`, we focus on the region around the critical point for three system sizes $L$=4,6, and 8:
 
     LATTICE="square lattice";
 
@@ -83,7 +83,7 @@ In the parameter file `parm1b`, we focus on the region around the critical point
     U    = 1.0;
     mu   = 0.5;
 
-    T    = 0.05;
+    T    = 0.1;
 
     SWEEPS=2000000;
     THERMALIZATION=150000;
@@ -126,7 +126,7 @@ In the parameter file `parm1b`, we focus on the region around the critical point
 
 ### Evaluating the simulation and preparing plots using Python
 
-We load the results from all output files starting with `parm1b` and collect the magntization density as a function of magnetic field.
+We load the results from all output files starting with `parm1b` and collect the scaled stiffness as a function of the hopping parameter.
 
     import pyalps
     import matplotlib.pyplot as plt
@@ -147,11 +147,14 @@ We load the results from all output files starting with `parm1b` and collect the
     plt.show()
 
 Note the legend and labels that are nicely set up.
+For the experts: The quantum phase transition between the superfluid and the Mott insulating phase can have two different university classes. First, if we work at constant density, then the transition will have dynamical exponent z=1 and can be described by an emergent (2+1)D CFT. For the simulations, this implies that we must scale the temperature linearly with system size and make sure that we work in the canonical ensemble or enforce that the average density is 1, $<n>=1$, which also works in this case. Second, if we drive the transition by changing the density (as in a drive with chemical potential), then the dynamical exponent z=2 and the transition is mean-fieldish describing a few particles (holes) on top of a (rescaled) vacuum. Note that in the tutorial we do neither of these protocols and our results are therefore only approximately locating the phase transition. Nevertheless we are close to unit density and used the correct scaling form of the stiffness in that case. We refer to [this paper](https://arxiv.org/abs/0710.2703) by B. Capogrosso-Sansone et al. for a detailed quantum Monte Carlo study of the 2D Bose-Hubbard model.
 
 ## Contributors
 
 - Matthias Troyer
 - Ping Nang Ma
 
+## Revisions
+- Lode Pollet
 
 
