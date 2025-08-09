@@ -10,7 +10,7 @@ weight: 3
 
 ## Location
 
-The meeting will be held at Northeastern University in Boston. The workshop venue is the Alumni Center. You can find all the information, including directions, at [this link](https://alumni.northeastern.edu/events/alumni-center/).
+The meeting has been held at Northeastern University in Boston. The workshop venue is the Alumni Center. You can find all the information, including directions, at [this link](https://alumni.northeastern.edu/events/alumni-center/).
 
 To get to campus, you can either walk for about 10-15 minutes, along Huntington St, or take the E line, direction Heath St. for one stop and get off at Northeastern. A very nice and pleasant walk that will take you directly to the venue is along the Southwest corridor: walk toward Huntington Ave., cross the street and continue on Newton St for one block, and turn right. When you reach Massachusetts Ave, follow to the left of the metro “T” Orange Line station.
 

@@ -7,7 +7,7 @@ weight: 1
 
 ## Quantum phase transitions in the Bose-Hubbard model
 
-**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only. Vistrails input files are not available. 
+**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only.
 
 As an example of the directed worm algorithm QMC code, we will study a quantum phase transition in the Bose-Hubbard model.
 
@@ -15,7 +15,7 @@ As an example of the directed worm algorithm QMC code, we will study a quantum p
 
 ### Preparing and running the simulation from the command line
 
-We create the parameter file `parm1a` to set up Monte Carlo simulations of the Bose-Hubbard model on a square lattice with 4x4 sites for a couple of hopping parameters ($t=0.01, 0.02, ..., 0.1$) using the dwa code. It is the same parameter file that was used for the ALPS worm [MCO5](../mc05.md) tutorial.
+We create the parameter file `parm1a` to set up Monte Carlo simulations of the Bose-Hubbard model on a square lattice with 4x4 sites for a couple of hopping parameters ($t=0.01, 0.02, ..., 0.1$) using the dwa code. It is the same parameter file that was used for the ALPS worm [MCO5](../../mc05) tutorial.
 
     LATTICE="square lattice";
     L=4;

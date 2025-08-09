@@ -2,12 +2,12 @@
 title: DWA-02 Density Profile
 math: true
 toc: true
-weight: 1
+weight: 2
 ---
 
 ## Density profile
 
-**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only. Vistrails input files are not available. 
+**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only.
 
 As a second example of the directed worm algorithm QMC code, we will study the density profile of the Bose-Hubbard model subject to an harmonic trap.
 

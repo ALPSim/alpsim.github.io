@@ -17,7 +17,7 @@ weight: 1
 - [MC-07 Phase transition in the Ising model](mc07)
 - [MC-08 Quantum phase transition in a quantum spin model](mc08) 
 - [MC-09 Quantum Monte Carlo](qmc)
-- [MC-10 Monte Carlo Simulations with Directed Worm](worm)
+- [MC-10 Monte Carlo Simulations with Directed Worm](dwa)
 
 
 
