@@ -10,6 +10,7 @@ icon: event
 ALPS constantly organizes developer meetings and user workshops.
 ## Upcoming Developer Meetings
 
+- To be scheduled.
 
 ## Past Meetings
 
