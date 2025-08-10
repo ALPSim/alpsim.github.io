@@ -44,8 +44,6 @@ Flow of packaging (missing picture)
 
 ## Tutorial
 
-The tutorial sample code can be found at http://todo.ap.t.u-tokyo.ac.jp/archive/alpsize-20120829-r2707.tar.gz .
-
 ### Packaging with Cmake
 
 00\_cmake

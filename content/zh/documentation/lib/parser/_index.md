@@ -132,8 +132,6 @@ The default behavior is to just return the file name
 
 If the environment variable ALPS_XSLT_PATH is set, the contents of ALPS_XSLT_PATH are used instead of the default path.
 
-A special case is if [http://xml.comp-phys.org/](http://xml.comp-phys.org/) is used as the value of ALPS_XSLT_PATH. In that case not the string returned points to the version of the XSLT file valid at the time of release of the library. E.g. given the file name "ALPS.xsl" the returned string might be "http://xml.comp-phys.org/2004/10/ALPS.xsl".
-
 #### `public ALPS_DECL std::string `[`search_xml_library_path`](#d8/d57/xslt__path_8h_1af488068133d67a3b7c2b12c9423aa7bb)`(const std::string & file)` 
 
 returns the full path to the specified XML file and checks whether the file exists.

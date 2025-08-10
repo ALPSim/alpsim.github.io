@@ -95,7 +95,7 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-After running these simulations compare the output to the Hirsch-Fye results of the section [Hirsch-Fye]() or the DMFT review, or to the interaction expansion results of the section Interaction Expansion CT-INT . To rerun a simulation, you can specify a starting solution by defining G0OMEGA_INPUT, e.g. copy G0omga_output to G0_omega_input, specify G0OMEGA_INPUT = G0_omega_input in the parameter file and rerun the code. You can observe the transition to the antiferromagnetic phase by plotting the Green's functions using the script:
+After running these simulations compare the output to the Hirsch-Fye results of the section [Hirsch-Fye](../dmft07) or the DMFT review, or to the interaction expansion results of the section Interaction Expansion CT-INT . To rerun a simulation, you can specify a starting solution by defining G0OMEGA_INPUT, e.g. copy G0omga_output to G0_omega_input, specify G0OMEGA_INPUT = G0_omega_input in the parameter file and rerun the code. You can observe the transition to the antiferromagnetic phase by plotting the Green's functions using the script:
 
 ```
 flavors=parms[0]['FLAVORS']
@@ -151,9 +151,9 @@ It is instructive to run the same calculations as in the section Hybridization E
 
 ### Hirsch Fye
 
-We compare the continous time results by running a discrete time Monte Carlo code: the [Hirsch Fye code](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521). The Hirsch Fye algorithm is described in [here](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13), and this review also provides an open source implementation for the codes. More information can also be found in [Blümer's PhD](http://komet337.physik.uni-mainz.de/Bluemer/Thesis/bluemer_color.pdf). While many improvements have been developed (see e.g. Alvarez08 or [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)), the algorithm has been replaced by [continuous-time algorithms](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123).
+We compare the continous time results by running a discrete time Monte Carlo code: the [Hirsch Fye code](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521). The Hirsch Fye algorithm is described in [here](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13), and this review also provides an open source implementation for the codes. While many improvements have been developed (see e.g. Alvarez08 or [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)), the algorithm has been replaced by [continuous-time algorithms](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123).
 
-The Hirsch Fye simulation will run for about a minute per iteration. The parameter files for running this simulation can be found in the directory `tutorials/dmft-07-hirschfye`.
+The Hirsch Fye simulation will run for about a minute per iteration. The parameter files for running this simulation can be found in [this tutorial](../dmft07).
 
 The main parameters are:
 

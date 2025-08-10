@@ -92,10 +92,10 @@ $ cmake --build alps-build -t test
 <summary><strong>故障排除</strong></summary>
 
 * **需使用其他 MPI/BLAS?**
-将上述包名替换为您集群的模块 (如 Intel MKL/OneAPI, AMD AOCL, IBM ESSL 等)。CMake 会自动定位这些包并生成编译指令。
+将上述包名替换为您集群的模块 (如 [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), 等)。[CMake](https://cmake.org/) 会自动定位这些包并生成编译指令。
 
 * **Python 错误**
-确保使用 Python 3.9 或更高版本。注意：部分系统 (如 macOS) 使用 pip3 而非 pip。请参考 Python 官网 获取安装支持。
+确保使用 Python 3.9 或更高版本。注意：部分系统 (如 macOS) 使用 pip3 而非 pip。请参考 [Python 官网](https://www.python.org/) 获取安装支持。
 
 * **MPI 版本不匹配?**
 确保 CMake 使用的 MPI 版本与 mpirun --version 一致。

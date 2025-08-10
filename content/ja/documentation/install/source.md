@@ -94,10 +94,10 @@ $ cmake --build alps-build -t test
 <details> 
 <summary><strong>トラブルシューティング</strong></summary>
 * **別のMPI/BLASが必要ですか？**
-上記のパッケージ名をクラスタのモジュール（例: Intel MKL/OneAPI, AMD AOCL, IBM ESSL 等）に置き換えてください。CMakeはこれらのパッケージの位置を自動検出し、Makefileにコンパイル指示を生成します。
+上記のパッケージ名をクラスタのモジュール（例: [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), 等）に置き換えてください。[CMake](https://cmake.org/)はこれらのパッケージの位置を自動検出し、Makefileにコンパイル指示を生成します。
 
 * **Pythonエラー**
-Python 3.9以上を使用していることを確認してください。注意：一部の環境（macOSなど）ではpipの代わりにpip3を使用します。正しいバージョンのインストールサポートについてはPython公式サイトを参照してください。
+Python 3.9以上を使用していることを確認してください。注意：一部の環境（macOSなど）ではpipの代わりにpip3を使用します。正しいバージョンのインストールサポートについては[Python](https://www.python.org/)公式サイトを参照してください。
 
 * **MPIのバージョン不一致？**
 CMakeが使用するMPIバージョンがmpirun --versionの結果と一致していることを確認してください。
