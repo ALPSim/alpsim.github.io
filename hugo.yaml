@@ -66,8 +66,13 @@ languages:
           url: "https://discord.gg/JRNWnnva9g"
           params:
             icon: discord
-        - name: Toggle
+        - name: YouTube
           weight: 11
+          url: "https://youtube.com/@ALPS-Collaboration"
+          params:
+            icon: youtube
+        - name: Toggle
+          weight: 12
           params:
             type: toggle
             icon: sun
@@ -126,8 +131,13 @@ languages:
           url: "https://discord.gg/JRNWnnva9g"
           params:
             icon: discord
-        - name: 切换模式
+        - name: YouTube
           weight: 11
+          url: "https://youtube.com/@ALPS-Collaboration"
+          params:
+            icon: youtube
+        - name: 切换模式
+          weight: 12
           params:
             type: toggle
             icon: sun
@@ -186,6 +196,11 @@ languages:
           url: "https://discord.gg/JRNWnnva9g"
           params:
             icon: discord
+        - name: YouTube
+          weight: 11
+          url: "https://youtube.com/@ALPS-Collaboration"
+          params:
+            icon: youtube
         - name: モード切替
           weight: 11
           params:
