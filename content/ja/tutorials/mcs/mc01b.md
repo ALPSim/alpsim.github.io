@@ -14,9 +14,9 @@ As an example, we will implement a classical Monte Carlo simulation implemented 
 
 ### Preparing and running the simulation from the command line
 
-The parameter file <a href="../codes/mc-01b-equilibration-and-convergence/parm1a" download>`parm1a`</a>:
+The parameter file <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01b-equilibration-and-convergence/parm1a" download>`parm1a`</a>:
 
-```Python
+```
 LATTICE="square lattice"
 T=2.269186
 J=1
@@ -29,14 +29,14 @@ MODEL="Ising"
 
 We first convert the input parameters to XML and then run the application `spinmc`:
 
-```Python
+```
 parameter2xml parm1a
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
 ### Preparing and running the simulation using Python
 
-The following describes what is going on within the script file <a href="../codes/mc-01b-equilibration-and-convergence/tutorial1a.py" download>`tutorial1a.py`</a>.
+The following describes what is going on within the script file <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" download>`tutorial1a.py`</a>.
 The headers:
 
 ```Python
