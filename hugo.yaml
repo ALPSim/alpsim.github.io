@@ -84,7 +84,7 @@ languages:
 
   zh-cn:
     languageName: 中文
-    contentDir: content/zh
+    contentDir: content/zh-cn
     languageCode: zh-cn
     weight: 2
     menu:
