@@ -1,5 +1,5 @@
 - id: copyright
-  translation: "ALPS 合作"
+  translation: "2025 ALPS 合作"
 - id: searchPlaceholder
   translation: "搜索..."
 - id: changeTheme
@@ -9,11 +9,11 @@
 - id: dark
   translation: "暗色"
 - id: poweredBy
-  translation: "技术支持"
+  translation: "Hextra驱动"
 - id: noResultsFound
   translation: "未找到结果"
 - id: lastUpdated
-  translation: "最后更新"
+  translation: "最近更新"
 - id: changeLanguage
   translation: "切换语言"
 - id: onThisPage
@@ -22,3 +22,4 @@
   translation: "编辑本页"
 - id: backToTop
   translation: "返回顶部"
+

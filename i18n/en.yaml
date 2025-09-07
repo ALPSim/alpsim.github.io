@@ -1,5 +1,5 @@
 - id: copyright
-  translation: "ALPS Collaboration"
+  translation: "2025 ALPS Collaboration"
 - id: searchPlaceholder
   translation: "Search..."
 - id: changeTheme
@@ -9,7 +9,7 @@
 - id: dark
   translation: "Dark"
 - id: poweredBy
-  translation: "Powered by"
+  translation: "Powered by Hextra"
 - id: noResultsFound
   translation: "No results found"
 - id: lastUpdated

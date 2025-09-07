@@ -82,7 +82,7 @@ languages:
           params:
             type: language
 
-  zh:
+  zh-cn:
     languageName: 中文
     contentDir: content/zh
     languageCode: zh-cn
