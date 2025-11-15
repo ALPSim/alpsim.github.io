@@ -1,29 +1,59 @@
-{{ define "main" }}
-<div style='font-family:system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"; height:100vh; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center'>
-  <div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Not Found</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Redirect after 5 seconds -->
+    <meta http-equiv="refresh" content="5; url='/'" />
     <style>
-      body {
-        color: #000;
-        background: #fff;
-        margin: 0;
-      }
-      .next-error-h1 {
-        border-right: 1px solid rgba(0, 0, 0, 0.3);
-      }
-      @media (prefers-color-scheme: dark) {
         body {
-          color: #fff;
-          background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
         }
-        .next-error-h1 {
-          border-right: 1px solid rgba(255, 255, 255, 0.3);
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0366d6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
         }
-      }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
-    <h1 class="next-error-h1" style='display: inline-block; margin: 0 20px 0 0; padding-right: 23px; font-size: 24px; font-weight: 500; vertical-align: top; line-height: 49px; font-feature-settings: "rlig" 1,"calt" 1,"ss01" 1,"ss06" 1 !important;'>404</h1>
-    <div style="display: inline-block; text-align: left">
-      <h2 style="font-size: 14px; font-weight: 400; line-height: 49px; margin: 0">This page could not be found.</h2>
-    </div>
-  </div>
-</div>
-{{ end }}
+</head>
+<body>
+    <h1>Page Not Found</h1>
+    <p>Sorry, we couldn't find the page you're looking for.</p>
+    <p>You'll be automatically redirected to the homepage in <span id="countdown">5</span> seconds.</p>
+    
+    <div class="spinner"></div>
+    
+    <p>If you're not redirected automatically, <a href="/">click here to go to the homepage</a>.</p>
+
+    <script>
+        // Countdown timer
+        let seconds = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        const countdown = setInterval(function() {
+            seconds--;
+            countdownElement.textContent = seconds;
+            
+            if (seconds <= 0) {
+                clearInterval(countdown);
+                window.location.href = '/';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
