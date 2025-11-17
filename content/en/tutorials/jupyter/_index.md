@@ -31,7 +31,7 @@ Below are a collection of ALPS simulations in Jupyter notebooks. You can learn a
 
 ## Dynamical Mean Field Theory
 
-- [DMFT of Hubbard Model on a Bethe Lattice](dmft/dmftBetheHubbard) <a href = "/codes/dmft/dmftBetheHubbard.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [DMFT of Hubbard Model on a Bethe Lattice](dmft/dmftbethehubbard) <a href = "/codes/dmft/dmftBetheHubbard.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
 ## Time-evolving Block Decimation
 
