@@ -1,14 +1,14 @@
 ---
-title: 密度行列繰り込み群法
-linkTitle: 密度行列繰り込み群法
-description: "ALPSの使用方法"
+title: Density Matrix Renormalization Group
+linkTitle: Density Matrix Renormalization Group
+description: "How to use ALPS"
 weight: 7
 math: true
 ---
 
-この例では、密度行列繰り込み群法（DMRG）シミュレーションを使用して、開境界条件を持つ32サイトのスピン1/2ハイゼンベルグチェーンの基底状態エネルギーを研究します。反復回数の関数として、基底状態エネルギーの収束と切り捨て誤差の減衰を観察します。
+In this example, we will use Density Matrix Renormalization Group (DMRG) simulations to study the ground state energy of a 32-site spin-half Heisenberg chain with open boundary conditions. We will look at the convergence of the ground state energy as well as the decay of the truncation errors as functions of the iteration numbers.
 
-まず必要なライブラリをインポートし、シミュレーションパラメータを設定します。
+We first import necessary libraries and set the parameters for the simulation.
 
 ```python
 import pyalps
@@ -17,74 +17,68 @@ import matplotlib.pyplot as plt
 import pyalps.plot
 
 parms = [ { 
-        'LATTICE'                   : "open chain lattice",  # 開境界チェーン格子
-        'MODEL'                     : "spin",                # スピンモデル
-        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',                # 保存量
-        'Sz_total'                  : 0,                     # 全スピンz成分
-        'J'                         : 1,                     # 交換相互作用
-        'SWEEPS'                    : 4,                     # スイープ数
-        'NUMBER_EIGENVALUES'        : 1,                     # 固有値数
-        'L'                         : 32,                    # サイト数
-        'MAXSTATES'                 : 100                    # 最大状態数
+        'LATTICE'                   : "open chain lattice", 
+        'MODEL'                     : "spin",
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : 0,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'NUMBER_EIGENVALUES'        : 1,
+        'L'                         : 32,
+        'MAXSTATES'                 : 100
        } ]
 
 input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
 res = pyalps.runApplication('dmrg',input_file,writexml=True)
 ```
 
-実行するには、ターミナルで以下を入力します：
-
-```
+To run this, in your computer terminal type
+```python 
 python spin_one_half.py
 ```
 
-次に、DMRGコードで測定された基底状態の特性を読み込みます：
+Next, we load the properties of the ground state measured by the DMRG code
 
-```
+```python
 data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
 ```
+and print them to the terminal.
 
-結果をターミナルに出力します：
-
-```
+```python
 for s in data[0]:
     print(s.props['observable'], ' : ', s.y[0])
 ```
 
-さらに、各反復ステップの詳細データを読み込めます：
+Additionally, we can load detailed data for each iteration step.
 
-```
+```python
 iter = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'),
                           what=['Iteration Energy','Iteration Truncation Error'])
 ```
 
-これにより、DMRGアルゴリズムが最終結果にどのように収束したかを確認できます。
-最後に、反復回数の関数として各種量の収束をプロットします：
+The above allows us to look at how the DMRG algorithm converged to the final results.
 
-```
+We finally plot the convergence of various quantities as functions of iterations.
+```python
 plt.figure()
 pyalps.plot.plot(iter[0][0])
-plt.title('基底状態エネルギーの反復履歴 (S=1/2)')
+plt.title('Iteration history of ground state energy (S=1/2)')
 plt.ylim(-15,0)
 plt.ylabel('$E_0$')
-plt.xlabel('反復回数')
+plt.xlabel('iteration')
 
 plt.figure()
 pyalps.plot.plot(iter[0][1])
-plt.title('切り捨て誤差の反復履歴 (S=1/2)')
+plt.title('Iteration history of truncation error (S=1/2)')
 plt.yscale('log')
-plt.ylabel('誤差')
-plt.xlabel('反復回数')
+plt.ylabel('error')
+plt.xlabel('iteration')
 
 plt.show()
 ```
 
-反復回数に対する基底状態エネルギーの収束は以下の図のようになります：
+The convergence of the ground state energy as a function of iteration numbers is shown in the following figure.
+![Ground State Energy](/figs/dmrg/dmrg_energy.png)
 
-![Ground State Energy](/figs/dmrg_energy.png)
-
-反復回数の増加に伴う切り捨て誤差の減衰も確認できます：
-
-![Truncation Error](/figs/dmrg_truncation.png)
-
-
+We can also take a look at the decay of the truncation error as the iteration number increases.
+![Truncation Error](/figs/dmrg/dmrg_truncation.png)

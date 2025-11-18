@@ -78,7 +78,7 @@ plt.show()
 ```
 
 The convergence of the ground state energy as a function of iteration numbers is shown in the following figure.
-![Ground State Energy](/figs/dmrg_energy.png)
+![Ground State Energy](/figs/dmrg/dmrg_energy.png)
 
 We can also take a look at the decay of the truncation error as the iteration number increases.
-![Truncation Error](/figs/dmrg_truncation.png)
+![Truncation Error](/figs/dmrg/dmrg_truncation.png)

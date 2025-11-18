@@ -124,8 +124,8 @@ plt.pyplot.show()
 ```
 
 The resulting figures are shown below:
-![Linear Quench](/static/figs/tebd/linearquench.png)   
-![Linear Quench V vs. t](/static/figs/tebd/linearquenchvt.png)  
+![Linear Quench](/figs/tebd/linearquench.png)   
+![Linear Quench V vs. t](/figs/tebd/linearquenchvt.png)  
 
    
 #### Questions
@@ -213,7 +213,7 @@ plt.pyplot.show()
 
 The resulting figures are shown below:
 ![Linear Quench Hold](/figs/tebd/linearquenchhold.png)   
-![Linear Quench Hold V vs. t](/static/figs/tebd/linearquenchholdvt.png) 
+![Linear Quench Hold V vs. t](/figs/tebd/linearquenchholdvt.png) 
 
 
 #### Questions
@@ -314,7 +314,3 @@ The resulting figures are shown below:
 - Again change from the hardcore boson model to the boson Hubbard model and investigate the dynamics of the MI-CDW transition, this time with a nonlinear quench. Is the behavior different from that of a linear quench?
 - The present example uses an asymmetric quench which is linear one one side and nonlinear on the other. How is the behavior changed if you make both quenches nonlinear?
 
-
-```python
-
-```
