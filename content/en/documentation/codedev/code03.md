@@ -283,7 +283,7 @@ or
 
     LATTICE = "honeycomb lattice"
     
-There are a lot of predefined lattices, which you can find in your `/alps/2.x.x/lib/xml/lattices.xml`. How to define your own lattice is explained [here](../../general/latticedef).
+There are a lot of predefined lattices, which you can find in your `/alps/2.x.x/lib/xml/lattices.xml`. How to define your own lattice is explained [here](../../intro/latticehowtos/intro).
 
 ### Introduction
 

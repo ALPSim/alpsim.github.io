@@ -1,5 +1,5 @@
 ---
-title: Alps/Parser Library
+title: ALPS/Parser Library
 description: "ALPS Parser Library"
 weight: 5
 ---

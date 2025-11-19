@@ -14,7 +14,7 @@ The Random library provides extensions to the Boost Random library, in particula
 
 ## Multivariate normal distribution
 
-The [multivariate_normal_distribution class template](../../random/classmnd) implements a multi-variate normal distribution of correlated normally distributed random numbers.
+The multivariate_normal_distribution class template implements a multi-variate normal distribution of correlated normally distributed random numbers.
 
 Multivariate normally distributed random numbers are sequences of n random numbers, distributed with given mean values M(i), and covariance matrix Cov(i,j).
 
@@ -32,11 +32,11 @@ The constructor of the distribution takes the Cholesky decomposition C of the co
 
 `Boost.Random` and the TR1 random number library provide a number of efficient pseudo random number generators. These pseudo random number generators follow an algorithmic prescription to generate numbers that look "sufficiently" random to be used in place of true random numbers. Since, however these "random numbers" are not truly random, one has to be careful when using them for high-precision Monte Carlo simulations. Experience has shown that the only reliable test for the quality of a random number generator for a given application is to redo the calculation with more than one type of random number generator.
 
-In order to facilitate the switching of random number engines at runtime, we here provide polymorphic generator classes. Since the cost os a virtual operator(), requiring a virtual function call for every single number is prohibitive in high performance applications, the [buffered_generator](../../random/classbg) uses a virtual function [memfunref alps::buffered_generator::fill_buffer fill_buffer] to generate not just one but a sequence of numbers, and then return values from that buffer using an inlines <code>operator()</code> until the buffer is exhausted.
+In order to facilitate the switching of random number engines at runtime, we here provide polymorphic generator classes. Since the cost os a virtual operator(), requiring a virtual function call for every single number is prohibitive in high performance applications, the buffered_generator uses a virtual function [memfunref alps::buffered_generator::fill_buffer fill_buffer] to generate not just one but a sequence of numbers, and then return values from that buffer using an inlines <code>operator()</code> until the buffer is exhausted.
 
-We provide an abstract class template [buffered_generator<ResultType>](../../random/classbg) and a concrete derived class template [basic_buffered_generator<GeneratorType,ResultType>](../../random/classbbg) which uses a given generator to fill the buffer.
+We provide an abstract class template buffered_generator<ResultType> and a concrete derived class template basic_buffered_generator<GeneratorType,ResultType> which uses a given generator to fill the buffer.
 
-Since generators can have different ranges, we additionally provide, for convenience, a [buffered_uniform_01<GeneratorType,ResultType>](../../random/classbu01) random number generator class template. This template models a uniform random number generator by providing `min()` and `max()` functions and can thus be used with any of the distributions of `Boost.Random`.
+Since generators can have different ranges, we additionally provide, for convenience, a buffered_uniform_01<GeneratorType,ResultType> random number generator class template. This template models a uniform random number generator by providing `min()` and `max()` functions and can thus be used with any of the distributions of `Boost.Random`.
 
 ### Example 1: a buffered generator
 
@@ -75,7 +75,7 @@ The first example shows how a buffered generator can be created and used in a si
     }
 
 ### Example 2: a buffered engine
-The next example uses a polymorphic [`buffered_uniform_01`](../../random/classbu01) generator as a uniform random number generation engine to create variates with different distributions: uniform and normally distributed. Note that the [buffered_generator](../../random/classbg) is a model of Generator but not of UniformRandomNumberGenerator and can thus not be used as an engine in a `variate_generator`.
+The next example uses a polymorphic `buffered_uniform_01` generator as a uniform random number generation engine to create variates with different distributions: uniform and normally distributed. Note that the buffered_generator is a model of Generator but not of UniformRandomNumberGenerator and can thus not be used as an engine in a `variate_generator`.
 
     #include <alps/random/buffered_uniform_01.hpp>
     #include <boost/random.hpp>
@@ -186,9 +186,9 @@ The headers [`alps/random/parallel/seed.hpp`](../../random/reference) and [`alps
 
 The ALPS Random library includes a 64-bit linear congruential generator and the WELL generators in the headers [`alps/random/parallel/lcg64.hpp`](../../random/reference) and [`alps/random/parallel/well.hpp`](../../random/reference).
 
-The 64-bit linear congruential generator template [`alps::random::parallel::lcg64`](../../random/classlcg64) comes with three predfined instantiations [`lcg64a`](../../random/reference), [`lcg64b`](../../random/reference), and [`lcg64c`](../../random/reference), using three well-tested choices of multipliers. As for other linear congruential generators, the recursion relation x(n+1) := (a * x(n) + c) mod m is used. In this implementation, m=2^64 and the multiplier a, which is given as template parameter is different for the three generators . The prime additive constant c is chosen depending on the stream number, thus giving independent sequences for each stream.
+The 64-bit linear congruential generator template `alps::random::parallel::lcg64` comes with three predfined instantiations [`lcg64a`](../../random/reference), [`lcg64b`](../../random/reference), and [`lcg64c`](../../random/reference), using three well-tested choices of multipliers. As for other linear congruential generators, the recursion relation x(n+1) := (a * x(n) + c) mod m is used. In this implementation, m=2^64 and the multiplier a, which is given as template parameter is different for the three generators . The prime additive constant c is chosen depending on the stream number, thus giving independent sequences for each stream.
 
-The WELL generators provided by two instantiations [`well512a`](../../random/reference) and [`well1024a`](../../random/reference) of the class template [`alps::random::parallel::well`](../../random/classwell) model a parallel uniform pseude random number generator, whose algorithm is described in [Improved Long-Period Generators Based on Linear Recurrences Modulo 2, F. Panneton, P. L'Ecuyer and M. Matsumoto, submitted to ACM TOMS](https://doi.org/10.1145/1132973.1132974). The parallel seeding is based on stochastic cycle division: \* The single seed method calls a pseudo-random number generator (default: `boost::mt19937`), which provides the random seeds for `total_streams` WELL generators. \* In the iterator method the state vector of all `total_streams` WELL generators is filled from a buffer.
+The WELL generators provided by two instantiations [`well512a`](../../random/reference) and [`well1024a`](../../random/reference) of the class template `alps::random::parallel::well` model a parallel uniform pseude random number generator, whose algorithm is described in [Improved Long-Period Generators Based on Linear Recurrences Modulo 2, F. Panneton, P. L'Ecuyer and M. Matsumoto, submitted to ACM TOMS](https://doi.org/10.1145/1132973.1132974). The parallel seeding is based on stochastic cycle division: \* The single seed method calls a pseudo-random number generator (default: `boost::mt19937`), which provides the random seeds for `total_streams` WELL generators. \* In the iterator method the state vector of all `total_streams` WELL generators is filled from a buffer.
 
 ## Wrappers to the SPRNG parallel random number library
 

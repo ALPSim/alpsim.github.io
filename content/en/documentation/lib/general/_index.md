@@ -9,4 +9,3 @@ weight: 2
 
 ## [alps/config.h](config)
 
-## [Reference](reference)

@@ -8,5 +8,3 @@ weight: 11
 ## [Comparable Graph](graph)
 
 ## [Sub Graph Embedding](subgraph)
-
-## [Acknowledgement](ackn)

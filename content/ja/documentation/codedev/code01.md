@@ -142,5 +142,5 @@ You can plot the Binder cumulant using the commands:
     plt.legend()
     plt.show()
 
-What do you observe? If you want to learn more about phase transitions and finite size scaling methods, check out the tutorial [MC-07 Phase transition in the Ising model](../../mcs/mc07).
+What do you observe? If you want to learn more about phase transitions and finite size scaling methods, check out the tutorial [MC-07 Phase transition in the Ising model](../../../tutorials/mcs/mc07).
 

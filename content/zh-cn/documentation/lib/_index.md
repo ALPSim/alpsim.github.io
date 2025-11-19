@@ -8,20 +8,19 @@ weight: 7
 1. [Overview](overview)
     - [Libraries](overview#libraries)
 
-2. [Alps/General Library](general)
+2. [ALPS/General Library](general)
     - [Introduction](general/intro)
     - [alps/config.h](general/config)
     - [Reference](general/reference)
     
-3. [ALPS.Random](random)
+3. [ALPS/Random](random)
     - [The Random Library](random/random)
     - [Reference](random/reference)
     
-4. [Alps/Parser Library](parser)
-    - [Introduction](parser/intro)
+4. [ALPS/Parser Library](parser)
     - [Reference](parser/reference)
     
-5. [Alps/Alea Library](alea)
+5. [ALPS/Alea Library](alea)
     - [Introduction](alea/intro)
     - [Analyzing Monte-Carlo data](alea/analyze)
     - [Reference](alea/reference)
@@ -31,7 +30,7 @@ weight: 7
     - [Sub Graph Embedding](bgl/subgraph)
     - [Acknowledgement](bgl/ackn)
     
-7. [Alps/HDF5 Library](hdf5)
+7. [ALPS/HDF5 Library](hdf5)
     - [Supported types](hdf5/types)
     - [Examples](hdf5/examples)
     - [Reference](hdf5/reference)

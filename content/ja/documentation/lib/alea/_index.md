@@ -1,5 +1,5 @@
 ---
-title: Alps/Alea Library
+title: ALPS/Alea Library
 description: "ALPS Alea Library"
 weight: 6
 ---

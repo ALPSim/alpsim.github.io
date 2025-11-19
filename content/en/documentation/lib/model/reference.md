@@ -2,7 +2,7 @@
 ---
 title: Reference
 description: "ALPS Model Library"
-weight: 2
+weight: 1
 ---
 
 # Summary
