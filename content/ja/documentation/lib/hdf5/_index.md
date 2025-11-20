@@ -5,5 +5,5 @@ description: "ALPS Data Format"
 weight: 12
 ---
 
-## [Examples](example)
+## [Examples](examples)
 
