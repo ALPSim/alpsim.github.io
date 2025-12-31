@@ -89,15 +89,8 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
   $ cmake --build alps-build -t test
   ```
 
-### Video Walkthrough
-<br>
-
-{{< youtube id="OHQGfDDaRMk" >}}
-
-
+### Troubleshooting
 <details>
-<summary><strong>Troubleshooting</strong></summary>
-
 * **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
 * **Python errors** <br> Ensure you are using Python 3.9 at a minimum. Note: some installations (e.g. macOS) use `pip3` instead of pip. Refer to the [python website](https://www.python.org/) for support in installing the correct version.
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
@@ -147,4 +140,8 @@ Your install directory will be created; if everything was successful you can fin
 
 {{% /steps %}}
 
+### Video Walkthrough
+<br>
+
+{{< youtube id="OHQGfDDaRMk" >}}
 

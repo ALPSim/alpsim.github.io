@@ -7,15 +7,19 @@ cascade:
 weight: 2
 ---
 
-ALPSは以下の2つの方法でMac/Linuxマシンにインストールできます：<br><br>
+ALPS は以下の3つの方法で Mac/Linux マシンにインストールできます：<br><br>
 
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
     title="バイナリインストール"
     link="binary"
   >}}
-    {{< hextra/feature-card
+  {{< hextra/feature-card
     title="ソースからのインストール"
     link="source"
+  >}}
+  {{< hextra/feature-card
+    title="Spack インストール"
+    link="spack"
   >}}
 {{< /hextra/feature-grid >}}

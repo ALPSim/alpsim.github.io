@@ -8,15 +8,19 @@ cascade:
 weight: 2
 ---
 
-We support ALPS installations on Mac/Linux machines with the following two methods:<br><br>
+We support ALPS installations on Mac/Linux machines with the following three methods:<br><br>
 
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
     title="Binary Installations"
     link="binary"
   >}}
-    {{< hextra/feature-card
+  {{< hextra/feature-card
     title="Source Installations"
     link="source"
+  >}}
+  {{< hextra/feature-card
+    title="Spack Installations"
+    link="spack"
   >}}
 {{< /hextra/feature-grid >}}

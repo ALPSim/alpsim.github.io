@@ -13,6 +13,7 @@ The prebuilt binary [`pyALPS`](https://pypi.org/project/pyalps/) can be installe
     pip install pyalps
 
 Please make sure your version of Python is Python >= 3.9.
+Note that the binary version of ALPS does not support parallel run of the codes. For a parallel version of ALPS, please use [source](../source) or [spack](../spack) installations.
 
 ## Walkthrough Video
 
