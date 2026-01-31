@@ -9,13 +9,12 @@ icon: event
 
 ALPS constantly organizes developer meetings and user workshops.
 
-<!--
+
 ## Google Summer of Code 2026
 
 We welcome prospective GSoC contributors to work on projects related to ALPS. You can find more information about GSoC [here](https://summerofcode.withgoogle.com/programs/2026).
 - [Contributor Guidance](2026/gsoc_guide)
 - [Ideas List](2026/gsoc_ideas)
---!>
 
 ## Upcoming Developer Meetings
 
