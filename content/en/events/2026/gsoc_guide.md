@@ -9,7 +9,7 @@ weight: 4
 ---
 
 ALPS (Algorithms and Libraries for Physics Simulations) is an open-source software ecosystem for simulations of correlated quantum systems and related many-body models.
-GSoC contributors help us improve the software infrastructure around these algorithms—build systems, APIs, workflows, documentation, testing, and tooling that make ALPS easier to use and maintain.
+GSoC contributors help us improve the software infrastructure around these algorithms (build systems, APIs, workflows, documentation, testing, and tooling) that make ALPS easier to use and maintain.
 
 ## How to contact us (start here)
 
