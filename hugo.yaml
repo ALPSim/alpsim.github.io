@@ -44,35 +44,39 @@ languages:
           name: Events
           pageRef: /events
           weight: 5
+        - identifier: /opportunities
+          name: Opportunities
+          pageRef: /opportunities
+          weight: 6
         - identifier: govern
           name: Governance
           pageRef: /govern
-          weight: 6
+          weight: 7
         - identifier: faqs
           name: FAQs
           pageRef: /faqs
-          weight: 7
-        - name: Search
           weight: 8
+        - name: Search
+          weight: 9
           params:
             type: search
         - name: GitHub
-          weight: 9
+          weight: 10
           url: "https://github.com/ALPSim"
           params:
             icon: github
         - name: Discord
-          weight: 10
+          weight: 11
           url: "https://discord.gg/JRNWnnva9g"
           params:
             icon: discord
         - name: YouTube
-          weight: 11
+          weight: 12
           url: "https://youtube.com/@ALPS-Collaboration"
           params:
             icon: youtube
         - name: Toggle
-          weight: 12
+          weight: 13
           params:
             type: toggle
             icon: sun
@@ -109,35 +113,39 @@ languages:
           name: 活动日程
           pageRef: /events
           weight: 5
+        - identifier: /opportunities
+          name: 招聘
+          pageRef: /opportunities
+          weight: 6
         - identifier: govern
           name: 领导团队
           pageRef: /govern
-          weight: 6
+          weight: 7
         - identifier: faqs
           name: 常见问题
           pageRef: /faqs
-          weight: 7
-        - name: 搜索
           weight: 8
+        - name: 搜索
+          weight: 9
           params:
             type: search
         - name: GitHub
-          weight: 9
+          weight: 10
           url: "https://github.com/ALPSim"
           params:
             icon: github
         - name: Discord
-          weight: 10
+          weight: 11
           url: "https://discord.gg/JRNWnnva9g"
           params:
             icon: discord
         - name: YouTube
-          weight: 11
+          weight: 12
           url: "https://youtube.com/@ALPS-Collaboration"
           params:
             icon: youtube
         - name: 切换模式
-          weight: 12
+          weight: 13
           params:
             type: toggle
             icon: sun
@@ -178,31 +186,35 @@ languages:
           name: 運営体制
           pageRef: /govern
           weight: 6
+        - identifier: /opportunities
+          name: 採用情報
+          pageRef: /opportunities
+          weight: 7
         - identifier: faqs
           name: よくある質問
           pageRef: /faqs
-          weight: 7
-        - name: 検索
           weight: 8
+        - name: 検索
+          weight: 9
           params:
             type: search
         - name: GitHub
-          weight: 9
+          weight: 10
           url: "https://github.com/ALPSim"
           params:
             icon: github
         - name: Discord
-          weight: 10
+          weight: 11
           url: "https://discord.gg/JRNWnnva9g"
           params:
             icon: discord
         - name: YouTube
-          weight: 11
+          weight: 12
           url: "https://youtube.com/@ALPS-Collaboration"
           params:
             icon: youtube
         - name: モード切替
-          weight: 11
+          weight: 13
           params:
             type: toggle
             icon: sun
