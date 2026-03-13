@@ -76,7 +76,7 @@ Please email the following to scarola@vt.edu (Subject: ALPS Software Engineer �
   <li>4) A short note on your experience with CI/CD, packaging, or HPC.</li>
 </ol>
 
-Learn more: ALPS website — https://alps.comp-phys.org/Opportunities
+Learn more: ALPS website — https://alps.comp-phys.org/opportunities
 
 EEO: Virginia Tech is an equal opportunity/affirmative action employer and encourages applications from women, minorities, veterans, and persons with disabilities.
 
