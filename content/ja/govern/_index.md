@@ -34,11 +34,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="/govern/feiguin.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/feiguin.jpg" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="/govern/gull.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/gull.jpg" width="150" height="150">}}
   </div>
   
 </div>
@@ -86,7 +86,7 @@ h4 {
   </div>
   
   <div>
-    {{< figure src="/govern/scarola.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/scarola.jpg" width="150" height="150">}}
   </div>
   
 </div>
@@ -208,7 +208,7 @@ h4 {
     {{< figure src="/govern/purdueu_logo_chamon.png" width="150" height="150">}}
   </div>
   <div>
-    {{< figure src="/govern/utk_logo_maestro.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/utk_logo_maestro.jpg" width="150" height="150">}}
   </div>
   
 </div>
