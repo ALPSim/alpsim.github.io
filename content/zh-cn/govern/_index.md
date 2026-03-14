@@ -34,11 +34,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="feiguin.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/feiguin.jpeg" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="gull.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/gull.jpeg" width="150" height="150">}}
   </div>
   
 </div>
@@ -81,11 +81,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="moller.png" width="150" height="150">}}
+    {{< figure src="/govern/moller.png" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="scarola.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/scarola.jpeg" width="150" height="150">}}
   </div>
   
 </div>
@@ -129,7 +129,7 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="todo150.png" width="150" height="150">}}
+    {{< figure src="/govern/todo.png" width="150" height="150">}}
   </div>
   
 </div>
@@ -162,18 +162,18 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="chamon150.png" width="150" height="150">}}
+    {{< figure src="/govern/chamon.png" width="150" height="150">}}
   </div>
 
   <div>
-    {{< figure src="maestro150.png" width="150" height="150">}}
+    {{< figure src="/govern/maestro.png" width="150" height="150">}}
   </div>
   
 </div>
 
 <div class="mycontainer">
   <div>
-    <h4><a href="https://www.bu.edu/eng/profile/claudio-chamon/">Claudio Chamon</a></h4>
+    <h4><a href="https://quantum.research.purdue.edu/directory/claudio-chamon/">Claudio Chamon</a></h4>
   </div>
 
   <div>
@@ -184,15 +184,15 @@ h4 {
 
 <div class="mycontainer">
   <div>
-    <h6>
-    物理学教授 <br>
-    美国波士顿大学
+    <h6>教授 <br>
+    物理与天文学系 <br>
+    美国普渡大学
     </h6>
   </div>
 
   <div>
     <h6>教授<br>
-    物理学与天文学系 及 <br>
+    物理与天文学系 及 <br>
     电气工程与计算机科学系 <br>
     美国田纳西大学<br>
     </h6>
@@ -204,10 +204,10 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="bostonu_logo_chamon150.png" width="100">}}
+    {{< figure src="/govern/purdueu_logo_chamon.png" width="150" height="150">}}
   </div>
   <div>
-    {{< figure src="utk_logo_maestro.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/utk_logo_maestro.jpeg" width="150" height="150">}}
   </div>
   
 </div>
@@ -217,10 +217,10 @@ h4 {
 
 <div class="mycontainer">
   <div>
-    {{< figure src="maier150.png" height="150">}}
+    {{< figure src="/govern/maier.png" width="150" height="150">}}
   </div>
   <div>
-    {{< figure src="m_troyer150.png" width="150" height="150">}}
+    {{< figure src="/govern/troyer.png" width="150" height="150">}}
   </div>
 </div>
 

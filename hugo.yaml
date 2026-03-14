@@ -114,7 +114,7 @@ languages:
           pageRef: /events
           weight: 5
         - identifier: /opportunities
-          name: 招聘
+          name: 招聘信息
           pageRef: /opportunities
           weight: 6
         - identifier: govern
@@ -182,13 +182,13 @@ languages:
           name: イベント
           pageRef: /events
           weight: 5
-        - identifier: govern
-          name: 運営体制
-          pageRef: /govern
-          weight: 6
         - identifier: /opportunities
           name: 採用情報
           pageRef: /opportunities
+          weight: 6
+        - identifier: govern
+          name: 運営体制
+          pageRef: /govern
           weight: 7
         - identifier: faqs
           name: よくある質問

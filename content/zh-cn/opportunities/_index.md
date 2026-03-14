@@ -1,5 +1,5 @@
 ---
-title: 招聘
+title: 招聘信息
 description: "Opportunities from ALPS Collaboration"
 toc: false
 ---

@@ -8,7 +8,7 @@ toc: false
 
 ALPS aims to house and distribute software for simulation of correlated quantum systems.
 
-We are currently reworking the governance of ALPS. Work on the future structure will be performed at our workshops and announced here. If you are interesteed in getting involved please let the current leadership know.
+We are currently reworking the governance of ALPS. Work on the future structure will be performed at our workshops and announced here. If you are interested in getting involved please let the current leadership know.
 
 ## ALPS Community Steering Committee
 
@@ -34,11 +34,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="feiguin.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/feiguin.jpeg" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="gull.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/gull.jpeg" width="150" height="150">}}
   </div>
   
 </div>
@@ -81,11 +81,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="moller.png" width="150" height="150">}}
+    {{< figure src="/govern/moller.png" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="scarola.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/scarola.jpeg" width="150" height="150">}}
   </div>
   
 </div>
@@ -129,7 +129,7 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="todo150.png" width="150" height="150">}}
+    {{< figure src="/govern/todo.png" width="150" height="150">}}
   </div>
   
 </div>
@@ -162,18 +162,18 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="chamon150.png" width="150" height="150">}}
+    {{< figure src="/govern/chamon.png" width="150" height="150">}}
   </div>
 
   <div>
-    {{< figure src="maestro150.png" width="150" height="150">}}
+    {{< figure src="/govern/maestro.png" width="150" height="150">}}
   </div>
   
 </div>
 
 <div class="mycontainer">
   <div>
-    <h4><a href="https://www.bu.edu/eng/profile/claudio-chamon/">Claudio Chamon</a></h4>
+    <h4><a href="https://quantum.research.purdue.edu/directory/claudio-chamon/">Claudio Chamon</a></h4>
   </div>
 
   <div>
@@ -184,9 +184,9 @@ h4 {
 
 <div class="mycontainer">
   <div>
-    <h6>
-    Professor of Physics <br>
-    Boston University
+    <h6>Professor <br>
+    Department of Physics and Astronomy <br>
+    Purdue University
     </h6>
   </div>
 
@@ -204,10 +204,10 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="bostonu_logo_chamon150.png" width="100">}}
+    {{< figure src="/govern/purdueu_logo_chamon.png" width="150" height="150">}}
   </div>
   <div>
-    {{< figure src="utk_logo_maestro.jpeg" width="150" height="150">}}
+    {{< figure src="/govern/utk_logo_maestro.jpeg" width="150" height="150">}}
   </div>
   
 </div>
@@ -217,10 +217,10 @@ h4 {
 
 <div class="mycontainer">
   <div>
-    {{< figure src="maier150.png" height="150">}}
+    {{< figure src="/govern/maier.png" width="150" height="150">}}
   </div>
   <div>
-    {{< figure src="m_troyer150.png" width="150" height="150">}}
+    {{< figure src="/govern/troyer.png" width="150" height="150">}}
   </div>
 </div>
 
@@ -254,11 +254,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="ornl_logo_maier.png" width="150" height="150">}}
+    {{< figure src="/govern/ornl_logo_maier.png" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="microsoft_logo_troyer.png" width="150" height="150">}}
+    {{< figure src="/govern/microsoft_logo_troyer.png" width="150" height="150">}}
   </div>
   
 </div>
