@@ -254,11 +254,11 @@ h4 {
 <div class="mycontainer">
 
   <div>
-    {{< figure src="ornl_logo_maier.png" width="150" height="150">}}
+    {{< figure src="/govern/ornl_logo_maier.png" width="150" height="150">}}
   </div>
   
   <div>
-    {{< figure src="microsoft_logo_troyer.png" width="150" height="150">}}
+    {{< figure src="/govern/microsoft_logo_troyer.png" width="150" height="150">}}
   </div>
   
 </div>
