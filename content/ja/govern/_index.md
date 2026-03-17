@@ -38,7 +38,7 @@ h4 {
   </div>
   
   <div>
-    {{< figure src="/govern/gull.jpg" width="150" height="150">}}
+    {{< figure src="/govern/gull.png" width="150" height="150">}}
   </div>
   
 </div>
@@ -86,7 +86,7 @@ h4 {
   </div>
   
   <div>
-    {{< figure src="/govern/scarola.jpg" width="150" height="150">}}
+    {{< figure src="/govern/scarola.png" width="150" height="150">}}
   </div>
   
 </div>
@@ -218,7 +218,7 @@ h4 {
 
 <div class="mycontainer">
   <div>
-    {{< figure src="/govern/maier.png" width="150" height="150">}}
+    {{< figure src="/govern/maier.png" width="150">}}
   </div>
   <div>
     {{< figure src="/govern/troyer.png" width="150" height="150">}}
