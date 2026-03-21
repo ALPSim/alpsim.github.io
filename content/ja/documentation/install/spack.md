@@ -55,22 +55,6 @@ spack info alps
 spack install alps
 ```
 
-### トラブルシューティング
-<details>
-<summary><strong> Boost </strong> </summary>
-
-Spack の Boost パッケージでは、そのバリアント「cxxstd」のデフォルト値は「11」です。これは、C++ 標準に「14」を必要とする ALPS の要件と一致しません。以下の場所の `package.py` でこのデフォルト値を編集できます：
-
-```
-~/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/boost/package.py
-```
-または、パッケージのデフォルト値を変更せずに、コマンドラインでバリアント値を設定することもできます：
-```
-spack install alps ^boost@1.87.0 cxxstd=14
-```
-これにより、Boost ライブラリも C++14 標準でコンパイルされます。
-
-</details>
 
 
 

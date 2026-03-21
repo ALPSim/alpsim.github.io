@@ -55,22 +55,6 @@ spack info alps
 spack install alps
 ```
 
-### 故障排除
-<details>
-<summary><strong> Boost 库问题 </strong> </summary>
-
-在 Spack 的 Boost 包中，其变量 `cxxstd` 的默认值是 "11"，这与 ALPS 要求的 `C++14` 标准 不一致。您可以在以下位置的 `package.py` 文件中编辑此默认值：
-```
-~/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/boost/package.py
-```
-或者，如果不更改包的默认值，您可以在命令行中设置该变量的值：
-```
-spack install alps ^boost@1.87.0 cxxstd=14
-```
-这将以 `C++14` 标准编译 Boost 库。
-
-</details>
-
 
 
 

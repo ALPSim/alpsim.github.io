@@ -55,21 +55,6 @@ Finally, let us install ALPS!
 spack install alps
 ```
 
-### Troubleshooting
-<details>
-<summary><strong> Boost </strong> </summary>
-
-In the Spack boost package, the default value of its variant "cxxstd" is "11", which is inconsistent with ALPS requirement of "14" for c++ standard. You can edit this default value in ```package.py``` at the following location:
-```
-~/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/boost/package.py
-```
-Alternatively, without changing the package default value, you can set the variant value at the command line:
-```
-spack install alps ^boost@1.87.0 cxxstd=14
-```
-This will also compile the boost library with the c++14 standard. 
-
-</details>
 
 
 
