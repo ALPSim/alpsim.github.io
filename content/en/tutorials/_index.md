@@ -36,6 +36,10 @@ The tutorials are available in both Python scripts and Jupyter notebooks (work i
     title="Jupyter Notebooks"
     link="jupyter"
   >}}
+  {{< hextra/feature-card
+    title="New Tutorial Ideas"
+    link="idea"
+  >}}
 {{< /hextra/feature-grid >}}
 
 

@@ -54,7 +54,38 @@ spack info alps
 ```
 spack install alps
 ```
+ALPS を使用するには、パッケージをロードする必要があります。
+```
+spack load alps
+```
 
+### スーパーコンピュータクラスタでの Spack インストール
+スーパーコンピュータクラスタに ALPS をインストールする必要がある場合は、ログインノードで上記のコマンドを実行するのではなく、バッチジョブを投入してジョブノード上でインストールすることをお勧めします。インストールには長時間かかることがあるため、ログインノードでインストールを行うとクラスタの他のユーザに影響を与える可能性があります。
+
+以下のスーパーコンピュータクラスタでの ALPS のインストールに成功しています。[NCSA Delta (イリノイ州)](https://docs.ncsa.illinois.edu/systems/delta/en/latest/index.html)、[PSC Bridges (ピッツバーグ)](https://www.psc.edu/resources/bridges-2/user-guide/)、[Purdue Anvil](https://www.rcac.purdue.edu/anvil#docs)、[SDSC Expanse (サンディエゴ)](https://www.sdsc.edu/systems/expanse/user_guide.html)、[TACC Stampede3 (テキサス州)](https://docs.tacc.utexas.edu/hpc/stampede3/)。バッチジョブの投入方法については、それぞれのドキュメントを参照してください。以下は、NCSA Delta スーパーコンピュータクラスタで ALPS をインストールするために使用したバッチスクリプトのサンプルです。
+```
+#!/bin/bash
+#SBATCH --mem=16g
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1    # <- OMP_NUM_THREADS に合わせる
+#SBATCH --partition=cpu      # <- または gpuA100x4 gpuA40x4 gpuA100x8 gpuMI100x8 のいずれか
+#SBATCH --account=bdhb-delta-cpu    # <- "accounts" コマンドで返される "Project" に合わせる
+#SBATCH --job-name=installALPS
+#SBATCH --time=05:00:00      # ジョブの実行時間 (hh:mm:ss)
+#SBATCH --constraint="scratch"
+#SBATCH -e slurm-%j.err
+#SBATCH -o slurm-%j.out
+### GPU オプション ###
+##SBATCH --gpus-per-node=2
+##SBATCH --gpu-bind=none     # <- または closest
+##SBATCH --mail-user=you@yourinstitution.edu
+##SBATCH --mail-type="BEGIN,END" その他のメールオプションについては sbatch または srun のマニュアルページを参照
+
+. spack/share/spack/setup-env.sh
+
+spack install alps
+```
 
 
 

@@ -54,7 +54,37 @@ spack info alps
 ```
 spack install alps
 ```
+要使用 ALPS，我们需要加载ALPS包：
+```
+spack load alps
+```
 
+### 在超算集群中通过 Spack 安装
+如果需要在超算集群中安装ALPS，我们建议通过提交批处理作业在计算节点上安装，而不是在登录节点上执行上述命令。由于安装过程有时耗时较长，在登录节点上安装可能会影响集群的其他用户。
 
+我们已在以下超算集群中成功安装过 ALPS：[NCSA Delta（伊利诺伊）](https://docs.ncsa.illinois.edu/systems/delta/en/latest/index.html)、[PSC Bridges（匹兹堡）](https://www.psc.edu/resources/bridges-2/user-guide/)、[Purdue Anvil](https://www.rcac.purdue.edu/anvil#docs)、[SDSC Expanse（圣地亚哥）](https://www.sdsc.edu/systems/expanse/user_guide.html)、[TACC Stampede3（德克萨斯）](https://docs.tacc.utexas.edu/hpc/stampede3/)。请阅读相应集群的文档以了解如何提交批处理作业。下面是我们用于在 NCSA Delta 超算集群中安装 ALPS 的一个示例批处理脚本。
+```
+#!/bin/bash
+#SBATCH --mem=16g
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1    # <- 与 OMP_NUM_THREADS 保持一致
+#SBATCH --partition=cpu      # <- 可选：gpuA100x4 gpuA40x4 gpuA100x8 gpuMI100x8
+#SBATCH --account=bdhb-delta-cpu    # <- 替换为 "accounts" 命令返回的某个 "Project"
+#SBATCH --job-name=installALPS
+#SBATCH --time=05:00:00      # 作业运行时间 hh:mm:ss
+#SBATCH --constraint="scratch"
+#SBATCH -e slurm-%j.err
+#SBATCH -o slurm-%j.out
+### GPU 选项 ###
+##SBATCH --gpus-per-node=2
+##SBATCH --gpu-bind=none     # <- 或 closest
+##SBATCH --mail-user=you@yourinstitution.edu
+##SBATCH --mail-type="BEGIN,END" 更多邮件选项请参阅 sbatch 或 srun 手册
+
+. spack/share/spack/setup-env.sh
+
+spack install alps
+```
 
 

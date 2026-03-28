@@ -54,8 +54,38 @@ Finally, let us install ALPS!
 ```
 spack install alps
 ```
+To use ALPS, we need to load the package:
+```
+spack load alps
+```
 
+### Spack Installation on Supercomputer Clusters
+If you need to install ALPS on a supercomputer cluster, we recommend submitting a batch job to install ALPS through a job node instead of running the above commands on a login node. Since the installation sometimes takes a long time, using login node to install ALPS could affect other users of the cluster. 
 
+We have successfully installed ALPS on the following supercomputer clusters: [NCSA Delta (Illinois)](https://docs.ncsa.illinois.edu/systems/delta/en/latest/index.html), [PSC Bridges (Pittsburgh)](https://www.psc.edu/resources/bridges-2/user-guide/), [Purdue Anvil](https://www.rcac.purdue.edu/anvil#docs), [SDSC Expanse (San Diego)](https://www.sdsc.edu/systems/expanse/user_guide.html), [TACC Stampede3 (Texas)](https://docs.tacc.utexas.edu/hpc/stampede3/). Please read their documentation about how to submit a batch job. Below is one sample batch script we used to install ALPS on the NCSA Delta supercomputer cluster.
+```
+#!/bin/bash
+#SBATCH --mem=16g
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1    # <- match to OMP_NUM_THREADS
+#SBATCH --partition=cpu      # <- or one of: gpuA100x4 gpuA40x4 gpuA100x8 gpuMI100x8
+#SBATCH --account=bdhb-delta-cpu    # <- match to a "Project" returned by the "accounts" command
+#SBATCH --job-name=installALPS
+#SBATCH --time=05:00:00      # hh:mm:ss for the job
+#SBATCH --constraint="scratch"
+#SBATCH -e slurm-%j.err
+#SBATCH -o slurm-%j.out
+### GPU options ###
+##SBATCH --gpus-per-node=2
+##SBATCH --gpu-bind=none     # <- or closest
+##SBATCH --mail-user=you@yourinstitution.edu
+##SBATCH --mail-type="BEGIN,END" See sbatch or srun man pages for more email options
+
+. spack/share/spack/setup-env.sh
+
+spack install alps
+```
 
 
 
