@@ -87,5 +87,11 @@ We have successfully installed ALPS on the following supercomputer clusters: [NC
 spack install alps
 ```
 
+## Walkthrough Video
+
+### Spack Installation of ALPS in WSL.
+<br>
+
+{{< youtube id="TD7PuiJKq5U" >}}
 
 

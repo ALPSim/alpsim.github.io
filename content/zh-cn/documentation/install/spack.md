@@ -87,4 +87,9 @@ spack load alps
 spack install alps
 ```
 
+## 安装视频指南
 
+### 在 WSL 中 spack 安装 ALPS
+<br>
+
+{{< youtube id="TD7PuiJKq5U" >}}
