@@ -284,8 +284,51 @@ html.dark .alps-pre {
   color: #d4d4d4;
 }
 
-/* Widen the chat window when a code block is displayed */
-#alps-chat-window:has(.alps-code-wrap) {
+/* ---- Lattice diagram blocks ---- */
+.alps-diagram-wrap {
+  margin: 0.45rem 0;
+  border-radius: 0.45rem;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+html.dark .alps-diagram-wrap {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.alps-diagram-bar {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #555;
+}
+
+html.dark .alps-diagram-bar {
+  background: rgba(255, 255, 255, 0.07);
+  color: #aaa;
+}
+
+.alps-diagram {
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  background: #fafaf5;
+  overflow-x: auto;
+  font-size: 0.76rem;
+  line-height: 1.65;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  white-space: pre;
+  color: #1a1a1a;
+}
+
+html.dark .alps-diagram {
+  background: #1a1a10;
+  color: #d8d8c0;
+}
+
+/* Widen the chat window when a code or diagram block is displayed */
+#alps-chat-window:has(.alps-code-wrap),
+#alps-chat-window:has(.alps-diagram-wrap) {
   width: 420px;
 }
 
@@ -297,7 +340,8 @@ html.dark .alps-pre {
   }
 
   #alps-chat-window,
-  #alps-chat-window:has(.alps-code-wrap) {
+  #alps-chat-window:has(.alps-code-wrap),
+  #alps-chat-window:has(.alps-diagram-wrap) {
     width: calc(100vw - 2rem);
     max-height: 80vh;
   }

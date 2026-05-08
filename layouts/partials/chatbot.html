@@ -1,5 +1,14 @@
 {{/* ALPS Chat Assistant Widget */}}
 <link rel="stylesheet" href="/css/chatbot.css">
+<style>
+/* Diagram blocks — inlined so they are never overridden by theme cascade */
+.alps-diagram-wrap{margin:.45rem 0;border-radius:.45rem;overflow:hidden;border:1px solid rgba(0,0,0,.12)}
+html.dark .alps-diagram-wrap{border-color:rgba(255,255,255,.12)}
+.alps-diagram-bar{display:block;background:rgba(0,0,0,.06);padding:.2rem .5rem;font-size:.72rem;font-weight:600;color:#555;letter-spacing:.01em}
+html.dark .alps-diagram-bar{background:rgba(255,255,255,.07);color:#aaa}
+pre.alps-diagram{display:block!important;margin:0!important;padding:.55rem .75rem!important;background:#fafaf5!important;color:#1a1a1a!important;font-size:.75rem!important;line-height:1.65!important;font-family:ui-monospace,'SFMono-Regular',Menlo,monospace!important;white-space:pre!important;overflow-x:auto!important;max-height:300px!important;tab-size:2}
+html.dark pre.alps-diagram{background:#1a1a10!important;color:#d8d8c0!important}
+</style>
 
 <div id="alps-chat-widget">
   <div id="alps-chat-window" class="alps-chat-hidden" role="dialog" aria-label="ALPS Assistant">
