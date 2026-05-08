@@ -89,9 +89,18 @@ spack install alps
 
 ## インストール手順ビデオ
 
-### WSLでのALPSのSpackインストール
+### WSL での Spack による ALPS (v2.3.3) のインストール
 <br>
 
 {{< youtube id="TD7PuiJKq5U" >}}
 
 
+### WSL での Spack による ALPS (v2.3.4) のインストール
+<br>
+
+{{< youtube id="CJmRIpAi02g" >}}
+
+### スーパーコンピュータクラスタ上での Spack による ALPS (v2.3.4) のインストール
+<br>
+
+{{< youtube id="yTn7ubU4bqE" >}}

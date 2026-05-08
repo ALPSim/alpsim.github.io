@@ -89,9 +89,18 @@ spack install alps
 
 ## Walkthrough Video
 
-### Spack Installation of ALPS in WSL.
+### Spack Installation of ALPS (v2.3.3) in WSL.
 <br>
 
 {{< youtube id="TD7PuiJKq5U" >}}
 
+### Spack Installation of ALPS (v2.3.4) in WSL.
+<br>
+
+{{< youtube id="CJmRIpAi02g" >}}
+
+### Spack Installation of ALPS (v2.3.4) on a Supercomputer Cluster.
+<br>
+
+{{< youtube id="yTn7ubU4bqE" >}}
 

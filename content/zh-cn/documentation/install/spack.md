@@ -89,7 +89,17 @@ spack install alps
 
 ## 安装视频指南
 
-### 在 WSL 中 spack 安装 ALPS
+### 在 WSL 中 spack 安装 ALPS (版本2.3.3)
 <br>
 
 {{< youtube id="TD7PuiJKq5U" >}}
+
+### 在 WSL 中 spack 安装 ALPS (版本2.3.4)
+<br>
+
+{{< youtube id="CJmRIpAi02g" >}}
+
+### 在超级计算机中 spack 安装 ALPS (版本2.3.4)
+<br>
+
+{{< youtube id="yTn7ubU4bqE" >}}
