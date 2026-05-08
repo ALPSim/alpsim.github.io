@@ -11,6 +11,7 @@
     {{- if or (eq .Site.Params.footer.enable nil) (.Site.Params.footer.enable) }}
       {{ partial "footer.html" . }}
     {{ end }}
+    {{- partial "chatbot.html" . -}}
   </body>
   {{ partial "scripts.html" . }}
 </html>
