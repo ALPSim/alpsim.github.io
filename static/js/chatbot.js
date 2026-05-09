@@ -111,38 +111,61 @@
     },
     {
       keywords: ['dmrg', 'density matrix renormalization', 'density matrix renormalization group',
-                 'tensor network', 'mps', 'matrix product state', '1d chain',
-                 'one dimensional chain'],
+                 'tensor network', 'mps', 'matrix product state', 'mps optimization',
+                 '1d chain dmrg', 'one dimensional dmrg'],
       response:
-        '<strong>DMRG</strong> (Density Matrix Renormalization Group) is highly accurate for ' +
-        '1D quantum systems using matrix product states (MPS).<br><br>' +
+        '<strong>DMRG / MPS</strong> in ALPS — two apps:<ul>' +
+        '<li><code>dmrg</code> — DMRG ground state; requires <code>LATTICE="open chain lattice"</code></li>' +
+        '<li><code>mps_optim</code> — MPS optimization (alternative ground state solver)</li>' +
+        '</ul>' +
+        'MODEL="spin" or "fermion Hubbard"; key params: <code>MAXSTATES</code> (bond dimension), <code>SWEEPS</code><br>' +
+        'Requires open boundary conditions; use <code>LATTICE="open chain lattice"</code>.<br><br>' +
         '&#8594; <a href="{lang}/documentation/methods/dmrg">DMRG documentation</a><br>' +
         '&#8594; <a href="{lang}/tutorials/dmrg">DMRG tutorials</a>'
     },
     {
       keywords: ['exact diagonalization', 'exact diag', 'ed method', 'full diagonalization',
-                 'lanczos', 'hamiltonian matrix', 'small system diag'],
+                 'lanczos', 'hamiltonian matrix', 'small system diag', 'sparsediag', 'fulldiag'],
       response:
-        '<strong>Exact Diagonalization (ED)</strong> directly diagonalizes the Hamiltonian for ' +
-        'small quantum systems — exact results, limited to small sizes.<br><br>' +
+        '<strong>Exact Diagonalization</strong> in ALPS — two apps:<ul>' +
+        '<li><code>sparsediag</code> — sparse (Lanczos) diagonalization; ground state and low-lying levels (ED-01 to ED-05)</li>' +
+        '<li><code>fulldiag</code> — full diagonalization; thermodynamic quantities vs T (ED-06)</li>' +
+        '</ul>' +
+        'MODEL="spin" (or "fermion Hubbard" for small Hubbard clusters)<br>' +
+        'Parameters: <code>L</code>, <code>J</code>, <code>local_S</code>, <code>CONSERVED_QUANTUMNUMBERS="Sz"</code><br><br>' +
         '&#8594; <a href="{lang}/documentation/methods/ed">ED documentation</a><br>' +
         '&#8594; <a href="{lang}/tutorials/ed">ED tutorials</a>'
     },
     {
-      keywords: ['qmc', 'quantum monte carlo', 'loop algorithm', 'worm algorithm',
-                 'stochastic series expansion', 'sse', 'path integral monte carlo'],
+      keywords: ['qmc', 'quantum monte carlo', 'loop algorithm', 'loop qmc',
+                 'dirloop', 'directed loop', 'stochastic series expansion', 'sse',
+                 'path integral monte carlo', 'quantum spin qmc'],
       response:
-        '<strong>QMC</strong> (Quantum Monte Carlo) uses stochastic sampling to solve quantum ' +
-        'many-body problems — highly scalable, sign-problem-free for many models.<br><br>' +
+        '<strong>Quantum MC</strong> in ALPS — MODEL="spin", two apps:<ul>' +
+        '<li><code>loop</code> — loop algorithm; susceptibility, gaps, phase diagrams (MC-02, MC-08)</li>' +
+        '<li><code>dirloop_sse</code> — directed loop SSE; use when magnetic field <code>h</code> is present (MC-03, MC-04)</li>' +
+        '</ul>' +
+        'Parameters: <code>J</code> (coupling), <code>local_S</code> (spin), <code>T</code> (temperature), optional <code>h</code> (field)<br>' +
+        'Sign-problem-free for unfrustrated spin models.<br><br>' +
         '&#8594; <a href="{lang}/documentation/methods/qmc">QMC documentation</a>'
     },
     {
       keywords: ['spinmc', 'spin mc', 'classical monte carlo', 'classical spin',
                  'ising monte carlo', 'metropolis', 'wolff', 'cluster algorithm'],
       response:
-        '<strong>SpinMC</strong> provides classical Monte Carlo for spin models (Ising, Heisenberg, etc.) ' +
-        'using Metropolis and cluster algorithms.<br><br>' +
+        '<strong>SpinMC</strong> — classical Monte Carlo; app: <code>spinmc</code><br>' +
+        'MODEL: <code>"Ising"</code>, <code>"Heisenberg"</code>, or <code>"XY"</code><br>' +
+        'Parameters: <code>J</code>, <code>T</code>, <code>h</code> (field), <code>UPDATE="cluster"</code><br><br>' +
         '&#8594; <a href="{lang}/documentation/methods/spinmc">SpinMC documentation</a>'
+    },
+    {
+      keywords: ['qwl', 'quantum wang-landau', 'wang landau', 'wang-landau',
+                 'density of states', 'flat histogram'],
+      response:
+        '<strong>QWL</strong> (Quantum Wang-Landau) computes the density of states directly, ' +
+        'giving thermodynamic quantities at all temperatures in a single run.<br>' +
+        'App: <code>qwl</code>, MODEL="spin"<br><br>' +
+        '&#8594; <a href="{lang}/tutorials/mcs">MC tutorials (MC-06)</a>'
     },
     {
       keywords: ['tebd', 'time-evolving block decimation', 'time evolution', 'real time evolution',
@@ -153,11 +176,25 @@
         '&#8594; <a href="{lang}/tutorials/tebd">TEBD tutorial</a>'
     },
     {
-      keywords: ['hubbard model', 'hubbard', 'fermi hubbard', 'on-site interaction',
-                 'hopping term', 'mott insulator', 'strongly correlated electron'],
+      keywords: ['hubbard model', 'fermion hubbard', 'fermi hubbard', 'electron hubbard',
+                 'hubbard chain', 'hubbard lattice', '1d hubbard', 'on-site interaction',
+                 'hopping t', 'hubbard u', 'mott insulator', 'strongly correlated electron',
+                 'nup ndown', 'spinful hubbard', 'half filling'],
       response:
-        'The <strong>Hubbard model</strong> describes electrons on a lattice with hopping t and ' +
-        'on-site repulsion U — a paradigmatic model for strong correlations.<br><br>' +
+        '<strong>Hubbard model</strong> in ALPS — <code>MODEL="fermion Hubbard"</code><br><br>' +
+        'H = &minus;t &Sigma; c<sup>&dagger;</sup>c + U &Sigma; n<sub>&uarr;</sub>n<sub>&darr;</sub> &minus; &mu; &Sigma; n<br><br>' +
+        '<strong>ALPS parameters:</strong><ul>' +
+        '<li><code>t</code> — hopping amplitude between neighboring sites</li>' +
+        '<li><code>U</code> — on-site Coulomb repulsion</li>' +
+        '<li><code>mu</code> — chemical potential (&mu; = 0 gives half filling)</li>' +
+        '<li><code>Nup_total</code> — total number of spin-up electrons</li>' +
+        '<li><code>Ndown_total</code> — total number of spin-down electrons</li>' +
+        '<li><code>CONSERVED_QUANTUMNUMBERS="Nup,Ndown"</code></li>' +
+        '</ul>' +
+        '<strong>Recommended method:</strong> DMRG / MPS for 1D chains; ED (sparsediag) for tiny clusters<br>' +
+        '<strong>Lattice:</strong> <code>open chain lattice</code> (required for DMRG), <code>chain lattice</code> (ED)<br><br>' +
+        'Try: <em>"create Hubbard model input L=16 U=4 t=1"</em> or ' +
+        '<em>"fermion Hubbard ED L=6 U=8"</em><br>' +
         '&#8594; <a href="{lang}/documentation/models/hubbard">Hubbard model docs</a>'
     },
     {
@@ -177,11 +214,36 @@
         '&#8594; <a href="{lang}/documentation/models/ising">Ising model docs</a>'
     },
     {
-      keywords: ['bose-hubbard', 'bose hubbard', 'bhm', 'bosonic model', 'superfluid',
-                 'mott lobe', 'optical lattice', 'bose einstein condensate'],
+      keywords: ['bose-hubbard', 'bose hubbard', 'bhm', 'bosonic model', 'superfluid mott',
+                 'mott lobe', 'optical lattice', 'bose einstein condensate',
+                 'soft core boson', 'soft-core boson', 'boson hubbard',
+                 'nmax bosons', 'worm algorithm boson',
+                 'hardcore boson', 'hard core boson', 'hard-core boson'],
       response:
-        'The <strong>Bose-Hubbard model</strong> describes interacting bosons on a lattice, ' +
-        'exhibiting superfluid–Mott insulator quantum phase transitions.<br><br>' +
+        '<strong>Bose-Hubbard model</strong> in ALPS — two variants:<br><br>' +
+        '<strong>&#9312; Soft-core bosons</strong> — <code>MODEL="boson Hubbard"</code><br>' +
+        'H = &minus;t &Sigma; b<sup>&dagger;</sup>b + (U/2) &Sigma; n(n&minus;1) &minus; &mu; &Sigma; n<br>' +
+        '<ul>' +
+        '<li><code>t</code> — hopping amplitude</li>' +
+        '<li><code>U</code> — on-site repulsion (U&gt;0 → repulsive)</li>' +
+        '<li><code>mu</code> — chemical potential</li>' +
+        '<li><code>Nmax</code> — max bosons per site (2–5 typical)</li>' +
+        '<li><code>NONLOCAL=0</code> — required flag</li>' +
+        '<li><code>V</code> — optional nearest-neighbor repulsion</li>' +
+        '</ul>' +
+        'App: <code>worm</code> (standard QMC) or <code>dwa</code> (directed worm algorithm)<br><br>' +
+        '<strong>&#9313; Hard-core bosons</strong> — <code>MODEL="hardcore boson"</code><br>' +
+        'Hopping-only Hamiltonian; occupancy is strictly 0 or 1 per site (no U parameter).<br>' +
+        '<ul>' +
+        '<li><code>t</code> — hopping amplitude</li>' +
+        '<li><code>mu</code> — chemical potential</li>' +
+        '<li><code>V</code> — optional NN repulsion</li>' +
+        '</ul>' +
+        'App: <code>worm</code> or <code>dwa</code><br><br>' +
+        '<strong>Typical lattice:</strong> <code>square lattice</code> (2D superfluid&ndash;Mott), <code>chain lattice</code> (1D)<br>' +
+        'Phase diagram: superfluid (large t/U) &#8596; Mott insulator (large U/t)<br><br>' +
+        'Try: <em>"create Bose-Hubbard input L=4 W=4 U=1 t=0.05"</em> or ' +
+        '<em>"hardcore boson input L=16"</em><br>' +
         '&#8594; <a href="{lang}/documentation/models/bhm">Bose-Hubbard model docs</a>'
     },
     {
@@ -229,6 +291,39 @@
         '<li><strong><code>coupled ladders</code></strong> — 2D periodic; J2 couples adjacent ladders.</li>' +
         '</ul>' +
         'Try: <em>"create a ladder QMC input"</em>, <em>"ladder DMRG input L=40"</em>, or <em>"coupled ladders input J2=0.3"</em>.'
+    },
+    {
+      keywords: ['available lattice', 'all lattice', 'which lattice', 'list of lattice',
+                 'what lattice', 'supported lattice', '2d lattice', '3d lattice',
+                 'triangular lattice', 'honeycomb', 'honeycomb lattice', 'kagome',
+                 'simple cubic', 'cubic lattice', 'frustrated lattice', 'j1 j2 model',
+                 'j1-j2', 'nnn chain', 'next nearest neighbor chain'],
+      response:
+        'ALPS supports the following lattice geometries in <code>LATTICE="..."</code>:<br><br>' +
+        '<strong>1D lattices</strong><ul>' +
+        '<li><code>chain lattice</code> — periodic, 1 parameter: L</li>' +
+        '<li><code>open chain lattice</code> — open BCs; use for DMRG</li>' +
+        '<li><code>nnn chain lattice</code> — adds next-nearest-neighbor (NNN) bonds; parameters J, J\'</li>' +
+        '</ul>' +
+        '<strong>2D lattices</strong><ul>' +
+        '<li><code>square lattice</code> — periodic square grid; parameters L, W (default W=L), J</li>' +
+        '<li><code>open square lattice</code> — open BCs in both directions</li>' +
+        '<li><code>frustrated square lattice</code> — adds diagonal NNN bonds J\'; classic J1-J2 model</li>' +
+        '<li><code>anisotropic square lattice</code> — J0 (x-bonds), J1 (y-bonds)</li>' +
+        '<li><code>triangular lattice</code> — 6 neighbors; J; periodic; L, W</li>' +
+        '<li><code>anisotropic triangular lattice</code> — J0, J1, J2 for 3 bond directions</li>' +
+        '<li><code>honeycomb lattice</code> — 3 neighbors/site; bipartite; hexagonal rings</li>' +
+        '<li><code>kagome lattice</code> — highly frustrated; corner-sharing triangles</li>' +
+        '<li><code>ladder</code> — W-leg ladder; J0=legs, J1=rungs; periodic along legs</li>' +
+        '<li><code>open ladder</code> — open BCs both directions; for DMRG</li>' +
+        '<li><code>coupled ladders</code> — 2D stack of ladders; J0=legs, J1=rungs, J2=inter-ladder</li>' +
+        '</ul>' +
+        '<strong>3D lattices</strong><ul>' +
+        '<li><code>simple cubic lattice</code> — 6 neighbors; parameters L, W, H; J</li>' +
+        '</ul>' +
+        'Try: <em>"create spinmc input square lattice L=16 W=16"</em>, ' +
+        '<em>"qmc triangular lattice L=12 J=-1"</em>, or ' +
+        '<em>"ed frustrated square lattice L=4"</em>.'
     },
     {
       keywords: ['tutorial', 'tutorials', 'example', 'examples', 'jupyter notebook',
@@ -378,12 +473,22 @@
   var METHOD_MAP = {
     spinmc:          ['spinmc', 'spin mc', 'classical monte carlo', 'classical ising',
                       'classical heisenberg', 'classical spin'],
-    looper:          ['looper', 'quantum monte carlo spin', 'quantum spin mc',
-                      'loop algorithm', 'loop qmc'],
+    loop:            ['loop algorithm', 'loop qmc', 'quantum spin mc', 'quantum monte carlo spin',
+                      'looper', 'loop app'],
+    dirloop:         ['dirloop_sse', 'dirloop', 'directed loop', 'quantum spin mc field',
+                      'qmc with field', 'spin qmc magnetic field'],
+    qwl:             ['qwl', 'quantum wang-landau', 'wang landau spin', 'wang-landau qmc'],
     qmc:             ['qmc'],
-    dwa:             ['dwa', 'directed worm', 'boson qmc', 'bosonic qmc', 'bose-hubbard qmc',
-                      'boson hubbard qmc'],
-    bhm:             ['boson hubbard', 'bose hubbard', 'bose-hubbard mc', 'bhm'],
+    dwa:             ['dwa', 'directed worm', 'bose-hubbard dwa', 'boson hubbard dwa',
+                      'directed worm boson'],
+    bhm:             ['boson hubbard', 'bose hubbard', 'bose-hubbard', 'bhm', 'bose hubbard model',
+                      'boson qmc', 'bosonic qmc', 'worm boson', 'boson worm',
+                      'hubbard qmc', 'qmc hubbard', 'hubbard worm', 'hubbard model qmc'],
+    hardcore_boson:  ['hardcore boson', 'hard-core boson', 'hard core boson', 'hcb'],
+    fermion_hubbard: ['fermion hubbard', 'fermi hubbard', 'electron hubbard', 'spinful hubbard',
+                      'hubbard dmrg', 'hubbard ed', 'hubbard model ed', 'hubbard model dmrg',
+                      'hubbard chain', '1d hubbard', 'one dimensional hubbard',
+                      'fermion hubbard model', 'fermi hubbard model'],
     ed:              ['sparsediag', 'sparse diag', 'exact diagonalization', 'exact diag',
                       'ground state ed', ' ed '],
     fulldiag:        ['fulldiag', 'full diagonalization', 'full ed',
@@ -409,10 +514,19 @@
   };
 
   function detectMethod(q) {
-    /* Check longer / more-specific keys first to avoid false partial matches */
+    /* Pre-checks: catch cross-keyword combos before the single-word loop fires.
+       "hubbard" + any QMC keyword → Bose-Hubbard worm (only sign-problem-free Hubbard QMC in ALPS).
+       Must run before the generic 'qmc' keyword match. */
+    if (/\bhubbard\b/i.test(q) && /\bqmc\b|\bworm\b|\bmonte\s*carlo\b/i.test(q) &&
+        !/\bferm|\belectron\b|\bspinful\b/i.test(q)) return 'bhm';
+
+    /* Check longer / more-specific keys first to avoid false partial matches.
+       Boson models must be checked before fermion_hubbard. */
     var order = ['ladder_dmrg', 'ladder_ed', 'ladder_fulldiag', 'coupled_ladders', 'ladder',
-                 'spinmc', 'looper', 'qmc', 'dwa', 'bhm', 'ed', 'fulldiag',
-                 'dmrg', 'mps', 'tebd', 'dmft'];
+                 'hardcore_boson', 'dwa', 'bhm',
+                 'fermion_hubbard',
+                 'spinmc', 'dirloop', 'loop', 'qwl', 'qmc',
+                 'ed', 'fulldiag', 'dmrg', 'mps', 'tebd', 'dmft'];
     for (var oi = 0; oi < order.length; oi++) {
       var m = order[oi];
       var kws = METHOD_MAP[m];
@@ -420,11 +534,20 @@
         if (q.indexOf(kws[i]) !== -1) return m;
       }
     }
-    /* fallback heuristics */
-    if (/\bbeta\b|\bnmatsubara\b|\bimpurity\b|\bhybridization solver\b/i.test(q)) return 'dmft';
-    if (/\btebd\b|\bquench\b|\breal.?time\b/i.test(q))                             return 'tebd';
-    if (/\bdmrg\b|\bmaxstates\b/i.test(q))                                         return 'dmrg';
-    if (/\bboson\b|\bbose\b/i.test(q))                                              return 'dwa';
+    /* fallback heuristics — order matters */
+    if (/\bbeta\b|\bnmatsubara\b|\bimpurity\b|\bhybridization\b/i.test(q)) return 'dmft';
+    if (/\btebd\b|\bquench\b|\breal.?time\b/i.test(q))                     return 'tebd';
+    if (/\bdmrg\b|\bmaxstates\b/i.test(q))                                 return 'dmrg';
+    /* Boson Hubbard: any "hubbard" + boson context → QMC via worm */
+    if (/\bhubbard\b/i.test(q) && /\bbose\b|\bboson\b/i.test(q))           return 'bhm';
+    /* Hubbard + QMC keyword: in ALPS, QMC for Hubbard means Bose-Hubbard */
+    if (/\bhubbard\b/i.test(q) && /\bqmc\b|\bworm\b|\bloop\b/i.test(q))   return 'bhm';
+    /* Explicit fermion/electron Hubbard → DMRG/ED */
+    if (/\bhubbard\b/i.test(q) && /\bferm|\belectron\b|\bspinful\b/i.test(q)) return 'fermion_hubbard';
+    /* Plain "hubbard" (no boson/QMC context) → fermion Hubbard */
+    if (/\bhubbard\b/i.test(q))                                             return 'fermion_hubbard';
+    /* Generic boson/bose → BHM */
+    if (/\bboson\b|\bbose\b/i.test(q))                                      return 'bhm';
     /* ladder heuristics — check after other methods so "ladder dmrg" etc. already matched above */
     if (/\bladder\b/i.test(q) && /\bdmrg\b|\bmps\b/i.test(q))                      return 'ladder_dmrg';
     if (/\bladder\b/i.test(q) && /\b(?:exact\s*diag|sparsediag|\bed\b)/i.test(q)) return 'ladder_ed';
@@ -519,21 +642,49 @@
     if ((m = q.match(/Nmax\s*=\s*(\d+)/i))                   ||
         (m = q.match(/max\s*(?:occup\w+|bosons?\s*per\s*site)\s*[=:]\s*(\d+)/i))) p.Nmax = +m[1];
 
-    /* N_total */
+    /* N_total (bosons) */
     if ((m = q.match(/N_total\s*=\s*(\d+)/i))                ||
         (m = q.match(/(\d+)\s*(?:particles?|bosons?)\b/i)))  p.N_total = +m[1];
 
-    /* Lattice — check specific before general */
-    if      (/open\s+chain|obc\b/i.test(q))        p.LATTICE = 'open chain lattice';
-    else if (/\bchain\b/i.test(q))                  p.LATTICE = 'chain lattice';
-    if      (/\bsquare\b/i.test(q))                 p.LATTICE = 'square lattice';
-    if      (/\bcubic\b/i.test(q))                  p.LATTICE = 'cubic lattice';
-    if      (/\btriangular\b/i.test(q))             p.LATTICE = 'triangular lattice';
-    if      (/\bhoneycomb\b/i.test(q))              p.LATTICE = 'honeycomb';
+    /* Nup_total / Ndown_total (fermion Hubbard) */
+    if ((m = q.match(/Nup(?:_total)?\s*=\s*(\d+)/i))         ||
+        (m = q.match(/spin.?up\s*[=:]\s*(\d+)/i)))           p.Nup_total = +m[1];
+    if ((m = q.match(/Ndown(?:_total)?\s*=\s*(\d+)/i))       ||
+        (m = q.match(/spin.?down\s*[=:]\s*(\d+)/i)))         p.Ndown_total = +m[1];
+
+    /* V nearest-neighbor repulsion (bosons) */
+    if ((m = q.match(/\bV\s*=\s*([\d.]+)/))                  ||
+        (m = q.match(/nn\s+repulsion\s*[=:]\s*([\d.]+)/i)))  p.V = +m[1];
+
+    /* T_MIN / T_MAX / DELTA_T (fulldiag) */
+    if ((m = q.match(/T_MIN\s*=\s*([\d.]+)/i))               ||
+        (m = q.match(/min\s+temp\w*\s*[=:]\s*([\d.]+)/i)))   p.T_MIN = +m[1];
+    if ((m = q.match(/T_MAX\s*=\s*([\d.]+)/i))               ||
+        (m = q.match(/max\s+temp\w*\s*[=:]\s*([\d.]+)/i)))   p.T_MAX = +m[1];
+    if ((m = q.match(/DELTA_T\s*=\s*([\d.]+)/i)))             p.DELTA_T = +m[1];
+
+    /* Lattice — check most-specific first */
+    if      (/nnn\s+open\s+chain|nnn\s+obc/i.test(q))            p.LATTICE = 'nnn open chain lattice';
+    else if (/nnn\s+chain|next.?nearest.*chain/i.test(q))         p.LATTICE = 'nnn chain lattice';
+    else if (/open\s+chain|obc\b/i.test(q))                       p.LATTICE = 'open chain lattice';
+    else if (/\bchain\b/i.test(q) && !/ladder/i.test(q))          p.LATTICE = 'chain lattice';
+    if      (/frustrated\s+square|j1.?j2\s+square|nnn\s+square/i.test(q))  p.LATTICE = 'frustrated square lattice';
+    else if (/anisotropic\s+square/i.test(q))                      p.LATTICE = 'anisotropic square lattice';
+    else if (/open\s+square/i.test(q))                             p.LATTICE = 'open square lattice';
+    else if (/\bsquare\b/i.test(q))                                p.LATTICE = 'square lattice';
+    if      (/simple\s+cubic|cubic\s+lattice|\bsc\s+lattice/i.test(q)) p.LATTICE = 'simple cubic lattice';
+    else if (/\bcubic\b/i.test(q))                                 p.LATTICE = 'simple cubic lattice';
+    if      (/\bkagome\b/i.test(q))                                p.LATTICE = 'kagome lattice';
+    if      (/anisotropic\s+trian/i.test(q))                       p.LATTICE = 'anisotropic triangular lattice';
+    else if (/\btriangular\b/i.test(q))                            p.LATTICE = 'triangular lattice';
+    if      (/\bhoneycomb\b/i.test(q))                             p.LATTICE = 'honeycomb lattice';
     /* Ladder lattices — most specific first */
     if      (/coupled\s+ladders?\b/i.test(q))       p.LATTICE = 'coupled ladders';
     else if (/open\s+ladder\b/i.test(q))            p.LATTICE = 'open ladder';
     else if (/\bladder\b/i.test(q))                 p.LATTICE = 'ladder';
+    /* Height H for 3D lattices */
+    if ((m = q.match(/\bH\s*=\s*(\d+)/i))          ||
+        (m = q.match(/height\s*[=:]\s*(\d+)/i)))   p.H = +m[1];
 
     /* SpinMC model name */
     if      (/\bising\b/i.test(q))                 p.spinMCmodel = 'Ising';
@@ -605,19 +756,117 @@
 
       case 'square lattice':
         return diagramBlock(
-          'o --J-- o --J-- o\n' +
-          '|       |       |\n' +
-          'J       J       J\n' +
-          '|       |       |\n' +
-          'o --J-- o --J-- o\n' +
-          '|       |       |\n' +
-          'J       J       J\n' +
-          '|       |       |\n' +
-          'o --J-- o --J-- o\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '|       |       |       |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '|       |       |       |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '|       |       |       |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
           '\n' +
-          'Periodic BCs in both directions (3×3 shown).\n' +
-          'J = nearest-neighbour coupling.',
-          'Lattice: square lattice (3×3 shown)'
+          'J  = NN coupling (horizontal \'--J--\' and vertical \'|\' bonds)\n' +
+          'Periodic BCs in both directions  (4×4 shown)\n' +
+          'L  = sites along x,   W = sites along y  (default W = L)',
+          'Lattice: square lattice (4×4 shown)'
+        );
+
+      case 'open square lattice':
+        return diagramBlock(
+          'o --J-- o --J-- o --J-- o\n' +
+          '|       |       |       |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '|       |       |       |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '|       |       |       |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '\n' +
+          'J  = NN coupling  (all bonds)\n' +
+          'Open BCs in both directions  (4×4 shown)\n' +
+          'L  = sites along x,   W = sites along y',
+          'Lattice: open square lattice (4×4 shown)'
+        );
+
+      case 'triangular lattice':
+        return diagramBlock(
+          'o -J- o -J- o -J- o\n' +
+          '|  \\  |  \\  |  \\  |\n' +
+          '|  J\\ |  J\\ |  J\\ |\n' +
+          'o -J- o -J- o -J- o\n' +
+          '|  \\  |  \\  |  \\  |\n' +
+          '|  J\\ |  J\\ |  J\\ |\n' +
+          'o -J- o -J- o -J- o\n' +
+          '\n' +
+          'J  = NN coupling  (6 neighbors per site)\n' +
+          'Bond directions: horizontal (J), vertical (J), diagonal (J)\n' +
+          'Periodic BCs in both directions\n' +
+          'L  = sites along x,   W = sites along y',
+          'Lattice: triangular lattice'
+        );
+
+      case 'honeycomb lattice':
+        return diagramBlock(
+          'o - o       o - o\n' +
+          '    |           |\n' +
+          '    o - o   o - o\n' +
+          '    |           |\n' +
+          'o - o       o - o\n' +
+          '    |           |\n' +
+          '    o - o   o - o\n' +
+          '\n' +
+          'J  = NN coupling  (3 neighbors per site)\n' +
+          'Bipartite lattice; sites form hexagonal rings\n' +
+          'Periodic BCs in both directions',
+          'Lattice: honeycomb lattice'
+        );
+
+      case 'simple cubic lattice':
+        return diagramBlock(
+          '      o ---J--- o ---J--- o\n' +
+          '     /|        /|        /|\n' +
+          '    J |       J |       J |\n' +
+          '   /  J      /  J      /  J\n' +
+          '  o ---J--- o ---J--- o   |\n' +
+          '  |   o     |   o     |   o\n' +
+          '  |  /      |  /      |  /\n' +
+          '  | J       | J       | J\n' +
+          '  |/        |/        |/\n' +
+          '  o ---J--- o ---J--- o\n' +
+          '\n' +
+          'J  = NN coupling  (6 neighbors: ±x, ±y, ±z)\n' +
+          'Periodic BCs in all three directions\n' +
+          'L = sites along x,  W = along y  (default W=L),  H = along z  (default H=W)',
+          'Lattice: simple cubic lattice (3×3×2 shown)'
+        );
+
+      case 'frustrated square lattice':
+        return diagramBlock(
+          'o --J-- o --J-- o --J-- o\n' +
+          '|\\ J\'  |\\ J\'  |\\ J\'  |\n' +
+          'J  \\   J  \\   J  \\   J\n' +
+          '|   \\  |   \\  |   \\  |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '|\\ J\'  |\\ J\'  |\\ J\'  |\n' +
+          'J  \\   J  \\   J  \\   J\n' +
+          '|   \\  |   \\  |   \\  |\n' +
+          'o --J-- o --J-- o --J-- o\n' +
+          '\n' +
+          'J  = NN coupling  (nearest-neighbor bonds, horizontal and vertical)\n' +
+          'J\' = NNN coupling (next-nearest-neighbor diagonal bonds, frustrating)\n' +
+          'Periodic BCs in both directions  (4×3 shown)\n' +
+          'Use J\'≈0.5J for maximum frustration (classical Lissajous point)',
+          'Lattice: frustrated square lattice (J1-J2 model)'
+        );
+
+      case 'nnn chain lattice':
+        return diagramBlock(
+          'o --J-- o --J-- o --J-- o --J-- o\n' +
+          ' \\  J\'  / \\  J\'  / \\  J\'  / \\\n' +
+          '  o --J-- o --J-- o --J-- o\n' +
+          '\n' +
+          'J  = NN coupling  (nearest-neighbor, bond type 0)\n' +
+          'J\' = NNN coupling (next-nearest-neighbor, bond type 1)\n' +
+          'Periodic BCs along the chain',
+          'Lattice: nnn chain lattice'
         );
 
       case 'ladder':
@@ -682,52 +931,61 @@
    * INPUT FILE — generators (one per method)
    * ================================================================ */
 
+  var _2D_LATTICES = ['square lattice', 'open square lattice', 'anisotropic square lattice',
+                       'frustrated square lattice', 'triangular lattice',
+                       'anisotropic triangular lattice', 'honeycomb lattice', 'kagome lattice'];
+  var _3D_LATTICES = ['simple cubic lattice'];
+
   function genSpinMC(p) {
     var lattice = p.LATTICE || 'square lattice';
     var L       = p.L       || 8;
+    var is2D    = _2D_LATTICES.indexOf(lattice) !== -1;
+    var is3D    = _3D_LATTICES.indexOf(lattice) !== -1;
+    var W       = (is2D || is3D) ? (p.W || L) : undefined;
+    var H       = is3D ? (p.H || (W || L)) : undefined;
     var model   = p.spinMCmodel || 'Ising';
     var J       = (p.J   !== undefined) ? p.J   : 1;
     var therm   = p.THERMALIZATION || 1000;
     var sweeps  = p.SWEEPS || 50000;
     var temps   = p.T !== undefined ? [p.T] : [1.5, 2.0, 2.5];
 
-    var parmLines = [
-      'LATTICE="' + lattice + '"',
-      'L=' + L,
-      'MODEL="' + model + '"',
-      'J=' + J,
-      'THERMALIZATION=' + therm,
-      'SWEEPS=' + sweeps,
-      'UPDATE="cluster"'
-    ];
+    var parmLines = ['LATTICE="' + lattice + '"', 'L=' + L];
+    if (W !== undefined) parmLines.push('W=' + W);
+    if (H !== undefined) parmLines.push('H=' + H);
+    parmLines.push('MODEL="' + model + '"', 'J=' + J,
+                   'THERMALIZATION=' + therm, 'SWEEPS=' + sweeps, 'UPDATE="cluster"');
     temps.forEach(function(t) { parmLines.push('{T=' + t + ';}'); });
     var parm = parmLines.join('\n');
 
-    var tempStr = temps.length === 1
-      ? '[' + temps[0] + ']'
-      : '[' + temps.join(', ') + ']';
-    var py = [
-      'import pyalps',
-      '',
-      'parms = []',
-      'for t in ' + tempStr + ':',
-      '    parms.append({',
+    var tempStr = temps.length === 1 ? '[' + temps[0] + ']' : '[' + temps.join(', ') + ']';
+    var pyDict = [
       '        \'LATTICE\'        : "' + lattice + '",',
-      '        \'L\'              : ' + L + ',',
+      '        \'L\'              : ' + L + ','
+    ];
+    if (W !== undefined) pyDict.push('        \'W\'              : ' + W + ',');
+    if (H !== undefined) pyDict.push('        \'H\'              : ' + H + ',');
+    pyDict = pyDict.concat([
       '        \'MODEL\'          : "' + model + '",',
       '        \'J\'              : ' + J + ',',
       '        \'THERMALIZATION\' : ' + therm + ',',
       '        \'SWEEPS\'         : ' + sweeps + ',',
       '        \'UPDATE\'         : "cluster",',
-      '        \'T\'              : t',
-      '    })',
-      '',
+      '        \'T\'              : t'
+    ]);
+    var py = [
+      'import pyalps', '',
+      'parms = []',
+      'for t in ' + tempStr + ':',
+      '    parms.append({'
+    ].concat(pyDict).concat([
+      '    })', '',
       'input_file = pyalps.writeInputFiles(\'parm_spinmc\', parms)',
       'res = pyalps.runApplication(\'spinmc\', input_file)',
       'print("Done. Results in:", pyalps.getResultFiles(prefix=\'parm_spinmc\'))'
-    ].join('\n');
+    ]).join('\n');
 
-    return '<strong>SpinMC input</strong> — ' + model + ', ' + lattice + ', L=' + L + '<br>' +
+    var sizeStr = W !== undefined ? 'L=' + L + '×W=' + W : 'L=' + L;
+    return '<strong>SpinMC input</strong> — ' + model + ', ' + lattice + ', ' + sizeStr + '<br>' +
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
@@ -737,6 +995,9 @@
   function genQMC(p) {
     var lattice  = p.LATTICE || 'chain lattice';
     var L        = p.L       || 16;
+    var is2D     = _2D_LATTICES.indexOf(lattice) !== -1;
+    var is3D     = _3D_LATTICES.indexOf(lattice) !== -1;
+    var W        = (is2D || is3D) ? (p.W || L) : undefined;
     var local_S  = (p.local_S !== undefined) ? p.local_S : 0.5;
     var J        = (p.J    !== undefined) ? p.J    : 1;
     var therm    = p.THERMALIZATION || 5000;
@@ -744,49 +1005,61 @@
     var temps    = p.T !== undefined ? [p.T] : [0.5, 1.0, 2.0];
     var tempStr  = temps.length === 1 ? '[' + temps[0] + ']' : '[' + temps.join(', ') + ']';
 
-    var parmLines = [
-      'LATTICE="' + lattice + '"',
-      'L=' + L,
-      'MODEL="spin"',
-      'local_S=' + local_S,
-      'J=' + J,
-      'THERMALIZATION=' + therm,
-      'SWEEPS=' + sweeps
-    ];
+    var parmLines = ['LATTICE="' + lattice + '"', 'L=' + L];
+    if (W !== undefined) parmLines.push('W=' + W);
+    parmLines.push('MODEL="spin"', 'local_S=' + local_S, 'J=' + J,
+                   'THERMALIZATION=' + therm, 'SWEEPS=' + sweeps);
     temps.forEach(function(t) { parmLines.push('{T=' + t + ';}'); });
     var parm = parmLines.join('\n');
 
-    var py = [
-      'import pyalps',
-      '',
-      'parms = []',
-      'for t in ' + tempStr + ':',
-      '    parms.append({',
+    var pyDict = [
       '        \'LATTICE\'        : "' + lattice + '",',
-      '        \'L\'              : ' + L + ',',
+      '        \'L\'              : ' + L + ','
+    ];
+    if (W !== undefined) pyDict.push('        \'W\'              : ' + W + ',');
+    pyDict = pyDict.concat([
       '        \'MODEL\'          : "spin",',
       '        \'local_S\'        : ' + local_S + ',',
       '        \'J\'              : ' + J + ',',
       '        \'THERMALIZATION\' : ' + therm + ',',
       '        \'SWEEPS\'         : ' + sweeps + ',',
-      '        \'T\'              : t',
-      '    })',
-      '',
+      '        \'T\'              : t'
+    ]);
+    var py = [
+      'import pyalps', '',
+      'parms = []',
+      'for t in ' + tempStr + ':',
+      '    parms.append({'
+    ].concat(pyDict).concat([
+      '    })', '',
       'input_file = pyalps.writeInputFiles(\'parm_qmc\', parms)',
-      'res = pyalps.runApplication(\'looper\', input_file)'
-    ].join('\n');
+      /* use dirloop_sse when magnetic field is present, loop otherwise */
+      'res = pyalps.runApplication(\'' + (p.h !== undefined ? 'dirloop_sse' : 'loop') + '\', input_file)'
+    ]).join('\n');
 
-    return '<strong>QMC (looper) input</strong> — spin-' + local_S + ', ' + lattice + ', L=' + L + '<br>' +
+    var app = p.h !== undefined ? 'dirloop_sse' : 'loop';
+    var sizeStr = W !== undefined ? 'L=' + L + '×W=' + W : 'L=' + L;
+    return '<strong>QMC input</strong> — spin-' + local_S + ', ' + lattice + ', ' + sizeStr + '<br>' +
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>looper</code></small>';
+      '<small>App: <code>' + app + '</code>' +
+      (p.h !== undefined
+        ? ' — <code>dirloop_sse</code> (directed loop SSE, recommended when field h is present)'
+        : ' — <code>loop</code> (loop algorithm); use <code>dirloop_sse</code> if applying a magnetic field h') +
+      '</small>';
   }
 
-  function genBHM(p) {
+  function genBHM(p, algo) {
+    algo = algo || 'worm';
     var lattice = p.LATTICE || 'square lattice';
     var L       = p.L      || 4;
-    var U       = (p.U    !== undefined) ? p.U    : 1.0;
+    var is2D    = _2D_LATTICES.indexOf(lattice) !== -1;
+    var is3D    = _3D_LATTICES.indexOf(lattice) !== -1;
+    var W       = (is2D || is3D) ? (p.W || L) : undefined;
+    /* J is the spin-model coupling — for Bose-Hubbard remap to U if U not given */
+    var U       = (p.U    !== undefined) ? p.U    :
+                  (p.J    !== undefined) ? p.J    : 1.0;
     var mu      = (p.mu   !== undefined) ? p.mu   : 0.5;
     var t_hop   = (p.t_hop!== undefined) ? p.t_hop: 0.05;
     var Nmax    = p.Nmax   || 2;
@@ -794,20 +1067,22 @@
     var therm   = p.THERMALIZATION || 10000;
     var sweeps  = p.SWEEPS || 500000;
 
-    var parm = [
-      'LATTICE="' + lattice + '"', 'L=' + L,
+    var parmLines = ['LATTICE="' + lattice + '"', 'L=' + L];
+    if (W !== undefined) parmLines.push('W=' + W);
+    parmLines = parmLines.concat([
       '', 'MODEL="boson Hubbard"', 'NONLOCAL=0',
-      'U='    + U, 'mu='   + mu, 'Nmax=' + Nmax,
+      'U=' + U, 'mu=' + mu, 'Nmax=' + Nmax,
       '', 'T=' + T, 'SWEEPS=' + sweeps, 'THERMALIZATION=' + therm,
       '', '{t=' + t_hop + ';}'
-    ].join('\n');
+    ]);
+    var parm = parmLines.join('\n');
 
-    var py = [
-      'import pyalps',
-      '',
-      'parms = [{',
+    var pyDict = [
       '    \'LATTICE\'        : "' + lattice + '",',
-      '    \'L\'              : ' + L + ',',
+      '    \'L\'              : ' + L + ','
+    ];
+    if (W !== undefined) pyDict.push('    \'W\'              : ' + W + ',');
+    pyDict = pyDict.concat([
       '    \'MODEL\'          : "boson Hubbard",',
       '    \'NONLOCAL\'       : 0,',
       '    \'U\'              : ' + U + ',',
@@ -816,68 +1091,259 @@
       '    \'T\'              : ' + T + ',',
       '    \'THERMALIZATION\' : ' + therm + ',',
       '    \'SWEEPS\'         : ' + sweeps + ',',
-      '    \'t\'              : ' + t_hop,
-      '}]',
-      '',
-      'input_file = pyalps.writeInputFiles(\'parm_bhm\', parms)',
-      'res = pyalps.runApplication(\'dirloop_sse\', input_file)'
-    ].join('\n');
+      '    \'t\'              : ' + t_hop
+    ]);
+    var py = ['import pyalps', '', 'parms = [{']
+      .concat(pyDict)
+      .concat(['}]', '',
+        'input_file = pyalps.writeInputFiles(\'parm_bhm\', parms)',
+        'res = pyalps.runApplication(\'' + algo + '\', input_file)'
+      ]).join('\n');
 
-    return '<strong>Bose-Hubbard QMC input</strong> — ' + lattice + ', L=' + L + ', U=' + U + ', t=' + t_hop + '<br>' +
+    var sizeStr = W !== undefined ? 'L=' + L + '×W=' + W : 'L=' + L;
+    return '<strong>Bose-Hubbard QMC input</strong> — ' + lattice + ', ' + sizeStr + ', U=' + U + ', t=' + t_hop + '<br>' +
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>dirloop_sse</code></small>';
+      '<small>App: <code>' + algo + '</code> — use <code>worm</code> (standard) or <code>dwa</code> (directed worm algorithm)</small>';
+  }
+
+  function genHardcoreBoson(p, algo) {
+    algo = algo || 'worm';
+    var lattice = p.LATTICE || 'chain lattice';
+    var L       = p.L      || 16;
+    var is2D    = _2D_LATTICES.indexOf(lattice) !== -1;
+    var W       = is2D ? (p.W || L) : undefined;
+    var mu      = (p.mu   !== undefined) ? p.mu   : 0;
+    var t_hop   = (p.t_hop!== undefined) ? p.t_hop: 1.0;
+    var V       = (p.V    !== undefined) ? p.V    : undefined;
+    var T       = (p.T    !== undefined) ? p.T    : 0.1;
+    var therm   = p.THERMALIZATION || 10000;
+    var sweeps  = p.SWEEPS || 200000;
+
+    var parmLines = ['LATTICE="' + lattice + '"', 'L=' + L];
+    if (W !== undefined) parmLines.push('W=' + W);
+    parmLines = parmLines.concat(['', 'MODEL="hardcore boson"',
+      't=' + t_hop, 'mu=' + mu]);
+    if (V !== undefined) parmLines.push('V=' + V);
+    parmLines = parmLines.concat(['', 'T=' + T, 'SWEEPS=' + sweeps,
+      'THERMALIZATION=' + therm, '', '{t=' + t_hop + ';}']);
+    var parm = parmLines.join('\n');
+
+    var pyDict = ['    \'LATTICE\'        : "' + lattice + '",', '    \'L\'              : ' + L + ','];
+    if (W !== undefined) pyDict.push('    \'W\'              : ' + W + ',');
+    pyDict = pyDict.concat([
+      '    \'MODEL\'          : "hardcore boson",',
+      '    \'t\'              : ' + t_hop + ',',
+      '    \'mu\'             : ' + mu + ','
+    ]);
+    if (V !== undefined) pyDict.push('    \'V\'              : ' + V + ',');
+    pyDict = pyDict.concat([
+      '    \'T\'              : ' + T + ',',
+      '    \'THERMALIZATION\' : ' + therm + ',',
+      '    \'SWEEPS\'         : ' + sweeps
+    ]);
+    var py = ['import pyalps', '', 'parms = [{']
+      .concat(pyDict)
+      .concat(['}]', '',
+        'input_file = pyalps.writeInputFiles(\'parm_hcb\', parms)',
+        'res = pyalps.runApplication(\'' + algo + '\', input_file)'
+      ]).join('\n');
+
+    var sizeStr = W !== undefined ? 'L=' + L + '×W=' + W : 'L=' + L;
+    return '<strong>Hardcore Boson QMC input</strong> — ' + lattice + ', ' + sizeStr + ', t=' + t_hop + (V !== undefined ? ', V=' + V : '') + '<br>' +
+      latticeDiagram(lattice) +
+      codeBlock(py,   'Python (pyalps)') +
+      codeBlock(parm, 'Parameter file') +
+      '<small>App: <code>' + algo + '</code>. Max occupancy = 1 per site (no U needed).</small>';
+  }
+
+  function genFermionHubbard(p) {
+    var lattice  = p.LATTICE || 'open chain lattice';
+    var L        = p.L       || 8;
+    var t_hop    = (p.t_hop  !== undefined) ? p.t_hop  : 1.0;
+    /* J is the spin-model coupling — for Hubbard, remap to U if U not given */
+    var U        = (p.U      !== undefined) ? p.U      :
+                   (p.J      !== undefined) ? p.J      : 4.0;
+    var mu       = (p.mu     !== undefined) ? p.mu     : 0;
+    var Nup      = (p.Nup_total !== undefined) ? p.Nup_total : Math.floor(L / 2);
+    var Ndown    = (p.Ndown_total !== undefined) ? p.Ndown_total : Math.floor(L / 2);
+    var MAXSTATES= p.MAXSTATES || 100;
+    var SWEEPS   = p.SWEEPS   || 4;
+    var NEIGEN   = p.NUMBER_EIGENVALUES || 1;
+    /* Use DMRG for open chain, sparsediag for small chain */
+    var useDMRG  = /open/i.test(lattice) || L > 8;
+    var app      = useDMRG ? 'dmrg' : 'sparsediag';
+
+    var parm;
+    if (useDMRG) {
+      parm = [
+        'MODEL="fermion Hubbard"',
+        'LATTICE="' + lattice + '"',
+        'L=' + L,
+        't=' + t_hop,
+        'U=' + U,
+        'mu=' + mu,
+        'CONSERVED_QUANTUMNUMBERS="Nup,Ndown"',
+        'Nup_total=' + Nup,
+        'Ndown_total=' + Ndown,
+        'SWEEPS=' + SWEEPS,
+        'NUMBER_EIGENVALUES=' + NEIGEN,
+        '{MAXSTATES=' + MAXSTATES + '}'
+      ].join('\n');
+    } else {
+      parm = [
+        'MODEL="fermion Hubbard"',
+        'LATTICE="' + lattice + '"',
+        'L=' + L,
+        't=' + t_hop,
+        'U=' + U,
+        'mu=' + mu,
+        'CONSERVED_QUANTUMNUMBERS="Nup,Ndown"',
+        'MEASURE_CORRELATIONS[density-density]=n',
+        '{Nup_total=' + Nup + '; Ndown_total=' + Ndown + ';}'
+      ].join('\n');
+    }
+
+    var pyLines;
+    if (useDMRG) {
+      pyLines = [
+        'import pyalps', '',
+        'parms = [{',
+        '    \'LATTICE\'                  : "' + lattice + '",',
+        '    \'MODEL\'                    : "fermion Hubbard",',
+        '    \'L\'                        : ' + L + ',',
+        '    \'t\'                        : ' + t_hop + ',',
+        '    \'U\'                        : ' + U + ',',
+        '    \'mu\'                       : ' + mu + ',',
+        '    \'CONSERVED_QUANTUMNUMBERS\' : \'Nup,Ndown\',',
+        '    \'Nup_total\'                : ' + Nup + ',',
+        '    \'Ndown_total\'              : ' + Ndown + ',',
+        '    \'SWEEPS\'                   : ' + SWEEPS + ',',
+        '    \'NUMBER_EIGENVALUES\'       : ' + NEIGEN + ',',
+        '    \'MAXSTATES\'               : ' + MAXSTATES,
+        '}]', '',
+        'input_file = pyalps.writeInputFiles(\'parm_hubbard\', parms)',
+        'res = pyalps.runApplication(\'dmrg\', input_file, writexml=True)',
+        'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'parm_hubbard\'))',
+        'for s in data[0]:',
+        '    print(s.props[\'observable\'], \':\', s.y[0])'
+      ];
+    } else {
+      pyLines = [
+        'import pyalps', '',
+        'parms = [{',
+        '    \'LATTICE\'                  : "' + lattice + '",',
+        '    \'MODEL\'                    : "fermion Hubbard",',
+        '    \'L\'                        : ' + L + ',',
+        '    \'t\'                        : ' + t_hop + ',',
+        '    \'U\'                        : ' + U + ',',
+        '    \'mu\'                       : ' + mu + ',',
+        '    \'CONSERVED_QUANTUMNUMBERS\' : \'Nup,Ndown\',',
+        '    \'Nup_total\'                : ' + Nup + ',',
+        '    \'Ndown_total\'              : ' + Ndown + ',',
+        '    \'MEASURE_CORRELATIONS[density-density]\' : \'n\'',
+        '}]', '',
+        'input_file = pyalps.writeInputFiles(\'parm_hubbard\', parms)',
+        'res = pyalps.runApplication(\'sparsediag\', input_file)',
+        'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'parm_hubbard\'))'
+      ];
+    }
+
+    return '<strong>Fermion Hubbard input</strong> — ' + lattice + ', L=' + L +
+      ', t=' + t_hop + ', U=' + U + ', Nup=' + Nup + ', Ndown=' + Ndown + '<br>' +
+      latticeDiagram(lattice) +
+      codeBlock(pyLines.join('\n'), 'Python (pyalps)') +
+      codeBlock(parm, 'Parameter file') +
+      '<small>App: <code>' + app + '</code>' +
+      (useDMRG ? ' — DMRG for 1D Hubbard chains; use <code>open chain lattice</code> for DMRG'
+               : ' — sparsediag (ED) for small clusters') +
+      '</small>';
   }
 
   function genED(p) {
-    var lattice = p.LATTICE || 'chain lattice';
-    var L       = p.L      || 8;
-    var local_S = (p.local_S !== undefined) ? p.local_S : 0.5;
-    var J       = (p.J    !== undefined) ? p.J    : 1;
+    var lattice  = p.LATTICE || 'chain lattice';
+    var L        = p.L       || 8;
+    var local_S  = (p.local_S  !== undefined) ? p.local_S  : 0.5;
+    var J        = (p.J        !== undefined) ? p.J        : 1;
+    var Sz_total = (p.Sz_total !== undefined) ? p.Sz_total : 0;
+    var NEIGEN   = p.NUMBER_EIGENVALUES || 1;
+    var J1       = p.J1;  /* NNN coupling (ed-05) or anisotropic bond */
 
-    var parm = [
+    var parmLines = [
       'MODEL="spin"',
       'LATTICE="' + lattice + '"',
       'local_S=' + local_S,
-      'J=' + J,
+      'J=' + J
+    ];
+    if (J1 !== undefined) parmLines.push('J1=' + J1);
+    parmLines = parmLines.concat([
       'CONSERVED_QUANTUMNUMBERS="Sz"',
-      'MEASURE_CORRELATIONS[Spin correlations]=Sz',
-      'MEASURE_CORRELATIONS[Off-diagonal correlations]="Splus:Sminus"',
+      'Sz_total=' + Sz_total
+    ]);
+    if (NEIGEN > 1) parmLines.push('NUMBER_EIGENVALUES=' + NEIGEN);
+    parmLines = parmLines.concat([
+      'MEASURE_STRUCTURE_FACTOR[Structure Factor S]=Sz',
+      'MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz',
+      'MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"',
       '{L=' + L + ';}'
-    ].join('\n');
+    ]);
+    var parm = parmLines.join('\n');
 
-    var py = [
-      'import pyalps',
-      '',
-      'parms = [{',
-      '    \'LATTICE\'                                          : "' + lattice + '",',
-      '    \'MODEL\'                                           : "spin",',
-      '    \'local_S\'                                         : ' + local_S + ',',
-      '    \'J\'                                               : ' + J + ',',
-      '    \'L\'                                               : ' + L + ',',
-      '    \'CONSERVED_QUANTUMNUMBERS\'                        : \'Sz\',',
-      '    \'MEASURE_CORRELATIONS[Spin correlations]\'         : \'Sz\',',
-      '    \'MEASURE_CORRELATIONS[Off-diagonal correlations]\' : \'Splus:Sminus\'',
-      '}]',
-      '',
-      'input_file = pyalps.writeInputFiles(\'parm_ed\', parms)',
-      'res = pyalps.runApplication(\'sparsediag\', input_file)',
-      'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'parm_ed\'))'
-    ].join('\n');
+    var pyDict = [
+      '    \'LATTICE\'                                                   : "' + lattice + '",',
+      '    \'MODEL\'                                                    : "spin",',
+      '    \'local_S\'                                                  : ' + local_S + ','
+    ];
+    if (J1 !== undefined) {
+      pyDict.push('    \'J\'                                                        : ' + J + ',');
+      pyDict.push('    \'J1\'                                                       : ' + J1 + ',');
+    } else {
+      pyDict.push('    \'J\'                                                        : ' + J + ',');
+    }
+    pyDict = pyDict.concat([
+      '    \'L\'                                                        : ' + L + ',',
+      '    \'CONSERVED_QUANTUMNUMBERS\'                                 : \'Sz\',',
+      '    \'Sz_total\'                                                 : ' + Sz_total + ','
+    ]);
+    if (NEIGEN > 1) pyDict.push('    \'NUMBER_EIGENVALUES\'                                        : ' + NEIGEN + ',');
+    pyDict = pyDict.concat([
+      '    \'MEASURE_STRUCTURE_FACTOR[Structure Factor S]\'             : \'Sz\',',
+      '    \'MEASURE_CORRELATIONS[Diagonal spin correlations]\'        : \'Sz\',',
+      '    \'MEASURE_CORRELATIONS[Offdiagonal spin correlations]\'     : \'Splus:Sminus\''
+    ]);
 
-    return '<strong>Exact Diagonalization input</strong> — spin-' + local_S + ', ' + lattice + ', L=' + L + '<br>' +
+    var py = ['import pyalps', '', 'parms = [{']
+      .concat(pyDict)
+      .concat(['}]', '',
+        'input_file = pyalps.writeInputFiles(\'parm_ed\', parms)',
+        'res = pyalps.runApplication(\'sparsediag\', input_file)',
+        'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'parm_ed\'))',
+        'for sector in data[0]:',
+        '    print(\'Sector Sz =\', sector[0].props[\'Sz\'])',
+        '    for s in sector:',
+        '        print(s.props[\'observable\'], \':\', s.y[0])'
+      ]).join('\n');
+
+    return '<strong>Exact Diagonalization input</strong> — spin-' + local_S + ', ' + lattice +
+      ', L=' + L + ', Sz=' + Sz_total + '<br>' +
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>sparsediag</code></small>';
+      '<small>App: <code>sparsediag</code>' +
+      (NEIGEN > 1 ? ' — ' + NEIGEN + ' lowest eigenvalues' : ' — ground state (Sz_total=' + Sz_total + ')') +
+      '; set <code>Sz_total=1</code> for the triplet sector to compute the spin gap</small>';
   }
 
   function genFullDiag(p) {
     var lattice = p.LATTICE || 'chain lattice';
-    var L       = p.L      || 8;
+    /* fulldiag diagonalizes the full Hilbert space — keep L small */
+    var L       = p.L       || 8;
     var local_S = (p.local_S !== undefined) ? p.local_S : 0.5;
-    var J       = (p.J    !== undefined) ? p.J    : 1;
+    var J       = (p.J     !== undefined) ? p.J     : 1;
+    var T_MIN   = (p.T_MIN  !== undefined) ? p.T_MIN  : 0.1;
+    var T_MAX   = (p.T_MAX  !== undefined) ? p.T_MAX  : 10.0;
+    var DELTA_T = (p.DELTA_T!== undefined) ? p.DELTA_T: 0.1;
 
     var parm = [
       'MODEL="spin"',
@@ -885,9 +1351,9 @@
       'local_S=' + local_S,
       'J=' + J,
       'CONSERVED_QUANTUMNUMBERS="Sz"',
-      'T_MIN=0.1',
-      'T_MAX=10.0',
-      'DELTA_T=0.1',
+      'T_MIN='   + T_MIN,
+      'T_MAX='   + T_MAX,
+      'DELTA_T=' + DELTA_T,
       '{L=' + L + ';}'
     ].join('\n');
 
@@ -900,21 +1366,27 @@
       '    \'local_S\'                  : ' + local_S + ',',
       '    \'J\'                        : ' + J + ',',
       '    \'L\'                        : ' + L + ',',
-      '    \'CONSERVED_QUANTUMNUMBERS\' : \'Sz\',',
-      '    \'T_MIN\'                    : 0.1,',
-      '    \'T_MAX\'                    : 10.0,',
-      '    \'DELTA_T\'                  : 0.1',
+      '    \'CONSERVED_QUANTUMNUMBERS\' : \'Sz\'',
       '}]',
       '',
       'input_file = pyalps.writeInputFiles(\'parm_fulldiag\', parms)',
-      'res = pyalps.runApplication(\'fulldiag\', input_file)'
+      'res = pyalps.runApplication(\'fulldiag\', input_file)',
+      '',
+      '# Evaluate thermodynamic observables (specific heat, susceptibility, …) vs T',
+      'data = pyalps.evaluateFulldiagVersusT(',
+      '    pyalps.getResultFiles(prefix=\'parm_fulldiag\'),',
+      '    DELTA_T=' + DELTA_T + ', T_MIN=' + T_MIN + ', T_MAX=' + T_MAX + ')',
+      'for s in pyalps.flatten(data):',
+      '    print(s.props[\'observable\'])'
     ].join('\n');
 
-    return '<strong>Full ED (thermodynamics) input</strong> — spin-' + local_S + ', ' + lattice + ', L=' + L + '<br>' +
+    return '<strong>Full ED (thermodynamics) input</strong> — spin-' + local_S + ', ' + lattice +
+      ', L=' + L + ', T: ' + T_MIN + '→' + T_MAX + '<br>' +
+      '<em>fulldiag diagonalizes the full Hilbert space — keep L ≤ 8 (spin-1/2) or ≤ 6 (spin-1).</em><br>' +
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>fulldiag</code> — sweeps T from 0.1 to 10</small>';
+      '<small>App: <code>fulldiag</code>; use <code>evaluateFulldiagVersusT</code> to extract C(T), χ(T), etc.</small>';
   }
 
   function genDMRG(p, appName) {
@@ -922,13 +1394,19 @@
     var L        = p.L        || 32;
     var local_S  = (p.local_S !== undefined) ? p.local_S : 0.5;
     var J        = (p.J       !== undefined) ? p.J       : 1;
-    var MAXSTATES= p.MAXSTATES|| 100;
     var SWEEPS   = p.SWEEPS   || 4;
     var NEIGEN   = p.NUMBER_EIGENVALUES || 1;
     var Sz_total = (p.Sz_total!== undefined) ? p.Sz_total: 0;
     var prefix   = 'parm_' + appName.replace('_', '');
 
-    var parm = [
+    /* When user specifies MAXSTATES, use that single value.
+       Otherwise generate a convergence sweep {20},{40},{60} as in the tutorials. */
+    var userMX   = p.MAXSTATES;
+    var mxBlocks = userMX ? ['{MAXSTATES=' + userMX + '}']
+                           : ['{ MAXSTATES=20 }', '{ MAXSTATES=40 }', '{ MAXSTATES=60 }'];
+    var mxList   = userMX ? [userMX] : [20, 40, 60];
+
+    var parmLines = [
       'LATTICE="open chain lattice"',
       'MODEL="spin"',
       'local_S=' + local_S,
@@ -938,38 +1416,69 @@
       'Sz_total=' + Sz_total,
       'SWEEPS=' + SWEEPS,
       'NUMBER_EIGENVALUES=' + NEIGEN,
-      '{MAXSTATES=' + MAXSTATES + '}'
-    ].join('\n');
+      'MEASURE_LOCAL[Local magnetization]=Sz',
+      'MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz',
+      'MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"'
+    ].concat(mxBlocks);
+    var parm = parmLines.join('\n');
 
-    var py = [
-      'import pyalps',
-      '',
-      'parms = [{',
-      '    \'LATTICE\'                  : "open chain lattice",',
-      '    \'MODEL\'                    : "spin",',
-      '    \'local_S\'                  : ' + local_S + ',',
-      '    \'J\'                        : ' + J + ',',
-      '    \'L\'                        : ' + L + ',',
-      '    \'CONSERVED_QUANTUMNUMBERS\' : \'Sz\',',
-      '    \'Sz_total\'                 : ' + Sz_total + ',',
-      '    \'SWEEPS\'                   : ' + SWEEPS + ',',
-      '    \'NUMBER_EIGENVALUES\'       : ' + NEIGEN + ',',
-      '    \'MAXSTATES\'               : ' + MAXSTATES,
-      '}]',
-      '',
-      'input_file = pyalps.writeInputFiles(\'' + prefix + '\', parms)',
-      'res = pyalps.runApplication(\'' + appName + '\', input_file, writexml=True)',
-      'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'' + prefix + '\'))',
-      'for s in data[0]:',
-      '    print(s.props[\'observable\'], \':\', s.y[0])'
-    ].join('\n');
+    var pyParms = userMX
+      ? [
+          'parms = [{',
+          '    \'LATTICE\'                                                 : "open chain lattice",',
+          '    \'MODEL\'                                                   : "spin",',
+          '    \'CONSERVED_QUANTUMNUMBERS\'                               : \'N,Sz\',',
+          '    \'Sz_total\'                                               : ' + Sz_total + ',',
+          '    \'J\'                                                      : ' + J + ',',
+          '    \'SWEEPS\'                                                 : ' + SWEEPS + ',',
+          '    \'NUMBER_EIGENVALUES\'                                     : ' + NEIGEN + ',',
+          '    \'L\'                                                      : ' + L + ',',
+          '    \'MAXSTATES\'                                              : ' + userMX + ',',
+          '    \'MEASURE_LOCAL[Local magnetization]\'                     : \'Sz\',',
+          '    \'MEASURE_CORRELATIONS[Diagonal spin correlations]\'       : \'Sz\',',
+          '    \'MEASURE_CORRELATIONS[Offdiagonal spin correlations]\'    : \'Splus:Sminus\'',
+          '}]'
+        ]
+      : [
+          '# Sweep MAXSTATES to check convergence (tutorial style)',
+          'parms = []',
+          'for D in ' + JSON.stringify(mxList) + ':',
+          '    parms.append({',
+          '        \'LATTICE\'                                                : "open chain lattice",',
+          '        \'MODEL\'                                                  : "spin",',
+          '        \'CONSERVED_QUANTUMNUMBERS\'                              : \'N,Sz\',',
+          '        \'Sz_total\'                                              : ' + Sz_total + ',',
+          '        \'J\'                                                     : ' + J + ',',
+          '        \'SWEEPS\'                                                : ' + SWEEPS + ',',
+          '        \'NUMBER_EIGENVALUES\'                                    : ' + NEIGEN + ',',
+          '        \'L\'                                                     : ' + L + ',',
+          '        \'MAXSTATES\'                                             : D,',
+          '        \'MEASURE_LOCAL[Local magnetization]\'                    : \'Sz\',',
+          '        \'MEASURE_CORRELATIONS[Diagonal spin correlations]\'      : \'Sz\',',
+          '        \'MEASURE_CORRELATIONS[Offdiagonal spin correlations]\'   : \'Splus:Sminus\'',
+          '    })'
+        ];
+
+    var py = ['import pyalps', '']
+      .concat(pyParms)
+      .concat(['',
+        'input_file = pyalps.writeInputFiles(\'' + prefix + '\', parms)',
+        'res = pyalps.runApplication(\'' + appName + '\', input_file, writexml=True)',
+        'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'' + prefix + '\'))',
+        'for s in data[0]:',
+        '    print(s.props[\'observable\'], \':\', s.y[0])'
+      ]).join('\n');
 
     var label = appName === 'mps_optim' ? 'MPS optimization' : 'DMRG';
-    return '<strong>' + label + ' input</strong> — spin-' + local_S + ', open chain, L=' + L + ', MAXSTATES=' + MAXSTATES + '<br>' +
+    var mxStr = userMX ? 'MAXSTATES=' + userMX : 'MAXSTATES=20,40,60 (convergence sweep)';
+    return '<strong>' + label + ' input</strong> — spin-' + local_S +
+      ', open chain, L=' + L + ', ' + mxStr + '<br>' +
       latticeDiagram('open chain lattice') +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>' + appName + '</code></small>';
+      '<small>App: <code>' + appName + '</code>; DMRG requires <code>open chain lattice</code>' +
+      (userMX ? '' : '; sweeping MAXSTATES checks convergence of ground state energy') +
+      '</small>';
   }
 
   function genTEBD(p) {
@@ -1059,7 +1568,7 @@
       '    })',
       '',
       'input_file = pyalps.writeInputFiles(\'parm_ladder\', parms)',
-      'res = pyalps.runApplication(\'looper\', input_file)'
+      'res = pyalps.runApplication(\'loop\', input_file)'
     ].join('\n');
 
     return '<strong>Ladder QMC input</strong> — ' + W + '-leg ladder, spin-' + local_S +
@@ -1067,7 +1576,7 @@
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>looper</code></small>';
+      '<small>App: <code>loop</code></small>';
   }
 
   /* ---- Two-leg ladder: Exact Diagonalization ---- */
@@ -1302,25 +1811,91 @@
       '<small>Run via <code>pyalps.runDMFT()</code>. Solver: hybridization expansion CT-HYB.</small>';
   }
 
+  /* ---- Quantum Wang-Landau (qwl) ---- */
+  function genQWL(p) {
+    var L       = p.L  || 8;
+    var local_S = (p.local_S !== undefined) ? p.local_S : 0.5;
+    var J       = (p.J !== undefined) ? p.J : 1.0;
+    var lattice = p.LATTICE || 'chain lattice';
+    var is2D    = _2D_LATTICES.indexOf(lattice) !== -1;
+    var is3D    = _3D_LATTICES.indexOf(lattice) !== -1;
+    var W       = (is2D || is3D) ? (p.W || L) : undefined;
+    var H_val   = is3D ? (p.H || L) : undefined;
+
+    var parmLines = [
+      'LATTICE="' + lattice + '"',
+      'MODEL="spin"',
+      'local_S=' + local_S,
+      'J=' + J,
+      'L=' + L
+    ];
+    if (W !== undefined)   parmLines.push('W=' + W);
+    if (H_val !== undefined) parmLines.push('H=' + H_val);
+    parmLines.push('SWEEPS=100000');
+    var parm = parmLines.join('\n');
+
+    var pyExtra = '';
+    if (W !== undefined && H_val === undefined) pyExtra = '\n        \'W\'     : ' + W + ',';
+    if (H_val !== undefined) pyExtra = '\n        \'W\'     : ' + W + ',\n        \'H\'     : ' + H_val + ',';
+
+    var py = [
+      'import pyalps',
+      '',
+      'parms = [{',
+      '    \'LATTICE\'  : "' + lattice + '",',
+      '    \'MODEL\'    : "spin",',
+      '    \'local_S\'  : ' + local_S + ',',
+      '    \'J\'        : ' + J + ',',
+      '    \'L\'        : ' + L + ',' + pyExtra,
+      '    \'SWEEPS\'   : 100000',
+      '}]',
+      '',
+      'input_file = pyalps.writeInputFiles(\'parm_qwl\', parms)',
+      'res = pyalps.runApplication(\'qwl\', input_file)'
+    ].join('\n');
+
+    var dimInfo = is3D ? 'L=' + L + '×W=' + W + '×H=' + H_val
+                  : is2D ? 'L=' + L + '×W=' + W
+                  : 'L=' + L;
+    return '<strong>Quantum Wang-Landau input</strong> — ' + lattice + ', spin-' + local_S +
+      ', ' + dimInfo + ', J=' + J + '<br>' +
+      latticeDiagram(lattice) +
+      codeBlock(py,   'Python (pyalps)') +
+      codeBlock(parm, 'Parameter file') +
+      '<small>App: <code>qwl</code> — computes density of states across the full energy spectrum.</small>';
+  }
+
   var METHOD_CHOICES_MSG =
     'Which simulation method would you like an input file for?<ul>' +
     '<li><strong>spinmc</strong> — Classical spin MC (Ising, Heisenberg, XY)</li>' +
-    '<li><strong>qmc</strong> — Quantum spin MC (looper, chain/square)</li>' +
-    '<li><strong>bhm</strong> — Bose-Hubbard MC (bosons)</li>' +
-    '<li><strong>ed</strong> — Exact Diagonalization (ground state)</li>' +
+    '<li><strong>qmc</strong> — Quantum spin MC (loop / dirloop_sse); MODEL="spin"</li>' +
+    '<li><strong>qwl</strong> — Quantum Wang-Landau; MODEL="spin"; full density of states</li>' +
+    '<li><strong>bhm</strong> — Bose-Hubbard QMC (worm alg.); MODEL="boson Hubbard"; params: t, U, mu, Nmax</li>' +
+    '<li><strong>dwa</strong> — Directed Worm Algorithm; same as bhm but uses dwa app</li>' +
+    '<li><strong>hardcore boson</strong> — Hard-core boson QMC (worm); MODEL="hardcore boson"; params: t, mu, V</li>' +
+    '<li><strong>fermion hubbard</strong> — Fermion Hubbard; MODEL="fermion Hubbard"; params: t, U, mu, Nup, Ndown; app: dmrg/sparsediag</li>' +
+    '<li><strong>ed</strong> — Exact Diagonalization (ground state); MODEL="spin"</li>' +
     '<li><strong>fulldiag</strong> — Full ED (thermodynamics, finite-T)</li>' +
-    '<li><strong>dmrg</strong> — DMRG (1D ground state)</li>' +
+    '<li><strong>dmrg</strong> — DMRG for 1D spin chains (open chain lattice)</li>' +
     '<li><strong>mps</strong> — MPS optimization</li>' +
     '<li><strong>tebd</strong> — TEBD (real-time evolution)</li>' +
-    '<li><strong>dmft</strong> — DMFT (single-site, Hubbard)</li>' +
+    '<li><strong>dmft</strong> — DMFT (Hubbard on Bethe lattice, CT-HYB)</li>' +
     '</ul>' +
     '<strong>Ladder lattice variants:</strong><ul>' +
-    '<li><strong>ladder qmc</strong> — Two-leg ladder QMC (looper), J0=leg, J1=rung</li>' +
+    '<li><strong>ladder qmc</strong> — Two-leg ladder QMC (loop), J0=leg, J1=rung</li>' +
     '<li><strong>ladder ed</strong> — Two-leg ladder Exact Diagonalization</li>' +
     '<li><strong>ladder dmrg</strong> — Two-leg ladder DMRG (open ladder)</li>' +
-    '<li><strong>coupled ladders</strong> — 2D coupled-ladders QMC (loop), adds J2=inter-ladder</li>' +
+    '<li><strong>coupled ladders</strong> — 2D coupled-ladders QMC (loop), J2=inter-ladder</li>' +
     '</ul>' +
-    'Type the method name and any parameters, e.g.:<br>' +
+    '<strong>Lattice options</strong> (add to any method):<ul>' +
+    '<li>1D: <code>chain lattice</code>, <code>open chain lattice</code>, <code>nnn chain lattice</code></li>' +
+    '<li>2D: <code>square lattice</code>, <code>triangular lattice</code>, <code>honeycomb lattice</code>, ' +
+    '<code>kagome lattice</code>, <code>frustrated square lattice</code></li>' +
+    '<li>3D: <code>simple cubic lattice</code></li>' +
+    '</ul>' +
+    'Type the method and any parameters, e.g.:<br>' +
+    '<em>"spinmc Ising square lattice L=16 W=16"</em><br>' +
+    '<em>"qmc triangular lattice L=12 J=-1"</em><br>' +
     '<em>"ladder qmc spin-1/2 L=16 J0=1 J1=0.5"</em><br>' +
     '<em>"coupled ladders L=8 W=4 J2=0.3"</em><br>' +
     '<em>"dmrg spin-1/2 L=32 MAXSTATES=200"</em>';
@@ -1328,8 +1903,12 @@
   function generateInputFile(method, params) {
     switch (method) {
       case 'spinmc':                    return genSpinMC(params);
-      case 'looper': case 'qmc':        return genQMC(params);
-      case 'dwa':    case 'bhm':        return genBHM(params);
+      case 'loop': case 'dirloop': case 'looper': case 'qmc': return genQMC(params);
+      case 'qwl':                       return genQWL(params);
+      case 'bhm':                       return genBHM(params, 'worm');
+      case 'dwa':                       return genBHM(params, 'dwa');
+      case 'hardcore_boson':            return genHardcoreBoson(params, 'worm');
+      case 'fermion_hubbard':           return genFermionHubbard(params);
       case 'ed':                        return genED(params);
       case 'fulldiag':                  return genFullDiag(params);
       case 'dmrg':                      return genDMRG(params, 'dmrg');
@@ -1370,7 +1949,8 @@
           return 'No problem! Ask me anything else about ALPS.';
         }
         return 'I didn\'t recognise that method. Please choose from: ' +
-               'spinmc, qmc, bhm, ed, fulldiag, dmrg, mps, tebd, dmft, ' +
+               'spinmc, qmc, qwl, bhm, dwa, "hardcore boson", "fermion hubbard", ' +
+               'ed, fulldiag, dmrg, mps, tebd, dmft, ' +
                '"ladder qmc", "ladder ed", "ladder dmrg", "coupled ladders". ' +
                'Or type "cancel" to go back.';
       }
