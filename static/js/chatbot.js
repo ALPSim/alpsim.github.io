@@ -206,12 +206,40 @@
         '&#8594; <a href="{lang}/documentation/models/heisenberg">Heisenberg model docs</a>'
     },
     {
-      keywords: ['ising model', 'ising', 'transverse field ising', 'classical ising',
-                 'phase transition', 'ferromagnetic', 'z2 symmetry'],
+      keywords: ['transverse field ising', 'tfim', 'quantum ising', 'transverse ising',
+                 'ising in transverse', 'ising transverse field', 'gamma field', 'transverse field'],
       response:
-        'The <strong>Ising model</strong> is the canonical model for magnetic phase transitions, ' +
-        'available in classical and transverse-field (quantum) variants.<br><br>' +
-        '&#8594; <a href="{lang}/documentation/models/ising">Ising model docs</a>'
+        '<strong>Transverse-Field Ising Model (TFIM)</strong> in ALPS — <code>MODEL="spin"</code><br><br>' +
+        'H = &minus;J<sub>z</sub> &Sigma; S<sup>z</sup>S<sup>z</sup> &minus; &Gamma; &Sigma; S<sup>x</sup><br><br>' +
+        '<strong>ALPS parameters:</strong><ul>' +
+        '<li><code>Jxy=0</code> — no XY coupling (pure Ising)</li>' +
+        '<li><code>Jz=-1</code> — ferromagnetic Ising coupling (negative = FM)</li>' +
+        '<li><code>Gamma=0.5</code> — transverse field; critical point at &Gamma;/|J<sub>z</sub>|=1 (1D)</li>' +
+        '<li><code>local_S=0.5</code> — always spin-1/2</li>' +
+        '<li><strong>No</strong> <code>CONSERVED_QUANTUMNUMBERS</code> — &Gamma; breaks S<sup>z</sup> conservation</li>' +
+        '<li><code>NUMBER_EIGENVALUES=5</code> — recommended for spectrum/criticality</li>' +
+        '</ul>' +
+        'App: <code>sparsediag</code> (ED for exact spectrum)<br>' +
+        '1D critical point: &Gamma;<sub>c</sub> = |J<sub>z</sub>| (quantum phase transition, Ising CFT)<br><br>' +
+        'Try: <em>"tfim input L=12 Jz=-1 Gamma=0.5"</em> or <em>"transverse Ising ED L=10"</em>'
+    },
+    {
+      keywords: ['xy model', 'xy chain', 'xy lattice', 'jxy model', 'planar model',
+                 'xx model', 'jxy jz', 'xxz model', 'anisotropic heisenberg',
+                 'ising model', 'ising', 'classical ising', 'phase transition',
+                 'ferromagnetic', 'z2 symmetry'],
+      response:
+        '<strong>XY model</strong> in ALPS — <code>MODEL="spin"</code><br><br>' +
+        'H = &minus;J<sub>xy</sub> &Sigma; (S<sup>x</sup>S<sup>x</sup> + S<sup>y</sup>S<sup>y</sup>)<br><br>' +
+        '<strong>ALPS parameters:</strong><ul>' +
+        '<li><code>Jxy=1</code> — XY coupling (S&sup+;S&sup-; + h.c.)</li>' +
+        '<li><code>Jz=0</code> — Ising (longitudinal) coupling; omit or set 0 for pure XY</li>' +
+        '<li><code>CONSERVED_QUANTUMNUMBERS="Sz"</code> — XY coupling conserves total S<sup>z</sup></li>' +
+        '</ul>' +
+        '<strong>XXZ model</strong> (general): <code>Jxy&ne;0</code> and <code>Jz&ne;0</code><br>' +
+        'Limits: Jxy=1,Jz=1 → Heisenberg; Jxy=1,Jz=0 → XY; Jxy=0,Jz=±1 → Ising<br><br>' +
+        'App: <code>loop</code> (QMC) or <code>sparsediag</code> (ED)<br><br>' +
+        'Try: <em>"xy model QMC chain L=60"</em> or <em>"xy model ED L=12"</em>'
     },
     {
       keywords: ['bose-hubbard', 'bose hubbard', 'bhm', 'bosonic model', 'superfluid mott',
@@ -489,6 +517,11 @@
                       'hubbard dmrg', 'hubbard ed', 'hubbard model ed', 'hubbard model dmrg',
                       'hubbard chain', '1d hubbard', 'one dimensional hubbard',
                       'fermion hubbard model', 'fermi hubbard model'],
+    tfim:            ['transverse field ising', 'transverse ising', 'tfim',
+                      'quantum ising model', 'ising transverse field', 'ising gamma'],
+    xy_model:        ['xy model', 'xy chain', 'xy lattice', 'xy qmc',
+                      'planar model', 'jxy model', 'xx model chain'],
+    xy_ed:           ['xy ed', 'xy exact diag', 'xy sparsediag', 'xy model ed', 'xy ground state'],
     ed:              ['sparsediag', 'sparse diag', 'exact diagonalization', 'exact diag',
                       'ground state ed', ' ed '],
     fulldiag:        ['fulldiag', 'full diagonalization', 'full ed',
@@ -525,6 +558,7 @@
     var order = ['ladder_dmrg', 'ladder_ed', 'ladder_fulldiag', 'coupled_ladders', 'ladder',
                  'hardcore_boson', 'dwa', 'bhm',
                  'fermion_hubbard',
+                 'tfim', 'xy_ed', 'xy_model',
                  'spinmc', 'dirloop', 'loop', 'qwl', 'qmc',
                  'ed', 'fulldiag', 'dmrg', 'mps', 'tebd', 'dmft'];
     for (var oi = 0; oi < order.length; oi++) {
@@ -554,6 +588,12 @@
     if (/coupled\s+ladders?\b/i.test(q))                                            return 'coupled_ladders';
     if (/\bladder\b/i.test(q))                                                      return 'ladder';
     if (/\bdiagonal/i.test(q))                                                      return 'ed';
+    /* TFIM: Gamma or transverse-field context with Ising */
+    if (/\bGamma\b/i.test(q) || (/\btransverse\b/i.test(q) && /\bising\b/i.test(q))) return 'tfim';
+    /* XY model: Jxy or xy + spin context */
+    if (/\bJxy\b/i.test(q) || (/\bxy\b/i.test(q) && /\bmodel\b|\bchain\b|\blattice\b/i.test(q))) {
+      return (/\bed\b|sparsediag|exact\s*diag/i.test(q)) ? 'xy_ed' : 'xy_model';
+    }
     return null;
   }
 
@@ -655,6 +695,17 @@
     /* V nearest-neighbor repulsion (bosons) */
     if ((m = q.match(/\bV\s*=\s*([\d.]+)/))                  ||
         (m = q.match(/nn\s+repulsion\s*[=:]\s*([\d.]+)/i)))  p.V = +m[1];
+
+    /* Jxy / Jz (XY, XXZ, TFIM) */
+    if ((m = q.match(/\bJxy\s*=\s*([-\d.]+)/i))              ||
+        (m = q.match(/xy\s+coupling\s*[=:]\s*([-\d.]+)/i)))  p.Jxy = +m[1];
+    if ((m = q.match(/\bJz\s*=\s*([-\d.]+)/i))               ||
+        (m = q.match(/ising\s+coupling\s*[=:]\s*([-\d.]+)/i))) p.Jz = +m[1];
+
+    /* Gamma (transverse field for TFIM) */
+    if ((m = q.match(/\bGamma\s*=\s*([-\d.]+)/i))            ||
+        (m = q.match(/transverse\s+field\s*[=:]\s*([-\d.]+)/i)) ||
+        (m = q.match(/\b[Γ]\s*=\s*([-\d.]+)/)))              p.Gamma = +m[1];
 
     /* T_MIN / T_MAX / DELTA_T (fulldiag) */
     if ((m = q.match(/T_MIN\s*=\s*([\d.]+)/i))               ||
@@ -1259,6 +1310,172 @@
       (useDMRG ? ' — DMRG for 1D Hubbard chains; use <code>open chain lattice</code> for DMRG'
                : ' — sparsediag (ED) for small clusters') +
       '</small>';
+  }
+
+  /* ---- Transverse-Field Ising Model (TFIM) — sparsediag ED ---- */
+  function genTFIM(p) {
+    var lattice = p.LATTICE || 'chain lattice';
+    var L       = p.L       || 12;
+    var Jz      = (p.Jz    !== undefined) ? p.Jz    : -1;   /* ferromagnetic Ising */
+    var Gamma   = (p.Gamma !== undefined) ? p.Gamma : 0.5;  /* transverse field */
+    var NEIGEN  = p.NUMBER_EIGENVALUES || 5;
+
+    /* TFIM: Jxy=0, Jz≠0, Gamma≠0. Sz is NOT conserved → no CONSERVED_QUANTUMNUMBERS. */
+    var parm = [
+      'MODEL="spin"',
+      'LATTICE="' + lattice + '"',
+      'local_S=0.5',
+      'Jxy=0',
+      'Jz=' + Jz,
+      'Gamma=' + Gamma,
+      'NUMBER_EIGENVALUES=' + NEIGEN,
+      '{L=' + L + ';}'
+    ].join('\n');
+
+    var py = [
+      'import pyalps',
+      '',
+      'parms = [{',
+      '    \'LATTICE\'            : "' + lattice + '",',
+      '    \'MODEL\'              : "spin",',
+      '    \'local_S\'            : 0.5,',
+      '    \'Jxy\'                : 0,',
+      '    \'Jz\'                 : ' + Jz + ',',
+      '    \'Gamma\'              : ' + Gamma + ',',
+      '    \'NUMBER_EIGENVALUES\' : ' + NEIGEN + ',',
+      '    \'L\'                  : ' + L,
+      '}]',
+      '',
+      'input_file = pyalps.writeInputFiles(\'parm_tfim\', parms)',
+      'res = pyalps.runApplication(\'sparsediag\', input_file)',
+      'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'parm_tfim\'))',
+      'for sector in data[0]:',
+      '    for s in sector:',
+      '        print(s.props[\'observable\'], \':\', s.y[0])'
+    ].join('\n');
+
+    return '<strong>TFIM input</strong> — ' + lattice + ', L=' + L +
+      ', Jz=' + Jz + ', &Gamma;=' + Gamma + '<br>' +
+      '<em>H = &minus;J<sub>z</sub> &Sigma; S<sup>z</sup>S<sup>z</sup> &minus; &Gamma; &Sigma; S<sup>x</sup>;' +
+      ' critical point: &Gamma;<sub>c</sub> = |J<sub>z</sub>| = ' + Math.abs(Jz) + '</em><br>' +
+      '<em>Note: no <code>CONSERVED_QUANTUMNUMBERS</code> — &Gamma; breaks S<sup>z</sup> conservation.</em><br>' +
+      latticeDiagram(lattice) +
+      codeBlock(py,   'Python (pyalps)') +
+      codeBlock(parm, 'Parameter file') +
+      '<small>App: <code>sparsediag</code> — ' + NEIGEN + ' lowest eigenvalues; ' +
+      'adjust Gamma to scan the quantum phase transition</small>';
+  }
+
+  /* ---- XY model ---- */
+  function genXY(p, useQMC) {
+    if (useQMC === undefined) useQMC = true;
+    var lattice  = p.LATTICE || 'chain lattice';
+    var L        = p.L       || 16;
+    var is2D     = _2D_LATTICES.indexOf(lattice) !== -1;
+    var is3D     = _3D_LATTICES.indexOf(lattice) !== -1;
+    var W        = (is2D || is3D) ? (p.W || L) : undefined;
+    var Jxy      = (p.Jxy !== undefined) ? p.Jxy : 1;
+    var Jz       = (p.Jz  !== undefined) ? p.Jz  : 0;       /* 0 = pure XY */
+    var local_S  = (p.local_S !== undefined) ? p.local_S : 0.5;
+    var Sz_total = (p.Sz_total !== undefined) ? p.Sz_total : 0;
+
+    if (useQMC) {
+      /* QMC path — loop algorithm */
+      var therm  = p.THERMALIZATION || 5000;
+      var sweeps = p.SWEEPS || 50000;
+      var temps  = p.T !== undefined ? [p.T] : [0.5, 1.0, 2.0];
+      var tempStr = temps.length === 1 ? '[' + temps[0] + ']' : '[' + temps.join(', ') + ']';
+
+      var parmLines = ['LATTICE="' + lattice + '"', 'L=' + L];
+      if (W !== undefined) parmLines.push('W=' + W);
+      parmLines = parmLines.concat([
+        'MODEL="spin"', 'local_S=' + local_S,
+        'Jxy=' + Jxy,
+        (Jz !== 0 ? 'Jz=' + Jz : '# Jz=0  (pure XY — omit or set 0)'),
+        'CONSERVED_QUANTUMNUMBERS="Sz"',
+        'THERMALIZATION=' + therm, 'SWEEPS=' + sweeps
+      ]);
+      temps.forEach(function(t) { parmLines.push('{T=' + t + ';}'); });
+      var parm = parmLines.join('\n');
+
+      var pyDict = ['    \'LATTICE\'        : "' + lattice + '",', '    \'L\'              : ' + L + ','];
+      if (W !== undefined) pyDict.push('    \'W\'              : ' + W + ',');
+      pyDict = pyDict.concat([
+        '    \'MODEL\'          : "spin",',
+        '    \'local_S\'        : ' + local_S + ',',
+        '    \'Jxy\'            : ' + Jxy + ','
+      ]);
+      if (Jz !== 0) pyDict.push('    \'Jz\'             : ' + Jz + ',');
+      pyDict = pyDict.concat([
+        '    \'CONSERVED_QUANTUMNUMBERS\' : \'Sz\',',
+        '    \'THERMALIZATION\' : ' + therm + ',',
+        '    \'SWEEPS\'         : ' + sweeps + ',',
+        '    \'T\'              : t'
+      ]);
+      var py = [
+        'import pyalps', '',
+        'parms = []',
+        'for t in ' + tempStr + ':',
+        '    parms.append({'
+      ].concat(pyDict).concat([
+        '    })', '',
+        'input_file = pyalps.writeInputFiles(\'parm_xy\', parms)',
+        'res = pyalps.runApplication(\'loop\', input_file)'
+      ]).join('\n');
+
+      var sizeStr = W !== undefined ? 'L=' + L + '×W=' + W : 'L=' + L;
+      return '<strong>XY model QMC input</strong> — ' + lattice + ', ' + sizeStr +
+        ', Jxy=' + Jxy + (Jz !== 0 ? ', Jz=' + Jz + ' (XXZ)' : ' (pure XY)') + '<br>' +
+        '<em>H = &minus;J<sub>xy</sub> &Sigma; (S<sup>x</sup>S<sup>x</sup>+S<sup>y</sup>S<sup>y</sup>)' +
+        (Jz !== 0 ? ' &minus; J<sub>z</sub> &Sigma; S<sup>z</sup>S<sup>z</sup>' : '') + '</em><br>' +
+        latticeDiagram(lattice) +
+        codeBlock(py,   'Python (pyalps)') +
+        codeBlock(parm, 'Parameter file') +
+        '<small>App: <code>loop</code>; XY model conserves S<sup>z</sup> — use <code>CONSERVED_QUANTUMNUMBERS="Sz"</code></small>';
+    } else {
+      /* ED path — sparsediag */
+      var parmED = [
+        'MODEL="spin"',
+        'LATTICE="' + lattice + '"',
+        'local_S=' + local_S,
+        'Jxy=' + Jxy
+      ];
+      if (Jz !== 0) parmED.push('Jz=' + Jz);
+      parmED = parmED.concat([
+        'CONSERVED_QUANTUMNUMBERS="Sz"',
+        'Sz_total=' + Sz_total,
+        'NUMBER_EIGENVALUES=' + (p.NUMBER_EIGENVALUES || 1),
+        'MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz',
+        'MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"',
+        '{L=' + L + ';}'
+      ]);
+      var pyED = [
+        'import pyalps', '',
+        'parms = [{',
+        '    \'LATTICE\'                  : "' + lattice + '",',
+        '    \'MODEL\'                    : "spin",',
+        '    \'local_S\'                  : ' + local_S + ',',
+        '    \'Jxy\'                      : ' + Jxy + ','
+      ];
+      if (Jz !== 0) pyED.push('    \'Jz\'                       : ' + Jz + ',');
+      pyED = pyED.concat([
+        '    \'L\'                        : ' + L + ',',
+        '    \'CONSERVED_QUANTUMNUMBERS\' : \'Sz\',',
+        '    \'Sz_total\'                 : ' + Sz_total + ',',
+        '    \'MEASURE_CORRELATIONS[Diagonal spin correlations]\'    : \'Sz\',',
+        '    \'MEASURE_CORRELATIONS[Offdiagonal spin correlations]\' : \'Splus:Sminus\'',
+        '}]', '',
+        'input_file = pyalps.writeInputFiles(\'parm_xy_ed\', parms)',
+        'res = pyalps.runApplication(\'sparsediag\', input_file)',
+        'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'parm_xy_ed\'))'
+      ]);
+      return '<strong>XY model ED input</strong> — ' + lattice + ', L=' + L +
+        ', Jxy=' + Jxy + (Jz !== 0 ? ', Jz=' + Jz + ' (XXZ)' : ' (pure XY)') + '<br>' +
+        latticeDiagram(lattice) +
+        codeBlock(pyED.join('\n'), 'Python (pyalps)') +
+        codeBlock(parmED.join('\n'), 'Parameter file') +
+        '<small>App: <code>sparsediag</code>; for QMC use <em>"xy model qmc"</em></small>';
+    }
   }
 
   function genED(p) {
@@ -1869,6 +2086,8 @@
     'Which simulation method would you like an input file for?<ul>' +
     '<li><strong>spinmc</strong> — Classical spin MC (Ising, Heisenberg, XY)</li>' +
     '<li><strong>qmc</strong> — Quantum spin MC (loop / dirloop_sse); MODEL="spin"</li>' +
+    '<li><strong>tfim</strong> — Transverse-Field Ising Model (sparsediag ED); params: Jz, Gamma</li>' +
+    '<li><strong>xy model</strong> — XY / XXZ model QMC (loop) or ED; params: Jxy, Jz</li>' +
     '<li><strong>qwl</strong> — Quantum Wang-Landau; MODEL="spin"; full density of states</li>' +
     '<li><strong>bhm</strong> — Bose-Hubbard QMC (worm alg.); MODEL="boson Hubbard"; params: t, U, mu, Nmax</li>' +
     '<li><strong>dwa</strong> — Directed Worm Algorithm; same as bhm but uses dwa app</li>' +
@@ -1903,6 +2122,9 @@
   function generateInputFile(method, params) {
     switch (method) {
       case 'spinmc':                    return genSpinMC(params);
+      case 'tfim':                       return genTFIM(params);
+      case 'xy_model':                  return genXY(params, true);
+      case 'xy_ed':                     return genXY(params, false);
       case 'loop': case 'dirloop': case 'looper': case 'qmc': return genQMC(params);
       case 'qwl':                       return genQWL(params);
       case 'bhm':                       return genBHM(params, 'worm');
@@ -1949,7 +2171,7 @@
           return 'No problem! Ask me anything else about ALPS.';
         }
         return 'I didn\'t recognise that method. Please choose from: ' +
-               'spinmc, qmc, qwl, bhm, dwa, "hardcore boson", "fermion hubbard", ' +
+               'spinmc, qmc, qwl, tfim, "xy model", bhm, dwa, "hardcore boson", "fermion hubbard", ' +
                'ed, fulldiag, dmrg, mps, tebd, dmft, ' +
                '"ladder qmc", "ladder ed", "ladder dmrg", "coupled ladders". ' +
                'Or type "cancel" to go back.';
