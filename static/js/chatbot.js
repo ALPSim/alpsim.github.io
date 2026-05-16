@@ -101,8 +101,8 @@
     },
     {
       keywords: ['dmft', 'dynamical mean field', 'dynamical mean-field theory',
-                 'mott transition', 'hubbard dmft', 'bethe lattice', 'self-consistent field',
-                 'impurity solver'],
+                 'mott transition', 'hubbard dmft', 'mott hubbard', 'bethe lattice',
+                 'self-consistent field', 'impurity solver', 'dmft u', 'beta nmatsubara'],
       response:
         '<strong>DMFT</strong> (Dynamical Mean-Field Theory) maps a lattice problem onto an impurity ' +
         'model solved self-consistently — great for correlated electron systems.<br><br>' +
@@ -112,7 +112,8 @@
     {
       keywords: ['dmrg', 'density matrix renormalization', 'density matrix renormalization group',
                  'tensor network', 'mps', 'matrix product state', 'mps optimization',
-                 '1d chain dmrg', 'one dimensional dmrg'],
+                 '1d chain dmrg', 'one dimensional dmrg',
+                 'maxstates', 'bond dimension', 'convergence sweep dmrg'],
       response:
         '<strong>DMRG / MPS</strong> in ALPS — two apps:<ul>' +
         '<li><code>dmrg</code> — DMRG ground state; requires <code>LATTICE="open chain lattice"</code></li>' +
@@ -125,7 +126,9 @@
     },
     {
       keywords: ['exact diagonalization', 'exact diag', 'ed method', 'full diagonalization',
-                 'lanczos', 'hamiltonian matrix', 'small system diag', 'sparsediag', 'fulldiag'],
+                 'lanczos', 'hamiltonian matrix', 'small system diag', 'sparsediag', 'fulldiag',
+                 'number eigenvalues', 'number_eigenvalues', 'energy spectrum ed',
+                 'ed-01', 'ed-02', 'ed-03', 'ed-04', 'ed-05', 'ed-06'],
       response:
         '<strong>Exact Diagonalization</strong> in ALPS — two apps:<ul>' +
         '<li><code>sparsediag</code> — sparse (Lanczos) diagonalization; ground state and low-lying levels (ED-01 to ED-05)</li>' +
@@ -456,6 +459,10 @@
   /* ================================================================
    * KB SCORING
    * ================================================================ */
+  /* Product-name stop words: excluded from word-level scoring because they
+     appear in almost every query and would unfairly inflate what_is_alps. */
+  var _SCORE_STOP = ['alps'];
+
   function scoreEntry(query, entry) {
     var q = query.toLowerCase().trim();
     var s = 0;
@@ -466,7 +473,7 @@
       var kwW = kw.split(/\s+/);
       var qW  = q.split(/\s+/);
       for (var j = 0; j < qW.length; j++) {
-        if (qW[j].length > 2 && kwW.indexOf(qW[j]) !== -1) s += 1;
+        if (qW[j].length > 2 && _SCORE_STOP.indexOf(qW[j]) === -1 && kwW.indexOf(qW[j]) !== -1) s += 1;
       }
     }
     return s;
@@ -1056,11 +1063,21 @@
     var temps    = p.T !== undefined ? [p.T] : [0.5, 1.0, 2.0];
     var tempStr  = temps.length === 1 ? '[' + temps[0] + ']' : '[' + temps.join(', ') + ']';
 
+    var app      = p.h !== undefined ? 'dirloop_sse' : 'loop';
+    var hVal     = p.h;
+
     var parmLines = ['LATTICE="' + lattice + '"', 'L=' + L];
     if (W !== undefined) parmLines.push('W=' + W);
     parmLines.push('MODEL="spin"', 'local_S=' + local_S, 'J=' + J,
                    'THERMALIZATION=' + therm, 'SWEEPS=' + sweeps);
-    temps.forEach(function(t) { parmLines.push('{T=' + t + ';}'); });
+    /* loop app: include ALGORITHM keyword to match mc-02c / mc-08 tutorial style */
+    if (app === 'loop') parmLines.push('ALGORITHM="loop"');
+    if (hVal !== undefined) {
+      /* dirloop_sse with magnetic field: emit h as a sweep variable like mc-03 */
+      parmLines.push('{T=' + temps[0] + '; h=' + hVal + ';}');
+    } else {
+      temps.forEach(function(t) { parmLines.push('{T=' + t + ';}'); });
+    }
     var parm = parmLines.join('\n');
 
     var pyDict = [
@@ -1071,7 +1088,11 @@
     pyDict = pyDict.concat([
       '        \'MODEL\'          : "spin",',
       '        \'local_S\'        : ' + local_S + ',',
-      '        \'J\'              : ' + J + ',',
+      '        \'J\'              : ' + J + ','
+    ]);
+    if (hVal !== undefined) pyDict.push('        \'h\'              : ' + hVal + ',');
+    if (app === 'loop') pyDict.push('        \'ALGORITHM\'      : \'loop\',');
+    pyDict = pyDict.concat([
       '        \'THERMALIZATION\' : ' + therm + ',',
       '        \'SWEEPS\'         : ' + sweeps + ',',
       '        \'T\'              : t'
@@ -1084,11 +1105,8 @@
     ].concat(pyDict).concat([
       '    })', '',
       'input_file = pyalps.writeInputFiles(\'parm_qmc\', parms)',
-      /* use dirloop_sse when magnetic field is present, loop otherwise */
-      'res = pyalps.runApplication(\'' + (p.h !== undefined ? 'dirloop_sse' : 'loop') + '\', input_file)'
+      'res = pyalps.runApplication(\'' + app + '\', input_file)'
     ]).join('\n');
-
-    var app = p.h !== undefined ? 'dirloop_sse' : 'loop';
     var sizeStr = W !== undefined ? 'L=' + L + '×W=' + W : 'L=' + L;
     return '<strong>QMC input</strong> — spin-' + local_S + ', ' + lattice + ', ' + sizeStr + '<br>' +
       latticeDiagram(lattice) +
@@ -1629,7 +1647,7 @@
       'local_S=' + local_S,
       'J=' + J,
       'L=' + L,
-      'CONSERVED_QUANTUMNUMBERS="Sz"',
+      'CONSERVED_QUANTUMNUMBERS="N,Sz"',
       'Sz_total=' + Sz_total,
       'SWEEPS=' + SWEEPS,
       'NUMBER_EIGENVALUES=' + NEIGEN,
@@ -1761,7 +1779,8 @@
       'L=' + L,
       'W=' + W,
       'THERMALIZATION=' + therm,
-      'SWEEPS=' + sweeps
+      'SWEEPS=' + sweeps,
+      'ALGORITHM="loop"'
     ];
     temps.forEach(function(t) { parmLines.push('{T=' + t + ';}'); });
     var parm = parmLines.join('\n');
@@ -1775,6 +1794,7 @@
       '        \'LATTICE\'        : "' + lattice + '",',
       '        \'MODEL\'          : "spin",',
       '        \'local_S\'        : ' + local_S + ',',
+      '        \'ALGORITHM\'      : \'loop\',',
       '        \'J0\'             : ' + J0 + ',',
       '        \'J1\'             : ' + J1 + ',',
       '        \'L\'              : ' + L + ',',
@@ -1980,7 +2000,9 @@
     var BETA  = (p.BETA !== undefined) ? p.BETA  : 10.0;
     var U     = (p.U    !== undefined) ? p.U     : 4.0;
     var MU    = (p.mu   !== undefined) ? p.mu    : 0;
-    var t_hop = (p.t_hop!== undefined) ? p.t_hop : 0.5;
+    /* t = 1/√2 ≈ 0.7071 is the canonical Bethe-lattice hopping for half-bandwidth D=1
+       (tutorials dmft-02, dmft-03, dmft-04 all use this value) */
+    var t_hop = (p.t_hop!== undefined) ? p.t_hop : 0.707106781186547;
     var SWEEPS= p.SWEEPS || 5000;
     var THERM = p.THERMALIZATION || 500;
     var N     = Math.max(100, Math.round(BETA * 50));
@@ -2030,32 +2052,39 @@
 
   /* ---- Quantum Wang-Landau (qwl) ---- */
   function genQWL(p) {
-    var L       = p.L  || 8;
+    var L       = p.L  || 40;
     var local_S = (p.local_S !== undefined) ? p.local_S : 0.5;
-    var J       = (p.J !== undefined) ? p.J : 1.0;
+    /* tutorial mc-06: J=-1 (antiferromagnet), T_MIN/T_MAX/DELTA_T, CUTOFF */
+    var J       = (p.J !== undefined) ? p.J : -1;
     var lattice = p.LATTICE || 'chain lattice';
     var is2D    = _2D_LATTICES.indexOf(lattice) !== -1;
     var is3D    = _3D_LATTICES.indexOf(lattice) !== -1;
     var W       = (is2D || is3D) ? (p.W || L) : undefined;
     var H_val   = is3D ? (p.H || L) : undefined;
+    var T_MIN   = (p.T_MIN  !== undefined) ? p.T_MIN  : 0.1;
+    var T_MAX   = (p.T_MAX  !== undefined) ? p.T_MAX  : 10.0;
+    var DELTA_T = (p.DELTA_T!== undefined) ? p.DELTA_T: 0.1;
+    /* CUTOFF caps the number of energy levels — required by the qwl app */
+    var CUTOFF  = 500;
 
     var parmLines = [
       'LATTICE="' + lattice + '"',
       'MODEL="spin"',
       'local_S=' + local_S,
-      'J=' + J,
       'L=' + L
     ];
-    if (W !== undefined)   parmLines.push('W=' + W);
+    if (W !== undefined)     parmLines.push('W=' + W);
     if (H_val !== undefined) parmLines.push('H=' + H_val);
-    parmLines.push('SWEEPS=100000');
+    parmLines = parmLines.concat([
+      'T_MIN='   + T_MIN,
+      'T_MAX='   + T_MAX,
+      'DELTA_T=' + DELTA_T,
+      'CUTOFF='  + CUTOFF,
+      '{J=' + J + '}'
+    ]);
     var parm = parmLines.join('\n');
 
-    var pyExtra = '';
-    if (W !== undefined && H_val === undefined) pyExtra = '\n        \'W\'     : ' + W + ',';
-    if (H_val !== undefined) pyExtra = '\n        \'W\'     : ' + W + ',\n        \'H\'     : ' + H_val + ',';
-
-    var py = [
+    var pyLines = [
       'import pyalps',
       '',
       'parms = [{',
@@ -2063,23 +2092,39 @@
       '    \'MODEL\'    : "spin",',
       '    \'local_S\'  : ' + local_S + ',',
       '    \'J\'        : ' + J + ',',
-      '    \'L\'        : ' + L + ',' + pyExtra,
-      '    \'SWEEPS\'   : 100000',
+      '    \'L\'        : ' + L + ','
+    ];
+    if (W !== undefined)     pyLines.push('    \'W\'        : ' + W + ',');
+    if (H_val !== undefined) pyLines.push('    \'H\'        : ' + H_val + ',');
+    pyLines = pyLines.concat([
+      '    \'T_MIN\'    : ' + T_MIN + ',',
+      '    \'T_MAX\'    : ' + T_MAX + ',',
+      '    \'DELTA_T\'  : ' + DELTA_T + ',',
+      '    \'CUTOFF\'   : ' + CUTOFF,
       '}]',
       '',
       'input_file = pyalps.writeInputFiles(\'parm_qwl\', parms)',
-      'res = pyalps.runApplication(\'qwl\', input_file)'
-    ].join('\n');
+      'res = pyalps.runApplication(\'qwl\', input_file)',
+      '',
+      '# Load thermodynamic observables vs T',
+      'data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=\'parm_qwl\'),',
+      '                               [\'Specific Heat\', \'Susceptibility\', \'Free Energy\'])',
+      'for d in pyalps.flatten(data):',
+      '    print(d.props[\'observable\'])'
+    ]);
+    var py = pyLines.join('\n');
 
     var dimInfo = is3D ? 'L=' + L + '×W=' + W + '×H=' + H_val
                   : is2D ? 'L=' + L + '×W=' + W
                   : 'L=' + L;
     return '<strong>Quantum Wang-Landau input</strong> — ' + lattice + ', spin-' + local_S +
-      ', ' + dimInfo + ', J=' + J + '<br>' +
+      ', ' + dimInfo + ', J=' + J + ', T: ' + T_MIN + '→' + T_MAX + '<br>' +
+      '<em>QWL sweeps energy space (not time) — use T_MIN/T_MAX/DELTA_T and CUTOFF, not SWEEPS.</em><br>' +
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>qwl</code> — computes density of states across the full energy spectrum.</small>';
+      '<small>App: <code>qwl</code> — computes full density of states; ' +
+      'yields C(T), χ(T), F(T) across the entire temperature range in one run.</small>';
   }
 
   var METHOD_CHOICES_MSG =
