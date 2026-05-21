@@ -40,15 +40,15 @@ $ sudo apt install build-essential cmake \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # or: libmpich-dev mpich
 
-# download and extract Boost sources v1.87.0 (required for NumPy >= 2.0):
-$ wget https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-$ tar -xzf boost_1_87_0.tar.gz
-
 # install Python libs:
 $ pip install numpy scipy # python libraries 
 # or 
 $ python3 -m pip install numpy scipy
 ```
+
+> **Note:** Do not install Boost via `apt`. ALPS builds Boost from source to ensure
+> ABI compatibility. CMake auto-downloads Boost 1.87 during configuration (requires
+> internet access). See the offline alternative in the build step below if needed.
 </details>
 <details>
 <summary><strong> macOS (via Homebrew)</strong> </summary>
@@ -140,8 +140,8 @@ The following combinations of `Boost`, Python and the C++ compiler have been tes
   For **NumPy ≥ 2.0**, use `Boost` 1.87.0 or later (CMake downloads this automatically).
 {{% /tab %}}
 {{% tab %}}
-ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0).
-On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler, the following environment variable have to be set:
+ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0, NumPy < 2.0).
+On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler, the following environment variable must be set:
 
 ```ShellSession
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/

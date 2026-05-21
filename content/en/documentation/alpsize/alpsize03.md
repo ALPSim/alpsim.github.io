@@ -528,7 +528,7 @@ Although there has been in the do loop iteration (line 25 original-code)in the o
         88:      return
         89:    end subroutine alps_run
 
-The calculation process itself (Line 65 to 82) is the same as the original code. After porting, alps_run will be called automatically and repeatedly; the loop at line 25 of the original code is not written. Instead, it counts the number of iterations in line 86. Also, save the results of the calculation using the ALPS function (lines 84 and 85). In the original code (lines 43-46) operations such as calculating the integral and square are performed, but these are done automatically by `alps_accumulate_observable`.
+The calculation process itself (Line 65 to 82) is the same as the original code. After porting, alps_run will be called automatically and repeatedly; the loop at line 25 of the original code is not written. Instead, it counts the number of iterations in line 86. It also saves the results of the calculation using the ALPS function (lines 84 and 85). In the original code (lines 43-46) operations such as calculating the integral and square are performed, but these are done automatically by `alps_accumulate_observable`.
 
 - after porting(alps_progress)
 
