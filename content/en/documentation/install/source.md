@@ -40,7 +40,7 @@ $ sudo apt install build-essential cmake \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # or: libmpich-dev mpich
 
-# download and install Boost v1.87.0 (required for NumPy >= 2.0):
+# download and extract Boost sources v1.87.0 (required for NumPy >= 2.0):
 $ wget https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
 $ tar -xzf boost_1_87_0.tar.gz
 
@@ -87,16 +87,22 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
   $ git clone https://github.com/alpsim/ALPS alps-src
   $ cmake -S alps-src -B alps-build                                     \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
-         -DBoost_SRC_DIR=</directory/with/boost/sources>/boost_1_87_0  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
   $ cmake --build alps-build -j 8
   $ cmake --build alps-build -t test
   ```
 
-> **`Boost_SRC_DIR` is optional.** If omitted, CMake automatically downloads Boost 1.87
-> during configuration. Set it only if you have already downloaded Boost manually or are
-> building without internet access.
+> **Boost is downloaded automatically.** If `Boost_SRC_DIR` is not set, CMake fetches
+> Boost 1.87 during configuration (requires internet access). To build offline or reuse a
+> previously extracted archive, pass the path explicitly:
+> ```ShellSession
+> $ cmake -S alps-src -B alps-build                                     \
+>        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
+>        -DBoost_SRC_DIR=</path/to/boost_1_87_0>                        \
+>        -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
+>        -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
+> ```
 
 > **macOS (Apple Clang) users:** Apple Clang does not ship `libstdc++` headers; you must
 > select `libc++` explicitly, or the build will fail with `fatal error: 'cstddef' file not
@@ -124,12 +130,14 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 {{% tabs items="Linux,Mac" %}}
 {{% tab %}}
 The following combinations of `Boost`, Python and the C++ compiler have been tested:
-  - GCC 10.5.0, Python 3.9.19 and `Boost` 1.76.0
-  - GCC 11.4.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - GCC 12.3.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 13.0.1, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 14.0.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 15.0.7, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
+  - GCC 10.5.0, Python 3.9.19 (NumPy < 2.0) and `Boost` 1.76.0
+  - GCC 11.4.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - GCC 12.3.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 13.0.1, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 14.0.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 15.0.7, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+
+  For **NumPy ≥ 2.0**, use `Boost` 1.87.0 or later (CMake downloads this automatically).
 {{% /tab %}}
 {{% tab %}}
 ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0).
