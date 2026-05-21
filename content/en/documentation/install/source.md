@@ -104,16 +104,6 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 >        -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
 > ```
 
-> **macOS (Apple Clang) users:** Apple Clang does not ship `libstdc++` headers; you must
-> select `libc++` explicitly, or the build will fail with `fatal error: 'cstddef' file not
-> found`. Add `-stdlib=libc++` to `CMAKE_CXX_FLAGS`:
-> ```ShellSession
-> $ cmake -S alps-src -B alps-build                                     \
->        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
->        -DCMAKE_CXX_FLAGS="-stdlib=libc++ -DBOOST_NO_AUTO_PTR          \
->        -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
-> ```
-> This also fixes MPI C++ detection, which fails silently without `-stdlib=libc++`.
 
 ### Troubleshooting
 <details>
@@ -121,7 +111,6 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 * **Python errors** <br> Ensure you are using Python 3.9 at a minimum. Note: some installations (e.g. macOS) use `pip3` instead of pip. Refer to the [python website](https://www.python.org/) for support in installing the correct version.
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
 * **Boost errors** <br> Building ALPS' Python bindings against NumPy ≥ 2.0 requires Boost ≥ 1.87 (NumPy 2.0 introduced API changes that only Boost 1.87+ handles). Boost 1.76–1.86 work only with NumPy < 2.0. See the [build notes](#build-notes) for tested compiler/Boost/Python combinations.
-* **Apple Clang: `fatal error: 'cstddef' file not found`** <br> Apple Clang on macOS does not include `libstdc++`. ALPS forces `-stdlib=libstdc++` by default, which causes this error. Pass `-stdlib=libc++` as the first flag in `CMAKE_CXX_FLAGS` (see the macOS note in the build step above). This also resolves MPI C++ detection failures on macOS.
 
 </details>
 
@@ -146,10 +135,6 @@ On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler,
 ```ShellSession
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
 ```
-
-**Apple Clang (default compiler):** Always add `-stdlib=libc++` as the first entry in
-`CMAKE_CXX_FLAGS`. Without it the build fails immediately because Apple Clang no longer
-ships `libstdc++` headers (removed since Xcode 10).
 
 **Python selection:** CMake may pick up the Xcode system Python (3.9) rather than your
 Homebrew or MacPorts Python. If you see the wrong Python version during configuration,
