@@ -12,7 +12,7 @@ get all result files matching the given pattern or prefix
 
 - This function returns a list of all ALPS result files matching a given pattern, starting recursively from a given directory. The pattern can be either specificed by giving a prefix for the files, which is then augmented with the default ALPS file name suffixes. ALternatively a fiull custom regular expression pattern can be specified.
 
-- The paramters are:
+- The parameters are:
 
    - dirname: The directory from which to start the recursive search, defaulting to the current working directory. 
    - pattern: a regular expression pattern resricting the files to be matches 

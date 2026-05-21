@@ -31,7 +31,7 @@ valid characters, in addition to those in an XML identifier are `'`, and additio
 
 #### `public std::string `[`read_until`](#d3/df5/parser_8_c_1a9c6396ca9b36dae30b589d285b4da6d9)`(std::istream & in,char end)` 
 
-reads until the next occurence of the character *end* or until the end of the stream is reached.
+reads until the next occurrence of the character *end* or until the end of the stream is reached.
 
 #### Parameters
 * `in` the stream to be read 

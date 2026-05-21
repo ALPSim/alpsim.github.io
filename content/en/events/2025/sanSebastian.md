@@ -52,7 +52,7 @@ The workshop will begin in the morning of the 24th, and end in the afternoon of 
   
   - **Hiroshi Shinaoka:** Dimensionality reduction technologies for quantum field theories
 
-  - **Adrian Del MAestro:** Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
+  - **Adrian Del Maestro:** Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
   
   - **Lode Polet:** (TBA)
   
