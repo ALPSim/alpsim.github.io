@@ -18,7 +18,7 @@ ALPSはいくつかの外部ライブラリに依存しています。<br>
 | 依存関係 | 最低バージョン | インストールパッケージ |
 |----------|----------------|------------------------|
 | HDF5     | 1.10.0 | `libhdf5-dev` |
-| CMake | 2.8 | `cmake` |
+| CMake | 3.18 | `cmake` |
 | C++ コンパイラ | GCC 10.5.0 または Clang 13.0.1 | `build-essential` |
 | Boost | 1.76 <br>*(NumPy ≥ 2.0 / Python ≥ 3.13 の場合は 1.87)* | 下記参照 |
 | MPI | OpenMPI 4.0 **または** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
@@ -38,15 +38,13 @@ $ sudo apt install build-essential cmake \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # または: libmpich-dev mpich
 
-# Boost v1.81.0のダウンロードとインストール:
-$ wget https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
-$ tar -xzf boost_1_81_0.tar.gz
-
 # Pythonライブラリのインストール:
 $ pip install numpy scipy # Pythonライブラリ
 # または
 $ python3 -m pip install numpy scipy
 ```
+
+> **注:** Boostは`apt`でインストールしないでください。ALPSはABI互換性を確保するためにBoostをソースからビルドします。CMakeが設定時にBoost 1.87を自動ダウンロードします（インターネット接続が必要）。
 </details> 
 
 <details> <summary><strong> macOS (Homebrew経由)</strong> </summary>
@@ -56,12 +54,11 @@ $ brew update
 $ brew install cmake hdf5 \
                openblas open-mpi # または: mpich
 
-# Boostのインストール:
-$ brew install boost
-
 # Pythonライブラリのインストール:
 $ pip3 install numpy scipy 
 ```
+
+> **注:** HomebrewでBoostをインストールしないでください。CMakeが設定時にBoost 1.87を自動ダウンロードします（インターネット接続が必要）。
 </details>
 
 ### 依存関係の確認
@@ -80,7 +77,6 @@ ALPSライブラリのダウンロードとビルドを開始します。
 $ git clone https://github.com/alpsim/ALPS alps-src
 $ cmake -S alps-src -B alps-build                                     \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
-         -DBoost_SRC_DIR=</directory/with/boost/sources>/boost_1_81_0  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
 $ cmake --build alps-build -j 8

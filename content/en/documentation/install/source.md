@@ -21,7 +21,7 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 | HDF5     | 1.10.0 | `libhdf5-dev`|
 | CMake | 3.18 | `cmake`|
 | C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` |
-| Boost | 1.76 <br>*(1.87 if NumPy >= 2.0 / Python >= 3.13)* | see below |
+| Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0)* | see below |
 | MPI | OpenMPI 4.0 **or** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev`|
 | BLAS | 0.3 | `libopenblas-dev`
 | Python | 3.9 | [python.org](https://www.python.org/) |
@@ -40,15 +40,15 @@ $ sudo apt install build-essential cmake \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # or: libmpich-dev mpich
 
-# download and extract Boost sources v1.87.0 (required for NumPy >= 2.0):
-$ wget https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-$ tar -xzf boost_1_87_0.tar.gz
-
 # install Python libs:
 $ pip install numpy scipy # python libraries 
 # or 
 $ python3 -m pip install numpy scipy
 ```
+
+> **Note:** Do not install Boost via `apt`. ALPS builds Boost from source to ensure
+> ABI compatibility. CMake auto-downloads Boost 1.87 during configuration (requires
+> internet access). See the offline alternative in the build step below if needed.
 </details>
 <details>
 <summary><strong> macOS (via Homebrew)</strong> </summary>
@@ -120,7 +120,7 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 * **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
 * **Python errors** <br> Ensure you are using Python 3.9 at a minimum. Note: some installations (e.g. macOS) use `pip3` instead of pip. Refer to the [python website](https://www.python.org/) for support in installing the correct version.
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
-* **Boost errors** <br> Use Boost 1.87.0 or later when NumPy ≥ 2.0 is installed (the default since NumPy 2.0 was released). Boost 1.76–1.86 work only with NumPy < 2.0. See the [build notes](#build-notes) for tested compiler/Boost/Python combinations.
+* **Boost errors** <br> Building ALPS' Python bindings against NumPy ≥ 2.0 requires Boost ≥ 1.87 (NumPy 2.0 introduced API changes that only Boost 1.87+ handles). Boost 1.76–1.86 work only with NumPy < 2.0. See the [build notes](#build-notes) for tested compiler/Boost/Python combinations.
 * **Apple Clang: `fatal error: 'cstddef' file not found`** <br> Apple Clang on macOS does not include `libstdc++`. ALPS forces `-stdlib=libstdc++` by default, which causes this error. Pass `-stdlib=libc++` as the first flag in `CMAKE_CXX_FLAGS` (see the macOS note in the build step above). This also resolves MPI C++ detection failures on macOS.
 
 </details>
@@ -137,11 +137,11 @@ The following combinations of `Boost`, Python and the C++ compiler have been tes
   - Clang 14.0.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
   - Clang 15.0.7, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
 
-  For **NumPy ≥ 2.0**, use `Boost` 1.87.0 or later (CMake downloads this automatically).
+  For **NumPy ≥ 2.0**, `Boost` 1.87.0 or later is required for ALPS' Boost.Python bindings (CMake downloads this automatically).
 {{% /tab %}}
 {{% tab %}}
 ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0).
-On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler, the following environment variable have to be set:
+On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler, the following environment variable must be set:
 
 ```ShellSession
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
