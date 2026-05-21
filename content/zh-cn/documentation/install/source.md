@@ -96,7 +96,7 @@ $ cmake --build alps-build -t test
 确保 CMake 使用的 MPI 版本与 mpirun --version 一致。
 
 * **Boost 错误**
-我们已测试 ALPS 在 Boost 版本 1.76.0 至 1.81.0 的构建 (不同编译器与 Python 版本的支持组合请参考 构建说明)
+使用 NumPy ≥ 2.0 构建 ALPS Python 绑定需要 Boost ≥ 1.87；Boost 1.76–1.86 仅支持 NumPy < 2.0。不同编译器与 Python 版本的支持组合请参考构建说明。
 
 </details>
 
@@ -104,15 +104,17 @@ $ cmake --build alps-build -t test
 {{% tabs items="Linux,Mac" %}}
 {{% tab %}}
 以下 Boost、Python 和 C++ 编译器的组合已通过测试：
-  - GCC 10.5.0, Python 3.9.19 and `Boost` 1.76.0
-  - GCC 11.4.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - GCC 12.3.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 13.0.1, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 14.0.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 15.0.7, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
+  - GCC 10.5.0, Python 3.9.19 (NumPy < 2.0) and `Boost` 1.76.0
+  - GCC 11.4.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - GCC 12.3.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 13.0.1, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 14.0.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 15.0.7, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+
+  **NumPy ≥ 2.0** 时，ALPS 的 Boost.Python 绑定需要 Boost 1.87.0 或更高版本（CMake 自动下载）。
 {{% /tab %}}
 {{% tab %}}
-ALPS 已在 ARM 架构的 MacOS 系统上通过默认编译器和 Homebrew 的 gcc 编译器 (使用 Boost 1.86.0) 完成测试。
+ALPS 已在 ARM 架构的 MacOS 系统上通过默认编译器和 Homebrew 的 gcc 编译器 (使用 Boost 1.86.0，NumPy < 2.0) 完成测试。
 在 MacOS ≥14.6 系统中，若要通过 Homebrew gcc 成功构建 ALPS，需设置以下环境变量：
 ```ShellSession
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
