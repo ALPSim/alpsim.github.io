@@ -10,12 +10,12 @@ weight: 2
 `pyalps.getResultFiles(dirname='.', pattern=None, prefix=None, format=None)`
 get all result files matching the given pattern or prefix
 
-- This function returns a list of all ALPS result files matching a given pattern, starting recursively from a given directory. The pattern can be either specificed by giving a prefix for the files, which is then augmented with the default ALPS file name suffixes. ALternatively a fiull custom regular expression pattern can be specified.
+- This function returns a list of all ALPS result files matching a given pattern, starting recursively from a given directory. The pattern can be either specified by giving a prefix for the files, which is then augmented with the default ALPS file name suffixes. Alternatively a full custom regular expression pattern can be specified.
 
 - The parameters are:
 
    - dirname: The directory from which to start the recursive search, defaulting to the current working directory. 
-   - pattern: a regular expression pattern resricting the files to be matches 
+   - pattern: a regular expression pattern restricting the files to be matched 
    - prefix: a pattern which the start of the file names has to match. This will be augmented by the standard ALPS file name endings ‘.task.out.xml’ or ‘\*.h5’ to form the full pattern.
 
 - The function returns a list of filenames
