@@ -18,7 +18,7 @@ ALPS 依赖多个外部库。
 | 依赖项     | 最低版本       | 安装包                  |
 |------------|----------------|-------------------------|
 | HDF5       | 1.10.0         | `libhdf5-dev`           |
-| CMake      | 2.8            | `cmake`                 |
+| CMake      | 3.18           | `cmake`                 |
 | C++ 编译器 | GCC 10.5.0 或 Clang 13.0.1 | `build-essential`      |
 | Boost      | 1.76 <br>*(若 NumPy ≥ 2.0 / Python ≥ 3.13 需 1.87)* | 见下文 |
 | MPI        | OpenMPI 4.0 **或** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
@@ -37,17 +37,14 @@ $ sudo apt install build-essential cmake \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # 或: libmpich-dev mpich
 
-# 下载并安装 Boost v1.81.0:
-
-$ wget https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
-$ tar -xzf boost_1_81_0.tar.gz
-
 # 安装 Python 库:
 $ pip install numpy scipy # python 库
 
 # 或
 $ python3 -m pip install numpy scipy
 ```
+
+> **注意:** 请勿通过 `apt` 安装 Boost。ALPS 从源码构建 Boost 以确保 ABI 兼容性。CMake 在配置时会自动下载 Boost 1.87（需要网络连接）。
 </details> 
 
 <details> 
@@ -58,12 +55,11 @@ $ brew update
 $ brew install cmake hdf5 \
                openblas open-mpi # 或: mpich
 
-# 安装 Boost:
-$ brew install boost
-
 # 安装 Python 库:
 $ pip3 install numpy scipy 
 ```
+
+> **注意:** 请勿通过 Homebrew 安装 Boost。CMake 在配置时会自动下载 Boost 1.87（需要网络连接）。
 </details>
 
 ### 验证依赖项
@@ -81,7 +77,6 @@ $ mpirun --version # 需为 OpenMPI 4.0 或 MPICH 4
 $ git clone https://github.com/alpsim/ALPS alps-src
 $ cmake -S alps-src -B alps-build \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir> \
-         -DBoost_SRC_DIR=</directory/with/boost/sources>/boost_1_81_0 \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
 $ cmake --build alps-build -j 8
@@ -101,7 +96,7 @@ $ cmake --build alps-build -t test
 确保 CMake 使用的 MPI 版本与 mpirun --version 一致。
 
 * **Boost 错误**
-我们已测试 ALPS 在 Boost 版本 1.76.0 至 1.81.0 的构建 (不同编译器与 Python 版本的支持组合请参考 构建说明)
+使用 NumPy ≥ 2.0 构建 ALPS Python 绑定需要 Boost ≥ 1.87；Boost 1.76–1.86 仅支持 NumPy < 2.0。不同编译器与 Python 版本的支持组合请参考构建说明。
 
 </details>
 
@@ -109,15 +104,17 @@ $ cmake --build alps-build -t test
 {{% tabs items="Linux,Mac" %}}
 {{% tab %}}
 以下 Boost、Python 和 C++ 编译器的组合已通过测试：
-  - GCC 10.5.0, Python 3.9.19 and `Boost` 1.76.0
-  - GCC 11.4.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - GCC 12.3.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 13.0.1, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 14.0.0, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
-  - Clang 15.0.7, Python 3.10.14 and `Boost` 1.81.0, 1.86.0
+  - GCC 10.5.0, Python 3.9.19 (NumPy < 2.0) and `Boost` 1.76.0
+  - GCC 11.4.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - GCC 12.3.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 13.0.1, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 14.0.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+  - Clang 15.0.7, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
+
+  **NumPy ≥ 2.0** 时，ALPS 的 Boost.Python 绑定需要 Boost 1.87.0 或更高版本（CMake 自动下载）。
 {{% /tab %}}
 {{% tab %}}
-ALPS 已在 ARM 架构的 MacOS 系统上通过默认编译器和 Homebrew 的 gcc 编译器 (使用 Boost 1.86.0) 完成测试。
+ALPS 已在 ARM 架构的 MacOS 系统上通过默认编译器和 Homebrew 的 gcc 编译器 (使用 Boost 1.86.0，NumPy < 2.0) 完成测试。
 在 MacOS ≥14.6 系统中，若要通过 Homebrew gcc 成功构建 ALPS，需设置以下环境变量：
 ```ShellSession
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
