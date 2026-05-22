@@ -9,7 +9,7 @@ toc: true
 
 ## Welcome to the ALPS Software Package
 
-The ALPS (Algorithms and Libraries for Physics Simulations) software package aims to provide a set of well tested, robust, and standardized components for numerical simulations of condensed matter systems, incluing bosonic, fermionic, and spin systems. They consist of a set of components that are used in state-of-the-art high performance codes.
+The ALPS (Algorithms and Libraries for Physics Simulations) software package aims to provide a set of well tested, robust, and standardized components for numerical simulations of condensed matter systems, including bosonic, fermionic, and spin systems. They consist of a set of components that are used in state-of-the-art high performance codes.
 
 <div class="cta-buttons" style="text-align:left;width:100%;">
 {{< cta-button text="Get started" link="documentation/start/intro" icon="build"  prim="yes" >}}
@@ -23,7 +23,7 @@ The ALPS (Algorithms and Libraries for Physics Simulations) software package aim
 </div>
 
 ## Our Impacts
-ALPS has been used by hundreds of researchers in 52 countries since its inception and has produced thousands of publications by different groups. In addition, ALPS has been applied to more than 20 research disciplines, as evidenced by the research citations. We are pround of its contribution in advancing the understanding of material properties.
+ALPS has been used by hundreds of researchers in 52 countries since its inception and has produced thousands of publications by different groups. In addition, ALPS has been applied to more than 20 research disciplines, as evidenced by the research citations. We are proud of its contribution in advancing the understanding of material properties.
 
 {{< tile-list >}}
   {{< tile title="Our Systems" >}}

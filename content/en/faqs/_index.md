@@ -8,7 +8,7 @@ toc: false
 
 Our software release publications are shown on [this page](../documentation/pubs/papers/). For specific numerical methods, please refer to our ["Code and Method References" page](../documentation/pubs/refs/). The citation requirement is discussed on the [citation page](../documentation/pubs/citations/).
 
-### Where can I ask questions about ALPS installation, documnetation, or tutorials?
+### Where can I ask questions about ALPS installation, documentation, or tutorials?
 
 We created a discord channel for community discussions. You can ask your questions in our [Github repository discussions](https://github.com/ALPSim/ALPS/discussions/categories/q-a) or in our [Discord channel](https://discord.com/invite/JRNWnnva9g).
 

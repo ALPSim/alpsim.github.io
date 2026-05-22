@@ -52,7 +52,7 @@ The workshop will begin in the morning of the 24th, and end in the afternoon of 
   
   - **Hiroshi Shinaoka:** Dimensionality reduction technologies for quantum field theories
 
-  - **Adrian Del MAestro:** Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
+  - **Adrian Del Maestro:** Berezinskii-Kosterlitz-Thouless Renormalization Group Flow at a Quantum Phase Transition
   
   - **Lode Polet:** (TBA)
   
@@ -71,7 +71,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 
 - Title of your talk:
 - Estimated arrival and departure dates:
-- Staying at the Oralain or making own arrangements:
+- Staying at the Olarain or making own arrangements:
 - Sharing the room with:
 
 ## Meeting Participants (confirmed)
