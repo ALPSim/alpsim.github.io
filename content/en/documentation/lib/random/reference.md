@@ -104,7 +104,7 @@ constructs a buffered generator from the given argument
 
 * `buffer_size` the size of the buffer
 
-If a reference type is specifed as `Generator` type, a reference to the generator `gen` is stored and used, otherweise the generator is copied.
+If a reference type is specified as `Generator` type, a reference to the generator `gen` is stored and used, otherwise the generator is copied.
 
 #### `typedef `[`generator_type`](#d2/dea/classalps_1_1basic__buffered__generator_1a6a18c3f5e0752f2032fca58ed77f7985) 
 
@@ -157,7 +157,7 @@ constructs a generator from the given engine
 
 * `buffer_size` the size of the buffer
 
-If a reference type is specifed as `Engine` type, a reference to the `engine` is stored and used, otherweise the engine is copied.
+If a reference type is specified as `Engine` type, a reference to the `engine` is stored and used, otherwise the engine is copied.
 
 #### `typedef `[`result_type`](#da/d82/classalps_1_1basic__buffered__uniform__01_1ab30c2c5da0212d21e66b3206d42c8ef7) 
 

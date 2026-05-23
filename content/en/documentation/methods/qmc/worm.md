@@ -32,7 +32,7 @@ In addition, specific simulations parameters can be assigned (use only if you se
 | :------------ | :---------- | :---------- |
 | SKIP | 1 | the number of Monte Carlo sweeps between each measurement |
 | RESTRICT_MEASUREMENTS[N] | | if defined this restricts measurements to configurations where the quantum number N (particle number) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the chemical potential needs to be tuned to the right range, to actually sample configurations with the desired particle number. |
-| RESTRICT_MEASUREMENTS[Sz] | | if defined this restricts measurements to configurations where the quantum number Sz (magnetization) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the magnetic field needs to be tuned to the right range, to actually sample configurations with the desiredmagnetization. |
+| RESTRICT_MEASUREMENTS[Sz] | | if defined this restricts measurements to configurations where the quantum number Sz (magnetization) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the magnetic field needs to be tuned to the right range, to actually sample configurations with the desired magnetization. |
 | WORMS_PER_KINK | 1 | determines how often a worm should visit a kink on average per sweep. |
 | MEASURE_GREEN | false | flag that indicates whether the Green's function should be measured. Don't use - this is untested! |
 

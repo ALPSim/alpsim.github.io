@@ -228,11 +228,11 @@ With these elements we can now describe the Hamiltonian of a model. A simple har
     </HAMILTONIAN>
  
  First, default values can be specified for parameters such as coupling constants by using `<PARAMETER>` elements.
-Next, one `<BASIS>` element specifes the basis used for the model, either fully specified inline or by a reference (using the `ref` attribute).
-The terms of the Hamiltonian are next specified by site terms, associated with the sites of the lattice and bond terms, associated with the bonds. Each of the `<SITETERM>` and `<BONDTERM>` elements can optionally take a type attribute. This type attribute specifies at which type of site (bond) the term will be applied. These are the same types specified in the lattice description. Omitting the type attribute applies the term to all sites or bonds for which no other term is explcitly specifed.
+Next, one `<BASIS>` element specifies the basis used for the model, either fully specified inline or by a reference (using the `ref` attribute).
+The terms of the Hamiltonian are next specified by site terms, associated with the sites of the lattice and bond terms, associated with the bonds. Each of the `<SITETERM>` and `<BONDTERM>` elements can optionally take a type attribute. This type attribute specifies at which type of site (bond) the term will be applied. These are the same types specified in the lattice description. Omitting the type attribute applies the term to all sites or bonds for which no other term is explicitly specified.
 The `<SITETERM>` elements contain terms of the Hamiltonian associated with a single site. In the above example the term mu refers to the parameter mu while the term n refers to the operator n described above.
-In the `<BONDTERM>` elements, operators referring to two different sites need to be specfied. This is done by adding the site index in parentheses after the operator, e.g. as in n(i) to act on site i. The source and target attributes specify which variables to use for specifying the sites (i and j in the example).
-To simplify writing of the Hamltonians, the pre-defined site and bond operators above can be used. E.g. for a transverse field spin model we can use the Sx and `exchange` operators defined above:
+In the `<BONDTERM>` elements, operators referring to two different sites need to be specified. This is done by adding the site index in parentheses after the operator, e.g. as in n(i) to act on site i. The source and target attributes specify which variables to use for specifying the sites (i and j in the example).
+To simplify writing of the Hamiltonians, the pre-defined site and bond operators above can be used. E.g. for a transverse field spin model we can use the Sx and `exchange` operators defined above:
 
     <HAMILTONIAN name="spin">
     <PARAMETER name="J" default="1"/>

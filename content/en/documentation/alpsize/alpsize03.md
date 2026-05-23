@@ -64,7 +64,7 @@ The following is an example of a C + + source code.
     22:        return alps::parapack::start(argc, argv);
     23:    }
 
-In the above example, it needs to be changed will be the red part characters.
+In the above example, the characters that need to be changed are highlighted in red.
 
 ### Fortran source code
 
@@ -310,7 +310,7 @@ user program builds using CMake as well as ALPS. It is a sample of setting file(
     16:    # External library file required to generate execution
     17:    target_link_libraries(**hello** ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
     
-In the above example, it needs to be changed will be the part of characters inside \*\*...\*\*.
+In the above example, the parts that need to be changed are the characters inside \*\*...\*\*.
 
 ## Porting of existing program code
 

@@ -89,17 +89,17 @@ we then calculate the exact result from the time data, and use the computed valu
                 exactCopy[0].props['Distance']=n
                 exactCopy[0].props['SIMID']='Exact at n='+str(n)
 
-                #compute the exact result of the manetization n sites from the center
+                #compute the exact result of the magnetization n sites from the center
                 loc=0.0
                 for i in range(1-n,n):
                         loc-=0.5*scipy.special.jn(i,q[0].props['Time'])*scipy.special.jn(i,q[0].props['Time'])                        
                 exactCopy[0].y=[loc]
-                #add to the the exact dataset
+                #add to the exact dataset
                 exactResult.extend(exactCopy)
 
                 #get the numerical result of the magnetization n sites from the center
                 numericalCopy[0].y=[q[0].y[syssize/2+n-1]]
-                #add to the the numerical dataset
+                #add to the numerical dataset
                 numericalResult.extend(numericalCopy)
 
 Next, we calculate the exact scaling function, and then compute magnetization as a function of the scaling variable $n/t$ to compare with the exact solution

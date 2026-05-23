@@ -101,7 +101,7 @@ The first defined parameter specifies the dimension. Thus if only L is specified
 
 ## Boundary conditions
 
-For finite lattices in addition to the extent the boundary conditions need to be specifed. Widely used boundary conditions are:
+For finite lattices in addition to the extent the boundary conditions need to be specified. Widely used boundary conditions are:
 
 - open: the lattice has open edges, and the boundary cells do not have any neighbor on one or more sides
 - periodic: the lattice is assumed to be periodic, i.e. moving out of the lattice on one side, one reenters the lattice on the opposite side. The right neighbor of the rightmost cell is the left-most, and the upper neighbor of the uppermost cell is the lowest cell. For a two-dimensional lattice this looks like a torus.
