@@ -1647,7 +1647,7 @@
       'local_S=' + local_S,
       'J=' + J,
       'L=' + L,
-      'CONSERVED_QUANTUMNUMBERS="N,Sz"',
+      'CONSERVED_QUANTUMNUMBERS="Sz"',
       'Sz_total=' + Sz_total,
       'SWEEPS=' + SWEEPS,
       'NUMBER_EIGENVALUES=' + NEIGEN,
@@ -1662,7 +1662,7 @@
           'parms = [{',
           '    \'LATTICE\'                                                 : "open chain lattice",',
           '    \'MODEL\'                                                   : "spin",',
-          '    \'CONSERVED_QUANTUMNUMBERS\'                               : \'N,Sz\',',
+          '    \'CONSERVED_QUANTUMNUMBERS\'                               : \'Sz\',',
           '    \'Sz_total\'                                               : ' + Sz_total + ',',
           '    \'J\'                                                      : ' + J + ',',
           '    \'SWEEPS\'                                                 : ' + SWEEPS + ',',
@@ -1681,7 +1681,7 @@
           '    parms.append({',
           '        \'LATTICE\'                                                : "open chain lattice",',
           '        \'MODEL\'                                                  : "spin",',
-          '        \'CONSERVED_QUANTUMNUMBERS\'                              : \'N,Sz\',',
+          '        \'CONSERVED_QUANTUMNUMBERS\'                              : \'Sz\',',
           '        \'Sz_total\'                                              : ' + Sz_total + ',',
           '        \'J\'                                                     : ' + J + ',',
           '        \'SWEEPS\'                                                : ' + SWEEPS + ',',
@@ -1700,8 +1700,11 @@
         'input_file = pyalps.writeInputFiles(\'' + prefix + '\', parms)',
         'res = pyalps.runApplication(\'' + appName + '\', input_file, writexml=True)',
         'data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=\'' + prefix + '\'))',
-        'for s in data[0]:',
-        '    print(s.props[\'observable\'], \':\', s.y[0])'
+        'if not data:',
+        '    print("No output found — DMRG may have failed. Check ALPS ran correctly.")',
+        'else:',
+        '    for s in data[0]:',
+        '        print(s.props[\'observable\'], \':\', s.y[0])'
       ]).join('\n');
 
     var label = appName === 'mps_optim' ? 'MPS optimization' : 'DMRG';

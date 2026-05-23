@@ -220,24 +220,24 @@ class GenTest:
 
 
 GEN_TESTS: list[GenTest] = [
-    # ── DMRG (dmrg-01 tutorial) ───────────────────────────────────
+    # ── DMRG (dmrg-02 tutorial, standard spin model) ─────────────
     # Note: In the raw JS file, Python string literals use \' escaping, so
-    # 'N,Sz' appears as \'N,Sz\' and "N,Sz" appears as "N,Sz" (double-quoted parm line).
+    # 'Sz' appears as \'Sz\' and "Sz" appears as "Sz" (double-quoted parm line).
     GenTest(
         func_name="genDMRG",
         expected=[
-            # Both parm file and Python dict must have N,Sz (dmrg-01 tutorial)
-            '"N,Sz"',          # parm file line: CONSERVED_QUANTUMNUMBERS="N,Sz"
-            r"\'N,Sz\'",       # Python dict (JS-escaped): \'N,Sz\'
+            # Standard spin model uses only Sz (not N,Sz — N is invalid for MODEL="spin")
+            '"Sz"',            # parm file line: CONSERVED_QUANTUMNUMBERS="Sz"
+            r"\'Sz\'",         # Python dict (JS-escaped): \'Sz\'
             "open chain lattice",
             "dmrg",
             "MAXSTATES",
             "SWEEPS",
             "NUMBER_EIGENVALUES",
         ],
-        not_expected=[],
-        source="dmrg-01 tutorial (spin_one_half.py)",
-        desc="DMRG parm file and Python both use CONSERVED_QUANTUMNUMBERS='N,Sz'",
+        not_expected=['"N,Sz"', r"\'N,Sz\'"],
+        source="dmrg-02 tutorial (standard spin model uses CONSERVED_QUANTUMNUMBERS='Sz')",
+        desc="DMRG parm file and Python both use CONSERVED_QUANTUMNUMBERS='Sz' (not N,Sz)",
     ),
     # ── QMC / loop (mc-02c, mc-08 tutorials) ─────────────────────
     GenTest(
