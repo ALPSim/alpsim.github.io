@@ -10,12 +10,12 @@ The first tutorial is an introduction to an important topic in Monte Carlo simul
 
 ## Local updates
 
-We will start with local updates in an Ising model. We will simulate an Ising model on finite square lattices (L=2, 4, ..., 48) at the critical temperature $T_C=2.269186$ using **local** updates.
+We will simulate an Ising model on finite square lattices (L=2, 4, ..., 48) at the critical temperature $T_C=2.269186$ using **local** updates.
 This tutorial can be run either on the command line or in Python. We recommend the Python version on your local machine, and the command line version for large simulations on clusters.
 
 ## Setting up and running the simulation on the command line 
 
-To set up and run the simulation on the command line, we first create a parameter file that specifies the parameters of the simulation(s). The <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/parm1a" download>downloadable file</a> will be titled `parm1a` and its contents shall be:
+To set up and run the simulation on the command line, we first create a parameter file that specifies the parameters of the simulation(s). The <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/parm1a" download>downloadable file</a> will be titled `parm1a`, with the following contents:
 
 ```Python
 LATTICE="square lattice"
@@ -49,21 +49,21 @@ The simulation can be started on a single processor by running
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
-or on multiple processors (in our example 8) using MPI by
+or on multiple processors (eight in this example) using MPI:
 
 ```Python
 mpirun -np 8 spinmc --mpi  --Tmin 10 --write-xml parm1a.in.xml 
 ```
 
-(In the following examples we will refer to the single processor commands only.) By setting the argument `--Tmin 10`, we tell the scheduler to check if the simulation is finished every 10 seconds initially. (The time is then dynamically adapted by the scheduler according to the needs of the simulation.)
+(In the following examples we will refer to the single-processor commands only.) By setting the argument `--Tmin 10`, we tell the scheduler to check if the simulation is finished every 10 seconds initially. (The time is then dynamically adapted by the scheduler according to the needs of the simulation.)
 
-The progress of a simulation is saved in the XML output file as the simulation is run. If a simulation is halted, such as due to pressing Ctrl-C or reaching the CPU time limit, it may be continued by starting the simulation with the XML output file instead of the input job file. Since our input job file was named `parm1a.in.xml`, the output file will be named `parm1a.out.xml` and we may restart the simulation by running
+The progress of a simulation is saved in the XML output file as the simulation is run. If a simulation is halted, for example by pressing Ctrl-C or reaching the CPU time limit, it may be continued by starting the simulation with the XML output file instead of the input job file. Since our input job file was named `parm1a.in.xml`, the output file will be named `parm1a.out.xml` and we may restart the simulation by running
 
 ```Python
 spinmc --Tmin 10 --write-xml parm1a.out.xml
 ```
 
-The option "--write-xml" tells the simulation to store the results of each simulation also in an XML output file (`parm1a.task\[1-5\].out.xml`) which you can open from the job description file parm1a.out.xml using your XML browser or alternatively by converting the output to a text file using one of the following commands:
+The option "--write-xml" tells the simulation to store the results of each simulation also in an XML output file (`parm1a.task\[1-6\].out.xml`) which you can open from the job description file parm1a.out.xml using your XML browser or alternatively by converting the output to a text file using one of the following commands:
 
 ```Python
 firefox ./parm1a.out.xml
@@ -85,7 +85,7 @@ To obtain more detailed information on the simulation runs, such as to check the
 convert2xml parm1a.task*.out.run1
 ```
 
-which will generate the XML output files `parm1a.task\[1-6\].out.run1.xml` which we may open or convert to text just like the output XML files.
+which will generate the XML output files `parm1a.task\[1-6\].out.run1.xml`, which can be opened or converted to text just like the output XML files.
 
 Look at all six tasks and, by studying the binning analysis in the files `parm1a.task\[1-6\].out.run1.xml`, observe that for large lattices the errors no longer converge. To create plots, we recommend using the Python tools described below.
 
@@ -122,7 +122,7 @@ and convert this into an XML job file with the function
 input_file = pyalps.writeInputFiles('parm1a',parms)
 ```
 
-The input_file variable may be used as an input for `pyalps.runApplication` as shown below:
+The `input_file` variable may be used as an input for `pyalps.runApplication` as shown below:
 
 ```Python
 pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
@@ -137,14 +137,14 @@ binning = pyalps.loadBinningAnalysis(pyalps.getResultFiles(prefix='parm1a'),'|Ma
 binning = pyalps.flatten(binning)
 ```
 
-We may give each data set a label which will be displayed in any graph specifying the lattice size:
+We give each dataset a label that will appear in the plot legend to identify the lattice size:
 
 ```Python
 for dataset in binning:
     dataset.props['label'] = 'L='+str(dataset.props['L'])
 ```
 
-`pyalps.plot` functions will respect this. And finally we create a plot showing the binning analysis graphically:
+`pyalps.plot` functions will use these labels automatically. Finally, we create a plot showing the binning analysis:
 
 ```Python
 plt.figure()
@@ -168,7 +168,7 @@ for dataset in binning:
 plt.show()
 ```
 
-From the produced figure below, you can clearly see that the errors do not converge for large system sizes.
+From the figure below, you can clearly see that the errors do not converge for large system sizes.
 
 ![](/figs/mcs01binlocal.png)
 
@@ -182,7 +182,7 @@ We next repeat the simulations, but using cluster updates. We want to change thr
 | SWEEPS | 100000 |
 | UPDATE | "cluster" |
 
-To run the simulations we follow the same procedure as above, using either
+To run the simulations, we follow the same procedure as above, using either
 - <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/parm1b" download>`parm1b`</a> for the command-line input file, or
 - <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/tutorial1b.py" download>`tutorial1b.py`</a> for the Python script.
 
@@ -194,7 +194,7 @@ You will get curves looking like the ones below. Now the errors have converged a
 
 - Are the errors converged? (To check this convert the run files as described above.)
 - Why do longer autocorrelation times lead to slower error convergence?
-- On what system parameters do the autocorrelation times depend on? Check by changing parameters in the input file.
+- On what system parameters do the autocorrelation times depend? Check by changing parameters in the input file.
 - Can you explain why cluster updates are more efficient than local updates?
 
 
