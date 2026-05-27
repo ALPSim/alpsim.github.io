@@ -9,7 +9,7 @@ weight: 3
 Every Monte Carlo simulation starts from some initial configuration — often a random or fully ordered state — that is far from equilibrium.
 During the first phase of the run, the Markov chain relaxes towards the equilibrium distribution, and measurements taken during this *thermalization* period are biased by the choice of starting point.
 They must be discarded before computing averages.
-The number of sweeps needed for the system to lose memory of its initial state is set by the autocorrelation time (see [MC-01a](mc01a)); close to a phase transition, where correlations are long-ranged, thermalization can require many thousands of sweeps.
+The number of sweeps needed for the system to lose memory of its initial state is set by the autocorrelation time (see [MC-01a](../mc01a)); close to a phase transition, where correlations are long-ranged, thermalization can require many thousands of sweeps.
 
 This tutorial covers two related diagnostics:
 
@@ -109,7 +109,7 @@ data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 Convergence is a separate question from equilibration: even after the system has fully equilibrated, the statistical errors in the measured averages decrease only as $1/\sqrt{N}$ with the number of independent samples $N$.
 A convergence check verifies that the simulation has accumulated enough measurements for the error estimates to be reliable and stable.
 
-`pyalps.checkConvergence` tests whether the errors in the measured averages have stabilised.
+`pyalps.checkConvergence` tests whether the errors in the measured averages have stabilized.
 It is used in the same way as `checkSteadyState`:
 
 ```Python
