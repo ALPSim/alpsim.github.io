@@ -44,7 +44,7 @@ CONSERVED_QUANTUMNUMBERS="N,Sz"
 Sz_total=0
 J=1
 SWEEPS=4
-{L=32, MAXSTATES=40
+{L=32, MAXSTATES=100
 NUMBER_EIGENVALUES=2}
 ```
     
@@ -168,7 +168,7 @@ for run in data:
 Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors
 
 ```python
-print 'Gap:', energies[1]-energies[0]
+print('Gap:', energies[1]-energies[0])
 ```
 
 ### Extrapolating The Gap To The Thermodynamic Limit

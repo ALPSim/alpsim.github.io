@@ -219,7 +219,7 @@ and print them to the terminal.
 
 ```python
 for s in data[0]:
-    print s.props['observable'], ' : ', s.y[0]
+    print(s.props['observable'], ':', s.y[0])
 ```
 
 Additionally, we can load detailed data for each iteration step.
@@ -259,7 +259,7 @@ We now proceed to illustrate how to setup several runs in a single parameter fil
 ```python
 LATTICE="open chain lattice"
 SWEEPS=4
-CONSERVED_QUANTUMNUMBERS="Sz"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
 MODEL="spin", Sz_total=0
 J=1
 NUMBER_EIGENVALUES=1
@@ -304,7 +304,7 @@ After writing parameter files, running the dmrg application, and loading the res
 ```python
 for run in data:
     for s in run:
-        print s.props['observable'], ' : ', s.y[0]
+        print(s.props['observable'], ':', s.y[0])
 ```
 
 #### The one dimensional S=1 Heisenberg chain
@@ -410,7 +410,7 @@ LATTICE="open chain lattice with special edges 32"
 MODEL="spin"
 local_S0=0.5
 local_S1=1
-CONSERVED_QUANTUMNUMBERS="Sz"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
 Sz_total=0
 J=1 
 NUMBER_EIGENVALUES=1 
