@@ -6,34 +6,37 @@ toc: true
 cascade:
     type: docs
 ---
+这些教程涵盖 ALPS 提供的主要模拟方法，从经典和量子蒙特卡洛到张量网络与平均场方法。
+每个教程均以一个具体模型为例——通常是自旋链、Hubbard 模型或 Bose-Hubbard 系统——逐步讲解参数设置、运行模拟及分析输出的全过程。
+示例系统规模较小，笔记本电脑上每次计算可在数分钟内完成。
+所有教程均提供 Python 脚本；[Jupyter 笔记本](jupyter)版本持续扩充中，提供交互式学习体验。
 
-以下教程演示如何设置输入参数及收集模拟数据。示例模拟针对小规模系统设计，可在数分钟内获得结果。
-教程提供 Python 脚本和 Jupyter 笔记本两种形式（持续更新中）。
+## [蒙特卡洛模拟](mcs)
 
-<br>
-{{< hextra/feature-grid maxcolumns="2" >}}
-  {{< hextra/feature-card
-    title="蒙特卡洛方法"
-    link="mcs"
-  >}}
-  {{< hextra/feature-card
-    title="精确对角化"
-    link="ed"
-  >}}
-  {{< hextra/feature-card
-    title="密度矩阵重整化群 (DMRG)"
-    link="dmrg"
-  >}}
-  {{< hextra/feature-card
-    title="动力学平均场理论 (DMFT)"
-    link="dmft"
-  >}}
-  {{< hextra/feature-card
-    title="时间演化块消减 (TEBD)"
-    link="tebd"
-  >}}
-  {{< hextra/feature-card
-    title="Jupyter 笔记本"
-    link="jupyter"
-  >}}
-{{< /hextra/feature-grid >}}
+涵盖 ALPS 中各类蒙特卡洛算法的教程集合。
+从简单的 Metropolis 抽样与自相关分析出发，逐步介绍自旋和 Bose-Hubbard 模型的环算法、有向环量子蒙特卡洛、Worm 算法，以及扩展系综 Wang-Landau 抽样，并探讨经典与量子相变的数值研究。
+
+## [精确对角化](ed)
+
+针对小规模量子格点模型精确对角化的教程。
+内容包括稀疏 Lanczos 对角化、一维量子自旋系统的自旋能隙标度、谱函数与动态结构因子、临界谱的共形场论描述、阻挫自旋链附近的量子相变，以及用于完整能级统计的全矩阵对角化。
+
+## [密度矩阵重整化群 (DMRG)](dmrg)
+
+应用于一维量子系统的 DMRG 方法教程。
+系列教程介绍算法原理与收敛性，随后演示如何提取能隙、测量局域可观测量（如磁化轮廓），以及计算两点关联函数——这些是识别量子相与临界行为的关键物理量。
+
+## [动力学平均场理论 (DMFT)](dmft)
+
+DMFT 自洽循环及其量子杂质求解器的教程。
+在方法介绍之后，各教程分别讲解 CT-HYB 与 CT-INT 连续时间量子蒙特卡洛求解器、Hirsch-Fye 求解器、Mott 金属-绝缘体转变、轨道选择性 Mott 转变、有限温度外推、自定义格子几何，以及单格点 DMFT 中的反铁磁 Néel 转变。
+
+## [时间演化块消减 (TEBD)](tebd)
+
+基于矩阵乘积态对一维量子系统进行实时演化的教程。
+两个教程分别研究典型非平衡问题：硬核玻色子模型中的突然淬火，以及 XX 自旋链中畴壁的传播，展示量子淬火后纠缠熵与局域可观测量的动力学演化。
+
+## [Jupyter 笔记本](jupyter)
+
+按方法分类整理的 ALPS 教程交互式 Jupyter 笔记本版本。
+每个笔记本将代码、公式与图表集成于单一文档，可下载到本地运行，便于修改参数、即时探索结果。
