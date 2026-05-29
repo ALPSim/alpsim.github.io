@@ -37,6 +37,11 @@ After an introduction to the method, individual tutorials cover the CT-HYB and C
 Tutorials for real-time evolution of one-dimensional quantum systems using matrix product states.
 The two tutorials study prototypical non-equilibrium problems: a sudden quench in the hardcore boson model and the propagation of a domain wall in the XX spin chain, illustrating how entanglement and local observables evolve after a quantum quench.
 
+## [Custom Lattices and Models](lm)
+
+Tutorials for defining custom lattice geometries and model Hamiltonians using the ALPS XML format.
+These tutorials bridge the gap between the built-in ALPS library and the full generality of the lattice and model schema, showing how to specify any periodic lattice with an arbitrary unit cell and run standard or custom Hamiltonians on it.
+
 ## [Jupyter Notebooks](jupyter)
 
 Interactive Jupyter notebook versions of selected ALPS tutorials, organised by method.
