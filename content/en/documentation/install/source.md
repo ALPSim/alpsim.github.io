@@ -136,9 +136,15 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
-  $ cmake --build alps-build -j 8
+  $ cmake --build alps-build -j$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
   $ cmake --build alps-build -t test
   ```
+
+> **`-j` controls parallel compilation.** The expression above automatically uses all
+> logical CPU cores on both Linux (`nproc`) and macOS (`sysctl -n hw.logicalcpu`).
+> You can also set the number manually, e.g. `-j 8` for 8 cores.
+> Building ALPS including Boost from source typically takes **5–20 minutes** depending
+> on your hardware; the terminal will be busy and that is normal.
 
 > **Boost is downloaded automatically.** If `Boost_SRC_DIR` is not set, CMake fetches
 > Boost 1.87 during configuration (requires internet access). To build offline or reuse a
