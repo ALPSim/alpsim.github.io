@@ -151,8 +151,16 @@ $ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', sc
 > for whichever Python CMake will use.
 
 ### Download and Build
-We can now proceed to download and build the `ALPS` library. <br>
-In the snippet below, please replace `/path/to/install/directory` with the actual directory on your system you want ALPS to be installed.
+We can now proceed to download and build the `ALPS` library.
+In the snippet below, replace `</path/to/install/dir>` with the directory where you want ALPS installed.
+
+> **Before you run these commands, note two expected pauses:**
+> 1. **`cmake` configuration (~1–3 min):** CMake silently downloads Boost 1.87 (~130 MB)
+>    during configuration. The terminal will produce no output for a minute or two while
+>    the download completes — this is normal, do not interrupt it.
+> 2. **`cmake --build` (5–20 min):** Compiling ALPS and Boost from source takes several
+>    minutes even with all CPU cores. The terminal will be busy printing compiler lines
+>    throughout — also normal.
 
   ```ShellSession
   $ git clone https://github.com/alpsim/ALPS alps-src
@@ -160,6 +168,7 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
+  # ^ Boost (~130 MB) is downloaded here; no output for 1-3 min is normal
   $ cmake --build alps-build -j$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
   $ cmake --build alps-build -t test
   ```
@@ -167,12 +176,9 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 > **`-j` controls parallel compilation.** The expression above automatically uses all
 > logical CPU cores on both Linux (`nproc`) and macOS (`sysctl -n hw.logicalcpu`).
 > You can also set the number manually, e.g. `-j 8` for 8 cores.
-> Building ALPS including Boost from source typically takes **5–20 minutes** depending
-> on your hardware; the terminal will be busy and that is normal.
 
-> **Boost is downloaded automatically.** If `Boost_SRC_DIR` is not set, CMake fetches
-> Boost 1.87 during configuration (requires internet access). To build offline or reuse a
-> previously extracted archive, pass the path explicitly:
+> **Offline or slow-connection build:** By default CMake fetches Boost 1.87 at configure
+> time. To avoid the download, extract the archive manually first and pass the path:
 > ```ShellSession
 > $ cmake -S alps-src -B alps-build                                     \
 >        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
