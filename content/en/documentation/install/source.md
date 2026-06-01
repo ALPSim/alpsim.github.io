@@ -106,10 +106,25 @@ $ pip3 install numpy scipy
 ### Verify Dependencies
 
  ```ShellSession
-$ gcc -v #  must be >= 10.5.0
-$ cmake --version # must be >= 3.18
-$ mpirun --version # OpenMPI 4.0 or MPICH 4
+$ gcc -v              # must be >= 10.5.0
+$ cmake --version     # must be >= 3.18
+$ mpirun --version    # OpenMPI 4.0 or MPICH 4
+$ python3 --version   # must be >= 3.9
+$ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
 ```
+
+> **macOS — which Python will CMake use?** CMake on macOS searches Apple's framework
+> paths before `$PATH`, so it may silently select the Xcode-bundled Python 3.9 even if
+> you have a newer Python installed via Homebrew or MacPorts. During `cmake` configuration,
+> look for a line like:
+> ```
+> -- Found Python: /path/to/python (found version "X.Y.Z")
+> ```
+> If the path or version is not what you expect, pin it explicitly by adding
+> `-DPython3_EXECUTABLE=/path/to/your/python3` to your `cmake` command.
+> Typical paths are `/opt/homebrew/bin/python3` (Homebrew) or
+> `/opt/local/bin/python3` (MacPorts). Make sure `numpy` and `scipy` are installed
+> for whichever Python CMake will use.
 
 ### Download and Build
 We can now proceed to download and build the `ALPS` library. <br>
@@ -140,7 +155,7 @@ In the snippet below, please replace `/path/to/install/directory` with the actua
 ### Troubleshooting
 <details>
 * **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
-* **Python errors** <br> Ensure you are using Python 3.9 at a minimum. Note: some installations (e.g. macOS) use `pip3` instead of pip. Refer to the [python website](https://www.python.org/) for support in installing the correct version.
+* **Python errors** <br> Ensure Python ≥ 3.9 is installed and that `numpy` and `scipy` are installed for the same Python that CMake selects. On macOS, CMake may pick the Xcode-bundled Python rather than your Homebrew/MacPorts Python — check the `Found Python:` line in the CMake output and pin the interpreter with `-DPython3_EXECUTABLE=/path/to/python3` if needed (see the [Verify Dependencies](#verify-dependencies) step).
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
 * **Boost errors** <br> Building ALPS' Python bindings against NumPy ≥ 2.0 requires Boost ≥ 1.87 (NumPy 2.0 introduced API changes that only Boost 1.87+ handles). Boost 1.76–1.86 work only with NumPy < 2.0. See the [build notes](#build-notes) for tested compiler/Boost/Python combinations.
 
@@ -168,15 +183,27 @@ On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler,
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
 ```
 
-**Python selection:** CMake may pick up the Xcode system Python (3.9) rather than your
-Homebrew or MacPorts Python. If you see the wrong Python version during configuration,
-pin it explicitly:
+**Python selection:** On macOS, CMake searches Apple's framework paths before `$PATH`
+and will often select the Xcode-bundled Python 3.9
+(`/Applications/Xcode.app/.../python3.9`) even when a newer Python is installed via
+Homebrew or MacPorts and appears first in your shell. Verify which Python CMake
+found by looking for the `Found Python:` line printed during configuration. If it is not
+the one you want, pin it explicitly — do not rely on `$(which python3)` as it may still
+resolve to the wrong interpreter. Use the full path instead:
 
 ```ShellSession
-$ cmake -S alps-src -B alps-build \
-       ... \
-       -DPython3_EXECUTABLE=$(which python3)
+# Homebrew (Apple Silicon):
+$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/homebrew/bin/python3
+
+# Homebrew (Intel):
+$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/usr/local/bin/python3
+
+# MacPorts:
+$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python3
 ```
+
+Whichever Python CMake uses, make sure `numpy` and `scipy` are installed for it
+(`/path/to/that/python3 -m pip install numpy scipy`).
 
 {{% /tab %}}
 
