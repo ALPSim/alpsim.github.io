@@ -278,7 +278,32 @@ To install the code run:
   ```ShellSession
   $ cmake --install alps-build
   ```
-Your install directory will be created; if everything was successful you can find ALPS executables such as `spinmc` or `fulldiag` under the bin directory of your installation path.
+
+### Set up your environment
+
+The install directory is self-contained but your shell does not know about it yet.
+ALPS provides a setup script that adds the right directories to `PATH`,
+`LD_LIBRARY_PATH`, and `PYTHONPATH`. Source it once before using ALPS:
+
+```ShellSession
+# bash / zsh:
+$ source </path/to/install/dir>/bin/alpsvars.sh
+
+# csh / tcsh:
+$ source </path/to/install/dir>/bin/alpsvars.csh
+```
+
+To avoid running this command in every new terminal session, add the `source` line
+to your shell's startup file (`~/.bashrc`, `~/.zshrc`, or `~/.cshrc`).
+
+**Verify the installation** by running one of the ALPS executables:
+
+```ShellSession
+$ spinmc --help
+```
+
+If the command is found and prints a help message, ALPS is installed and your
+environment is set up correctly.
 
 {{% /steps %}}
 
