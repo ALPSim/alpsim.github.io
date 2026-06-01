@@ -70,6 +70,38 @@ $ pip3 install numpy scipy
 > $ tar -xzf boost_1_87_0.tar.gz
 > ```
 </details>
+<details>
+<summary><strong> macOS (via MacPorts)</strong> </summary>
+
+```ShellSession
+$ sudo port selfupdate
+$ sudo port install cmake \
+                   hdf5 \
+                   OpenBLAS \
+                   openmpi-clang20   # see note below about choosing a variant
+$ sudo port select --set mpi openmpi-clang20-fortran
+
+# install Python libs:
+$ pip3 install numpy scipy
+```
+
+> **Choosing an OpenMPI variant:** MacPorts ships a separate port for each compiler
+> version, named `openmpi-<compiler><version>` (e.g. `openmpi-clang20`,
+> `openmpi-gcc15`). The `clang20` variant shown above matches the LLVM Clang 20 port
+> and works alongside Apple's Xcode clang. If you use a different compiler, install the
+> matching variant and adjust the `port select` command accordingly.
+>
+> The `port select` step is required: without it, the bare `mpirun`, `mpicc`, and
+> `mpicxx` wrappers that CMake looks for will not exist.
+
+> **Note:** Do not install Boost via MacPorts. ALPS builds Boost from source to ensure
+> ABI compatibility. If `Boost_SRC_DIR` is not set, CMake auto-downloads Boost 1.87
+> during configuration (requires internet access). Alternatively, download it manually:
+> ```ShellSession
+> $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
+> $ tar -xzf boost_1_87_0.tar.gz
+> ```
+</details>
 
 ### Verify Dependencies
 
