@@ -206,12 +206,31 @@ The following combinations of `Boost`, Python and the C++ compiler have been tes
   For **NumPy ≥ 2.0**, `Boost` 1.87.0 or later is required for ALPS' Boost.Python bindings (CMake downloads this automatically).
 {{% /tab %}}
 {{% tab %}}
-ALPS has been tested on ARM-based MacOS systems using both the default compiler and the `Homebrew` gcc compiler (with `Boost` 1.86.0, NumPy < 2.0).
-On MacOS >=14.6 in order to successfully build ALPS using Homebrew gcc compiler, the following environment variable must be set:
+ALPS has been tested on ARM-based macOS systems using Apple's Xcode Clang and
+third-party compilers (Homebrew GCC, MacPorts GCC/Clang) with `Boost` 1.86.0+.
+
+**`SDKROOT` — when and how to set it**
+
+`SDKROOT` tells the compiler where to find macOS system headers and frameworks.
+Apple's own Clang (the `cc`/`c++` you get after installing Xcode or Command Line Tools)
+locates the SDK automatically — **you do not need to set `SDKROOT` when using Apple Clang**.
+
+Third-party compilers (Homebrew GCC, MacPorts GCC or LLVM Clang, etc.) do not know
+where the SDK lives and will fail with errors about missing system headers. Before
+running `cmake`, set:
 
 ```ShellSession
-export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/
+export SDKROOT=$(xcrun --show-sdk-path)
 ```
+
+`xcrun --show-sdk-path` always returns the correct path for whichever Xcode or
+Command Line Tools version you have installed, regardless of macOS version. Do not
+hardcode a version-specific path such as `MacOSX14.sdk` — it will break whenever
+Xcode is updated.
+
+To check which compiler CMake will use, look for the `C compiler identification` line
+at the start of the cmake output. If it says `AppleClang`, you do not need `SDKROOT`.
+If it says `GNU` or `Clang` (without "Apple"), set it as shown above.
 
 **Python selection:** On macOS, CMake searches Apple's framework paths before `$PATH`
 and will often select the Xcode-bundled Python 3.9
