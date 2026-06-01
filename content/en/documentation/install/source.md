@@ -46,9 +46,17 @@ $ pip install numpy scipy # python libraries
 $ python3 -m pip install numpy scipy
 ```
 
-> **Note:** Do not install Boost via `apt`. ALPS builds Boost from source to ensure
-> ABI compatibility. CMake auto-downloads Boost 1.87 during configuration (requires
-> internet access). See the offline alternative in the build step below if needed.
+> **Do not install Boost via `apt`.** ALPS must compile Boost from source for two reasons:
+> 1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
+>    `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; the
+>    `libboost-dev` packages do not set these, causing link errors.
+> 2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
+>    exact Python interpreter that ALPS will use. Pre-built packages target the system
+>    Python and will silently mismatch if you use a different one.
+>
+> CMake handles both automatically: it downloads and compiles Boost 1.87 during
+> configuration (requires internet access). See the offline alternative in the build
+> step below if needed.
 </details>
 <details>
 <summary><strong> macOS (via Homebrew)</strong> </summary>
@@ -62,9 +70,17 @@ $ brew install cmake hdf5 \
 $ pip3 install numpy scipy
 ```
 
-> **Note:** Do not install Boost via Homebrew. ALPS builds Boost from source to ensure
-> ABI compatibility. If `Boost_SRC_DIR` is not set, CMake auto-downloads Boost 1.87
-> during configuration (requires internet access). Alternatively, download it manually:
+> **Do not install Boost via Homebrew.** ALPS must compile Boost from source for two reasons:
+> 1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
+>    `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; the
+>    Homebrew `boost` formula does not set these, causing link errors.
+> 2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
+>    exact Python interpreter that ALPS will use. The Homebrew Boost targets Homebrew's
+>    own Python and will silently mismatch any other interpreter.
+>
+> CMake handles both automatically: if `Boost_SRC_DIR` is not set, it downloads and
+> compiles Boost 1.87 during configuration (requires internet access). To build offline
+> or reuse a previously extracted archive, download it manually first:
 > ```ShellSession
 > $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
 > $ tar -xzf boost_1_87_0.tar.gz
@@ -94,9 +110,17 @@ $ pip3 install numpy scipy
 > The `port select` step is required: without it, the bare `mpirun`, `mpicc`, and
 > `mpicxx` wrappers that CMake looks for will not exist.
 
-> **Note:** Do not install Boost via MacPorts. ALPS builds Boost from source to ensure
-> ABI compatibility. If `Boost_SRC_DIR` is not set, CMake auto-downloads Boost 1.87
-> during configuration (requires internet access). Alternatively, download it manually:
+> **Do not install Boost via MacPorts.** ALPS must compile Boost from source for two reasons:
+> 1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
+>    `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; the
+>    MacPorts `boost` ports do not set these, causing link errors.
+> 2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
+>    exact Python interpreter that ALPS will use. MacPorts Boost targets MacPorts' own
+>    Python and will silently mismatch any other interpreter.
+>
+> CMake handles both automatically: if `Boost_SRC_DIR` is not set, it downloads and
+> compiles Boost 1.87 during configuration (requires internet access). To build offline
+> or reuse a previously extracted archive, download it manually first:
 > ```ShellSession
 > $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
 > $ tar -xzf boost_1_87_0.tar.gz
