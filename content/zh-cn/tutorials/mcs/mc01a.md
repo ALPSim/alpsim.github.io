@@ -25,7 +25,7 @@ This tutorial can be run either on the command line or in Python. We recommend t
 
 To set up and run the simulation on the command line, we first create a parameter file that specifies the parameters of the simulation(s). The <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/parm1a" download>downloadable file</a> will be titled `parm1a`, with the following contents:
 
-```Python
+```
 LATTICE="square lattice"
 T=2.269186
 J=1
@@ -45,7 +45,7 @@ This actually specifies six simulation tasks in one simulation job, all tasks ha
 
 ALPS expects one *job file* to specify the job as a whole and a *task file* for each simulation task within it, all in XML format. So in order to run the simulation, we first need to convert this parameter file. ALPS provides a simple tool to do this: We can just run
 
-```Python
+```
 parameter2xml parm1a
 ```
 
@@ -53,13 +53,13 @@ in the folder of the parameter file. This will generate six task files (one for 
 
 The simulation can be started on a single processor by running
 
-```Python
+```
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
 or on multiple processors (eight in this example) using MPI:
 
-```Python
+```
 mpirun -np 8 spinmc --mpi  --Tmin 10 --write-xml parm1a.in.xml 
 ```
 
@@ -67,13 +67,13 @@ mpirun -np 8 spinmc --mpi  --Tmin 10 --write-xml parm1a.in.xml
 
 The progress of a simulation is saved in the XML output file as the simulation is run. If a simulation is halted, for example by pressing Ctrl-C or reaching the CPU time limit, it may be continued by starting the simulation with the XML output file instead of the input job file. Since our input job file was named `parm1a.in.xml`, the output file will be named `parm1a.out.xml` and we may restart the simulation by running
 
-```Python
+```
 spinmc --Tmin 10 --write-xml parm1a.out.xml
 ```
 
 The option "--write-xml" tells the simulation to store the results of each simulation also in an XML output file (`parm1a.task\[1-6\].out.xml`) which you can open from the job description file parm1a.out.xml using your XML browser or alternatively by converting the output to a text file using one of the following commands:
 
-```Python
+```
 firefox ./parm1a.out.xml
 convert2text parm1a.out.xml
 ```
@@ -82,14 +82,13 @@ The results of a single task stored, for example, in `parm1a.task1.out.xml`, can
 
 - Linux: `firefox ./parm1a.task1.out.xml`
 - MacOS: `open -a safari parm1a.task1.out.xml`
-- Windows: `"C:\Program Files\Internet Explorer\iexplore.exe" parm1a.task1.out.xml`
-- Text output on Linux or MacOS: `convert2text parm1a.task1.out.xml`
+- Text output: `convert2text parm1a.task1.out.xml`
 
 Note that writing XML files can be very slow if you perform many measurements, and it is then better to work with the binary results in the HDF5 files.
 
 To obtain more detailed information on the simulation runs, such as to check the convergence of errors, we can convert the run files of the tasks (`parm1a.task\[1-6\].out.run1`) into XML files by typing
 
-```Python
+```
 convert2xml parm1a.task*.out.run1
 ```
 
@@ -182,17 +181,87 @@ From the figure below, you can clearly see that the errors do not converge for l
 
 ## Cluster updates
 
-We next repeat the simulations, but using cluster updates. We want to change three parameters:
+Near the critical temperature, the correlation length $\xi$ grows large and local updates become highly inefficient: each accepted move flips a single spin, so it takes $O(\xi^2)$ sweeps merely to decorrelate two neighbouring spins.
+This *critical slowing down* means the autocorrelation time diverges as
+$$\tau \sim L^z,$$
+where $z \approx 2$ for local updates but $z \approx 0.25$ for cluster algorithms such as Wolff or Swendsen–Wang.
+Cluster updates flip entire correlated regions at once, essentially eliminating critical slowing down for the quantities measured here.
 
-| **Name** |  |
+We therefore repeat the simulations with cluster updates, using fewer thermalization sweeps (the system decorrelates much faster) but more measurement sweeps to accumulate good statistics:
+
+| **Parameter** | **Value** |
 | :------- | :------- |
 | THERMALIZATION | 1000 |
 | SWEEPS | 100000 |
 | UPDATE | "cluster" |
 
-To run the simulations, we follow the same procedure as above, using either
-- <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/parm1b" download>`parm1b`</a> for the command-line input file, or
-- <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/tutorial1b.py" download>`tutorial1b.py`</a> for the Python script.
+### Command line
+
+The downloadable parameter file <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/parm1b" download>`parm1b`</a> has the following contents:
+
+```
+LATTICE="square lattice"
+T=2.269186
+J=1
+THERMALIZATION=1000
+SWEEPS=100000
+UPDATE="cluster"
+MODEL="Ising"
+{L=2;}
+{L=4;}
+{L=8;}
+{L=16;}
+{L=32;}
+{L=48;}
+```
+
+Convert and run exactly as before:
+
+```
+parameter2xml parm1b
+spinmc --Tmin 10 --write-xml parm1b.in.xml
+```
+
+### Python
+
+The script <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01-autocorrelations/tutorial1b.py" download>`tutorial1b.py`</a> follows the same structure as `tutorial1a.py`, with the updated parameters and `parm1b` as the file prefix:
+
+```Python
+import pyalps
+import matplotlib.pyplot as plt
+import pyalps.plot
+
+parms = []
+for l in [2,4,8,16,32,48]:
+    parms.append(
+        {
+            'LATTICE'        : "square lattice",
+            'T'              : 2.269186,
+            'J'              : 1,
+            'THERMALIZATION' : 1000,
+            'SWEEPS'         : 100000,
+            'UPDATE'         : "cluster",
+            'MODEL'          : "Ising",
+            'L'              : l
+        }
+    )
+
+input_file = pyalps.writeInputFiles('parm1b', parms)
+pyalps.runApplication('spinmc', input_file, Tmin=5, writexml=True)
+
+binning = pyalps.loadBinningAnalysis(pyalps.getResultFiles(prefix='parm1b'), '|Magnetization|')
+binning = pyalps.flatten(binning)
+
+for dataset in binning:
+    dataset.props['label'] = 'L=' + str(dataset.props['L'])
+
+plt.figure()
+plt.xlabel('binning level')
+plt.ylabel('Error of |Magnetization|')
+pyalps.plot.plot(binning)
+plt.legend()
+plt.show()
+```
 
 You will get curves looking like the ones below. Now the errors have converged and can be trusted.
 
