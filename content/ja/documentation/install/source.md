@@ -20,7 +20,7 @@ ALPSはいくつかの外部ライブラリに依存しています。<br>
 | HDF5     | 1.10.0 | `libhdf5-dev` |
 | CMake | 3.18 | `cmake` |
 | C++ コンパイラ | GCC 10.5.0 または Clang 13.0.1 | `build-essential` |
-| Boost | 1.76 <br>*(NumPy ≥ 2.0 の場合は 1.87 が必要)* | 下記参照 |
+| Boost | 1.76 <br>*(NumPy ≥ 2.0 向けに ALPS Python バインディングをビルドする場合は 1.87 が必要)* | 下記参照 |
 | MPI | OpenMPI 4.0 **または** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
 | BLAS | 0.3 | `libopenblas-dev` |
 | Python | 3.9 | [python.org](https://www.python.org/) |
@@ -46,7 +46,7 @@ $ python3 -m pip install numpy scipy
 
 > **`apt`でBoostをインストールしないでください。** ALPSはBoostをソースからコンパイルする必要があります。理由は2つあります：
 > 1. **カスタムコンパイラフラグ** — ALPSはC++17/20互換性のために`-DBOOST_NO_AUTO_PTR`と`-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF`を必要としますが、`libboost-dev`パッケージはこれらを設定しないため、リンクエラーが発生します。
-> 2. **Python ABIの一致** — `Boost.Python`コンポーネントはALPSが使用するPythonインタープリタと全く同じものに対してコンパイルされる必要があります。パッケージマネージャーのビルドはシステムPythonを対象としており、異なるインタープリタと一致しない場合があります。
+> 2. **Python ABIの一致** — `Boost.Python`コンポーネントはALPSが使用するPythonインタープリタと全く同じものに対してコンパイルされる必要があります。パッケージマネージャーのビルドはシステムPythonを対象としており、別のインタープリタを使うと、警告なしにABIが一致しなくなることがあります。
 >
 > CMakeは両方を自動的に処理します：`Boost_SRC_DIR`が設定されていない場合、設定時にBoost 1.87をダウンロードしてコンパイルします（インターネット接続が必要）。オフラインビルドの代替については、ビルドステップを参照してください。
 </details>
@@ -65,7 +65,7 @@ $ pip3 install numpy scipy
 
 > **HomebrewでBoostをインストールしないでください。** ALPSはBoostをソースからコンパイルする必要があります。理由は2つあります：
 > 1. **カスタムコンパイラフラグ** — ALPSはC++17/20互換性のために`-DBOOST_NO_AUTO_PTR`と`-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF`を必要としますが、Homebrewの`boost`フォーミュラはこれらを設定しないため、リンクエラーが発生します。
-> 2. **Python ABIの一致** — `Boost.Python`コンポーネントはALPSが使用するPythonインタープリタと全く同じものに対してコンパイルされる必要があります。HomebrewのBoostはHomebrew独自のPythonを対象としており、他のインタープリタと一致しない場合があります。
+> 2. **Python ABIの一致** — `Boost.Python`コンポーネントはALPSが使用するPythonインタープリタと全く同じものに対してコンパイルされる必要があります。HomebrewのBoostはHomebrew独自のPythonを対象としており、別のインタープリタを使うと、警告なしにABIが一致しなくなることがあります。
 >
 > CMakeは両方を自動的に処理します：`Boost_SRC_DIR`が設定されていない場合、設定時にBoost 1.87をダウンロードしてコンパイルします（インターネット接続が必要）。オフラインビルドまたは既存のアーカイブを使用する場合は、手動でダウンロードしてください：
 > ```ShellSession
@@ -91,11 +91,11 @@ $ pip3 install numpy scipy
 
 > **OpenMPIバリアントの選択:** MacPortsはコンパイラバージョンごとに個別のポートを提供します（`openmpi-<compiler><version>`の形式、例：`openmpi-clang20`、`openmpi-gcc15`）。上記の`clang20`バリアントはLLVM Clang 20ポートに対応しており、XcodeのApple Clangと共存できます。異なるコンパイラを使用する場合は、対応するバリアントをインストールし、`port select`コマンドを適宜変更してください。
 >
-> `port select`ステップは必須です：これを実行しないと、CMakeが検索するベアの`mpirun`、`mpicc`、`mpicxx`ラッパーが存在しません。
+> `port select`ステップは必須です：これを実行しないと、CMakeが探す`mpirun`、`mpicc`、`mpicxx`を名前だけでは実行できません。
 
 > **MacPortsでBoostをインストールしないでください。** ALPSはBoostをソースからコンパイルする必要があります。理由は2つあります：
 > 1. **カスタムコンパイラフラグ** — ALPSはC++17/20互換性のために`-DBOOST_NO_AUTO_PTR`と`-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF`を必要としますが、MacPortsの`boost`ポートはこれらを設定しないため、リンクエラーが発生します。
-> 2. **Python ABIの一致** — `Boost.Python`コンポーネントはALPSが使用するPythonインタープリタと全く同じものに対してコンパイルされる必要があります。MacPortsのBoostはMacPorts独自のPythonを対象としており、他のインタープリタと一致しない場合があります。
+> 2. **Python ABIの一致** — `Boost.Python`コンポーネントはALPSが使用するPythonインタープリタと全く同じものに対してコンパイルされる必要があります。MacPortsのBoostはMacPorts独自のPythonを対象としており、別のインタープリタを使うと、警告なしにABIが一致しなくなることがあります。
 >
 > CMakeは両方を自動的に処理します：`Boost_SRC_DIR`が設定されていない場合、設定時にBoost 1.87をダウンロードしてコンパイルします（インターネット接続が必要）。オフラインビルドまたは既存のアーカイブを使用する場合は、手動でダウンロードしてください：
 > ```ShellSession
@@ -125,8 +125,8 @@ $ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', sc
 ALPSライブラリのダウンロードとビルドを開始します。
 以下のコマンドでは、`</path/to/install/dir>`を実際のインストールディレクトリに置き換えてください。
 
-> **これらのコマンドを実行する前に、2つの待機が予想されることを確認してください：**
-> 1. **`cmake`設定（約1〜3分）：** CMakeは設定時にBoost 1.87（約130 MB）を暗黙的にダウンロードします。ダウンロード完了まで1〜2分間ターミナルに出力が表示されませんが、これは正常です。中断しないでください。
+> **これらのコマンドを実行する前に、次の2か所で待ち時間が発生することに注意してください：**
+> 1. **`cmake`設定（約1〜3分）：** CMakeは設定時にBoost 1.87（約130 MB）を自動的にダウンロードします。ダウンロード完了まで1〜2分間ターミナルに出力が表示されませんが、これは正常です。中断しないでください。
 > 2. **`cmake --build`（5〜20分）：** ALPSとBoostをソースからコンパイルするには、全CPUコアを使用しても数分かかります。ターミナルはコンパイラの出力で埋め尽くされます — これも正常です。
 
 ```ShellSession
@@ -157,7 +157,7 @@ $ cmake --build alps-build -t test
 * **別のMPI/BLASが必要ですか？** <br> 上記のパッケージ名をクラスタのモジュール（例: [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), 等）に置き換えてください。[CMake](https://cmake.org/)はこれらのパッケージの位置を自動検出し、Makefileにコンパイル指示を生成します。
 * **Pythonエラー** <br> Python ≥ 3.9がインストールされており、CMakeが選択したPythonと同じものに`numpy`と`scipy`がインストールされていることを確認してください。macOSでは、CMakeがHomebrew/MacPortsのPythonではなくXcodeに同梱されたPythonを選択することがあります。CMake出力の`Found Python:`行を確認し、必要に応じて`-DPython3_EXECUTABLE=/path/to/python3`でインタープリタを指定してください（[依存関係の確認](#依存関係の確認)ステップを参照）。
 * **MPIのバージョン不一致？** <br> CMakeが使用するMPIバージョンが`mpirun --version`の結果と一致していることを確認してください。
-* **Boostエラー** <br> NumPy ≥ 2.0に対してALPSのPythonバインディングをビルドする場合はBoost ≥ 1.87が必要です（NumPy 2.0で導入されたAPIの変更はBoost 1.87以降のみが対応しています）。Boost 1.76〜1.86はNumPy < 2.0でのみ動作します。テスト済みの組み合わせについてはビルド注意事項を参照してください。
+* **Boostエラー** <br> NumPy ≥ 2.0に対してALPSのPythonバインディングをビルドする場合はBoost ≥ 1.87が必要です（NumPy 2.0で導入されたAPIの変更はBoost 1.87以降のみが対応しています）。Boost 1.76〜1.86はNumPy < 2.0でのみ動作します。テスト済みの組み合わせについては[ビルド注意事項](#ビルド注意事項)を参照してください。
 
 </details>
 
@@ -173,7 +173,7 @@ $ cmake --build alps-build -t test
   - Clang 14.0.0, Python 3.10.14 (NumPy < 2.0), Boost 1.81.0, 1.86.0
   - Clang 15.0.7, Python 3.10.14 (NumPy < 2.0), Boost 1.81.0, 1.86.0
 
-  **NumPy ≥ 2.0** の場合、ALPSのBoost.PythonバインディングにはBoost 1.87.0以降が必要です（CMakeが自動でダウンロードします）。
+  **NumPy ≥ 2.0** 向けに ALPS Python バインディングをビルドする場合は、Boost 1.87.0以降が必要です（CMakeが自動でダウンロードします）。
 {{% /tab %}}
 {{% tab %}}
 ALPSはARMベースのmacOSシステムで、Apple XcodeのClangとサードパーティコンパイラ（Homebrew GCC、MacPorts GCC/Clang）でBoost 1.86.0以降を使用してテスト済みです。
@@ -229,7 +229,7 @@ $ cmake --install alps-build
 
 ### 環境設定
 
-インストールディレクトリは自己完結していますが、シェルはその場所をまだ認識していません。ALPSは`PATH`、`LD_LIBRARY_PATH`、`PYTHONPATH`に適切なディレクトリを追加するセットアップスクリプトを提供しています。ALPSを使用する前に一度ソースとして読み込んでください：
+インストール先のディレクトリに必要なファイルがすべて含まれていますが、まだシェルからは認識されていません。ALPSは`PATH`、`LD_LIBRARY_PATH`、`PYTHONPATH`に適切なパスを追加するセットアップスクリプトを提供しています。ALPSを使用する前に一度 source コマンドで読み込んでください：
 
 ```ShellSession
 # bash / zsh:
