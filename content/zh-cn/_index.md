@@ -9,7 +9,7 @@ toc: true
 
 ## 欢迎使用 ALPS 软件包
 
-ALPS（物理模拟算法与程序库）软件包致力于为凝聚态系统（包括玻色子、费米子和自旋系统）的数值模拟提供经过充分测试、稳定且标准化的程序组件。这些程序组件构成了高性能代码的核心模块。
+ALPS（物理模拟算法与程序库）是一款面向量子和经典凝聚态系统数值模拟的开源软件包。它提供了适用于自旋、玻色子和费米子格点模型的一流量子算法的生产级实现。Python 接口与标准化文件格式使模拟的搭建、运行（笔记本电脑或高性能集群均可）以及结果分析变得简便高效。
 
 <div class="cta-buttons" style="text-align:left;width:100%;">
 {{< cta-button text="快速开始" link="documentation/start/intro" icon="build"  prim="yes" >}}
