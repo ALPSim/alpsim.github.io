@@ -44,10 +44,6 @@ languages:
           name: Events
           pageRef: /events
           weight: 5
-        - identifier: /opportunities
-          name: Opportunities
-          pageRef: /opportunities
-          weight: 6
         - identifier: govern
           name: Governance
           pageRef: /govern
@@ -113,10 +109,6 @@ languages:
           name: 活动日程
           pageRef: /events
           weight: 5
-        - identifier: /opportunities
-          name: 招聘信息
-          pageRef: /opportunities
-          weight: 6
         - identifier: govern
           name: 领导团队
           pageRef: /govern
@@ -182,10 +174,6 @@ languages:
           name: イベント
           pageRef: /events
           weight: 5
-        - identifier: /opportunities
-          name: 採用情報
-          pageRef: /opportunities
-          weight: 6
         - identifier: govern
           name: 運営体制
           pageRef: /govern
