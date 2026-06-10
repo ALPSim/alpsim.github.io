@@ -14,3 +14,16 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-D0D8LZX95R');
 </script>
+
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+<!-- ALPS custom styles -->
+{{- $alps := resources.Get "css/alps.css" -}}
+{{- if hugo.IsProduction -}}
+  {{- $alps = $alps | minify | fingerprint -}}
+  <link href="{{ $alps.RelPermalink }}" rel="stylesheet" integrity="{{ $alps.Data.Integrity }}" />
+{{- else -}}
+  <link href="{{ $alps.RelPermalink }}" rel="stylesheet" />
+{{- end -}}

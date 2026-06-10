@@ -1,6 +1,7 @@
 :root {
   --primary-hue: 402deg;
   --primary-saturation: 50%;
+  --primary-lightness: 45%;
   --navbar-height: 4rem;
   --menu-height: 3.75rem;
   --button-width: 210px;
