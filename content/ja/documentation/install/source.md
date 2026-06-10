@@ -163,8 +163,8 @@ $ cmake --build alps-build -t test
 
 #### ビルド注意事項
 
-{{% tabs items="Linux,Mac" %}}
-{{% tab %}}
+{{% tabs %}}
+{{% tab name="Linux" %}}
 以下のBoost、Python、C++コンパイラの組み合わせがテスト済みです：
   - GCC 10.5.0, Python 3.9.19 (NumPy < 2.0), Boost 1.76.0
   - GCC 11.4.0, Python 3.10.14 (NumPy < 2.0), Boost 1.81.0, 1.86.0
@@ -175,7 +175,7 @@ $ cmake --build alps-build -t test
 
   **NumPy ≥ 2.0** 向けに ALPS Python バインディングをビルドする場合は、Boost 1.87.0以降が必要です（CMakeが自動でダウンロードします）。
 {{% /tab %}}
-{{% tab %}}
+{{% tab name="Mac" %}}
 ALPSはARMベースのmacOSシステムで、Apple XcodeのClangとサードパーティコンパイラ（Homebrew GCC、MacPorts GCC/Clang）でBoost 1.86.0以降を使用してテスト済みです。
 
 **`SDKROOT` — いつ、どのように設定するか**

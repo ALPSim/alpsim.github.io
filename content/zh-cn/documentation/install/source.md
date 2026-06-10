@@ -161,8 +161,8 @@ $ cmake --build alps-build -t test
 
 #### 编译说明
 
-{{% tabs items="Linux,Mac" %}}
-{{% tab %}}
+{{% tabs %}}
+{{% tab name="Linux" %}}
 以下 Boost、Python 和 C++ 编译器的组合已通过测试：
   - GCC 10.5.0, Python 3.9.19 (NumPy < 2.0), `Boost` 1.76.0
   - GCC 11.4.0, Python 3.10.14 (NumPy < 2.0), `Boost` 1.81.0, 1.86.0
@@ -173,7 +173,7 @@ $ cmake --build alps-build -t test
 
   **NumPy ≥ 2.0** 时，ALPS 的 Boost.Python 绑定需要 Boost 1.87.0 或更高版本（CMake 自动下载）。
 {{% /tab %}}
-{{% tab %}}
+{{% tab name="Mac" %}}
 ALPS 已在 ARM 架构的 macOS 系统上通过 Apple Xcode Clang 和第三方编译器（Homebrew GCC、MacPorts GCC/Clang）使用 Boost 1.86.0+ 完成测试。
 
 **`SDKROOT` — 何时以及如何设置**

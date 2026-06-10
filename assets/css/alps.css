@@ -1,6 +1,7 @@
 :root {
   --primary-hue: 402deg;
   --primary-saturation: 50%;
+  --primary-lightness: 45%;
   --navbar-height: 4rem;
   --menu-height: 3.75rem;
   --button-width: 210px;
@@ -174,51 +175,61 @@
     margin-top: var(--bs-gutter-y)
 }
 
-.btn-primary {
-    background-color: hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity)) !important;
-    border: hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity))px solid !important;
-    --tw-text-opacity: 1;
-    color: rgb(247 247 247 / var(--tw-text-opacity));
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.55rem 1.25rem;
+    border-radius: 0.5rem;
     font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
     width: var(--button-width);
-    &:hover,
-    &:active,
-    &.active,
-    &.focus {
-        background: var(--btn-primary-bg);
-        border-color: var(--btn-primary-border) !important;
-        --tw-text-opacity: 1;
-        color: rgb(17 24 39 / var(--tw-text-opacity));
+    justify-content: center;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.btn-primary {
+    background-color: hsl(var(--primary-hue) var(--primary-saturation) 45%);
+    border: 2px solid hsl(var(--primary-hue) var(--primary-saturation) 45%);
+    color: #f7f7f7 !important;
+    &:hover {
+        background-color: hsl(var(--primary-hue) var(--primary-saturation) 38%);
+        border-color: hsl(var(--primary-hue) var(--primary-saturation) 38%);
+        color: #ffffff !important;
     }
-    :is(html[class~="dark"])
-    &:hover,
-    &:active,
-    &.active,
-    &.focus {
-        background: var(--btn-primary-bg);
-        border-color: var(--btn-primary-border) !important;
-        background-color: hsl(var(--primary-hue) var(--primary-saturation) 55% / var(--tw-bg-opacity)) !important;
-        --tw-text-opacity: 1;
-        color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+:is(html[class~="dark"]) .btn-primary {
+    background-color: hsl(var(--primary-hue) var(--primary-saturation) 55%);
+    border-color: hsl(var(--primary-hue) var(--primary-saturation) 55%);
+    color: #111827 !important;
+    &:hover {
+        background-color: hsl(var(--primary-hue) var(--primary-saturation) 62%);
+        border-color: hsl(var(--primary-hue) var(--primary-saturation) 62%);
     }
 }
 
 .btn-outlined-primary {
-    background-color: var(--btn-primary-bg) !important;
-    border: 2px solid hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity)) !important;
-    border-color: hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity));
-    color: hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity)) !important;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: var(--button-width);
-    &:hover,
-    &:active,
-    &.active,
-    &.focus {
-        background-color: hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity)) !important;
-        border-color: hsl(var(--primary-hue) var(--primary-saturation) 45% / var(--tw-bg-opacity));
-        --tw-text-opacity: 1;
-        color: rgb(247 247 247 / var(--tw-text-opacity)) !important;
+    background-color: transparent;
+    border: 2px solid hsl(var(--primary-hue) var(--primary-saturation) 45%);
+    color: hsl(var(--primary-hue) var(--primary-saturation) 45%) !important;
+    &:hover {
+        background-color: hsl(var(--primary-hue) var(--primary-saturation) 45%);
+        color: #f7f7f7 !important;
+    }
+}
+
+:is(html[class~="dark"]) .btn-outlined-primary {
+    border-color: hsl(var(--primary-hue) var(--primary-saturation) 60%);
+    color: hsl(var(--primary-hue) var(--primary-saturation) 60%) !important;
+    &:hover {
+        background-color: hsl(var(--primary-hue) var(--primary-saturation) 55%);
+        border-color: hsl(var(--primary-hue) var(--primary-saturation) 55%);
+        color: #111827 !important;
     }
 }
 

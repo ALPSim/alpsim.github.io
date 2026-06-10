@@ -199,8 +199,8 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 
 #### Build notes
 
-{{% tabs items="Linux,Mac" %}}
-{{% tab %}}
+{{% tabs %}}
+{{% tab name="Linux" %}}
 The following combinations of `Boost`, Python and the C++ compiler have been tested:
   - GCC 10.5.0, Python 3.9.19 (NumPy < 2.0) and `Boost` 1.76.0
   - GCC 11.4.0, Python 3.10.14 (NumPy < 2.0) and `Boost` 1.81.0, 1.86.0
@@ -211,7 +211,7 @@ The following combinations of `Boost`, Python and the C++ compiler have been tes
 
   For **NumPy ≥ 2.0**, `Boost` 1.87.0 or later is required for ALPS' Boost.Python bindings (CMake downloads this automatically).
 {{% /tab %}}
-{{% tab %}}
+{{% tab name="Mac" %}}
 ALPS has been tested on ARM-based macOS systems using Apple's Xcode Clang and
 third-party compilers (Homebrew GCC, MacPorts GCC/Clang) with `Boost` 1.86.0+.
 
