@@ -252,6 +252,7 @@ params:
     base: "https://github.com/ALPSim/alpsim.github.io/edit/main/content"
   navbar:
     displayLogo: true
+    displayTitle: false
     logo:
       path: logo/alps.png
       dark: logo/alps.png
