@@ -1,7 +1,5 @@
 module github.com/ALPSim/alpsim.github.io
 
-go 1.20
+go 1.21
 
-require (
-	github.com/iskakoff/hextra v0.7.4 // indirect
-)
+require github.com/imfing/hextra v0.12.3 // indirect

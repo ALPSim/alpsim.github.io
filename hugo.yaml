@@ -18,9 +18,9 @@ defaultContentLanguage: en
     
 languages:
   en:
-    languageName: English
+    label: English
     contentDir: content/en
-    languageCode: en
+    locale: en
     weight: 1
     menu:
       main:
@@ -78,18 +78,18 @@ languages:
         - name: Toggle
           weight: 13
           params:
-            type: toggle
+            type: theme-toggle
             icon: sun
         - identifier: language
           name: 🌐 Language
           weight: 20
           params:
-            type: language
+            type: language-switch
 
   zh-cn:
-    languageName: 中文
+    label: 中文
     contentDir: content/zh-cn
-    languageCode: zh-cn
+    locale: zh-cn
     weight: 2
     menu:
       main:
@@ -147,18 +147,18 @@ languages:
         - name: 切换模式
           weight: 13
           params:
-            type: toggle
+            type: theme-toggle
             icon: sun
         - identifier: language
           name: 🌐 语言
           weight: 20
           params:
-            type: language
+            type: language-switch
 
   ja:
-    languageName: 日本語
+    label: 日本語
     contentDir: content/ja
-    languageCode: ja
+    locale: ja
     weight: 3
     menu:
       main:
@@ -216,20 +216,20 @@ languages:
         - name: モード切替
           weight: 13
           params:
-            type: toggle
+            type: theme-toggle
             icon: sun
         - identifier: language
           name: 🌐 言語
           weight: 20
           params:
-            type: language
+            type: language-switch
 
 module:
   hugoVersion:
     extended: true
     min: "0.112.0"
   imports:
-    - path: github.com/iskakoff/hextra
+    - path: github.com/imfing/hextra
 
 markup:
   goldmark:
