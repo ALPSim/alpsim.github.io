@@ -13,6 +13,13 @@ All codes under ALPS framework are released under the MIT open-source license.
 
 ## Acknowledgements
 
-ALPS software package results from the contributions of numerous researchers around the world in the past 20+ years. Without their efforts, the current state of the software is impossible to exist. We hope that more researchers will join us in promoting and developing this open source ecosystem to further advance ALPS's capabilities in research and education.
+The ALPS software package has been developed over more than 20 years by researchers from around the world. After long being funded by ETH Zurich and the Simons Foundation, current sponsorship comes from the NSF POSE program.
 
-ALPS has been funded by many funding sources from various international funding agencies over the years. Currently, work on the maintenance of ALPS is sponsored by a grant from the US National Science Foundation under the award NSF No. 2345575.
+<div style="display:flex; align-items:center; gap:1.5rem; margin-top:1rem; flex-wrap:wrap;">
+<a href="https://www.nsf.gov" target="_blank"><img src="/logo/NSF.webp" alt="NSF" style="height:80px;" /></a>
+<div>
+Supported by the US National Science Foundation under awards
+<a href="https://www.nsf.gov/awardsearch/show-award?AWD_ID=2550169" target="_blank">NSF #2550169</a> and
+<a href="https://www.nsf.gov/awardsearch/show-award?AWD_ID=2345575" target="_blank">NSF #2345575</a>.
+</div>
+</div>

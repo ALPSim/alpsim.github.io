@@ -13,6 +13,13 @@ ALPS 框架下的所有代码均遵循 MIT 开源许可证发布。
 
 ## 致谢
 
-ALPS 软件包凝聚了全球研究人员过去 20 余年的共同贡献。没有他们的努力，就不可能成就今天的软件成果。我们期待更多研究者加入这个开源生态，共同提升 ALPS 在科研和教育领域应用的能力。
+ALPS 软件包由全球研究人员历经 20 余年共同开发。长期以来得到苏黎世联邦理工学院（ETH Zurich）和西蒙斯基金会（Simons Foundation）的资助，目前由美国国家科学基金会 NSF POSE 项目提供资助。
 
-ALPS 项目多年来获得众多国际资助机构的支持。当前维护工作由美国国家科学基金会资助（项目号 NSF No. 2345575）。
+<div style="display:flex; align-items:center; gap:1.5rem; margin-top:1rem; flex-wrap:wrap;">
+<a href="https://www.nsf.gov" target="_blank"><img src="/logo/NSF.webp" alt="NSF" style="height:80px;" /></a>
+<div>
+由美国国家科学基金会资助，项目编号
+<a href="https://www.nsf.gov/awardsearch/show-award?AWD_ID=2550169" target="_blank">NSF #2550169</a> 和
+<a href="https://www.nsf.gov/awardsearch/show-award?AWD_ID=2345575" target="_blank">NSF #2345575</a>。
+</div>
+</div>
