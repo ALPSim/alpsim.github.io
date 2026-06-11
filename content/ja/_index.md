@@ -11,7 +11,7 @@ toc: true
 
 ALPS（Algorithms and Libraries for Physics Simulations）は、量子および古典的な凝縮系物理システムの数値シミュレーションのためのオープンソースパッケージです。スピン系・ボソン系・フェルミオン系の格子モデルに対応した最先端の量子アルゴリズムを、すぐに研究に使える形で実装しています。Pythonインターフェースと標準化されたファイル形式により、ノートパソコンからHPCクラスターまで、シミュレーションのセットアップ・実行・解析を手軽に行うことができます。
 
-発足以来、ALPSは52か国の数百人の研究者に利用され、数千本の論文を支え、20以上の研究分野に応用されています。
+発足以来、ALPSは少なくとも52か国の数百人の研究者に利用され、数千本の論文を支え、20以上の研究分野に応用されています。
 
 <div class="cta-buttons" style="text-align:left;width:100%;">
 {{< cta-button text="はじめる" link="documentation/start/intro" icon="build"  prim="yes" >}}
