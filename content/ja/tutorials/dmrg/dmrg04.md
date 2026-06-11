@@ -14,7 +14,7 @@ The most important correlation functions in many-body physics are two-point corr
 As already mentioned above, the ground state energy per bond in both spin-1/2 and spin-1 chain is given by
 
 $$
-e_0(i) = \frac{1}{2} (\langle S^+\_i S^-\_{i+1}\rangle  + \langle S^-\_i S^+\_{i+1}\rangle ) + \langle S^z_i S^z\_{i+1} \rangle 
+e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$
 
 This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance.
@@ -31,7 +31,7 @@ For the spin-1/2 chain, bond energies oscillate strongly between odd and even nu
 
 Take a relatively long chain (say, $L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
 
-Now plot $C_l = \langle S^z\_{L/2-l/2} S^z\_{L/2+l/2} \rangle$ where you round the positions such that their distance is l. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible; there are also other ways of doing this (like averaging over several correlators with same site distance, also more or less centered). As we expect a power law, use a log-log plot. Take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
+Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is l. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible; there are also other ways of doing this (like averaging over several correlators with same site distance, also more or less centered). As we expect a power law, use a log-log plot. Take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
 
 What you should see, is a power law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power laws by such superpositions - at large distance, the slowest exponential decay will survive all the others, replacing the power law by an exponential law. The larger you choose $D$, the further you push out this crossover.
 
@@ -123,7 +123,7 @@ and plot them vs. site distance.
 
 In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again, choose a long chain (say,$L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
 
-Now plot $C_l = \langle S^z\_{L/2-l/2} S^z\_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
+Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
 
 From the log-lin plot, extract a correlation length. It will depend (and in fact monotonically increase with) $D$. Has it converged when you reach e.g. $D=300$? How does this compare to the convergence for the same number of states of local or quasi-local observables such as magnetization or energy?
 

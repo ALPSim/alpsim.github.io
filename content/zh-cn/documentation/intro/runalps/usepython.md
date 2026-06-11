@@ -166,7 +166,7 @@ The preparation, simulation, and evaluation tasks can also be split into subtask
 
 ## More examples
 
-More example usage of the various functions and more advanced applications can be found in the tutorials. Also, don't forget to look at the documentation of the various functions using the \_\_doc\_\_ member variable of the functions, as in:
+More example usage of the various functions and more advanced applications can be found in the tutorials. Also, don't forget to look at the documentation of the various functions using the __doc__ member variable of the functions, as in:
 
     print pyalps.plot.plot.__doc__
 

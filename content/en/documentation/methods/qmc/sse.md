@@ -16,22 +16,22 @@ $$
 where $\beta = 1/(k_B T)$ is the inverse temperature and $\mathcal{H}$ is the Hamiltonian. The key idea of SSE is to express the exponential operator $e^{-\beta \mathcal{H}}$ as a Taylor series:
 
 $$
-e^{-\beta \mathcal{H}} = \sum\_{n=0}^\infty \frac{(-\beta)^n}{n!} \mathcal{H}^n.
+e^{-\beta \mathcal{H}} = \sum_{n=0}^\infty \frac{(-\beta)^n}{n!} \mathcal{H}^n.
 $$
 
 By inserting a complete set of basis states $\{|\alpha\rangle\}$, the partition function can be rewritten as:
 
 $$
-Z = \sum\_{\alpha} \sum\_{n=0}^\infty \frac{(-\beta)^n}{n!} \langle \alpha | \mathcal{H}^n | \alpha \rangle.
+Z = \sum_{\alpha} \sum_{n=0}^\infty \frac{(-\beta)^n}{n!} \langle \alpha | \mathcal{H}^n | \alpha \rangle.
 $$
 
-Depending on the temperatures, the SSE expansion order in the simulation will never exceed a finite order $N$. The SSE method then truncates this expansion series at order $N$ and samples the terms stochastically. The Hamiltonian $\mathcal{H}$ is typically decomposed into a sum of elementary interaction terms $H\_{i,j}$, such as bond operators for the Heisenberg model:
+Depending on the temperatures, the SSE expansion order in the simulation will never exceed a finite order $N$. The SSE method then truncates this expansion series at order $N$ and samples the terms stochastically. The Hamiltonian $\mathcal{H}$ is typically decomposed into a sum of elementary interaction terms $H_{i,j}$, such as bond operators for the Heisenberg model:
 
 $$
-\mathcal{H} = -\sum\_{i,j} H\_{i,j}.
+\mathcal{H} = -\sum_{i,j} H_{i,j}.
 $$
 
-Each term $H\_{i,j}$ acts on a pair of sites and can be represented in a suitable basis. The SSE algorithm then samples configurations consisting of a sequence of these operators.
+Each term $H_{i,j}$ acts on a pair of sites and can be represented in a suitable basis. The SSE algorithm then samples configurations consisting of a sequence of these operators.
 
 For the Heisenberg model, the bond operator $H_{i,j}$ can be expressed as:
 
@@ -44,7 +44,7 @@ where $S_i^z$ is the $z$-component of the spin operator, and $S_i^+$ and $S_i^-$
 ### Diagonal and Off-Diagonal Matrix Elements
 
 #### Heisenberg Model
-In the SSE framework, the Heisenberg Hamiltonian is expressed in terms of diagonal and off-diagonal operators. For a given basis state $|\alpha\rangle$, the matrix elements of the bond operator $H\_{i,j}$ are:
+In the SSE framework, the Heisenberg Hamiltonian is expressed in terms of diagonal and off-diagonal operators. For a given basis state $|\alpha\rangle$, the matrix elements of the bond operator $H_{i,j}$ are:
 
 1. **Diagonal Matrix Elements**:
    These correspond to the $S_i^z S_j^z$ term and are given by:
@@ -79,7 +79,7 @@ where:
 - $n_i = b_i^\dagger b_i$ is the number operator,
 - $\langle i,j \rangle$ denotes nearest-neighbor pairs.
 
-The Bose-Hubbard Hamiltonian $\mathcal{H}$ is decomposed into a set of bond operators $H\_{i,j}$ (for hopping) and $H_i$ (for on-site interactions):
+The Bose-Hubbard Hamiltonian $\mathcal{H}$ is decomposed into a set of bond operators $H_{i,j}$ (for hopping) and $H_i$ (for on-site interactions):
 $$
 H = -\sum_b H_b,
 $$
@@ -92,20 +92,20 @@ where $b$ labels the bonds or sites. For the Bose-Hubbard model:
 In the SSE method, the partition function is expanded in terms of basis states $|\alpha\rangle$ and operator sequences. A typical configuration in the SSE expansion consists of:
 
 1. A basis state $|\alpha_0\rangle$ (the initial state).
-2. A sequence of operators $H\_{i,j}$ acting on the state.
+2. A sequence of operators $H_{i,j}$ acting on the state.
 
 The partition function can then be written as:
 
 $$
-Z = \sum_{\alpha_0} \sum\_{n=0}^N \frac{(-\beta)^n}{n!} \sum_{\{H_{i,j}\}} \langle \alpha_0 | H_{i_1,j_1} H_{i_2,j_2} \cdots H_{i_n,j_n} | \alpha_0 \rangle,
+Z = \sum_{\alpha_0} \sum_{n=0}^N \frac{(-\beta)^n}{n!} \sum_{\{H_{i,j}\}} \langle \alpha_0 | H_{i_1,j_1} H_{i_2,j_2} \cdots H_{i_n,j_n} | \alpha_0 \rangle,
 $$
 
-where $N$ is the cutoff of the expansion order and $\{H\_{i,j}\}$ represents a sequence of $n$ operators. The matrix elements of the operators are evaluated in the basis states, and the sequence of operators must satisfy the condition that the final state matches the initial state $|\alpha_0\rangle$.
+where $N$ is the cutoff of the expansion order and $\{H_{i,j}\}$ represents a sequence of $n$ operators. The matrix elements of the operators are evaluated in the basis states, and the sequence of operators must satisfy the condition that the final state matches the initial state $|\alpha_0\rangle$.
 
 ### Steps in the SSE Algorithm
 
 1. **Initialization**: Start with an initial state $|\alpha\rangle$ and an empty operator sequence.
-2. **Operator Insertion**: Propose to insert or remove diagonal operators $H\_{i,j}$ into the sequence, updating the state $|\alpha\rangle$ accordingly.
+2. **Operator Insertion**: Propose to insert or remove diagonal operators $H_{i,j}$ into the sequence, updating the state $|\alpha\rangle$ accordingly.
 3. **Diagonal Updates**: Ensure that the sequence of operators is consistent with the Hamiltonian and the basis states.
 4. **Loop Updates**: Perform non-local updates to improve sampling efficiency, often using cluster or loop algorithms tailored to the spin or other bosonic models [^Syljuasen02] [^pollet04] [^Alet05].
 5. **Measurement**: Compute physical quantities, such as energy, magnetization, and correlation functions, by averaging over the sampled configurations.

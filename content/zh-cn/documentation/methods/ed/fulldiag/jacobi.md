@@ -21,7 +21,7 @@ $$
 
 where $D$ is a diagonal matrix containing the eigenvalues of $A$, and the columns of $P$ are the corresponding eigenvectors.
 
-The Jacobi method achieves this by applying a sequence of orthogonal transformations (rotations) to $A$. Each rotation targets a specific off-diagonal element $A\_{ij}$ and zeroes it out.
+The Jacobi method achieves this by applying a sequence of orthogonal transformations (rotations) to $A$. Each rotation targets a specific off-diagonal element $A_{ij}$ and zeroes it out.
 
 
 ## Rotation Matrix
@@ -40,18 +40,18 @@ R = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-Here, $\cos \theta$ and $\sin \theta$ are placed at the intersections of the $i$-th and $j$-th rows and columns. The angle $\theta$ is chosen such that the off-diagonal element $A\_{ij}$ is zeroed out.
+Here, $\cos \theta$ and $\sin \theta$ are placed at the intersections of the $i$-th and $j$-th rows and columns. The angle $\theta$ is chosen such that the off-diagonal element $A_{ij}$ is zeroed out.
 
 
 ## Algorithm
 
 1. **Identify the Largest Off-Diagonal Element**:
-   - Find the largest off-diagonal element $A\_{ij}$ (in absolute value) in the matrix $A$.
+   - Find the largest off-diagonal element $A_{ij}$ (in absolute value) in the matrix $A$.
 
 2. **Compute the Rotation Angle $\theta$**:
    - The angle $\theta$ is chosen to satisfy:
      $$
-     \tan(2\theta) = \frac{2A\_{ij}}{A\_{ii} - A\_{jj}}
+     \tan(2\theta) = \frac{2A_{ij}}{A_{ii} - A_{jj}}
      $$
    - From this, compute $\cos \theta$ and $\sin \theta$.
 
@@ -63,7 +63,7 @@ Here, $\cos \theta$ and $\sin \theta$ are placed at the intersections of the $i$
      $$
      A^{\prime} = R^T A R
      $$
-   - This transformation zeroes out $A\_{ij}$ and $A\_{ji}$.
+   - This transformation zeroes out $A_{ij}$ and $A_{ji}$.
 
 5. **Accumulate the Transformations**:
    - Update the eigenvector matrix $P$ as:

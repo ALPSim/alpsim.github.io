@@ -24,13 +24,13 @@ In the above equation, $\Delta$ refers to the scaling dimension of that field. T
 
 In the exact solution of the Ising model (Eq. (3.7) in [the paper P. Pfeuty](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)), the long-range correlations are found to decay as:
 $$
-\langle S^i_z S^{i+n}\_z \rangle \sim n^{-2\times 1/8}
+\langle S^i_z S^{i+n}_z \rangle \sim n^{-2\times 1/8}
 $$
 $$
-\langle S^i_y S^{i+n}\_y \rangle \sim n^{-2\times(1+1/8)}
+\langle S^i_y S^{i+n}_y \rangle \sim n^{-2\times(1+1/8)}
 $$
 $$
-\langle S^i_x S^{i+n}\_x \rangle \sim n^{-2\times 1}
+\langle S^i_x S^{i+n}_x \rangle \sim n^{-2\times 1}
 $$
 Additionally, we expect the scaling dimension of the identity operator to be 0.
 
