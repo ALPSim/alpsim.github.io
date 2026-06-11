@@ -2275,7 +2275,7 @@
       '<strong>generate simulation input files</strong> for you.<br><br>' +
       'Try: <em>"create a DMRG input file for a spin-1/2 chain L=32"</em><br>' +
       'or ask about installation, methods, models, tutorials, etc.<br><br>' +
-      '<small style="color:#888;line-height:1.4;display:block;margin-top:.25rem;">' +
+      '<small style="opacity:0.6;line-height:1.4;display:block;margin-top:.25rem;">' +
       '&#9888;&#xFE0E; This assistant uses keyword matching, not AI. It can only answer ' +
       'questions it was explicitly programmed for and may miss or misinterpret novel queries.' +
       '</small>',
