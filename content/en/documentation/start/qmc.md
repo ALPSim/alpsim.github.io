@@ -1,153 +1,175 @@
 ---
-title: Quantum Monte Carlo Simulations
-linkTitle: Quantum Monte Carlo
-description: "How to use ALPS"
+title: CT-HYB Impurity Solver
+linkTitle: CT-HYB
+description: "Simulate Kondo screening of a magnetic impurity using the CT-HYB quantum impurity solver."
 weight: 5
 math: true
 ---
 
-As an example of Quantum Monte Carlo simulation we present a simulation of the effective local moment of the impurity
-with decreasing temperature due to Kondo screening, with the semielliptical density of states used as a hybridization function.
+{{< callout type="info" >}}
+This tutorial assumes that pyalps is already installed. If you have not set it up yet, see the [Getting Started](../) guide.
+{{< /callout >}}
 
+This tutorial demonstrates the **continuous-time hybridization-expansion (CT-HYB)** quantum Monte Carlo solver — an exact, numerically unbiased method for quantum impurity models, originally introduced by Werner et al. ([Phys. Rev. Lett. 97, 076405, 2006](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.97.076405)). We simulate the **Kondo effect**: as temperature decreases, conduction electrons screen a magnetic impurity, progressively reducing its effective local moment. The dimensionless effective moment is $4T\chi_{dd}$, where $\chi_{dd}$ is the local spin susceptibility. At high temperature it approaches 1 (free spin, $S = 1/2$); for a non-zero Coulomb interaction $U > 0$, it decreases toward zero at low temperature, signaling complete Kondo screening. We use a semielliptic density of states as the hybridization function — a standard choice corresponding to the Bethe lattice, commonly encountered in dynamical mean-field theory (DMFT) calculations.
 
-First, we import all required python modules:
-```Python
-from pyalps.hdf5 import archive       # hdf5 interface
-import pyalps.cthyb as cthyb      # the solver module
-import matplotlib.pyplot as plt   # for plotting results
-from numpy import exp,log,sqrt,pi # some math
+## Imports
+
+```python
+from pyalps.hdf5 import archive       # HDF5 archive interface
+import pyalps.cthyb as cthyb          # CT-HYB impurity solver
+import matplotlib.pyplot as plt       # for plotting results
+from numpy import exp, log, sqrt, pi  # math utilities
 ```
 
-Now we generate a sequence of $10$ temperatures between $0.05$ and $100.0$ which are equidistant on a logarithmic scale
-```Python
-N_T  = 10    # number of temperatures
-Tmin = 0.05  # maximum temperature
-Tmax = 100.0 # minimum temperature
+## Temperature grid
+
+We generate 10 temperatures between $T_{\min} = 0.05$ and $T_{\max} = 100.0$, spaced equally on a logarithmic scale to sample both the high-temperature free-spin regime and the low-temperature Kondo-screened regime:
+
+```python
+N_T  = 10     # number of temperature points
+Tmin = 0.05   # minimum temperature
+Tmax = 100.0  # maximum temperature
 Tdiv = exp(log(Tmax/Tmin)/N_T)
-T=Tmax
-Tvalues=[]
-for i in range(N_T+1):
-  Tvalues.append(T)
-  T/=Tdiv
+T = Tmax
+Tvalues = []
+for i in range(N_T + 1):
+    Tvalues.append(T)
+    T /= Tdiv
 ```
 
-We set up the values of the onsite interaction, the number of time points, and the time limit for each simulation:
-```Python
-Uvalues=[0.,2.] # the values of the on-site interaction
-N_TAU = 1000    # number of tau-points; must be large enough for the lowest temperature (set to at least 5*BETA*U)
-runtime = 5     # solver runtime (in seconds)
+## Simulation parameters
+
+We compare two values of the on-site Coulomb interaction: $U = 0$ (non-interacting reference) and $U = 2$ (interacting, Kondo regime). Key parameters:
+
+- **`N_TAU`**: Number of imaginary-time grid points $\tau \in [0, \beta]$. Must be large enough to resolve the lowest temperature; a safe rule of thumb is $N_\tau \geq 5\beta U$.
+- **`runtime`**: Wall-clock seconds allocated to each solver call. Increase this for production runs to improve statistical accuracy.
+
+```python
+Uvalues = [0., 2.]  # on-site Coulomb interaction values
+N_TAU   = 1000      # imaginary-time points; at least 5*BETA*U for the lowest temperature
+runtime = 5         # solver runtime per temperature point (seconds)
 ```
 
-Then we set up the parameters for the simulation:
-```Python
-values=[[] for u in Uvalues]
-errors=[[] for u in Uvalues]
-parameters=[]
-for un,u in enumerate(Uvalues):
+## Building the parameter list
+
+For each combination of $U$ and $T$, we construct a parameter dictionary:
+
+- **`SWEEPS`**: Upper bound on Monte Carlo moves. In practice, `MAX_TIME` stops the solver first.
+- **`THERMALIZATION`**: Moves discarded at the start before measurements begin (equilibration).
+- **`N_MEAS`**: A measurement is recorded once every `N_MEAS` sweeps.
+- **`N_ORBITALS`**: Number of spin-orbital flavors — here 2 for spin-up and spin-down.
+- **`MU`**: Chemical potential. Set to $U/2$ to enforce particle-hole symmetry at half-filling.
+- **`BETA`**: Inverse temperature $\beta = 1/T$.
+
+```python
+values     = [[] for u in Uvalues]
+errors     = [[] for u in Uvalues]
+parameters = []
+for un, u in enumerate(Uvalues):
     for t in Tvalues:
-        # prepare the input parameters; they can be used inside the script and are passed to the solver
         parameters.append(
          {
            # solver parameters
-           'SWEEPS'             : 1000000000,                         # sweeps to be done
-           'THERMALIZATION'     : 1000,                               # thermalization sweeps to be done
-           'SEED'               : 42,                                 # random number seed
-           'N_MEAS'             : 10,                                 # number of sweeps after which a measurement is done
-           'N_ORBITALS'         : 2,                                  # number of 'orbitals', i.e. number of spin-orbital degrees of freedom or segments
-           'BASENAME'           : "hyb.param_U%.1f_BETA%.3f"%(u,1/t), # base name of the h5 output file
-           'MAX_TIME'           : runtime,                            # runtime of the solver per iteration
-           'VERBOSE'            : 1,                                  # whether to output extra information
-           'TEXT_OUTPUT'        : 0,                                  # whether to write results in human readable (text) format
+           'SWEEPS'             : 1000000000,                          # total Monte Carlo moves (capped by MAX_TIME)
+           'THERMALIZATION'     : 1000,                                # equilibration moves (discarded)
+           'SEED'               : 42,                                  # random number seed
+           'N_MEAS'             : 10,                                  # sweeps between measurements
+           'N_ORBITALS'         : 2,                                   # spin-orbital flavors (spin-up, spin-down)
+           'BASENAME'           : "hyb.param_U%.1f_BETA%.3f"%(u,1/t), # base name for the HDF5 output file
+           'MAX_TIME'           : runtime,                             # wall-clock time limit per solver call (seconds)
+           'VERBOSE'            : 1,                                   # print solver progress
+           'TEXT_OUTPUT'        : 0,                                   # disable human-readable text output
            # file names
-           'DELTA'              : "Delta_BETA%.3f.h5"%(1/t),          # file name of the hybridization function
-           'DELTA_IN_HDF5'      : 1,                                  # whether to read the hybridization from an h5 archive
+           'DELTA'              : "Delta_BETA%.3f.h5"%(1/t),           # hybridization function input file
+           'DELTA_IN_HDF5'      : 1,                                   # read hybridization from HDF5
            # physical parameters
-           'U'                  : u,                                  # Hubbard repulsion
-           'MU'                 : u/2.,                               # chemical potential
-           'BETA'               : 1/t,                                # inverse temperature
+           'U'                  : u,                                   # on-site Coulomb repulsion
+           'MU'                 : u/2.,                                # chemical potential (half-filling)
+           'BETA'               : 1/t,                                 # inverse temperature
            # measurements
-           'MEASURE_nnw'        : 1,                                  # measure the density-density correlation function (local susceptibility) on Matsubara frequencies
-           'MEASURE_time'       : 0,                                  # turn of imaginary-time measurement
-           # measurement parameters
-           'N_HISTOGRAM_ORDERS' : 50,                                 # maximum order for the perturbation order histogram
-           'N_TAU'              : N_TAU,                              # number of imaginary time points (tau_0=0, tau_N_TAU=BETA)
-           'N_MATSUBARA'        : int(N_TAU/(2*pi)),                  # number of Matsubara frequencies
-           'N_W'                : 1,                                  # number of bosonic Matsubara frequencies for the local susceptibility
-           # additional parameters (used outside the solver only)
-           't'                  : 1,                                  # hopping
-           'Un'                 : un,                                 # interaction point
+           'MEASURE_nnw'        : 1,                                   # density-density correlator on Matsubara frequencies
+           'MEASURE_time'       : 0,                                   # disable imaginary-time measurements
+           # discretization
+           'N_HISTOGRAM_ORDERS' : 50,                                  # max perturbation order for histogram
+           'N_TAU'              : N_TAU,                               # imaginary-time points (tau_0=0, tau_{N_TAU}=beta)
+           'N_MATSUBARA'        : int(N_TAU/(2*pi)),                   # Matsubara frequency points
+           'N_W'                : 1,                                   # bosonic Matsubara points for local susceptibility
+           # bookkeeping
+           't'                  : 1,                                   # hopping amplitude (sets energy scale)
+           'Un'                 : un,                                  # index into Uvalues (for postprocessing)
          }
         )
 ```
 
-For each set of parameters, we set up the hybridization function
-```Python
+## Hybridization function
+
+The CT-HYB solver requires the hybridization function $\Delta(\tau)$ as input, which encodes the coupling to the conduction-electron bath. We use a semielliptic density of states with half-bandwidth $D = 2t$, and compute $\Delta(\tau) = t^2 G_0(\tau)$ via a Fourier transform of the non-interacting Green's function. The high-frequency tail is subtracted before the transform for numerical stability, then added back analytically.
+
+```python
 for parms in parameters:
-    ar=archive(parms['BASENAME']+'.out.h5','a')
-    ar['/parameters']=parms
+    ar = archive(parms['BASENAME']+'.out.h5', 'a')
+    ar['/parameters'] = parms
     del ar
-    print("creating initial hybridization...").
-    g=[]
-    I=complex(0.,1.)
-    mu=0.0
+    print("Creating hybridization function...")
+    g  = []
+    I  = complex(0., 1.)
+    mu = 0.0
     for n in range(parms['N_MATSUBARA']):
-        w=(2*n+1)*pi/parms['BETA']
-        g.append(2.0/(I*w+mu+I*sqrt(4*parms['t']**2-(I*w+mu)**2))) # use GF with semielliptical DOS
-    delta=[]
+        w = (2*n+1)*pi/parms['BETA']
+        g.append(2.0/(I*w + mu + I*sqrt(4*parms['t']**2 - (I*w+mu)**2)))  # semielliptic Green's function
+    delta = []
     for i in range(parms['N_TAU']+1):
-        tau=i*parms['BETA']/parms['N_TAU']
-        g0tau=0.0;
+        tau   = i*parms['BETA']/parms['N_TAU']
+        g0tau = 0.0
         for n in range(parms['N_MATSUBARA']):
-            iw=complex(0.0,(2*n+1)*pi/parms['BETA'])
-            g0tau+=((g[n]-1.0/iw)*exp(-iw*tau)).real # Fourier transform with tail subtracted
+            iw     = complex(0.0, (2*n+1)*pi/parms['BETA'])
+            g0tau += ((g[n] - 1.0/iw)*exp(-iw*tau)).real  # Fourier transform with tail subtracted
         g0tau *= 2.0/parms['BETA']
-        g0tau += -1.0/2.0 # add back contribution of the tail
-        delta.append(parms['t']**2*g0tau) # delta=t**2 g
+        g0tau += -1.0/2.0                                  # add back the tail contribution
+        delta.append(parms['t']**2 * g0tau)                # Delta(tau) = t^2 * G0(tau)
 
-    # write hybridization function to hdf5 archive (solver input)
-    ar=archive(parms['DELTA'],'w')
+    ar = archive(parms['DELTA'], 'w')
     for m in range(parms['N_ORBITALS']):
-        ar['/Delta_%i'%m]=delta
+        ar['/Delta_%i'%m] = delta
     del ar
-
 ```
 
-Finally, we run the Monte Carlo simulation for each set of parameters.
-```Python
+## Running the solver
+
+```python
 for parms in parameters:
-    # solve the impurity model in parallel
     cthyb.solve(parms)
-
 ```
 
+## Postprocessing and plotting
 
-After the simulation is finished, we obtain results for each set of parameters, postprocess them, and plot them.
-```Python
+We extract the density-density correlator $\langle n_\uparrow n_\uparrow \rangle$, $\langle n_\downarrow n_\downarrow \rangle$, and $\langle n_\uparrow n_\downarrow \rangle$ at the zeroth bosonic Matsubara frequency to compute the local spin susceptibility $\chi_{dd} = (\langle n_\uparrow n_\uparrow \rangle + \langle n_\downarrow n_\downarrow \rangle - 2\langle n_\uparrow n_\downarrow \rangle)/4$.
+
+```python
 for parms in parameters:
-    # extract the local spin susceptiblity
-    ar=archive(parms['BASENAME']+'.out.h5','w')
-    nn_0_0=ar['simulation/results/nnw_re_0_0/mean/value']
-    nn_1_1=ar['simulation/results/nnw_re_1_1/mean/value']
-    nn_1_0=ar['simulation/results/nnw_re_1_0/mean/value']
-    dnn_0_0=ar['simulation/results/nnw_re_0_0/mean/error']
-    dnn_1_1=ar['simulation/results/nnw_re_1_1/mean/error']
-    dnn_1_0=ar['simulation/results/nnw_re_1_0/mean/error']
+    ar      = archive(parms['BASENAME']+'.out.h5', 'a')
+    nn_0_0  = ar['simulation/results/nnw_re_0_0/mean/value']
+    nn_1_1  = ar['simulation/results/nnw_re_1_1/mean/value']
+    nn_1_0  = ar['simulation/results/nnw_re_1_0/mean/value']
+    dnn_0_0 = ar['simulation/results/nnw_re_0_0/mean/error']
+    dnn_1_1 = ar['simulation/results/nnw_re_1_1/mean/error']
+    dnn_1_0 = ar['simulation/results/nnw_re_1_0/mean/error']
 
     nn  = nn_0_0 + nn_1_1 - 2*nn_1_0
-    dnn = sqrt(dnn_0_0**2 + dnn_1_1**2 + ((2*dnn_1_0)**2) )
+    dnn = sqrt(dnn_0_0**2 + dnn_1_1**2 + (2*dnn_1_0)**2)
 
-    ar['chi']=nn/4.
-    ar['dchi']=dnn/4.
-
+    ar['chi']  = nn/4.
+    ar['dchi'] = dnn/4.
     del ar
-    T=1/parms['BETA']
+
+    T = 1/parms['BETA']
     values[parms['Un']].append(T*nn[0])
     errors[parms['Un']].append(T*dnn[0])
 
 plt.figure()
 plt.xlabel(r'$T$')
 plt.ylabel(r'$4T\chi_{dd}$')
-plt.title('Kondo screening of an impurity\n(using the hybridization expansion impurity solver)')
+plt.title('Kondo screening of a magnetic impurity\n(CT-HYB hybridization-expansion solver)')
 for un in range(len(Uvalues)):
     plt.errorbar(Tvalues, values[un], yerr=errors[un], label="U=%.1f"%Uvalues[un])
 plt.xscale('log')
@@ -155,8 +177,9 @@ plt.legend()
 plt.show()
 ```
 
-After that, you will have the following plot:
-![kondo](/figs/Kondo.png)
+The plot shows $4T\chi_{dd}$ versus temperature on a logarithmic scale. For $U = 0$, the effective moment is approximately constant (non-interacting limit). For $U = 2$, it decreases toward zero at low temperature, demonstrating the Kondo screening of the impurity spin by the conduction electrons.
+
+![Effective local moment vs temperature showing Kondo screening](/figs/Kondo.png)
 
 ## Walkthrough Video
 
