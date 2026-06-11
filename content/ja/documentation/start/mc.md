@@ -2,7 +2,7 @@
 linkTitle: 古典モンテカルロ法
 title: 古典モンテカルロシミュレーション
 description: "ALPSの使用方法"
-weight: 4
+weight: 2
 math: true
 ---
 

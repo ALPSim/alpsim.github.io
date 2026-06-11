@@ -2,7 +2,7 @@
 linkTitle: 经典蒙特卡洛
 title: 经典蒙特卡洛模拟
 description: "如何使用 ALPS"
-weight: 4
+weight: 2
 math: true
 ---
 

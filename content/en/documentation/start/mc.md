@@ -2,7 +2,7 @@
 linkTitle: Classical Monte Carlo
 title: Classical Monte Carlo Simulations
 description: "How to use ALPS"
-weight: 4
+weight: 2
 math: true
 ---
 

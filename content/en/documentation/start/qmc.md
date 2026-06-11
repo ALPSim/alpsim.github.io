@@ -2,7 +2,7 @@
 title: Quantum Monte Carlo Simulations
 linkTitle: Quantum Monte Carlo
 description: "How to use ALPS"
-weight: 5
+weight: 3
 math: true
 ---
 

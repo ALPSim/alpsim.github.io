@@ -12,7 +12,7 @@ toc: true
 ALPS (Algorithms and Libraries for Physics Simulations) is an open-source package for numerical simulations of quantum and classical condensed matter systems. It provides production-ready implementations of leading quantum algorithms for spin, bosonic, and fermionic lattice models. A Python interface and standardized file formats make it straightforward to set up simulations, run them on a laptop or HPC cluster, and analyse the results.
 
 <div class="cta-buttons" style="text-align:left;width:100%;">
-{{< cta-button text="Get started" link="documentation/start/intro" icon="build"  prim="yes" >}}
+{{< cta-button text="Get started" link="documentation/start" icon="build"  prim="yes" >}}
 {{< cta-button text="Tutorials" link="tutorials/" icon="launch" >}}
 </div>
 </div>
