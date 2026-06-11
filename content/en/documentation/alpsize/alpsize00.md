@@ -46,7 +46,7 @@ Flow of packaging (missing picture)
 
 ### Packaging with Cmake
 
-00\_cmake
+00_cmake
 
     $ cmake .
     $ make 
@@ -54,7 +54,7 @@ Flow of packaging (missing picture)
 
 ### Implementation of the Wolff algorithm in C language
 
-01\_original-c
+01_original-c
 
     $ cmake .
     $ make 
@@ -62,7 +62,7 @@ Flow of packaging (missing picture)
 
 ### Implementation of the Wolff algorithm in C++ language
 
-02\_basic-cpp
+02_basic-cpp
 
 - modify header file： \<math.h\> to \<cmath\>,etc..
 - std name space
@@ -75,7 +75,7 @@ Flow of packaging (missing picture)
 
 ### Using Standard Template Library
 
-03\_stl
+03_stl
 
 - std::vector<>:1D-array
 - std::stack<>:stack
@@ -88,7 +88,7 @@ Flow of packaging (missing picture)
 
 ### Using Boost C++ Library
 
-04\_boost
+04_boost
 
 - <boost/array.hpp>
     - fixed-length array
@@ -105,7 +105,7 @@ Flow of packaging (missing picture)
 
 ### Using ALPS/parameters
 
-05\_parameters
+05_parameters
 
     $ cmake .
     $ make
@@ -113,7 +113,7 @@ Flow of packaging (missing picture)
 
 ### Using ALPS/alea
 
-06\_alea
+06_alea
 
     $ cmake .
     $ make
@@ -121,7 +121,7 @@ Flow of packaging (missing picture)
 
 ### Using ALPS/lattice
 
-07\_lattice
+07_lattice
 
     $ cmake .
     $ make
@@ -130,7 +130,7 @@ Flow of packaging (missing picture)
 
 ### Full ALPSize using ALPS/Parapack Scheduler
 
-08\_scheduler
+08_scheduler
 
 - encapsulated code: Worker class
 - Function, must be implemented by Worker Class
@@ -140,7 +140,7 @@ Flow of packaging (missing picture)
     - save&load member function
 - Worker registration to the scheduler running the macro of PARAPACK_REGISTER_WORKER
 - preparation of Parameters and ObservableSet by scheduler,and setting constructor、init_observables-function、run-function
-- Because lattice_mc_workerはlattice\_helper has inherited rng_helper、that can activate the function of lattice_helper,rng_helper.
+- Because lattice_mc_workerはlattice_helper has inherited rng_helper、that can activate the function of lattice_helper,rng_helper.
 
         $ cmake .
         $ make

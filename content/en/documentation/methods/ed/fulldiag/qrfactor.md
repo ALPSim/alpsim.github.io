@@ -44,13 +44,13 @@ The eigenvalues of $A$ are found on the diagonal of the final matrix $A_k$, and 
 3. **Reconstruction**:
    - Reconstruct the matrix $A_{k+1}$ as:
      $$
-     A\_{k+1} = R_k Q_k
+     A_{k+1} = R_k Q_k
      $$
 
 4. **Accumulate Transformations**:
    - Update the eigenvector matrix $P$ as:
      $$
-     P\_{k+1} = P_k Q_k
+     P_{k+1} = P_k Q_k
      $$
    - Initialize $P_0 = I$ (identity matrix).
 

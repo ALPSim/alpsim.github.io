@@ -9,7 +9,7 @@ weight: 1
 The **Ising model** is one of the most fundamental and widely studied models in statistical mechanics and condensed matter physics. It was first proposed by Wilhelm Lenz in 1920 and later solved in one dimension by his student Ernst Ising in 1925. The model provides a simplified description of phase transitions and critical phenomena in magnetic systems.
 
 $$
-\mathcal{H} = J \sum\_{\langle i,j \rangle} S_i^z S_j^z + h \sum_i S_i^z
+\mathcal{H} = J \sum_{\langle i,j \rangle} S_i^z S_j^z + h \sum_i S_i^z
 $$
 
 where:

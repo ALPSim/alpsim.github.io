@@ -11,23 +11,23 @@ Exact diagonalization (ED) is a numerical technique used to solve quantum many-b
 The Heisenberg model is defined by the Hamiltonian:
 
 $$
-\mathcal{H} = J \sum\_{\langle i,j \rangle} \mathbf{S}\_i \cdot \mathbf{S}\_j,
+\mathcal{H} = J \sum_{\langle i,j \rangle} \mathbf{S}_i \cdot \mathbf{S}_j,
 $$
 
-where $\mathbf{S}\_i$ is the spin-1/2 operator at site $i$, $J$ is the exchange interaction (ferromagnetic for $J \lt 0$ and antiferromagnetic for $J \gt 0$), and the sum runs over nearest-neighbor pairs $\langle i,j \rangle$. For simplicity, we consider a 1D chain with periodic boundary conditions.
+where $\mathbf{S}_i$ is the spin-1/2 operator at site $i$, $J$ is the exchange interaction (ferromagnetic for $J \lt 0$ and antiferromagnetic for $J \gt 0$), and the sum runs over nearest-neighbor pairs $\langle i,j \rangle$. For simplicity, we consider a 1D chain with periodic boundary conditions.
 
 ### Example: 4-Site 1D Heisenberg Chain
 
 Let’s study a 4-site 1D Heisenberg chain with periodic boundary conditions. The Hamiltonian for this system is:
 
 $$
-\mathcal{H} = J \left( \mathbf{S}\_1 \cdot \mathbf{S}\_2 + \mathbf{S}\_2 \cdot \mathbf{S}\_3 + \mathbf{S}\_3 \cdot \mathbf{S}\_4 + \mathbf{S}\_4 \cdot \mathbf{S}\_1 \right).
+\mathcal{H} = J \left( \mathbf{S}_1 \cdot \mathbf{S}_2 + \mathbf{S}_2 \cdot \mathbf{S}_3 + \mathbf{S}_3 \cdot \mathbf{S}_4 + \mathbf{S}_4 \cdot \mathbf{S}_1 \right).
 $$
 
-The spin-1/2 operators $\mathbf{S}\_i = (S_i^x, S_i^y, S_i^z)$ can be expressed in terms of Pauli matrices $\boldsymbol{\sigma}\_i$ as $\mathbf{S}\_i = \frac{1}{2} \boldsymbol{\sigma}\_i$. The dot product $\mathbf{S}\_i \cdot \mathbf{S}\_j$ can be written as:
+The spin-1/2 operators $\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ can be expressed in terms of Pauli matrices $\boldsymbol{\sigma}_i$ as $\mathbf{S}_i = \frac{1}{2} \boldsymbol{\sigma}_i$. The dot product $\mathbf{S}_i \cdot \mathbf{S}_j$ can be written as:
 
 $$
-\mathbf{S}\_i \cdot \mathbf{S}\_j = S_i^x S_j^x + S_i^y S_j^y + S_i^z S_j^z.
+\mathbf{S}_i \cdot \mathbf{S}_j = S_i^x S_j^x + S_i^y S_j^y + S_i^z S_j^z.
 $$
 
 ### Basis States
@@ -36,15 +36,15 @@ For a 4-site system with spin-1/2 particles, the Hilbert space has $2^4 = 16$ ba
 
 The basis states are eigen states of $S_i^z$ operators. When it is applied to the $i$'th site, it gives
 $$
-S\_i^z|\uparrow\rangle = \frac{1}{2}|\uparrow\rangle,
+S_i^z|\uparrow\rangle = \frac{1}{2}|\uparrow\rangle,
 $$
 and
 $$
-S\_i^z|\downarrow\rangle = -\frac{1}{2}|\downarrow\rangle.
+S_i^z|\downarrow\rangle = -\frac{1}{2}|\downarrow\rangle.
 $$
 To see the result of applying Hamiltonian to the basis states, we need to express the off-diagonal operators, i.e., $S_i^x$ and $S_i^y$ in terms of raising $S^{\dagger}$ and lowering $S^{-}$ operators:
 $$
-S\_i^x=\frac{1}{2}(S_i^{\dagger}+S_i^{-}),
+S_i^x=\frac{1}{2}(S_i^{\dagger}+S_i^{-}),
 $$
 $$
 S_i^y=\frac{1}{2i}(S_i^{\dagger}-S_i^{-}),
@@ -59,21 +59,21 @@ $$
 where $S=1/2$ and $s=-1/2, 1/2$.
 With the above transformation, the Hamiltonian element becomes
 $$
-\mathbf{S}\_i \cdot \mathbf{S}\_j = \frac{1}{2}(S_i^{\dagger}S_j^{-}+S_i^{-}S_j^{\dagger})+S\_i^zS\_j^z.
+\mathbf{S}_i \cdot \mathbf{S}_j = \frac{1}{2}(S_i^{\dagger}S_j^{-}+S_i^{-}S_j^{\dagger})+S_i^zS_j^z.
 $$
 
 ### Hamiltonian Matrix
 
-To construct the Hamiltonian matrix, we evaluate the action of $\mathcal{H}$ on each basis state. For instance, consider the term $\mathbf{S}\_1 \cdot \mathbf{S}\_2$:
+To construct the Hamiltonian matrix, we evaluate the action of $\mathcal{H}$ on each basis state. For instance, consider the term $\mathbf{S}_1 \cdot \mathbf{S}_2$:
 
 $$
-\mathbf{S}\_1 \cdot \mathbf{S}\_2 = \frac{1}{2}(S_1^{\dagger}S_2^{-}+S_1^{-}S_2^{\dagger})+S\_1^zS\_2^z.
+\mathbf{S}_1 \cdot \mathbf{S}_2 = \frac{1}{2}(S_1^{\dagger}S_2^{-}+S_1^{-}S_2^{\dagger})+S_1^zS_2^z.
 $$
 
 This term flips spins at sites 1 and 2 if they are antiparallel and contributes a factor of $\frac{1}{4}$ if they are parallel. For example:
 
 $$
-\mathbf{S}\_1 \cdot \mathbf{S}\_2 | \uparrow \downarrow \uparrow \uparrow \rangle = \frac{1}{4} \left( | \downarrow \uparrow \uparrow \uparrow \rangle - | \uparrow \downarrow \uparrow \uparrow \rangle \right).
+\mathbf{S}_1 \cdot \mathbf{S}_2 | \uparrow \downarrow \uparrow \uparrow \rangle = \frac{1}{4} \left( | \downarrow \uparrow \uparrow \uparrow \rangle - | \uparrow \downarrow \uparrow \uparrow \rangle \right).
 $$
 
 Repeating this process for all terms in $\mathcal{H}$ and all basis states, we construct the $16 \times 16$ Hamiltonian matrix. For brevity, we do not write the full matrix here, but it can be systematically built using the above rules.

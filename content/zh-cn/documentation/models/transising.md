@@ -15,7 +15,7 @@ The **transverse field Ising model (TFIM)** is a generalization of the classical
 The transverse field quantum Ising model is given by the Hamiltonian
 
 $$
-H=J\_{z} \sum\_{\langle i,j \rangle} S_i^z S_j^z + \Gamma \sum_i S_i^x
+H=J_{z} \sum_{\langle i,j \rangle} S_i^z S_j^z + \Gamma \sum_i S_i^x
 $$
 
 Here, the first sum runs over pairs of nearest neighbours. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J_z=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J_z\gt 0$ and ferromagnetic for $J_z \lt 0$. 

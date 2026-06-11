@@ -11,21 +11,21 @@ In condensed matter physics, the **Kondo lattice model (KLM)** is used to descri
 The Hamiltonian for the Kondo Lattice Model can be written as:
 
 $$
-H = H\_{\text{band}} + H\_{\text{Kondo}}
+H = H_{\text{band}} + H_{\text{Kondo}}
 $$
 
 where:
-- $H\_{\text{band}}$ describes the kinetic energy of the conduction electrons:
+- $H_{\text{band}}$ describes the kinetic energy of the conduction electrons:
   $$
-  H\_{\text{band}} = \sum\_{k, \sigma} \epsilon_k c\_{k\sigma}^\dagger c\_{k\sigma}
+  H_{\text{band}} = \sum_{k, \sigma} \epsilon_k c_{k\sigma}^\dagger c_{k\sigma}
   $$
-  Here, $c\_{k\sigma}^\dagger$ and $c\_{k\sigma}$ are the creation and annihilation operators for conduction electrons with momentum $k$ and spin $\sigma$, and $\epsilon_k$ is the dispersion relation.
+  Here, $c_{k\sigma}^\dagger$ and $c_{k\sigma}$ are the creation and annihilation operators for conduction electrons with momentum $k$ and spin $\sigma$, and $\epsilon_k$ is the dispersion relation.
 
-- $H\_{\text{Kondo}}$ represents the Kondo interaction between the localized spins $\mathbf{S}\_i$ and the conduction electrons:
+- $H_{\text{Kondo}}$ represents the Kondo interaction between the localized spins $\mathbf{S}_i$ and the conduction electrons:
   $$
-  H\_{\text{Kondo}} = J \sum_i \mathbf{S}\_i \cdot \mathbf{s}\_i
+  H_{\text{Kondo}} = J \sum_i \mathbf{S}_i \cdot \mathbf{s}_i
   $$
-  Here, $\mathbf{s}\_i$ is the spin density of the conduction electrons at site $i$, and $J$ is the exchange coupling constant.
+  Here, $\mathbf{s}_i$ is the spin density of the conduction electrons at site $i$, and $J$ is the exchange coupling constant.
   
 The above KLM describes three key components of the model:
 - **Localized Magnetic Moments**: In the KLM, localized magnetic moments (often represented by spins) are associated with atoms in a periodic lattice. These moments arise from partially filled f-orbitals in rare-earth or actinide compounds.
