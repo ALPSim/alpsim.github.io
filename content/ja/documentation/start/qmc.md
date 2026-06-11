@@ -23,16 +23,16 @@ from numpy import exp, log, sqrt, pi  # 数学ユーティリティ
 
 ## 温度グリッド
 
-高温の自由スピン領域と低温の近藤スクリーニング領域の両方をカバーするため、$T_{\min} = 0.05$ から $T_{\max} = 100.0$ まで、対数スケールで等間隔に並んだ 10 個の温度点を生成します：
+高温の自由スピン領域と低温の近藤スクリーニング領域の両方をカバーするため、$T_{\min} = 0.05$ から $T_{\max} = 100.0$ まで、対数スケールで等間隔に並んだ 11 個の温度点（両端点を含む）を生成します：
 
 ```python
-N_T  = 10     # 温度点数
+N_T  = 11     # 温度点数（両端点を含む）
 Tmin = 0.05   # 最低温度
 Tmax = 100.0  # 最高温度
-Tdiv = exp(log(Tmax/Tmin)/N_T)
+Tdiv = exp(log(Tmax/Tmin)/(N_T - 1))
 T = Tmax
 Tvalues = []
-for i in range(N_T + 1):
+for i in range(N_T):
     Tvalues.append(T)
     T /= Tdiv
 ```

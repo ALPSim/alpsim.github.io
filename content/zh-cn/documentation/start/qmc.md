@@ -23,16 +23,16 @@ from numpy import exp, log, sqrt, pi  # 数学工具函数
 
 ## 温度网格
 
-我们生成 10 个温度点，范围从 $T_{\min} = 0.05$ 到 $T_{\max} = 100.0$，在对数尺度上均匀分布，以同时覆盖高温自由自旋区和低温近藤屏蔽区：
+我们生成 11 个温度点（包含两端点），范围从 $T_{\min} = 0.05$ 到 $T_{\max} = 100.0$，在对数尺度上均匀分布，以同时覆盖高温自由自旋区和低温近藤屏蔽区：
 
 ```python
-N_T  = 10     # 温度点数
+N_T  = 11     # 温度点数（包含两端点）
 Tmin = 0.05   # 最低温度
 Tmax = 100.0  # 最高温度
-Tdiv = exp(log(Tmax/Tmin)/N_T)
+Tdiv = exp(log(Tmax/Tmin)/(N_T - 1))
 T = Tmax
 Tvalues = []
-for i in range(N_T + 1):
+for i in range(N_T):
     Tvalues.append(T)
     T /= Tdiv
 ```

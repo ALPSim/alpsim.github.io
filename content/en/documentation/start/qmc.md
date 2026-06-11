@@ -23,16 +23,16 @@ from numpy import exp, log, sqrt, pi  # math utilities
 
 ## Temperature grid
 
-We generate 10 temperatures between $T_{\min} = 0.05$ and $T_{\max} = 100.0$, spaced equally on a logarithmic scale to sample both the high-temperature free-spin regime and the low-temperature Kondo-screened regime:
+We generate 11 temperature points between $T_{\min} = 0.05$ and $T_{\max} = 100.0$, spaced equally on a logarithmic scale to sample both the high-temperature free-spin regime and the low-temperature Kondo-screened regime:
 
 ```python
-N_T  = 10     # number of temperature points
+N_T  = 11     # number of temperature points (includes both endpoints)
 Tmin = 0.05   # minimum temperature
 Tmax = 100.0  # maximum temperature
-Tdiv = exp(log(Tmax/Tmin)/N_T)
+Tdiv = exp(log(Tmax/Tmin)/(N_T - 1))
 T = Tmax
 Tvalues = []
-for i in range(N_T + 1):
+for i in range(N_T):
     Tvalues.append(T)
     T /= Tdiv
 ```
