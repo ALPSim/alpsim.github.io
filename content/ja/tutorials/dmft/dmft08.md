@@ -74,7 +74,7 @@ EPSSQ_0 = 4;                      // the second moment of the bandstructure for 
 EPSSQ_1 = 4;                      // the second moment of the bandstructure for the flavor 1
 ```
 
-Note1: if you do not provide the bandstructure parameters (EPS_i, EPSSQ_i) in the input file, then they will be calculated using the given DOS (since revision 6146) as  $EPS\_{flavor=i} = \int \mathrm{d}\epsilon\ DOS\_{band=i/2}(\epsilon)\ \epsilon$, $EPSSQ\_{flavor=i} = \int \mathrm{d}\epsilon\ DOS\_{band=i/2}(\epsilon)\ \epsilon^2$.
+Note1: if you do not provide the bandstructure parameters (EPS_i, EPSSQ_i) in the input file, then they will be calculated using the given DOS (since revision 6146) as  $EPS_{flavor=i} = \int \mathrm{d}\epsilon\ DOS_{band=i/2}(\epsilon)\ \epsilon$, $EPSSQ_{flavor=i} = \int \mathrm{d}\epsilon\ DOS_{band=i/2}(\epsilon)\ \epsilon^2$.
 
 Note2: the antiferromagnetic selfconsistency loop assumes Neel order. Therefore it is only applicable for bipartite lattices.
 
@@ -88,7 +88,7 @@ Note3: the density of states has to be provided by the user. In the tutorial we 
 Note4: for a multiband simulation [$n_{bands}=FLAVORS/2$] with known DOS, the DOS-file has to consist of $2n_{\text{bands}}$ columns. The number of bins [=number of lines of the input file] for DOS has to be the same for all bands. The $i$-th line has the structure as follows
 
 $$
-e\_{1,i}\ \ \ DOS\_{band1}(e\_{1,i})\ \ \ e\_{2,i}\ \ \ DOS\_{band2}(e\_{2,i})\ \ \ \ldots
+e_{1,i}\ \ \ DOS_{band1}(e_{1,i})\ \ \ e_{2,i}\ \ \ DOS_{band2}(e_{2,i})\ \ \ \ldots
 $$
 
 ### Option TWODBS

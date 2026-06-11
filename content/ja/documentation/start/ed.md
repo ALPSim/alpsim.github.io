@@ -168,8 +168,8 @@ plt.legend()
 plt.xlim(0, 0.25)
 plt.ylim(0, 1.0)
 
-# 初期推定値：Delta~0.411（既知のハルデンギャップ）、A~1000、xi~1
-pars = [fw.Parameter(0.411), fw.Parameter(1000), fw.Parameter(1)]
+# 初期推定値：Delta~0.411（既知のハルデンギャップ）、A~1000、xi~6
+pars = [fw.Parameter(0.411), fw.Parameter(1000), fw.Parameter(6)]
 f = lambda self, x, p: p[0]() + p[1]()*np.exp(-x/p[2]())
 fw.fit(None, f, pars, np.array(gapplot.y)[2:], np.sort(lengths)[2:])  # L >= 8 でフィット
 

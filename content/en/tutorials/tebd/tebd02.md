@@ -14,11 +14,11 @@ In this tutorial we will study the time evolution of a S=1/2 spin chain prepared
 The time evolution of the kink initial state under the XX model was solved exactly in Phys. Rev. E 59, 4912 (1999) by a Jordan-Wigner transformation to free fermions.  It was found that the expectation value of the magnetization at any site as a function of time can be represented as a sum of Bessel functions, and the magnetization in the limit of long times and large distances from the initial domain wall approaches a scaling form in the variable $n/t$ , where $n$ is the distance from the center and $t$ the time.  Explicitly, we have
 
 $$
- M(n,t)=-\frac{1}{2}\sum\_{i=1-n}^{n-1}j_i^2\left(t\right)
+ M(n,t)=-\frac{1}{2}\sum_{i=1-n}^{n-1}j_i^2\left(t\right)
  $$
 
 $$
-\lim\_{n\to \infty} \lim\_{t\to \infty} M(n,t)\to \phi\left(n/t\right)=-\frac{1}{\pi}\arcsin\left(n/t\right)
+\lim_{n\to \infty} \lim_{t\to \infty} M(n,t)\to \phi\left(n/t\right)=-\frac{1}{\pi}\arcsin\left(n/t\right)
 $$
 
 where  $M(n,t)$ is the magnetization a distance $n$ from the center and  $j_i(t)$ is the Bessel function of order $i$ . In the first part of this tutorial we demonstrate these two results.
@@ -315,10 +315,10 @@ This exponential growth of errors also accounts for the failure of the simulatio
 
 ### Solution in the case of the XXZ model
 
-We saw from the exact solution that the magnetization profile had a well defined front which expanded ballistically with velocity  $v=1$ . The XX model has many special properties and so it is natural to ask if this same magnetization behavior holds under more general conditions. In this part of the tutorial we investigate the effects of adding a  $J_z S_i^z S\_{i+1}^z$  term to the Hamiltonian, corresponding to the XXZ model. In the limit as this term dominates the spins become frozen in a parallel configuration, and so the initial state becomes an exact eigenstate of the Hamiltonian. The XX terms in the Hamiltonian try to flip the spins, and are responsible for the propagating magnetization wavefront we saw in the pure XX model. As a quantitative measure of the ability of the system to transport spin, we consider the integrated flow of magnetization through the center defined in Phys. Rev. E 71 036102(2005) as
+We saw from the exact solution that the magnetization profile had a well defined front which expanded ballistically with velocity  $v=1$ . The XX model has many special properties and so it is natural to ask if this same magnetization behavior holds under more general conditions. In this part of the tutorial we investigate the effects of adding a  $J_z S_i^z S_{i+1}^z$  term to the Hamiltonian, corresponding to the XXZ model. In the limit as this term dominates the spins become frozen in a parallel configuration, and so the initial state becomes an exact eigenstate of the Hamiltonian. The XX terms in the Hamiltonian try to flip the spins, and are responsible for the propagating magnetization wavefront we saw in the pure XX model. As a quantitative measure of the ability of the system to transport spin, we consider the integrated flow of magnetization through the center defined in Phys. Rev. E 71 036102(2005) as
 
 $$
- \Delta M(t)=\sum\_{n>L/2}^{L} (\langle S_n^z(t)\rangle+1/2) 
+ \Delta M(t)=\sum_{n>L/2}^{L} (\langle S_n^z(t)\rangle+1/2) 
 $$
 
 #### Preparing and running the simulation using Python

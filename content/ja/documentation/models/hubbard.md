@@ -11,15 +11,15 @@ The **Hubbard model** was first introduced by John Hubbard in 1963 to describe t
 The one-band Hubbard model with spin-$\frac{1}{2}$ Fermions is given by the following Hamiltonian
 
 $$
-H = -t \sum\_{\langle i,j \rangle, \sigma} \left( c\_{i,\sigma}^\dagger c\_{j,\sigma} + \text{h.c.} \right) + U \sum_i n\_{i,\uparrow} n\_{i,\downarrow},
+H = -t \sum_{\langle i,j \rangle, \sigma} \left( c_{i,\sigma}^\dagger c_{j,\sigma} + \text{h.c.} \right) + U \sum_i n_{i,\uparrow} n_{i,\downarrow},
 $$
 
 where 
 
-- $c\_{i,\sigma}^\dagger$ and $c\_{i,\sigma}$ are creation and annihilation operators for a fermion with spin $\sigma$ (up $\uparrow$ or down $\downarrow$) at site $i$ and $\text{h.c.}$ represents Hermitian Conjugate. 
+- $c_{i,\sigma}^\dagger$ and $c_{i,\sigma}$ are creation and annihilation operators for a fermion with spin $\sigma$ (up $\uparrow$ or down $\downarrow$) at site $i$ and $\text{h.c.}$ represents Hermitian Conjugate. 
 - $t$ is hopping amplitude between neighboring sites $\langle i,j \rangle$.
 - $U$ is on-site interaction energy, with $U > 0$ corresponding to repulsive interactions and $U < 0$ corresponding to attractive interactions.
-- $n\_{i,\sigma} = c\_{i,\sigma}^\dagger c\_{i,\sigma}$ is number operator for fermions with spin $\sigma$ at site $i$.
+- $n_{i,\sigma} = c_{i,\sigma}^\dagger c_{i,\sigma}$ is number operator for fermions with spin $\sigma$ at site $i$.
 
 The first term of the Hamiltonian describes the kinetic energy of the many-body system with particles hopping between neighboring sites. The second term represents the potential energy of the system. The competition between the kinetic energy, potential energy, as well as the temperature can lead to interesting properties.
 

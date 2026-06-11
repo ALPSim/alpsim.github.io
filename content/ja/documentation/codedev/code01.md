@@ -78,7 +78,7 @@ The `run` method manages the Monte Carlo updates defined in the step routine and
             # Flip s_k with probability exp(2 beta e)
             ...
 
-The Monte Carlo sweeps are done in the `step` method. In the Metropolis algorithm a spin is a randomly picked and flipped with probability $p\_{accept} = min(1,e^{-\beta \Delta E})$, $\Delta E$ being the energy difference of the initial and proposed configuration. This procedure is repeated $L^2$ times. The implementation of the Metropolis algorithm is left to you as an exercise. You can make use of the `randint` function defined below:
+The Monte Carlo sweeps are done in the `step` method. In the Metropolis algorithm a spin is a randomly picked and flipped with probability $p_{accept} = min(1,e^{-\beta \Delta E})$, $\Delta E$ being the energy difference of the initial and proposed configuration. This procedure is repeated $L^2$ times. The implementation of the Metropolis algorithm is left to you as an exercise. You can make use of the `randint` function defined below:
 
     def randint(self,max):
        return int(max*self.rng())
