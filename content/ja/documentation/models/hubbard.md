@@ -18,7 +18,7 @@ where
 
 - $c\_{i,\sigma}^\dagger$ and $c\_{i,\sigma}$ are creation and annihilation operators for a fermion with spin $\sigma$ (up $\uparrow$ or down $\downarrow$) at site $i$ and $\text{h.c.}$ represents Hermitian Conjugate. 
 - $t$ is hopping amplitude between neighboring sites $\langle i,j \rangle$.
-- $U$ is on-site interaction energy, with $U > 0$ corresponding to repulsive interactions and $U \< 0$ corresponding to attractive interactions.
+- $U$ is on-site interaction energy, with $U > 0$ corresponding to repulsive interactions and $U < 0$ corresponding to attractive interactions.
 - $n\_{i,\sigma} = c\_{i,\sigma}^\dagger c\_{i,\sigma}$ is number operator for fermions with spin $\sigma$ at site $i$.
 
 The first term of the Hamiltonian describes the kinetic energy of the many-body system with particles hopping between neighboring sites. The second term represents the potential energy of the system. The competition between the kinetic energy, potential energy, as well as the temperature can lead to interesting properties.
@@ -33,7 +33,7 @@ The first term of the Hamiltonian describes the kinetic energy of the many-body 
    - In the Mott insulating phase, the Fermi-Hubbard model can exhibit magnetic ordering. At half-filling and large $U/t$, the effective low-energy Hamiltonian reduces to the **Heisenberg model**, which describes antiferromagnetic interactions between spins.
 
 3. **Superconductivity**:
-   - For attractive interactions $U \< 0$, the model can exhibit superconductivity, where fermions pair up to form Cooper pairs.
+   - For attractive interactions $U < 0$, the model can exhibit superconductivity, where fermions pair up to form Cooper pairs.
 
 4. **Doping and Phase Separation**:
    - When the system is doped away from half-filling (e.g., by adding or removing electrons), rich phases such as stripe order, charge density waves, and high-temperature superconductivity can emerge.

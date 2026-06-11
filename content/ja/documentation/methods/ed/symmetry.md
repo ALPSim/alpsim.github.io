@@ -20,7 +20,7 @@ $$
 
 The Hamiltonian has several symmetries that can be used to block-diagonalize it, reducing the computational effort:
 
-- **Total magnetization $\(S^z\_{\text{total}}\)$ conservation**:
+- **Total magnetization $S^z\_{\text{total}}$ conservation**:
    The total $S^z$ operator, $S^z\_{\text{total}} = \sum\_{i=1}^4 S_i^z$, commutes with $\mathcal{H}$. Thus, the Hamiltonian is block-diagonal in sectors of fixed $S^z\_{\text{total}}$.
 
 - **Translational symmetry**:

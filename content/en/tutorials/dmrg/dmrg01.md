@@ -10,7 +10,7 @@ toc: true
 For applications of DMRG, we consider two models, namely the spin-1/2 and the spin-1 antiferromagnetic Heisenberg chains of length L given by the following Hamiltonian,
 
 $$
-H = J\sum\_{i=1}^{L-1} \[\frac{1}{2} (S^+\_i S^-\_{i+1} + S^-\_i S^+\_{i+1}) + S^z_i S^z\_{i+1}\] .
+H = J\sum\_{i=1}^{L-1} \left[\frac{1}{2} (S^+\_i S^-\_{i+1} + S^-\_i S^+\_{i+1}) + S^z_i S^z\_{i+1}\right] .
 $$
 
 The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behaviour and pose very different challenges to the DMRG algorithm. Let us briefly review their physical properties.

@@ -41,7 +41,7 @@ $$
 for configuration
 
 $$
-\mathcal{C} = \[ m ; i_1 \cdots i_m; \tau_1 \cdots \tau_m,  m \in \mathbf{N} ; 0 \lt \tau_1 \lt \cdots \lt \tau_m \lt \beta \]
+\mathcal{C} = [ m ; i_1 \cdots i_m; \tau_1 \cdots \tau_m,  m \in \mathbf{N} ; 0 \lt \tau_1 \lt \cdots \lt \tau_m \lt \beta ]
 $$
 
 where

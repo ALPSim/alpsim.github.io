@@ -19,13 +19,13 @@ in the units of recoil energy $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi
 The quantum mechanical behaviour of the single particle follows
 
 $$
-\[\frac{1}{\pi^2} \left( -i \nabla + 2\pi \vec{k} \right)^2 + \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)\]  u_k (\vec{r}) = \epsilon_k u_k(\vec{r})
+\left[\frac{1}{\pi^2} \left( -i \nabla + 2\pi \vec{k} \right)^2 + \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)\right]  u_k (\vec{r}) = \epsilon_k u_k(\vec{r})
 $$
 
 which is clearly separable to say the $x$-component:
 
 $$
-\[\frac{1}{\pi^2} \left( -i \partial_x + 2\pi k_x \right)^2 + V_0^{x} \sin^2 (\pi x)\]  u\_{k_x} (x) = \epsilon\_{k_x} u\_{k_x}(x),
+\left[\frac{1}{\pi^2} \left( -i \partial_x + 2\pi k_x \right)^2 + V_0^{x} \sin^2 (\pi x)\right]  u\_{k_x} (x) = \epsilon\_{k_x} u\_{k_x}(x),
 $$
 
 where $k_x = 0, \frac{1}{L_x} ,\cdots \frac{L_x-1}{L_x}$.
@@ -39,7 +39,7 @@ $$
 We arrive at a tridiagonal diagonalization problem:
 
 $$
-\[  4(m + k_x)^2 + \frac{V_0^x}{2} \] c_m^{(k_x)} - \frac{V_0^x}{4} c\_{m-1}^{(k_x)} - \frac{V_0^x}{4} c\_{m+1}^{(k_x)}  = \epsilon\_{k_x}  c_m^{(k_x)}.
+\left[  4(m + k_x)^2 + \frac{V_0^x}{2} \right] c_m^{(k_x)} - \frac{V_0^x}{4} c\_{m-1}^{(k_x)} - \frac{V_0^x}{4} c\_{m+1}^{(k_x)}  = \epsilon\_{k_x}  c_m^{(k_x)}.
 $$
 
 The wannier function is defined as:

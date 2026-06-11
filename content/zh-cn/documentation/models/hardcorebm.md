@@ -11,7 +11,7 @@ The **hardcore boson model** is a fundamental theoretical framework in condensed
 In the hardcore boson model, the particles are described by creation ($b_i^\dagger$) and annihilation ($b_i$) operators that obey modified commutation relations due to the hardcore constraint. Specifically, the operators satisfy:
 
 $$
-\[b_i, b_j^\dagger\] = \delta\_{ij} (1 - 2 b_i^\dagger b_i), \quad (b_i^\dagger)^2 = (b_i)^2 = 0,
+[b_i, b_j^\dagger] = \delta\_{ij} (1 - 2 b_i^\dagger b_i), \quad (b_i^\dagger)^2 = (b_i)^2 = 0,
 $$
 
 where the condition $(b_i^\dagger)^2 = 0$ enforces the hardcore constraint, ensuring that no more than one boson can occupy a single site. The Hamiltonian of the hardcore boson model typically includes terms for particle hopping and interactions, and can be written as:

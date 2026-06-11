@@ -16,7 +16,7 @@ $$
 
 where
 - $\mathbf{S}\_i$: Spin vector at site $i$.
-- $J$: Exchange interaction strength. $J \< 0$ for ferromagnetic interactions (spins favor alignment), and $J > 0$ for antiferromagnetic interactions (spins favor anti-alignment).
+- $J$: Exchange interaction strength. $J < 0$ for ferromagnetic interactions (spins favor alignment), and $J > 0$ for antiferromagnetic interactions (spins favor anti-alignment).
 - $\langle i,j \rangle$: Sum over nearest-neighbor pairs.
 
 For quantum spins, $\mathbf{S}\_i$ are spin operators obeying the commutation relations of angular momentum. For classical spins, $\mathbf{S}\_i$ are unit vectors in 3D space.

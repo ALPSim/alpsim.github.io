@@ -125,7 +125,7 @@ The resulting picutre show look like the following:
 We now solve the two-leg Heisenberg ladder in much the same way. The Hamiltonian for the ladder can be thought of as coupling two chains together. Denoting the spins in one chain $\vec{S}$  and in the other $\vec{T}$, the Hamiltonian is
 
 $$
-H=\sum\[J\_0(\vec{S}\_i\cdot\vec{S}\_{i+1}+\vec{T}\_i\cdot\vec{T}_{i+1})+J_1\vec{S}_i\cdot\vec{T}_i+h(S_i^z+T_i^z)\],
+H=\sum[J\_0(\vec{S}\_i\cdot\vec{S}\_{i+1}+\vec{T}\_i\cdot\vec{T}_{i+1})+J_1\vec{S}_i\cdot\vec{T}_i+h(S_i^z+T_i^z)],
 $$
 
 where we again apply periodic boundary conditions with the identification $\vec{S}\_{L+1}=\vec{S}\_1$ and $\vec{T}\_{L+1}=\vec{T}\_1$.
