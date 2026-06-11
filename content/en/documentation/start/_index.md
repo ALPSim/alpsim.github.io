@@ -3,6 +3,10 @@ title: Getting Started
 description: "Introduction to ALPS and how to install it"
 weight: 1
 toc: true
+aliases:
+  - /documentation/start/intro/
+  - /documentation/start/obtain/
+  - /documentation/start/path/
 ---
 
 ALPS is a software package for simulating correlated systems. It provides programs for Classical Monte Carlo, Quantum Monte Carlo, and Density Matrix Renormalization Group simulations.
@@ -18,9 +22,9 @@ $ pip install pyalps
 For more control over the installation — or to build with HPC support — choose one of the methods below:
 
 <div class="btn-grid">
-{{< cta-button text="Binary" link="/documentation/install/binary" icon="download" >}}
-{{< cta-button text="Source" link="/documentation/install/source" icon="code" >}}
-{{< cta-button text="Spack" link="/documentation/install/spack" icon="inventory_2" >}}
+{{< cta-button text="Binary" link="../install/binary" icon="download" >}}
+{{< cta-button text="Source" link="../install/source" icon="code" >}}
+{{< cta-button text="Spack" link="../install/spack" icon="inventory_2" >}}
 </div>
 
 ## Quickstart Tutorials
