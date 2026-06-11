@@ -13,10 +13,6 @@ ALPS (Algorithms and Libraries for Physics Simulations) is an open-source packag
 
 Since its inception, ALPS has been used by hundreds of researchers across at least 52 countries, has underpinned thousands of publications, and has been applied to more than 20 research disciplines.
 
-<div class="cta-buttons" style="text-align:left;width:100%;">
-{{< cta-button text="Get started" link="documentation/start/intro" icon="build"  prim="yes" >}}
-{{< cta-button text="Tutorials" link="tutorials/" icon="launch" >}}
-</div>
 </div>
 <div class="rightX" >
 <img class="logoX" />
@@ -24,19 +20,28 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 
 </div>
 
-## Our Impacts
+<div class="btn-grid">
+{{< cta-button text="Get Started" link="documentation/start/intro" icon="rocket_launch" >}}
+{{< cta-button text="GitHub Source" link="https://github.com/ALPSim/ALPS" icon="code" >}}
+{{< cta-button text="Events" link="events" icon="event" >}}
+{{< cta-button text="Installation" link="documentation/install" icon="download" >}}
+{{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
+{{< cta-button text="Governance" link="govern" icon="account_balance" >}}
+{{< cta-button text="Tutorials" link="tutorials/" icon="school" >}}
+{{< cta-button text="Discord" link="https://discord.gg/JRNWnnva9g" icon="forum" >}}
+{{< cta-button text="FAQ" link="faqs" icon="help" >}}
+</div>
 
-{{< tile-list >}}
-  {{< tile title="Our Systems" >}}
-  One-, two-, and three-dimensional [lattice systems](about/sys) with model parameters that describe real materials.
-  {{< /tile >}}
-  {{< tile title="Our Evolution" >}}
-  ALPS progress needs the support of the user community. If you identify any potential bugs in the codes, please submit a [bug report](https://github.com/ALPSim/ALPS/issues).
-  {{< /tile >}}
-  {{< tile title="Our Collaboration" >}}
-  We are happy to collaborate with researchers and educators around the world on projects or codes that can have an ALPS application or can be included in the ALPS framework. If you are interested, please reach out to one of our [steering committee members](govern#alps-community-steering-committee).
-  {{< /tile >}}
-{{< /tile-list >}}
+### Tutorials
+
+<div class="btn-grid">
+{{< cta-button text="Monte Carlo Simulations" link="tutorials/mcs" icon="casino" >}}
+{{< cta-button text="Exact Diagonalization" link="tutorials/ed" icon="calculate" >}}
+{{< cta-button text="Density Matrix Renormalization Group" link="tutorials/dmrg" icon="compress" >}}
+{{< cta-button text="Dynamical Mean Field Theory (DMFT) Solvers" link="tutorials/dmft" icon="hub" >}}
+{{< cta-button text="Time-Evolving Block Decimation" link="tutorials/tebd" icon="update" >}}
+{{< cta-button text="Custom Lattices and Models" link="tutorials/lm" icon="grid_view" >}}
+</div>
 
 ## Acknowledgement
 
