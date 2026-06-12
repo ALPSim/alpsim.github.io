@@ -28,22 +28,26 @@ languages:
           name: About
           pageRef: /about
           weight: 1
+        - identifier: start
+          name: Getting Started
+          pageRef: /documentation/start
+          weight: 2
         - identifier: installation
           name: Installation
           pageRef: /documentation/install
-          weight: 2
+          weight: 3
         - identifier: documentation
           name: Documentation
           pageRef: /documentation
-          weight: 3
+          weight: 4
         - identifier: tutorials
           name: Tutorials
           pageRef: /tutorials
-          weight: 4
+          weight: 5
         - identifier: events
           name: Events
           pageRef: /events
-          weight: 5
+          weight: 6
         - identifier: govern
           name: Governance
           pageRef: /govern
@@ -93,22 +97,26 @@ languages:
           name: 关于我们
           pageRef: /about
           weight: 1
+        - identifier: start
+          name: 快速入门
+          pageRef: /documentation/start
+          weight: 2
         - identifier: installation
           name: 安装指南
           pageRef: /documentation/install
-          weight: 2
+          weight: 3
         - identifier: documentation
           name: 文档中心
           pageRef: /documentation
-          weight: 3
+          weight: 4
         - identifier: tutorials
           name: 教程资源
           pageRef: /tutorials
-          weight: 4
+          weight: 5
         - identifier: events
           name: 活动日程
           pageRef: /events
-          weight: 5
+          weight: 6
         - identifier: govern
           name: 领导团队
           pageRef: /govern
@@ -158,22 +166,26 @@ languages:
           name: 概要
           pageRef: /about
           weight: 1
+        - identifier: start
+          name: はじめに
+          pageRef: /documentation/start
+          weight: 2
         - identifier: installation
           name: インストール
           pageRef: /documentation/install
-          weight: 2
+          weight: 3
         - identifier: documentation
           name: ドキュメント
           pageRef: /documentation
-          weight: 3
+          weight: 4
         - identifier: tutorials
           name: チュートリアル
           pageRef: /tutorials
-          weight: 4
+          weight: 5
         - identifier: events
           name: イベント
           pageRef: /events
-          weight: 5
+          weight: 6
         - identifier: govern
           name: 運営体制
           pageRef: /govern
