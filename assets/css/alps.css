@@ -235,10 +235,22 @@
 
 .btn-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 40rem) {
+  .btn-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 26rem) {
+  .btn-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .btn-grid .btn {
