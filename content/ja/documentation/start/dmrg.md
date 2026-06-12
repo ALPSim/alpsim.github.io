@@ -2,7 +2,7 @@
 title: 密度行列繰り込み群
 linkTitle: DMRG
 description: "DMRG を用いた 32 サイト S=1/2 ハイゼンベルク鎖の基底状態探索と収束解析。"
-weight: 7
+weight: 4
 math: true
 ---
 

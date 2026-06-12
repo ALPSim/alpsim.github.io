@@ -2,7 +2,7 @@
 title: 密度矩阵重整化群
 linkTitle: DMRG
 description: "使用 DMRG 求解 32 格点 S=1/2 海森堡链的基态并研究收敛性。"
-weight: 7
+weight: 4
 math: true
 ---
 

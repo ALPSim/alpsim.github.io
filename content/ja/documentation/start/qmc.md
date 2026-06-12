@@ -2,7 +2,7 @@
 title: 量子モンテカルロシミュレーション
 linkTitle: 量子モンテカルロ
 description: "ALPSの使用方法"
-weight: 5
+weight: 3
 math: true
 ---
 

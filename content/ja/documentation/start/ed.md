@@ -2,7 +2,7 @@
 title: 厳密対角化法
 linkTitle: 厳密対角化法
 description: "疎行列厳密対角化を用いた S=1 ハイゼンベルク鎖のハルデンギャップ計算。"
-weight: 6
+weight: 5
 math: true
 ---
 

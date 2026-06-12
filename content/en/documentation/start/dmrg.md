@@ -2,7 +2,7 @@
 title: Density Matrix Renormalization Group
 linkTitle: DMRG
 description: "Find the ground state of a 32-site S=1/2 Heisenberg chain using DMRG and study convergence."
-weight: 7
+weight: 4
 math: true
 ---
 

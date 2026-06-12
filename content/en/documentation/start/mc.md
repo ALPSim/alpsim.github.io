@@ -2,7 +2,7 @@
 linkTitle: Classical Monte Carlo
 title: Classical Monte Carlo Simulations
 description: "Phase transition in the 2D Ising model"
-weight: 4
+weight: 2
 math: true
 ---
 
