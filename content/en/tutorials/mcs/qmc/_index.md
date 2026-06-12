@@ -21,14 +21,14 @@ from pyalps.plot import plot
 
 In this first section, we calculate the magnetization curve of the  $S=1/2$  Heisenberg chain:
 $$
-H=\sum\_{i}^{L}\vec{S}\_i\cdot\vec{S}\_{i+1}+h\sum\_{i=1}^LS_i^z
+H=\sum_{i}^{L}\vec{S}_i\cdot\vec{S}_{i+1}+h\sum_{i=1}^LS_i^z
 $$
-where we use the periodic boundary conditions, i.e. we identify $\vec{S}\_{L+1}=\vec{S}\_1$.
+where we use the periodic boundary conditions, i.e. we identify $\vec{S}_{L+1}=\vec{S}_1$.
 We would like to calculate the magnetization curve in the ground state. However, our choice of method here is a path-integral Quantum Monte Carlo method that operates at finite temperature. We therefore simulate a thermal ensemble and choose a temperature that is sufficiently low compared to the other energy scales of the problem.
 
 The thermal expectation value of the magnetization per site is defined as
 $$
-m=\frac{1}{L}\sum\_i\langle S\_i^z\rangle
+m=\frac{1}{L}\sum_i\langle S_i^z\rangle
 $$
 where
 $$
@@ -125,10 +125,10 @@ The resulting picutre show look like the following:
 We now solve the two-leg Heisenberg ladder in much the same way. The Hamiltonian for the ladder can be thought of as coupling two chains together. Denoting the spins in one chain $\vec{S}$  and in the other $\vec{T}$, the Hamiltonian is
 
 $$
-H=\sum\[J\_0(\vec{S}\_i\cdot\vec{S}\_{i+1}+\vec{T}\_i\cdot\vec{T}_{i+1})+J_1\vec{S}_i\cdot\vec{T}_i+h(S_i^z+T_i^z)\],
+H=\sum[J_0(\vec{S}_i\cdot\vec{S}_{i+1}+\vec{T}_i\cdot\vec{T}_{i+1})+J_1\vec{S}_i\cdot\vec{T}_i+h(S_i^z+T_i^z)],
 $$
 
-where we again apply periodic boundary conditions with the identification $\vec{S}\_{L+1}=\vec{S}\_1$ and $\vec{T}\_{L+1}=\vec{T}\_1$.
+where we again apply periodic boundary conditions with the identification $\vec{S}_{L+1}=\vec{S}_1$ and $\vec{T}_{L+1}=\vec{T}_1$.
 
 Notice the difference in lattice and model parameters:
 

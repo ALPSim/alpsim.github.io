@@ -67,8 +67,8 @@ The following quantities are directly measured by the `qwl` application, and are
 
 | **Name** | **Description** |
 | :------- | :-------------- |
-| Coefficients | estimate of the logarithms $\ln\[g(n)\]$ of the coefficients $g(n)$ of the high temperature series expansion of the partition function, $Z= \sum_n g(n)\beta_n$, after SWEEPS fixed-weights sweeps, taking into account the final histogram (this usually constitutes the best estimate)|
-| Coefficients # | estimate of $\ln\[g(n)\]$, after the #-th Wang-Landau refinement step (# ≥ START_STORING) |
+| Coefficients | estimate of the logarithms $\ln[g(n)]$ of the coefficients $g(n)$ of the high temperature series expansion of the partition function, $Z= \sum_n g(n)\beta_n$, after SWEEPS fixed-weights sweeps, taking into account the final histogram (this usually constitutes the best estimate)|
+| Coefficients # | estimate of $\ln[g(n)]$, after the #-th Wang-Landau refinement step (# ≥ START_STORING) |
 | Histogram | normalized histogram of visited expansion orders during the fixed-weights sweeps |
 | Fraction | fraction of up-walkers for the visited expansion orders during the fixed-weights sweeps |
 | Time Up | time to tunnel from lowest to highest expansion coefficent during the fixed-weights sweeps |

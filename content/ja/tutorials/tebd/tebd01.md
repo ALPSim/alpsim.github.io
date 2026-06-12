@@ -10,7 +10,7 @@ toc: true
 In this first tutorial we investigate the behavior of the hardcore boson model
 
 $$
- H=-t\sum\_{i=1}^{L-1}(b_i^{\dagger}b\_{i+1} +b_ib\_{i+1}^{\dagger})+V\sum\_{i=1}^{L-1}n_in\_{i+1} 
+ H=-t\sum_{i=1}^{L-1}(b_i^{\dagger}b_{i+1} +b_ib_{i+1}^{\dagger})+V\sum_{i=1}^{L-1}n_in_{i+1} 
  $$
 
 as the parameter $V$ is changed in time. It is well known that for large $V/t$ the ground state of the hardcore boson model at half filling is a charge-density wave (CDW) insulator while for small $V/t$ the ground state is a superfluid (SF). It is interesting to consider what happens to the system if we begin in one phase and then dynamically change, or "quench", one of the Hamiltonian parameters $t$ or $V$ such that we are in the other phase. As a simple first foray into the rich physics of quenches, we will consider quenching from one phase to the other and then back into the original phase. A particularly stringent criterion for adiabaticity of such a quench is how close the final state is to the initial state, i.e.
@@ -27,7 +27,7 @@ $$
 g(t)=g(t_i)+((t-t_i)/\tau)^p (g(t_f)-g(t_i))
 $$
 
-where  $g$ is some Hamiltonian parameter. In the present case we will take $g$ to be the interaction parameter $V$. We will begin our system in the CDW regime with $V/t=10$, quench to the SF regime where $V/t=0$, and then quench back to the CDW regime with $V/t=10$. In the three parts of this tutorial we will investigate a)the effects of the timescale $\tau$ on the Loschmidt echo during a linear quench, b) the effects of "holding" the system in the SF phase for a time $\tau\_{\mathrm{hold}}$ before returning to the CDW phase, and c) the effects of changing the power $p$ of the quench function.
+where  $g$ is some Hamiltonian parameter. In the present case we will take $g$ to be the interaction parameter $V$. We will begin our system in the CDW regime with $V/t=10$, quench to the SF regime where $V/t=0$, and then quench back to the CDW regime with $V/t=10$. In the three parts of this tutorial we will investigate a)the effects of the timescale $\tau$ on the Loschmidt echo during a linear quench, b) the effects of "holding" the system in the SF phase for a time $\tau_{\mathrm{hold}}$ before returning to the CDW phase, and c) the effects of changing the power $p$ of the quench function.
 
 ### Linear Quench
 
@@ -133,7 +133,7 @@ The resulting figures are shown below:
 
 ### Linear Quench with hold
 
-In this section we will investigate the effects of "holding" the system in the SF phase for a time  $\tau\_{\mathrm{hold}}$  before quenching back to the CDW phase.
+In this section we will investigate the effects of "holding" the system in the SF phase for a time  $\tau_{\mathrm{hold}}$  before quenching back to the CDW phase.
 
 #### Preparing and running the simulation using Python
 
@@ -174,7 +174,7 @@ for A in [5.0, 10.0, 15.0, 25.0, 50.0]:
             })
 ```
 
-Note that in this case we have three quenches as GS, GIS, etc. are all vectors of length three. The second quench keeps the Hamiltonian parameters fixed at  $t=1$, $V=0$  for a time  $\tau\_{\mathrm{hold}}$  before quenching back. We write the input files, run the simulations, get outputs, and plot as above:
+Note that in this case we have three quenches as GS, GIS, etc. are all vectors of length three. The second quench keeps the Hamiltonian parameters fixed at  $t=1$, $V=0$  for a time  $\tau_{\mathrm{hold}}$  before quenching back. We write the input files, run the simulations, get outputs, and plot as above:
 
 ```python
 baseName='tutorial_1b'

@@ -41,7 +41,7 @@ $$
 for configuration
 
 $$
-\mathcal{C} = \[ m ; i_1 \cdots i_m; \tau_1 \cdots \tau_m,  m \in \mathbf{N} ; 0 \lt \tau_1 \lt \cdots \lt \tau_m \lt \beta \]
+\mathcal{C} = [ m ; i_1 \cdots i_m; \tau_1 \cdots \tau_m,  m \in \mathbf{N} ; 0 \lt \tau_1 \lt \cdots \lt \tau_m \lt \beta ]
 $$
 
 where
@@ -117,15 +117,15 @@ Note: The following definitions for mu are allowed:
 
 | **Option** | **Default** | **Boolean control** |
 | :--------- | :---------- | :------------------ |
-| MEASURE[Total Particle Number^2] | false | measure_number2\_ |
-| MEASURE[Energy^2] | false | measure_energy2\_ |
-| MEASURE[Density^2]  | false | measure_density2\_ |
-| MEASURE[Energy Density^2]  | false | measure_energy_density2\_ |
-| MEASURE[Local Kink: Number] | false | measure_local_num_kinks\_ |
-| MEASURE[Winding Number] | false | measure_winding_number\_ |
-| MEASURE[Local Density]  | false | measure_local_density\_  |
-| MEASURE[Local Density^2] | false | measure_local_density2\_ |
-| MEASURE[Green Function] | false | measure_green_function\_ |
+| MEASURE[Total Particle Number^2] | false | measure_number2_ |
+| MEASURE[Energy^2] | false | measure_energy2_ |
+| MEASURE[Density^2]  | false | measure_density2_ |
+| MEASURE[Energy Density^2]  | false | measure_energy_density2_ |
+| MEASURE[Local Kink: Number] | false | measure_local_num_kinks_ |
+| MEASURE[Winding Number] | false | measure_winding_number_ |
+| MEASURE[Local Density]  | false | measure_local_density_  |
+| MEASURE[Local Density^2] | false | measure_local_density2_ |
+| MEASURE[Green Function] | false | measure_green_function_ |
 
 ## The dwa code: starting the simulation
 
@@ -153,19 +153,19 @@ When the measurement mode is turned on, the following is a list of common observ
 | Energy Density | $\langle \epsilon \rangle$ | detailed | measure if lattice is homogeneous  |
 | Energy Density:Vertex | $\langle E_v \rangle$ | detailed | measure if lattice is homogeneous  |
 | Energy Density:Onsite | $\langle E_o \rangle$ | detailed | measure if lattice is homogeneous  |
-| Total Particle Number^2 | $\langle N^2 \rangle$ | measure_number2\_ | detailed | |
-| Energy^2 | $\langle E^2 \rangle$ | measure_energy2\_ | detailed | |
-| Density^2 | $\langle N^2 \rangle$ | measure_density2\_ | detailed | measure if lattice is homogeneous  |
-|  Energy Density^2 | $\langle E^2 \rangle$ | measure_energy_density2\_ | detailed | measure if lattice is homogeneous  |
-| Winding Number^2 | $\langle W\_{\alpha}^2 \rangle$ | measure_winding_number\_ | detailed | measure if lattice is periodic:  $\alpha=x,y,z$ |
-| Stiffness (superfluid density) | $\langle \rho_s \rangle$ | measure_winding_number\_ | detailed | measure if lattice is periodic:  $\alpha=x,y,z$ |
-| Local Kink:Number | $\langle n_i^r \rangle$ | measure_local_num_kinks\_ | simple | |
-| Local Density | $\langle n_i \rangle$ | measure_local_density\_ | simple | |
-| Local Density^2 | $\langle n_i^2 \rangle$ | measure_local_density2\_ | simple | |
+| Total Particle Number^2 | $\langle N^2 \rangle$ | measure_number2_ | detailed | |
+| Energy^2 | $\langle E^2 \rangle$ | measure_energy2_ | detailed | |
+| Density^2 | $\langle N^2 \rangle$ | measure_density2_ | detailed | measure if lattice is homogeneous  |
+|  Energy Density^2 | $\langle E^2 \rangle$ | measure_energy_density2_ | detailed | measure if lattice is homogeneous  |
+| Winding Number^2 | $\langle W_{\alpha}^2 \rangle$ | measure_winding_number_ | detailed | measure if lattice is periodic:  $\alpha=x,y,z$ |
+| Stiffness (superfluid density) | $\langle \rho_s \rangle$ | measure_winding_number_ | detailed | measure if lattice is periodic:  $\alpha=x,y,z$ |
+| Local Kink:Number | $\langle n_i^r \rangle$ | measure_local_num_kinks_ | simple | |
+| Local Density | $\langle n_i \rangle$ | measure_local_density_ | simple | |
+| Local Density^2 | $\langle n_i^2 \rangle$ | measure_local_density2_ | simple | |
 | Green Function:0 | $g_f \left(\alpha=0\right)$ | | detailed | measure always |
-| Green Function:1 | $\sum\_{i=x,y,z} g_f \left(\alpha_i =1\right)$ | | detailed | measure always |
-| Green Function | $g_f \left(\alpha ; \gamma = 0 \right)$ | measure_green_function\_ | simple | |
-| Green Function:TOF | $g_f \left(\alpha \right)$ | measure_green_function\_ | simple | measure if tof_phase != 0 |
+| Green Function:1 | $\sum_{i=x,y,z} g_f \left(\alpha_i =1\right)$ | | detailed | measure always |
+| Green Function | $g_f \left(\alpha ; \gamma = 0 \right)$ | measure_green_function_ | simple | |
+| Green Function:TOF | $g_f \left(\alpha \right)$ | measure_green_function_ | simple | measure if tof_phase != 0 |
 | Momentum Distribution:0 |  $\langle n_k \left( 0 ; \gamma = 0 \right) \rangle$ | | detailed | measure if tof_phase == 0 |
 |  Momentum Distribution:TOF:0 |  $\langle n_k \left( 0 \right) \rangle$ | | detailed | measure if tof_phase != 0 |
 

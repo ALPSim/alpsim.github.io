@@ -11,7 +11,7 @@ The **Bose-Hubbard model** is a cornerstone of theoretical physics, particularly
 The Bose-Hubbard model is defined by the following Hamiltonian:
 
 $$
-H = -t \sum\_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + \frac{U}{2} \sum_i n_i (n_i - 1) - \mu \sum_i n_i,
+H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + \frac{U}{2} \sum_i n_i (n_i - 1) - \mu \sum_i n_i,
 $$
 
 where:
