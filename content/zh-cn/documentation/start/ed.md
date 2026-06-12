@@ -2,7 +2,7 @@
 title: 精确对角化
 linkTitle: 精确对角化
 description: "使用稀疏精确对角化方法计算 S=1 海森堡链的 Haldane 能隙。"
-weight: 6
+weight: 5
 math: true
 ---
 

@@ -2,7 +2,7 @@
 title: Exact Diagonalization
 linkTitle: Exact Diagonalization
 description: "Compute the Haldane gap of the S=1 Heisenberg chain using sparse exact diagonalization."
-weight: 6
+weight: 5
 math: true
 ---
 
