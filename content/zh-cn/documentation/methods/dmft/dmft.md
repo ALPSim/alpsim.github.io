@@ -34,7 +34,7 @@ weight: 9
 | MAX_IT | maximum number of iteration in self-consistency loop (usually 10-20 will be enough) |
 | CONVERGED | criterium for stopping the self-consistency loop before reaching MAX_IT - if the maximum change in Green's function in Matsubara representation is less than CONVERGED, the loop will stop |
 | TOLERANCE | (only for hirschfyesim) as above |
-| RELAX_RATE | (by default 1; currently implemented only for selfconsistency loop with OMEGA_LOOP switched on) the new Green's function are in general computed as RELAX\_RATE \* $G\_{new}(i\omega_n)$ + (1-RELAX\_RATE) \* $G\_{old}(i\omega_n)$, which may help if oscillations occur |
+| RELAX_RATE | (by default 1; currently implemented only for selfconsistency loop with OMEGA_LOOP switched on) the new Green's function are in general computed as RELAX_RATE \* $G_{new}(i\omega_n)$ + (1-RELAX_RATE) \* $G_{old}(i\omega_n)$, which may help if oscillations occur |
 
 ### General parameters
 
@@ -147,7 +147,7 @@ weight: 9
 
 ### The output files for the hybridization expansion impurity solver: (text files) 
 
-- overlap: i-th row contains the $\langle n\_\downarrow n\_\uparrow\rangle$ in the i-th iteration 
+- overlap: i-th row contains the $\langle n_\downarrow n_\uparrow\rangle$ in the i-th iteration 
 - matrix_size:
 
 

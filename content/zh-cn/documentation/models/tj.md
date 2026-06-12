@@ -11,15 +11,15 @@ The **t-J model** is a widely studied theoretical framework in condensed matter 
 The t-J model describes the dynamics of electrons (or holes) moving on a lattice, where double occupancy of any lattice site is prohibited due to strong repulsive interactions. This constraint is a key feature of the model and reflects the strong correlation effects in the system. The Hamiltonian of the t-J model consists of two main terms:
 
 $$
-H = -t \sum\_{\langle i,j \rangle, \sigma} \left( \tilde{c}\_{i,\sigma}^\dagger \tilde{c}\_{j,\sigma} + \text{h.c.} \right) + J \sum\_{\langle i,j \rangle} \left( \mathbf{S}\_i \cdot \mathbf{S}\_j - \frac{n_i n_j}{4} \right),
+H = -t \sum_{\langle i,j \rangle, \sigma} \left( \tilde{c}_{i,\sigma}^\dagger \tilde{c}_{j,\sigma} + \text{h.c.} \right) + J \sum_{\langle i,j \rangle} \left( \mathbf{S}_i \cdot \mathbf{S}_j - \frac{n_i n_j}{4} \right),
 $$
 
 where:
 - $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
 - $J$ is the antiferromagnetic exchange interaction between spins on neighboring sites,
-- $\tilde{c}\_{i,\sigma}^\dagger$ and $\tilde{c}\_{i,\sigma}$ are the creation and annihilation operators for electrons with spin $\sigma$ at site $i$, projected onto the subspace with no double occupancy,
-- $\mathbf{S}\_i$ is the spin operator at site $i$,
-- $n_i = \sum\_\sigma \tilde{c}\_{i,\sigma}^\dagger \tilde{c}\_{i,\sigma}$ is the number operator at site $i$.
+- $\tilde{c}_{i,\sigma}^\dagger$ and $\tilde{c}_{i,\sigma}$ are the creation and annihilation operators for electrons with spin $\sigma$ at site $i$, projected onto the subspace with no double occupancy,
+- $\mathbf{S}_i$ is the spin operator at site $i$,
+- $n_i = \sum_\sigma \tilde{c}_{i,\sigma}^\dagger \tilde{c}_{i,\sigma}$ is the number operator at site $i$.
 
 The first term in the Hamiltonian represents the kinetic energy of electrons hopping between lattice sites, while the second term describes the spin-spin interactions between neighboring sites. The projection onto the subspace with no double occupancy is a crucial aspect of the model, reflecting the strong correlation effects.
 

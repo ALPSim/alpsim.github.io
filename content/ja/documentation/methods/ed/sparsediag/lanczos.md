@@ -15,11 +15,11 @@ The Lanczos method is an iterative algorithm that reduces a symmetric matrix $A$
 
 2. **Iteration**:
    For $j = 1, 2, \dots, m$:
-   - Compute $w = A v_j - \beta\_{j-1} v\_{j-1}$.
+   - Compute $w = A v_j - \beta_{j-1} v_{j-1}$.
    - Compute $\alpha_j = v_j^\top w$.
    - Compute $w = w - \alpha_j v_j$.
    - Compute $\beta_j = \|w\|$.
-   - If $\beta_j = 0$, stop; otherwise, set $v\_{j+1} = w / \beta_j$.
+   - If $\beta_j = 0$, stop; otherwise, set $v_{j+1} = w / \beta_j$.
 
 3. **Tridiagonal Matrix**:
    After $m$ iterations, the matrix $T$ is constructed as:
@@ -28,8 +28,8 @@ The Lanczos method is an iterative algorithm that reduces a symmetric matrix $A$
    \alpha_1 & \beta_1 & 0 & \dots & 0 \\\
    \beta_1 & \alpha_2 & \beta_2 & \dots & 0 \\\
    0 & \beta_2 & \alpha_3 & \dots & 0 \\\
-   \vdots & \vdots & \vdots & \ddots & \beta\_{m-1} \\\
-   0 & 0 & 0 & \beta\_{m-1} & \alpha_m
+   \vdots & \vdots & \vdots & \ddots & \beta_{m-1} \\\
+   0 & 0 & 0 & \beta_{m-1} & \alpha_m
    \end{pmatrix}
    $$
 

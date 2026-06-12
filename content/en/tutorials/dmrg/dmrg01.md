@@ -10,7 +10,7 @@ toc: true
 For applications of DMRG, we consider two models, namely the spin-1/2 and the spin-1 antiferromagnetic Heisenberg chains of length L given by the following Hamiltonian,
 
 $$
-H = J\sum\_{i=1}^{L-1} \left[\frac{1}{2} (S^+\_i S^-\_{i+1} + S^-\_i S^+\_{i+1}) + S^z_i S^z\_{i+1}\right] .
+H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
 The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behaviour and pose very different challenges to the DMRG algorithm. Let us briefly review their physical properties.
@@ -440,7 +440,7 @@ The correct way is to eliminate the effect of the open boundary conditions by co
 
 2. The less costly and usual way would be to use correlators (as discussed further below, so we postpone this exercise until then) between neighbouring sites and use
 $$
-e_0/J = \frac{1}{2} (\langle S^+\_i S^-\_{i+1}\rangle  + \langle S^-\_i S^+\_{i+1}\rangle ) + \langle S^z_i S^z\_{i+1} \rangle 
+e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$
 
 for sites $i,i+1$ at the chain center.

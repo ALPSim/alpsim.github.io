@@ -15,8 +15,8 @@ Here is an overview of the functions available
 | `mean` | Timeseries | None | `AverageType` |
 | `variance` | Timeseries | None | `AverageType` | 
 | `error` | Timeseries | uncorrelated, binning | `AverageType` |
-| `autocorrelation` | Timeseries | \_distance, \_limit | `mctimeseries<AverageType>` | 
-| `exponential_autocorrelation_time` | Scalar MCTimeseries | \_from & \_to, \_max & \_min | `std::pair<AverageType, AverageType>` |
+| `autocorrelation` | Timeseries | _distance, _limit | `mctimeseries<AverageType>` | 
+| `exponential_autocorrelation_time` | Scalar MCTimeseries | _from & _to, _max & _min | `std::pair<AverageType, AverageType>` |
 | `integrated_autocorrelation_time` | Scalar MCTimeseries, `std::pair<AverageType, AverageType>` | None | `AverageType` |
 | `running_mean` | Timeseries | None | `mctimeseries<AverageType>` |
 | `reverse_running_mean` | Timeseries | None | `mctimeseries<AverageType>` |
@@ -27,8 +27,8 @@ The objects `mctimeseries<ValueType>` and `mctimeseries_view<ValueType>` are ess
 
 | **Function Name** | **Argument(s)** | **Options** | **Return Type** |
 | :---------------- | :-------------- | :---------- | :-------------- |
-| `cut_head` | Timeseries | \_distance, \_limit | `mctimeseries_view<ValueType>` |
-| `cut_tail` | Timeseries | \_distance, \_limit | `mctimeseries_view<ValueType>` |
+| `cut_head` | Timeseries | _distance, _limit | `mctimeseries_view<ValueType>` |
+| `cut_tail` | Timeseries | _distance, _limit | `mctimeseries_view<ValueType>` |
 
 
 ## Mean
