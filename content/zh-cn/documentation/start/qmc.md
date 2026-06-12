@@ -2,7 +2,7 @@
 title: CT-HYB 杂质求解器
 linkTitle: CT-HYB
 description: "使用 CT-HYB 量子杂质求解器模拟磁性杂质的近藤屏蔽效应。"
-weight: 5
+weight: 3
 math: true
 ---
 

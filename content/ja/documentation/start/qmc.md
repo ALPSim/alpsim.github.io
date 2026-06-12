@@ -2,7 +2,7 @@
 title: CT-HYB 不純物ソルバー
 linkTitle: CT-HYB
 description: "CT-HYB 量子不純物ソルバーを用いた磁性不純物の近藤スクリーニングシミュレーション。"
-weight: 5
+weight: 3
 math: true
 ---
 

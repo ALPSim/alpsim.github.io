@@ -2,7 +2,7 @@
 title: 精确对角化
 linkTitle: 精确对角化
 description: "如何使用 ALPS"
-weight: 6
+weight: 5
 ---
 
 作为稀疏矩阵精确对角化方法的示例，我们将获得自旋链模型的三重态能隙作为系统大小的函数。

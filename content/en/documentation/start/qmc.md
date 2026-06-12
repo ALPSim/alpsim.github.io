@@ -2,7 +2,7 @@
 title: CT-HYB Impurity Solver
 linkTitle: CT-HYB
 description: "Simulate Kondo screening of a magnetic impurity using the CT-HYB quantum impurity solver."
-weight: 5
+weight: 3
 math: true
 ---
 

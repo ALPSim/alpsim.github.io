@@ -2,7 +2,7 @@
 linkTitle: 经典蒙特卡洛
 title: 经典蒙特卡洛模拟
 description: "二维伊辛模型的相变"
-weight: 4
+weight: 2
 math: true
 ---
 

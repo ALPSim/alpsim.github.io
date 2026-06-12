@@ -2,7 +2,7 @@
 title: Exact Diagonaliztion
 linkTitle: Exact Diagonaliztion
 description: "How to use ALPS"
-weight: 6
+weight: 5
 ---
 
 As an example of the sparse exact diagonalization method, we will obtain the triplet gap as a function of system size for the spin chain model.
