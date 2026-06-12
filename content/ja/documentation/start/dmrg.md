@@ -2,7 +2,7 @@
 title: Density Matrix Renormalization Group
 linkTitle: Density Matrix Renormalization Group
 description: "How to use ALPS"
-weight: 7
+weight: 4
 math: true
 ---
 

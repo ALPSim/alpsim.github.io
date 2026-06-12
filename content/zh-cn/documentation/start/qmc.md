@@ -2,7 +2,7 @@
 title: 量子蒙特卡洛模拟
 linkTitle: 量子蒙特卡洛
 description: "如何使用 ALPS"
-weight: 5
+weight: 3
 math: true
 ---
 
