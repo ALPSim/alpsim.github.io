@@ -1,11 +1,24 @@
 ---
 title: About
 description: "About ALPS"
-layout: alps-home 
-toc: true  
+toc: true
+cascade:
+    type: docs
 ---
 
-ALPS is a software package for simulating correlated systems, with codes for classical spin systems, quantum spin systems, bosonic systems, and fermion systems.
+ALPS (Algorithms and Libraries for Physics Simulations) is an open-source package for numerical simulations of quantum and classical condensed matter systems. It provides production-ready implementations of leading quantum algorithms for spin, bosonic, and fermionic lattice models. A Python interface and standardized file formats make it straightforward to set up simulations, run them on a laptop or HPC cluster, and analyse the results.
+
+Since its inception, ALPS has been used by hundreds of researchers across at least 52 countries, has underpinned thousands of publications, and has been applied to more than 20 research disciplines.
+
+## Mission
+
+ALPS aims to house and distribute software for simulation of correlated quantum systems.
+
+<div class="btn-grid">
+{{< cta-button text="Events" link="events" icon="event" >}}
+{{< cta-button text="Governance" link="govern" icon="account_balance" >}}
+{{< cta-button text="FAQ" link="faqs" icon="help" >}}
+</div>
 
 ## Licensing
 

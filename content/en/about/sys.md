@@ -1,8 +1,7 @@
 ---
 title: Our Systems
 description: "About ALPS"
-layout: alps-home 
-toc: true  
+toc: true
 ---
 
 ALPS can simulate a broad range of particles residing on 1D, 2D, and 3D lattice systems, including classical and quantum spins with or without external magnetic fields, and Fermionic and Bosonic particles interacting through on-site Coulomb or optical lattice potentials.

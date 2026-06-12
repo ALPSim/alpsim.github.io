@@ -1,11 +1,24 @@
 ---
 title: 关于我们
 description: "ALPS 项目介绍"
-layout: alps-home 
-toc: true  
+toc: true
+cascade:
+    type: docs
 ---
 
-ALPS 是一个面向关联系统模拟的软件包，包含经典自旋系统、量子自旋系统、玻色子系统及费米子系统的模拟代码。
+ALPS（物理模拟算法与程序库）是一款面向量子和经典凝聚态系统数值模拟的开源软件包。它提供了适用于自旋、玻色子和费米子格点模型的一流量子算法的生产级实现。Python 接口与标准化文件格式使模拟的搭建、运行（笔记本电脑或高性能集群均可）以及结果分析变得简便高效。
+
+自诞生以来，ALPS 已被来自至少 52 个国家的数百位研究人员使用，支撑了数千篇论文发表，并已应用于 20 多个研究领域。
+
+## 使命
+
+ALPS 旨在托管和分发用于模拟关联量子系统的软件。
+
+<div class="btn-grid">
+{{< cta-button text="活动" link="events" icon="event" >}}
+{{< cta-button text="领导团队" link="govern" icon="account_balance" >}}
+{{< cta-button text="常见问题" link="faqs" icon="help" >}}
+</div>
 
 ## 许可协议
 

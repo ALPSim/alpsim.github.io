@@ -1,8 +1,7 @@
 ---
 title: 我们的系统
 description: "ALPS 系统介绍"
-layout: alps-home 
-toc: true  
+toc: true
 ---
 
 ALPS 能够模拟多种存在于一维、二维和三维晶格系统中的粒子，包括：
