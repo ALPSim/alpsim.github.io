@@ -139,7 +139,7 @@ def build_index() -> list:
 if __name__ == '__main__':
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     index = build_index()
-    OUTPUT.write_text(json.dumps(index, ensure_ascii=False, separators=(',', ':')))
+    OUTPUT.write_text(json.dumps(index, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     sizes = [len(e['sections']) for e in index]
     print(f'Built docs index: {len(index)} pages, '
           f'{sum(sizes)} sections → {OUTPUT.relative_to(ROOT)}')

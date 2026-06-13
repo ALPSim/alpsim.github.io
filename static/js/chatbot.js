@@ -2272,13 +2272,14 @@
       if (docMatch) {
         var sec = docMatch.section;
         var html = 'I found this in the documentation:<br><br>';
-        html += '<strong><a href="{lang}' + docMatch.page.url + '">' + esc(docMatch.page.title) + '</a></strong>';
+        var docUrl = encodeURI(docMatch.page.url);
+        html += '<strong><a href="{lang}' + docUrl + '">' + esc(docMatch.page.title) + '</a></strong>';
         if (sec && sec.h) html += ' &rsaquo; ' + esc(sec.h);
         if (sec && sec.t) {
           var snippet = sec.t.length > 220 ? sec.t.slice(0, 220) + '…' : sec.t;
           html += '<br><small style="opacity:0.75">' + esc(snippet) + '</small>';
         }
-        html += '<br><br>&#8594; <a href="{lang}' + docMatch.page.url + '">Read more</a>';
+        html += '<br><br>&#8594; <a href="{lang}' + docUrl + '">Read more</a>';
         return html;
       }
       return 'I\'m not sure about that. Try the ' +
