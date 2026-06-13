@@ -75,19 +75,19 @@ Finally, we diagonalize each block of the Hamiltonian to obtain the eigenvalues 
 The $S^z_{\text{total}} = 0$ sector consists of states with exactly 2 spins up ($\uparrow$) and 2 spins down ($\downarrow$). For a 4-site chain, there are $\binom{4}{2} = 6$ basis states in this sector:
 
 $$
-|\psi_1\rangle = |\uparrow, \uparrow, \downarrow, \downarrow\rangle, \quad |\psi_2\rangle = |\uparrow, \downarrow, \uparrow, \downarrow\rangle, \quad |\psi_3\rangle = |\uparrow, \downarrow, \downarrow, \uparrow\rangle, \\\
+|\psi_1\rangle = |\uparrow, \uparrow, \downarrow, \downarrow\rangle, \quad |\psi_2\rangle = |\uparrow, \downarrow, \uparrow, \downarrow\rangle, \quad |\psi_3\rangle = |\uparrow, \downarrow, \downarrow, \uparrow\rangle, \\
 |\psi_4\rangle = |\downarrow, \uparrow, \uparrow, \downarrow\rangle, \quad |\psi_5\rangle = |\downarrow, \uparrow, \downarrow, \uparrow\rangle, \quad |\psi_6\rangle = |\downarrow, \downarrow, \uparrow, \uparrow\rangle
 $$
 
 The full Hamiltonian matrix for the $S^z_{\text{total}}=0$ sector is given by
 $$
 \mathcal{H} = J\begin{pmatrix}
- 0 & 0.5 & 0 & 0 & 0.5 & 0 \\\
- 0.5 & -1 & 0.5 & 0.5 & 0 & 0.5 \\\
- 0 & 0.5 & 0 & 0 & 0.5 & 0 \\\
- 0 & 0.5 & 0 & 0 & 0.5 & 0 \\\
- 0.5 & 0 & 0.5 & 0.5 & -1 & 0.5 \\\
- 0 & 0.5 & 0 & 0 & 0.5 & 0 \\\
+ 0 & 0.5 & 0 & 0 & 0.5 & 0 \\
+ 0.5 & -1 & 0.5 & 0.5 & 0 & 0.5 \\
+ 0 & 0.5 & 0 & 0 & 0.5 & 0 \\
+ 0 & 0.5 & 0 & 0 & 0.5 & 0 \\
+ 0.5 & 0 & 0.5 & 0.5 & -1 & 0.5 \\
+ 0 & 0.5 & 0 & 0 & 0.5 & 0 \\
 \end{pmatrix}.
 $$
 Exact diagonalization of the above matrix gives $E_1=-2J$, $E_2=-J$, $E_3=0$, $E_4=0$, $E_5=0$, and $E_6=J$.
@@ -118,8 +118,8 @@ In the above construction of basis states in momentum space, two **representativ
 The Hamiltonian matrix in this sector is given by:
 $$
 \mathcal{H} = J\begin{pmatrix}
-0 & \sqrt{2} \\\
-\sqrt{2} & -1 \\\
+0 & \sqrt{2} \\
+\sqrt{2} & -1 \\
 \end{pmatrix}.
 $$
 Exact diagonalization of the matrix gives $E_1=-2J$ and $E_2=J$.
@@ -154,8 +154,8 @@ The Hamiltonian matrix in this sector is:
 
 $$
 \mathcal{H} = J \begin{pmatrix}
-0 & 0 \\\
-0 & -1 \\\
+0 & 0 \\
+0 & -1 \\
 \end{pmatrix},
 $$
 the exact diagonalization of which gives $E_4=-J$ and $E_5=0$.
