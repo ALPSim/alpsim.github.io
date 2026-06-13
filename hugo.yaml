@@ -85,6 +85,7 @@ languages:
           weight: 20
           params:
             type: language-switch
+            label: true
 
   zh-cn:
     label: 中文
@@ -154,6 +155,7 @@ languages:
           weight: 20
           params:
             type: language-switch
+            label: true
 
   ja:
     label: 日本語
@@ -223,6 +225,7 @@ languages:
           weight: 20
           params:
             type: language-switch
+            label: true
 
 module:
   hugoVersion:
