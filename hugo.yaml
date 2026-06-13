@@ -19,6 +19,7 @@ defaultContentLanguage: en
 languages:
   en:
     label: English
+    languageName: English
     contentDir: content/en
     locale: en
     weight: 1
@@ -89,6 +90,7 @@ languages:
 
   zh-cn:
     label: 中文
+    languageName: 中文
     contentDir: content/zh-cn
     locale: zh-cn
     weight: 2
@@ -159,6 +161,7 @@ languages:
 
   ja:
     label: 日本語
+    languageName: 日本語
     contentDir: content/ja
     locale: ja
     weight: 3
