@@ -7,6 +7,9 @@
   /* conversation state for multi-turn input-file flow */
   var chatState = { mode: 'normal' };
 
+  /* docs-index loaded asynchronously for fallback search */
+  var docsIndex = null;
+
   /* global store for copy-to-clipboard */
   window._alpsCodeStore = [];
   window.alpsCodeCopy = function (idx, btn) {
@@ -486,6 +489,42 @@
       if (s > bestS) { bestS = s; best = KB[i]; }
     }
     return best;
+  }
+
+  function searchDocsIndex(query) {
+    if (!docsIndex) return null;
+    var words = query.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(function (w) {
+      return w.length > 2 && _SCORE_STOP.indexOf(w) === -1;
+    });
+    if (!words.length) return null;
+
+    var best = null, bestS = 0;
+    for (var i = 0; i < docsIndex.length; i++) {
+      var page = docsIndex[i];
+      var titleLow = page.title.toLowerCase();
+      var pageS = 0;
+      words.forEach(function (w) {
+        if (titleLow.indexOf(w) !== -1) pageS += 3;
+      });
+
+      var bestSec = null, bestSecS = 0;
+      for (var j = 0; j < page.sections.length; j++) {
+        var sec = page.sections[j];
+        var secS = 0;
+        var hl = (sec.h || '').toLowerCase();
+        var tl = (sec.t || '').toLowerCase();
+        words.forEach(function (w) {
+          if (hl.indexOf(w) !== -1) secS += 3;
+          if (tl.indexOf(w) !== -1) secS += 1;
+        });
+        if (secS > bestSecS) { bestSecS = secS; bestSec = sec; }
+      }
+
+      var total = pageS + bestSecS;
+      if (total > bestS) { bestS = total; best = { page: page, section: bestSec }; }
+    }
+
+    return bestS >= 3 ? best : null;
   }
 
   /* ================================================================
@@ -2229,6 +2268,20 @@
     /* --- general KB lookup --- */
     var match = findBestKB(q);
     if (!match) {
+      var docMatch = searchDocsIndex(q);
+      if (docMatch) {
+        var sec = docMatch.section;
+        var html = 'I found this in the documentation:<br><br>';
+        var docUrl = encodeURI(docMatch.page.url);
+        html += '<strong><a href="{lang}' + docUrl + '">' + esc(docMatch.page.title) + '</a></strong>';
+        if (sec && sec.h) html += ' &rsaquo; ' + esc(sec.h);
+        if (sec && sec.t) {
+          var snippet = sec.t.length > 220 ? sec.t.slice(0, 220) + '…' : sec.t;
+          html += '<br><small style="opacity:0.75">' + esc(snippet) + '</small>';
+        }
+        html += '<br><br>&#8594; <a href="{lang}' + docUrl + '">Read more</a>';
+        return html;
+      }
       return 'I\'m not sure about that. Try the ' +
              '<a href="{lang}/documentation">Documentation</a>, ' +
              '<a href="{lang}/faqs">FAQs</a>, or ask on ' +
@@ -2262,6 +2315,11 @@
   function init() {
     var widget   = document.getElementById('alps-chat-widget');
     if (!widget) return;
+
+    fetch('/data/docs-index.json')
+      .then(function (r) { return r.json(); })
+      .then(function (d) { docsIndex = d; })
+      .catch(function () { /* silent — fallback simply won't be available */ });
 
     var toggleBtn = document.getElementById('alps-chat-toggle');
     var closeBtn  = document.getElementById('alps-chat-close');
