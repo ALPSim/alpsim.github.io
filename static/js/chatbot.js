@@ -493,7 +493,7 @@
 
   function searchDocsIndex(query) {
     if (!docsIndex) return null;
-    var words = query.toLowerCase().split(/\s+/).filter(function (w) {
+    var words = query.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(function (w) {
       return w.length > 2 && _SCORE_STOP.indexOf(w) === -1;
     });
     if (!words.length) return null;
