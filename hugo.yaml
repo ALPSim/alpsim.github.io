@@ -25,33 +25,33 @@ languages:
     weight: 1
     menu:
       main:
-        - identifier: about
-          name: About
-          pageRef: /about
+        - identifier: installation
+          name: Installation
+          pageRef: /install
           weight: 1
         - identifier: start
           name: Getting Started
-          pageRef: /documentation/start
+          pageRef: /start
           weight: 2
-        - identifier: installation
-          name: Installation
-          pageRef: /documentation/install
+        - identifier: tutorials
+          name: Tutorials
+          pageRef: /tutorials
           weight: 3
         - identifier: documentation
           name: Documentation
           pageRef: /documentation
           weight: 4
-        - identifier: tutorials
-          name: Tutorials
-          pageRef: /tutorials
+        - identifier: about
+          name: About
+          pageRef: /about
           weight: 5
-        - identifier: events
-          name: Events
-          pageRef: /events
-          weight: 6
         - identifier: govern
           name: Governance
           pageRef: /govern
+          weight: 6
+        - identifier: events
+          name: Events
+          pageRef: /events
           weight: 7
         - identifier: faqs
           name: FAQs
@@ -96,33 +96,33 @@ languages:
     weight: 2
     menu:
       main:
-        - identifier: about
-          name: 关于我们
-          pageRef: /about
+        - identifier: installation
+          name: 安装指南
+          pageRef: /install
           weight: 1
         - identifier: start
           name: 快速入门
-          pageRef: /documentation/start
+          pageRef: /start
           weight: 2
-        - identifier: installation
-          name: 安装指南
-          pageRef: /documentation/install
+        - identifier: tutorials
+          name: 教程资源
+          pageRef: /tutorials
           weight: 3
         - identifier: documentation
           name: 文档中心
           pageRef: /documentation
           weight: 4
-        - identifier: tutorials
-          name: 教程资源
-          pageRef: /tutorials
+        - identifier: about
+          name: 关于我们
+          pageRef: /about
           weight: 5
-        - identifier: events
-          name: 活动日程
-          pageRef: /events
-          weight: 6
         - identifier: govern
           name: 领导团队
           pageRef: /govern
+          weight: 6
+        - identifier: events
+          name: 活动日程
+          pageRef: /events
           weight: 7
         - identifier: faqs
           name: 常见问题
@@ -167,33 +167,33 @@ languages:
     weight: 3
     menu:
       main:
-        - identifier: about
-          name: 概要
-          pageRef: /about
+        - identifier: installation
+          name: インストール
+          pageRef: /install
           weight: 1
         - identifier: start
           name: はじめに
-          pageRef: /documentation/start
+          pageRef: /start
           weight: 2
-        - identifier: installation
-          name: インストール
-          pageRef: /documentation/install
+        - identifier: tutorials
+          name: チュートリアル
+          pageRef: /tutorials
           weight: 3
         - identifier: documentation
           name: ドキュメント
           pageRef: /documentation
           weight: 4
-        - identifier: tutorials
-          name: チュートリアル
-          pageRef: /tutorials
+        - identifier: about
+          name: 概要
+          pageRef: /about
           weight: 5
-        - identifier: events
-          name: イベント
-          pageRef: /events
-          weight: 6
         - identifier: govern
           name: 運営体制
           pageRef: /govern
+          weight: 6
+        - identifier: events
+          name: イベント
+          pageRef: /events
           weight: 7
         - identifier: faqs
           name: よくある質問

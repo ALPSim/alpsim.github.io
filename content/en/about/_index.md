@@ -1,6 +1,7 @@
 ---
 title: About
 description: "About ALPS"
+weight: 5
 toc: true
 cascade:
     type: docs
@@ -15,9 +16,9 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 ALPS aims to house and distribute software for simulation of correlated quantum systems.
 
 <div class="btn-grid">
-{{< cta-button text="Events" link="events" icon="event" >}}
-{{< cta-button text="Governance" link="govern" icon="account_balance" >}}
-{{< cta-button text="FAQ" link="faqs" icon="help" >}}
+{{< cta-button text="Events" link="../events" icon="event" >}}
+{{< cta-button text="Governance" link="../govern" icon="account_balance" >}}
+{{< cta-button text="FAQ" link="../faqs" icon="help" >}}
 </div>
 
 ## Licensing

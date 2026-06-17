@@ -32,7 +32,7 @@ From Logan airport, you can use Uber, or public transportation. At your terminal
 
 ## Before the Meeting
 
-At this moment, **We kindly ask you to send us a title for your talk, if you intend to give one,** so we can put together the program. The program will follow a similar format as our past workshop in Spain (you can find it [here](../sansebastian)).
+At this moment, **We kindly ask you to send us a title for your talk, if you intend to give one,** so we can put together the program. The program will follow a similar format as our past workshop in Spain (you can find it [here](sanSebastian)).
 
 The easiest would be for you to send an email to Adrian Feiguin at <a href="mailto:adrianfeiguin@gmail.com">adrianfeiguin@gmail.com</a>, answering these questions:
 
@@ -44,7 +44,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 
 The workshop will begin in the morning of Jul. 30th, and end in the afternoon of Aug. 1st. 
 
-### Schedule: <a href="../Agenda_Boston.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+### Schedule: <a href="Agenda_Boston.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
  
 ## List of Participants

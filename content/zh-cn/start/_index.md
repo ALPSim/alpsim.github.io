@@ -1,8 +1,10 @@
 ---
 title: 入门指南
 description: "ALPS 简介及安装方法"
-weight: 1
+weight: 2
 toc: true
+cascade:
+    type: docs
 aliases:
   - /zh-cn/documentation/start/intro/
   - /zh-cn/documentation/start/obtain/

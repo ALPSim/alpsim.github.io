@@ -21,10 +21,10 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 </div>
 
 <div class="btn-grid">
-{{< cta-button text="Get Started" link="documentation/start/intro" icon="rocket_launch" >}}
+{{< cta-button text="Get Started" link="start" icon="rocket_launch" >}}
 {{< cta-button text="GitHub Source" link="https://github.com/ALPSim/ALPS" icon="code" >}}
 {{< cta-button text="Events" link="events" icon="event" >}}
-{{< cta-button text="Installation" link="documentation/install" icon="download" >}}
+{{< cta-button text="Installation" link="install" icon="download" >}}
 {{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
 {{< cta-button text="Governance" link="govern" icon="account_balance" >}}
 {{< cta-button text="Tutorials" link="tutorials/" icon="school" >}}

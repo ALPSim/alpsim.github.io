@@ -1,6 +1,7 @@
 ---
 title: よくある質問
 description: "ALPSに関するFAQ"
+weight: 8
 toc: false
 ---
 
@@ -18,7 +19,7 @@ toc: false
 
 ### ALPSのインストール方法は？
 
-LinuxおよびMacシステム向けのインストール手順は[インストールガイドページ](../documentation/install/)をご参照ください。現在Windowsシステムはサポートしておりません。
+LinuxおよびMacシステム向けのインストール手順は[インストールガイドページ](../install/)をご参照ください。現在Windowsシステムはサポートしておりません。
 
 ### ALPSへの貢献方法は？
 

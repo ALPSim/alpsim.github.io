@@ -1,6 +1,7 @@
 ---
 title: Events
 description: "Developer Meetings and User Workshops"
+weight: 7
 toc: false
 sidebar:
   exclude: true

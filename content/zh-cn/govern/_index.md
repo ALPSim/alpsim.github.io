@@ -1,6 +1,7 @@
 ---
 title: 领导团队
 description: "ALPS 项目治理结构"
+weight: 6
 toc: false
 ---
 

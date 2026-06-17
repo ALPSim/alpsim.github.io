@@ -50,32 +50,32 @@
                  'linux', 'mac', 'macos'],
       response:
         'ALPS can be installed in three ways:<ul>' +
-        '<li><a href="{lang}/documentation/install/binary">Binary packages</a> — easiest, pre-compiled</li>' +
-        '<li><a href="{lang}/documentation/install/source">From source</a> — full control, requires compilation</li>' +
-        '<li><a href="{lang}/documentation/install/spack">Via Spack</a> — ideal for HPC clusters</li>' +
+        '<li><a href="{lang}/install/binary">Binary packages</a> — easiest, pre-compiled</li>' +
+        '<li><a href="{lang}/install/source">From source</a> — full control, requires compilation</li>' +
+        '<li><a href="{lang}/install/spack">Via Spack</a> — ideal for HPC clusters</li>' +
         '</ul>' +
-        '&#8594; Full <a href="{lang}/documentation/install">Installation guide</a>'
+        '&#8594; Full <a href="{lang}/install">Installation guide</a>'
     },
     {
       keywords: ['binary', 'prebuilt', 'pre-built', 'binary package', 'conda', 'pip',
                  'package manager', 'easiest install', 'no compile'],
       response:
         'The <strong>binary installation</strong> is the easiest way — no compilation required.<br><br>' +
-        '&#8594; <a href="{lang}/documentation/install/binary">Binary installation guide</a>'
+        '&#8594; <a href="{lang}/install/binary">Binary installation guide</a>'
     },
     {
       keywords: ['build from source', 'compile', 'cmake', 'git clone', 'source code',
                  'build alps', 'compile alps', 'from source'],
       response:
         'You can <strong>build ALPS from source</strong> for full customization and development access.<br><br>' +
-        '&#8594; <a href="{lang}/documentation/install/source">Build from source guide</a>'
+        '&#8594; <a href="{lang}/install/source">Build from source guide</a>'
     },
     {
       keywords: ['spack', 'hpc', 'supercomputer', 'cluster', 'module', 'lmod',
                  'high performance computing'],
       response:
         '<strong>Spack</strong> is the recommended method for HPC clusters and supercomputers.<br><br>' +
-        '&#8594; <a href="{lang}/documentation/install/spack">Spack installation guide</a>'
+        '&#8594; <a href="{lang}/install/spack">Spack installation guide</a>'
     },
     {
       keywords: ['windows', 'win10', 'win11', 'microsoft', 'wsl', 'windows support'],

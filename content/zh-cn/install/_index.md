@@ -4,7 +4,7 @@ description: "ALPS 安装方法"
 toc: true
 cascade:
     type: docs
-weight: 2
+weight: 1
 ---
 
 我们支持通过以下三种方式在 Mac/Linux 系统安装 ALPS：<br><br>

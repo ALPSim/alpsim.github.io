@@ -2,6 +2,7 @@
 title: 教程资源
 icon: school
 description: "ALPS 使用教程"
+weight: 3
 toc: true
 cascade:
     type: docs
