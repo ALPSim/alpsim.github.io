@@ -1,6 +1,7 @@
 ---
 title: ALPSについて
 description: "ALPSの概要"
+weight: 5
 toc: true
 cascade:
     type: docs

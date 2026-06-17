@@ -1,6 +1,7 @@
 ---
 title: 关于我们
 description: "ALPS 项目介绍"
+weight: 5
 toc: true
 cascade:
     type: docs

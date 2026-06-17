@@ -1,8 +1,10 @@
 ---
 title: はじめに
 description: "ALPSの概要とインストール方法"
-weight: 1
+weight: 2
 toc: true
+cascade:
+    type: docs
 aliases:
   - /ja/documentation/start/intro/
   - /ja/documentation/start/obtain/

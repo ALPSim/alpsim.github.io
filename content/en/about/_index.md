@@ -1,6 +1,7 @@
 ---
 title: About
 description: "About ALPS"
+weight: 5
 toc: true
 cascade:
     type: docs

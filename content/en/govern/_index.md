@@ -1,6 +1,7 @@
 ---
 title: Governance
 description: "ALPS Governance"
+weight: 6
 toc: false
 ---
 

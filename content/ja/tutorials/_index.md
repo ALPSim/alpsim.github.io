@@ -2,6 +2,7 @@
 title: チュートリアル
 icon: school
 description: "ALPSのチュートリアル"
+weight: 3
 toc: true
 cascade:
     type: docs

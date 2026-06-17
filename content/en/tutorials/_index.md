@@ -3,6 +3,7 @@
 title: Tutorials
 icon: school
 description: "Tutorials for ALPS"
+weight: 3
 toc: true
 cascade:
     type: docs

@@ -1,6 +1,7 @@
 ---
 title: 常见问题
 description: "ALPS 常见问题解答"
+weight: 8
 toc: false
 ---
 
@@ -18,7 +19,7 @@ toc: false
 
 ### 如何安装 ALPS？
 
-最简便的安装方式是在 Linux/Mac 系统或 Windows 的 Linux 子系统中使用[pyalps 二进制安装](../documentation/install/binary)。如需源码安装，请遵循[安装指南](../documentation/install/)中的 Linux/Mac 系统说明。
+最简便的安装方式是在 Linux/Mac 系统或 Windows 的 Linux 子系统中使用[pyalps 二进制安装](../install/binary)。如需源码安装，请遵循[安装指南](../install/)中的 Linux/Mac 系统说明。
 
 ### 如何为 ALPS 贡献代码？
 

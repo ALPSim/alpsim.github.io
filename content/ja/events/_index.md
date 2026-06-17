@@ -1,6 +1,7 @@
 ---
 title: イベント
 description: "開発者会議とユーザーワークショップ"
+weight: 7
 toc: false
 sidebar:
   exclude: true

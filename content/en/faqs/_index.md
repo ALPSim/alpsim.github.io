@@ -1,6 +1,7 @@
 ---
 title: Frequently Asked Questions
 description: "FAQs about ALPS"
+weight: 8
 toc: false
 ---
 
@@ -18,7 +19,7 @@ We encourage you to report the bug in the [issues section of our Github reposito
 
 ### How can I install ALPS?
 
-Please follow the instructions on our [installation page](../documentation/install/) for Linux and Mac systems. Currently we do not support Windows system.
+Please follow the instructions on our [installation page](../install/) for Linux and Mac systems. Currently we do not support Windows system.
 
 
 ### How can I contribute to ALPS?

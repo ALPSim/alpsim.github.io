@@ -1,6 +1,7 @@
 ---
 title: ガバナンス
 description: "ALPS ガバナンス"
+weight: 6
 toc: false
 ---
 

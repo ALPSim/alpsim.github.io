@@ -5,7 +5,7 @@ description: "ALPS Installation"
 toc: true
 cascade:
     type: docs
-weight: 2
+weight: 1
 ---
 
 We support ALPS installations on Mac/Linux machines with the following three methods:<br><br>

@@ -1,8 +1,10 @@
 ---
 title: Getting Started
 description: "Introduction to ALPS and how to install it"
-weight: 1
+weight: 2
 toc: true
+cascade:
+    type: docs
 aliases:
   - /documentation/start/intro/
   - /documentation/start/obtain/
