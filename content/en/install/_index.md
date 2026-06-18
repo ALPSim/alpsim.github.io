@@ -21,3 +21,10 @@ ALPS supports three installation methods on Mac and Linux. Choose the one that f
 {{< cta-button text="Source Installation" link="source" icon="code" >}}
 {{< cta-button text="Spack Installation" link="spack" icon="storage" >}}
 </div>
+
+If you encounter trouble during installation, please file an issue or reach us on Discord — we will do our best to help.
+
+<div class="btn-grid">
+{{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
+{{< cta-button text="Discord" link="https://discord.com/invite/JRNWnnva9g" icon="forum" >}}
+</div>

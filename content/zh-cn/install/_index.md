@@ -20,3 +20,10 @@ ALPS 在 Mac 和 Linux 上支持三种安装方式，请根据您的实际情况
 {{< cta-button text="源码安装" link="source" icon="code" >}}
 {{< cta-button text="Spack 安装" link="spack" icon="storage" >}}
 </div>
+
+如果在安装过程中遇到问题，请提交 Issue 或在 Discord 上联系我们——我们将尽力提供帮助。
+
+<div class="btn-grid">
+{{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
+{{< cta-button text="Discord" link="https://discord.com/invite/JRNWnnva9g" icon="forum" >}}
+</div>
