@@ -8,19 +8,16 @@ cascade:
 weight: 1
 ---
 
-We support ALPS installations on Mac/Linux machines with the following three methods:<br><br>
+ALPS supports three installation methods on Mac and Linux. Choose the one that fits your situation:
 
-{{< hextra/feature-grid maxcolumns="2" >}}
-  {{< hextra/feature-card
-    title="Binary Installations"
-    link="binary"
-  >}}
-  {{< hextra/feature-card
-    title="Source Installations"
-    link="source"
-  >}}
-  {{< hextra/feature-card
-    title="Spack Installations"
-    link="spack"
-  >}}
-{{< /hextra/feature-grid >}}
+**Most users should install the binary package.** It is the fastest and easiest way to get ALPS running, requiring no compilation and no special system privileges.
+
+**Developers and advanced users** who need full control over the build — for example to link against custom libraries, modify the source, or contribute to ALPS — should use the source installation.
+
+**HPC system operators and users on HPC clusters** should use Spack, particularly if their system already manages software through Spack.
+
+<div class="btn-grid">
+{{< cta-button text="Binary Installation" link="binary" icon="download" >}}
+{{< cta-button text="Source Installation" link="source" icon="code" >}}
+{{< cta-button text="Spack Installation" link="spack" icon="storage" >}}
+</div>

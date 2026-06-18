@@ -7,19 +7,16 @@ cascade:
 weight: 1
 ---
 
-ALPS は以下の3つの方法で Mac/Linux マシンにインストールできます：<br><br>
+ALPSはMacおよびLinux上で3つのインストール方法に対応しています。状況に応じて最適な方法をお選びください。
 
-{{< hextra/feature-grid maxcolumns="2" >}}
-  {{< hextra/feature-card
-    title="バイナリインストール"
-    link="binary"
-  >}}
-  {{< hextra/feature-card
-    title="ソースからのインストール"
-    link="source"
-  >}}
-  {{< hextra/feature-card
-    title="Spack インストール"
-    link="spack"
-  >}}
-{{< /hextra/feature-grid >}}
+**ほとんどのユーザーにはバイナリパッケージのインストールを推奨します。** コンパイル不要で特別なシステム権限も必要なく、最も手軽にALPSを導入できます。
+
+**開発者や上級ユーザー**で、カスタムライブラリへのリンク、ソースコードの変更、ALPSへの貢献など、ビルドを細かく制御したい場合はソースインストールをご利用ください。
+
+**HPCシステムの管理者やHPCクラスター利用者**にはSpackによるインストールを推奨します。特にシステムがすでにSpackでソフトウェア管理を行っている場合に適しています。
+
+<div class="btn-grid">
+{{< cta-button text="バイナリインストール" link="binary" icon="download" >}}
+{{< cta-button text="ソースインストール" link="source" icon="code" >}}
+{{< cta-button text="Spackインストール" link="spack" icon="storage" >}}
+</div>
