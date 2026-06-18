@@ -5,23 +5,45 @@ weight: 8
 toc: false
 ---
 
-### 如何在研究论文中引用 ALPS？
+### 我在使用 ALPS 时遇到了问题，需要帮助。
 
-我们的软件发布出版物详见[本页面](../documentation/pubs/papers)。特定数值方法请参考[代码与方法参考文献](../documentation/pubs/refs)。引用要求在[引用说明页](../documentation/pubs/citations)有详细说明。
+如果您在网页或文档中找不到答案，有两种求助方式：在 Discord 上提问以获得即时帮助，或在 Issues 中提交问题。我们将尽力及时回复您。
 
-### 关于 ALPS 安装、文档或教程的问题应咨询何处？
+<div class="btn-grid">
+{{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
+{{< cta-button text="Discord" link="https://discord.com/invite/JRNWnnva9g" icon="forum" >}}
+</div>
 
-我们创建了 Discord 频道供社区讨论。您可以在[Github 仓库讨论区](https://github.com/ALPSim/ALPS/discussions/categories/q-a)或[Discord 频道](https://discord.gg/JRNWnnva9g)提问。
+### 使用 ALPS 的条件是什么？
+
+ALPS 及其所有应用均以 [MIT 许可证](https://github.com/ALPSim/ALPS/blob/main/LICENSE)发布，这是目前最为宽松的开源许可证之一。您可以在几乎任何场景中自由使用、修改和分发 ALPS，包括将其集成到您自己的软件中或用于商业项目，限制极少。
+
+如果您使用 ALPS 并发表了相关科研成果，我们诚挚地希望您能引用我们的论文。请访问我们的[论文页面](../documentation/pubs/papers/)获取相应参考文献。
 
 ### 如何报告代码中的错误？
 
-欢迎在[Github 仓库的问题区](https://github.com/ALPSim/ALPS/issues)提交错误报告。我们的开发人员将立即调查潜在问题。
+如果您发现了错误，请在我们的 GitHub 仓库中提交 Issue。提交时，请遵循 GitHub 页面上提供的 Issue 模板，这有助于我们尽快复现并解决问题。您也可以直接在 Discord 上联系 ALPS 团队。我们将尽力及时跟进并回复。
+
+<div class="btn-grid">
+{{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
+{{< cta-button text="Discord" link="https://discord.com/invite/JRNWnnva9g" icon="forum" >}}
+</div>
 
 ### 如何安装 ALPS？
 
-最简便的安装方式是在 Linux/Mac 系统或 Windows 的 Linux 子系统中使用[pyalps 二进制安装](../install/binary)。如需源码安装，请遵循[安装指南](../install/)中的 Linux/Mac 系统说明。
+详细安装说明请参阅我们的安装页面。我们支持[二进制](../install/binary/)、[Spack](../install/spack/) 和[源码](../install/source/)三种安装方式。
+
+<div class="btn-grid">
+{{< cta-button text="安装说明" link="../install/" icon="download" >}}
+</div>
 
 ### 如何为 ALPS 贡献代码？
 
-请[联系](../govern#alps-community-steering-committee)我们的领导团队成员获取详情。我们很乐意探讨您的项目方案。
-如果您是学生，希望在了解 ALPS 的过程中参与贡献，请参阅我们的[新人指南](../govern/onboard)。
+欢迎以多种方式为 ALPS 做出贡献——从承担现有代码的维护工作、贡献您自己的代码，到协助修复已知问题和错误，各种层次的参与都受到欢迎。第一步是联系我们的[社区指导委员会](../govern#alps-community-steering-committee)，他们将乐于探讨如何将您的工作融入项目。
+
+有意参与 ALPS 的本科生，欢迎阅读我们专为学生准备的[新人入门说明](../govern/onboard/)。
+
+<div class="btn-grid">
+{{< cta-button text="治理" link="../govern/" icon="account_balance" >}}
+{{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
+</div>
