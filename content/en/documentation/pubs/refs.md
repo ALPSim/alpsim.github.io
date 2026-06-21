@@ -66,7 +66,7 @@ The following lists the implementation papers for individual ALPS applications a
 **Algorithm papers**
 
 - A. N. Rubtsov, V. V. Savkin, and A. I. Lichtenstein, *Continuous-time quantum Monte Carlo method for fermions*, Phys. Rev. B **72**, 035122 (2005).
-- P. Werner and A. J. Millis, *Hybridization expansion impurity solver: General formulation and application to Kondo lattice and two-orbital models*, Phys. Rev. B **74**, 155107 (2006).
+- P. Werner, A. Comanac, L. de' Medici, M. Troyer, and A. J. Millis, *Continuous-Time Solver for Quantum Impurity Models*, Phys. Rev. Lett. **97**, 076405 (2006).
 - E. Gull, A. J. Millis, A. I. Lichtenstein, A. N. Rubtsov, M. Troyer, and P. Werner, *Continuous-time Monte Carlo methods for quantum impurity models*, Rev. Mod. Phys. **83**, 349 (2011).
 
 ---
