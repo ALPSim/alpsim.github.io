@@ -32,6 +32,12 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 {{< cta-button text="FAQ" link="faqs" icon="help" >}}
 </div>
 
+<div class="btn-grid">
+{{< cta-button text="Papers" link="documentation/pubs/papers/" icon="library_books" >}}
+{{< cta-button text="Journal" link="https://iopscience.iop.org/article/10.1088/1742-5468/2011/05/P05001" icon="article" >}}
+{{< cta-button text="Cite" link="/data/bauer2011.bib" icon="format_quote" >}}
+</div>
+
 ### Tutorials
 
 <div class="btn-grid">
