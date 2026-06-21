@@ -7,7 +7,7 @@ toc: false
 
 ### How can I cite ALPS in my research publication?
 
-Our software release publications are shown on [this page](../documentation/pubs/papers/). For specific numerical methods, please refer to our ["Code and Method References" page](../documentation/pubs/refs/). The citation requirement is discussed on the [citation page](../documentation/pubs/citations/).
+For guidance on how to cite ALPS, please refer to our [Papers and Citations](../documentation/pubs/) page, which covers citation types and links to our release papers and method references.
 
 ### Where can I ask questions about ALPS installation, documentation, or tutorials?
 

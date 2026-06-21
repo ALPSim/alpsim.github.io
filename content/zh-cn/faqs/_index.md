@@ -7,7 +7,7 @@ toc: false
 
 ### 如何在研究论文中引用 ALPS？
 
-我们的软件发布出版物详见[本页面](../documentation/pubs/papers)。特定数值方法请参考[代码与方法参考文献](../documentation/pubs/refs)。引用要求在[引用说明页](../documentation/pubs/citations)有详细说明。
+如需了解如何引用 ALPS，请参阅[论文与引用](../documentation/pubs/)页面，其中涵盖引用类型，并提供发布论文及方法参考文献的链接。
 
 ### 关于 ALPS 安装、文档或教程的问题应咨询何处？
 
