@@ -9,7 +9,9 @@ The following lists the implementation papers for individual ALPS applications a
 
 ---
 
-### The scheduler library
+### ALPS Parallel Monte Carlo Scheduler
+
+*Source: [`src/alps/scheduler/`](https://github.com/ALPSim/ALPS/tree/master/src/alps/scheduler)*
 
 **Implementation papers**
 
@@ -23,7 +25,9 @@ M. Troyer, B. Ammon, and E. Heeb, *Parallel object oriented Monte Carlo Simulati
 
 ---
 
-### The looper code
+### Loop Algorithm QMC — `looper`
+
+*Source: [`applications/qmc/looper/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/looper)*
 
 **Implementation papers**
 
@@ -67,6 +71,8 @@ H. G. Evertz, *The loop algorithm*, Adv. Phys. **52**, 1 (2003).
 ---
 
 ### The Directed Loop code in SSE representation
+
+*Source: [`applications/qmc/sse/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse), [`sse2/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse2), [`sse4/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse4)*
 
 **Implementation papers**
 
@@ -144,7 +150,9 @@ M. Troyer, F. Alet, S. Trebst, and S. Wessel, *Non-local Updates for Quantum Mon
 
 ---
 
-### Quantum Wang-Landau code
+### Quantum Wang-Landau Flat-Histogram QMC — `qwl`
+
+*Source: [`applications/qmc/qwl/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/qwl)*
 
 **Implementation papers**
 
@@ -159,7 +167,9 @@ M. Troyer, S. Wessel, and F. Alet, *Wang-Landau sampling for quantum systems: al
 
 ---
 
-### Continuous-Time quantum Monte Carlo impurity solver programs and the DMFT framework
+### ALPS-DMFT: CT-QMC Impurity Solvers and Dynamical Mean-Field Theory
+
+*Source: [`applications/dmft/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmft)*
 
 **Implementation papers**
 
@@ -202,7 +212,9 @@ E. Gull, A. J. Millis, A. I. Lichtenstein, A. N. Rubtsov, M. Troyer, and P. Wern
 
 ---
 
-### Matrix product state applications and the MPS framework
+### DMRG and Matrix Product State Applications — `dmrg`
+
+*Source: [`applications/dmrg/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmrg)*
 
 **Implementation papers**
 
