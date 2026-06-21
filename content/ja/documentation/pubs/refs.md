@@ -36,14 +36,14 @@ The following lists the implementation papers for individual ALPS applications a
 **Implementation papers**
 
 - F. Alet, S. Wessel, and M. Troyer, *Generalized directed loop method for quantum Monte Carlo simulations*, Phys. Rev. E **71**, 036706 (2005).
-- A. W. Sandvik, *Stochastic series expansion method with operator-loop update*, Phys. Rev. B **59**, 14157 (1999).
-- L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, *Optimal Monte Carlo updating*, Phys. Rev. E **70**, 056705 (2004).
 
 **Algorithm papers**
 
 - A. W. Sandvik and J. Kurkijärvi, *Quantum Monte Carlo simulation method for spin systems*, Phys. Rev. B **43**, 5950 (1991).
 - A. W. Sandvik, *A generalization of Handscomb's quantum Monte Carlo scheme applied to the 1D Hubbard model*, J. Phys. A **25**, 3667 (1992).
+- A. W. Sandvik, *Stochastic series expansion method with operator-loop update*, Phys. Rev. B **59**, 14157 (1999).
 - O. F. Syljuåsen and A. W. Sandvik, *Quantum Monte Carlo with directed loops*, Phys. Rev. E **66**, 046701 (2002).
+- L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, *Optimal Monte Carlo updating*, Phys. Rev. E **70**, 056705 (2004).
 - N. V. Prokof'ev, B. V. Svistunov, and I. S. Tupitsyn, *Exact, Complete and Universal Continuous-Time Worldline Monte Carlo Approach to the Statistics of Discrete Quantum Systems*, Phys. Lett. A **238**, 253 (1998).
 - M. Troyer, F. Alet, S. Trebst, and S. Wessel, *Non-local Updates for Quantum Monte Carlo Simulations*, AIP Conf. Proc. **690**, 400 (2003).
 
