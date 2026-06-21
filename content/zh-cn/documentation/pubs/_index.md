@@ -15,4 +15,4 @@ Citations to ALPS-based work typically fall into three categories:
 
 3. **The ALPS library itself.** This citation recognizes the community infrastructure that ALPS provides: ongoing code maintenance, user support, and the base libraries on which individual applications are built.
 
-The three ALPS library papers are listed on the [ALPS Release Papers](papers) page; users are asked to cite the most recent one. Implementation papers for individual ALPS applications, along with key references for the underlying algorithms, are collected on the [References](refs) page.
+The three ALPS library papers are listed on the [ALPS Release Papers](papers) page; users are asked to cite the most recent one. Implementation papers for individual ALPS applications, along with key references for the underlying algorithms, are collected on the [Implementation and Algorithm Papers](refs) page.
