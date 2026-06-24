@@ -3,4 +3,5 @@ resources
 public
 .idea
 go.sum
-.hugo_build.lockstatic/data/docs-index.json
+.hugo_build.lock
+static/data/docs-index.json
