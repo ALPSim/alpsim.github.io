@@ -1,4 +1,3 @@
-
 ---
 title: Alpsize-02 Fortran Introduction
 math: true
@@ -6,198 +5,173 @@ toc: true
 weight: 3
 ---
 
-This is the tutorial of ALPS Fortran. This chapter explains how to use and install the ALPS Fortran. It should be noted that this tutorial assumes the readers have a knowledge of Fortran programming
+This chapter explains how to install and use ALPS Fortran. It assumes the reader has basic knowledge of Fortran programming.
 
-## Operating environment　
+## Operating Environment
 
-ALPS Fortran is a wrapper library to run fortran code on the ALPS system. Therefore, the following environment is necessary to use ALPS Fortran.
+ALPS Fortran is a wrapper library for running Fortran code on the ALPS system. The following are required:
+
 |       |          |
 | :---- | :------- |
-| ALPS  |  Regarding the operating environment of the ALPS and installation procedure, please click here |
-| CMake  |  To compile a client code and ALPS Fortran makes use of CMake. (Cmake Version 2.8.0 and later) |
-| Fortran compiler（Gnu/Intel/Fujitsu） |   You will need the same compiler used in ALPS. Regarding the compiler installation procedure, please refer to the manual of each compiler. |
+| ALPS  | See the [ALPS installation page](https://alps.comp-phys.org/documentation/install/) for operating environment requirements and installation instructions. |
+| CMake | Version 3.18 or later. Used to compile both ALPS Fortran and client code. |
+| Fortran compiler (GNU/Intel/Fujitsu) | Must be the same compiler used to build ALPS. Refer to each compiler's manual for installation instructions. |
 
-## Install
+## Installation
 
-ALPS Fortran is provided as a patch file, which is available by applying a patch to ALPS system. APLS Fortran patching procedure are as follows.
+ALPS Fortran is provided as a patch file applied to the ALPS source tree.
 
-1. download patchs
+1. **Download the patch**
 
-download available following url.
+   Download the ALPS Fortran archive from the [ALPS repository](https://github.com/ALPSim/ALPS) and extract it:
 
-    $ cd ~/
-    $ wget http://xxx.xxx/alps_fortran.tar.gz
-    $ tar –zxvf alps_fortran.tar.gz
+        $ cd ~/
+        $ wget http://xxx.xxx/alps_fortran.tar.gz
+        $ tar -zxvf alps_fortran.tar.gz
 
-doing the above procedure,the following file and directories will be created.
+   This creates the following files and directories:
 
-    alps_fortran/
-        + alps_fortran.patch
-        +samples/
-            +hello/
-            +ising/
-            +looper-2/
-            +tutorial/
-            
-2. patch apply
+        alps_fortran/
+            + alps_fortran.patch
+            + samples/
+                + hello/
+                + ising/
+                + looper-2/
+                + tutorial/
 
-moving ALPS source directory(${ALPS_SRC}),apply the patch.
+2. **Apply the patch**
 
-    $ cd ${ALPS_SRC}
-    $ patch –p0 < ~/alps_fortran/alps_fortran.patch
-    
-3. build installation ALPS sysytem
+   Change to the ALPS source directory (`${ALPS_SRC}`) and apply the patch:
 
-The ALPS Fortran is also installed together when you build ALPS system according to the HP manual.
+        $ cd ${ALPS_SRC}
+        $ patch -p0 < ~/alps_fortran/alps_fortran.patch
 
-- ${ALPS_ROOT}/lib/libalps_fortran.a
-- ${ALPS_ROOT}/include/alps/fortran/alps_fortran.h
-- ${ALPS_ROOT}/include/alps/fortran/fortran_wrapper.h
-- ${ALPS_ROOT}/include/alps/fortran/fwrapper_impl.h
-- ${ALPS_ROOT} shows ALPS install directory
+3. **Build and install ALPS**
+
+   Build ALPS according to the [installation documentation](https://alps.comp-phys.org/documentation/install/). ALPS Fortran is installed alongside ALPS and produces the following files (where `${ALPS_ROOT}` is your ALPS installation prefix):
+
+   - `${ALPS_ROOT}/lib/libalps_fortran.a`
+   - `${ALPS_ROOT}/include/alps/fortran/alps_fortran.h`
+   - `${ALPS_ROOT}/include/alps/fortran/fortran_wrapper.h`
+   - `${ALPS_ROOT}/include/alps/fortran/fwrapper_impl.h`
 
 ## Sample Source Code
 
-The ALPS Fortran contains the following codes as a sample.
+ALPS Fortran includes three sample applications:
 
-"hello" application
+- **"hello"** — Performs no calculation; simply prints the contents of the parameter file to standard output.
+- **"ising"** — A sample application for Ising model calculations.
+- **"looper-2"** — A sample application demonstrating the use of an external library.
 
-- Calculation is not performed,only to output the contents of the parameter file for standard output.
-
-"ising" application
-- is sample application for ising model calculators.
-
-"looper-2" application
-- is the application sample using external library.
-
-From the next section, you will learn how how to build and run the hello application.You can build and run the same procedure as hello ising, for looper-2 application.
+The following sections explain how to build and run the `hello` application. The `ising` and `looper-2` applications follow the same procedure.
 
 ### "hello" Application
 
-hello application consists of the following files.
-- `hello_impl.f90`：main program
-- `hello.C`：setting entrypoint
-- `hello_params`：parameter file
-- `CMakeLists.txt`：configuration file
+The hello application consists of the following files:
 
-### compiling
+- `hello_impl.f90` — main program
+- `hello.C` — sets the entry point
+- `hello_params` — parameter file
+- `CMakeLists.txt` — build configuration
 
-The compilation procedures are as follows.
+### Compiling
 
-1. Creating the Work Directory for build
+1. **Create a build directory**
 
-Creating the Work Directory for storing the results of "hello" application build.
+        $ mkdir -p ${HOME}/alps_fortran_build/hello
+        $ cd ${HOME}/alps_fortran_build/hello
 
-    $ mkdir –p ${HOME}/alps_fortran_build/hello
-    $ cd ${HOME}/alps_fortran_build/hello
-    
-2. Running cmake
+2. **Run CMake**
 
-specifying the source code directory and run cmake.(${SAMPLES} is a folder for samples which is generated by ALPS Fortran unpacking )
+   Specify the source directory (`${SAMPLES}` is the samples folder extracted from the ALPS Fortran archive):
 
-    $ cmake –DALPS_ROOT:PATH=${ALPS_ROOT} \
-    >       ${SAMPLES}/hello
-    
-3. building "hello" application
+        $ cmake -DALPS_ROOT:PATH=${ALPS_ROOT} \
+        >       ${SAMPLES}/hello
 
-doing cmake command makes such as Makefile is nesessary for building ,then run the make.
+3. **Build**
 
-    $ make
-    
-After the building,execute file "hello" will be generated in the currenet directory.
+        $ make
 
-### thread-level parallelization
+   After a successful build, the executable `hello` appears in the current directory.
 
-The thread-level parallelization procedures are as follows.
+### Thread-level Parallelization
 
-1. moving the work directory
+1. **Go to the build directory**
 
-moving to the work directory that you created buildig the "hello" application.
+        $ cd ${HOME}/alps_fortran_build/hello
 
-    $ cd ${HOME}/alpls_fortran_build/hello
-    
-In addition, the application can not run if there is (`hello_param.out. *`) File execution results in the work directory. If you have such the resulting file, proceed to the next step to remove all.
+   If any result files (`hello_param.out.*`) are present from a previous run, delete them before proceeding.
 
-2. preparation parameterfiles
+2. **Prepare the parameter file**
 
-to generate XML files from the parameter files in {SAMPLES}/hello
+   Generate an XML input file from the parameter file:
 
-    $ cp ${SAMPLES}/hello/hello_params .
-    $ parameter2xml hello_params
-    
-For `parameter2xml` command, refer to the ALPS HP.
+        $ cp ${SAMPLES}/hello/hello_params .
+        $ parameter2xml hello_params
 
-3. running "hello"
+   See the [ALPS documentation](https://alps.comp-phys.org) for details on the `parameter2xml` command.
 
-running application as following.
+3. **Run**
 
-    $ ./hello hello_params.in.xml
-    
-When you run the hello application, the parameters are defined in the `hello_params` will be output to standard output. The following is an excerpt execution result.
+        $ ./hello hello_params.in.xml
 
-    ##### alps_init() #####
-    parameter X     =    3.2000000000000002
-    parameter Y     =            0
-    parameter WORLD = world
-    defined parameter Z =            1
-    
-[2011-May-13 11:45:42]: dispatching a new clone[1,1] on threadgroup[3]
+   The parameters defined in `hello_params` are printed to standard output. Example output:
 
-    ##### alps_init() #####
-    parameter X     =   -3.1000000000000001
-    parameter Y     =            6
-    parameter WORLD = alps
-    defined parameter Z =            0
-    
-[2011-May-13 11:45:42]: dispatching a new clone[2,1] on threadgroup[8]
+        ##### alps_init() #####
+        parameter X     =    3.2000000000000002
+        parameter Y     =            0
+        parameter WORLD = world
+        defined parameter Z =            1
+        
+    [2011-May-13 11:45:42]: dispatching a new clone[1,1] on threadgroup[3]
 
-    ##### alps_init() #####
-    parameter X     =   1.00000000000000002E-003
-    parameter Y     =         -100
-    parameter WORLD = looper
-    defined parameter Z =            0
-    
-[2011-May-13 11:45:43]: dispatching a new clone[3,1] on threadgroup[7]
-[2011-May-13 11:45:43]: clone[3,1] finished on threadgroup[7]
+        ##### alps_init() #####
+        parameter X     =   -3.1000000000000001
+        parameter Y     =            6
+        parameter WORLD = alps
+        defined parameter Z =            0
+        
+    [2011-May-13 11:45:42]: dispatching a new clone[2,1] on threadgroup[8]
 
-    ##### alps_init() #####
-    parameter X     =    100.00000000000000
-    parameter Y     =            2
-    parameter WORLD = japan
-    defined parameter Z =            0
-    
-[2011-May-13 11:45:43]: dispatching a new clone[4,1] on threadgroup[1]
-[2011-May-13 11:45:43]: clone[4,1] finished on threadgroup[1]
+        ##### alps_init() #####
+        parameter X     =   1.00000000000000002E-003
+        parameter Y     =         -100
+        parameter WORLD = looper
+        defined parameter Z =            0
+        
+    [2011-May-13 11:45:43]: dispatching a new clone[3,1] on threadgroup[7]
+    [2011-May-13 11:45:43]: clone[3,1] finished on threadgroup[7]
 
-    ##### alps_init() #####
-    parameter X     =    3.0000000000000000
-    parameter Y     =            0
-    parameter WORLD = wistaria
-    defined parameter Z =            0
+        ##### alps_init() #####
+        parameter X     =    100.00000000000000
+        parameter Y     =            2
+        parameter WORLD = japan
+        defined parameter Z =            0
+        
+    [2011-May-13 11:45:43]: dispatching a new clone[4,1] on threadgroup[1]
+    [2011-May-13 11:45:43]: clone[4,1] finished on threadgroup[1]
 
-### mpi parallelization
+        ##### alps_init() #####
+        parameter X     =    3.0000000000000000
+        parameter Y     =            0
+        parameter WORLD = wistaria
+        defined parameter Z =            0
 
-The mpi parallelization procedures are as follows.
+### MPI Parallelization
 
-1. moving the work directory
+1. **Go to the build directory**
 
-moving to the work directory that you created buildig the "hello" application.
+        $ cd ${HOME}/alps_fortran_build/hello
 
-    $ cd ${HOME}/alpls_fortran_build/hello
+   As above, delete any existing result files (`hello_param.out.*`) before proceeding.
 
-In addition, the application can not run if there is (`hello_param.out. *`) File execution results in the work directory. If you have such the resulting file, proceed to the next step to remove all.
+2. **Prepare the parameter file**
 
-2. preparation parameterfiles
+        $ cp ${SAMPLES}/hello/hello_params .
+        $ parameter2xml hello_params
 
-to generate XML files from the parameter files in {SAMPLES}/hello
+3. **Run with MPI**
 
-    $ cp ${SAMPLES}/hello/hello_params .
-    $ parameter2xml hello_params
-    
-3. runnig the application
+        $ mpirun -np 4 -x OMP_NUM_THREADS=1 ./hello --mpi hello_params.in.xml
 
-running application as following.
-
-    $ mpirun -np 4 -x OMP_NUM_THREADS=1 ./hello --mpi hello_params.in.xml
-
-In the same manner as described above,the parameters are defined in the `hello_params` will be output to standard output.
+   The parameters defined in `hello_params` are printed to standard output, as in the thread-level example above.
