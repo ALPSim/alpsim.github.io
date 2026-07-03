@@ -1,148 +1,120 @@
 
 ---
-title: Alpsize-00 Usercode ALPSize
+title: Alpsize-00 ユーザーコード ALPSize
 math: true
 toc: true
 weight: 1
 ---
 
-## ALPSize Introduction
+## ALPSize 入門
 
-ALPS scheduler functions and calculations, such as **Parameters** and **Alea** will be able to use easily by packaging with Cmake and setting the link with the ALPS library.There is the following advantage by using an ALPS scheduler.
+CMake でパッケージングし ALPS ライブラリとリンクすることで、**Parameters** や **Alea** などの ALPS スケジューラ機能を最小限のセットアップで利用できます。ALPS スケジューラを使うと次のような利点があります。
 
-- Easy parameter parallelization.
-- To work on PC,Server,even supercomputer.
-- Easy processing of the results.
-- Multiple parallelization of the already parallelized code is also easy.
-- That is aleady available,such as adapters for exchange method.
+- コードを追加することなくパラメータ並列化が可能。
+- 同一バイナリでノートPC・クラスタサーバー・スーパーコンピュータすべてで動作。
+- 結果の集約と後処理が組み込み済み。
+- 既に並列化されたコードの多段並列化も簡単。
+- レプリカ交換法などの高度な手法向けのアダプタがすぐに利用可能。
 
-## Packaging with Cmake
+## チュートリアル
 
-To package the program is using CMake(2.8.0-).CMake is cross-platform system for managing the build process of software. it can compile using cmake&make with configure file `CMakeLists.txt`.
-The following figure is an image of the flow of packaging. The packaging is done by editing the CMakeList.txt.
+以下の各ステップは ALPSize チュートリアルパッケージ内のサブディレクトリに対応しています。
+順番に進めてください。各ステップは前のステップを土台として構築されています。
 
-Flow of packaging (missing picture)
+### CMake によるパッケージング
 
-`CMakeList.txt` should be edited,setting headers,read of ALPS environment and dependencies to target, and if necessary,edit test setting.
-
-    Headers
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
-    project(hello NONE)
-    
-    read ALPS environment
-    find_package(ALPS REQUIRED PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME} NO_SYSTEM_ENVIRONMENT_PATH)
-    message(STATUS "Found ALPS: ${ALPS_ROOT_DIR} (revision: ${ALPS_VERSION})")
-    include(${ALPS_USE_FILE})
-
-    Enable languages to be used
-    enable_language(CXX)
-
-    dependencies to target
-    add_executable(hello hello.cpp)
-
-    test setting
-
-## Tutorial
-
-The tutorial sample code can be found at http://todo.ap.t.u-tokyo.ac.jp/archive/alpsize-20120829-r2707.tar.gz .
-
-### Packaging with Cmake
-
-00_cmake
+00_cmake — 最小限の "hello world" プログラムをコンパイル・実行して、CMake + ALPS のビルドシステムが正しく設定されていることを確認します。
 
     $ cmake .
-    $ make 
+    $ make
     $ ./hello
 
-### Implementation of the Wolff algorithm in C language
+### Wolff アルゴリズムの C 言語による実装
 
-01_original-c
+01_original-c — ALPS や C++ の機能を一切使わない、Wolff クラスターアルゴリズムの純粋な C 実装です。ベースラインとなります。
 
     $ cmake .
-    $ make 
+    $ make
     $ ./wolff
 
-### Implementation of the Wolff algorithm in C++ language
+### Wolff アルゴリズムの C++ 言語による実装
 
-02_basic-cpp
+02_basic-cpp — C コードを慣用的な C++ に移行します。`<math.h>` を `<cmath>` に置き換え、`std::` I/O を使用し、C++ のコメントスタイルを採用します。
 
-- modify header file： \<math.h\> to \<cmath\>,etc..
-- std name space
-- modify "printf","fprintf" to "std::cout","std::cerr"
-- format of comment
+- `<math.h>` を `<cmath>` に置き換える（他の C ヘッダも同様に C++ 版に変更）
+- `std` 名前空間の使用
+- `printf`/`fprintf` を `std::cout`/`std::cerr` に置き換える
+- C++ スタイルのコメントに変更
 
         $ cmake .
-        $ make 
+        $ make
         $ ./wolff
 
-### Using Standard Template Library
+### 標準テンプレートライブラリ（STL）の使用
 
-03_stl
+03_stl — 生の配列と手動メモリ管理を `std::vector` と `std::stack` に置き換え、メモリ確保・解放を標準ライブラリに任せます。
 
-- std::vector<>:1D-array
-- std::stack<>:stack
-    - The required size will be allocate/deallocate automatically
-    - The type of the elements of the stack and array (which may be user-defined types) specified in the template parameter
-
-            $ cmake .
-            $ make
-            $ ./wolff
-
-### Using Boost C++ Library
-
-04_boost
-
-- <boost/array.hpp>
-    - fixed-length array
-- <boost/random.hpp>
-    - random number generation
-        - variety of random number generation method,Mersenne Twister,、Lagged Fibonacci,...
-        - uniform distribution,normal distribution,Poisson distribution,exponential distribution...
-- <boost/timer.hpp>
-    - timer（execution time measurements）
+- `std::vector<>`：1 次元配列
+    - サイズは自動的に確保・解放される
+    - 要素の型（ユーザー定義型を含む）はテンプレートパラメータで指定
+- `std::stack<>`：同様の自動メモリ管理を持つスタック
 
             $ cmake .
             $ make
             $ ./wolff
 
-### Using ALPS/parameters
+### Boost C++ ライブラリの使用
 
-05_parameters
+04_boost — 固定長配列・より優れた乱数生成器・タイマーを Boost で置き換えます。
+
+- `<boost/array.hpp>`：固定長配列
+- `<boost/random.hpp>`：乱数生成
+    - メルセンヌ・ツイスタ、ラグドフィボナッチ法などの生成器
+    - 一様分布、正規分布、ポアソン分布、指数分布など
+- `<boost/timer.hpp>`：実行時間計測用タイマー
+
+            $ cmake .
+            $ make
+            $ ./wolff
+
+### ALPS/parameters の使用
+
+05_parameters — ハードコードされた定数をなくし、`ALPS/parameters` を通じてファイルからシミュレーションパラメータを読み込みます。
 
     $ cmake .
     $ make
     $ ./wolff <wolff.ip
 
-### Using ALPS/alea
+### ALPS/alea の使用
 
-06_alea
+06_alea — `ALPS/alea` を使ってオブザーバブルデータを蓄積・解析し、統計誤差の自動推定を行います。
 
     $ cmake .
     $ make
     $ ./wolff wolff.ip
 
-### Using ALPS/lattice
+### ALPS/lattice の使用
 
-07_lattice
+07_lattice — `ALPS/lattice` を通じてシミュレーション格子を定義し、幾何学的な構造と物理を分離します。
 
     $ cmake .
     $ make
     $ ./lattice <lattice.ip
     $ ./wolff <wolff.ip
 
-### Full ALPSize using ALPS/Parapack Scheduler
+### ALPS/Parapack スケジューラを用いた完全な ALPSize
 
-08_scheduler
+08_scheduler — シミュレーションを Worker クラスに包み、ALPS Parapack スケジューラに制御を渡すことで、透過的な並列化を実現します。
 
-- encapsulated code: Worker class
-- Function, must be implemented by Worker Class
-    - constructor、init_obserbables member function
-    - run member function
-    - is_thermalized&progress member function
-    - save&load member function
-- Worker registration to the scheduler running the macro of PARAPACK_REGISTER_WORKER
-- preparation of Parameters and ObservableSet by scheduler,and setting constructor、init_observables-function、run-function
-- Because lattice_mc_workerはlattice_helper has inherited rng_helper、that can activate the function of lattice_helper,rng_helper.
+- シミュレーションロジックを `Worker` クラスにカプセル化する
+- Worker クラスで実装すべき関数：
+    - コンストラクタと `init_observables` メンバ関数
+    - `run` メンバ関数
+    - `is_thermalized` と `progress` メンバ関数
+    - `save` と `load` メンバ関数
+- `PARAPACK_REGISTER_WORKER` マクロを使用して Worker をスケジューラに登録する
+- スケジューラが `Parameters` と `ObservableSet` を準備し、コンストラクタ・`init_observables`・`run` 関数を呼び出す
+- `lattice_mc_worker` は `lattice_helper` と `rng_helper` の両方を継承しているため、それらのメソッドを直接使用できる
 
         $ cmake .
         $ make
