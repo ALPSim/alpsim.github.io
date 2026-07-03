@@ -1,4 +1,3 @@
-
 ---
 title: Alpsize-01 CMake
 math: true
@@ -6,17 +5,15 @@ toc: true
 weight: 2
 ---
 
-## Packaging with Cmake
+## CMake によるパッケージング
 
-To package the program is using CMake (version 2.8 or later). CMake is a cross-platform system for managing the build process of software. One can compile software using cmake & make with configure file **CMakeLists.txt**. It is generally much easier to write CMakeLists.txt than writing Makefile directly by hand. The following figure is an image of the flow of packaging. The packaging is done by editing CMakeList.txt.
+ALPS はビルドシステムとして CMake（バージョン 3.18 以降）を使用しています。CMake はソフトウェアのビルドプロセスを管理するためのクロスプラットフォームツールです。**CMakeLists.txt** という設定ファイルをもとに `cmake` と `make` を実行してコードをコンパイルします。CMakeLists.txt の記述は、Makefile を手書きするよりも一般的にはるかに簡単です。
 
-Flow of packaging (missing picture)
-
-CMakeList.txt consists of several parts: header, importing ALPS environment, description of target dependencies, and (if necessary) some tests.
-The ALPS library provides an ALPS configuration file for CMake in `/opt/alps/share/alps/ALPSConfig.cmake`. Including that file will set all the configuration variables used when building ALPS. Additionally including the file `/opt/alps/share/alps/UseALPS.cmake` into your CMake file will automatically set the compiler and linker options to use ALPS. Here is an example `CMakeLists.txt`. A complete set of source codes will be found at [tutorials/alpsize-01-cmake/]().:
+`CMakeLists.txt` はいくつかの部分で構成されています：ヘッダー、ALPS 環境のインポート、ターゲットの依存関係の記述、そして（必要に応じて）テストの定義です。
+ALPS ライブラリは `${ALPS_ROOT}/share/alps/ALPSConfig.cmake`（`${ALPS_ROOT}` は ALPS のインストールプレフィックス、例：`/opt/alps`）に CMake 設定ファイルを提供しています。このファイルをインクルードすることで、ALPS のビルドに必要なすべての設定変数がセットされます。また `${ALPS_ROOT}/share/alps/UseALPS.cmake` をインクルードすると、ALPS を使用するためのコンパイラとリンカのオプションが自動的に設定されます。以下は `CMakeLists.txt` の例です。完全なソースファイルは [ALPS リポジトリ](https://github.com/ALPSim/ALPS) で入手できます：
 
 ```
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 project(alpsize NONE)
  
 # find ALPS Library
@@ -33,25 +30,25 @@ target_link_libraries(hello ${ALPS_LIBRARIES})
 add_alps_test(hello)
 ```
     
-Note that NO_SYSTEM_ENVIRONMENT_PATH option in find_package is essential. Otherwise, the variables (compilers, etc) will be overwritten by the system default ones.
+`find_package` の `NO_SYSTEM_ENVIRONMENT_PATH` オプションは必須です。これを省略すると、コンパイラなどの変数がシステムのデフォルト値で上書きされてしまいます。
 
-## Running CMake
+## CMake の実行
 
-When running cmake, one should specify the path where ALPS may be found by using -DALPS_ROOT_DIR option:
+cmake を実行する際は、`-DALPS_ROOT_DIR` オプションで ALPS のインストールパスを指定します：
 
-    $ cmake -DALPS_ROOT_DIR=/opt/alps /somewhere/to/your/source/code
+    $ cmake -DALPS_ROOT_DIR=/path/to/alps /path/to/your/source
     
-Or, one can tell the place of ALPS to cmake by using environmental variable $ALPS_HOME:
+または、`$ALPS_HOME` 環境変数を設定しておくと、CMake が自動的に ALPS を検出します：
 
-    $ export ALPS_HOME=/opt/alps
-    $ cmake /somewhere/to/your/source/code
+    $ export ALPS_HOME=/path/to/alps
+    $ cmake /path/to/your/source
     -- Found ALPS: ...
     [snip]
     -- Configuring done
     -- Generating done
     -- Build files have been written to: /home/alps/tutorial
     
-CMake will generate Makefile. Then, run make to build program:
+CMake が Makefile を生成します。次に `make` を実行してプログラムをビルドします：
 
     $ make
     [100%] Building CXX object CMakeFiles/hello.dir/hello.C.o
@@ -60,7 +57,7 @@ CMake will generate Makefile. Then, run make to build program:
     $ ./hello
     hello, world
     
-Run some tests by using CTest tool. CTest will runs hello, and compare its output with the contents of `hello.op`:
+CTest ツールを使ってテストを実行します。CTest は hello を実行し、その出力を `hello.op` の内容と比較します：
 
     $ ctest
     Test project /home/alps/tutorial

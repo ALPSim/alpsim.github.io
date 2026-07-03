@@ -6,17 +6,15 @@ toc: true
 weight: 2
 ---
 
-## Packaging with Cmake
+## Packaging with CMake
 
-To package the program is using CMake (version 2.8 or later). CMake is a cross-platform system for managing the build process of software. One can compile software using cmake & make with configure file **CMakeLists.txt**. It is generally much easier to write CMakeLists.txt than writing Makefile directly by hand. The following figure is an image of the flow of packaging. The packaging is done by editing CMakeList.txt.
+ALPS uses CMake (version 3.18 or later) as its build system. CMake is a cross-platform tool for managing the build process of software. You compile your code using `cmake` followed by `make`, driven by a configuration file called **CMakeLists.txt**. Writing a CMakeLists.txt is generally much simpler than writing a Makefile by hand.
 
-Flow of packaging (missing picture)
-
-CMakeList.txt consists of several parts: header, importing ALPS environment, description of target dependencies, and (if necessary) some tests.
-The ALPS library provides an ALPS configuration file for CMake in `/opt/alps/share/alps/ALPSConfig.cmake`. Including that file will set all the configuration variables used when building ALPS. Additionally including the file `/opt/alps/share/alps/UseALPS.cmake` into your CMake file will automatically set the compiler and linker options to use ALPS. Here is an example `CMakeLists.txt`. A complete set of source codes will be found at [tutorials/alpsize-01-cmake/]().:
+`CMakeLists.txt` consists of several parts: a header, importing the ALPS environment, description of target dependencies, and (if necessary) test definitions.
+The ALPS library provides a CMake configuration file at `${ALPS_ROOT}/share/alps/ALPSConfig.cmake` (where `${ALPS_ROOT}` is your ALPS installation prefix, e.g. `/opt/alps`). Including that file sets all configuration variables used when building ALPS. Including `${ALPS_ROOT}/share/alps/UseALPS.cmake` automatically sets the compiler and linker options to use ALPS. Here is an example `CMakeLists.txt`. A complete set of source files is available in the [ALPS repository](https://github.com/ALPSim/ALPS):
 
 ```
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 project(alpsize NONE)
  
 # find ALPS Library
@@ -37,14 +35,14 @@ Note that NO_SYSTEM_ENVIRONMENT_PATH option in find_package is essential. Otherw
 
 ## Running CMake
 
-When running cmake, one should specify the path where ALPS may be found by using -DALPS_ROOT_DIR option:
+When running cmake, specify the path to your ALPS installation with `-DALPS_ROOT_DIR`:
 
-    $ cmake -DALPS_ROOT_DIR=/opt/alps /somewhere/to/your/source/code
+    $ cmake -DALPS_ROOT_DIR=/path/to/alps /path/to/your/source
     
-Or, one can tell the place of ALPS to cmake by using environmental variable $ALPS_HOME:
+Alternatively, set the `$ALPS_HOME` environment variable so CMake finds ALPS automatically:
 
-    $ export ALPS_HOME=/opt/alps
-    $ cmake /somewhere/to/your/source/code
+    $ export ALPS_HOME=/path/to/alps
+    $ cmake /path/to/your/source
     -- Found ALPS: ...
     [snip]
     -- Configuring done
