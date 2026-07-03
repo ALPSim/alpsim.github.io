@@ -7,6 +7,6 @@ toc: false
 
 このページでは、[ALPS リポジトリ](https://github.com/ALPSim/ALPS) の各パスを担当するメンテナーを一覧しています。Issue やプルリクエストを作成する際は、この表を参照して適切な担当者に連絡してください。担当の変更に応じて随時更新されます。
 
-| パス | 主担当 | 副担当 | 第三担当 |
-| :--- | :----- | :----- | :------- |
-| [`/`](https://github.com/ALPSim/ALPS) | [Emanuel Gull](../govern#alps-community-steering-committee) | [Fei Lin](https://github.com/Ooolab) | [Vito Scarola](../govern#alps-community-steering-committee) |
+| パス | メンテナー | コアメンテナー 1 | コアメンテナー 2 |
+| :--- | :--------- | :-------------- | :-------------- |
+| [`/`](https://github.com/ALPSim/ALPS) | [Emanuel Gull](../govern#alps-community-steering-committee) | [Fei Lin](https://github.com/Ooolab) | [Marcus Rosales](https://github.com/marcusr2ML) |
