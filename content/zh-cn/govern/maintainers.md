@@ -10,3 +10,6 @@ toc: false
 | 路径 | 维护者 | 核心维护者 1 | 核心维护者 2 |
 | :--- | :----- | :---------- | :---------- |
 | [`/`](https://github.com/ALPSim/ALPS) | [Emanuel Gull](../govern#alps-community-steering-committee) | [Fei Lin](https://github.com/Ooolab) | [Marcus Rosales](https://github.com/marcusr2ML) |
+| [`/src/alps/parapack`](https://github.com/ALPSim/ALPS/tree/master/src/alps/parapack) | [Synge Todo](https://github.com/wistaria) | [Fei Lin](https://github.com/Ooolab) | [Marcus Rosales](https://github.com/marcusr2ML) |
+| [`/applications/dmrg`](https://github.com/ALPSim/ALPS/tree/master/applications/dmrg) | [Adrian Feiguin](https://github.com/afeiguin) | [Fei Lin](https://github.com/Ooolab) | [Marcus Rosales](https://github.com/marcusr2ML) |
+| [`/applications/qmc`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc) | [Lode Pollet](https://github.com/LodePollet) | [Fei Lin](https://github.com/Ooolab) | [Marcus Rosales](https://github.com/marcusr2ML) |
