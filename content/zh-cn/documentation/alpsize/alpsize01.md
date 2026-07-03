@@ -6,14 +6,14 @@ toc: true
 weight: 2
 ---
 
-## Packaging with Cmake
+## 使用 CMake 打包
 
-To package the program is using CMake (version 2.8 or later). CMake is a cross-platform system for managing the build process of software. One can compile software using cmake & make with configure file **CMakeLists.txt**. It is generally much easier to write CMakeLists.txt than writing Makefile directly by hand. The following figure is an image of the flow of packaging. The packaging is done by editing CMakeList.txt.
+程序的打包使用 CMake（2.8 版本及以上）。CMake 是一个跨平台的软件构建过程管理系统。可以通过配置文件 **CMakeLists.txt** 使用 cmake & make 进行编译。编写 CMakeLists.txt 通常比直接手写 Makefile 简单得多。下图展示了打包流程的示意图，打包通过编辑 CMakeList.txt 来完成。
 
-Flow of packaging (missing picture)
+打包流程（图片缺失）
 
-CMakeList.txt consists of several parts: header, importing ALPS environment, description of target dependencies, and (if necessary) some tests.
-The ALPS library provides an ALPS configuration file for CMake in `/opt/alps/share/alps/ALPSConfig.cmake`. Including that file will set all the configuration variables used when building ALPS. Additionally including the file `/opt/alps/share/alps/UseALPS.cmake` into your CMake file will automatically set the compiler and linker options to use ALPS. Here is an example `CMakeLists.txt`. A complete set of source codes will be found at [tutorials/alpsize-01-cmake/]().:
+CMakeList.txt 由以下几部分组成：头部、导入 ALPS 环境、目标依赖关系的描述，以及（如有必要）一些测试设置。
+ALPS 库在 `/opt/alps/share/alps/ALPSConfig.cmake` 中提供了用于 CMake 的 ALPS 配置文件。包含该文件将设置构建 ALPS 时使用的所有配置变量。此外，将 `/opt/alps/share/alps/UseALPS.cmake` 包含到您的 CMake 文件中，将自动设置使用 ALPS 的编译器和链接器选项。以下是一个 `CMakeLists.txt` 的示例，完整的源代码可在 [tutorials/alpsize-01-cmake/]() 中找到：
 
 ```
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
@@ -32,16 +32,16 @@ add_executable(hello hello.C)
 target_link_libraries(hello ${ALPS_LIBRARIES})
 add_alps_test(hello)
 ```
-    
-Note that NO_SYSTEM_ENVIRONMENT_PATH option in find_package is essential. Otherwise, the variables (compilers, etc) will be overwritten by the system default ones.
 
-## Running CMake
+请注意，`find_package` 中的 `NO_SYSTEM_ENVIRONMENT_PATH` 选项是必不可少的，否则变量（编译器等）将被系统默认值覆盖。
 
-When running cmake, one should specify the path where ALPS may be found by using -DALPS_ROOT_DIR option:
+## 运行 CMake
+
+运行 cmake 时，应使用 `-DALPS_ROOT_DIR` 选项指定 ALPS 的安装路径：
 
     $ cmake -DALPS_ROOT_DIR=/opt/alps /somewhere/to/your/source/code
-    
-Or, one can tell the place of ALPS to cmake by using environmental variable $ALPS_HOME:
+
+或者，可以通过环境变量 `$ALPS_HOME` 告知 cmake ALPS 的位置：
 
     $ export ALPS_HOME=/opt/alps
     $ cmake /somewhere/to/your/source/code
@@ -50,8 +50,8 @@ Or, one can tell the place of ALPS to cmake by using environmental variable $ALP
     -- Configuring done
     -- Generating done
     -- Build files have been written to: /home/alps/tutorial
-    
-CMake will generate Makefile. Then, run make to build program:
+
+CMake 将生成 Makefile，然后运行 make 来构建程序：
 
     $ make
     [100%] Building CXX object CMakeFiles/hello.dir/hello.C.o
@@ -59,8 +59,8 @@ CMake will generate Makefile. Then, run make to build program:
     [100%] Built target hello
     $ ./hello
     hello, world
-    
-Run some tests by using CTest tool. CTest will runs hello, and compare its output with the contents of `hello.op`:
+
+使用 CTest 工具运行测试。CTest 将运行 hello 程序，并将其输出与 `hello.op` 的内容进行比较：
 
     $ ctest
     Test project /home/alps/tutorial

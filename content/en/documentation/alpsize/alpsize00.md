@@ -8,96 +8,72 @@ weight: 1
 
 ## ALPSize Introduction
 
-ALPS scheduler functions and calculations, such as **Parameters** and **Alea** will be able to use easily by packaging with Cmake and setting the link with the ALPS library.There is the following advantage by using an ALPS scheduler.
+By packaging your code with CMake and linking against the ALPS library, you can use ALPS
+scheduler infrastructure — including **Parameters** and **Alea** — with minimal setup.
+Using the ALPS scheduler provides the following advantages:
 
-- Easy parameter parallelization.
-- To work on PC,Server,even supercomputer.
-- Easy processing of the results.
-- Multiple parallelization of the already parallelized code is also easy.
-- That is aleady available,such as adapters for exchange method.
-
-## Packaging with Cmake
-
-To package the program is using CMake(2.8.0-).CMake is cross-platform system for managing the build process of software. it can compile using cmake&make with configure file `CMakeLists.txt`.
-The following figure is an image of the flow of packaging. The packaging is done by editing the CMakeList.txt.
-
-Flow of packaging (missing picture)
-
-`CMakeList.txt` should be edited,setting headers,read of ALPS environment and dependencies to target, and if necessary,edit test setting.
-
-    Headers
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
-    project(hello NONE)
-    
-    read ALPS environment
-    find_package(ALPS REQUIRED PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME} NO_SYSTEM_ENVIRONMENT_PATH)
-    message(STATUS "Found ALPS: ${ALPS_ROOT_DIR} (revision: ${ALPS_VERSION})")
-    include(${ALPS_USE_FILE})
-
-    Enable languages to be used
-    enable_language(CXX)
-
-    dependencies to target
-    add_executable(hello hello.cpp)
-
-    test setting
+- Parameter parallelization with no extra code.
+- Runs on a laptop, a cluster server, or a supercomputer with the same binary.
+- Built-in result aggregation and post-processing.
+- Straightforward multi-level parallelization of already-parallelized code.
+- Ready-made adapters for advanced methods such as replica exchange.
 
 ## Tutorial
 
-### Packaging with Cmake
+Each step below corresponds to a subdirectory in the ALPSize tutorial package.
+Work through them in order; each one builds on the previous.
 
-00_cmake
+### Packaging with CMake
+
+00_cmake — Verifies that the CMake + ALPS build system is set up correctly by compiling and running a minimal "hello world" program.
 
     $ cmake .
-    $ make 
+    $ make
     $ ./hello
 
-### Implementation of the Wolff algorithm in C language
+### Implementation of the Wolff algorithm in C
 
-01_original-c
+01_original-c — A direct C implementation of the Wolff cluster algorithm with no ALPS or C++ features; establishes the baseline.
 
     $ cmake .
-    $ make 
+    $ make
     $ ./wolff
 
-### Implementation of the Wolff algorithm in C++ language
+### Implementation of the Wolff algorithm in C++
 
-02_basic-cpp
+02_basic-cpp — Converts the C code to idiomatic C++: replaces `<math.h>` with `<cmath>`, uses `std::` I/O, and adopts C++ comment style.
 
-- modify header file： \<math.h\> to \<cmath\>,etc..
-- std name space
-- modify "printf","fprintf" to "std::cout","std::cerr"
-- format of comment
+- Replace `<math.h>` with `<cmath>` (and other C headers with their C++ equivalents)
+- Use `std` namespace
+- Replace `printf`/`fprintf` with `std::cout`/`std::cerr`
+- C++-style comments
 
         $ cmake .
-        $ make 
+        $ make
         $ ./wolff
 
-### Using Standard Template Library
+### Using the Standard Template Library
 
-03_stl
+03_stl — Replaces raw arrays and manual memory management with `std::vector` and `std::stack`, letting the standard library handle allocation.
 
-- std::vector<>:1D-array
-- std::stack<>:stack
-    - The required size will be allocate/deallocate automatically
-    - The type of the elements of the stack and array (which may be user-defined types) specified in the template parameter
+- `std::vector<>`: one-dimensional array
+    - Size is allocated and freed automatically
+    - Element type (including user-defined types) is specified as a template parameter
+- `std::stack<>`: stack with the same automatic memory management
 
             $ cmake .
             $ make
             $ ./wolff
 
-### Using Boost C++ Library
+### Using the Boost C++ Library
 
-04_boost
+04_boost — Swaps in Boost for fixed-length arrays, a better random-number generator, and a timer.
 
-- <boost/array.hpp>
-    - fixed-length array
-- <boost/random.hpp>
-    - random number generation
-        - variety of random number generation method,Mersenne Twister,、Lagged Fibonacci,...
-        - uniform distribution,normal distribution,Poisson distribution,exponential distribution...
-- <boost/timer.hpp>
-    - timer（execution time measurements）
+- `<boost/array.hpp>`: fixed-length array
+- `<boost/random.hpp>`: random number generation
+    - Mersenne Twister, Lagged Fibonacci, and other generators
+    - Uniform, normal, Poisson, exponential distributions
+- `<boost/timer.hpp>`: timer for measuring execution time
 
             $ cmake .
             $ make
@@ -105,7 +81,7 @@ Flow of packaging (missing picture)
 
 ### Using ALPS/parameters
 
-05_parameters
+05_parameters — Reads simulation parameters from a file via `ALPS/parameters`, eliminating hard-coded constants.
 
     $ cmake .
     $ make
@@ -113,7 +89,7 @@ Flow of packaging (missing picture)
 
 ### Using ALPS/alea
 
-06_alea
+06_alea — Accumulates and analyses observable data using `ALPS/alea`, including automatic statistical error estimation.
 
     $ cmake .
     $ make
@@ -121,26 +97,26 @@ Flow of packaging (missing picture)
 
 ### Using ALPS/lattice
 
-07_lattice
+07_lattice — Defines the simulation lattice through `ALPS/lattice`, separating geometry from physics.
 
     $ cmake .
     $ make
     $ ./lattice <lattice.ip
     $ ./wolff <wolff.ip
 
-### Full ALPSize using ALPS/Parapack Scheduler
+### Full ALPSize with the ALPS/Parapack Scheduler
 
-08_scheduler
+08_scheduler — Wraps the simulation in a Worker class and hands control to the ALPS Parapack scheduler, enabling transparent parallelization.
 
-- encapsulated code: Worker class
-- Function, must be implemented by Worker Class
-    - constructor、init_obserbables member function
-    - run member function
-    - is_thermalized&progress member function
-    - save&load member function
-- Worker registration to the scheduler running the macro of PARAPACK_REGISTER_WORKER
-- preparation of Parameters and ObservableSet by scheduler,and setting constructor、init_observables-function、run-function
-- Because lattice_mc_workerはlattice_helper has inherited rng_helper、that can activate the function of lattice_helper,rng_helper.
+- Simulation logic is encapsulated in a `Worker` class
+- The Worker class must implement:
+    - Constructor and `init_observables` member function
+    - `run` member function
+    - `is_thermalized` and `progress` member functions
+    - `save` and `load` member functions
+- Register the Worker with the scheduler using the `PARAPACK_REGISTER_WORKER` macro
+- The scheduler prepares `Parameters` and `ObservableSet` and calls the constructor, `init_observables`, and `run` functions
+- `lattice_mc_worker` inherits both `lattice_helper` and `rng_helper`, so their methods are available directly
 
         $ cmake .
         $ make
