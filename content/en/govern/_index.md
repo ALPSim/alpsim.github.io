@@ -3,6 +3,8 @@ title: Governance
 description: "ALPS Governance"
 weight: 6
 toc: false
+cascade:
+    type: docs
 ---
 
 ## ALPS Mission
@@ -282,7 +284,9 @@ The external advisory board makes recommendations regarding direction and approa
 
 #### Maintainers:
 
-Each code has a maintainer group that uses GitHub to submit change requests. Maintainer groups are responsible for making GitHub pull requests and changing the scope of their code.  Each maintainer group is responsible for selecting one or more members to commit time as a core maintainer.  The governing council decides on the extent of the commitment. 
+Each code has a maintainer group that uses GitHub to submit change requests. Maintainer groups are responsible for making GitHub pull requests and changing the scope of their code.  Each maintainer group is responsible for selecting one or more members to commit time as a core maintainer.  The governing council decides on the extent of the commitment.
+
+A current list of maintainers and their areas of responsibility is available on the [Code Maintainers](maintainers) page.
 
 #### Core Maintainers:
     
