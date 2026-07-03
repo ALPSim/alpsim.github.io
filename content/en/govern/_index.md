@@ -319,9 +319,13 @@ Contributions and changes to ALPS occur using a consensus model.  Proposals for 
 
 ### Contribution Process
 
-Developers wishing to make ALPS contributions should contact a member of the [Governing Council](#alps-community-steering-committee), who will discuss onboarding.  Contributors and their group members will join the ALPS team by contributing code to integrate into the package using GitHub.  Codes will be released under the MIT open source license.  Community engagement will take place through regular [ALPS workshops](../../events). 
+The practical starting point for any contribution is the [CONTRIBUTING.md](https://github.com/ALPSim/ALPS/blob/master/CONTRIBUTING.md) file in the ALPS repository. It covers how to fork and build the code, branch and commit conventions, the pull request workflow, and code style expectations.
 
-Contributors will arrange for a maintenance time commitment that will help sustain ALPS.  Maintenance will include updating existing codes, help with the website, responding to forum help requests and other ALPS community maintenance tasks.  The time commitment will be monitored using GitHub and Discord.  
+Contributions at all levels are welcome — from bug reports and tutorial improvements to new simulation methods. See the [onboarding page](../onboard) for a description of contribution levels and what to expect at each one.
 
-ALPS releases will be accompanied by an announcement publication. Active contributors to ALPS will be added as coauthors.  The Governing Council will be responsible for deciding the author list.
+For contributions of new simulation applications or libraries, please contact a member of the [Governing Council](#alps-community-steering-committee) to discuss onboarding. Contributors join the ALPS team via GitHub and arrange a modest maintenance time commitment (bug fixes, dependency updates, community support) to help sustain the project. All code is released under the MIT open source license.
+
+Community engagement takes place through regular [ALPS workshops](../../events) and the [Discord server](https://discord.gg/JRNWnnva9g).
+
+ALPS releases are accompanied by an announcement publication. Active contributors are added as co-authors; the Governing Council decides the author list.
 
