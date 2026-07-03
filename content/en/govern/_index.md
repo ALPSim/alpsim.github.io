@@ -319,7 +319,7 @@ Contributions and changes to ALPS occur using a consensus model.  Proposals for 
 
 ### Contribution Process
 
-The practical starting point for any contribution is the [CONTRIBUTING.md](https://github.com/ALPSim/ALPS/blob/master/CONTRIBUTING.md) file in the ALPS repository. It covers how to fork and build the code, branch and commit conventions, the pull request workflow, and code style expectations.
+The practical starting point for any contribution is the [Contributing to ALPS](../contribute) page, which describes the workflow and what we look for in a pull request. The [CONTRIBUTING.md](https://github.com/ALPSim/ALPS/blob/master/CONTRIBUTING.md) in the ALPS repository has the full technical details (build instructions, branch conventions, code style).
 
 Contributions at all levels are welcome — from bug reports and tutorial improvements to new simulation methods. See the [onboarding page](../onboard) for a description of contribution levels and what to expect at each one.
 
