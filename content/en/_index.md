@@ -39,7 +39,6 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 {{< cta-button text="Exact Diagonalization" link="tutorials/ed" icon="calculate" >}}
 {{< cta-button text="Density Matrix Renormalization Group" link="tutorials/dmrg" icon="compress" >}}
 {{< cta-button text="Dynamical Mean Field Theory" link="tutorials/dmft" icon="hub" >}}
-{{< cta-button text="Time-Evolving Block Decimation" link="tutorials/tebd" icon="update" >}}
 {{< cta-button text="Custom Lattices and Models" link="tutorials/lm" icon="grid_view" >}}
 </div>
 
