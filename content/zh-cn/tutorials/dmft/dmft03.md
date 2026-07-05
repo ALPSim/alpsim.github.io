@@ -5,6 +5,6 @@ math: true
 toc: true
 ---
 
-## Interaction Expansion CT-INT
+## 相互作用展开 CT-INT
 
-It is instructive to run the same calculations as in Tutorial 02 with a CT-INT code. This code performs an expansion in the interaction (instead of the hybridization in the case of CT-HYB). The corresponding python scripts are very similar, you can find them in the directory tutorials/dmft-03-interaction. As in the tutorial DMFT-02 you have the choice between a shorter version [`tutorial3.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3.py) producing data for 2 temperature points (running roughly 10 minutes) or a longer version doing all 6 curves `tutorial3_long.py` (30 minutes). The evaluation may be exactly as in the tutorial [`ALPS_2_Tutorials:DMFT-02_Hybridization`](../dmft02) done using the script [`tutorial3eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3eval.py). 
+用 CT-INT 代码重复教程 02 中的计算是很有启发性的。该代码对相互作用做展开（而不是像 CT-HYB 那样对杂化做展开）。相应的 python 脚本与教程 02 中的非常相似，可以在目录 `tutorials/dmft-03-interaction` 中找到。与 DMFT-02 教程一样，你可以选择简短版脚本 [`tutorial3.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3.py)，它生成 2 个温度点的数据（运行时间约 10 分钟）；也可以选择重现全部 6 条曲线的完整版脚本 [`tutorial3_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3_long.py)（约 30 分钟）。结果的分析方式可以与 [DMFT-02 Hybridization](../dmft02) 教程完全相同，使用脚本 [`tutorial3eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3eval.py) 即可。
