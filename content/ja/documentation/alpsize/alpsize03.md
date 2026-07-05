@@ -1,44 +1,44 @@
 
 ---
-title: Alpsize-03 Fortran Application Development
+title: Alpsize-03 Fortran アプリケーション開発
 math: true
 toc: true
 weight: 4
 ---
 
-ALPS Fortran is the Fortran interface modules of ALPS. Using ALPS Fortran, You can run Fortran code program easily on ALPS by implementing some necessary subroutine. This chapter describes the procedures for writing the Fortran code to run on ALPS. In addition, also described in this chapter on how to modify (`CMakeList.txt`) file setting procedures and build the Fortran code to be ported to the existing ALPS Fortran.
+ALPS Fortran は ALPS の Fortran インターフェースモジュールです。ALPS Fortran を使うと、必要ないくつかのサブルーチンを実装するだけで、Fortran のコードを ALPS 上で簡単に実行できます。本章では、ALPS 上で動作する Fortran コードを記述する手順を説明します。また、既存の ALPS Fortran へ移植するために `CMakeList.txt` ファイルの設定手順を変更し、Fortran コードをビルドする方法についても本章で説明します。
 
-## Introduction ALPS Fortran
+## ALPS Fortran の概要
 
-The following figure shows the relationship diagram between ALPS system,ALPS Fortran,and user fortran program.
+次の図は、ALPS システム、ALPS Fortran、ユーザーの Fortran プログラムの関係を示す図です。
 
-![ALPS Fortran module](../figs/fortranmodule.png)
+![ALPS Fortran モジュール](../figs/fortranmodule.png)
 
-ALPS Fortran is called from the ALPS, call the Subroutine of the user program as necessary.Thus, ALPS can control the Program has been implemented in Fortran as well as the C++ Program.On the other hand, ALPS Fortran has provided a Subroutine call the functions of ALPS.Therefore, user program will be able to use the ALPS functions as well as to call the normal Fortran Subroutine.
+ALPS Fortran は ALPS から呼び出され、必要に応じてユーザープログラムのサブルーチンを呼び出します。これにより、ALPS は C++ プログラムと同様に、Fortran で実装されたプログラムを制御できます。一方、ALPS Fortran は ALPS の機能を呼び出すためのサブルーチンを提供します。そのため、ユーザープログラムは通常の Fortran サブルーチンを呼び出すのと同じように、ALPS の機能を利用できます。
 
-## call flows subroutine
+## サブルーチンの呼び出しフロー
 
-The following figure shows the flow chart of the ALPS system and user program. Subroutines for each of the below, refer to the [2.3.3].
+次の図は、ALPS システムとユーザープログラムのフローチャートを示しています。以下の各サブルーチンについては [2.3.3] を参照してください。
 
-![Call flow](../figs/callflow.png)
+![呼び出しフロー](../figs/callflow.png)
 
-## Preparation fortran source code
+## Fortran ソースコードの準備
 
-To implement the Program using ALPS Fortran, you will need to prepare following two source code.
+ALPS Fortran を使ってプログラムを実装するには、次の 2 つのソースコードを準備する必要があります。
 
-- C++ source code for implementing main function(entory point of Program).
-- Fortran source code for implementing according to a rule of the ALPS Fortran.
+- プログラムのエントリーポイントとなる main 関数を実装する C++ ソースコード。
+- ALPS Fortran の規則に従って実装する Fortran ソースコード。
 
-### Entry Point　
+### エントリーポイント　
 
-This section describes the setting Program function main, such as main function(entry point of the Program) and the worker name. Main function is only to describe the fixed contents, usually does not need to be changed. Settings with Program, please refer to the following code,
+このセクションでは、main 関数（プログラムのエントリーポイント）やワーカー名など、プログラムの設定について説明します。main 関数は固定の内容を記述するだけで、通常は変更する必要はありません。プログラムの設定については、以下のコードを参照してください。
 
-- Program version numbers
-- Program copyright
-- Worker name
-- Evaluator name
+- プログラムのバージョン番号
+- プログラムの著作権表示
+- ワーカー名
+- エバリュエーター名
 
-The following is an example of a C + + source code.
+以下は C++ ソースコードの例です。
 
     1:    #include <alps/parapack/parapack.h>
     2:    #include "fortran_wrapper.h"
@@ -64,21 +64,21 @@ The following is an example of a C + + source code.
     22:        return alps::parapack::start(argc, argv);
     23:    }
 
-In the above example, it needs to be changed will be the red part characters.
+上記の例で変更が必要なのは、赤色で示された部分の文字です。
 
-### Fortran source code
+### Fortran ソースコード
 
-The main contents of the Fortran source code is the calculation logic. However, there is always a need to implement some Subroutine to use the ALPS Fortran.You call the ALPS function via the Subroutine provided by the ALPS Fortran when performing the loading of the parameters and saving the calculation results.
+Fortran ソースコードの主な内容は計算ロジックです。ただし、ALPS Fortran を使用するには、いくつかのサブルーチンを必ず実装する必要があります。パラメータの読み込みや計算結果の保存を行う際には、ALPS Fortran が提供するサブルーチンを介して ALPS の機能を呼び出します。
 
-#### required Subroutine　
+#### 必須サブルーチン　
 
-for the user program to control the function of ALPS, you will need some Subroutine in the Fortran source code.read on below for a description of each Subroutine,Implement appropriately,and is a link error if you omit them, you can not build. when implementing these Subroutine, keep in mind the following points:
+ユーザープログラムから ALPS の機能を制御するには、Fortran ソースコード内にいくつかのサブルーチンが必要です。以下の各サブルーチンの説明を読み、適切に実装してください。これらを省略するとリンクエラーとなり、ビルドできません。これらのサブルーチンを実装する際は、次の点に注意してください。
 
-- All Subroutine will be passed "(2) :: caller integer" as argument.caller is a variable that is used internally to take ALPS function.Therefore, please do not rewrite the value of the caller. If the value of caller behavior has been changed is not guaranteed.
+- すべてのサブルーチンには引数として `integer :: caller(2)` が渡されます。caller は ALPS の機能を呼び出すために内部的に使用される変数です。そのため、caller の値を書き換えないでください。caller の値を変更した場合、動作は保証されません。
 
-- include the "alps / fortran / alps_fortran.h" In each Subroutine. This file will be required when calling the ALPS functions from Fortran code.
+- 各サブルーチンで `alps/fortran/alps_fortran.h` を include してください。このファイルは、Fortran コードから ALPS の機能を呼び出すときに必要です。
 
-So, with regard to the Subroutine required, you will need the following three lines immediately below the signature of the Subroutine.
+したがって、必須サブルーチンについては、サブルーチンのシグネチャの直下に次の 3 行が必要です。
 
     1:    subroutine alps_init(caller)
     2:    implicit none
@@ -89,149 +89,149 @@ So, with regard to the Subroutine required, you will need the following three li
 
 **`alps_init(caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-|integer  |  caller(2)  |  in  |  local variable |
+|integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine will be called once before the calculation is performed.This is where the initialization process of the Program like as allocating arrays.
+このサブルーチンは、計算が実行される前に一度だけ呼び出されます。配列の割り当てなど、プログラムの初期化処理をここで行います。
 
 **`alps_init_observables(caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine will be called only once after it has been a call is `alps_init`. This is where you initialize the `alps :: ObservableSet`.This Subroutine is called once in one input parameter. Incidentally, detail information of the `alps :: ObservableSet`, refer to the ALPS HP.
+このサブルーチンは、`alps_init` が呼び出された後に一度だけ呼び出されます。ここで `alps::ObservableSet` を初期化します。このサブルーチンは、1 つの入力パラメータにつき一度呼び出されます。なお、`alps::ObservableSet` の詳細については ALPS のホームページを参照してください。
 
 **`alps_run(caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This subroutine is implemented the logic calculation.until it returns a value greater than or equal to 1.0 by alps_progress,This Subroutine is called repeatedly from ALPS.Therefore, in this Subroutine is necessary to take the loop structure is not available. In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation
+このサブルーチンには計算ロジックを実装します。alps_progress が 1.0 以上の値を返すまで、このサブルーチンは ALPS から繰り返し呼び出されます。そのため、このサブルーチン内でループ構造を記述する必要はありません。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作します。したがって、スレッドレベル並列で使用する場合は、スレッドセーフな実装を行う必要があります。
 
 **`alps_progress(prgrs, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| real\*8  |  prgrs  |  out  |  Programの進捗状態(0.0 ≦ prgrs) |
-| integer  |  caller(2)  |  in   | local variable |
+| real\*8  |  prgrs  |  out  |  プログラムの進捗状態(0.0 ≦ prgrs) |
+| integer  |  caller(2)  |  in   | ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine will be called by the ALPS has been finished after `alps_run`, ALPS is returned to the progress situation of the Program.While the prgrs value less than 1.0, ALPS will call repeatedly `alps_run`. When `prgrs` value more than 1.0 are substituted, ALPS judges that a calculation was completed, and will finish the program.In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation
+このサブルーチンは `alps_run` の後に ALPS によって呼び出され、プログラムの進捗状況を ALPS に返します。prgrs の値が 1.0 未満の間、ALPS は `alps_run` を繰り返し呼び出します。`prgrs` に 1.0 以上の値が代入されると、ALPS は計算が完了したと判断し、プログラムを終了します。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作するため、スレッドレベル並列で使用する場合はスレッドセーフな実装を行う必要があります。
 
 **`alps_is_thermalized(thrmlz, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| real\*8  |  thrmlz   | out   | thermalize ending flag(0:Not Completed / 1:Completed ) |
-| integer  |  caller(2) |   in  |  local variable |
+| real\*8  |  thrmlz   | out   | 熱平衡化の終了フラグ(0:未完了 / 1:完了) |
+| integer  |  caller(2) |   in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine will be called by the ALPS has been finished after alps_run, returns the incomplete / complete thermalize.When a value of thrmlz is 0, Program judges the calculation is now in thermalize, and does not save a calculation result data.On the other hand,value is 1, Program judges that thermalize was completed, and the calculation result saving is started. In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation
+このサブルーチンは alps_run の後に ALPS によって呼び出され、熱平衡化が未完了か完了かを返します。thrmlz の値が 0 のとき、プログラムは計算がまだ熱平衡化中であると判断し、計算結果データを保存しません。一方、値が 1 のとき、プログラムは熱平衡化が完了したと判断し、計算結果の保存を開始します。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作するため、スレッドレベル並列で使用する場合はスレッドセーフな実装を行う必要があります。
 
 **`alps_finalize(caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine will be called only once (after returning the value greater than or equal to 1.0 from alps_progress) after completing your calculation. This is where you end processing such as the release of allocated memory.
+このサブルーチンは、計算完了後（alps_progress が 1.0 以上の値を返した後）に一度だけ呼び出されます。割り当てたメモリの解放など、終了処理をここで行います。
 
 **`alps_save(caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in   | local variable |
+| integer  |  caller(2)  |  in   | ローカル変数 |
 
-- Explanation
+- 説明
 
-This subroutine is called from ALPS has been finished after `alps_run`. Saves the restartrestart-file using the function of ALPS.In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation.
+このサブルーチンは `alps_run` の後に ALPS から呼び出されます。ALPS の機能を使ってリスタートファイルを保存します。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作するため、スレッドレベル並列で使用する場合はスレッドセーフな実装を行う必要があります。
 
 **`alps_load(caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine will be called once, when the Program is restart. Load the saved restart-file using the ALPS functions.
+このサブルーチンは、プログラムがリスタートするときに一度だけ呼び出されます。ALPS の機能を使って、保存されたリスタートファイルを読み込みます。
 
-#### Subroutine provided ALPS Fortran
+#### ALPS Fortran が提供するサブルーチン
 
-When you call the ALPS functions from the user program, call the Subroutine provided by the ALPS Fortran. These subroutine will require "(2) :: caller integer" as argument. caller is a local variable that is passed from the ALPS Fortran, you will need to pass the Subroutine provided as a variable passed in the argument to (2.2.3.1) Subroutine required.
+ユーザープログラムから ALPS の機能を呼び出すときは、ALPS Fortran が提供するサブルーチンを呼び出します。これらのサブルーチンは引数として `integer :: caller(2)` を必要とします。caller は ALPS Fortran から渡されるローカル変数であり、(2.2.3.1) の必須サブルーチンの引数として渡された変数を、そのまま提供サブルーチンに渡す必要があります。
 
 **`alps_get_parameter(data, name, type, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data  |  out  |   store of the value |
-| character   | name(\*)  |  in  |  parameter name to take out |
-| integer  |  type  |  in  |  data type |
-| integer  |  caller(2)  |  in  |  local variable |
+| -  |  data  |  out  |   値の格納先 |
+| character   | name(\*)  |  in  |  取り出すパラメータ名 |
+| integer  |  type  |  in  |  データ型 |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-Specify the name, ane receive a parameter from ALPS. parameter name, type, number of elements is specified **name**, **type**, in each count.This Subroutine will be used to initialize the arrays and variables in the mainly `alps_init`. In addition, the possible value of the type is defined in the `alps_fortran.h`.
+名前を指定して、ALPS からパラメータを受け取ります。パラメータ名、型、要素数はそれぞれ **name**、**type**、count で指定します。このサブルーチンは主に `alps_init` で配列や変数を初期化するために使用します。なお、type に指定できる値は `alps_fortran.h` で定義されています。
 
 **`alps_parameter_defined(res, name, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  res   | out  |  The presence or absence of definition of parameter(1:absence / 0:definition) |
-| character  |  name(\*)  |  in  |  parameter name |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  res   | out  |  パラメータ定義の有無(1:定義なし / 0:定義あり) |
+| character  |  name(\*)  |  in  |  パラメータ名 |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-Returns whether the parameter is defined in the parameter file is specified by **name**. *1Italic* text is assigned to the res if it is defined. *0Italic* text is assigned if it is not.This Subroutine will be used to initialize the arrays and variables in the mainly `alps_init`.
+**name** で指定したパラメータが、パラメータファイルで定義されているかどうかを返します。定義されている場合は res に *1* が代入され、定義されていない場合は *0* が代入されます。このサブルーチンは主に `alps_init` で配列や変数を初期化するために使用します。
 
 **`alps_init_observable(count, type, name, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  count  |  in   | Number of element of a stored calculation result |
-| integer  |  type  |  in  |  data type |
-| character  |  name(\*)  |  in  |  The name of Observable to store |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  count  |  in   | 格納する計算結果の要素数 |
+| integer  |  type  |  in  |  データ型 |
+| character  |  name(\*)  |  in  |  格納する Observable の名前 |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine is used to register a name that is specified in the Observable to `alps :: ObservableSet` in `alps_init_observable`. Observable types are determined as follows by **type** and **count**.
+このサブルーチンは、`alps_init_observable` で指定した Observable の名前を `alps::ObservableSet` に登録するために使用します。Observable の型は **type** と **count** によって次のように決まります。
 
 | **type** | **count** | **Observable** |
 | :------- | :-------- | :------------- |
@@ -245,52 +245,52 @@ This Subroutine is used to register a name that is specified in the Observable t
 
 **`alps_accumulate_observable(data, count, type, name, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -   | data  |  in   | the calculation results to store |
-| integer  |  count   | in  |  Number of element of a stored calculation result |
-| integer  |  type  |  in  |  data type |
-| character  |  name(\*)  |  in   | The name of Observable to store |
-| integer  |  caller(2)  |  in  |  local variable |
+| -   | data  |  in   | 格納する計算結果 |
+| integer  |  count   | in  |  格納する計算結果の要素数 |
+| integer  |  type  |  in  |  データ型 |
+| character  |  name(\*)  |  in   | 格納する Observable の名前 |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-Save the result data to Observable with the specified name. This Subroutine is used to store the results of a calculation in `alps_run`. count / name / type must match the ones specified in `init_observable`.
+指定した名前の Observable に結果データを保存します。このサブルーチンは `alps_run` で計算結果を格納するために使用します。count / name / type は `init_observable` で指定したものと一致している必要があります。
 
 **`alps_dump(data, count, type, caller)`**
 
-- Argument
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+- 引数
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data  |  in  |  the values to store |
-| integer  |  count  |  in  |  Number of elements of values to store |
-| integer  |  type  |  in  |  data type |
-| integer  |  call(2)  |  in  |  local variable |
+| -  |  data  |  in  |  格納する値 |
+| integer  |  count  |  in  |  格納する値の要素数 |
+| integer  |  type  |  in  |  データ型 |
+| integer  |  call(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine is used to save the restart-file in the `alps_save`. interruption data was saved using `alps_dump` will be used at restart.
+このサブルーチンは `alps_save` でリスタートファイルを保存するために使用します。`alps_dump` を使って保存した中断データは、リスタート時に使用されます。
 
 **`alps_restore(data, count, type, caller)`**
 
-- Argument
+- 引数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **型**  |  **名前**  |  **入出力**  |  **意味** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data   | out  |  storage location of loaded values |
-| integer  |  count  |  in  |  Number of element of value to load |
-| integer  |  type  |  in  |  data type |
-| integer  |  caller(2)  |  in  |  local variable |
+| -  |  data   | out  |  読み込んだ値の格納先 |
+| integer  |  count  |  in  |  読み込む値の要素数 |
+| integer  |  type  |  in  |  データ型 |
+| integer  |  caller(2)  |  in  |  ローカル変数 |
 
-- Explanation
+- 説明
 
-This Subroutine is used to load the restart-file in the `alps_load` to restart-file data is saved in the order in which they were saved in `alps_dump`. Therefore, when loading is `alps_restore`, remove the data in the same order as when it is saved.
+このサブルーチンは `alps_load` でリスタートファイルを読み込むために使用します。リスタートファイルのデータは `alps_dump` で保存した順序で保存されています。したがって、`alps_restore` で読み込むときは、保存したときと同じ順序でデータを取り出してください。
 
-### editing configuration file
+### 設定ファイルの編集
 
-user program builds using CMake as well as ALPS. It is a sample of setting file(`CMakeLists.txt`) to build user program in CMake as follows.
+ユーザープログラムは ALPS と同様に CMake を使ってビルドします。以下は、CMake でユーザープログラムをビルドするための設定ファイル(`CMakeLists.txt`)の例です。
 
     1:    # CMakeList.txt
     2:    # editing configuration file for CMake
@@ -310,45 +310,45 @@ user program builds using CMake as well as ALPS. It is a sample of setting file(
     16:    # External library file required to generate execution
     17:    target_link_libraries(**hello** ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
     
-In the above example, it needs to be changed will be the part of characters inside \*\*...\*\*.
+上記の例で変更が必要なのは、\*\*...\*\* の内側の文字です。
 
-## Porting of existing program code
+## 既存プログラムコードの移植
 
-In this section, in case of the ising model program shown below,Describes the procedure that ALPS to work on the existing Fortran Program.
+このセクションでは、以下に示すイジングモデルのプログラムを例に、既存の Fortran プログラムを ALPS 上で動作させる手順を説明します。
 
-### preparation porting　
+### 移植の準備　
 
-In this section, we will use the file in the tutorial directory that is generated by extracting the `alps_fortran.tar.gz`.In preparation for the porting work, copy the following file to a working directory in the tutorial directory.
+このセクションでは、`alps_fortran.tar.gz` を展開して生成される tutorial ディレクトリ内のファイルを使用します。移植作業の準備として、tutorial ディレクトリ内の次のファイルを作業ディレクトリにコピーしてください。
 
-- `ising_original.f`：original source code
-- `template.f90`：Template source cod of ALPS Fortran Program
-- `main.C`：entry point of Program
-- `CMakeList.txt`：Template of `CMakeList.txt`
+- `ising_original.f`：元のソースコード
+- `template.f90`：ALPS Fortran プログラムのテンプレートソースコード
+- `main.C`：プログラムのエントリーポイント
+- `CMakeList.txt`：`CMakeList.txt` のテンプレート
 
-All Subroutine which are necessary implementing ALPSProgram in `template.f90` is defined.Therefore, when developing a new Program you can proceed with the development based on `template.f90`.
+ALPS プログラムの実装に必要なすべてのサブルーチンが `template.f90` に定義されています。そのため、新しいプログラムを開発する際は `template.f90` をもとに開発を進めることができます。
 
-The rough structure of original code is as follows.
+元のコードのおおまかな構造は次のとおりです。
 
-|      | **Processing contents** |
+|      | **処理内容** |
 | :--- | :---------------------- |
-| 4-7  |  Variable Declaration & Initialization |
-| 8-23  |  Array element Initialization |
-| 24-47 |   main loop |
-| 25-34  |  calculation |
-| 36   | thermalize check |
-| 37-46  |  saving calculation resutls |
-| 48-58  |  results output |
+| 4-7  |  変数の宣言と初期化 |
+| 8-23  |  配列要素の初期化 |
+| 24-47 |   メインループ |
+| 25-34  |  計算 |
+| 36   | 熱平衡化チェック |
+| 37-46  |  計算結果の保存 |
+| 48-58  |  結果の出力 |
 
 
-### porting fortran code
+### Fortran コードの移植
 
-The porting of Fortran code, we will assign to Subroutine, the processing being done in each block of `ising_original.f`. This section describes an example of `tutorial/alps_ising.f90` as a sample of after-porting code.
+Fortran コードの移植では、`ising_original.f` の各ブロックで行われている処理をサブルーチンに割り当てます。このセクションでは、移植後のコードのサンプルとして `tutorial/alps_ising.f90` の例を説明します。
 
-#### Variable declaration
+#### 変数の宣言
 
-Each variable has been declared in the `ising_original.f` is at the porting is turned into ALPS module.In order to porting to ALPS because there is a need to Subroutine for each processing unit, and modify it to allow access to the variables from each Subroutine.
+`ising_original.f` で宣言されている各変数は、移植時に ALPS モジュールにまとめられます。ALPS へ移植するには処理単位ごとにサブルーチンが必要になるため、各サブルーチンから変数へアクセスできるように変更します。
 
-- before porting
+- 移植前
 
         4:    DIMENSION IS(20,20),IP(20),IM(20),P(-4:4),A(4)
         5:    C PARAMETERS
@@ -356,7 +356,7 @@ Each variable has been declared in the `ising_original.f` is at the porting is t
         7:          DATA IX/1234567/, V0/.465661288D-9/
 
 
-- after porting
+- 移植後
 
         1:    module ising_mod
         2:      implicit none
@@ -370,14 +370,14 @@ Each variable has been declared in the `ising_original.f` is at the porting is t
         10:    end module ising_mod
         11:
 
-IP, IM, IS, P array are initialized in `alps_init`, the size of the after transplantation does not specify here.In addition, original array A is for storing a result, this array is in the after-porting will use the mechanism of ALPS.Therefore, array A is not necessary for code after the porting.Also, the value of each variable after porting gotten from the parameter file.In addition, K is a variable variable after the porting to count the number of iterations. Thermalize check after porting is responsible for control and repeat with the value of K to do without a loop.
-**In this section, so that is expected to run in parallel MPI, for thread-safe is not considered.**
+IP, IM, IS, P 配列は `alps_init` で初期化されるため、移植後はここでサイズを指定しません。また、元の配列 A は結果を格納するためのものですが、移植後はこの配列に ALPS の仕組みを使用します。そのため、移植後のコードでは配列 A は不要です。また、移植後の各変数の値はパラメータファイルから取得します。さらに、K は移植後に繰り返し回数を数えるための変数です。移植後の熱平衡化チェックは、ループを使わずに K の値で制御と繰り返しを行う役割を担います。
+**このセクションでは MPI による並列実行を想定しているため、スレッドセーフについては考慮していません。**
 
-#### Initializing process
+#### 初期化処理
 
-Initialization process of the original code may have to initialize each element of the array, at after-porting code, run in the initialization process is Subroutine `alps_init`.First,Initializes the array variables, using the `alps_get_parameter`, then initialize the array elements.Also, do not prepare the array for storing the results after porting, prepare the Observable for saving the results in `alps_init_observableSubroutine`.In addition, it is not necessary for `alps_init` and `alps_init_observable` to call it in after-porting code because it is called automatically by ALPS.Also, do not prepare an array for storing the results, prepare the Observable for saving the results in `alps_init_observableSubroutine`.
+元のコードの初期化処理では配列の各要素を初期化する場合がありますが、移植後のコードでは初期化処理をサブルーチン `alps_init` で行います。まず `alps_get_parameter` を使って配列変数を初期化し、次に配列要素を初期化します。また、移植後は結果を格納する配列を用意せず、結果を保存するための Observable を `alps_init_observable` サブルーチンで用意します。なお、`alps_init` と `alps_init_observable` は ALPS によって自動的に呼び出されるため、移植後のコードで呼び出す必要はありません。
 
-- before porting
+- 移植前
 
         8:    C TABLES
         9:          DO 10 I=-4,4
@@ -396,7 +396,7 @@ Initialization process of the original code may have to initialize each element 
         22:          DO 21 I=1,4
         23:     21   A(I)=0.0
 
-- after porting(`alps_init`)
+- 移植後(`alps_init`)
 
         13:    subroutine alps_init(caller)
         14:      use ising_mod
@@ -441,9 +441,9 @@ Initialization process of the original code may have to initialize each element 
         53:      return
         54:    end subroutine alps_init
 
-Above code shows that it calls the `alps_get_parameter` in line 21 to 24, getting the contents of the parameter file through the ALPS.In addition, the processing of line 34-51 is the same as the original code.
+上記のコードでは、21〜24 行目で `alps_get_parameter` を呼び出し、ALPS を通じてパラメータファイルの内容を取得しています。また、34〜51 行目の処理は元のコードと同じです。
 
-- after porting(`alps_init_observables`)
+- 移植後(`alps_init_observables`)
 
         92:    subroutine alps_init_observables(caller)
         93:      implicit none
@@ -456,13 +456,13 @@ Above code shows that it calls the `alps_get_parameter` in line 21 to 24, gettin
         100:      return
         101:    end subroutine alps_init_observables
     
-Observable are available with the name "Magnetization" and "Energy" as a buffer for storing the calculation result after porting.In the original code, calculates the sum of squares with the sum for each Magnetization and Energy, but,these calculations is done automatically by Observable after porting.
+移植後は、計算結果を格納するバッファとして "Magnetization" と "Energy" という名前の Observable が用意されます。元のコードでは Magnetization と Energy のそれぞれについて合計と二乗和を計算していましたが、移植後はこれらの計算が Observable によって自動的に行われます。
 
-#### calcuration and saving results
+#### 計算と結果の保存
 
-Although there has been in the do loop iteration (line 25 original-code)in the original code, and after porting, uses the `alps_progressSubroutine` `alps_run` without a do loop.
+元のコードでは do ループによる繰り返し（元のコードの 25 行目）がありましたが、移植後は do ループを使わずに `alps_progress` サブルーチンと `alps_run` を使用します。
 
-- before porting
+- 移植前
 
         24:    C SIMULATION
         25:          DO 30 K=1,MCS+INT
@@ -489,7 +489,7 @@ Although there has been in the do loop iteration (line 25 original-code)in the o
         46:          A(4)=A(4)+MG**2
         47:     30   CONTINUE
 
-- after porting(`alps_run`)
+- 移植後(`alps_run`)
 
         56:    ! subroutine alps_run
         57:    subroutine alps_run(caller)
@@ -528,9 +528,9 @@ Although there has been in the do loop iteration (line 25 original-code)in the o
         88:      return
         89:    end subroutine alps_run
 
-Calculation process itself(Line 65 to 82) is the same as the original code, after porting will be called automatically alps_run repeatedly, the loop at line 25 of the Original Code is not writted.Instead, it counts the number of iterations in line 86.Also, save the results of the calculation using the ALPS function(line 84 and 85).In the original code (lines 43-46 the original code) are performed, such as calculating the integrated and square, but these are done automatically by `alps_accumulate_observable`.
+計算処理そのもの（65〜82 行目）は元のコードと同じです。移植後は alps_run が自動的に繰り返し呼び出されるため、元のコードの 25 行目のループは記述しません。代わりに、86 行目で繰り返し回数を数えます。また、ALPS の機能（84 行目と 85 行目）を使って計算結果を保存します。元のコード（43〜46 行目）では積算や二乗などの計算を行っていましたが、移植後はこれらが `alps_accumulate_observable` によって自動的に行われます。
 
-- after porting(alps_progress)
+- 移植後(alps_progress)
 
         103:    ! alps_progerss
         104:    subroutine alps_progress(prgrs, caller)
@@ -544,17 +544,17 @@ Calculation process itself(Line 65 to 82) is the same as the original code, afte
         112:
         113:    end subroutine alps_progress
     
-after porting, Alps_progress done in the control of the iterative calculation.prgrs value is greater than or equal to 1 is `alps_run` will no longer be called.Therefore, it is implemented as prgrs value is greater than or equal to 1 to monitor the value of (K), the number of times when you are running counter provision.
+移植後は、alps_progress で繰り返し計算の制御を行います。prgrs の値が 1 以上になると `alps_run` は呼び出されなくなります。そのため、実行回数のカウンタである (K) の値を監視し、prgrs の値が 1 以上になるように実装します。
 
-#### thermalized check
+#### 熱平衡化チェック
 
-In the original code, hermalized-check has been run within the main loop (line 36).However,after porting,run for subroutine `alps_is_thermalized`.
+元のコードでは、熱平衡化チェックはメインループ内（36 行目）で実行されていました。しかし移植後は、サブルーチン `alps_is_thermalized` で実行します。
 
-- before porting
+- 移植前
 
         36:          IF(K.LE.INT) GOTO 30
 
-- after porting(`alps_is_thermalized`)：
+- 移植後(`alps_is_thermalized`)：
 
         115:    ! alps_is_thermalized
         116:    subroutine alps_is_thermalized(thrmlz, caller)
@@ -573,13 +573,13 @@ In the original code, hermalized-check has been run within the main loop (line 3
         129:      return
         130:    end subroutine alps_is_thermalized
     
-Similarly `alps_progress`, checks the thermalized from the value of (K) counter. are considered to have been completed thermalize and become value thrmlz=1.
+`alps_progress` と同様に、カウンタ (K) の値から熱平衡化を判定します。熱平衡化が完了したとみなされると、thrmlz の値は 1 になります。
 
-#### output results
+#### 結果の出力
 
-Post-processing and output of the results is done automatically when you use the ALPS.Therefore, the codes for output of calculation results and post-processing are not required.
+結果の後処理と出力は、ALPS を使用すると自動的に行われます。そのため、計算結果の出力や後処理のコードは不要です。
 
-- before porting
+- 移植前
 
         48:    C STATISTICS
         49:          DO 50 I=1,4
@@ -593,15 +593,15 @@ Post-processing and output of the results is done automatically when you use the
         57:         * /' ENG =',F10.5,' C   =',F10.5,
         58:         * /' MAG =',F10.5,' X   =',F10.5)
 
-- after porting：code not available
+- 移植後：該当コードなし
 
-#### Finalizing process
+#### 終了処理
 
-There is no end processing is not performed for allocate in the original code. However, after porting must be deallocate array that you allocate in `alps_init`.
+元のコードでは allocate に対する終了処理は行われていません。しかし移植後は、`alps_init` で allocate した配列を deallocate する必要があります。
 
-- before porting：code not available
+- 移植前：該当コードなし
 
-- after porting(`alps_finalize`)
+- 移植後(`alps_finalize`)
 
         160:    ! alps_finalize
         161:    subroutine alps_finalize(caller)
@@ -618,12 +618,12 @@ There is no end processing is not performed for allocate in the original code. H
         172:      return
         173:    end subroutine alps_finalize
 
-#### restart function
+#### リスタート機能
 
-Only to implement (`alps_save` / `alps_load`), you can add functionality to restart restart-file Program I / O function of when you use the ALPS.The original code does not have the ability to restart, describes an example implementation of I / O function of the restart-file according to the ALPS below.
+(`alps_save` / `alps_load`) を実装するだけで、ALPS を使用したときのリスタートファイルの入出力機能によって、プログラムにリスタート機能を追加できます。元のコードにはリスタート機能がないため、以下では ALPS に従ったリスタートファイルの入出力機能の実装例を説明します。
 
-- before porting：code not available
-- after porting(`alps_save`)
+- 移植前：該当コードなし
+- 移植後(`alps_save`)
 
         132:    ! alps_save
         133:    subroutine alps_save(caller)
@@ -639,9 +639,9 @@ Only to implement (`alps_save` / `alps_load`), you can add functionality to rest
         143:      return
         144:    end subroutine alps_save
 
-`alps_save` writes in `alps_dump` the only variables that need to restart.Here, This section shows how to export counter (K) and data (IX, IS) calculating.
+`alps_save` では、リスタートに必要な変数だけを `alps_dump` で書き出します。ここでは、カウンタ (K) と計算データ (IX, IS) を書き出す方法を示します。
 
-- after porting(`alps_load`)
+- 移植後(`alps_load`)
 
         146:    ! alps_load
         147:    subroutine alps_load(caller)
@@ -657,13 +657,13 @@ Only to implement (`alps_save` / `alps_load`), you can add functionality to rest
         157:      return
         158:    end subroutine alps_load
 
-There are (`alps_restore`) must be loaded in the order alps_save exported in (`alps_dump`) In `alps_load`.However, when you restart the ALPSProgram, `alps_init` will be called before `alps_load` is called. However, when you restart the ALPSProgram, `alps_init` will be called before `alps_load` is called. In other words, the initialization of the memory allocation K,IX,and IS and other variables is done in `alps_init`, need to do initialization, etc. within the `alps_load` is not available.
+`alps_load` では、`alps_save` が (`alps_dump`) で書き出した順序で (`alps_restore`) を使って読み込む必要があります。なお、ALPS プログラムをリスタートするとき、`alps_load` が呼び出される前に `alps_init` が呼び出されます。つまり、K, IX, IS などの変数のメモリ割り当てや初期化は `alps_init` で行われるため、`alps_load` 内で初期化などを行う必要はありません。
 
-#### About support of multi-thread
+#### マルチスレッド対応について
 
-If you want to run with multi-thread the ALPSProgram, must be thread-safe implementation of the Fortran code.If `tutorial.f90` described in this section, you can support multi-thread by thread-local variables to prepare in 2.4.2.
+ALPS プログラムをマルチスレッドで実行したい場合は、Fortran コードをスレッドセーフに実装する必要があります。このセクションで説明した `tutorial.f90` の場合、2.4.2 で用意するスレッドローカル変数によってマルチスレッドに対応できます。
 
-- after porting(multi-thread)
+- 移植後(マルチスレッド)
 
         1:    module ising_mod
         2:      implicit none
@@ -678,13 +678,13 @@ If you want to run with multi-thread the ALPSProgram, must be thread-safe implem
         11:    end module ising_mod
         12:
 
-### About main.C　
+### main.C について　
 
-`main.C` file is required to become entry point of the Program.But it is not necessary to change the contents of the main function. Configuration of `main.C`, change it if necessary. refer to 2.2.2.
+`main.C` ファイルはプログラムのエントリーポイントとなるために必要です。ただし、main 関数の内容を変更する必要はありません。`main.C` の設定は必要に応じて変更してください。2.2.2 を参照してください。
 
-### About `CMakeLists.txt`
+### `CMakeLists.txt` について
 
-change the `CMakeLists.txt` (see text 2.3). The following is an example of `CMakeLits.txt`.
+`CMakeLists.txt` を変更します（本文 2.3 を参照）。以下は `CMakeLists.txt` の例です。
 
     1:    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
     2:    

@@ -7,12 +7,12 @@ toc: true
 
 ## Hirsch Fye Code
 
-We start by running a discrete time Monte Carlo code: the [Hirsch Fye code](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521). As an example we reproduce Fig. 11 in the DMFT review by [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). The series of six curves shows how the system, a Hubbard model on the Bethe lattice with interaction $U=3D/\sqrt{2}$ at half filling, enters an antiferromagnetic phase upon cooling.
+我们首先运行一个离散时间蒙特卡罗代码：[Hirsch Fye 代码](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521)。作为示例，我们重现 [Georges 等人的 DMFT 综述文章](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。
 
-The Hirsch Fye algorithm is described in [here](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13), and this review also provides an open source implementation for the codes. While many improvements have been developed (see e.g. [Alvarez08]() or [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)), the algorithm has been replaced by [continuous-time algorithms](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123) eliminating systematic discretization errors.
+Hirsch Fye 算法在[这里](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)有详细描述，该综述文章也提供了相应代码的开源实现。尽管已经出现了许多改进（例如可参见 Alvarez (2008) 或 [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)），但这一算法已被能够消除系统性离散化误差的[连续时间算法](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)所取代。
 
-The Hirsch Fye simulation will run for about 20 seconds per iteration. The python scripts for running this simulation include a short version [`tutorial7.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7.py) running simulations at 2 temperatures only (takes 5 minutes) or a version reproducing all 6 temperatures at [`tutorial7_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7_long.py). For evaluation you may use the same script `tutorial2eval.py` as described in the tutorial [ALPS_2_Tutorials:DMFT-02_Hybridization](../dmft02), or you may use the script [`tutorial7eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7eval.py).
+Hirsch Fye 模拟每次迭代大约需要 20 秒。运行此模拟的 python 脚本包括：只在 2 个温度点运行的简短版本 [`tutorial7.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7.py)（耗时 5 分钟），以及重现全部 6 个温度点的版本 [`tutorial7_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7_long.py)。用于结果分析，你可以像 [DMFT-02 Hybridization](../dmft02) 教程中描述的那样使用相同的脚本 `tutorial2eval.py`，也可以使用脚本 [`tutorial7eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7eval.py)。
 
-The main parameters are same as those described in the tutorial [ALPS_2_Tutorials:DMFT-02_Hybridization](../dmft02).
+主要参数与 [DMFT-02 Hybridization](../dmft02) 教程中描述的相同。
 
-As a discrete time method, HF suffers from $\Delta\tau$ - errors. Pick a set of parameters and run it for sucessively larger $N$.
+作为一种离散时间方法，HF 会受到 $\Delta\tau$ 离散化误差的影响。请选取一组参数，并对逐渐增大的 $N$ 重复运行。

@@ -5,15 +5,17 @@ math: true
 toc: true
 ---
 
-## Hybridization Expansion CT-HYB
+## ハイブリダイゼーション展開 CT-HYB
 
-We start by running a continuous-time quantum Monte Carlo code - the hybridization expansion algorithm CT-HYB. As an example we reproduce Fig. 11 in the DMFT review by Georges et al.. The series of six curves shows how the system, a Hubbard model on the Bethe lattice with interaction $U=3D/\sqrt{2}$r at half filling, enters an antiferromagnetic phase upon cooling. In tutorials 03 and 07 we will reproduce the same results with the interaction expansion continuous-time solver and with the discrete-time Quantum Monte Carlo Hirsch-Fye code, respectively. The input parameters are the same, apart from a few solver-related parameters.
+まず、連続時間量子モンテカルロコードであるハイブリダイゼーション展開アルゴリズム CT-HYB を実行します。例として、[Georges らによる DMFT のレビュー論文、Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) の図11を再現します。この6本の曲線は、相互作用 $U=3D/\sqrt{2}$ を持つベーテ格子上の半充填 Hubbard 模型が、冷却に伴って反強磁性相へと転移していく様子を示しています。チュートリアル03と07では、それぞれ相互作用展開の連続時間ソルバーと、離散時間の Hirsch-Fye 量子モンテカルロコードを用いて同じ結果を再現します。入力パラメータは、ソルバーに関連する一部のパラメータを除いて同じです。
 
-The CT-HYB simulation will run in total roughly 1 hour if you want to reproduce all 6 curves in the Fig. 11 mentioned above. The files for this tutorial may be found in the directory tutorials/dmft-02-hybridization.
+### シミュレーションの実行
 
-All DMFT tutorials can be started using a python script. The python script generates parameter files, run them, and plot the results. You can run the short script [`tutorial2.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2.py) reproducing only 2 out of the 6 curves (runtime: roughly 20 minutes), or the long version [`tutorial2_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2_long.py) (runtime: roughly 1 hour) or the longer version to reproduce all curves in the figure.
-    
-The python script `tutorial2.py` automatically prepares the input files for the 2 simulations, `parm_beta_6.0` and `parm_beta_12.0`, and runs them (/path-to-alps-installation/bin/dmft parm_beta_x).
+上記の図11にある6本の曲線すべてを再現する場合、CT-HYB シミュレーションは全体で約1時間かかります。このチュートリアルに必要なファイルはディレクトリ `tutorials/dmft-02-hybridization` にあります。
+
+すべての DMFT チュートリアルは python スクリプトを用いて実行できます。このスクリプトはパラメータファイルを生成し、それらを実行し、結果をプロットします。短縮版のスクリプト [`tutorial2.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2.py) を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約20分）。あるいは完全版のスクリプト [`tutorial2_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2_long.py) を実行すると、図の6本すべての曲線を再現します（実行時間の目安：約1時間）。
+
+python スクリプト `tutorial2.py` は、2つのシミュレーション用の入力ファイル `parm_beta_6.0` と `parm_beta_12.0` を自動的に準備し、それらを実行します（`/path-to-alps-installation/bin/dmft parm_beta_x`）。
 
 ```
 import pyalps
@@ -58,7 +60,9 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-The input file `parm_beta_6.0` produced by the script above with added comments on the parameters:
+### 入力パラメータの解説
+
+上記のスクリプトによって生成される入力ファイル `parm_beta_6.0` に、パラメータの説明を加えたものです。
 
 ```
 H_INIT = 0.0225   //  initial magnetic field in the direction of quantization axis, to produce the initial Weiss field
@@ -85,17 +89,21 @@ MU = 0   // Chemical potential; for particle-hole symmetric models corresponds M
 t = 0.707106781187   // hopping parameter; for the Bethe lattice considered here $W=2D=4t$
 ```
 
-Note that there is no parameter specifying the band structure or lattice type. By default a Bethe lattice is assumed, but this can be changed (see [DMFT-08 Setting a particular lattice](../dmft08)).
+バンド構造や格子の種類を指定するパラメータが無いことに注意してください。デフォルトではベーテ格子が仮定されますが、これは変更可能です（[DMFT-08 格子](../dmft08) を参照してください）。
 
-A specification of the initial Weiss field (set by the variables G0OMEGA_INPUT or G0TAU_INPUT) is missing as well - the program will thus at initialization compute the non-interacting Green's function. It will use the initial magnetic field H_INIT, which produces in this case a small difference between flavors (0 and 1 representing $\uparrow$,\ $\downarrow$) to start away from the paramagnetic solution - the reason for that is that in very short simulations (like this tutorial) starting from a paramagnetic Weiss field could mean that the random noise would not produce enough difference in the first few iterations to get the system away from the paramagnetic regime. A badly converged paramagnet would then appear as a solution. The dependence of H_INIT on BETA serves for optimization of the run, lowering the number of needed iterations.
+初期外斯場（Weiss field、変数 G0OMEGA_INPUT または G0TAU_INPUT で設定）の指定も省略されています。この場合、プログラムは初期化の際に非相互作用グリーン関数を計算します。初期磁場 H_INIT を用いることで、この例では2つの「フレーバー」（flavor 0 と 1、すなわち $\uparrow$ と $\downarrow$）の間にわずかな差を生じさせ、常磁性解から離れた状態から計算を開始します。これは、（このチュートリアルのように）非常に短いシミュレーションでは、常磁性の外斯場から出発すると、最初の数回の反復ではランダムノイズだけでは系を常磁性領域から十分に引き離すことができず、収束の悪い常磁性解がそのまま解として現れてしまう可能性があるためです。H_INIT を BETA に依存させているのは、実行を最適化し、必要な反復回数を減らすためです。
 
-The code will run up to 6 self-consistency iterations. For a precise simulation one can raise this number and the simulation shall stop on the convergency criterion specified by the parameter CONVERGED. In the directory in which you run the program you will find Green's functions files G_tau_i as well the self energies (selfenergy_i) and Green's functions in Matsubara representation (frequency space) G_omega_i. G_tau in these examples has two entries: a spin-up and a spin-down column. The entry at \tau=\beta^- is the negative occupation (density); by that we may get magnetization of the system.
+### 自己無撞着になるまでの反復計算
 
-Error bars may be estimated via successive iterations on a converged system.
+このコードは最大6回の自己無撞着反復を実行します。より精密なシミュレーションを行うにはこの回数を増やすことができます。その場合、パラメータ CONVERGED で指定された収束判定基準に達した時点で計算は早期に終了します。プログラムを実行したディレクトリには、グリーン関数ファイル `G_tau_i`、自己エネルギー（`selfenergy_i`）、そして松原表示（周波数空間）でのグリーン関数 `G_omega_i` が生成されます。これらの例における `G_tau` はスピンアップとスピンダウンの2列から成ります。$\tau=\beta^-$ における値は負の占有数（密度）であり、これから系の磁化を求めることができます。
 
-To rerun a simulation, you can specify a starting solution by defining the input parameter G0OMEGA_INPUT, e.g. copy the desired G0omega_output to filename_X and specify input parameter 'G0OMEGA_INPUT':'filename_X' in the python script (or G0OMEGA_INPUT=filename_X in the input file directly) and rerun the code.
+誤差は、収束した系に対する連続した反復計算から見積もることができます。
 
-As in the Fig. 11 in the DMFT review Georges it et al. you can observe the transition to the antiferromagnetic phase by plotting the Green's functions in the imaginary-time represention (part of `tutorial2.py` and `tutorial2_long.py`):
+シミュレーションを再実行するには、入力パラメータ G0OMEGA_INPUT を指定することで初期解を与えることができます。目的の `G0omega_output` を `filename_X` にコピーし、python スクリプト内で `'G0OMEGA_INPUT':'filename_X'` と指定するか（あるいは入力ファイル内で直接 `G0OMEGA_INPUT=filename_X` と指定し）、コードを再実行してください。
+
+### 反強磁性転移のプロット
+
+[Georges らによる DMFT のレビュー論文](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) の図11と同様に、虚時間表示でのグリーン関数をプロットすることで（`tutorial2.py` と `tutorial2_long.py` の一部）、反強磁性相への転移を観察できます。
 
 ```
 listobs=['0', '1']   # we will plot both flavors 0 and 1
@@ -115,9 +123,11 @@ plt.legend()
 plt.show()
 ```
 
-You will notice that the results are relatively noisy. The reason for that is that the expansion order at such high temperatures is very small, which renders the measurement procedure inefficient. You can improve statistics by increasing the total runtime (MAX_TIME) and/or the number of SWEEPS. The solver may run on more than one CPU using MPI, try `SOLVER = "mpirun -np procs /path-to-ALPS-installation/bin/hybridization"` (currently not working due to issue with path prefix) or consult the man page of your mpi installation.
+結果には比較的大きなノイズが見られることに気づくでしょう。これは、このような高温では展開次数が非常に小さくなり、測定手順の効率が下がるためです。統計精度は、総実行時間（MAX_TIME）や SWEEPS の数を増やすことで改善できます。なお、SOLVER パラメータを用いて求解器を直接 MPI 上で実行する方法（例えば `SOLVER = "mpirun -np procs /path-to-ALPS-installation/bin/hybridization"`）は、パスのプレフィックスに関する問題により、現時点では正しく動作しません。お使いのシステムで並列ジョブを正しく起動する方法については、MPI 環境のドキュメント（例えば `mpirun` の man ページ）を参照してください。
 
-If you want to check the convergence of your DMFT self-consistency, you can plot the Green's functions of different iterations using [`tutorial2eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2eval.py), whose code is shown here:
+### 収束の確認
+
+DMFT の自己無撞着計算の収束を確認したい場合は、[`tutorial2eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2eval.py) を使って各反復ステップのグリーン関数をプロットできます。そのコードは以下の通りです。
 
 ```
 listobs=['0']   # we look at a single flavor (=0) 
@@ -147,9 +157,9 @@ for sim in grouped:
 plt.show()
 ```
 
-It has to be noted that the iteration-resolved results are loaded by a different function (`pyalps.loadDMFTIterations`) than the final results (`pyalps.loadMeasurements`), because the iteration-resolved data is stored using a different folder structure (/simulation/iteration/number/results/) than the ALPS default (/simulation/results/) used for storage of the final results.
+なお、反復ステップごとの結果は、最終結果を読み込む関数（`pyalps.loadMeasurements`）とは異なる関数（`pyalps.loadDMFTIterations`）で読み込まれます。これは、反復ステップごとのデータが、最終結果の保存に使われる ALPS のデフォルトのフォルダ構造（`/simulation/results/`）とは異なるフォルダ構造（`/simulation/iteration/number/results/`）で保存されているためです。
 
-As already mentioned above, the occupation $n_f$ equals to $G_f(\tau=\beta^-)$, which is the last entry of the imaginary time Green's function for flavor $f$. Code for printing the final occupancies and plotting them vs $\beta$ is a part of `tutorial2eval.py`,
+前述の通り、占有数 $n_f$ はフレーバー $f$ の虚時間グリーン関数の最後の値である $G_f(\tau=\beta^-)$ に等しくなります。最終的な占有数を出力し、それを $\beta$ に対してプロットするコードも `tutorial2eval.py` の一部です。
 
 ```
 ## load the final iteration of G_{flavor=0}(tau)
@@ -176,7 +186,9 @@ plt.title('Occupation versus BETA')
 plt.show()
 ```
 
-As our self-consistency is in Matsubara frequencies (recall parameter OMEGA_LOOP=1), the criterion for convergency is $\mathrm{max}|G_{f}^{it}(i\omega_n)-G_{f}^{it+1}(i\omega_n)|\lt$CONVERGED. The imaginary part (real part analogously) Matsubara frequency Green's function is plotted by
+### 松原周波数グリーン関数と自己エネルギー
+
+今回の自己無撞着計算は松原周波数で行われるため（パラメータ OMEGA_LOOP=1 を思い出してください）、収束判定基準は $\mathrm{max}|G_{f}^{it}(i\omega_n)-G_{f}^{it+1}(i\omega_n)|\lt$ CONVERGED となります。松原周波数グリーン関数の虚部（実部も同様）は次のようにプロットします。
 
 ```
 from math import pi
@@ -208,7 +220,7 @@ for sim in grouped:
 plt.show()
 ```
 
-It is usually best to observe convergence in the selfenergy, which is much more sensitive. Note that longer simulations are required to obtain smoother Green's functions and selfenergies; in this simulation the noise in the intermediate range of Matsubara frequencies is very strong. The selfenergy is obtained via Dyson's equation as $\Sigma_f^{it}(i\omega_n)=G0_f^{it}(i\omega_n)^{-1}-G_f^{it}(i\omega_n)^{-1}$ and its imaginary part is plotted by this fragment of `tutorial2eval.py` (real part analogously):
+収束の様子は、より変化に敏感な自己エネルギーで観察するのが最良です。より滑らかなグリーン関数や自己エネルギーを得るには、より長いシミュレーションが必要であることに注意してください。このシミュレーションでは、松原周波数の中間領域でのノイズが非常に強くなっています。自己エネルギーは Dyson 方程式 $\Sigma_f^{it}(i\omega_n)=G0_f^{it}(i\omega_n)^{-1}-G_f^{it}(i\omega_n)^{-1}$ によって得られ、その虚部は `tutorial2eval.py` の次のコード断片でプロットされます（実部も同様です）。
 
 ```
 ## load all iterations of G_{flavor=0}(i omega_n) and G0_{flavor=0}(i omega_n)

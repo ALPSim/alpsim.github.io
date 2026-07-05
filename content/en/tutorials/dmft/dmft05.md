@@ -7,13 +7,15 @@ toc: true
 
 ## Orbitally Selective Mott Transition
 
-An interesting phenomenon in multi-orbital models is the orbitally selective Mott transition, first examined by [Anisimov et al.]() A variant of this, a *momentum-selective* Mott transition, has recently been discussed in [cluster calculations](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120) as a cluster representation of pseudogap physics.
+An interesting phenomenon in multi-orbital models is the orbitally selective Mott transition, first examined by [Anisimov et al., Eur. Phys. J. B 25, 191 (2002)](https://doi.org/10.1140/epjb/e20020021). A variant of this, a *momentum-selective* Mott transition, has recently been discussed in [cluster calculations](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120) as a cluster representation of pseudogap physics.
 
 In an orbitally selective Mott transition some of the orbitals involved become Mott insulating as a function of doping or interactions, while others stay metallic.
 
-As a minimal model we consider two bands: a wide band and a narrow band. In addition to the intra-orbital Coulomb repulsion $U$ we consider interactions $U'$, and $J$, with $U' = U-2J$. We limit ourselves to Ising-like interactions - a simplification that is often problematic for real compounds.
+As a minimal model we consider two bands: a wide band and a narrow band. In addition to the intra-orbital Coulomb repulsion $U$ we consider interactions $U'$ and $J$, with $U' = U-2J$. We limit ourselves to Ising-like interactions - a simplification that is often problematic for real compounds.
 
-We choose here a case with two bandwidth $t1=0.5$ and $t2=1$ and density-density like interactions of $U'=U/2$, $J=U/4$, and $U$ between $1.8$ and $2.8$, where the first case shows a Fermi liquid-like behavior in both orbitals, the $U=2.2$ is orbitally selective, and $U=2.8$ is insulating in both orbitals.
+### Running the simulation
+
+We choose here a case with two bandwidths, $t_0=0.5$ and $t_1=1$, and density-density-like interactions of $U'=U/2$, $J=U/4$, with $U$ between $1.8$ and $2.8$: $U=1.8$ shows a Fermi-liquid-like behavior in both orbitals, $U=2.2$ is orbitally selective, and $U=2.8$ is insulating in both orbitals.
 
 The python command lines for running the simulations are found in [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py):
 
@@ -65,7 +67,9 @@ for p in parms:
 
 A paper using the same sample parameters can be found [here](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.72.081103).
 
-As discussed in the previous tutorial [ALPS 2 Tutorials:DMFT-04 Mott](../dmft04), the (non-)metallicity of the Green's function is best observed by plotting the data on a logarithmic scale.
+### Interpreting the results
+
+As discussed in the previous tutorial [DMFT-04 Mott](../dmft04), the (non-)metallicity of the Green's function is best observed by plotting the data on a logarithmic scale.
 
 ```
 listobs = ['0', '2']   # flavor 0 is SYMMETRIZED with 1, flavor 2 is SYMMETRIZED with 3
@@ -85,4 +89,6 @@ plt.legend()
 plt.show()
 ```
 
-Convergency may be checked by [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py), showing all iterations of $G_f^{it}(\tau)$ on logarithmic scale.
+### Checking convergence
+
+Convergence may be checked by [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py), showing all iterations of $G_f^{it}(\tau)$ on logarithmic scale.

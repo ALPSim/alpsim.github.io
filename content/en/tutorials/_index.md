@@ -33,11 +33,6 @@ The series introduces the algorithm and its convergence, then demonstrates how t
 Tutorials for the DMFT self-consistency loop and its quantum impurity solvers.
 After an introduction to the method, individual tutorials cover the CT-HYB and CT-INT continuous-time QMC solvers, the Hirsch-Fye solver, the Mott metal-insulator transition, the orbitally selective Mott transition, finite-temperature extrapolation, custom lattice geometries, and the antiferromagnetic Néel transition.
 
-## [Time-Evolving Block Decimation (TEBD)](tebd)
-
-Tutorials for real-time evolution of one-dimensional quantum systems using matrix product states.
-The two tutorials study prototypical non-equilibrium problems: a sudden quench in the hardcore boson model and the propagation of a domain wall in the XX spin chain, illustrating how entanglement and local observables evolve after a quantum quench.
-
 ## [Custom Lattices and Models](lm)
 
 Tutorials for defining custom lattice geometries and model Hamiltonians using the ALPS XML format.

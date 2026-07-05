@@ -1,44 +1,44 @@
 
 ---
-title: Alpsize-03 Fortran Application Development
+title: Alpsize-03 Fortran 应用程序开发
 math: true
 toc: true
 weight: 4
 ---
 
-ALPS Fortran is the Fortran interface modules of ALPS. Using ALPS Fortran, You can run Fortran code program easily on ALPS by implementing some necessary subroutine. This chapter describes the procedures for writing the Fortran code to run on ALPS. In addition, also described in this chapter on how to modify (`CMakeList.txt`) file setting procedures and build the Fortran code to be ported to the existing ALPS Fortran.
+ALPS Fortran 是 ALPS 的 Fortran 接口模块。使用 ALPS Fortran，只需实现若干必要的子程序，即可在 ALPS 上轻松运行 Fortran 代码程序。本章介绍编写在 ALPS 上运行的 Fortran 代码的步骤。此外，本章还介绍如何修改 `CMakeList.txt` 文件的设置步骤，以及如何构建要移植到现有 ALPS Fortran 的 Fortran 代码。
 
-## Introduction ALPS Fortran
+## ALPS Fortran 简介
 
-The following figure shows the relationship diagram between ALPS system,ALPS Fortran,and user fortran program.
+下图显示了 ALPS 系统、ALPS Fortran 与用户 Fortran 程序之间的关系图。
 
-![ALPS Fortran module](../figs/fortranmodule.png)
+![ALPS Fortran 模块](../figs/fortranmodule.png)
 
-ALPS Fortran is called from the ALPS, call the Subroutine of the user program as necessary.Thus, ALPS can control the Program has been implemented in Fortran as well as the C++ Program.On the other hand, ALPS Fortran has provided a Subroutine call the functions of ALPS.Therefore, user program will be able to use the ALPS functions as well as to call the normal Fortran Subroutine.
+ALPS Fortran 由 ALPS 调用，并在需要时调用用户程序的子程序。因此，ALPS 能够像控制 C++ 程序一样控制以 Fortran 实现的程序。另一方面，ALPS Fortran 提供了调用 ALPS 功能的子程序。因此，用户程序可以像调用普通 Fortran 子程序一样使用 ALPS 的功能。
 
-## call flows subroutine
+## 子程序的调用流程
 
-The following figure shows the flow chart of the ALPS system and user program. Subroutines for each of the below, refer to the [2.3.3].
+下图显示了 ALPS 系统与用户程序的流程图。关于以下各个子程序，请参见 [2.3.3]。
 
-![Call flow](../figs/callflow.png)
+![调用流程](../figs/callflow.png)
 
-## Preparation fortran source code
+## Fortran 源代码的准备
 
-To implement the Program using ALPS Fortran, you will need to prepare following two source code.
+要使用 ALPS Fortran 实现程序，需要准备以下两种源代码。
 
-- C++ source code for implementing main function(entory point of Program).
-- Fortran source code for implementing according to a rule of the ALPS Fortran.
+- 实现 main 函数（程序入口点）的 C++ 源代码。
+- 按照 ALPS Fortran 规则实现的 Fortran 源代码。
 
-### Entry Point　
+### 入口点　
 
-This section describes the setting Program function main, such as main function(entry point of the Program) and the worker name. Main function is only to describe the fixed contents, usually does not need to be changed. Settings with Program, please refer to the following code,
+本节介绍程序的设置，例如 main 函数（程序的入口点）和 worker 名称。main 函数只需描述固定内容，通常不需要更改。关于程序的设置，请参考以下代码。
 
-- Program version numbers
-- Program copyright
-- Worker name
-- Evaluator name
+- 程序版本号
+- 程序版权信息
+- Worker 名称
+- Evaluator 名称
 
-The following is an example of a C + + source code.
+以下是 C++ 源代码的示例。
 
     1:    #include <alps/parapack/parapack.h>
     2:    #include "fortran_wrapper.h"
@@ -64,21 +64,21 @@ The following is an example of a C + + source code.
     22:        return alps::parapack::start(argc, argv);
     23:    }
 
-In the above example, it needs to be changed will be the red part characters.
+上例中需要更改的是红色部分的字符。
 
-### Fortran source code
+### Fortran 源代码
 
-The main contents of the Fortran source code is the calculation logic. However, there is always a need to implement some Subroutine to use the ALPS Fortran.You call the ALPS function via the Subroutine provided by the ALPS Fortran when performing the loading of the parameters and saving the calculation results.
+Fortran 源代码的主要内容是计算逻辑。但是，使用 ALPS Fortran 时始终需要实现若干子程序。在加载参数和保存计算结果时，需要通过 ALPS Fortran 提供的子程序来调用 ALPS 的功能。
 
-#### required Subroutine　
+#### 必需的子程序　
 
-for the user program to control the function of ALPS, you will need some Subroutine in the Fortran source code.read on below for a description of each Subroutine,Implement appropriately,and is a link error if you omit them, you can not build. when implementing these Subroutine, keep in mind the following points:
+为了让用户程序控制 ALPS 的功能，Fortran 源代码中需要若干子程序。请阅读下面对各子程序的说明并进行适当实现；如果省略它们，将产生链接错误，无法构建。实现这些子程序时，请注意以下几点：
 
-- All Subroutine will be passed "(2) :: caller integer" as argument.caller is a variable that is used internally to take ALPS function.Therefore, please do not rewrite the value of the caller. If the value of caller behavior has been changed is not guaranteed.
+- 所有子程序都会以 `integer :: caller(2)` 作为参数传入。caller 是在内部用于调用 ALPS 功能的变量。因此，请勿改写 caller 的值。如果更改了 caller 的值，则行为无法保证。
 
-- include the "alps / fortran / alps_fortran.h" In each Subroutine. This file will be required when calling the ALPS functions from Fortran code.
+- 在每个子程序中 include `alps/fortran/alps_fortran.h`。从 Fortran 代码调用 ALPS 功能时需要该文件。
 
-So, with regard to the Subroutine required, you will need the following three lines immediately below the signature of the Subroutine.
+因此，对于必需的子程序，需要在子程序签名的正下方加入以下三行。
 
     1:    subroutine alps_init(caller)
     2:    implicit none
@@ -89,149 +89,149 @@ So, with regard to the Subroutine required, you will need the following three li
 
 **`alps_init(caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-|integer  |  caller(2)  |  in  |  local variable |
+|integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine will be called once before the calculation is performed.This is where the initialization process of the Program like as allocating arrays.
+该子程序在执行计算之前被调用一次。在这里进行诸如分配数组等程序的初始化处理。
 
 **`alps_init_observables(caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine will be called only once after it has been a call is `alps_init`. This is where you initialize the `alps :: ObservableSet`.This Subroutine is called once in one input parameter. Incidentally, detail information of the `alps :: ObservableSet`, refer to the ALPS HP.
+该子程序在调用 `alps_init` 之后仅被调用一次。在这里初始化 `alps::ObservableSet`。该子程序对每个输入参数调用一次。另外，关于 `alps::ObservableSet` 的详细信息，请参见 ALPS 主页。
 
 **`alps_run(caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This subroutine is implemented the logic calculation.until it returns a value greater than or equal to 1.0 by alps_progress,This Subroutine is called repeatedly from ALPS.Therefore, in this Subroutine is necessary to take the loop structure is not available. In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation
+该子程序中实现计算逻辑。在 alps_progress 返回大于等于 1.0 的值之前，该子程序会被 ALPS 反复调用。因此，在该子程序内无需编写循环结构。此外，在线程级并行运行时，该子程序在多线程下工作，因此在线程级并行中使用时需要提供线程安全的实现。
 
 **`alps_progress(prgrs, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| real\*8  |  prgrs  |  out  |  Programの進捗状態(0.0 ≦ prgrs) |
-| integer  |  caller(2)  |  in   | local variable |
+| real\*8  |  prgrs  |  out  |  程序的进度状态(0.0 ≦ prgrs) |
+| integer  |  caller(2)  |  in   | 局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine will be called by the ALPS has been finished after `alps_run`, ALPS is returned to the progress situation of the Program.While the prgrs value less than 1.0, ALPS will call repeatedly `alps_run`. When `prgrs` value more than 1.0 are substituted, ALPS judges that a calculation was completed, and will finish the program.In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation
+该子程序在 `alps_run` 之后由 ALPS 调用，将程序的进度状况返回给 ALPS。当 prgrs 的值小于 1.0 时，ALPS 会反复调用 `alps_run`。当为 `prgrs` 赋予大于等于 1.0 的值时，ALPS 判断计算已完成并结束程序。此外，在线程级并行运行时，该子程序在多线程下工作，因此在线程级并行中使用时需要提供线程安全的实现。
 
 **`alps_is_thermalized(thrmlz, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| real\*8  |  thrmlz   | out   | thermalize ending flag(0:Not Completed / 1:Completed ) |
-| integer  |  caller(2) |   in  |  local variable |
+| real\*8  |  thrmlz   | out   | 热化结束标志(0:未完成 / 1:已完成) |
+| integer  |  caller(2) |   in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine will be called by the ALPS has been finished after alps_run, returns the incomplete / complete thermalize.When a value of thrmlz is 0, Program judges the calculation is now in thermalize, and does not save a calculation result data.On the other hand,value is 1, Program judges that thermalize was completed, and the calculation result saving is started. In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation
+该子程序在 alps_run 之后由 ALPS 调用，返回热化是否完成。当 thrmlz 的值为 0 时，程序判断计算仍处于热化阶段，不保存计算结果数据。另一方面，当值为 1 时，程序判断热化已完成，并开始保存计算结果。此外，在线程级并行运行时，该子程序在多线程下工作，因此在线程级并行中使用时需要提供线程安全的实现。
 
 **`alps_finalize(caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine will be called only once (after returning the value greater than or equal to 1.0 from alps_progress) after completing your calculation. This is where you end processing such as the release of allocated memory.
+该子程序在完成计算之后（从 alps_progress 返回大于等于 1.0 的值之后）仅被调用一次。在这里进行诸如释放已分配内存等结束处理。
 
 **`alps_save(caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in   | local variable |
+| integer  |  caller(2)  |  in   | 局部变量 |
 
-- Explanation
+- 说明
 
-This subroutine is called from ALPS has been finished after `alps_run`. Saves the restartrestart-file using the function of ALPS.In addition,while running at thread-level-parallelism,this subroutine work on multi-threading.Therefore, when used in thread-level-parallelism is required to provide thread-safe implementation.
+该子程序在 `alps_run` 之后由 ALPS 调用。使用 ALPS 的功能保存重启文件。此外，在线程级并行运行时，该子程序在多线程下工作，因此在线程级并行中使用时需要提供线程安全的实现。
 
 **`alps_load(caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine will be called once, when the Program is restart. Load the saved restart-file using the ALPS functions.
+该子程序在程序重启时仅被调用一次。使用 ALPS 的功能加载已保存的重启文件。
 
-#### Subroutine provided ALPS Fortran
+#### ALPS Fortran 提供的子程序
 
-When you call the ALPS functions from the user program, call the Subroutine provided by the ALPS Fortran. These subroutine will require "(2) :: caller integer" as argument. caller is a local variable that is passed from the ALPS Fortran, you will need to pass the Subroutine provided as a variable passed in the argument to (2.2.3.1) Subroutine required.
+从用户程序调用 ALPS 功能时，调用 ALPS Fortran 提供的子程序。这些子程序需要以 `integer :: caller(2)` 作为参数。caller 是从 ALPS Fortran 传入的局部变量，需要将传入 (2.2.3.1) 必需子程序参数中的变量原样传递给所提供的子程序。
 
 **`alps_get_parameter(data, name, type, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data  |  out  |   store of the value |
-| character   | name(\*)  |  in  |  parameter name to take out |
-| integer  |  type  |  in  |  data type |
-| integer  |  caller(2)  |  in  |  local variable |
+| -  |  data  |  out  |   值的存储位置 |
+| character   | name(\*)  |  in  |  要取出的参数名 |
+| integer  |  type  |  in  |  数据类型 |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-Specify the name, ane receive a parameter from ALPS. parameter name, type, number of elements is specified **name**, **type**, in each count.This Subroutine will be used to initialize the arrays and variables in the mainly `alps_init`. In addition, the possible value of the type is defined in the `alps_fortran.h`.
+指定名称，从 ALPS 接收参数。参数名、类型、元素数分别由 **name**、**type**、count 指定。该子程序主要用于在 `alps_init` 中初始化数组和变量。另外，type 可取的值在 `alps_fortran.h` 中定义。
 
 **`alps_parameter_defined(res, name, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  res   | out  |  The presence or absence of definition of parameter(1:absence / 0:definition) |
-| character  |  name(\*)  |  in  |  parameter name |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  res   | out  |  参数定义的有无(1:无定义 / 0:有定义) |
+| character  |  name(\*)  |  in  |  参数名 |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-Returns whether the parameter is defined in the parameter file is specified by **name**. *1Italic* text is assigned to the res if it is defined. *0Italic* text is assigned if it is not.This Subroutine will be used to initialize the arrays and variables in the mainly `alps_init`.
+返回由 **name** 指定的参数是否在参数文件中定义。如果已定义，则向 res 赋值 *1*；如果未定义，则赋值 *0*。该子程序主要用于在 `alps_init` 中初始化数组和变量。
 
 **`alps_init_observable(count, type, name, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  count  |  in   | Number of element of a stored calculation result |
-| integer  |  type  |  in  |  data type |
-| character  |  name(\*)  |  in  |  The name of Observable to store |
-| integer  |  caller(2)  |  in  |  local variable |
+| integer  |  count  |  in   | 存储的计算结果的元素数 |
+| integer  |  type  |  in  |  数据类型 |
+| character  |  name(\*)  |  in  |  要存储的 Observable 的名称 |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine is used to register a name that is specified in the Observable to `alps :: ObservableSet` in `alps_init_observable`. Observable types are determined as follows by **type** and **count**.
+该子程序用于将在 `alps_init_observable` 中为 Observable 指定的名称注册到 `alps::ObservableSet`。Observable 的类型由 **type** 和 **count** 按如下方式确定。
 
 | **type** | **count** | **Observable** |
 | :------- | :-------- | :------------- |
@@ -245,52 +245,52 @@ This Subroutine is used to register a name that is specified in the Observable t
 
 **`alps_accumulate_observable(data, count, type, name, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -   | data  |  in   | the calculation results to store |
-| integer  |  count   | in  |  Number of element of a stored calculation result |
-| integer  |  type  |  in  |  data type |
-| character  |  name(\*)  |  in   | The name of Observable to store |
-| integer  |  caller(2)  |  in  |  local variable |
+| -   | data  |  in   | 要存储的计算结果 |
+| integer  |  count   | in  |  存储的计算结果的元素数 |
+| integer  |  type  |  in  |  数据类型 |
+| character  |  name(\*)  |  in   | 要存储的 Observable 的名称 |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-Save the result data to Observable with the specified name. This Subroutine is used to store the results of a calculation in `alps_run`. count / name / type must match the ones specified in `init_observable`.
+将结果数据保存到指定名称的 Observable。该子程序用于在 `alps_run` 中存储计算结果。count / name / type 必须与在 `init_observable` 中指定的一致。
 
 **`alps_dump(data, count, type, caller)`**
 
-- Argument
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+- 参数
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data  |  in  |  the values to store |
-| integer  |  count  |  in  |  Number of elements of values to store |
-| integer  |  type  |  in  |  data type |
-| integer  |  call(2)  |  in  |  local variable |
+| -  |  data  |  in  |  要存储的值 |
+| integer  |  count  |  in  |  要存储的值的元素数 |
+| integer  |  type  |  in  |  数据类型 |
+| integer  |  call(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine is used to save the restart-file in the `alps_save`. interruption data was saved using `alps_dump` will be used at restart.
+该子程序用于在 `alps_save` 中保存重启文件。使用 `alps_dump` 保存的中断数据将在重启时使用。
 
 **`alps_restore(data, count, type, caller)`**
 
-- Argument
+- 参数
 
-| **Type**  |  **Name**  |  **I/O**  |  **Meaning** |
+| **类型**  |  **名称**  |  **输入/输出**  |  **含义** |
 | :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data   | out  |  storage location of loaded values |
-| integer  |  count  |  in  |  Number of element of value to load |
-| integer  |  type  |  in  |  data type |
-| integer  |  caller(2)  |  in  |  local variable |
+| -  |  data   | out  |  加载值的存储位置 |
+| integer  |  count  |  in  |  要加载的值的元素数 |
+| integer  |  type  |  in  |  数据类型 |
+| integer  |  caller(2)  |  in  |  局部变量 |
 
-- Explanation
+- 说明
 
-This Subroutine is used to load the restart-file in the `alps_load` to restart-file data is saved in the order in which they were saved in `alps_dump`. Therefore, when loading is `alps_restore`, remove the data in the same order as when it is saved.
+该子程序用于在 `alps_load` 中加载重启文件。重启文件的数据按照在 `alps_dump` 中保存的顺序存储。因此，使用 `alps_restore` 加载时，请按照保存时的相同顺序取出数据。
 
-### editing configuration file
+### 编辑配置文件
 
-user program builds using CMake as well as ALPS. It is a sample of setting file(`CMakeLists.txt`) to build user program in CMake as follows.
+用户程序与 ALPS 一样使用 CMake 构建。以下是用于在 CMake 中构建用户程序的配置文件(`CMakeLists.txt`)示例。
 
     1:    # CMakeList.txt
     2:    # editing configuration file for CMake
@@ -310,45 +310,45 @@ user program builds using CMake as well as ALPS. It is a sample of setting file(
     16:    # External library file required to generate execution
     17:    target_link_libraries(**hello** ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
     
-In the above example, it needs to be changed will be the part of characters inside \*\*...\*\*.
+上例中需要更改的是 \*\*...\*\* 内部的字符。
 
-## Porting of existing program code
+## 现有程序代码的移植
 
-In this section, in case of the ising model program shown below,Describes the procedure that ALPS to work on the existing Fortran Program.
+本节以下面所示的 Ising 模型程序为例，介绍使 ALPS 在现有 Fortran 程序上工作的步骤。
 
-### preparation porting　
+### 移植准备　
 
-In this section, we will use the file in the tutorial directory that is generated by extracting the `alps_fortran.tar.gz`.In preparation for the porting work, copy the following file to a working directory in the tutorial directory.
+本节使用通过解压 `alps_fortran.tar.gz` 生成的 tutorial 目录中的文件。作为移植工作的准备，请将 tutorial 目录中的以下文件复制到工作目录。
 
-- `ising_original.f`：original source code
-- `template.f90`：Template source cod of ALPS Fortran Program
-- `main.C`：entry point of Program
-- `CMakeList.txt`：Template of `CMakeList.txt`
+- `ising_original.f`：原始源代码
+- `template.f90`：ALPS Fortran 程序的模板源代码
+- `main.C`：程序的入口点
+- `CMakeList.txt`：`CMakeList.txt` 的模板
 
-All Subroutine which are necessary implementing ALPSProgram in `template.f90` is defined.Therefore, when developing a new Program you can proceed with the development based on `template.f90`.
+实现 ALPS 程序所需的所有子程序都已在 `template.f90` 中定义。因此，在开发新程序时，可以基于 `template.f90` 进行开发。
 
-The rough structure of original code is as follows.
+原始代码的大致结构如下。
 
-|      | **Processing contents** |
+|      | **处理内容** |
 | :--- | :---------------------- |
-| 4-7  |  Variable Declaration & Initialization |
-| 8-23  |  Array element Initialization |
-| 24-47 |   main loop |
-| 25-34  |  calculation |
-| 36   | thermalize check |
-| 37-46  |  saving calculation resutls |
-| 48-58  |  results output |
+| 4-7  |  变量声明与初始化 |
+| 8-23  |  数组元素初始化 |
+| 24-47 |   主循环 |
+| 25-34  |  计算 |
+| 36   | 热化检查 |
+| 37-46  |  保存计算结果 |
+| 48-58  |  结果输出 |
 
 
-### porting fortran code
+### 移植 Fortran 代码
 
-The porting of Fortran code, we will assign to Subroutine, the processing being done in each block of `ising_original.f`. This section describes an example of `tutorial/alps_ising.f90` as a sample of after-porting code.
+在移植 Fortran 代码时，我们将 `ising_original.f` 各个代码块中进行的处理分配给子程序。本节以 `tutorial/alps_ising.f90` 为例，说明移植后的代码。
 
-#### Variable declaration
+#### 变量声明
 
-Each variable has been declared in the `ising_original.f` is at the porting is turned into ALPS module.In order to porting to ALPS because there is a need to Subroutine for each processing unit, and modify it to allow access to the variables from each Subroutine.
+在 `ising_original.f` 中声明的各变量，在移植时被整合到 ALPS 模块中。由于移植到 ALPS 时需要为每个处理单元设置子程序，因此需修改为可从各子程序访问这些变量。
 
-- before porting
+- 移植前
 
         4:    DIMENSION IS(20,20),IP(20),IM(20),P(-4:4),A(4)
         5:    C PARAMETERS
@@ -356,7 +356,7 @@ Each variable has been declared in the `ising_original.f` is at the porting is t
         7:          DATA IX/1234567/, V0/.465661288D-9/
 
 
-- after porting
+- 移植后
 
         1:    module ising_mod
         2:      implicit none
@@ -370,14 +370,14 @@ Each variable has been declared in the `ising_original.f` is at the porting is t
         10:    end module ising_mod
         11:
 
-IP, IM, IS, P array are initialized in `alps_init`, the size of the after transplantation does not specify here.In addition, original array A is for storing a result, this array is in the after-porting will use the mechanism of ALPS.Therefore, array A is not necessary for code after the porting.Also, the value of each variable after porting gotten from the parameter file.In addition, K is a variable variable after the porting to count the number of iterations. Thermalize check after porting is responsible for control and repeat with the value of K to do without a loop.
-**In this section, so that is expected to run in parallel MPI, for thread-safe is not considered.**
+IP、IM、IS、P 数组在 `alps_init` 中初始化，因此移植后不在此处指定其大小。此外，原始数组 A 用于存储结果，但移植后该数组将使用 ALPS 的机制。因此，移植后的代码中不需要数组 A。另外，移植后各变量的值从参数文件获取。此外，K 是移植后用于计数迭代次数的变量。移植后的热化检查负责用 K 的值进行控制和重复，而无需循环。
+**本节假定以 MPI 并行运行，因此未考虑线程安全。**
 
-#### Initializing process
+#### 初始化处理
 
-Initialization process of the original code may have to initialize each element of the array, at after-porting code, run in the initialization process is Subroutine `alps_init`.First,Initializes the array variables, using the `alps_get_parameter`, then initialize the array elements.Also, do not prepare the array for storing the results after porting, prepare the Observable for saving the results in `alps_init_observableSubroutine`.In addition, it is not necessary for `alps_init` and `alps_init_observable` to call it in after-porting code because it is called automatically by ALPS.Also, do not prepare an array for storing the results, prepare the Observable for saving the results in `alps_init_observableSubroutine`.
+原始代码的初始化处理可能需要初始化数组的每个元素，而在移植后的代码中，初始化处理在子程序 `alps_init` 中进行。首先使用 `alps_get_parameter` 初始化数组变量，然后初始化数组元素。此外，移植后不准备用于存储结果的数组，而是在 `alps_init_observable` 子程序中准备用于保存结果的 Observable。另外，`alps_init` 和 `alps_init_observable` 由 ALPS 自动调用，因此无需在移植后的代码中调用它们。
 
-- before porting
+- 移植前
 
         8:    C TABLES
         9:          DO 10 I=-4,4
@@ -396,7 +396,7 @@ Initialization process of the original code may have to initialize each element 
         22:          DO 21 I=1,4
         23:     21   A(I)=0.0
 
-- after porting(`alps_init`)
+- 移植后(`alps_init`)
 
         13:    subroutine alps_init(caller)
         14:      use ising_mod
@@ -441,9 +441,9 @@ Initialization process of the original code may have to initialize each element 
         53:      return
         54:    end subroutine alps_init
 
-Above code shows that it calls the `alps_get_parameter` in line 21 to 24, getting the contents of the parameter file through the ALPS.In addition, the processing of line 34-51 is the same as the original code.
+上述代码在第 21 至 24 行调用 `alps_get_parameter`，通过 ALPS 获取参数文件的内容。此外，第 34 至 51 行的处理与原始代码相同。
 
-- after porting(`alps_init_observables`)
+- 移植后(`alps_init_observables`)
 
         92:    subroutine alps_init_observables(caller)
         93:      implicit none
@@ -456,13 +456,13 @@ Above code shows that it calls the `alps_get_parameter` in line 21 to 24, gettin
         100:      return
         101:    end subroutine alps_init_observables
     
-Observable are available with the name "Magnetization" and "Energy" as a buffer for storing the calculation result after porting.In the original code, calculates the sum of squares with the sum for each Magnetization and Energy, but,these calculations is done automatically by Observable after porting.
+移植后，将准备名为 "Magnetization" 和 "Energy" 的 Observable 作为存储计算结果的缓冲区。在原始代码中，分别对 Magnetization 和 Energy 计算总和与平方和，但移植后这些计算由 Observable 自动完成。
 
-#### calcuration and saving results
+#### 计算与结果保存
 
-Although there has been in the do loop iteration (line 25 original-code)in the original code, and after porting, uses the `alps_progressSubroutine` `alps_run` without a do loop.
+在原始代码中存在 do 循环迭代（原始代码第 25 行），而移植后不使用 do 循环，改用 `alps_progress` 子程序和 `alps_run`。
 
-- before porting
+- 移植前
 
         24:    C SIMULATION
         25:          DO 30 K=1,MCS+INT
@@ -489,7 +489,7 @@ Although there has been in the do loop iteration (line 25 original-code)in the o
         46:          A(4)=A(4)+MG**2
         47:     30   CONTINUE
 
-- after porting(`alps_run`)
+- 移植后(`alps_run`)
 
         56:    ! subroutine alps_run
         57:    subroutine alps_run(caller)
@@ -528,9 +528,9 @@ Although there has been in the do loop iteration (line 25 original-code)in the o
         88:      return
         89:    end subroutine alps_run
 
-Calculation process itself(Line 65 to 82) is the same as the original code, after porting will be called automatically alps_run repeatedly, the loop at line 25 of the Original Code is not writted.Instead, it counts the number of iterations in line 86.Also, save the results of the calculation using the ALPS function(line 84 and 85).In the original code (lines 43-46 the original code) are performed, such as calculating the integrated and square, but these are done automatically by `alps_accumulate_observable`.
+计算处理本身（第 65 至 82 行）与原始代码相同。移植后 alps_run 会被自动反复调用，因此不编写原始代码第 25 行的循环。取而代之，在第 86 行对迭代次数进行计数。此外，使用 ALPS 的功能（第 84 行和第 85 行）保存计算结果。在原始代码（原始代码第 43 至 46 行）中进行了诸如累加和平方等计算，但这些在移植后由 `alps_accumulate_observable` 自动完成。
 
-- after porting(alps_progress)
+- 移植后(alps_progress)
 
         103:    ! alps_progerss
         104:    subroutine alps_progress(prgrs, caller)
@@ -544,17 +544,17 @@ Calculation process itself(Line 65 to 82) is the same as the original code, afte
         112:
         113:    end subroutine alps_progress
     
-after porting, Alps_progress done in the control of the iterative calculation.prgrs value is greater than or equal to 1 is `alps_run` will no longer be called.Therefore, it is implemented as prgrs value is greater than or equal to 1 to monitor the value of (K), the number of times when you are running counter provision.
+移植后，由 alps_progress 进行迭代计算的控制。当 prgrs 的值大于等于 1 时，`alps_run` 将不再被调用。因此，通过监视表示运行次数的计数器 (K) 的值来实现，使 prgrs 的值大于等于 1。
 
-#### thermalized check
+#### 热化检查
 
-In the original code, hermalized-check has been run within the main loop (line 36).However,after porting,run for subroutine `alps_is_thermalized`.
+在原始代码中，热化检查在主循环内（第 36 行）执行。但移植后，改在子程序 `alps_is_thermalized` 中执行。
 
-- before porting
+- 移植前
 
         36:          IF(K.LE.INT) GOTO 30
 
-- after porting(`alps_is_thermalized`)：
+- 移植后(`alps_is_thermalized`)：
 
         115:    ! alps_is_thermalized
         116:    subroutine alps_is_thermalized(thrmlz, caller)
@@ -573,13 +573,13 @@ In the original code, hermalized-check has been run within the main loop (line 3
         129:      return
         130:    end subroutine alps_is_thermalized
     
-Similarly `alps_progress`, checks the thermalized from the value of (K) counter. are considered to have been completed thermalize and become value thrmlz=1.
+与 `alps_progress` 类似，根据计数器 (K) 的值判断热化。当认为热化已完成时，thrmlz 的值变为 1。
 
-#### output results
+#### 结果输出
 
-Post-processing and output of the results is done automatically when you use the ALPS.Therefore, the codes for output of calculation results and post-processing are not required.
+使用 ALPS 时，结果的后处理和输出会自动完成。因此，不需要用于输出计算结果和后处理的代码。
 
-- before porting
+- 移植前
 
         48:    C STATISTICS
         49:          DO 50 I=1,4
@@ -593,15 +593,15 @@ Post-processing and output of the results is done automatically when you use the
         57:         * /' ENG =',F10.5,' C   =',F10.5,
         58:         * /' MAG =',F10.5,' X   =',F10.5)
 
-- after porting：code not available
+- 移植后：无相应代码
 
-#### Finalizing process
+#### 结束处理
 
-There is no end processing is not performed for allocate in the original code. However, after porting must be deallocate array that you allocate in `alps_init`.
+在原始代码中，未对 allocate 进行结束处理。但移植后，必须 deallocate 在 `alps_init` 中 allocate 的数组。
 
-- before porting：code not available
+- 移植前：无相应代码
 
-- after porting(`alps_finalize`)
+- 移植后(`alps_finalize`)
 
         160:    ! alps_finalize
         161:    subroutine alps_finalize(caller)
@@ -618,12 +618,12 @@ There is no end processing is not performed for allocate in the original code. H
         172:      return
         173:    end subroutine alps_finalize
 
-#### restart function
+#### 重启功能
 
-Only to implement (`alps_save` / `alps_load`), you can add functionality to restart restart-file Program I / O function of when you use the ALPS.The original code does not have the ability to restart, describes an example implementation of I / O function of the restart-file according to the ALPS below.
+只需实现 (`alps_save` / `alps_load`)，即可利用使用 ALPS 时的重启文件输入/输出功能，为程序添加重启功能。原始代码不具备重启功能，以下说明按照 ALPS 实现重启文件输入/输出功能的示例。
 
-- before porting：code not available
-- after porting(`alps_save`)
+- 移植前：无相应代码
+- 移植后(`alps_save`)
 
         132:    ! alps_save
         133:    subroutine alps_save(caller)
@@ -639,9 +639,9 @@ Only to implement (`alps_save` / `alps_load`), you can add functionality to rest
         143:      return
         144:    end subroutine alps_save
 
-`alps_save` writes in `alps_dump` the only variables that need to restart.Here, This section shows how to export counter (K) and data (IX, IS) calculating.
+`alps_save` 仅将重启所需的变量用 `alps_dump` 写出。这里展示如何写出计数器 (K) 和计算数据 (IX, IS)。
 
-- after porting(`alps_load`)
+- 移植后(`alps_load`)
 
         146:    ! alps_load
         147:    subroutine alps_load(caller)
@@ -657,13 +657,13 @@ Only to implement (`alps_save` / `alps_load`), you can add functionality to rest
         157:      return
         158:    end subroutine alps_load
 
-There are (`alps_restore`) must be loaded in the order alps_save exported in (`alps_dump`) In `alps_load`.However, when you restart the ALPSProgram, `alps_init` will be called before `alps_load` is called. However, when you restart the ALPSProgram, `alps_init` will be called before `alps_load` is called. In other words, the initialization of the memory allocation K,IX,and IS and other variables is done in `alps_init`, need to do initialization, etc. within the `alps_load` is not available.
+在 `alps_load` 中，必须按照 `alps_save` 用 (`alps_dump`) 写出的顺序使用 (`alps_restore`) 进行加载。另外，重启 ALPS 程序时，会在调用 `alps_load` 之前调用 `alps_init`。也就是说，K、IX、IS 等变量的内存分配和初始化在 `alps_init` 中完成，因此无需在 `alps_load` 内进行初始化等操作。
 
-#### About support of multi-thread
+#### 关于多线程支持
 
-If you want to run with multi-thread the ALPSProgram, must be thread-safe implementation of the Fortran code.If `tutorial.f90` described in this section, you can support multi-thread by thread-local variables to prepare in 2.4.2.
+如果希望以多线程运行 ALPS 程序，必须以线程安全的方式实现 Fortran 代码。对于本节所述的 `tutorial.f90`，可以通过在 2.4.2 中准备的线程局部变量来支持多线程。
 
-- after porting(multi-thread)
+- 移植后(多线程)
 
         1:    module ising_mod
         2:      implicit none
@@ -678,13 +678,13 @@ If you want to run with multi-thread the ALPSProgram, must be thread-safe implem
         11:    end module ising_mod
         12:
 
-### About main.C　
+### 关于 main.C　
 
-`main.C` file is required to become entry point of the Program.But it is not necessary to change the contents of the main function. Configuration of `main.C`, change it if necessary. refer to 2.2.2.
+`main.C` 文件是成为程序入口点所必需的。但无需更改 main 函数的内容。`main.C` 的配置请根据需要进行更改。请参见 2.2.2。
 
-### About `CMakeLists.txt`
+### 关于 `CMakeLists.txt`
 
-change the `CMakeLists.txt` (see text 2.3). The following is an example of `CMakeLits.txt`.
+更改 `CMakeLists.txt`（参见正文 2.3）。以下是 `CMakeLists.txt` 的示例。
 
     1:    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
     2:    

@@ -1,26 +1,36 @@
 
 ---
-title: Dynamical Mean Field Theory (DMFT) Solvers
-description: "Tutorials for ALPS"
+title: 动力学平均场理论（DMFT）求解器
+description: "ALPS 教程"
 toc: true
 weight: 4
+math: true
 ---
 
-- [DMFT-01 An introduction to DMFT](dmft01)
-- [DMFT-02 CT-HYB: the CT-HYB QMC solver](dmft02)
-- [DMFT-03 CT-INT: the CT-INT QMC solver](dmft03)
-- [DMFT-04 Mott Transition](dmft04)
-- [DMFT-05 Orbitally Selective Mott Transition](dmft05)
-- [DMFT-06 Paramagnetic metal and extrapolation errors](dmft06)
-- [DMFT-07 The Hirsch-Fye solver](dmft07)
-- [DMFT-08 Setting a particular lattice](dmft08)
-- [DMFT-09 Néel transition in single site DMFT](dmft09)
+动力学平均场理论（DMFT）将格点 Hubbard 模型映射为一个自洽确定的量子杂质问题，能够捕捉静态平均场理论完全无法描述的强关联现象——例如 Mott 金属-绝缘体转变。本系列教程将带你了解 ALPS 中的 DMFT 自洽循环及其量子杂质求解器，并将其应用于贝特格子及其他格子上一系列具有明确物理动机的例子。
 
+## 简介
 
+- [DMFT-01 DMFT 简介](dmft01) —— 介绍 DMFT 近似及其与量子杂质问题的映射关系，并给出后续教程的路线图。
 
+## 杂质求解器
 
+ALPS 为 DMFT 杂质问题提供了三种求解器，本系列将它们都应用于同一个金属-反铁磁绝缘体转变问题，以便直接比较它们的结果：连续时间杂化展开算法（CT-HYB）、连续时间相互作用展开算法（CT-INT），以及较早的离散时间 Hirsch-Fye 算法——正是后者存在系统性的 $\Delta\tau$ 误差，促使了连续时间方法的发展。
 
+- [DMFT-02 CT-HYB 量子蒙特卡罗求解器](dmft02) —— 介绍杂化展开求解器，并用它描绘出贝特格子上 Hubbard 模型随温度变化的金属-反铁磁绝缘体转变。
+- [DMFT-03 CT-INT 量子蒙特卡罗求解器](dmft03) —— 用相互作用展开求解器重复相同的练习。
+- [DMFT-07 Hirsch-Fye 求解器](dmft07) —— 用离散时间 Hirsch-Fye 求解器再次重复该练习，并讨论了连续时间算法在很大程度上取代它的原因。
 
+## 物理应用
 
+- [DMFT-04 Mott 转变](dmft04) —— 通过抑制反铁磁序、在固定温度下扫描相互作用强度，研究顺磁 Mott 转变——这是诸如 $V_2O_3$ 等材料中实现的金属-绝缘体转变。
+- [DMFT-05 轨道选择性 Mott 转变](dmft05) —— 将方法推广到双带模型，其中一个轨道可以变为 Mott 绝缘态，而另一个仍保持金属态，这一现象最早在 Ca$_{2-x}$Sr$_x$RuO$_4$ 等钌氧化物中被发现。
+- [DMFT-06 顺磁金属与外推误差](dmft06) —— 将 CT-HYB 与 CT-INT 得到的顺磁金属自能，与 Hirsch-Fye 及精确对角化的基准结果进行比较，展示离散化误差和统计误差在实际计算中的表现。
 
+## 贝特格子之外
 
+- [DMFT-08 设定特定格子](dmft08) —— 展示如何从默认的半圆形贝特格子态密度扩展到一般格子，包括正方、立方、六角等几何结构，以及通过 Hilbert 变换在 k 空间积分得到的二维色散关系。
+
+## 综合应用
+
+- [DMFT-09 单格点 DMFT 中的 Néel 转变](dmft09) —— 一个综合性的示例，使用全部三种杂质求解器并列重现反铁磁 Néel 转变，以便直接比较它们的结果。

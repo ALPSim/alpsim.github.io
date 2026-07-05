@@ -1,26 +1,36 @@
 
 ---
-title: Dynamical Mean Field Theory (DMFT) Solvers
-description: "Tutorials for ALPS"
+title: 動的平均場理論（DMFT）ソルバー
+description: "ALPSのチュートリアル"
 toc: true
 weight: 4
+math: true
 ---
 
-- [DMFT-01 An introduction to DMFT](dmft01)
-- [DMFT-02 CT-HYB: the CT-HYB QMC solver](dmft02)
-- [DMFT-03 CT-INT: the CT-INT QMC solver](dmft03)
-- [DMFT-04 Mott Transition](dmft04)
-- [DMFT-05 Orbitally Selective Mott Transition](dmft05)
-- [DMFT-06 Paramagnetic metal and extrapolation errors](dmft06)
-- [DMFT-07 The Hirsch-Fye solver](dmft07)
-- [DMFT-08 Setting a particular lattice](dmft08)
-- [DMFT-09 Néel transition in single site DMFT](dmft09)
+動的平均場理論（DMFT）は、格子 Hubbard 模型を自己無撞着に決定される量子不純物問題へと写像し、静的な平均場理論では全く捉えられない強相関現象――例えばモット金属-絶縁体転移――を記述することができます。これらのチュートリアルでは、ALPS の DMFT 自己無撞着ループとその量子不純物ソルバーについて解説し、それらをベーテ格子やその他の格子上での、物理的に動機づけられた一連の具体例に応用していきます。
 
+## 入門
 
+- [DMFT-01 DMFT 入門](dmft01) —— DMFT 近似とその量子不純物問題への写像を解説し、続くチュートリアルの構成を示します。
 
+## 不純物ソルバー
 
+ALPS は DMFT 不純物問題に対して3種類のソルバーを提供しており、ここではいずれも同じ金属-反強磁性絶縁体転移に適用することで、結果を直接比較できるようにしています。連続時間ハイブリダイゼーション展開アルゴリズム（CT-HYB）、連続時間相互作用展開アルゴリズム（CT-INT）、そしてより古い離散時間 Hirsch-Fye アルゴリズムです。この Hirsch-Fye アルゴリズムが持つ系統的な $\Delta\tau$ 誤差こそが、連続時間法の開発を動機づけました。
 
+- [DMFT-02 CT-HYB 量子モンテカルロソルバー](dmft02) —— ハイブリダイゼーション展開ソルバーを紹介し、ベーテ格子上の Hubbard 模型における温度に対する金属-反強磁性絶縁体転移を描き出します。
+- [DMFT-03 CT-INT 量子モンテカルロソルバー](dmft03) —— 相互作用展開ソルバーを用いて同じ演習を繰り返します。
+- [DMFT-07 Hirsch-Fye ソルバー](dmft07) —— 離散時間 Hirsch-Fye ソルバーを用いてこの演習をもう一度繰り返し、連続時間アルゴリズムがこれに大きく取って代わった理由について論じます。
 
+## 物理への応用
 
+- [DMFT-04 モット転移](dmft04) —— 反強磁性秩序を抑制し、固定温度で相互作用の強さを走査することで、$V_2O_3$ のような物質で実現される金属-絶縁体転移である常磁性モット転移を調べます。
+- [DMFT-05 軌道選択的モット転移](dmft05) —— 二バンド模型へと手法を拡張し、一方の軌道はモット絶縁体になり得るが、もう一方は金属的なままであるという現象を扱います。この現象は Ca$_{2-x}$Sr$_x$RuO$_4$ のようなルテニウム酸化物で初めて確認されました。
+- [DMFT-06 常磁性金属と外挿誤差](dmft06) —— CT-HYB と CT-INT による常磁性金属の自己エネルギーを、Hirsch-Fye および厳密対角化によるベンチマーク結果と比較し、離散化誤差と統計誤差が実際にどのように現れるかを示します。
 
+## ベーテ格子を超えて
 
+- [DMFT-08 特定の格子の設定](dmft08) —— デフォルトの半円形のベーテ格子状態密度を超えて、正方格子・立方格子・六角格子などの幾何学、および k 空間積分による Hilbert 変換で評価される2次元分散関係を含む、一般の格子を設定する方法を示します。
+
+## すべてを組み合わせる
+
+- [DMFT-09 単一格子 DMFT におけるネール転移](dmft09) —— 3種類の不純物ソルバーすべてを並べて反強磁性ネール転移を再現する統合的な例で、それぞれの結果を直接比較できます。

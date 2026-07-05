@@ -7,15 +7,17 @@ toc: true
 
 ## Orbitally Selective Mott Transition
 
-An interesting phenomenon in multi-orbital models is the orbitally selective Mott transition, first examined by [Anisimov et al.]() A variant of this, a *momentum-selective* Mott transition, has recently been discussed in [cluster calculations](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120) as a cluster representation of pseudogap physics.
+多轨道模型中一个有趣的现象是轨道选择性 Mott 转变，最早由 [Anisimov 等人，Eur. Phys. J. B 25, 191 (2002)](https://doi.org/10.1140/epjb/e20020021) 研究。它的一个变体——*动量选择性* Mott 转变——最近在[团簇计算](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120)中作为赝能隙物理的一种团簇表示被讨论。
 
-In an orbitally selective Mott transition some of the orbitals involved become Mott insulating as a function of doping or interactions, while others stay metallic.
+在轨道选择性 Mott 转变中，随着掺杂或相互作用的变化，参与的部分轨道会变为 Mott 绝缘态，而其余轨道仍保持金属态。
 
-As a minimal model we consider two bands: a wide band and a narrow band. In addition to the intra-orbital Coulomb repulsion $U$ we consider interactions $U'$, and $J$, with $U' = U-2J$. We limit ourselves to Ising-like interactions - a simplification that is often problematic for real compounds.
+作为一个最简模型，我们考虑两条能带：一条宽带和一条窄带。除了轨道内库仑排斥 $U$ 之外，我们还考虑相互作用 $U'$ 和 $J$，满足 $U' = U-2J$。这里我们仅限于类 Ising 相互作用——这是一个对真实化合物往往有问题的简化。
 
-We choose here a case with two bandwidth $t1=0.5$ and $t2=1$ and density-density like interactions of $U'=U/2$, $J=U/4$, and $U$ between $1.8$ and $2.8$, where the first case shows a Fermi liquid-like behavior in both orbitals, the $U=2.2$ is orbitally selective, and $U=2.8$ is insulating in both orbitals.
+### 运行模拟
 
-The python command lines for running the simulations are found in [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py):
+这里我们选取的算例中，两条能带的带宽为 $t_0=0.5$ 和 $t_1=1$，密度-密度型相互作用为 $U'=U/2$、$J=U/4$，$U$ 取值在 $1.8$ 到 $2.8$ 之间：$U=1.8$ 时两条轨道均表现出费米液体行为，$U=2.2$ 时体系为轨道选择性的，而 $U=2.8$ 时两条轨道均为绝缘态。
+
+运行模拟的 python 命令可以在 [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py) 中找到：
 
 ```
 import pyalps
@@ -63,9 +65,11 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-A paper using the same sample parameters can be found [here](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.72.081103).
+使用相同示例参数的一篇论文可以在[这里](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.72.081103)找到。
 
-As discussed in the previous tutorial [ALPS 2 Tutorials:DMFT-04 Mott](../dmft04), the (non-)metallicity of the Green's function is best observed by plotting the data on a logarithmic scale.
+### 解读结果
+
+正如前一个教程 [DMFT-04 Mott](../dmft04) 中所讨论的，格林函数是否具有金属性，最好通过以对数坐标绘制数据来观察。
 
 ```
 listobs = ['0', '2']   # flavor 0 is SYMMETRIZED with 1, flavor 2 is SYMMETRIZED with 3
@@ -85,4 +89,6 @@ plt.legend()
 plt.show()
 ```
 
-Convergency may be checked by [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py), showing all iterations of $G_f^{it}(\tau)$ on logarithmic scale.
+### 检验收敛性
+
+可以使用 [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py) 检验收敛性，它以对数坐标展示 $G_f^{it}(\tau)$ 的所有迭代结果。

@@ -7,15 +7,17 @@ toc: true
 
 ## Orbitally Selective Mott Transition
 
-An interesting phenomenon in multi-orbital models is the orbitally selective Mott transition, first examined by [Anisimov et al.]() A variant of this, a *momentum-selective* Mott transition, has recently been discussed in [cluster calculations](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120) as a cluster representation of pseudogap physics.
+多軌道模型における興味深い現象の一つが、軌道選択的モット転移です。これは [Anisimov らによって、Eur. Phys. J. B 25, 191 (2002)](https://doi.org/10.1140/epjb/e20020021) で最初に調べられました。この変種である*運動量選択的*モット転移は、擬ギャップ物理のクラスター表示として、最近の[クラスター計算](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120)で議論されています。
 
-In an orbitally selective Mott transition some of the orbitals involved become Mott insulating as a function of doping or interactions, while others stay metallic.
+軌道選択的モット転移では、ドーピングや相互作用の関数として、関与する軌道の一部がモット絶縁体になる一方で、残りは金属的なままです。
 
-As a minimal model we consider two bands: a wide band and a narrow band. In addition to the intra-orbital Coulomb repulsion $U$ we consider interactions $U'$, and $J$, with $U' = U-2J$. We limit ourselves to Ising-like interactions - a simplification that is often problematic for real compounds.
+最小模型として、幅の広いバンドと幅の狭いバンドという2つのバンドを考えます。軌道内クーロン反発 $U$ に加えて、$U' = U-2J$ を満たす相互作用 $U'$ と $J$ を考えます。ここではイジング的な相互作用に限定します。これは実際の化合物にとってはしばしば問題となる単純化です。
 
-We choose here a case with two bandwidth $t1=0.5$ and $t2=1$ and density-density like interactions of $U'=U/2$, $J=U/4$, and $U$ between $1.8$ and $2.8$, where the first case shows a Fermi liquid-like behavior in both orbitals, the $U=2.2$ is orbitally selective, and $U=2.8$ is insulating in both orbitals.
+### シミュレーションの実行
 
-The python command lines for running the simulations are found in [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py):
+ここでは、2つのバンド幅を $t_0=0.5$、$t_1=1$ とし、密度-密度型の相互作用を $U'=U/2$、$J=U/4$ とした場合を、$U$ を $1.8$ から $2.8$ の間で変化させて考えます。$U=1.8$ では両方の軌道でフェルミ液体的な振る舞いが見られ、$U=2.2$ では軌道選択的になり、$U=2.8$ では両方の軌道が絶縁的になります。
+
+シミュレーションを実行するための python コマンドは [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py) にあります。
 
 ```
 import pyalps
@@ -63,9 +65,11 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-A paper using the same sample parameters can be found [here](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.72.081103).
+同じサンプルパラメータを用いた論文は[こちら](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.72.081103)にあります。
 
-As discussed in the previous tutorial [ALPS 2 Tutorials:DMFT-04 Mott](../dmft04), the (non-)metallicity of the Green's function is best observed by plotting the data on a logarithmic scale.
+### 結果の解釈
+
+前のチュートリアル [DMFT-04 Mott](../dmft04) で述べたように、グリーン関数の金属性（あるいは非金属性）は対数スケールでデータをプロットすることで最もよく観察できます。
 
 ```
 listobs = ['0', '2']   # flavor 0 is SYMMETRIZED with 1, flavor 2 is SYMMETRIZED with 3
@@ -85,4 +89,6 @@ plt.legend()
 plt.show()
 ```
 
-Convergency may be checked by [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py), showing all iterations of $G_f^{it}(\tau)$ on logarithmic scale.
+### 収束の確認
+
+収束は [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py) で確認でき、$G_f^{it}(\tau)$ のすべての反復を対数スケールで表示します。

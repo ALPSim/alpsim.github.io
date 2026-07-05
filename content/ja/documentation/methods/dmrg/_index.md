@@ -19,10 +19,4 @@ weight: 5
     link="dmrg"
     icon=""
   >}}
-  {{< hextra/feature-card
-    title="TEBD"
-    subtitle="Time-Evolving Block Decimation"
-    link="tebd"
-    icon=""
-  >}}
 {{< /hextra/feature-grid >}}
