@@ -5,12 +5,27 @@ math: true
 toc: true
 ---
 
-## Introduction - The ALPS DMFT tutorials
+## ALPS DMFT 教程简介
 
-This is a set of introductory tutorials for the ALPS DMFT code. They should illustrate the Dynamical Mean Field Theory and in particular showcase some application of the new continuous-time impurity solvers.
+本系列是 ALPS 动力学平均场理论（DMFT）代码的入门教程，旨在介绍动力学平均场理论，并展示 ALPS 中连续时间杂质求解器的一些应用。
 
-The dynamical mean field theory (DMFT) provides an approximate solution to the quantum many body problem, in which the local physics is treated exactly but spatial correlations are neglected. Originally discussed in the infinite coordination number limit, where (after appropriate rescaling of hoppings) the approximation becomes exact, it is now mostly used for the simulation of correlated materials, e.g. in conjunction with LDA in the so-called LDA+DMFT method. In this limit the lattice problem maps onto an impurity problem with a time-dependent effective action, and a self-consistency condition. The effective action is solved by an impurity solver. An introductory article as well as lecture notes and various reviews give an introduction to the subject.
+### 什么是 DMFT？
 
-We discuss two impurity solver algorithms: an implementation of the hybridization expansion code, as well as an implementation of the interaction expansion algorithm. The discrete time Hirsch-Fye code is obsolete and serves mostly as a pedagogical example code.
+动力学平均场理论（DMFT）为量子多体问题提供了一种近似解法：局域物理被精确处理，而空间关联则被忽略。该理论最初是在无穷配位数极限下提出的，在此极限下（对跃迁项做适当的重新标度后）近似变为精确解。如今它主要用于关联材料的模拟，常与局域密度近似（LDA）结合使用，即所谓的 LDA+DMFT 方法。
 
-Tutorial 02 will introduce the Metal - AFM insulator transition as a function of temperature in infinite dimension, using a hybridization expansion impurity solver. Tutorial 03 will repeat the same exercise with an interaction expansion solver and tutorial 07 repeats it once more with the discrete time Hirsch-Fye impurity solver. Tutorial 04 and 05 will give an introduction to the Mott transition and orbitally selective Mott transition, and tutorial 06 shows an application to a paramagnetic metal. Tutorial 08 is an example on approximative solution of the Hubbard model for a specific lattice.
+在这一极限下，格点问题被映射为一个含时有效作用量、并满足自洽条件的量子杂质问题。该有效作用量由“杂质求解器”求解。关于该方法及其应用的详细介绍，可参阅 [Georges, Kotliar, Krauth 与 Rozenberg 的综述文章，Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)；关于其理论背景的进一步说明，另见 [ALPS DMFT 文档](../../../documentation/methods/dmft)。
+
+### 本系列教程使用的杂质求解器
+
+我们将介绍两种杂质求解器算法：杂化展开（hybridization-expansion）算法的实现，以及相互作用展开（interaction-expansion）算法的实现。此外还提供了离散时间的 Hirsch-Fye 代码；该算法在数值上已经过时，主要作为教学示例使用。
+
+### 教程路线图
+
+- **教程 02** 介绍在无穷维情形下，金属-反铁磁绝缘体转变随温度变化的规律，使用杂化展开杂质求解器。
+- **教程 03** 用相互作用展开求解器重复相同的练习。
+- **教程 04** 介绍 Mott 转变。
+- **教程 05** 介绍轨道选择性 Mott 转变。
+- **教程 06** 将该方法应用于顺磁金属。
+- **教程 07** 使用离散时间 Hirsch-Fye 杂质求解器再次重复金属-绝缘体转变的练习。
+- **教程 08** 展示如何在给定态密度的情况下，针对贝特格子以外的格子求解 Hubbard 模型。
+- **教程 09** 重现 Néel 转变，综合使用教程 02、03 和 07 中的杂化展开、相互作用展开与 Hirsch-Fye 求解器。

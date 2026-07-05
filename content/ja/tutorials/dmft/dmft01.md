@@ -5,12 +5,27 @@ math: true
 toc: true
 ---
 
-## Introduction - The ALPS DMFT tutorials
+## ALPS DMFT チュートリアル入門
 
-This is a set of introductory tutorials for the ALPS DMFT code. They should illustrate the Dynamical Mean Field Theory and in particular showcase some application of the new continuous-time impurity solvers.
+これは ALPS の DMFT コードのための入門チュートリアル集です。動的平均場理論（Dynamical Mean Field Theory, DMFT）を解説し、特に連続時間不純物ソルバーの応用例を紹介します。
 
-The dynamical mean field theory (DMFT) provides an approximate solution to the quantum many body problem, in which the local physics is treated exactly but spatial correlations are neglected. Originally discussed in the infinite coordination number limit, where (after appropriate rescaling of hoppings) the approximation becomes exact, it is now mostly used for the simulation of correlated materials, e.g. in conjunction with LDA in the so-called LDA+DMFT method. In this limit the lattice problem maps onto an impurity problem with a time-dependent effective action, and a self-consistency condition. The effective action is solved by an impurity solver. An introductory article as well as lecture notes and various reviews give an introduction to the subject.
+### DMFT とは
 
-We discuss two impurity solver algorithms: an implementation of the hybridization expansion code, as well as an implementation of the interaction expansion algorithm. The discrete time Hirsch-Fye code is obsolete and serves mostly as a pedagogical example code.
+動的平均場理論（DMFT）は、局所的な物理は厳密に扱う一方で空間的な相関を無視するという、量子多体問題に対する近似的な解法です。もともとは無限配位数の極限で導かれたもので、この極限では（ホッピングを適切に再スケーリングした後は）近似が厳密になります。現在では主に相関物質のシミュレーションに用いられており、しばしば局所密度近似（LDA）と組み合わせた、いわゆる LDA+DMFT 法として使われています。
 
-Tutorial 02 will introduce the Metal - AFM insulator transition as a function of temperature in infinite dimension, using a hybridization expansion impurity solver. Tutorial 03 will repeat the same exercise with an interaction expansion solver and tutorial 07 repeats it once more with the discrete time Hirsch-Fye impurity solver. Tutorial 04 and 05 will give an introduction to the Mott transition and orbitally selective Mott transition, and tutorial 06 shows an application to a paramagnetic metal. Tutorial 08 is an example on approximative solution of the Hubbard model for a specific lattice.
+この極限では、格子模型の問題は時間依存の有効作用と自己無撞着条件を持つ量子不純物問題に写像されます。この有効作用は「不純物ソルバー」によって解かれます。この手法とその応用についての詳しい解説は、[Georges, Kotliar, Krauth, Rozenberg によるレビュー論文、Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) を参照してください。理論的背景のさらなる説明については、[ALPS DMFT ドキュメント](../../../documentation/methods/dmft) もあわせてご覧ください。
+
+### 本チュートリアルで扱う不純物ソルバー
+
+ここでは2つの不純物ソルバーアルゴリズムを扱います。ハイブリダイゼーション展開（hybridization-expansion）コードの実装と、相互作用展開（interaction-expansion）アルゴリズムの実装です。離散時間の Hirsch-Fye コードも提供していますが、これは数値的にはすでに時代遅れであり、主に教育的な例として利用されています。
+
+### チュートリアルの構成
+
+- **チュートリアル02** では、ハイブリダイゼーション展開不純物ソルバーを用いて、無限次元における温度に対する金属-反強磁性絶縁体転移を紹介します。
+- **チュートリアル03** では、相互作用展開ソルバーを用いて同じ演習を繰り返します。
+- **チュートリアル04** では、モット転移を紹介します。
+- **チュートリアル05** では、軌道選択的モット転移を紹介します。
+- **チュートリアル06** では、この手法を常磁性金属に応用します。
+- **チュートリアル07** では、離散時間の Hirsch-Fye 不純物ソルバーを用いて、金属-絶縁体転移の演習をもう一度繰り返します。
+- **チュートリアル08** では、状態密度が与えられた場合に、（デフォルトの）ベーテ格子以外の格子で Hubbard 模型を解く方法を示します。
+- **チュートリアル09** では、チュートリアル02、03、07のハイブリダイゼーション展開・相互作用展開・Hirsch-Fye の各ソルバーを組み合わせて、ネール転移を再現します。
