@@ -9,7 +9,7 @@ toc: true
 
 ### Opción DOSFILE
 
-Todos los tutoriales anteriores trataban con la red de Bethe, que tiene una densidad de estados semicircular. Ahora mostramos cómo fijar los parámetros de entrada para especificar la densidad de estados de una red particular. Para ejecutar la simulación, puede tomar los scripts de los tutoriales anteriores y simplemente reemplazar la lista de parámetros para hacer simulaciones similares. Puede por ejemplo estudiar la transición MIT tal como se hizo en el Tutorial 4.
+Todos los tutoriales anteriores trataban con la red de Bethe, que tiene una densidad de estados semicircular. Ahora mostramos cómo fijar los parámetros de entrada para especificar la densidad de estados de una red particular. Para ejecutar la simulación, puede tomar los scripts de los tutoriales anteriores y simplemente reemplazar la lista de parámetros para hacer simulaciones similares. Puede por ejemplo estudiar la MIT tal como se hizo en [DMFT-04 Mott](../dmft04).
 
 Para una red general, debe proporcionar la densidad de estados de su red. Aparte de eso, son necesarios varios otros cambios para ejecutar la simulación. A continuación se muestra un script de python funcional [`tutorial8a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8a.py) que fija un archivo de entrada y ejecuta la simulación:
 
@@ -66,7 +66,7 @@ for p in parms:
 Los parámetros específicos de la red que aparecen en los archivos de entrada se listan a continuación:
 
 ```
-DOSFILE = DOS_Square_GRID4000; // specification of the file with density of states
+DOSFILE = DOS/DOS_Square_GRID4000; // specification of the file with density of states
 GENERAL_FOURIER_TRANSFORMER = 1;  // Fourier transformer for a general bandstructure
 EPS_0 = 0;                        // potential shift for the flavor 0
 EPS_1 = 0;                        // potential shift for the flavor 1
@@ -74,18 +74,18 @@ EPSSQ_0 = 4;                      // the second moment of the bandstructure for 
 EPSSQ_1 = 4;                      // the second moment of the bandstructure for the flavor 1
 ```
 
-Nota1: si no proporciona los parámetros de estructura de bandas (EPS_i, EPSSQ_i) en el archivo de entrada, estos se calcularán a partir de la DOS proporcionada (desde la revisión 6146) como $EPS_{flavor=i} = \int \mathrm{d}\epsilon\ DOS_{band=i/2}(\epsilon)\ \epsilon$, $EPSSQ_{flavor=i} = \int \mathrm{d}\epsilon\ DOS_{band=i/2}(\epsilon)\ \epsilon^2$.
+Nota 1: si no proporciona los parámetros de estructura de bandas (EPS_i, EPSSQ_i) en el archivo de entrada, estos se calcularán a partir de la DOS proporcionada (desde la revisión 6146) como $EPS_{flavor=i} = \int \mathrm{d}\epsilon\ DOS_{band=i/2}(\epsilon)\ \epsilon$, $EPSSQ_{flavor=i} = \int \mathrm{d}\epsilon\ DOS_{band=i/2}(\epsilon)\ \epsilon^2$.
 
-Nota2: el bucle de autoconsistencia antiferromagnética asume orden de Néel. Por lo tanto, solo es aplicable a redes bipartitas.
+Nota 2: el bucle de autoconsistencia antiferromagnética asume orden de Néel. Por lo tanto, solo es aplicable a redes bipartitas.
 
-Nota3: la densidad de estados debe ser proporcionada por el usuario. En el tutorial proporcionamos la DOS para
+Nota 3: la densidad de estados debe ser proporcionada por el usuario. En el tutorial proporcionamos la DOS para
 
 - la red cuadrada DOS_Square_GRID4000 (generada por [`DOS_Square.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Square.py) fijando GRID=4000); los parámetros correspondientes son EPSSQ_i=4
 - la red cúbica DOS_Cubic_GRID360 (generada por [`DOS_Cubic.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Cubic.py) fijando GRID=360); los parámetros correspondientes son EPSSQ_i=6
 - la red hexagonal DOS_Hexagonal_GRID4000 (generada por [`DOS_Hexagonal.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Hexagonal.py) fijando GRID=4000); los parámetros correspondientes son EPSSQ_i=3
 - la red de Bethe DOS_Bethe (generada por `DOS_Bethe.py`); los parámetros correspondientes son EPSSQ_i=1; para pruebas
 
-Nota4: para una simulación multibanda [$n_{\text{bands}}=FLAVORS/2$] con DOS conocida, el archivo DOS debe consistir en $2n_{\text{bands}}$ columnas. El número de bins [=número de líneas del archivo de entrada] de la DOS debe ser el mismo para todas las bandas. La línea $i$-ésima tiene la siguiente estructura
+Nota 4: para una simulación multibanda [$n_{\text{bands}}=FLAVORS/2$] con DOS conocida, el archivo DOS debe consistir en $2n_{\text{bands}}$ columnas. El número de bins [=número de líneas del archivo de entrada] de la DOS debe ser el mismo para todas las bandas. La línea $i$-ésima tiene la siguiente estructura
 
 $$
 e_{1,i}\ \ \ DOS_{band1}(e_{1,i})\ \ \ e_{2,i}\ \ \ DOS_{band2}(e_{2,i})\ \ \ \ldots
@@ -159,7 +159,7 @@ Los parámetros específicos de la red se listan aquí:
 TWODBS = 1;     // the Hilbert transformation integral runs in k-space; sets square lattice
 t = 1;          // the nearest-neighbor hopping
 tprime = 0;     // the second nearest-neighbor hopping
-L = 128;        // discretization in k-space in the Hilbert transformation
+L = 64;         // discretization in k-space in the Hilbert transformation
 GENERAL_FOURIER_TRANSFORMER = 1;  // Fourier transformer for a general bandstructure
 EPS_0 = 0;                        // potential shift for the flavor 0
 EPS_1 = 0;                        // potential shift for the flavor 1
@@ -171,6 +171,6 @@ EPSSQ_1 = 4;                   // the second moment of the bandstructure for the
 
 Pregunta: ¿qué información de la red entra en el cálculo DMFT? Compare con el campo medio clásico.
 
-Tarea: intente rehacer el Tutorial 4 para una red distinta (a la red de Bethe) e inspeccione la MIT. ¿Hay algún cambio significativo?
+Tarea: intente rehacer [DMFT-04 Mott](../dmft04) para una red distinta (a la red de Bethe) e inspeccione la MIT. ¿Hay algún cambio significativo?
 
 Recuerde las predicciones de campo medio para el modelo de Ising (para distintas dimensiones).
