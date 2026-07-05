@@ -7,21 +7,20 @@ toc: true
 
 ## Paramagnetic metal and extrapolation errors
 
-In this example we simulate the Hubbard model on the Bethe lattice with interaction $U=3D/\sqrt{2}$ at a temperature $\beta =32 \sqrt{2}/D$ using a paramagnetic self-consistency. We will calculate the self-energy and compare it to Fig. 15 in the DMFT review by [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13), where Hirsch-Fye and Exact Diagonalization results are shown for the same system. In contrast to the Hirsch-Fye algorithm the two Continuous time Monte Carlo algorithms CT-HYB and CT-INT do not suffer from discretization errors and reproduce the ED results.
+この例では、常磁性の自己無撞着計算を用いて、ベーテ格子上で相互作用 $U=3D/\sqrt{2}$、温度 $\beta =32 \sqrt{2}/D$ の Hubbard 模型をシミュレーションします。自己エネルギーを計算し、[Georges らによる DMFT のレビュー論文](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)の図15と比較します。この図には、同じ系についての Hirsch-Fye 法と厳密対角化の結果が示されています。Hirsch-Fye アルゴリズムとは異なり、2つの連続時間量子モンテカルロアルゴリズムである CT-HYB と CT-INT は離散化誤差を持たず、厳密対角化の結果を再現します。
 
-The parameter files and python scripts are located in the subdirectories `hyb` and `int` of the directory `tutorials/dmft-06-paramagnet` in your ALPS install directory. You can run the simulations by executing (for the hybridization expansion version)
+パラメータファイルと python スクリプトは、ALPS のインストールディレクトリ内の `tutorials/dmft-06-paramagnet` ディレクトリのサブディレクトリ `hyb` と `int` にあります。以下を実行することでシミュレーションを実行できます（ハイブリダイゼーション展開版の場合）。
 
 ```
 python tutorial6a.py
 ```
 
-and (for the interaction expansion version)
+および（相互作用展開版の場合）
 
 ```
 python tutorial6b.py
 ```
-    
-At each DMFT iteration i the self-energy is written to the file `selfenergy_i`. Plot the converged self-energy and compare your results to Fig. 15 in [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). Alternatively you may use the python script for this task as it is done in the tutorial [ALPS 2 Tutorials:DMFT-02 Hybridization](../dmft02).
 
+各 DMFT 反復 i において、自己エネルギーはファイル `selfenergy_i` に書き出されます。収束した自己エネルギーをプロットし、[Georges ら](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)の図15と結果を比較してください。あるいは、[DMFT-02 Hybridization](../dmft02) チュートリアルで行ったのと同様に、この作業のための python スクリプトを使用することもできます。
 
-Warning: It takes long to run on a single workstation (you may run it in $2\times 24$ minutes if you do not want very high precision).
+警告：1台のワークステーションで実行するとかなりの時間がかかります。非常に高い精度が不要な場合は、2回の実行の合計時間を約 $2\times 24$ 分に短縮することができます。

@@ -5,12 +5,27 @@ math: true
 toc: true
 ---
 
-## Introduction - The ALPS DMFT tutorials
+## Introduction to the ALPS DMFT Tutorials
 
-This is a set of introductory tutorials for the ALPS DMFT code. They should illustrate the Dynamical Mean Field Theory and in particular showcase some application of the new continuous-time impurity solvers.
+This is a set of introductory tutorials for the ALPS DMFT code. They illustrate Dynamical Mean Field Theory (DMFT) and showcase applications of the continuous-time impurity solvers implemented in ALPS.
 
-The dynamical mean field theory (DMFT) provides an approximate solution to the quantum many body problem, in which the local physics is treated exactly but spatial correlations are neglected. Originally discussed in the infinite coordination number limit, where (after appropriate rescaling of hoppings) the approximation becomes exact, it is now mostly used for the simulation of correlated materials, e.g. in conjunction with LDA in the so-called LDA+DMFT method. In this limit the lattice problem maps onto an impurity problem with a time-dependent effective action, and a self-consistency condition. The effective action is solved by an impurity solver. An introductory article as well as lecture notes and various reviews give an introduction to the subject.
+### What is DMFT?
 
-We discuss two impurity solver algorithms: an implementation of the hybridization expansion code, as well as an implementation of the interaction expansion algorithm. The discrete time Hirsch-Fye code is obsolete and serves mostly as a pedagogical example code.
+Dynamical mean field theory (DMFT) provides an approximate solution to the quantum many-body problem in which the local physics is treated exactly, while spatial correlations are neglected. It was originally derived in the limit of infinite coordination number, where (after an appropriate rescaling of the hopping) the approximation becomes exact. Today it is used mainly for the simulation of correlated materials, often combined with the Local Density Approximation (LDA) in the so-called LDA+DMFT method.
 
-Tutorial 02 will introduce the Metal - AFM insulator transition as a function of temperature in infinite dimension, using a hybridization expansion impurity solver. Tutorial 03 will repeat the same exercise with an interaction expansion solver and tutorial 07 repeats it once more with the discrete time Hirsch-Fye impurity solver. Tutorial 04 and 05 will give an introduction to the Mott transition and orbitally selective Mott transition, and tutorial 06 shows an application to a paramagnetic metal. Tutorial 08 is an example on approximative solution of the Hubbard model for a specific lattice.
+In this limit, the lattice problem maps onto a quantum impurity problem with a time-dependent effective action and a self-consistency condition. The effective action is solved by an "impurity solver". A thorough introduction to the method and its applications can be found in the review by [Georges, Kotliar, Krauth, and Rozenberg, Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13); see also the [ALPS DMFT documentation](../../../documentation/methods/dmft) for further theoretical background.
+
+### Impurity solvers used in this tutorial series
+
+We discuss two impurity solver algorithms: an implementation of the hybridization-expansion code, and an implementation of the interaction-expansion algorithm. A discrete-time Hirsch-Fye code is also provided; it is numerically obsolete and serves mostly as a pedagogical example.
+
+### Roadmap
+
+- **Tutorial 02** introduces the metal-AFM insulator transition as a function of temperature in infinite dimensions, using the hybridization-expansion impurity solver.
+- **Tutorial 03** repeats the same exercise with the interaction-expansion solver.
+- **Tutorial 04** introduces the Mott transition.
+- **Tutorial 05** introduces the orbitally selective Mott transition.
+- **Tutorial 06** applies the method to a paramagnetic metal.
+- **Tutorial 07** repeats the metal-insulator transition once more, using the discrete-time Hirsch-Fye impurity solver.
+- **Tutorial 08** shows how to solve the Hubbard model for a lattice other than the (default) Bethe lattice, given its density of states.
+- **Tutorial 09** reproduces the Néel transition, combining the hybridization-expansion, interaction-expansion, and Hirsch-Fye solvers from Tutorials 02, 03, and 07.

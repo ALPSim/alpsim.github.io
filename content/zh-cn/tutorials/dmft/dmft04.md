@@ -7,11 +7,13 @@ toc: true
 
 ## Mott Transition
 
-Mott transitions are metal insulator transitions (MIT) that occur in many materials, e.g. transition metal compounds, as a function of pressure or doping. The review by Imada et al. gives an excellent introduction to the subject and mentions $V_2O_3$ and the organics as typical examples.
+Mott 转变是发生在许多材料中的金属-绝缘体转变（MIT），例如过渡金属化合物中，随压力或掺杂而发生。[Imada、Fujimori 与 Tokura 的综述文章，Rev. Mod. Phys. 70, 1039 (1998)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.70.1039) 对这一主题作了极好的介绍，并以 $V_2O_3$ 和有机化合物作为典型例子。
 
-MIT are easily investigated by DMFT as the relevant physics is essentially local (or k-independent): At half filling the MIT can be modeled by a self energy with a pole at $\omega=0$ which splits the noninteracting band into an upper and a lower Hubbard band. In this context it is instructive to suppress antiferromagnetic long range order and enforce a paramagnetic solution in the DMFT simulation, to mimic the paramagnetic insulating phase. For this the up and down spin of the Green's functions are symmetrized (parameter `SYMMETRIZATION = 1;`).
+由于相关物理本质上是局域的（或与动量 k 无关的），MIT 可以很容易地用 DMFT 来研究：在半满情形下，MIT 可以用一个在 $\omega=0$ 处存在极点的自能来描述，该极点将非相互作用能带劈裂为上、下两个 Hubbard 带。在此背景下，抑制反铁磁长程序、在 DMFT 模拟中强制得到顺磁解，以此来模拟顺磁绝缘相，是很有启发意义的。为此，将格林函数的自旋向上和自旋向下分量对称化（参数 `SYMMETRIZATION = 1;`）。
 
-In order to run the simulations in python use [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py):
+### 运行模拟
+
+要用 python 运行模拟，请使用 [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py)：
 
 ```    
 import pyalps
@@ -57,9 +59,11 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-We investigate the Mott transition in single-site DMFT, as a function of interaction at fixed temperature $\beta t=20$ (see e.g. Fig. 2 in [this paper](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)). Starting from a non-interacting solution we see in the imaginary time Green's function that the solution is metallic for $U/t \leq 4.5$, and insulating for $U/t\geq 5$. A coexistence region could be found by starting from an insulating (or atomic) solution and trying to convert it for smaller $U$.
+### 识别金属-绝缘体转变
 
-Imaginary time Green's functions are not easy to interpret, and therefore many authors employ [analytic continuation methods](). There are however two clear features: the value at $\beta$ corresponds to $-n$, the negative value of the density (per spin). The second feature is that $-\beta G(\beta/2) \rightarrow \pi A(0)$ for decreasing temperature ($\beta\rightarrow\infty$); where $A(0)$ is the spectral function at the Fermi energy. From a temperature dependence of the imaginary time Green's function we can therefore immediately see if the system is metallic or insulating. In order to better inspect the behavior of the Green's function we will plot the data on a logarithmic scale:
+我们研究单格点 DMFT 中的 Mott 转变：在固定温度 $\beta t=20$ 下作为相互作用强度的函数（参见例如[这篇论文](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)中的图 2）。从非相互作用解出发，我们在虚时间格林函数中看到，当 $U/t \leq 4.5$ 时解为金属态，而当 $U/t\geq 5$ 时解为绝缘态。若从绝缘（或原子极限）解出发，尝试在更小的 $U$ 下使其收敛，则可以找到共存区域。
+
+虚时间格林函数不易直接解读，因此许多作者会采用[解析延拓方法（例如最大熵方法）](https://doi.org/10.1016/0370-1573%2895%2900074-7)。不过有两个明显的特征：在 $\tau=\beta$ 处的取值对应于 $-n$，即（每自旋的）密度的负值。第二个特征是，当温度降低（$\beta\rightarrow\infty$）时，$-\beta G(\beta/2) \rightarrow \pi A(0)$，其中 $A(0)$ 是费米能处的谱函数。因此，通过虚时间格林函数随温度的变化关系，我们可以立即判断体系是金属态还是绝缘态。为了更好地观察格林函数的行为，我们将以对数坐标绘制数据：
 
 ```
 listobs=['0']   # we look at only one flavor, as they are SYMMETRIZED
@@ -80,9 +84,11 @@ plt.legend()
 plt.show()
 ```
 
-You should observe that at small $U$ you find metallic solution and an insulating solution at large $U$, at fixed $\beta$. The largest value of $U$ is deep within the insulating phase.
+你应该会观察到，在固定的 $\beta$ 下，$U$ 较小时得到金属解，$U$ 较大时得到绝缘解。所取的最大 $U$ 值已深入绝缘相。
 
-The convergence may be checked by [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py):
+### 检验收敛性
+
+可以使用 [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py) 来检验收敛性：
 
 ```
 import pyalps

@@ -5,46 +5,46 @@ math: true
 toc: true
 ---
 
-## Néel transition in single site DMFT
+## 单格点 DMFT 中的 Néel 转变
 
-In this example we reproduce Fig. 11 in the DMFT review by [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). The series of six curves shows how the system, a Hubbard model on the Bethe lattice with interaction $U=3D/\sqrt{2}$ at half filling, enters an antiferromagnetic phase upon cooling.
+在本例中，我们重现 [Georges 等人的 DMFT 综述文章](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。
 
-These examples can either be started by directly invoking a command or python script on the command line. Running one of the dmft parameter sets manually, e.g. by entering the directory 'beta_14_U3_tsqrt2' in `tutorials/dmft-0j-xxx`, and running the dmft code '/opt/alps/bin/dmft xxx.param' leads to the same results.
+这些示例既可以通过命令行直接调用命令来运行，也可以通过 python 脚本来运行。手动运行其中一组 DMFT 参数，例如进入 `tutorials/dmft-02-hybridization` 目录下的 `beta_14_U3_tsqrt2` 目录，并运行 dmft 代码 `/opt/alps/bin/dmft hybrid.param`，会得到相同的结果。
 
-Note: the example merges the tutorials [DMFT-02 CT-HYB: the CT-HYB QMC solver](../dmft02), [DMFT-03 CT-INT: the CT-INT QMC solver](../dmft03) and [DMFT-07 The Hirsch-Fye solver](../dmft07) .
+注：本示例综合了教程 [DMFT-02 Hybridization](../dmft02)、[DMFT-03 Interaction](../dmft03) 和 [DMFT-07 Hirsch-Fye](../dmft07) 的内容。
 
-### Hybridization Expansion CT-HYB
+### 杂化展开 CT-HYB
 
-We start by running a continuous-time quantum Monte Carlo code - the hybridization expansion algorithm CT-HYB. The CT-HYB simulation will run for about a minute per iteration. The parameter files for running this simulation can be found in the directory `tutorials/dmft-02-hybridization`.
+我们首先运行一个连续时间量子蒙特卡罗代码：杂化展开算法 CT-HYB。CT-HYB 模拟每次迭代大约需要一分钟。运行此模拟所需的参数文件可以在目录 `tutorials/dmft-02-hybridization` 中找到。
 
-The main parameters are:
+主要参数如下：
 
 ```
-SEED = 0; //Monte Carlo Random Number Seed 
-THERMALIZATION = 1000;  Thermalization Sweeps 
-SWEEPS = 1000000; Total Sweeps to be computed 
-MAX_TIME = 60;  Maximum time to run the simulation 
-BETA = 12.;  Inverse temperature 
-SITES = 1;  This is a single site DMFT simulation, so Sites is 1 
-N = 16;  Number of time slices (you will see that this parameter is rather small) 
-NMATSUBARA = 500;  The number of Matsubara frequencies 
-U = 3;  Interaction energy 
-t = 1;  hopping parameter. For the Bethe lattice considered here $W=2D=4t$
-MU = 0;  Chemical potential 
-H = 0;  Magnetic field 
-SYMMETRIZATION = 0;  We are not enforcing a paramagnetic self consistency condition 
-SOLVER = Hybridization;  The Hybridization solver
+SEED = 0;                    // Monte Carlo Random Number Seed
+THERMALIZATION = 1000;       // Thermalization Sweeps
+SWEEPS = 100000000;          // Total Sweeps to be computed
+MAX_TIME = 60;               // Maximum time to run the simulation
+BETA = 12.;                  // Inverse temperature
+SITES = 1;                   // This is a single site DMFT simulation, so Sites is 1
+N = 1000;                    // auxiliary discretization of the imaginary-time Green's function
+NMATSUBARA = 1000;           // The number of Matsubara frequencies
+U = 3;                       // Interaction energy
+t = 0.707106781187;          // hopping parameter. For the Bethe lattice considered here $W=2D=4t$
+MU = 0;                      // Chemical potential
+H = 0;                       // Magnetic field
+SYMMETRIZATION = 0;          // We are not enforcing a paramagnetic self consistency condition
+SOLVER = Hybridization;      // The Hybridization solver
 ```
 
-To start a simulation with the command line, type:
+要通过命令行启动模拟，输入：
 
 ```
 dmft hybrid.param
 ```
 
-The code will run for up to 10 self-consistency iterations. In the directory in which you run the program you will find Green's functions files G_tau_i as well the self energies (selfenergy_i) and Green's functions in frequency space G_omega_i in your output directory. G_tau in these examples has two entries: a spin-up and a spin-down column. The entry at $\beta$ is the negative density; where it is different outside of error bars the system is in an antiferromagnetic phase. You can run the following lines in the python shell in order to plot the Green's functions for different $\beta$ and compare your result to Fig. 11 of [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). In the section ection Hirsch-Fye we will reproduce the same results with a discrete-time Quantum Monte Carlo code: the Hirsch Fye code. The parameters are the same, apart from the command for the solver.
+程序最多运行 10 次自洽迭代。在运行程序的目录中，你会找到格林函数文件 G_tau_i、自能文件（selfenergy_i）以及频率空间下的格林函数 G_omega_i，均位于输出目录中。这些例子中的 G_tau 包含两列：自旋向上和自旋向下。$\beta$ 处的取值即为负的密度；当该值在误差棒范围之外出现差异时，体系即处于反铁磁相。你可以在 python shell 中运行以下代码，绘制不同 $\beta$ 下的格林函数，并将结果与 [Georges 等人](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)图 11 的结果进行比较。在下面的 Hirsch-Fye 部分，我们将用离散时间量子蒙特卡罗代码——Hirsch Fye 代码——重现相同的结果。除求解器所用的命令外，其余参数都是相同的。
 
-You can find the parameter files (called \*tsqrt2) in the directory `tutorials/dmft-02-hybridization` in the examples. Alternatively you can run the python script `tutorial2a.py`:
+你可以在示例中的目录 `tutorials/dmft-02-hybridization` 里找到相应的参数文件（名为 \*tsqrt2）。你也可以运行 python 脚本 `tutorial2a.py`：
 
 ```
 import pyalps
@@ -95,7 +95,7 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-After running these simulations compare the output to the Hirsch-Fye results of the section [Hirsch-Fye](../dmft07) or the DMFT review, or to the interaction expansion results of the section Interaction Expansion CT-INT . To rerun a simulation, you can specify a starting solution by defining G0OMEGA_INPUT, e.g. copy G0omga_output to G0_omega_input, specify G0OMEGA_INPUT = G0_omega_input in the parameter file and rerun the code. You can observe the transition to the antiferromagnetic phase by plotting the Green's functions using the script:
+运行这些模拟后，将输出结果与 Hirsch Fye 部分或 DMFT 综述文章中的 Hirsch-Fye 结果进行比较，或与 Interaction Expansion CT-INT 部分的相互作用展开结果进行比较。若要重新运行某次模拟，可以通过设定输入参数 G0OMEGA_INPUT 来指定一个初始解：例如将 G0omga_output 复制为 G0_omega_input，在参数文件中设置 G0OMEGA_INPUT = G0_omega_input，然后重新运行代码。你可以通过以下脚本绘制格林函数，观察体系向反铁磁相的转变：
 
 ```
 flavors=parms[0]['FLAVORS']
@@ -117,9 +117,9 @@ plt.legend()
 plt.show()
 ```
 
-You will notice that the results are relatively noisy. The reason for that is that the expansion order at such high temperatures is very small, which renders the measurement procedure inefficient. You can improve statistics by increasing the total run time (MAX_TIME) or by running it on more than one CPU. For running it with MPI, try `mpirun -np procs dmft parameter_file` or consult the man page of your mpi installation.
+你会注意到结果的噪声相对较大。这是因为在如此高的温度下展开阶数很小，使得测量过程效率较低。你可以通过增加总运行时间（MAX_TIME）或在多个 CPU 上运行来改善统计性质。若要使用 MPI 运行，可以尝试 `mpirun -np procs dmft parameter_file`，或查阅你所使用的 MPI 安装的 man 手册。
 
-If you want to check the convergence of your DMFT self-consistency, you can plot the Green's functions of different iterations using `tutorial2b.py`:
+如果你想检查 DMFT 自洽过程的收敛情况，可以使用 `tutorial2b.py` 绘制不同迭代步骤的格林函数：
 
 ```
 ll=pyalps.load.Hdf5Loader()
@@ -143,44 +143,44 @@ for p in parms:
     plt.show()
 ```
 
-It is usually best to observe convergence in the self energy, which is much more sensitive. Note that longer simulations are required to obtain smoother Green's fuctions and self energies.
+最好通过观察自能的收敛情况来判断收敛性，因为自能对收敛更为敏感。请注意，要得到更平滑的格林函数和自能，需要更长时间的模拟。
 
-### Interaction Expansion CT-INT
+### 相互作用展开 CT-INT
 
-It is instructive to run the same calculations as in the section Hybridization Expansion CT-HYB with a CT-INT code. This code performs an expansion in the interaction (instead of the hybridization). The corresponding parameter files are very similar, you can find them in the directory `tutorials/dmft-03-interaction`. If you prefer to run the simulations in python you can use `tutorial3a.py` and `tutorial3b.py` files.
+用 CT-INT 代码重复 Hybridization Expansion CT-HYB 部分中的计算是很有启发性的。该代码对相互作用（而非杂化）做展开。相应的参数文件与之非常相似，可以在目录 `tutorials/dmft-03-interaction` 中找到。如果你更喜欢用 python 运行模拟，可以使用 `tutorial3a.py` 和 `tutorial3b.py` 文件。
 
 ### Hirsch Fye
 
-We compare the continous time results by running a discrete time Monte Carlo code: the [Hirsch Fye code](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521). The Hirsch Fye algorithm is described in [here](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13), and this review also provides an open source implementation for the codes. While many improvements have been developed (see e.g. Alvarez08 or [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)), the algorithm has been replaced by [continuous-time algorithms](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123).
+我们通过运行一个离散时间蒙特卡罗代码——[Hirsch Fye 代码](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521)——将其结果与连续时间的结果进行比较。Hirsch Fye 算法在[这里](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)有详细描述，该综述文章也提供了相应代码的开源实现。尽管已经出现了许多改进（例如可参见 Alvarez (2008) 或 [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)），但这一算法已被[连续时间算法](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)所取代。
 
-The Hirsch Fye simulation will run for about a minute per iteration. The parameter files for running this simulation can be found in [this tutorial](../dmft07).
+Hirsch Fye 模拟每次迭代大约需要一分钟。运行此模拟所需的参数文件可以在[本教程](../dmft07)中找到。
 
-The main parameters are:
+主要参数如下：
 
 ```
-SEED = 0; //Monte Carlo Random Number Seed 
-THERMALIZATION = 10000;  Thermalization Sweeps 
-SWEEPS = 1000000; Total Sweeps to be computed 
-MAX_TIME = 60;  Maximum time to run the simulation 
-BETA = 12.;  Inverse temperature 
-SITES = 1;  This is a single site DMFT simulation, so Sites is 1 
-N = 16;  Number of time slices (you will see that this parameter is rather small) 
-NMATSUBARA = 500;  The number of Matsubara frequencies 
-U = 3;  Interaction energy 
-t = 1;  hopping parameter. For the Bethe lattice considered here $W=2D=4t$
-MU = 0;  Chemical potential 
-H = 0;  Magnetic field 
-SYMMETRIZATION = 0;  We are not enforcing a paramagnetic self consistency condition 
-SOLVER = /opt/alps/bin/hirschfye;  The path to the external Hirsch Fye solver
+SEED = 0;                    // Monte Carlo Random Number Seed
+THERMALIZATION = 10000;      // Thermalization Sweeps
+SWEEPS = 1000000;            // Total Sweeps to be computed
+MAX_TIME = 60;               // Maximum time to run the simulation
+BETA = 12.;                  // Inverse temperature
+SITES = 1;                   // This is a single site DMFT simulation, so Sites is 1
+N = 16;                      // Number of time slices (you will see that this parameter is rather small)
+NMATSUBARA = 500;            // The number of Matsubara frequencies
+U = 3;                       // Interaction energy
+t = 0.707106781187;          // hopping parameter. For the Bethe lattice considered here $W=2D=4t$
+MU = 0;                      // Chemical potential
+H = 0;                       // Magnetic field
+SYMMETRIZATION = 0;          // We are not enforcing a paramagnetic self consistency condition
+SOLVER = /opt/alps/bin/hirschfye;  // The path to the external Hirsch Fye solver
 ```
 
-To start a simulation type:
+要启动模拟，输入：
 
 ```
 dmft hirschfye.param
 ```
 
-or run the python script `tutorial7a.py`:
+或运行 python 脚本 `tutorial7a.py`：
 
 ```
 import pyalps
@@ -224,7 +224,7 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-The code will run for up to 10 self-consistency iterations. In the directory in which you run the program you will find Green's functions files G_tau_i as well the self energies (selfenergy_i) and Green's functions in frequency space G_omega_i in your output directory. G_tau in these examples has two entries: a spin-up and a spin-down column. The entry at $\beta$ is the negative density; where it is different outside of error bars the system is in an antiferromagnetic phase. You can run the following lines in the python shell in order to plot the Green's functions for different $\beta$ and compare your result to Fig. 11 of [Georges it et al.](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13).
+程序最多运行 10 次自洽迭代。在运行程序的目录中，你会找到格林函数文件 G_tau_i、自能文件（selfenergy_i）以及频率空间下的格林函数 G_omega_i，均位于输出目录中。这些例子中的 G_tau 包含两列：自旋向上和自旋向下。$\beta$ 处的取值即为负的密度；当该值在误差棒范围之外出现差异时，体系即处于反铁磁相。你可以在 python shell 中运行以下代码，绘制不同 $\beta$ 下的格林函数，并将结果与 [Georges 等人](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)图 11 的结果进行比较。
 
 ```
 flavors=parms[0]['FLAVORS']
@@ -246,5 +246,4 @@ plt.legend()
 plt.show()
 ```
 
-As a discrete time method, HF suffers from $\Delta\tau$ - errors. Pick a set of parameters and run it for sucessively larger N! Also: you're running the DMFT simulation using an (almost) converged input bath function. By deleting the file G0_omega_input you can restart the calculation from the free solution and observe convergence.
-
+作为一种离散时间方法，HF 会受到 $\Delta\tau$ 离散化误差的影响。请选取一组参数，并对逐渐增大的 $N$ 重复运行！另外需要注意：你正在使用一个（几乎）已收敛的输入浴函数来运行 DMFT 模拟。删除文件 G0_omega_input 后，你可以从自由解重新开始计算，并观察其收敛过程。
