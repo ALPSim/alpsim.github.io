@@ -7,13 +7,15 @@ toc: true
 
 ## Transición de Mott orbitalmente selectiva
 
-Un fenómeno interesante en modelos multiorbitales es la transición de Mott orbitalmente selectiva, examinada por primera vez por [Anisimov et al.]() Una variante de esta, una transición de Mott *selectiva en momento*, se ha discutido recientemente en [cálculos de clúster](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120) como una representación de clúster de la física del pseudogap.
+Un fenómeno interesante en modelos multiorbitales es la transición de Mott orbitalmente selectiva, examinada por primera vez por [Anisimov et al., Eur. Phys. J. B 25, 191 (2002)](https://doi.org/10.1140/epjb/e20020021). Una variante de esta, una transición de Mott *selectiva en momento*, se ha discutido recientemente en [cálculos de clúster](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.045120) como una representación de clúster de la física del pseudogap.
 
 En una transición de Mott orbitalmente selectiva, algunos de los orbitales involucrados se vuelven aislantes de Mott en función del dopaje o de las interacciones, mientras que otros permanecen metálicos.
 
 Como modelo mínimo consideramos dos bandas: una banda ancha y una banda estrecha. Además de la repulsión de Coulomb intraorbital $U$, consideramos las interacciones $U'$ y $J$, con $U' = U-2J$. Nos limitamos a interacciones tipo Ising, una simplificación que a menudo es problemática para compuestos reales.
 
-Elegimos aquí un caso con dos anchos de banda $t1=0.5$ y $t2=1$ e interacciones tipo densidad-densidad de $U'=U/2$, $J=U/4$, y $U$ entre $1.8$ y $2.8$, donde el primer caso muestra un comportamiento tipo líquido de Fermi en ambos orbitales, el caso $U=2.2$ es orbitalmente selectivo, y $U=2.8$ es aislante en ambos orbitales.
+### Ejecutando la simulación
+
+Elegimos aquí un caso con dos anchos de banda, $t_0=0.5$ y $t_1=1$, e interacciones tipo densidad-densidad de $U'=U/2$, $J=U/4$, con $U$ entre $1.8$ y $2.8$: $U=1.8$ muestra un comportamiento tipo líquido de Fermi en ambos orbitales, $U=2.2$ es orbitalmente selectivo, y $U=2.8$ es aislante en ambos orbitales.
 
 Las líneas de comando en python para ejecutar las simulaciones se encuentran en [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py):
 
@@ -65,7 +67,9 @@ for p in parms:
 
 Un artículo que usa los mismos parámetros de ejemplo puede encontrarse [aquí](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.72.081103).
 
-Como se discutió en el tutorial anterior [ALPS 2 Tutorials:DMFT-04 Mott](../dmft04), el carácter (no) metálico de la función de Green se observa mejor graficando los datos en escala logarítmica.
+### Interpretando los resultados
+
+Como se discutió en el tutorial anterior [DMFT-04 Mott](../dmft04), el carácter (no) metálico de la función de Green se observa mejor graficando los datos en escala logarítmica.
 
 ```
 listobs = ['0', '2']   # flavor 0 is SYMMETRIZED with 1, flavor 2 is SYMMETRIZED with 3
@@ -84,5 +88,7 @@ pyalps.plot.plot(data)
 plt.legend()
 plt.show()
 ```
+
+### Comprobando la convergencia
 
 La convergencia puede comprobarse con [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py), que muestra todas las iteraciones de $G_f^{it}(\tau)$ en escala logarítmica.
