@@ -1,4 +1,3 @@
-
 ---
 title: ALPS Installation on Mac/Linux from Sources
 description: "ALPS Installation"
@@ -34,16 +33,16 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
  
  
   ```ShellSession
-$ sudo apt update
-$ sudo apt install build-essential cmake \
+sudo apt update
+sudo apt install build-essential cmake \
                    libhdf5-dev \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # or: libmpich-dev mpich
 
 # install Python libs:
-$ pip install numpy scipy # python libraries 
+pip install numpy scipy # python libraries 
 # or 
-$ python3 -m pip install numpy scipy
+python3 -m pip install numpy scipy
 ```
 
 > **Do not install Boost via `apt`.** ALPS must compile Boost from source for two reasons:
@@ -62,12 +61,12 @@ $ python3 -m pip install numpy scipy
 <summary><strong> macOS (via Homebrew)</strong> </summary>
 
  ```ShellSession
-$ brew update
-$ brew install cmake hdf5 \
+brew update
+brew install cmake hdf5 \
                openblas open-mpi # or: mpich
 
 # install Python libs:
-$ pip3 install numpy scipy
+pip3 install numpy scipy
 ```
 
 > **Do not install Boost via Homebrew.** ALPS must compile Boost from source for two reasons:
@@ -82,23 +81,23 @@ $ pip3 install numpy scipy
 > compiles Boost 1.87 during configuration (requires internet access). To build offline
 > or reuse a previously extracted archive, download it manually first:
 > ```ShellSession
-> $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-> $ tar -xzf boost_1_87_0.tar.gz
+> curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
+> tar -xzf boost_1_87_0.tar.gz
 > ```
 </details>
 <details>
 <summary><strong> macOS (via MacPorts)</strong> </summary>
 
 ```ShellSession
-$ sudo port selfupdate
-$ sudo port install cmake \
+sudo port selfupdate
+sudo port install cmake \
                    hdf5 \
                    OpenBLAS \
                    openmpi-clang20   # see note below about choosing a variant
-$ sudo port select --set mpi openmpi-clang20-fortran
+sudo port select --set mpi openmpi-clang20-fortran
 
 # install Python libs:
-$ pip3 install numpy scipy
+pip3 install numpy scipy
 ```
 
 > **Choosing an OpenMPI variant:** MacPorts ships a separate port for each compiler
@@ -122,19 +121,19 @@ $ pip3 install numpy scipy
 > compiles Boost 1.87 during configuration (requires internet access). To build offline
 > or reuse a previously extracted archive, download it manually first:
 > ```ShellSession
-> $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-> $ tar -xzf boost_1_87_0.tar.gz
+> curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
+> tar -xzf boost_1_87_0.tar.gz
 > ```
 </details>
 
 ### Verify Dependencies
 
  ```ShellSession
-$ gcc -v              # must be >= 10.5.0
-$ cmake --version     # must be >= 3.18
-$ mpirun --version    # OpenMPI 4.0 or MPICH 4
-$ python3 --version   # must be >= 3.9
-$ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
+gcc -v              # must be >= 10.5.0
+cmake --version     # must be >= 3.18
+mpirun --version    # OpenMPI 4.0 or MPICH 4
+python3 --version   # must be >= 3.9
+python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
 ```
 
 > **macOS — which Python will CMake use?** CMake on macOS searches Apple's framework
@@ -163,14 +162,14 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 >    throughout — also normal.
 
   ```ShellSession
-  $ git clone https://github.com/alpsim/ALPS alps-src
-  $ cmake -S alps-src -B alps-build                                     \
+  git clone https://github.com/alpsim/ALPS alps-src
+  cmake -S alps-src -B alps-build                                     \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
   # ^ Boost (~130 MB) is downloaded here; no output for 1-3 min is normal
-  $ cmake --build alps-build -j$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
-  $ cmake --build alps-build -t test
+  cmake --build alps-build -j$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
+  cmake --build alps-build -t test
   ```
 
 > **`-j` controls parallel compilation.** The expression above automatically uses all
@@ -180,7 +179,7 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 > **Offline or slow-connection build:** By default CMake fetches Boost 1.87 at configure
 > time. To avoid the download, extract the archive manually first and pass the path:
 > ```ShellSession
-> $ cmake -S alps-src -B alps-build                                     \
+> cmake -S alps-src -B alps-build                                     \
 >        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
 >        -DBoost_SRC_DIR=</path/to/boost_1_87_0>                        \
 >        -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
@@ -248,13 +247,13 @@ resolve to the wrong interpreter. Use the full path instead:
 
 ```ShellSession
 # Homebrew (Apple Silicon):
-$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/homebrew/bin/python3
+cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/homebrew/bin/python3
 
 # Homebrew (Intel):
-$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/usr/local/bin/python3
+cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/usr/local/bin/python3
 
 # MacPorts:
-$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python3
+cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python3
 ```
 
 Whichever Python CMake uses, make sure `numpy` and `scipy` are installed for it
@@ -276,7 +275,7 @@ After successfully building the code, you will need to install it. The install l
 To install the code run:
 
   ```ShellSession
-  $ cmake --install alps-build
+  cmake --install alps-build
   ```
 
 ### Set up your environment
@@ -287,10 +286,10 @@ ALPS provides a setup script that adds the right directories to `PATH`,
 
 ```ShellSession
 # bash / zsh:
-$ source </path/to/install/dir>/bin/alpsvars.sh
+source </path/to/install/dir>/bin/alpsvars.sh
 
 # csh / tcsh:
-$ source </path/to/install/dir>/bin/alpsvars.csh
+source </path/to/install/dir>/bin/alpsvars.csh
 ```
 
 To avoid running this command in every new terminal session, add the `source` line
@@ -299,7 +298,7 @@ to your shell's startup file (`~/.bashrc`, `~/.zshrc`, or `~/.cshrc`).
 **Verify the installation** by running one of the ALPS executables:
 
 ```ShellSession
-$ spinmc --help
+spinmc --help
 ```
 
 If the command is found and prints a help message, ALPS is installed and your
@@ -311,4 +310,3 @@ environment is set up correctly.
 <br>
 
 {{< youtube id="OHQGfDDaRMk" >}}
-
