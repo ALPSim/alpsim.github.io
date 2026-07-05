@@ -3,6 +3,8 @@ title: Governance
 description: "ALPS Governance"
 weight: 6
 toc: false
+cascade:
+    type: docs
 ---
 
 ## ALPS Mission
@@ -282,7 +284,9 @@ The external advisory board makes recommendations regarding direction and approa
 
 #### Maintainers:
 
-Each code has a maintainer group that uses GitHub to submit change requests. Maintainer groups are responsible for making GitHub pull requests and changing the scope of their code.  Each maintainer group is responsible for selecting one or more members to commit time as a core maintainer.  The governing council decides on the extent of the commitment. 
+Each code has a maintainer group that uses GitHub to submit change requests. Maintainer groups are responsible for making GitHub pull requests and changing the scope of their code.  Each maintainer group is responsible for selecting one or more members to commit time as a core maintainer.  The governing council decides on the extent of the commitment.
+
+A current list of maintainers and their areas of responsibility is available on the [Code Maintainers](maintainers) page.
 
 #### Core Maintainers:
     
@@ -319,9 +323,13 @@ Contributions and changes to ALPS occur using a consensus model.  Proposals for 
 
 ### Contribution Process
 
-Developers wishing to make ALPS contributions should contact a member of the [Governing Council](#alps-community-steering-committee), who will discuss onboarding.  Contributors and their group members will join the ALPS team by contributing code to integrate into the package using GitHub.  Codes will be released under the MIT open source license.  Community engagement will take place through regular [ALPS workshops](../../events). 
+The practical starting point for any contribution is the [Contributing to ALPS](../contribute) page, which describes the workflow and what we look for in a pull request. The [CONTRIBUTING.md](https://github.com/ALPSim/ALPS/blob/master/CONTRIBUTING.md) in the ALPS repository has the full technical details (build instructions, branch conventions, code style).
 
-Contributors will arrange for a maintenance time commitment that will help sustain ALPS.  Maintenance will include updating existing codes, help with the website, responding to forum help requests and other ALPS community maintenance tasks.  The time commitment will be monitored using GitHub and Discord.  
+Contributions at all levels are welcome — from bug reports and tutorial improvements to new simulation methods. See the [onboarding page](../onboard) for a description of contribution levels and what to expect at each one.
 
-ALPS releases will be accompanied by an announcement publication. Active contributors to ALPS will be added as coauthors.  The Governing Council will be responsible for deciding the author list.
+For contributions of new simulation applications or libraries, please contact a member of the [Governing Council](#alps-community-steering-committee) to discuss onboarding. Contributors join the ALPS team via GitHub and arrange a modest maintenance time commitment (bug fixes, dependency updates, community support) to help sustain the project. All code is released under the MIT open source license.
+
+Community engagement takes place through regular [ALPS workshops](../../events) and the [Discord server](https://discord.gg/JRNWnnva9g).
+
+ALPS releases are accompanied by an announcement publication. Active contributors are added as co-authors; the Governing Council decides the author list.
 

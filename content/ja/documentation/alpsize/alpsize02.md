@@ -1,203 +1,177 @@
-
 ---
-title: Alpsize-02 Fortran Introduction
+title: Alpsize-02 Fortran 入門
 math: true
 toc: true
 weight: 3
 ---
 
-This is the tutorial of ALPS Fortran. This chapter explains how to use and install the ALPS Fortran. It should be noted that this tutorial assumes the readers have a knowledge of Fortran programming
+本章では ALPS Fortran のインストール方法と使い方を説明します。読者が Fortran プログラミングの基本的な知識を持っていることを前提としています。
 
-## Operating environment　
+## 動作環境
 
-ALPS Fortran is a wrapper library to run fortran code on the ALPS system. Therefore, the following environment is necessary to use ALPS Fortran.
+ALPS Fortran は ALPS システム上で Fortran コードを実行するためのラッパーライブラリです。使用には以下の環境が必要です。
+
 |       |          |
 | :---- | :------- |
-| ALPS  |  Regarding the operating environment of the ALPS and installation procedure, please click here |
-| CMake  |  To compile a client code and ALPS Fortran makes use of CMake. (Cmake Version 2.8.0 and later) |
-| Fortran compiler（Gnu/Intel/Fujitsu） |   You will need the same compiler used in ALPS. Regarding the compiler installation procedure, please refer to the manual of each compiler. |
+| ALPS  | 動作環境の要件とインストール手順については [ALPS インストールページ](https://alps.comp-phys.org/documentation/install/) を参照してください。 |
+| CMake | バージョン 3.18 以降。ALPS Fortran とクライアントコードのコンパイルに使用します。 |
+| Fortran コンパイラ（GNU/Intel/Fujitsu） | ALPS のビルドに使用したものと同じコンパイラが必要です。インストール手順は各コンパイラのマニュアルを参照してください。 |
 
-## Install
+## インストール
 
-ALPS Fortran is provided as a patch file, which is available by applying a patch to ALPS system. APLS Fortran patching procedure are as follows.
+ALPS Fortran は ALPS ソースツリーに適用するパッチファイルとして提供されます。
 
-1. download patchs
+1. **パッチのダウンロード**
 
-download available following url.
+   [ALPS リポジトリ](https://github.com/ALPSim/ALPS) から ALPS Fortran アーカイブをダウンロードして展開します：
 
-    $ cd ~/
-    $ wget http://xxx.xxx/alps_fortran.tar.gz
-    $ tar –zxvf alps_fortran.tar.gz
+        $ cd ~/
+        $ wget http://xxx.xxx/alps_fortran.tar.gz
+        $ tar -zxvf alps_fortran.tar.gz
 
-doing the above procedure,the following file and directories will be created.
+   以下のファイルとディレクトリが作成されます：
 
-    alps_fortran/
-        + alps_fortran.patch
-        +samples/
-            +hello/
-            +ising/
-            +looper-2/
-            +tutorial/
-            
-2. patch apply
+        alps_fortran/
+            + alps_fortran.patch
+            + samples/
+                + hello/
+                + ising/
+                + looper-2/
+                + tutorial/
 
-moving ALPS source directory(${ALPS_SRC}),apply the patch.
+2. **パッチの適用**
 
-    $ cd ${ALPS_SRC}
-    $ patch –p0 < ~/alps_fortran/alps_fortran.patch
-    
-3. build installation ALPS sysytem
+   ALPS ソースディレクトリ（`${ALPS_SRC}`）に移動し、パッチを適用します：
 
-The ALPS Fortran is also installed together when you build ALPS system according to the HP manual.
+        $ cd ${ALPS_SRC}
+        $ patch -p0 < ~/alps_fortran/alps_fortran.patch
 
-- ${ALPS_ROOT}/lib/libalps_fortran.a
-- ${ALPS_ROOT}/include/alps/fortran/alps_fortran.h
-- ${ALPS_ROOT}/include/alps/fortran/fortran_wrapper.h
-- ${ALPS_ROOT}/include/alps/fortran/fwrapper_impl.h
-- ${ALPS_ROOT} shows ALPS install directory
+3. **ALPS のビルドとインストール**
 
-## Sample Source Code
+   [インストールドキュメント](https://alps.comp-phys.org/documentation/install/) に従って ALPS をビルドしてください。ALPS Fortran は ALPS と同時にインストールされ、以下のファイルが生成されます（`${ALPS_ROOT}` は ALPS のインストールプレフィックス）：
 
-The ALPS Fortran contains the following codes as a sample.
+   - `${ALPS_ROOT}/lib/libalps_fortran.a`
+   - `${ALPS_ROOT}/include/alps/fortran/alps_fortran.h`
+   - `${ALPS_ROOT}/include/alps/fortran/fortran_wrapper.h`
+   - `${ALPS_ROOT}/include/alps/fortran/fwrapper_impl.h`
 
-"hello" application
+## サンプルソースコード
 
-- Calculation is not performed,only to output the contents of the parameter file for standard output.
+ALPS Fortran には 3 つのサンプルアプリケーションが含まれています：
 
-"ising" application
-- is sample application for ising model calculators.
+- **"hello"** — 計算は行わず、パラメータファイルの内容を標準出力に表示するだけのアプリケーション。
+- **"ising"** — Ising モデル計算のサンプルアプリケーション。
+- **"looper-2"** — 外部ライブラリの使用例を示すサンプルアプリケーション。
 
-"looper-2" application
-- is the application sample using external library.
+以降のセクションでは `hello` アプリケーションのビルドと実行方法を説明します。`ising` と `looper-2` も同じ手順でビルド・実行できます。
 
-From the next section, you will learn how how to build and run the hello application.You can build and run the same procedure as hello ising, for looper-2 application.
+### "hello" アプリケーション
 
-### "hello" Application
+hello アプリケーションは以下のファイルで構成されています：
 
-hello application consists of the following files.
-- `hello_impl.f90`：main program
-- `hello.C`：setting entrypoint
-- `hello_params`：parameter file
-- `CMakeLists.txt`：configuration file
+- `hello_impl.f90` — メインプログラム
+- `hello.C` — エントリポイントの設定
+- `hello_params` — パラメータファイル
+- `CMakeLists.txt` — ビルド設定
 
-### compiling
+### コンパイル
 
-The compilation procedures are as follows.
+1. **ビルドディレクトリの作成**
 
-1. Creating the Work Directory for build
+        $ mkdir -p ${HOME}/alps_fortran_build/hello
+        $ cd ${HOME}/alps_fortran_build/hello
 
-Creating the Work Directory for storing the results of "hello" application build.
+2. **CMake の実行**
 
-    $ mkdir –p ${HOME}/alps_fortran_build/hello
-    $ cd ${HOME}/alps_fortran_build/hello
-    
-2. Running cmake
+   ソースディレクトリを指定して cmake を実行します（`${SAMPLES}` は ALPS Fortran アーカイブを展開して生成されたサンプルフォルダ）：
 
-specifying the source code directory and run cmake.(${SAMPLES} is a folder for samples which is generated by ALPS Fortran unpacking )
+        $ cmake -DALPS_ROOT:PATH=${ALPS_ROOT} \
+        >       ${SAMPLES}/hello
 
-    $ cmake –DALPS_ROOT:PATH=${ALPS_ROOT} \
-    >       ${SAMPLES}/hello
-    
-3. building "hello" application
+3. **ビルド**
 
-doing cmake command makes such as Makefile is nesessary for building ,then run the make.
+        $ make
 
-    $ make
-    
-After the building,execute file "hello" will be generated in the currenet directory.
+   ビルドが完了すると、カレントディレクトリに実行ファイル `hello` が生成されます。
 
-### thread-level parallelization
+### スレッドレベルの並列化
 
-The thread-level parallelization procedures are as follows.
+1. **ビルドディレクトリへの移動**
 
-1. moving the work directory
+        $ cd ${HOME}/alps_fortran_build/hello
 
-moving to the work directory that you created buildig the "hello" application.
+   前回の実行結果ファイル（`hello_param.out.*`）が残っている場合は、次のステップに進む前にすべて削除してください。
 
-    $ cd ${HOME}/alpls_fortran_build/hello
-    
-In addition, the application can not run if there is (`hello_param.out. *`) File execution results in the work directory. If you have such the resulting file, proceed to the next step to remove all.
+2. **パラメータファイルの準備**
 
-2. preparation parameterfiles
+   パラメータファイルから XML 入力ファイルを生成します：
 
-to generate XML files from the parameter files in {SAMPLES}/hello
+        $ cp ${SAMPLES}/hello/hello_params .
+        $ parameter2xml hello_params
 
-    $ cp ${SAMPLES}/hello/hello_params .
-    $ parameter2xml hello_params
-    
-For `parameter2xml` command, refer to the ALPS HP.
+   `parameter2xml` コマンドの詳細は [ALPS ドキュメント](https://alps.comp-phys.org) を参照してください。
 
-3. running "hello"
+3. **実行**
 
-running application as following.
+        $ ./hello hello_params.in.xml
 
-    $ ./hello hello_params.in.xml
-    
-When you run the hello application, the parameters are defined in the `hello_params` will be output to standard output. The following is an excerpt execution result.
+   `hello_params` で定義されたパラメータが標準出力に表示されます。実行結果の例：
 
-    ##### alps_init() #####
-    parameter X     =    3.2000000000000002
-    parameter Y     =            0
-    parameter WORLD = world
-    defined parameter Z =            1
-    
-[2011-May-13 11:45:42]: dispatching a new clone[1,1] on threadgroup[3]
+        ##### alps_init() #####
+        parameter X     =    3.2000000000000002
+        parameter Y     =            0
+        parameter WORLD = world
+        defined parameter Z =            1
+        
+    [2011-May-13 11:45:42]: dispatching a new clone[1,1] on threadgroup[3]
 
-    ##### alps_init() #####
-    parameter X     =   -3.1000000000000001
-    parameter Y     =            6
-    parameter WORLD = alps
-    defined parameter Z =            0
-    
-[2011-May-13 11:45:42]: dispatching a new clone[2,1] on threadgroup[8]
+        ##### alps_init() #####
+        parameter X     =   -3.1000000000000001
+        parameter Y     =            6
+        parameter WORLD = alps
+        defined parameter Z =            0
+        
+    [2011-May-13 11:45:42]: dispatching a new clone[2,1] on threadgroup[8]
 
-    ##### alps_init() #####
-    parameter X     =   1.00000000000000002E-003
-    parameter Y     =         -100
-    parameter WORLD = looper
-    defined parameter Z =            0
-    
-[2011-May-13 11:45:43]: dispatching a new clone[3,1] on threadgroup[7]
-[2011-May-13 11:45:43]: clone[3,1] finished on threadgroup[7]
+        ##### alps_init() #####
+        parameter X     =   1.00000000000000002E-003
+        parameter Y     =         -100
+        parameter WORLD = looper
+        defined parameter Z =            0
+        
+    [2011-May-13 11:45:43]: dispatching a new clone[3,1] on threadgroup[7]
+    [2011-May-13 11:45:43]: clone[3,1] finished on threadgroup[7]
 
-    ##### alps_init() #####
-    parameter X     =    100.00000000000000
-    parameter Y     =            2
-    parameter WORLD = japan
-    defined parameter Z =            0
-    
-[2011-May-13 11:45:43]: dispatching a new clone[4,1] on threadgroup[1]
-[2011-May-13 11:45:43]: clone[4,1] finished on threadgroup[1]
+        ##### alps_init() #####
+        parameter X     =    100.00000000000000
+        parameter Y     =            2
+        parameter WORLD = japan
+        defined parameter Z =            0
+        
+    [2011-May-13 11:45:43]: dispatching a new clone[4,1] on threadgroup[1]
+    [2011-May-13 11:45:43]: clone[4,1] finished on threadgroup[1]
 
-    ##### alps_init() #####
-    parameter X     =    3.0000000000000000
-    parameter Y     =            0
-    parameter WORLD = wistaria
-    defined parameter Z =            0
+        ##### alps_init() #####
+        parameter X     =    3.0000000000000000
+        parameter Y     =            0
+        parameter WORLD = wistaria
+        defined parameter Z =            0
 
-### mpi parallelization
+### MPI 並列化
 
-The mpi parallelization procedures are as follows.
+1. **ビルドディレクトリへの移動**
 
-1. moving the work directory
+        $ cd ${HOME}/alps_fortran_build/hello
 
-moving to the work directory that you created buildig the "hello" application.
+   上記と同様に、実行前に結果ファイル（`hello_param.out.*`）が残っていないことを確認してください。
 
-    $ cd ${HOME}/alpls_fortran_build/hello
+2. **パラメータファイルの準備**
 
-In addition, the application can not run if there is (`hello_param.out. *`) File execution results in the work directory. If you have such the resulting file, proceed to the next step to remove all.
+        $ cp ${SAMPLES}/hello/hello_params .
+        $ parameter2xml hello_params
 
-2. preparation parameterfiles
+3. **MPI での実行**
 
-to generate XML files from the parameter files in {SAMPLES}/hello
+        $ mpirun -np 4 -x OMP_NUM_THREADS=1 ./hello --mpi hello_params.in.xml
 
-    $ cp ${SAMPLES}/hello/hello_params .
-    $ parameter2xml hello_params
-    
-3. runnig the application
-
-running application as following.
-
-    $ mpirun -np 4 -x OMP_NUM_THREADS=1 ./hello --mpi hello_params.in.xml
-
-In the same manner as described above,the parameters are defined in the `hello_params` will be output to standard output.
+   `hello_params` で定義されたパラメータが標準出力に表示されます（スレッドレベルの例と同様）。
