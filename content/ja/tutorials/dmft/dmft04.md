@@ -7,11 +7,13 @@ toc: true
 
 ## Mott Transition
 
-Mott transitions are metal insulator transitions (MIT) that occur in many materials, e.g. transition metal compounds, as a function of pressure or doping. The review by Imada et al. gives an excellent introduction to the subject and mentions $V_2O_3$ and the organics as typical examples.
+モット転移は、多くの物質（例えば遷移金属化合物）において、圧力やドーピングの関数として生じる金属-絶縁体転移（MIT）です。[Imada, Fujimori, Tokura によるレビュー論文、Rev. Mod. Phys. 70, 1039 (1998)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.70.1039) はこのテーマへの優れた入門であり、代表例として $V_2O_3$ や有機物を挙げています。
 
-MIT are easily investigated by DMFT as the relevant physics is essentially local (or k-independent): At half filling the MIT can be modeled by a self energy with a pole at $\omega=0$ which splits the noninteracting band into an upper and a lower Hubbard band. In this context it is instructive to suppress antiferromagnetic long range order and enforce a paramagnetic solution in the DMFT simulation, to mimic the paramagnetic insulating phase. For this the up and down spin of the Green's functions are symmetrized (parameter `SYMMETRIZATION = 1;`).
+関連する物理が本質的に局所的（あるいは波数 k に依存しない）であるため、MIT は DMFT によって容易に調べることができます。半充填の場合、MIT は $\omega=0$ に極を持つ自己エネルギーによってモデル化することができ、この極が非相互作用バンドを上部・下部の Hubbard バンドに分裂させます。この文脈では、反強磁性の長距離秩序を抑制し、DMFT シミュレーションにおいて常磁性解を強制することで、常磁性絶縁相を模擬するのが有益です。そのために、グリーン関数のスピンアップ成分とスピンダウン成分を対称化します（パラメータ `SYMMETRIZATION = 1;`）。
 
-In order to run the simulations in python use [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py):
+### シミュレーションの実行
+
+python でシミュレーションを実行するには、[`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py) を使用します。
 
 ```    
 import pyalps
@@ -57,9 +59,11 @@ for p in parms:
     res = pyalps.runDMFT(input_file)
 ```
 
-We investigate the Mott transition in single-site DMFT, as a function of interaction at fixed temperature $\beta t=20$ (see e.g. Fig. 2 in [this paper](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)). Starting from a non-interacting solution we see in the imaginary time Green's function that the solution is metallic for $U/t \leq 4.5$, and insulating for $U/t\geq 5$. A coexistence region could be found by starting from an insulating (or atomic) solution and trying to convert it for smaller $U$.
+### 金属-絶縁体転移の特定
 
-Imaginary time Green's functions are not easy to interpret, and therefore many authors employ [analytic continuation methods](). There are however two clear features: the value at $\beta$ corresponds to $-n$, the negative value of the density (per spin). The second feature is that $-\beta G(\beta/2) \rightarrow \pi A(0)$ for decreasing temperature ($\beta\rightarrow\infty$); where $A(0)$ is the spectral function at the Fermi energy. From a temperature dependence of the imaginary time Green's function we can therefore immediately see if the system is metallic or insulating. In order to better inspect the behavior of the Green's function we will plot the data on a logarithmic scale:
+固定温度 $\beta t=20$ のもとで、相互作用の関数として単一格子 DMFT におけるモット転移を調べます（例えば[この論文](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)の図2を参照してください）。非相互作用解から出発すると、虚時間グリーン関数において、$U/t \leq 4.5$ では金属的な解となり、$U/t\geq 5$ では絶縁的な解となることがわかります。絶縁的な（あるいは原子極限の）解から出発し、より小さな $U$ で収束させようとすることで、共存領域を見つけることができます。
+
+虚時間グリーン関数は解釈が容易ではないため、多くの研究者は[解析接続法（例えば最大エントロピー法）](https://doi.org/10.1016/0370-1573%2895%2900074-7)を用います。しかし、はっきりとした特徴が2つあります。まず、$\tau=\beta$ における値は $-n$、すなわち（スピンあたりの）密度の負の値に対応します。もう一つの特徴は、温度を下げていくと（$\beta\rightarrow\infty$）、$-\beta G(\beta/2) \rightarrow \pi A(0)$ となることです。ここで $A(0)$ はフェルミエネルギーにおけるスペクトル関数です。したがって、虚時間グリーン関数の温度依存性から、系が金属的か絶縁的かをただちに見て取ることができます。グリーン関数の振る舞いをより詳しく見るために、対数スケールでデータをプロットします。
 
 ```
 listobs=['0']   # we look at only one flavor, as they are SYMMETRIZED
@@ -80,9 +84,11 @@ plt.legend()
 plt.show()
 ```
 
-You should observe that at small $U$ you find metallic solution and an insulating solution at large $U$, at fixed $\beta$. The largest value of $U$ is deep within the insulating phase.
+固定した $\beta$ のもとで、$U$ が小さいときには金属的な解が、$U$ が大きいときには絶縁的な解が得られることが確認できるはずです。最大の $U$ の値は、絶縁相の深いところにあります。
 
-The convergence may be checked by [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py):
+### 収束の確認
+
+収束は [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py) で確認できます。
 
 ```
 import pyalps
