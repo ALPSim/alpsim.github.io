@@ -230,6 +230,77 @@ languages:
             type: language-switch
             label: true
 
+  es:
+    label: Español
+    languageName: Español
+    contentDir: content/es
+    locale: es
+    weight: 4
+    menu:
+      main:
+        - identifier: installation
+          name: Instalación
+          pageRef: /install
+          weight: 1
+        - identifier: start
+          name: Primeros Pasos
+          pageRef: /start
+          weight: 2
+        - identifier: tutorials
+          name: Tutoriales
+          pageRef: /tutorials
+          weight: 3
+        - identifier: documentation
+          name: Documentación
+          pageRef: /documentation
+          weight: 4
+        - identifier: about
+          name: Acerca de
+          pageRef: /about
+          weight: 5
+        - identifier: govern
+          name: Gobernanza
+          pageRef: /govern
+          weight: 6
+        - identifier: events
+          name: Eventos
+          pageRef: /events
+          weight: 7
+        - identifier: faqs
+          name: Preguntas Frecuentes
+          pageRef: /faqs
+          weight: 8
+        - name: Buscar
+          weight: 9
+          params:
+            type: search
+        - name: GitHub
+          weight: 10
+          url: "https://github.com/ALPSim"
+          params:
+            icon: github
+        - name: Discord
+          weight: 11
+          url: "https://discord.gg/JRNWnnva9g"
+          params:
+            icon: discord
+        - name: YouTube
+          weight: 12
+          url: "https://youtube.com/@ALPS-Collaboration"
+          params:
+            icon: youtube
+        - name: Cambiar modo
+          weight: 13
+          params:
+            type: theme-toggle
+            icon: sun
+        - identifier: language
+          name: 🌐 Idioma
+          weight: 20
+          params:
+            type: language-switch
+            label: true
+
 module:
   hugoVersion:
     extended: true

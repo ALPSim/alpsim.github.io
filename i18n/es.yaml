@@ -1,0 +1,25 @@
+- id: copyright
+  translation: "© 2026 Colaboración ALPS"
+- id: searchPlaceholder
+  translation: "Buscar..."
+- id: changeTheme
+  translation: "Cambiar tema"
+- id: light
+  translation: "Claro"
+- id: dark
+  translation: "Oscuro"
+- id: poweredBy
+  translation: "Desarrollado con Hextra"
+- id: noResultsFound
+  translation: "No se encontraron resultados"
+- id: lastUpdated
+  translation: "Última actualización"
+- id: changeLanguage
+  translation: "Cambiar idioma"
+- id: onThisPage
+  translation: "En esta página"
+- id: editThisPage
+  translation: "Editar esta página"
+- id: backToTop
+  translation: "Volver arriba"
+
