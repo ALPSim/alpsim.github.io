@@ -31,16 +31,16 @@ ALPS 依赖多个外部库。
 <summary><strong> Ubuntu / Debian / WSL</strong> </summary>
 
 ```ShellSession
-$ sudo apt update
-$ sudo apt install build-essential cmake \
+sudo apt update
+sudo apt install build-essential cmake \
                    libhdf5-dev \
                    libopenblas-dev \
                    libopenmpi-dev openmpi-bin # 或: libmpich-dev mpich
 
 # 安装 Python 库:
-$ pip install numpy scipy
+pip install numpy scipy
 # 或
-$ python3 -m pip install numpy scipy
+python3 -m pip install numpy scipy
 ```
 
 > **请勿通过 `apt` 安装 Boost。** ALPS 必须从源码编译 Boost，原因有二：
@@ -54,12 +54,12 @@ $ python3 -m pip install numpy scipy
 <summary><strong> macOS (通过 Homebrew)</strong> </summary>
 
 ```ShellSession
-$ brew update
-$ brew install cmake hdf5 \
+brew update
+brew install cmake hdf5 \
                openblas open-mpi # 或: mpich
 
 # 安装 Python 库:
-$ pip3 install numpy scipy
+pip3 install numpy scipy
 ```
 
 > **请勿通过 Homebrew 安装 Boost。** ALPS 必须从源码编译 Boost，原因有二：
@@ -68,8 +68,8 @@ $ pip3 install numpy scipy
 >
 > CMake 会自动处理：若未设置 `Boost_SRC_DIR`，则在配置时下载并编译 Boost 1.87（需要网络连接）。如需离线构建或复用已解压的存档，请先手动下载：
 > ```ShellSession
-> $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-> $ tar -xzf boost_1_87_0.tar.gz
+> curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
+> tar -xzf boost_1_87_0.tar.gz
 > ```
 </details>
 
@@ -77,15 +77,15 @@ $ pip3 install numpy scipy
 <summary><strong> macOS (通过 MacPorts)</strong> </summary>
 
 ```ShellSession
-$ sudo port selfupdate
-$ sudo port install cmake \
+sudo port selfupdate
+sudo port install cmake \
                    hdf5 \
                    OpenBLAS \
                    openmpi-clang20   # 请参阅下方关于选择变体的说明
-$ sudo port select --set mpi openmpi-clang20-fortran
+sudo port select --set mpi openmpi-clang20-fortran
 
 # 安装 Python 库:
-$ pip3 install numpy scipy
+pip3 install numpy scipy
 ```
 
 > **选择 OpenMPI 变体：** MacPorts 为每个编译器版本提供独立的端口，命名为 `openmpi-<compiler><version>`（例如 `openmpi-clang20`、`openmpi-gcc15`）。上示的 `clang20` 变体对应 LLVM Clang 20 端口，可与 Xcode 的 Apple Clang 共存。若使用不同编译器，请安装对应变体并相应调整 `port select` 命令。
@@ -98,19 +98,19 @@ $ pip3 install numpy scipy
 >
 > CMake 会自动处理：若未设置 `Boost_SRC_DIR`，则在配置时下载并编译 Boost 1.87（需要网络连接）。如需离线构建或复用已解压的存档，请先手动下载：
 > ```ShellSession
-> $ curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-> $ tar -xzf boost_1_87_0.tar.gz
+> curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
+> tar -xzf boost_1_87_0.tar.gz
 > ```
 </details>
 
 ### 验证依赖项
 
 ```ShellSession
-$ gcc -v              # 必须 ≥ 10.5.0
-$ cmake --version     # 必须 ≥ 3.18
-$ mpirun --version    # 需为 OpenMPI 4.0 或 MPICH 4
-$ python3 --version   # 必须 ≥ 3.9
-$ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
+gcc -v              # 必须 ≥ 10.5.0
+cmake --version     # 必须 ≥ 3.18
+mpirun --version    # 需为 OpenMPI 4.0 或 MPICH 4
+python3 --version   # 必须 ≥ 3.9
+python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
 ```
 
 > **macOS — CMake 将使用哪个 Python？** macOS 上的 CMake 在搜索 `$PATH` 之前会先搜索 Apple 的框架路径，即使通过 Homebrew 或 MacPorts 安装了更新版本的 Python，也可能默认选择 Xcode 自带的 Python 3.9。在 `cmake` 配置时，请查找如下输出行：
@@ -128,21 +128,21 @@ $ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', sc
 > 2. **`cmake --build`（5–20 分钟）：** 即使使用全部 CPU 核心，从源码编译 ALPS 和 Boost 也需要数分钟。终端将持续打印编译输出——这也是正常现象。
 
 ```ShellSession
-$ git clone https://github.com/alpsim/ALPS alps-src
-$ cmake -S alps-src -B alps-build                                     \
-       -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
-       -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
-       -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
+git clone https://github.com/alpsim/ALPS alps-src
+cmake -S alps-src -B alps-build                                     \
+     -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
+     -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
+     -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
 # ^ Boost（约 130 MB）在此处下载；1–3 分钟内无输出属正常
-$ cmake --build alps-build -j$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
-$ cmake --build alps-build -t test
+cmake --build alps-build -j$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
+cmake --build alps-build -t test
 ```
 
 > **`-j` 控制并行编译数。** 上述表达式在 Linux（`nproc`）和 macOS（`sysctl -n hw.logicalcpu`）上均可自动使用全部逻辑 CPU 核心。也可手动指定，如 8 核时使用 `-j 8`。
 
 > **离线或低速连接构建：** 默认情况下 CMake 在配置时下载 Boost 1.87。如需避免下载，请先手动解压存档并指定路径：
 > ```ShellSession
-> $ cmake -S alps-src -B alps-build                                     \
+> cmake -S alps-src -B alps-build                                     \
 >        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
 >        -DBoost_SRC_DIR=</path/to/boost_1_87_0>                        \
 >        -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
@@ -194,13 +194,13 @@ export SDKROOT=$(xcrun --show-sdk-path)
 
 ```ShellSession
 # Homebrew（Apple Silicon）:
-$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/homebrew/bin/python3
+cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/homebrew/bin/python3
 
 # Homebrew（Intel）:
-$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/usr/local/bin/python3
+cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/usr/local/bin/python3
 
 # MacPorts:
-$ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python3
+cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python3
 ```
 
 无论 CMake 使用哪个 Python，请确保该 Python 已安装 `numpy` 和 `scipy`（`/path/to/that/python3 -m pip install numpy scipy`）。
@@ -221,7 +221,7 @@ $ cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python
 运行安装命令：
 
 ```ShellSession
-$ cmake --install alps-build
+cmake --install alps-build
 ```
 
 ### 配置环境
@@ -230,10 +230,10 @@ $ cmake --install alps-build
 
 ```ShellSession
 # bash / zsh:
-$ source </path/to/install/dir>/bin/alpsvars.sh
+source </path/to/install/dir>/bin/alpsvars.sh
 
 # csh / tcsh:
-$ source </path/to/install/dir>/bin/alpsvars.csh
+source </path/to/install/dir>/bin/alpsvars.csh
 ```
 
 为避免每次打开新终端都需执行此命令，请将 `source` 行添加到 shell 启动文件（`~/.bashrc`、`~/.zshrc` 或 `~/.cshrc`）中。
@@ -241,7 +241,7 @@ $ source </path/to/install/dir>/bin/alpsvars.csh
 **验证安装** — 运行任一 ALPS 可执行文件：
 
 ```ShellSession
-$ spinmc --help
+spinmc --help
 ```
 
 若命令可找到并打印帮助信息，则 ALPS 安装和环境配置均已成功。
