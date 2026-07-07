@@ -18,7 +18,7 @@ ALPS is a software package for simulating correlated systems. It provides progra
 The simplest way to start using `ALPS` is to install the prebuilt Python package:
 
 ```ShellSession
-$ pip install pyalps
+pip install pyalps
 ```
 
 For more control over the installation — or to build with HPC support — choose one of the methods below:
