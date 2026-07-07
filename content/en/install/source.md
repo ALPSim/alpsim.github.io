@@ -30,7 +30,6 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
       
 <details>
 <summary><strong> Ubuntu / Debian / WSL</strong> </summary>
-> **Note (zsh):** If you paste the commands below into `zsh`, inline `# ...` comments require `setopt INTERACTIVE_COMMENTS` (or remove the comments before pasting).
 
   ```ShellSession
 sudo apt update
