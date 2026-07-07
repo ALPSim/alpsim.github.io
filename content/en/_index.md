@@ -21,7 +21,7 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 </div>
 
 <div class="btn-grid">
-{{< cta-button text="Get Started" link="start" icon="rocket_launch" >}}
+{{< cta-button text="Get Started" link="start" icon="rocket_launch" color="#3B5B8C" >}}
 {{< cta-button text="GitHub Source" link="https://github.com/ALPSim/ALPS" icon="code" >}}
 {{< cta-button text="Events" link="events" icon="event" >}}
 {{< cta-button text="Installation" link="install" icon="download" >}}
