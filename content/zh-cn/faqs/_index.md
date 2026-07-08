@@ -16,7 +16,7 @@ toc: false
 
 ### 使用 ALPS 的条件是什么？
 
-ALPS 及其所有应用均以 [MIT 许可证](https://github.com/ALPSim/ALPS/blob/main/LICENSE)发布，这是目前最为宽松的开源许可证之一。您可以在几乎任何场景中自由使用、修改和分发 ALPS，包括将其集成到您自己的软件中或用于商业项目，限制极少。
+ALPS 及其所有应用均以 [MIT 许可证](https://github.com/ALPSim/ALPS/blob/master/LICENSE.txt)发布，这是目前最为宽松的开源许可证之一。您可以在几乎任何场景中自由使用、修改和分发 ALPS，包括将其集成到您自己的软件中或用于商业项目，限制极少。
 
 如果您使用 ALPS 并发表了相关科研成果，我们诚挚地希望您能引用我们的论文。请访问我们的[论文页面](../documentation/pubs/papers/)获取相应参考文献。
 

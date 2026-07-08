@@ -34,7 +34,7 @@ We might also be able to cover some of your local expenses (we suggest you keep 
 
 The workshop will begin in the morning of the 24th, and end in the afternoon of the 26th. We may arrange for a small reception on the evening of the 23rd. We also plan a “banquet” at a local sidreria.  Updates forthcoming. 
 
-### Schedule: <a href="Agenda_SS.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+### Schedule: <a href="../Agenda_SS.pdf" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
 ### Tentative list of talks:
 
@@ -106,7 +106,7 @@ The easiest would be for you to send an email to Adrian Feiguin at <a href="mail
 BUSES AEROPUERTOS:
  
 - Hondarribia-Donostia
-[https://ekialdebus.eus/es/linea-e21-aeropuerto-hondarribia-donostia/](https://ekialdebus.eus/es/linea-e21-aeropuerto-hondarribia-donostia/)
+[https://web.archive.org/web/20260313053732/https://ekialdebus.eus/es/linea-e21-aeropuerto-hondarribia-donostia/](https://web.archive.org/web/20260313053732/https://ekialdebus.eus/es/linea-e21-aeropuerto-hondarribia-donostia/)
 - Bilbao-Donostia
 [https://www.pesa.net/pesa/descargas/actual/DO50B.pdf](https://www.pesa.net/pesa/descargas/actual/DO50B.pdf)
 - Biarritz-Donostia

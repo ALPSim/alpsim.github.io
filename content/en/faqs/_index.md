@@ -16,7 +16,7 @@ If you need help and you cannot find an answer on the webpage or in the document
 
 ### What are the conditions for using ALPS?
 
-ALPS and all its applications are released under the [MIT License](https://github.com/ALPSim/ALPS/blob/main/LICENSE), one of the most permissive open-source licenses available. You are free to use, modify, and distribute ALPS in almost any context — including integrating it into your own software or using it in commercial projects — with minimal restrictions.
+ALPS and all its applications are released under the [MIT License](https://github.com/ALPSim/ALPS/blob/master/LICENSE.txt), one of the most permissive open-source licenses available. You are free to use, modify, and distribute ALPS in almost any context — including integrating it into your own software or using it in commercial projects — with minimal restrictions.
 
 If you find ALPS useful and publish scientific results obtained with it, we kindly ask that you cite our papers. Please visit our [publications page](../documentation/pubs/papers/) for the appropriate references.
 
