@@ -26,11 +26,11 @@ $$
 where we use the periodic boundary conditions, i.e. we identify $\vec{S}_{L+1}=\vec{S}_1$.
 We would like to calculate the magnetization curve in the ground state. However, our choice of method here is a path-integral Quantum Monte Carlo method that operates at finite temperature. We therefore simulate a thermal ensemble and choose a temperature that is sufficiently low compared to the other energy scales of the problem.
 
-The thermal expectation value of the magnetization per site is defined as
+The thermal expectation value of the magnetization per site is defined as:
 $$
 m=\frac{1}{L}\sum_i\langle S_i^z\rangle
 $$
-where
+where:
 $$
 \langle S_i^z\rangle = \frac{1}{Z}\text{Tr}(e^{-H/T}S_i^z).
 $$
@@ -42,9 +42,9 @@ The parameters we need to pass to the Directed Loop SSE code fall into four cate
 
 - Lattice parameters: We pick the lattice labeled "chain lattice". This corresponds to a simple one-dimensional chain with periodic boundary conditions. For this particular lattice, we also need to specify the length of the chain as the parameter "L".
 
-- Model parameters: We pick the "spin" model and set  $S=1/2$ , which is achived by setting "local_S" to 1/2. The coupling is "J", and "h" is the magnetic field in the Z direction.
+- Model parameters: We pick the "spin" model and set  $S=1/2$ , which is achieved by setting "local_S" to 1/2. The coupling is "J", and "h" is the magnetic field in the $z$ direction.
 
-- Ensemble parameter: We here pick a temperature of  $T=0.08$ , which turns out to be low enough in this case to see the physical effect we're looking for.
+- Ensemble parameter: Here we pick a temperature of  $T=0.08$ , which is low enough to see the physical effect we’re looking for.
 
 - QMC parameters: For this simple setup, we pass only the number of sweeps in the thermalization part of the simulation ("THERMALIZATION"), and the number of sweeps for which we measure the desired observable ("SWEEPS").
 
@@ -91,7 +91,7 @@ input_file = pyalps.writeInputFiles(chain_prefix, chain_parms)
 res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
 ```
 
-The above lines can be saved in a script and run with python command in your terminal. Or the input file can be run with the following command line in your terminal:
+The above lines can be saved in a script and run with the python command in your terminal. Alternatively, the input file can be run with the following command in your terminal:
 
 ```
 dirloop_sse qmc_chain.in.xml --Tmin 5
@@ -117,12 +117,12 @@ plt.title('Quantum Heisenberg chain')
 plt.show()
 ```
 
-The resulting picutre show look like the following:    
+The resulting picture should resemble the following:    
 ![](qmcmagchain.png)
 
 ## Heisenberg ladder
 
-We now solve the two-leg Heisenberg ladder in much the same way. The Hamiltonian for the ladder can be thought of as coupling two chains together. Denoting the spins in one chain $\vec{S}$  and in the other $\vec{T}$, the Hamiltonian is
+We now solve the two-leg Heisenberg ladder in much the same way. The Hamiltonian for the ladder can be thought of as coupling two chains together. Denoting the spins in one chain $\vec{S}$  and in the other $\vec{T}$, the Hamiltonian is:
 
 $$
 H=\sum[J_0(\vec{S}_i\cdot\vec{S}_{i+1}+\vec{T}_i\cdot\vec{T}_{i+1})+J_1\vec{S}_i\cdot\vec{T}_i+h(S_i^z+T_i^z)],
@@ -133,7 +133,7 @@ where we again apply periodic boundary conditions with the identification $\vec{
 Notice the difference in lattice and model parameters:
 
 - In addition to the length of the system, we now also provide the width.
-- The model now takes two parameters J0 and J1, where J0 is the coupling along the chains and J1 the coupling on the rungs. It is important to specify both parameters, otherwise they default to 0.
+- The model now takes two parameters $J_0$ and $J_1$, where $J_0$ is the coupling along the chains and $J_1$ the coupling on the rungs. It is important to specify both parameters, otherwise they default to 0.
 
 We keep all other parameters the same.
 
@@ -184,7 +184,7 @@ plt.title('Quantum Heisenberg ladder')
 We now compare the results for the chain and the ladder. For this, we do not need to run any new simulations, but we simply load both sets of data at the same time and tell pyalps.collectXY to create a separate plot for each value of the LATTICE parameter.
 
 - What are the significant differences between the two plots, particularly at small values of the field strength  h ?
-- What is the physical interpretation of these differences? What is their origin in the spectrum of the system?
+- What is the physical interpretation of these differences? How does the excitation spectrum of each system explain this?
 
 We will revisit these questions in the DMRG/MPS tutorial.
 
