@@ -1,0 +1,32 @@
+MODEL="spin"
+LATTICE="nnn chain lattice"
+CONSERVED_QUANTUMNUMBERS="Sz"
+local_S=1/2
+J=1
+NUMBER_EIGENVALUES=2
+Sz_total=0
+{ L=6; J1=0.0 }
+{ L=6; J1=0.1 }
+{ L=6; J1=0.2 }
+{ L=6; J1=0.3 }
+{ L=6; J1=0.4 }
+{ L=6; J1=0.5 }
+{ L=8; J1=0.0 }
+{ L=8; J1=0.1 }
+{ L=8; J1=0.2 }
+{ L=8; J1=0.3 }
+{ L=8; J1=0.4 }
+{ L=8; J1=0.5 }
+Sz_total=1
+{ L=6; J1=0.0 }
+{ L=6; J1=0.1 }
+{ L=6; J1=0.2 }
+{ L=6; J1=0.3 }
+{ L=6; J1=0.4 }
+{ L=6; J1=0.5 }
+{ L=8; J1=0.0 }
+{ L=8; J1=0.1 }
+{ L=8; J1=0.2 }
+{ L=8; J1=0.3 }
+{ L=8; J1=0.4 }
+{ L=8; J1=0.5 }
