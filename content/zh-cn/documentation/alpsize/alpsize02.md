@@ -1,5 +1,5 @@
 ---
-title: Alpsize-02 Fortran 入门
+title: Integration-02 Fortran 入门
 math: true
 toc: true
 weight: 3

@@ -1,12 +1,12 @@
 
 ---
-title: Alpsize-00 用户代码 ALPSize
+title: Integration-00 用户代码集成
 math: true
 toc: true
 weight: 1
 ---
 
-## ALPSize 简介
+## 集成简介
 
 通过使用 CMake 进行打包并与 ALPS 库链接，您可以以最少的配置使用 **Parameters** 和 **Alea** 等 ALPS 调度器功能。使用 ALPS 调度器具有以下优点：
 
@@ -18,7 +18,7 @@ weight: 1
 
 ## 教程
 
-以下各步骤对应 ALPSize 教程包中的一个子目录。
+以下各步骤对应集成教程包中的一个子目录。
 请按顺序完成，每个步骤都以前一步骤为基础构建。
 
 ### 使用 CMake 打包
@@ -102,7 +102,7 @@ weight: 1
     $ ./lattice <lattice.ip
     $ ./wolff <wolff.ip
 
-### 使用 ALPS/Parapack 调度器的完整 ALPSize
+### 使用 ALPS/Parapack 调度器的完整集成
 
 08_scheduler — 将仿真逻辑封装在 Worker 类中，并将控制权交给 ALPS Parapack 调度器，从而实现透明的并行化。
 

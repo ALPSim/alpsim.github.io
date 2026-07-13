@@ -1,12 +1,12 @@
 
 ---
-title: Alpsize-00 Usercode ALPSize
+title: Integration-00 Usercode Integration
 math: true
 toc: true
 weight: 1
 ---
 
-## ALPSize Introduction
+## Integration Overview
 
 By packaging your code with CMake and linking against the ALPS library, you can use ALPS
 scheduler infrastructure — including **Parameters** and **Alea** — with minimal setup.
@@ -20,7 +20,7 @@ Using the ALPS scheduler provides the following advantages:
 
 ## Tutorial
 
-Each step below corresponds to a subdirectory in the ALPSize tutorial package.
+Each step below corresponds to a subdirectory in the integration tutorial package.
 Work through them in order; each one builds on the previous.
 
 ### Packaging with CMake
@@ -104,7 +104,7 @@ Work through them in order; each one builds on the previous.
     $ ./lattice <lattice.ip
     $ ./wolff <wolff.ip
 
-### Full ALPSize with the ALPS/Parapack Scheduler
+### Full Integration with the ALPS/Parapack Scheduler
 
 08_scheduler — Wraps the simulation in a Worker class and hands control to the ALPS Parapack scheduler, enabling transparent parallelization.
 
