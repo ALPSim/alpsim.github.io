@@ -13,7 +13,7 @@ ALPS Fortran is a wrapper library for running Fortran code on the ALPS system. T
 
 |       |          |
 | :---- | :------- |
-| ALPS  | See the [ALPS installation page](https://alps.comp-phys.org/documentation/install/) for operating environment requirements and installation instructions. |
+| ALPS  | See the [ALPS installation page](https://alps.comp-phys.org/install/) for operating environment requirements and installation instructions. |
 | CMake | Version 3.18 or later. Used to compile both ALPS Fortran and client code. |
 | Fortran compiler (GNU/Intel/Fujitsu) | Must be the same compiler used to build ALPS. Refer to each compiler's manual for installation instructions. |
 
@@ -48,7 +48,7 @@ ALPS Fortran is provided as a patch file applied to the ALPS source tree.
 
 3. **Build and install ALPS**
 
-   Build ALPS according to the [installation documentation](https://alps.comp-phys.org/documentation/install/). ALPS Fortran is installed alongside ALPS and produces the following files (where `${ALPS_ROOT}` is your ALPS installation prefix):
+   Build ALPS according to the [installation documentation](https://alps.comp-phys.org/install/). ALPS Fortran is installed alongside ALPS and produces the following files (where `${ALPS_ROOT}` is your ALPS installation prefix):
 
    - `${ALPS_ROOT}/lib/libalps_fortran.a`
    - `${ALPS_ROOT}/include/alps/fortran/alps_fortran.h`
