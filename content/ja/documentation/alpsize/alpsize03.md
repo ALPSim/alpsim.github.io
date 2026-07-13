@@ -6,694 +6,757 @@ toc: true
 weight: 4
 ---
 
-ALPS Fortran は ALPS の Fortran インターフェースモジュールです。ALPS Fortran を使うと、必要ないくつかのサブルーチンを実装するだけで、Fortran のコードを ALPS 上で簡単に実行できます。本章では、ALPS 上で動作する Fortran コードを記述する手順を説明します。また、既存の ALPS Fortran へ移植するために `CMakeList.txt` ファイルの設定手順を変更し、Fortran コードをビルドする方法についても本章で説明します。
+ALPS Fortran は ALPS システム向けの Fortran インターフェースモジュールを提供します。少数の固定された必須サブルーチンを実装するだけで、Fortran プログラムを ALPS スケジューラの下で実行し、その並列化・パラメータ管理・結果集約機能を活用できます——これは [Integration-00](../alpsize00) で C++ を使って示したのと同じ利点であり、[Integration-02](../alpsize02) で "hello" サンプルを組み立てた際にも使われた仕組みです。本章ではそのサブルーチンインターフェースを詳しく説明し、実際に存在する完全な例を通してそれを実践します。すなわち、既存の、手を加えていない Fortran プログラム——1993 年に書かれた二次元 Ising モデルのモンテカルロシミュレーション——を ALPS Fortran フレームワークに移植します。
 
 ## ALPS Fortran の概要
 
-次の図は、ALPS システム、ALPS Fortran、ユーザーの Fortran プログラムの関係を示す図です。
+次の図は、ALPS システム、ALPS Fortran、ユーザーの Fortran プログラムの関係を示しています。
 
 ![ALPS Fortran モジュール](../figs/fortranmodule.png)
 
-ALPS Fortran は ALPS から呼び出され、必要に応じてユーザープログラムのサブルーチンを呼び出します。これにより、ALPS は C++ プログラムと同様に、Fortran で実装されたプログラムを制御できます。一方、ALPS Fortran は ALPS の機能を呼び出すためのサブルーチンを提供します。そのため、ユーザープログラムは通常の Fortran サブルーチンを呼び出すのと同じように、ALPS の機能を利用できます。
+ALPS Fortran は、C++ で書かれた ALPS スケジューラとあなたの Fortran コードの間に位置する薄い C++ の層です。ALPS は通常の C++ を使って ALPS Fortran を呼び出し、ALPS Fortran はそれを普通の Fortran サブルーチン呼び出しとしてあなたのプログラムのサブルーチンに橋渡しします——これにより、ALPS は C++ の `Worker` クラスをまったく同じ方法（ジョブスケジューリング、チェックポイント、プロセス制御）で制御するのとまったく同じように、Fortran プログラムを制御できます。詳しくは [Integration-00 のステップ 9](../alpsize00#ステップ-9--alpsparapack-スケジューラとの完全な統合)を参照してください。ALPS Fortran はその逆方向の経路も提供します。すなわち、あなたの Fortran コードが通常の Fortran サブルーチンであるかのように ALPS を呼び返せる一連のサブルーチン（`alps_get_parameter`、`alps_accumulate_observable` など）です。そのため、C++ を自分で書いたり呼び出したりする必要は一切ありません。
 
-## サブルーチンの呼び出しフロー
+## 呼び出しフロー
 
-次の図は、ALPS システムとユーザープログラムのフローチャートを示しています。以下の各サブルーチンについては [2.3.3] を参照してください。
+次の図は、1 回の実行のライフサイクルにおける ALPS システムとユーザープログラムの呼び出しフローを、**初期化**・**計算ループ**・**終了処理**の 3 つのフェーズに分けて示しています。
 
 ![呼び出しフロー](../figs/callflow.png)
 
+初期化フェーズでは、ALPS が `alps_init` を一度呼び出し、その中であなたのコードは通常 `alps_get_parameter` と `alps_parameter_defined` を呼び返してパラメータを読み込みます。続いて ALPS は `alps_init_observables` を呼び出し、その中であなたのコードは `alps_init_observable` を呼び出して各測定量を登録します。その後 ALPS は `alps_run`——実際の計算部分——を繰り返し呼び出し、その合間に `alps_is_thermalized` と `alps_progress` を呼び出します。これは進捗が 1.0 に達するまで続きます。各 `alps_run` は通常 `alps_accumulate_observable` を呼び返して測定結果を記録します。最後に、終了処理フェーズでは、ALPS は `alps_save`（内部で `alps_dump` を呼び出してチェックポイントデータを書き込みます）と `alps_finalize` を呼び出します。以下のサブルーチンリファレンスは、この図に描かれているすべての箱を説明しています。
+
+[Integration-00](../alpsize00) を読んだ方は、これがまったく同じ 3 フェーズ構造であることに気づくでしょう——ステップ 9 の `wolff_worker` C++ クラスとまったく同じライフサイクルが、C++ のメンバ関数の代わりに Fortran のサブルーチンに分散しているだけです。
+
+| ALPS Fortran サブルーチン | 対応する C++ `Worker` メソッド（Integration-00 ステップ 9） |
+| :----------------------- | :------------------------------------------------------- |
+| `alps_init`               | コンストラクタ |
+| `alps_init_observables`   | `init_observables` |
+| `alps_run`                | `run` |
+| `alps_progress`           | `progress` |
+| `alps_is_thermalized`     | `is_thermalized` |
+| `alps_save`               | `save` |
+| `alps_load`               | `load` |
+| `alps_finalize`           | デストラクタ |
+
 ## Fortran ソースコードの準備
 
-ALPS Fortran を使ってプログラムを実装するには、次の 2 つのソースコードを準備する必要があります。
+ALPS Fortran を使ってプログラムを実装するには、2 つのソースファイルを準備する必要があります。
 
-- プログラムのエントリーポイントとなる main 関数を実装する C++ ソースコード。
-- ALPS Fortran の規則に従って実装する Fortran ソースコード。
+- `main` 関数（プログラムのエントリーポイント）を定義する **C++ ソースファイル**。
+- ALPS Fortran が要求するサブルーチンを実装する **Fortran ソースファイル**。
 
-### エントリーポイント　
+### エントリーポイント
 
-このセクションでは、main 関数（プログラムのエントリーポイント）やワーカー名など、プログラムの設定について説明します。main 関数は固定の内容を記述するだけで、通常は変更する必要はありません。プログラムの設定については、以下のコードを参照してください。
+`main` 関数は、バージョン番号、著作権表示、Worker 名、Evaluator 名といったプログラムのメタデータを設定します。ほとんどの場合、`main` 関数の本体自体を変更する必要はありません——これらのメタデータ文字列だけをあなたのプログラム用に更新してください。
 
-- プログラムのバージョン番号
-- プログラムの著作権表示
-- ワーカー名
-- エバリュエーター名
+以下は C++ エントリーポイントの例です——実際、これは [Integration-02](../alpsize02) の `hello.C` と `ising.C` そのものであり、メタデータ文字列と Worker 名が `"hello"`/`"ising"` の代わりにプレースホルダーになっているだけです。
 
-以下は C++ ソースコードの例です。
+```cpp
+#include <alps/parapack/parapack.h>
+#include "alps/fortran/fortran_wrapper.h"
 
-    1:    #include <alps/parapack/parapack.h>
-    2:    #include "fortran_wrapper.h"
-    3:    
-    4:    // Version number setting
-    5:    PARAPACK_SET_VERSION("my version");
-    6:    
-    7:    // Copywrite display setting
-    8:    PARAPACK_SET_COPYRIGHT("my copyright");
-    9:    
-    10:    // Worker name setting
-    11:    PARAPACK_REGISTER_WORKER(alps::fortran_wrapper, "worker name</span>");
-    12:    
-    13:    // Evaluator setting
-    14:    PARAPACK_REGISTER_EVALUATOR(alps::parapack::simple_evaluator,"evaluator name");
-    15:    
-    16:    
-    17:    /**
-    18:     * Programのentry point
-    19:     */
-    20:    int main(int argc, char** argv)
-    21:    {
-    22:        return alps::parapack::start(argc, argv);
-    23:    }
+// Version number
+PARAPACK_SET_VERSION("my version");
 
-上記の例で変更が必要なのは、赤色で示された部分の文字です。
+// Copyright notice
+PARAPACK_SET_COPYRIGHT("my copyright");
+
+// Worker name
+PARAPACK_REGISTER_WORKER(alps::fortran_wrapper, "worker name");
+
+// Evaluator
+PARAPACK_REGISTER_EVALUATOR(alps::parapack::simple_evaluator, "evaluator name");
+
+int main(int argc, char** argv)
+{
+    return alps::parapack::start(argc, argv);
+}
+```
+
+サンプルの文字列（`"my version"`、`"my copyright"`、`"worker name"`、`"evaluator name"`）を、あなたのプログラムに適した値に置き換えてください。`alps::fortran_wrapper` こそが、これを実現している ALPS 提供の Worker クラスです。これは [Integration-00 のステップ 9](../alpsize00#ステップ-9--alpsparapack-スケジューラとの完全な統合)で手書きしたのと同じ Worker インターフェースを満たす C++ クラスですが、`run` や `is_thermalized` などを直接 C++ で実装する代わりに、各呼び出しを以下で実装する Fortran サブルーチンに転送します。
 
 ### Fortran ソースコード
 
-Fortran ソースコードの主な内容は計算ロジックです。ただし、ALPS Fortran を使用するには、いくつかのサブルーチンを必ず実装する必要があります。パラメータの読み込みや計算結果の保存を行う際には、ALPS Fortran が提供するサブルーチンを介して ALPS の機能を呼び出します。
+Fortran ソースコードの主な内容は計算ロジックです。ただし、ALPS Fortran があなたのプログラムを制御できるように、固定された一連の必須サブルーチンを必ず実装する必要があります。パラメータを読み込んだり結果を保存したりする際は、自分で I/O を処理するのではなく、ALPS Fortran が提供するサブルーチンを呼び出します。
 
-#### 必須サブルーチン　
+#### 必須サブルーチン
 
-ユーザープログラムから ALPS の機能を制御するには、Fortran ソースコード内にいくつかのサブルーチンが必要です。以下の各サブルーチンの説明を読み、適切に実装してください。これらを省略するとリンクエラーとなり、ビルドできません。これらのサブルーチンを実装する際は、次の点に注意してください。
+以下のサブルーチンは Fortran ソースファイルに必ず存在しなければなりません。いずれかが欠けていると、ビルド時にリンクエラーになります。
 
-- すべてのサブルーチンには引数として `integer :: caller(2)` が渡されます。caller は ALPS の機能を呼び出すために内部的に使用される変数です。そのため、caller の値を書き換えないでください。caller の値を変更した場合、動作は保証されません。
+必須サブルーチンはすべて `caller` を引数として受け取ります。これは ALPS Fortran が内部で ALPS の機能を呼び出すために使用する整数配列です。**`caller` の値を変更しないでください。** 値を変更すると未定義の動作になります。
 
-- 各サブルーチンで `alps/fortran/alps_fortran.h` を include してください。このファイルは、Fortran コードから ALPS の機能を呼び出すときに必要です。
+各サブルーチンは `alps/fortran/alps_fortran.h` を include する必要があります。
 
-したがって、必須サブルーチンについては、サブルーチンのシグネチャの直下に次の 3 行が必要です。
+```fortran
+subroutine alps_init(caller)
+implicit none
+include "alps/fortran/alps_fortran.h"
+integer :: caller(2)
 
-    1:    subroutine alps_init(caller)
-    2:    implicit none
-    3:    include "alps/fortran/alps_fortran.h"
-    4:    integer :: caller(2)
-    5:    
-    6:    ! --- snip --- !
+! --- your code here --- !
+```
+
+---
 
 **`alps_init(caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | caller(2) | in | 内部 ALPS ハンドル——変更しないこと |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-|integer  |  caller(2)  |  in  |  ローカル変数 |
+計算が始まる前に一度だけ呼び出されます。ここで初期化を行います：配列の割り当てとパラメータの読み込みです。
 
-- 説明
-
-このサブルーチンは、計算が実行される前に一度だけ呼び出されます。配列の割り当てなど、プログラムの初期化処理をここで行います。
+---
 
 **`alps_init_observables(caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+`alps_init` の後に一度だけ呼び出されます。ここで可観測量（測定量）を `alps::ObservableSet` に登録します。入力パラメータのセットごとに一度呼び出されます。`alps::ObservableSet` の詳細については [ALPS ドキュメント](https://alps.comp-phys.org)を参照してください。
 
-- 説明
-
-このサブルーチンは、`alps_init` が呼び出された後に一度だけ呼び出されます。ここで `alps::ObservableSet` を初期化します。このサブルーチンは、1 つの入力パラメータにつき一度呼び出されます。なお、`alps::ObservableSet` の詳細については ALPS のホームページを参照してください。
+---
 
 **`alps_run(caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+計算のコアロジックを含みます。`alps_progress` が 1.0 以上の値を返すまで、ALPS はこのサブルーチンを繰り返し呼び出します。ループは ALPS が管理するため、**`alps_run` の内部で外側のループを書かないでください**。スレッドレベル並列で実行する場合、このサブルーチンは複数のスレッドで同時に実行されるため、スレッドセーフでなければなりません。
 
-- 説明
-
-このサブルーチンには計算ロジックを実装します。alps_progress が 1.0 以上の値を返すまで、このサブルーチンは ALPS から繰り返し呼び出されます。そのため、このサブルーチン内でループ構造を記述する必要はありません。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作します。したがって、スレッドレベル並列で使用する場合は、スレッドセーフな実装を行う必要があります。
+---
 
 **`alps_progress(prgrs, caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| real\*8  | prgrs    | out | 進捗指標（0.0 ≤ prgrs；prgrs ≥ 1.0 で計算終了） |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| real\*8  |  prgrs  |  out  |  プログラムの進捗状態(0.0 ≦ prgrs) |
-| integer  |  caller(2)  |  in   | ローカル変数 |
+`alps_run` を呼び出すたびに、その後で ALPS から呼び出されます。`prgrs < 1.0` の間、ALPS は `alps_run` を呼び出し続けます。`prgrs ≥ 1.0` になると、ALPS は計算が完了したと判断して停止します。スレッドレベル並列で実行する場合はスレッドセーフでなければなりません。
 
-- 説明
-
-このサブルーチンは `alps_run` の後に ALPS によって呼び出され、プログラムの進捗状況を ALPS に返します。prgrs の値が 1.0 未満の間、ALPS は `alps_run` を繰り返し呼び出します。`prgrs` に 1.0 以上の値が代入されると、ALPS は計算が完了したと判断し、プログラムを終了します。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作するため、スレッドレベル並列で使用する場合はスレッドセーフな実装を行う必要があります。
+---
 
 **`alps_is_thermalized(thrmlz, caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | thrmlz   | out | 熱化フラグ：0 = 未熱化、1 = 熱化済み |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| real\*8  |  thrmlz   | out   | 熱平衡化の終了フラグ(0:未完了 / 1:完了) |
-| integer  |  caller(2) |   in  |  ローカル変数 |
+各 `alps_run` の後に ALPS から呼び出されます。`thrmlz = 0` の間、ALPS は測定結果を保存しません（系はまだ熱化中です）。`thrmlz = 1` になると、ALPS は結果の保存を開始します。スレッドレベル並列で実行する場合はスレッドセーフでなければなりません。
 
-- 説明
-
-このサブルーチンは alps_run の後に ALPS によって呼び出され、熱平衡化が未完了か完了かを返します。thrmlz の値が 0 のとき、プログラムは計算がまだ熱平衡化中であると判断し、計算結果データを保存しません。一方、値が 1 のとき、プログラムは熱平衡化が完了したと判断し、計算結果の保存を開始します。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作するため、スレッドレベル並列で使用する場合はスレッドセーフな実装を行う必要があります。
+---
 
 **`alps_finalize(caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+`alps_progress` が 1.0 以上の値を返した後、一度だけ呼び出されます。ここでクリーンアップを行います：配列の解放やその他のリソースの解放です。
 
-- 説明
-
-このサブルーチンは、計算完了後（alps_progress が 1.0 以上の値を返した後）に一度だけ呼び出されます。割り当てたメモリの解放など、終了処理をここで行います。
+---
 
 **`alps_save(caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in   | ローカル変数 |
+各 `alps_run` の後に ALPS から呼び出されます。`alps_dump` を使ってチェックポイントデータをリスタートファイルに書き込みます。スレッドレベル並列で実行する場合はスレッドセーフでなければなりません。
 
-- 説明
-
-このサブルーチンは `alps_run` の後に ALPS から呼び出されます。ALPS の機能を使ってリスタートファイルを保存します。また、スレッドレベル並列で実行する場合、このサブルーチンはマルチスレッドで動作するため、スレッドレベル並列で使用する場合はスレッドセーフな実装を行う必要があります。
+---
 
 **`alps_load(caller)`**
 
-- 引数
+| **型** | **名前** | **入出力** | **意味** |
+| :------- | :------- | :------ | :---------- |
+| integer  | caller(2) | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+プログラムがリスタートするときに一度だけ呼び出されます。`alps_restore` を使ってリスタートファイルからチェックポイントデータを読み込みます。
 
-- 説明
-
-このサブルーチンは、プログラムがリスタートするときに一度だけ呼び出されます。ALPS の機能を使って、保存されたリスタートファイルを読み込みます。
+---
 
 #### ALPS Fortran が提供するサブルーチン
 
-ユーザープログラムから ALPS の機能を呼び出すときは、ALPS Fortran が提供するサブルーチンを呼び出します。これらのサブルーチンは引数として `integer :: caller(2)` を必要とします。caller は ALPS Fortran から渡されるローカル変数であり、(2.2.3.1) の必須サブルーチンの引数として渡された変数を、そのまま提供サブルーチンに渡す必要があります。
+あなたの Fortran プログラムから ALPS の機能を呼び出すには、ALPS Fortran が提供するサブルーチンを使用します。それぞれ `caller(2)` を引数として受け取ります。外側の必須サブルーチンが受け取った `caller` 変数をそのまま渡してください。
+
+以下の表で参照するデータ型定数は `alps_fortran.h` で定義されています：`ALPS_CHAR`（文字列。例えば [Integration-02](../alpsize02) の `WORLD` のような文字列型パラメータを読み込む場合）、`ALPS_INT`、`ALPS_LONG`、`ALPS_REAL`、`ALPS_DOUBLE_PRECISION` です。
+
+---
 
 **`alps_get_parameter(data, name, type, caller)`**
 
-- 引数
+| **型**  | **名前**   | **入出力** | **意味** |
+| :-------- | :--------- | :------ | :---------- |
+| —         | data       | out | パラメータの値を受け取る変数 |
+| character | name(\*)   | in  | パラメータ名 |
+| integer   | type       | in  | データ型定数（`alps_fortran.h` で定義） |
+| integer   | caller(2)  | in  | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data  |  out  |   値の格納先 |
-| character   | name(\*)  |  in  |  取り出すパラメータ名 |
-| integer  |  type  |  in  |  データ型 |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+指定した名前のパラメータを ALPS パラメータファイルから読み込み、`data` に格納します。通常は `alps_init` の中で呼び出します。利用可能な型定数は `alps_fortran.h` で定義されています。
 
-- 説明
-
-名前を指定して、ALPS からパラメータを受け取ります。パラメータ名、型、要素数はそれぞれ **name**、**type**、count で指定します。このサブルーチンは主に `alps_init` で配列や変数を初期化するために使用します。なお、type に指定できる値は `alps_fortran.h` で定義されています。
+---
 
 **`alps_parameter_defined(res, name, caller)`**
 
-- 引数
+| **型**  | **名前**   | **入出力** | **意味** |
+| :-------- | :--------- | :------ | :---------- |
+| integer   | res        | out | パラメータが定義されていれば 1、なければ 0 |
+| character | name(\*)   | in  | パラメータ名 |
+| integer   | caller(2)  | in  | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  res   | out  |  パラメータ定義の有無(1:定義なし / 0:定義あり) |
-| character  |  name(\*)  |  in  |  パラメータ名 |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+指定した名前のパラメータがパラメータファイル内に存在するかどうかを返します。通常は `alps_init` でオプションパラメータを扱う際に使用します。
 
-- 説明
-
-**name** で指定したパラメータが、パラメータファイルで定義されているかどうかを返します。定義されている場合は res に *1* が代入され、定義されていない場合は *0* が代入されます。このサブルーチンは主に `alps_init` で配列や変数を初期化するために使用します。
+---
 
 **`alps_init_observable(count, type, name, caller)`**
 
-- 引数
+| **型**  | **名前**   | **入出力** | **意味** |
+| :-------- | :--------- | :------ | :---------- |
+| integer   | count      | in | その可観測量の要素数 |
+| integer   | type       | in | データ型定数 |
+| character | name(\*)   | in | 登録する可観測量の名前 |
+| integer   | caller(2)  | in | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| integer  |  count  |  in   | 格納する計算結果の要素数 |
-| integer  |  type  |  in  |  データ型 |
-| character  |  name(\*)  |  in  |  格納する Observable の名前 |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+`alps_init_observables` の中で、名前付きの可観測量を `alps::ObservableSet` に登録します。可観測量の型は `type` と `count` によって次のように決まります。
 
-- 説明
+| **type** | **count** | **Observable の型** |
+| :------- | :-------- | :------------------ |
+| ALPS_INT                | 1   | IntObservable |
+| ALPS_INT                | > 1 | IntVectorObservable |
+| ALPS_REAL               | 1   | RealObservable |
+| ALPS_REAL               | > 1 | RealVectorObservable |
+| ALPS_DOUBLE_PRECISION   | 1   | RealObservable |
+| ALPS_DOUBLE_PRECISION   | > 1 | RealVectorObservable |
 
-このサブルーチンは、`alps_init_observable` で指定した Observable の名前を `alps::ObservableSet` に登録するために使用します。Observable の型は **type** と **count** によって次のように決まります。
-
-| **type** | **count** | **Observable** |
-| :------- | :-------- | :------------- |
-| ALPS_INT  |  1   | IntObservable |
-| ALPS_INT  |  1\<  |  in |
-| ALPS_REAL  |  1  |  RealObservable |
-| ALPS_REAL  |  1\<  |  RealVectorObservable |
-| ALPS_DOUBLE_PRECISION  |  1   | RealObservable |
-| ALPS_DOUBLE_PRECISION  |  1\<  |  RealVectorObservable |
-
+---
 
 **`alps_accumulate_observable(data, count, type, name, caller)`**
 
-- 引数
+| **型**  | **名前**   | **入出力** | **意味** |
+| :-------- | :--------- | :------ | :---------- |
+| —         | data       | in  | 記録する値 |
+| integer   | count      | in  | 要素数 |
+| integer   | type       | in  | データ型定数 |
+| character | name(\*)   | in  | 格納先の可観測量の名前 |
+| integer   | caller(2)  | in  | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| -   | data  |  in   | 格納する計算結果 |
-| integer  |  count   | in  |  格納する計算結果の要素数 |
-| integer  |  type  |  in  |  データ型 |
-| character  |  name(\*)  |  in   | 格納する Observable の名前 |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+測定結果を名前付きの可観測量に記録します。`alps_run` の中で呼び出します。`count`、`type`、`name` は `alps_init_observable` で指定したものと一致していなければなりません。
 
-- 説明
-
-指定した名前の Observable に結果データを保存します。このサブルーチンは `alps_run` で計算結果を格納するために使用します。count / name / type は `init_observable` で指定したものと一致している必要があります。
+---
 
 **`alps_dump(data, count, type, caller)`**
 
-- 引数
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data  |  in  |  格納する値 |
-| integer  |  count  |  in  |  格納する値の要素数 |
-| integer  |  type  |  in  |  データ型 |
-| integer  |  call(2)  |  in  |  ローカル変数 |
+| **型**  | **名前**  | **入出力** | **意味** |
+| :-------- | :-------- | :------ | :---------- |
+| —         | data      | in  | 保存するデータ |
+| integer   | count     | in  | 要素数 |
+| integer   | type      | in  | データ型定数 |
+| integer   | caller(2) | in  | 内部 ALPS ハンドル |
 
-- 説明
+データをリスタートファイルに書き込みます。`alps_save` の中で呼び出します。`alps_dump` で保存したデータは、`alps_restore` で同じ順序で復元しなければなりません。
 
-このサブルーチンは `alps_save` でリスタートファイルを保存するために使用します。`alps_dump` を使って保存した中断データは、リスタート時に使用されます。
+---
 
 **`alps_restore(data, count, type, caller)`**
 
-- 引数
+| **型**  | **名前**  | **入出力** | **意味** |
+| :-------- | :-------- | :------ | :---------- |
+| —         | data      | out | 読み込んだデータの格納先 |
+| integer   | count     | in  | 要素数 |
+| integer   | type      | in  | データ型定数 |
+| integer   | caller(2) | in  | 内部 ALPS ハンドル |
 
-| **型**  |  **名前**  |  **入出力**  |  **意味** |
-| :-------  |  :-------  |  :------  |  :---------- |
-| -  |  data   | out  |  読み込んだ値の格納先 |
-| integer  |  count  |  in  |  読み込む値の要素数 |
-| integer  |  type  |  in  |  データ型 |
-| integer  |  caller(2)  |  in  |  ローカル変数 |
+リスタートファイルからデータを読み込みます。`alps_load` の中で呼び出します。データは `alps_dump` で保存したときと同じ順序で復元しなければなりません。
 
-- 説明
+---
 
-このサブルーチンは `alps_load` でリスタートファイルを読み込むために使用します。リスタートファイルのデータは `alps_dump` で保存した順序で保存されています。したがって、`alps_restore` で読み込むときは、保存したときと同じ順序でデータを取り出してください。
+### CMakeLists.txt の編集
 
-### 設定ファイルの編集
+ユーザープログラムは ALPS 自体と同様に CMake でビルドします——ALPS の CMake 統合の仕組みについての一般的な説明は [Integration-01](../alpsize01) を参照してください。以下は、[Integration-00](../alpsize00) と [Integration-02](../alpsize02) を通して使われてきたのと同じパターンに `Fortran` サポートを加えた `CMakeLists.txt` のサンプルです。`myproject`、`main.C`、`myprogram_impl.f90` を、あなたのプロジェクトの実際の名前に置き換えてください。
 
-ユーザープログラムは ALPS と同様に CMake を使ってビルドします。以下は、CMake でユーザープログラムをビルドするための設定ファイル(`CMakeLists.txt`)の例です。
+```cmake
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+project(myproject NONE)
 
-    1:    # CMakeList.txt
-    2:    # editing configuration file for CMake
-    3:    
-    4:    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
-    5:    
-    6:    #Project name setting
-    7:    project(**hello_sample**)
-    8:    
-    9:    # find ALPS Fortran setting
-    10:    find_package(ALPS REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
-    11:    message(STATUS "ALPS version: ${ALPS_VERSION}")
-    12:    include(${ALPS_USE_FILE})
-    13:    
-    14:    # Source code required to create and run file name
-    15:    add_executable(**hello main.C hello_impl.f**)
-    16:    # External library file required to generate execution
-    17:    target_link_libraries(**hello** ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
-    
-上記の例で変更が必要なのは、\*\*...\*\* の内側の文字です。
+# find ALPS Library
+find_package(ALPS REQUIRED PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME} NO_SYSTEM_ENVIRONMENT_PATH)
+message(STATUS "Found ALPS: ${ALPS_ROOT_DIR} (revision: ${ALPS_VERSION})")
+include(${ALPS_USE_FILE})
 
-## 既存プログラムコードの移植
+# enable C, C++, and Fortran compilers
+enable_language(C CXX Fortran)
 
-このセクションでは、以下に示すイジングモデルのプログラムを例に、既存の Fortran プログラムを ALPS 上で動作させる手順を説明します。
+# rule for generating the program
+add_executable(myprogram main.C myprogram_impl.f90)
+target_link_libraries(myprogram ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```
 
-### 移植の準備　
+{{< callout type="warning" >}}
+`enable_language(... Fortran)` と `PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME}` を忘れないでください——これらがないと、CMake は Fortran コンパイラをまったく有効化しないか、（`NO_SYSTEM_ENVIRONMENT_PATH` に対応する `PATHS` 引数がないと）ALPS を見つけられない可能性があります。ここの各行がなぜ重要なのかについては、[Integration-01](../alpsize01#cmake-の実行) を参照してください。
+{{< /callout >}}
 
-このセクションでは、`alps_fortran.tar.gz` を展開して生成される tutorial ディレクトリ内のファイルを使用します。移植作業の準備として、tutorial ディレクトリ内の次のファイルを作業ディレクトリにコピーしてください。
+## 既存の Fortran プログラムを移植する
 
-- `ising_original.f`：元のソースコード
-- `template.f90`：ALPS Fortran プログラムのテンプレートソースコード
-- `main.C`：プログラムのエントリーポイント
-- `CMakeList.txt`：`CMakeList.txt` のテンプレート
+このセクションでは、Ising モデルのプログラム `ising_original.f` を ALPS Fortran に移植する手順を説明します。ここで使うファイルはすべて、[ALPS リポジトリ](https://github.com/ALPSim/ALPS)内の `tutorials/alpsize-11-fortran-ising` ディレクトリの一部です——[Integration-00](../alpsize00) の C++ チュートリアルが由来する、同じリポジトリです。
 
-ALPS プログラムの実装に必要なすべてのサブルーチンが `template.f90` に定義されています。そのため、新しいプログラムを開発する際は `template.f90` をもとに開発を進めることができます。
+### 移植の準備
 
-元のコードのおおまかな構造は次のとおりです。
+以下のファイルをチュートリアルディレクトリからあなたの作業ディレクトリにコピーしてください。
 
-|      | **処理内容** |
-| :--- | :---------------------- |
-| 4-7  |  変数の宣言と初期化 |
-| 8-23  |  配列要素の初期化 |
-| 24-47 |   メインループ |
-| 25-34  |  計算 |
-| 36   | 熱平衡化チェック |
-| 37-46  |  計算結果の保存 |
-| 48-58  |  結果の出力 |
+- `ising_original.f` — 元のソースコード
+- `template.f90` — ALPS Fortran プログラムのテンプレート
+- `ising.C` — エントリーポイント（[Integration-02](../alpsize02) の `hello.C` エントリーポイントと構造は同一で、Worker/Evaluator 名として `"ising"` を使っているだけです）
+- `CMakeLists.txt` — ビルド設定のテンプレート
 
+`template.f90` には、必須サブルーチンすべてのスタブ定義が含まれています。新しいプログラムを開発する際は、サブルーチンをゼロから書くのではなく `template.f90` を出発点にしてください。
+
+元のコードの構造は次のとおりです。
+
+| 行番号   | 処理 |
+| :------ | :--------- |
+| 5–9     | 変数の宣言と初期化 |
+| 10–25   | 配列要素の初期化 |
+| 26–49   | メインループ |
+| 27–36   | 計算 |
+| 38      | 熱化チェック |
+| 39–48   | 結果の保存 |
+| 50–60   | 結果の出力 |
 
 ### Fortran コードの移植
 
-Fortran コードの移植では、`ising_original.f` の各ブロックで行われている処理をサブルーチンに割り当てます。このセクションでは、移植後のコードのサンプルとして `tutorial/alps_ising.f90` の例を説明します。
+`ising_original.f` の各ブロックは、対応する ALPS Fortran サブルーチンに割り当てられます。`ising_impl.f90` が移植を完了させたバージョンです。
 
 #### 変数の宣言
 
-`ising_original.f` で宣言されている各変数は、移植時に ALPS モジュールにまとめられます。ALPS へ移植するには処理単位ごとにサブルーチンが必要になるため、各サブルーチンから変数へアクセスできるように変更します。
+`ising_original.f` で宣言されている変数は、複数のサブルーチンからアクセスできるように、ALPS Fortran モジュールに移す必要があります。
 
-- 移植前
+- 移植前：
 
-        4:    DIMENSION IS(20,20),IP(20),IM(20),P(-4:4),A(4)
-        5:    C PARAMETERS
-        6:          DATA TEMP/2.5/, L/10/, MCS/1000/, INT/1000/
-        7:          DATA IX/1234567/, V0/.465661288D-9/
+  ```fortran
+  6    DIMENSION IS(20,20),IP(20),IM(20),P(-4:4),A(4)
+  7    C PARAMETERS
+  8          DATA TEMP/2.5/, L/10/, MCS/1000/, INT/1000/
+  9          DATA IX/1234567/, V0/.465661288D-9/
+  ```
 
+- 移植後：
 
-- 移植後
+  ```fortran
+  module ising_mod
+    implicit none
+    real, parameter :: V0 = .465661288D-9
 
-        1:    module ising_mod
-        2:      implicit none
-        3:      real, parameter :: V0 = .465661288D-9
-        4:
-        5:      integer, allocatable, dimension(:) :: IP, IM
-        6:      integer, allocatable, dimension(:,:) :: IS
-        7:      real*8, allocatable, dimension(:) :: P
-        8:      integer :: K, MCS, INT, L, IX
-        9:      real :: TEMP
-        10:    end module ising_mod
-        11:
+    integer, allocatable, dimension(:) :: IP, IM
+    integer, allocatable, dimension(:,:) :: IS
+    real*8, allocatable, dimension(:) :: P
+    integer :: K, MCS, INT, L, IX
+    real :: TEMP
+  end module ising_mod
+  ```
 
-IP, IM, IS, P 配列は `alps_init` で初期化されるため、移植後はここでサイズを指定しません。また、元の配列 A は結果を格納するためのものですが、移植後はこの配列に ALPS の仕組みを使用します。そのため、移植後のコードでは配列 A は不要です。また、移植後の各変数の値はパラメータファイルから取得します。さらに、K は移植後に繰り返し回数を数えるための変数です。移植後の熱平衡化チェックは、ループを使わずに K の値で制御と繰り返しを行う役割を担います。
-**このセクションでは MPI による並列実行を想定しているため、スレッドセーフについては考慮していません。**
+`IP`、`IM`、`IS`、`P` は `alps_init` で確保されるため、ここではサイズを固定していません。結果の累積に使われていた配列 `A` は ALPS の可観測量に置き換えられ、不要になります。各変数の値は実行時にパラメータファイルから読み込まれるようになります。反復回数を数えるために `K` が追加されました。移植後の熱化チェックは、`GOTO` を使ったループの代わりに `K` の値を監視することで行われます。（`!$omp threadprivate` の行は、後の[マルチスレッド対応](#マルチスレッド対応)で追加されます——チュートリアルで実際に提供されている `ising_impl.f90` は、完成した、スレッドセーフなプログラムを示しているため、すでにこの行を含んでいます。）
 
-#### 初期化処理
+**注：この例の MPI 版はスレッドセーフである必要がないため、ここではスレッドセーフ性を考慮していません。**
 
-元のコードの初期化処理では配列の各要素を初期化する場合がありますが、移植後のコードでは初期化処理をサブルーチン `alps_init` で行います。まず `alps_get_parameter` を使って配列変数を初期化し、次に配列要素を初期化します。また、移植後は結果を格納する配列を用意せず、結果を保存するための Observable を `alps_init_observable` サブルーチンで用意します。なお、`alps_init` と `alps_init_observable` は ALPS によって自動的に呼び出されるため、移植後のコードで呼び出す必要はありません。
+#### 初期化
 
-- 移植前
+元のコードの初期化ブロック（配列の設定）は、移植後の `alps_init` に対応します。パラメータは `alps_get_parameter` によってパラメータファイルから読み込まれ、結果を格納するための可観測量は `alps_init_observables` の中で登録されます。これらのサブルーチンは ALPS によって自動的に呼び出されます——自分で呼び出す必要はありません。
 
-        8:    C TABLES
-        9:          DO 10 I=-4,4
-        10:          W=EXP(FLOAT(I)/TEMP)
-        11:     10   P(I)=W/(W+1/W)
-        12:          DO 11 I=1,L
-        13:          IP(I)=I+1
-        14:     11   IM(I)=I-1
-        15:          IP(L)=1
-        16:          IM(1)=L
-        17:    C INITIAL CONFIGURATION
-        18:          DO 20 I=1,L
-        19:          DO 20 J=1,L
-        20:     20   IS(I,J)=1
-        21:    C ACCUMULATION DATA RESET
-        22:          DO 21 I=1,4
-        23:     21   A(I)=0.0
+- 移植前：
 
-- 移植後(`alps_init`)
+  ```fortran
+  10   C TABLES
+  11         DO 10 I=-4,4
+  12         W=EXP(FLOAT(I)/TEMP)
+  13    10   P(I)=W/(W+1/W)
+  14         DO 11 I=1,L
+  15         IP(I)=I+1
+  16    11   IM(I)=I-1
+  17         IP(L)=1
+  18         IM(1)=L
+  19   C INITIAL CONFIGURATION
+  20         DO 20 I=1,L
+  21         DO 20 J=1,L
+  22    20   IS(I,J)=1
+  23   C ACCUMULATION DATA RESET
+  24         DO 21 I=1,4
+  25    21   A(I)=0.0
+  ```
 
-        13:    subroutine alps_init(caller)
-        14:      use ising_mod
-        15:      implicit none
-        16:      include "alps/fortran/alps_fortran.h"
-        17:      integer :: caller(2)
-        18:      integer :: i, j
-        19:      real*8 :: W
-        20:
-        21:      call alps_get_parameter(TEMP, "TEMPERATURE", ALPS_REAL, caller)
-        22:      call alps_get_parameter(L, "L", ALPS_INT, caller)
-        23:      call alps_get_parameter(MCS, "MCS", ALPS_INT, caller)
-        24:      call alps_get_parameter(INT, "INT", ALPS_INT, caller)
-        25:
-        26:      allocate( IP(L) )
-        27:      allocate( IM(L) )
-        28:      allocate( P(-4:4) )
-        29:      allocate( IS(L, L) )
-        30:
-        31:      K = 0
-        32:      IX = 1234567
-        33:
-        34:      do i = -4, 4
-        35:         W = exp(float(i)/TEMP)
-        36:         P(i) = W / (W + 1/W)
-        37:      end do
-        38:
-        39:      do i = 1, L
-        40:         IP(i) = i + 1
-        41:         IM(i) = i - 1
-        42:      end do
-        43:
-        44:      do i = 1, L
-        45:         do j = 1, L
-        46:            IS(i, j) = 1
-        47:         end do
-        48:      end do
-        49:
-        50:      IP(L) = 1
-        51:      IM(1) = L
-        52:
-        53:      return
-        54:    end subroutine alps_init
+- 移植後（`alps_init`）：
 
-上記のコードでは、21〜24 行目で `alps_get_parameter` を呼び出し、ALPS を通じてパラメータファイルの内容を取得しています。また、34〜51 行目の処理は元のコードと同じです。
+  ```fortran
+  subroutine alps_init(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    integer :: i, j
+    real*8 :: W
 
-- 移植後(`alps_init_observables`)
+    call alps_get_parameter(TEMP, "TEMPERATURE", ALPS_REAL, caller)
+    call alps_get_parameter(L, "L", ALPS_INT, caller)
+    call alps_get_parameter(MCS, "MCS", ALPS_INT, caller)
+    call alps_get_parameter(INT, "INT", ALPS_INT, caller)
 
-        92:    subroutine alps_init_observables(caller)
-        93:      implicit none
-        94:      include "alps/fortran/alps_fortran.h"
-        95:      integer :: caller(2)
-        96:
-        97:      call alps_init_observable(1, ALPS_REAL, "Energy", caller)
-        98:      call alps_init_observable(1, ALPS_REAL, "Magnetization", caller)
-        99:
-        100:      return
-        101:    end subroutine alps_init_observables
-    
-移植後は、計算結果を格納するバッファとして "Magnetization" と "Energy" という名前の Observable が用意されます。元のコードでは Magnetization と Energy のそれぞれについて合計と二乗和を計算していましたが、移植後はこれらの計算が Observable によって自動的に行われます。
+    allocate( IP(L) )
+    allocate( IM(L) )
+    allocate( P(-4:4) )
+    allocate( IS(L, L) )
+
+    K = 0
+    IX = 1234567
+
+    do i = -4, 4
+       W = exp(float(i)/TEMP)
+       P(i) = W / (W + 1/W)
+    end do
+
+    do i = 1, L
+       IP(i) = i + 1
+       IM(i) = i - 1
+    end do
+
+    do i = 1, L
+       do j = 1, L
+          IS(i, j) = 1
+       end do
+    end do
+
+    IP(L) = 1
+    IM(1) = L
+
+    return
+  end subroutine alps_init
+  ```
+
+冒頭にある `alps_get_parameter` の呼び出しは、以前はハードコードされた `DATA` 文だった値を、代わりに ALPS パラメータファイルから読み込みます。それ以降の配列設定は元のコードとまったく同じです。
+
+{{< callout type="info" >}}
+`ising_impl.f90` に実際に含まれている `alps_init` は、`omp_get_thread_num()` も呼び出し、スレッド ID と読み込んだばかりのパラメータを出力します（例：`----- alps_init( 2 ) -----`）。これは、下記の[マルチスレッド対応](#マルチスレッド対応)まで進んだ際に、クローンが本当に別々のスレッドで動いていることを確認するための、ちょっとした診断用の仕掛けです。ここでは分かりやすさのために省略していますが、あなた自身のコードに加えても問題ありません。
+{{< /callout >}}
+
+- 移植後（`alps_init_observables`）：
+
+  ```fortran
+  subroutine alps_init_observables(caller)
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+
+    call alps_init_observable(1, ALPS_REAL, "Energy", caller)
+    call alps_init_observable(1, ALPS_REAL, "Magnetization", caller)
+
+    return
+  end subroutine alps_init_observables
+  ```
+
+`"Energy"` と `"Magnetization"` という名前の可観測量が、結果を格納するバッファとして登録されます。元のコードでは、合計と二乗和を配列 `A` に手動で累積していましたが、移植後はこれを `alps_accumulate_observable` が自動的に行います。
 
 #### 計算と結果の保存
 
-元のコードでは do ループによる繰り返し（元のコードの 25 行目）がありましたが、移植後は do ループを使わずに `alps_progress` サブルーチンと `alps_run` を使用します。
+元のコードは反復に `DO` ループを使っていました。移植後は、`alps_run` が呼び出されるたびに 1 回の反復を実行します——ALPS は `alps_progress` が 1.0 以上を返すまで `alps_run` を繰り返し呼び出すことで、このループを管理します。
 
-- 移植前
+- 移植前：
 
-        24:    C SIMULATION
-        25:          DO 30 K=1,MCS+INT
-        26:          KIJ=0
-        27:          DO 31 I=1,L
-        28:          DO 31 J=1,L
-        29:          M=IS(IP(I),J)+IS(I,IP(J))+IS(IM(I),J)+IS(I,IM(J))
-        30:          KIJ=KIJ+1
-        31:          IS(I,J)=-1
-        32:          IX=IAND(IX*5*11,2147483647)
-        33:          IF(P(M).GT.V0*IX) IS(I,J)=1
-        34:     31   CONTINUE
-        35:    C DATA
-        36:          IF(K.LE.INT) GOTO 30
-        37:          EN=0
-        38:          MG=0
-        39:          DO 40 I=1,L
-        40:          DO 40 J=1,L
-        41:          EN=EN+IS(I,J)*(IS(IP(I),J)+IS(I,IP(J)))
-        42:     40   MG=MG+IS(I,J)
-        43:          A(1)=A(1)+EN
-        44:          A(2)=A(2)+EN**2
-        45:          A(3)=A(3)+MG
-        46:          A(4)=A(4)+MG**2
-        47:     30   CONTINUE
+  ```fortran
+  26   C SIMULATION
+  27         DO 30 K=1,MCS+INT
+  28         KIJ=0
+  29         DO 31 I=1,L
+  30         DO 31 J=1,L
+  31         M=IS(IP(I),J)+IS(I,IP(J))+IS(IM(I),J)+IS(I,IM(J))
+  32         KIJ=KIJ+1
+  33         IS(I,J)=-1
+  34         IX=IAND(IX*5*11,2147483647)
+  35         IF(P(M).GT.V0*IX) IS(I,J)=1
+  36    31   CONTINUE
+  37   C DATA
+  38         IF(K.LE.INT) GOTO 30
+  39         EN=0
+  40         MG=0
+  41         DO 40 I=1,L
+  42         DO 40 J=1,L
+  43         EN=EN+IS(I,J)*(IS(IP(I),J)+IS(I,IP(J)))
+  44    40   MG=MG+IS(I,J)
+  45         A(1)=A(1)+EN
+  46         A(2)=A(2)+EN**2
+  47         A(3)=A(3)+MG
+  48         A(4)=A(4)+MG**2
+  49    30   CONTINUE
+  ```
 
-- 移植後(`alps_run`)
+- 移植後（`alps_run`）：
 
-        56:    ! subroutine alps_run
-        57:    subroutine alps_run(caller)
-        58:      use ising_mod
-        59:      implicit none
-        60:      include "alps/fortran/alps_fortran.h"
-        61:      integer :: caller(2)
-        62:      integer :: i, j, M
-        63:      real*8 :: EN, MG
-        64:
-        65:      do i = 1, L
-        66:         do j = 1, L
-        67:            M = IS(IP(i), j) + IS(i, IP(j)) + IS(IM(i), j) + IS(i, IM(j))
-        68:            IS(i, j) = -1
-        69:
-        70:            IX = IAND(IX * 5 * 11, 2147483647)
-        71:            if(P(M).gt.V0*IX) IS(i, j) = 1
-        72:         end do
-        73:      end do
-        74:
-        75:      EN = 0.0D0
-        76:      MG = 0.0D0
-        77:      do i = 1, L
-        78:         do j = 1, L
-        79:            EN = EN + IS(i, j) * (IS(IP(i), j) + IS(i, IP(j)))
-        80:            MG = MG + IS(i, j)
-        81:         end do
-        82:      end do
-        83:
-        84:      call alps_accumulate_observable(EN, 1, &
-                ALPS_DOUBLE_PRECISION, "Energy", caller)
-        85:      call alps_accumulate_observable(MG, 1, &
-                                                                                                                                                                                                                                                                                                                                            ALPS_DOUBLE_PRECISION, "Magnetization", caller)
-        86:      K = K + 1
-        87:
-        88:      return
-        89:    end subroutine alps_run
+  ```fortran
+  subroutine alps_run(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    integer :: i, j, M
+    real*8 :: EN, MG
 
-計算処理そのもの（65〜82 行目）は元のコードと同じです。移植後は alps_run が自動的に繰り返し呼び出されるため、元のコードの 25 行目のループは記述しません。代わりに、86 行目で繰り返し回数を数えます。また、ALPS の機能（84 行目と 85 行目）を使って計算結果を保存します。元のコード（43〜46 行目）では積算や二乗などの計算を行っていましたが、移植後はこれらが `alps_accumulate_observable` によって自動的に行われます。
+    do i = 1, L
+       do j = 1, L
+          M = IS(IP(i), j) + IS(i, IP(j)) + IS(IM(i), j) + IS(i, IM(j))
+          IS(i, j) = -1
 
-- 移植後(alps_progress)
+          IX = IAND(IX * 5 * 11, 2147483647)
+          if(P(M).gt.V0*IX) IS(i, j) = 1
+       end do
+    end do
 
-        103:    ! alps_progerss
-        104:    subroutine alps_progress(prgrs, caller)
-        105:      use ising_mod
-        106:      implicit none
-        107:      include "alps/fortran/alps_fortran.h"
-        108:      integer :: caller(2)
-        109:      real*8 :: prgrs
-        110:
-        111:      prgrs = K / (INT + MCS)
-        112:
-        113:    end subroutine alps_progress
-    
-移植後は、alps_progress で繰り返し計算の制御を行います。prgrs の値が 1 以上になると `alps_run` は呼び出されなくなります。そのため、実行回数のカウンタである (K) の値を監視し、prgrs の値が 1 以上になるように実装します。
+    EN = 0.0D0
+    MG = 0.0D0
+    do i = 1, L
+       do j = 1, L
+          EN = EN + IS(i, j) * (IS(IP(i), j) + IS(i, IP(j)))
+          MG = MG + IS(i, j)
+       end do
+    end do
 
-#### 熱平衡化チェック
+    call alps_accumulate_observable(EN, 1, &
+         ALPS_DOUBLE_PRECISION, "Energy", caller)
+    call alps_accumulate_observable(MG, 1, &
+         ALPS_DOUBLE_PRECISION, "Magnetization", caller)
+    K = K + 1
 
-元のコードでは、熱平衡化チェックはメインループ内（36 行目）で実行されていました。しかし移植後は、サブルーチン `alps_is_thermalized` で実行します。
+    return
+  end subroutine alps_run
+  ```
 
-- 移植前
+計算ループそのものは元のコードと同一です。外側の `DO 30 K=1,MCS+INT` ループはなくなり——代わりに ALPS が `alps_run` を繰り返し呼び出し、末尾の `K = K + 1` が呼び出された回数を記録します。`alps_accumulate_observable` の呼び出しが結果を直接記録します。元のコードで `A(1)`–`A(4)` に手動で行っていた合計と二乗の計算は、可観測量によって自動的に行われます。
 
-        36:          IF(K.LE.INT) GOTO 30
+- 移植後（`alps_progress`）：
 
-- 移植後(`alps_is_thermalized`)：
+  ```fortran
+  subroutine alps_progress(prgrs, caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    real*8 :: prgrs
 
-        115:    ! alps_is_thermalized
-        116:    subroutine alps_is_thermalized(thrmlz, caller)
-        117:      use ising_mod
-        118:      implicit none
-        119:      include "alps/fortran/alps_fortran.h"
-        120:      integer :: caller(2)
-        121:      integer :: thrmlz
-        122:
-        123:      if(K >= INT) then
-        124:         thrmlz = 1
-        125:      else
-        126:         thrmlz = 0
-        127:      end if
-        128:
-        129:      return
-        130:    end subroutine alps_is_thermalized
-    
-`alps_progress` と同様に、カウンタ (K) の値から熱平衡化を判定します。熱平衡化が完了したとみなされると、thrmlz の値は 1 になります。
+    prgrs = K / (INT + MCS)
 
-#### 結果の出力
+  end subroutine alps_progress
+  ```
 
-結果の後処理と出力は、ALPS を使用すると自動的に行われます。そのため、計算結果の出力や後処理のコードは不要です。
+`alps_progress` は反復をいつ止めるかを制御します。`prgrs ≥ 1.0`（すなわち `K ≥ INT + MCS`）になると、ALPS は `alps_run` の呼び出しを停止します。
 
-- 移植前
+#### 熱化チェック
 
-        48:    C STATISTICS
-        49:          DO 50 I=1,4
-        50:     50   A(I)=A(I)/MCS
-        51:          C=(A(2)-A(1)**2)/L**2/TEMP**2
-        52:          X=(A(4)-A(3)**2)/L**2/TEMP
-        53:          ENG=A(1)/L**2
-        54:          AMG=A(3)/L**2
-        55:          WRITE(6,100) TEMP,L,ENG,C,AMG,X
-        56:     100  FORMAT(' TEMP=',F10.5,' SIZE=',I5,
-        57:         * /' ENG =',F10.5,' C   =',F10.5,
-        58:         * /' MAG =',F10.5,' X   =',F10.5)
+元のコードでは、熱化チェックはメインループの中に埋め込まれていました。移植後は、独立したサブルーチンになります。
 
-- 移植後：該当コードなし
+- 移植前：
+
+  ```fortran
+  38         IF(K.LE.INT) GOTO 30
+  ```
+
+- 移植後（`alps_is_thermalized`）：
+
+  ```fortran
+  subroutine alps_is_thermalized(thrmlz, caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    integer :: thrmlz
+
+    if(K >= INT) then
+       thrmlz = 1
+    else
+       thrmlz = 0
+    end if
+
+    return
+  end subroutine alps_is_thermalized
+  ```
+
+`alps_progress` と同様に、熱化状態は反復カウンタ `K` から判定されます。`thrmlz = 1` になると、ALPS は測定結果の保存を開始します。
+
+#### 出力と後処理
+
+ALPS を使うと、出力と後処理は自動的に行われます。移植後は、元のプログラムにあった出力コードは不要になります。
+
+- 移植前：
+
+  ```fortran
+  50   C STATISTICS
+  51         DO 50 I=1,4
+  52    50   A(I)=A(I)/MCS
+  53         C=(A(2)-A(1)**2)/L**2/TEMP**2
+  54         X=(A(4)-A(3)**2)/L**2/TEMP
+  55         ENG=A(1)/L**2
+  56         AMG=A(3)/L**2
+  57         WRITE(6,100) TEMP,L,ENG,C,AMG,X
+  58    100  FORMAT(' TEMP=',F10.5,' SIZE=',I5,
+  59        * /' ENG =',F10.5,' C   =',F10.5,
+  60        * /' MAG =',F10.5,' X   =',F10.5)
+  ```
+
+- 移植後：コードは不要です。スケジューラが `Energy` と `Magnetization` の可観測量を自動的に収集し、標準の ALPS 結果ファイルに書き出します——詳しくは下記の[移植したプログラムを実行する](#移植したプログラムを実行する)を参照してください。
 
 #### 終了処理
 
-元のコードでは allocate に対する終了処理は行われていません。しかし移植後は、`alps_init` で allocate した配列を deallocate する必要があります。
+元のコードは静的配列を使っているため、明示的なクリーンアップがありません。移植後は、動的に確保した配列を `alps_finalize` で解放しなければなりません。
 
-- 移植前：該当コードなし
+- 移植前：コードは不要です。
 
-- 移植後(`alps_finalize`)
+- 移植後（`alps_finalize`）：
 
-        160:    ! alps_finalize
-        161:    subroutine alps_finalize(caller)
-        162:      use ising_mod
-        163:      implicit none
-        164:      include "alps/fortran/alps_fortran.h"
-        165:      integer :: caller(2)
-        166:
-        167:      deallocate(IP)
-        168:      deallocate(IM)
-        169:      deallocate(P)
-        170:      deallocate(IS)
-        171:
-        172:      return
-        173:    end subroutine alps_finalize
+  ```fortran
+  subroutine alps_finalize(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
 
-#### リスタート機能
+    deallocate(IP)
+    deallocate(IM)
+    deallocate(P)
+    deallocate(IS)
 
-(`alps_save` / `alps_load`) を実装するだけで、ALPS を使用したときのリスタートファイルの入出力機能によって、プログラムにリスタート機能を追加できます。元のコードにはリスタート機能がないため、以下では ALPS に従ったリスタートファイルの入出力機能の実装例を説明します。
+    return
+  end subroutine alps_finalize
+  ```
 
-- 移植前：該当コードなし
-- 移植後(`alps_save`)
+#### リスタート対応
 
-        132:    ! alps_save
-        133:    subroutine alps_save(caller)
-        134:      use ising_mod
-        135:      implicit none
-        136:      include "alps/fortran/alps_fortran.h"
-        137:      integer caller(2)
-        138:
-        139:      call alps_dump(K, 1, ALPS_INT, caller)
-        140:      call alps_dump(IX, 1, ALPS_INT, caller)
-        141:      call alps_dump(IS, L * L, ALPS_INT, caller)
-        142:
-        143:      return
-        144:    end subroutine alps_save
+`alps_save` と `alps_load` を実装すると、チェックポイント／リスタート機能が追加されます。元のコードにはリスタート対応がありません。以下の例はそれを追加する方法を示しています。
 
-`alps_save` では、リスタートに必要な変数だけを `alps_dump` で書き出します。ここでは、カウンタ (K) と計算データ (IX, IS) を書き出す方法を示します。
+- 移植前：コードは不要です。
 
-- 移植後(`alps_load`)
+- 移植後（`alps_save`）：
 
-        146:    ! alps_load
-        147:    subroutine alps_load(caller)
-        148:      use ising_mod
-        149:      implicit none
-        150:      include "alps/fortran/alps_fortran.h"
-        151:      integer :: caller(2)
-        152:
-        153:      call alps_restore(K, 1, ALPS_INT, caller)
-        154:      call alps_restore(IX, 1, ALPS_INT, caller)
-        155:      call alps_restore(IS, L * L, ALPS_INT, caller)
-        156:
-        157:      return
-        158:    end subroutine alps_load
+  ```fortran
+  subroutine alps_save(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer caller(2)
 
-`alps_load` では、`alps_save` が (`alps_dump`) で書き出した順序で (`alps_restore`) を使って読み込む必要があります。なお、ALPS プログラムをリスタートするとき、`alps_load` が呼び出される前に `alps_init` が呼び出されます。つまり、K, IX, IS などの変数のメモリ割り当てや初期化は `alps_init` で行われるため、`alps_load` 内で初期化などを行う必要はありません。
+    call alps_dump(K, 1, ALPS_INT, caller)
+    call alps_dump(IX, 1, ALPS_INT, caller)
+    call alps_dump(IS, L * L, ALPS_INT, caller)
 
-#### マルチスレッド対応について
+    return
+  end subroutine alps_save
+  ```
 
-ALPS プログラムをマルチスレッドで実行したい場合は、Fortran コードをスレッドセーフに実装する必要があります。このセクションで説明した `tutorial.f90` の場合、2.4.2 で用意するスレッドローカル変数によってマルチスレッドに対応できます。
+計算を再開するために必要な変数（`K`、`IX`、`IS`）だけが保存されます。
 
-- 移植後(マルチスレッド)
+- 移植後（`alps_load`）：
 
-        1:    module ising_mod
-        2:      implicit none
-        3:      real, parameter :: V0 = .465661288D-9
-        4:
-        5:      integer, allocatable, dimension(:) :: IP, IM
-        6:      integer, allocatable, dimension(:,:) :: IS
-        7:      real*8, allocatable, dimension(:) :: P
-        8:      integer :: K, MCS, INT, L, IX
-        9:      real :: TEMP
-        10:    !$omp threadprivate (K, MCS, INT, TEMP, IP, IM, P, IS, IX, L)
-        11:    end module ising_mod
-        12:
+  ```fortran
+  subroutine alps_load(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
 
-### main.C について　
+    call alps_restore(K, 1, ALPS_INT, caller)
+    call alps_restore(IX, 1, ALPS_INT, caller)
+    call alps_restore(IS, L * L, ALPS_INT, caller)
 
-`main.C` ファイルはプログラムのエントリーポイントとなるために必要です。ただし、main 関数の内容を変更する必要はありません。`main.C` の設定は必要に応じて変更してください。2.2.2 を参照してください。
+    return
+  end subroutine alps_load
+  ```
+
+データは保存したときと同じ順序で復元しなければなりません。なお、ALPS プログラムがリスタートするとき、`alps_load` より前に `alps_init` が呼び出されるため、メモリの確保と変数の初期化はいつもどおり `alps_init` で行われます——`alps_load` は保存された値を復元するだけで済みます。
+
+#### マルチスレッド対応
+
+スレッドレベル並列で実行するには、並列サブルーチンからアクセスされるすべてのモジュール変数を `threadprivate` として宣言する必要があります。`ising_mod` に次の行を追加します。
+
+- 移植後（マルチスレッド）：
+
+  ```fortran
+  module ising_mod
+    implicit none
+    real, parameter :: V0 = .465661288D-9
+
+    integer, allocatable, dimension(:) :: IP, IM
+    integer, allocatable, dimension(:,:) :: IS
+    real*8, allocatable, dimension(:) :: P
+    integer :: K, MCS, INT, L, IX
+    real :: TEMP
+    !$omp threadprivate (K, MCS, INT, TEMP, IP, IM, P, IS, IX, L)
+  end module ising_mod
+  ```
+
+これは[変数の宣言](#変数の宣言)で示した `ising_mod` そのものです——チュートリアルで実際に提供されている `ising_impl.f90` は、中間段階のシングルスレッド版ではなく、完成したスレッドセーフなプログラムを示しているため、すでにこの行を含んでいます。
+
+### `ising.C` について
+
+`ising.C` ファイルはプログラムのエントリーポイントを提供します。内容は上記の[エントリーポイント](#エントリーポイント)で説明したものとまったく同じです。`main` 関数の本体自体は変更する必要はありません。あなた自身のプログラム用にメタデータ文字列だけを更新してください。
 
 ### `CMakeLists.txt` について
 
-`CMakeLists.txt` を変更します（本文 2.3 を参照）。以下は `CMakeLists.txt` の例です。
+上記の[CMakeLists.txt の編集](#cmakeliststxt-の編集)で示したのと同じパターンに従って、`CMakeLists.txt` をあなた自身のソースファイル名に合わせて更新してください——以下は、実際にこのチュートリアルをビルドするために使われている `CMakeLists.txt` そのものです。
 
-    1:    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
-    2:    
-    3:    project(tutorial)
-    4:    
-    5:    find_package(ALPS REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
-    6:    message(STATUS "ALPS version: ${ALPS_VERSION}")
-    7:    include(${ALPS_USE_FILE})
-    8:    
-    9:    # Source code required to create and run file name
-    10:    add_executable(tutorial main.C tutorial.f90)
-    11:    target_link_libraries(tutorial ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```cmake
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+project(alpsize NONE)
+
+# find ALPS Library
+find_package(ALPS REQUIRED PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME} NO_SYSTEM_ENVIRONMENT_PATH)
+message(STATUS "Found ALPS: ${ALPS_ROOT_DIR} (revision: ${ALPS_VERSION})")
+include(${ALPS_USE_FILE})
+
+# enable C, C++, and Fortran compilers
+enable_language(C CXX Fortran)
+
+# rule for generating ising program
+add_executable(ising ising.C ising_impl.f90)
+target_link_libraries(ising ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```
+
+## 移植したプログラムを実行する
+
+[Integration-02](../alpsize02) の `hello` サンプルと同じ方法でビルドします。
+
+```bash
+$ cmake -DALPS_ROOT_DIR=${ALPS_ROOT} .
+$ make
+```
+
+チュートリアルのディレクトリには、それぞれ異なる温度・格子サイズ・スイープ数を持つ 4 つのクローンからなる `ising_params` パラメータファイルが用意されています。
+
+```
+ALGORITHM = "ising"
+{ TEMPERATURE = 2.5; MCS = 1000; INT = 1000; L=10; }
+{ TEMPERATURE = 2.3; MCS = 900; INT = 1100; L=20; }
+{ TEMPERATURE = 2.1; MCS = 800; INT = 1200; L=30; }
+{ TEMPERATURE = 1.9; MCS = 700; INT = 1300; L=40; }
+```
+
+Integration-02 とまったく同じように、これを XML に変換して実行します。
+
+```bash
+$ cp ${SAMPLES}/alpsize-11-fortran-ising/ising_params .
+$ parameter2xml ising_params
+$ ./ising ising_params.in.xml
+```
+
+チュートリアルで提供されている `ising_impl.f90` では、`alps_init` と `alps_finalize` が短い診断バナーを出力するため（上記の[初期化](#初期化)のコールアウトを参照）、各クローンは開始時と終了時にそれぞれ次のように自分自身を報告します。
+
+```
+----- alps_init( 0 ) -----
+   TEMP =  2.5000000000000000
+   MCS =  1000
+   INT =  1000
+   L =  10
+```
+
+4 つのクローンすべてが完了すると、ALPS は蓄積された `Energy` と `Magnetization` の可観測量を——C++ チュートリアルで `alps::alea` が提供するのとまったく同様に、自動的に計算された誤差付きで——標準の ALPS 結果ファイルに書き出します。これらは、[ALPS ドキュメント](https://alps.comp-phys.org)のいたるところで紹介されている通常の ALPS/`pyalps` ツールで確認できます。
+
+## 次のステップ
+
+これで ALPS 統合チュートリアルシリーズは完了です。パラメータ、可観測量、チェックポイント、並列クローンという同じ基盤のスケジューラが、純粋な C から駆動される様子（[Integration-00](../alpsize00)）、ビルドシステムのレベルで説明される様子（[Integration-01](../alpsize01)）、そして Fortran から駆動される様子（[Integration-02](../alpsize02) とこのページ）を、それぞれ見てきました。チュートリアルの一覧に戻るには[統合セクションの概要](../)を、あなた自身のコードの統合が終わった後に ALPS で他に何がシミュレートできるかを知るには [ALPS 格子ライブラリ](../../intro/latticehowtos)と[メソッドのドキュメント](../../methods)を参照してください。

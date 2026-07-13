@@ -5,7 +5,7 @@ toc: true
 weight: 4
 ---
 
-ALPS Fortran provides Fortran interface modules for the ALPS system. By implementing a small set of required subroutines, you can run a Fortran program under the ALPS scheduler and take advantage of its parallelization, parameter management, and result-aggregation features. This chapter describes how to write a Fortran program that runs on ALPS, and how to port an existing Fortran program into the ALPS Fortran framework.
+ALPS Fortran provides Fortran interface modules for the ALPS system. By implementing a small, fixed set of required subroutines, you can run a Fortran program under the ALPS scheduler and take advantage of its parallelization, parameter management, and result-aggregation features — the same benefits demonstrated in C++ in [Integration-00](../alpsize00) and used to build the "hello" sample in [Integration-02](../alpsize02). This chapter documents that subroutine interface in full, and works through a complete, realistic example: porting a pre-existing, unmodified Fortran program — a two-dimensional Ising model Monte Carlo simulation, written in 1993 — into the ALPS Fortran framework.
 
 ## Introduction to ALPS Fortran
 
@@ -13,13 +13,28 @@ The following figure shows the relationship between the ALPS system, ALPS Fortra
 
 ![ALPS Fortran module](../figs/fortranmodule.png)
 
-ALPS calls ALPS Fortran, which in turn calls the subroutines of the user program as needed. This allows ALPS to control a Fortran program in the same way it controls a C++ program. ALPS Fortran also provides subroutines that give the user program access to ALPS functions, so the user program can call ALPS features as if they were ordinary Fortran subroutines.
+ALPS Fortran is a thin C++ layer that sits between the C++ ALPS scheduler and your Fortran code. ALPS calls into ALPS Fortran using ordinary C++, and ALPS Fortran in turn calls the Fortran subroutines of your program as plain Fortran subroutine calls — this is what allows ALPS to control a Fortran program (job scheduling, checkpointing, process control) in exactly the same way it controls a C++ `Worker` class, as in [Integration-00, Step 9](../alpsize00#step-9--full-integration-with-the-alpsparapack-scheduler). ALPS Fortran also provides the reverse path: a set of subroutines (`alps_get_parameter`, `alps_accumulate_observable`, …) that let your Fortran code call back into ALPS as if those were ordinary Fortran subroutines, so you never need to write or call any C++ yourself.
 
 ## Call Flow
 
-The following figure shows the call flow between the ALPS system and the user program.
+The following figure shows the call flow between the ALPS system and the user program over the lifetime of a run, in three phases: **initialization**, the **computation loop**, and **finalization**.
 
 ![Call flow](../figs/callflow.png)
+
+During initialization, ALPS calls `alps_init` once, during which your code typically calls back into `alps_get_parameter` and `alps_parameter_defined` to read its parameters, then ALPS calls `alps_init_observables`, during which your code calls `alps_init_observable` to register each measurement. ALPS then repeatedly calls `alps_run` — the actual computation — interleaved with `alps_is_thermalized` and `alps_progress`, until progress reaches 1.0; each `alps_run` call typically calls back into `alps_accumulate_observable` to record its measurement. Finally, during finalization, ALPS calls `alps_save` (which calls `alps_dump` to write checkpoint data) and `alps_finalize`. The subroutine reference below documents every box in this diagram.
+
+Readers who worked through [Integration-00](../alpsize00) will recognize this exact same three-phase structure — it is the same lifecycle as the `wolff_worker` C++ class from Step 9, just spread across Fortran subroutines instead of C++ member functions:
+
+| ALPS Fortran subroutine | Equivalent C++ `Worker` method (Integration-00, Step 9) |
+| :----------------------- | :------------------------------------------------------- |
+| `alps_init`               | constructor |
+| `alps_init_observables`   | `init_observables` |
+| `alps_run`                | `run` |
+| `alps_progress`           | `progress` |
+| `alps_is_thermalized`     | `is_thermalized` |
+| `alps_save`               | `save` |
+| `alps_load`               | `load` |
+| `alps_finalize`           | destructor |
 
 ## Preparing the Fortran Source Code
 
@@ -32,29 +47,31 @@ To implement a program using ALPS Fortran, you need to prepare two source files:
 
 The `main` function sets program metadata such as the version number, copyright notice, worker name, and evaluator name. In most cases the body of `main` does not need to change — only the metadata strings need to be updated for your program.
 
-The following is an example C++ entry point:
+The following is an example C++ entry point — this is, in fact, exactly what `hello.C` and `ising.C` from [Integration-02](../alpsize02) look like, just with the metadata strings and worker name shown as placeholders instead of `"hello"`/`"ising"`:
 
-    #include <alps/parapack/parapack.h>
-    #include "fortran_wrapper.h"
-    
-    // Version number
-    PARAPACK_SET_VERSION("my version");
-    
-    // Copyright notice
-    PARAPACK_SET_COPYRIGHT("my copyright");
-    
-    // Worker name
-    PARAPACK_REGISTER_WORKER(alps::fortran_wrapper, "worker name");
-    
-    // Evaluator
-    PARAPACK_REGISTER_EVALUATOR(alps::parapack::simple_evaluator, "evaluator name");
-    
-    int main(int argc, char** argv)
-    {
-        return alps::parapack::start(argc, argv);
-    }
+```cpp
+#include <alps/parapack/parapack.h>
+#include "alps/fortran/fortran_wrapper.h"
 
-Replace the example strings (`"my version"`, `"my copyright"`, `"worker name"`, `"evaluator name"`) with values appropriate for your program.
+// Version number
+PARAPACK_SET_VERSION("my version");
+
+// Copyright notice
+PARAPACK_SET_COPYRIGHT("my copyright");
+
+// Worker name
+PARAPACK_REGISTER_WORKER(alps::fortran_wrapper, "worker name");
+
+// Evaluator
+PARAPACK_REGISTER_EVALUATOR(alps::parapack::simple_evaluator, "evaluator name");
+
+int main(int argc, char** argv)
+{
+    return alps::parapack::start(argc, argv);
+}
+```
+
+Replace the example strings (`"my version"`, `"my copyright"`, `"worker name"`, `"evaluator name"`) with values appropriate for your program. `alps::fortran_wrapper` is the ALPS-provided Worker class that makes this work: it is a C++ class satisfying the same Worker interface built by hand in [Integration-00, Step 9](../alpsize00#step-9--full-integration-with-the-alpsparapack-scheduler), but instead of implementing `run`, `is_thermalized`, and so on directly in C++, it forwards each call to the Fortran subroutines you implement below.
 
 ### Fortran Source Code
 
@@ -68,12 +85,14 @@ Every required subroutine receives `caller` as an argument — an integer array 
 
 Each subroutine must include `alps/fortran/alps_fortran.h`:
 
-    subroutine alps_init(caller)
-    implicit none
-    include "alps/fortran/alps_fortran.h"
-    integer :: caller(2)
-    
-    ! --- your code here --- !
+```fortran
+subroutine alps_init(caller)
+implicit none
+include "alps/fortran/alps_fortran.h"
+integer :: caller(2)
+
+! --- your code here --- !
+```
 
 ---
 
@@ -162,6 +181,8 @@ Called once when the program is restarted. Load checkpoint data from the restart
 #### Subroutines Provided by ALPS Fortran
 
 To call ALPS functions from your Fortran program, use the subroutines provided by ALPS Fortran. Each takes `caller(2)` as a parameter; pass the `caller` variable received by the enclosing required subroutine.
+
+The data type constants referenced in the tables below are defined in `alps_fortran.h`: `ALPS_CHAR` (a string, e.g. for reading a text-valued parameter such as `WORLD` in [Integration-02](../alpsize02)), `ALPS_INT`, `ALPS_LONG`, `ALPS_REAL`, and `ALPS_DOUBLE_PRECISION`.
 
 ---
 
@@ -254,24 +275,32 @@ Reads data from the restart file. Called inside `alps_load`. Data must be restor
 
 ### Editing the CMakeLists.txt
 
-User programs are built with CMake, just like ALPS itself. Below is a sample `CMakeLists.txt`. Replace `hello_sample`, `hello`, `main.C`, and `hello_impl.f` with the actual names for your project:
+User programs are built with CMake, just like ALPS itself — see [Integration-01](../alpsize01) for a general explanation of how ALPS's CMake integration works. Below is a sample `CMakeLists.txt`, following the same pattern used throughout [Integration-00](../alpsize00) and [Integration-02](../alpsize02), extended with `Fortran` support. Replace `myproject`, `main.C`, and `myprogram_impl.f90` with the actual names for your project:
 
-    # CMakeLists.txt
-    
-    cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
-    
-    project(hello_sample)
-    
-    find_package(ALPS REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
-    message(STATUS "ALPS version: ${ALPS_VERSION}")
-    include(${ALPS_USE_FILE})
-    
-    add_executable(hello main.C hello_impl.f)
-    target_link_libraries(hello ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```cmake
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+project(myproject NONE)
+
+# find ALPS Library
+find_package(ALPS REQUIRED PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME} NO_SYSTEM_ENVIRONMENT_PATH)
+message(STATUS "Found ALPS: ${ALPS_ROOT_DIR} (revision: ${ALPS_VERSION})")
+include(${ALPS_USE_FILE})
+
+# enable C, C++, and Fortran compilers
+enable_language(C CXX Fortran)
+
+# rule for generating the program
+add_executable(myprogram main.C myprogram_impl.f90)
+target_link_libraries(myprogram ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```
+
+{{< callout type="warning" >}}
+Don't forget `enable_language(... Fortran)` and `PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME}` — without them, CMake will not enable a Fortran compiler at all, or (without `NO_SYSTEM_ENVIRONMENT_PATH`'s companion `PATHS` argument) may fail to locate ALPS. See [Integration-01](../alpsize01#anatomy-of-a-cmakeliststxt) for why each line here matters.
+{{< /callout >}}
 
 ## Porting an Existing Fortran Program
 
-This section walks through porting the Ising model program `ising_original.f` to ALPS Fortran, using the tutorial files extracted from `alps_fortran.tar.gz`.
+This section walks through porting the Ising model program `ising_original.f` to ALPS Fortran. All the files used here are part of the `tutorials/alpsize-11-fortran-ising` directory in the [ALPS repository](https://github.com/ALPSim/ALPS) — the same repository the C++ tutorials in [Integration-00](../alpsize00) come from.
 
 ### Preparing for the Port
 
@@ -279,7 +308,7 @@ Copy the following files from the tutorial directory to your working directory:
 
 - `ising_original.f` — original source code
 - `template.f90` — ALPS Fortran program template
-- `main.C` — entry point
+- `ising.C` — entry point (identical in structure to the `hello.C` entry point from [Integration-02](../alpsize02), just with `"ising"` as the worker/evaluator name)
 - `CMakeLists.txt` — build configuration template
 
 `template.f90` contains stub definitions of all required subroutines. For a new program, start from `template.f90` rather than writing the subroutines from scratch.
@@ -288,17 +317,17 @@ The structure of the original code is:
 
 | Lines   | Processing |
 | :------ | :--------- |
-| 4–7     | Variable declaration and initialization |
-| 8–23    | Array element initialization |
-| 24–47   | Main loop |
-| 25–34   | Calculation |
-| 36      | Thermalization check |
-| 37–46   | Saving results |
-| 48–58   | Results output |
+| 5–9     | Variable declaration and initialization |
+| 10–25   | Array element initialization |
+| 26–49   | Main loop |
+| 27–36   | Calculation |
+| 38      | Thermalization check |
+| 39–48   | Saving results |
+| 50–60   | Results output |
 
 ### Porting the Fortran Code
 
-Each block of `ising_original.f` is assigned to a corresponding ALPS Fortran subroutine. The file `tutorial/alps_ising.f90` is the completed ported version.
+Each block of `ising_original.f` is assigned to a corresponding ALPS Fortran subroutine. The file `ising_impl.f90` is the completed ported version.
 
 #### Variable Declaration
 
@@ -306,25 +335,29 @@ Variables declared in `ising_original.f` must be moved into an ALPS Fortran modu
 
 - Before porting:
 
-        4:    DIMENSION IS(20,20),IP(20),IM(20),P(-4:4),A(4)
-        5:    C PARAMETERS
-        6:          DATA TEMP/2.5/, L/10/, MCS/1000/, INT/1000/
-        7:          DATA IX/1234567/, V0/.465661288D-9/
+  ```fortran
+  6    DIMENSION IS(20,20),IP(20),IM(20),P(-4:4),A(4)
+  7    C PARAMETERS
+  8          DATA TEMP/2.5/, L/10/, MCS/1000/, INT/1000/
+  9          DATA IX/1234567/, V0/.465661288D-9/
+  ```
 
 - After porting:
 
-        1:    module ising_mod
-        2:      implicit none
-        3:      real, parameter :: V0 = .465661288D-9
-        4:
-        5:      integer, allocatable, dimension(:) :: IP, IM
-        6:      integer, allocatable, dimension(:,:) :: IS
-        7:      real*8, allocatable, dimension(:) :: P
-        8:      integer :: K, MCS, INT, L, IX
-        9:      real :: TEMP
-        10:   end module ising_mod
+  ```fortran
+  module ising_mod
+    implicit none
+    real, parameter :: V0 = .465661288D-9
 
-`IP`, `IM`, `IS`, and `P` are allocated in `alps_init`, so their sizes are not fixed here. Array `A` (which stored accumulated results) is replaced by ALPS observables and is no longer needed. Variable values are read from the parameter file at runtime. `K` is added to count iterations; the thermalization check after porting is handled by monitoring `K` rather than using a loop with `GOTO`.
+    integer, allocatable, dimension(:) :: IP, IM
+    integer, allocatable, dimension(:,:) :: IS
+    real*8, allocatable, dimension(:) :: P
+    integer :: K, MCS, INT, L, IX
+    real :: TEMP
+  end module ising_mod
+  ```
+
+`IP`, `IM`, `IS`, and `P` are allocated in `alps_init`, so their sizes are not fixed here. Array `A` (which stored accumulated results) is replaced by ALPS observables and is no longer needed. Variable values are read from the parameter file at runtime. `K` is added to count iterations; the thermalization check after porting is handled by monitoring `K` rather than using a loop with `GOTO`. (The `!$omp threadprivate` line is added later, in [Multi-thread Support](#multi-thread-support) — the version of `ising_impl.f90` actually shipped in the tutorial already includes it, since it ships the finished, thread-safe program.)
 
 **Note: the MPI version of this example does not need to be thread-safe, so thread safety is not considered here.**
 
@@ -334,199 +367,216 @@ The initialization block of the original code (array setup) becomes `alps_init`.
 
 - Before porting:
 
-        8:    C TABLES
-        9:          DO 10 I=-4,4
-        10:         W=EXP(FLOAT(I)/TEMP)
-        11:    10   P(I)=W/(W+1/W)
-        12:         DO 11 I=1,L
-        13:         IP(I)=I+1
-        14:    11   IM(I)=I-1
-        15:         IP(L)=1
-        16:         IM(1)=L
-        17:   C INITIAL CONFIGURATION
-        18:         DO 20 I=1,L
-        19:         DO 20 J=1,L
-        20:    20   IS(I,J)=1
-        21:   C ACCUMULATION DATA RESET
-        22:         DO 21 I=1,4
-        23:    21   A(I)=0.0
+  ```fortran
+  10   C TABLES
+  11         DO 10 I=-4,4
+  12         W=EXP(FLOAT(I)/TEMP)
+  13    10   P(I)=W/(W+1/W)
+  14         DO 11 I=1,L
+  15         IP(I)=I+1
+  16    11   IM(I)=I-1
+  17         IP(L)=1
+  18         IM(1)=L
+  19   C INITIAL CONFIGURATION
+  20         DO 20 I=1,L
+  21         DO 20 J=1,L
+  22    20   IS(I,J)=1
+  23   C ACCUMULATION DATA RESET
+  24         DO 21 I=1,4
+  25    21   A(I)=0.0
+  ```
 
 - After porting (`alps_init`):
 
-        13:   subroutine alps_init(caller)
-        14:     use ising_mod
-        15:     implicit none
-        16:     include "alps/fortran/alps_fortran.h"
-        17:     integer :: caller(2)
-        18:     integer :: i, j
-        19:     real*8 :: W
-        20:
-        21:     call alps_get_parameter(TEMP, "TEMPERATURE", ALPS_REAL, caller)
-        22:     call alps_get_parameter(L, "L", ALPS_INT, caller)
-        23:     call alps_get_parameter(MCS, "MCS", ALPS_INT, caller)
-        24:     call alps_get_parameter(INT, "INT", ALPS_INT, caller)
-        25:
-        26:     allocate( IP(L) )
-        27:     allocate( IM(L) )
-        28:     allocate( P(-4:4) )
-        29:     allocate( IS(L, L) )
-        30:
-        31:     K = 0
-        32:     IX = 1234567
-        33:
-        34:     do i = -4, 4
-        35:        W = exp(float(i)/TEMP)
-        36:        P(i) = W / (W + 1/W)
-        37:     end do
-        38:
-        39:     do i = 1, L
-        40:        IP(i) = i + 1
-        41:        IM(i) = i - 1
-        42:     end do
-        43:
-        44:     do i = 1, L
-        45:        do j = 1, L
-        46:           IS(i, j) = 1
-        47:        end do
-        48:     end do
-        49:
-        50:     IP(L) = 1
-        51:     IM(1) = L
-        52:
-        53:     return
-        54:   end subroutine alps_init
+  ```fortran
+  subroutine alps_init(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    integer :: i, j
+    real*8 :: W
 
-Lines 21–24 call `alps_get_parameter` to read the parameter values from the ALPS parameter file. The array setup (lines 34–51) is otherwise identical to the original code.
+    call alps_get_parameter(TEMP, "TEMPERATURE", ALPS_REAL, caller)
+    call alps_get_parameter(L, "L", ALPS_INT, caller)
+    call alps_get_parameter(MCS, "MCS", ALPS_INT, caller)
+    call alps_get_parameter(INT, "INT", ALPS_INT, caller)
+
+    allocate( IP(L) )
+    allocate( IM(L) )
+    allocate( P(-4:4) )
+    allocate( IS(L, L) )
+
+    K = 0
+    IX = 1234567
+
+    do i = -4, 4
+       W = exp(float(i)/TEMP)
+       P(i) = W / (W + 1/W)
+    end do
+
+    do i = 1, L
+       IP(i) = i + 1
+       IM(i) = i - 1
+    end do
+
+    do i = 1, L
+       do j = 1, L
+          IS(i, j) = 1
+       end do
+    end do
+
+    IP(L) = 1
+    IM(1) = L
+
+    return
+  end subroutine alps_init
+  ```
+
+The calls to `alps_get_parameter` at the top read the values that used to be hard-coded `DATA` statements from the ALPS parameter file instead. The array setup that follows is otherwise identical to the original code.
+
+{{< callout type="info" >}}
+The version of `alps_init` actually shipped in `ising_impl.f90` also calls `omp_get_thread_num()` and prints the thread ID and the parameters it just read, e.g. `----- alps_init( 2 ) -----`. This is a small diagnostic aid for confirming — once you get to [Multi-thread Support](#multi-thread-support) below — that clones really are running on separate threads; it is omitted here for clarity but is harmless to add to your own code.
+{{< /callout >}}
 
 - After porting (`alps_init_observables`):
 
-        92:   subroutine alps_init_observables(caller)
-        93:     implicit none
-        94:     include "alps/fortran/alps_fortran.h"
-        95:     integer :: caller(2)
-        96:
-        97:     call alps_init_observable(1, ALPS_REAL, "Energy", caller)
-        98:     call alps_init_observable(1, ALPS_REAL, "Magnetization", caller)
-        99:
-        100:    return
-        101:  end subroutine alps_init_observables
+  ```fortran
+  subroutine alps_init_observables(caller)
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+
+    call alps_init_observable(1, ALPS_REAL, "Energy", caller)
+    call alps_init_observable(1, ALPS_REAL, "Magnetization", caller)
+
+    return
+  end subroutine alps_init_observables
+  ```
 
 Observables named `"Energy"` and `"Magnetization"` are registered as buffers for the results. In the original code, sums and sums of squares were accumulated manually in array `A`; after porting, `alps_accumulate_observable` handles this automatically.
 
 #### Calculation and Saving Results
 
-The original code uses a `DO` loop (line 25) for iteration. After porting, `alps_run` performs one iteration per call — ALPS manages the loop by repeatedly calling `alps_run` until `alps_progress` returns ≥ 1.0.
+The original code uses a `DO` loop to iterate. After porting, `alps_run` performs one iteration per call — ALPS manages the loop by repeatedly calling `alps_run` until `alps_progress` returns ≥ 1.0.
 
 - Before porting:
 
-        24:   C SIMULATION
-        25:         DO 30 K=1,MCS+INT
-        26:         KIJ=0
-        27:         DO 31 I=1,L
-        28:         DO 31 J=1,L
-        29:         M=IS(IP(I),J)+IS(I,IP(J))+IS(IM(I),J)+IS(I,IM(J))
-        30:         KIJ=KIJ+1
-        31:         IS(I,J)=-1
-        32:         IX=IAND(IX*5*11,2147483647)
-        33:         IF(P(M).GT.V0*IX) IS(I,J)=1
-        34:    31   CONTINUE
-        35:   C DATA
-        36:         IF(K.LE.INT) GOTO 30
-        37:         EN=0
-        38:         MG=0
-        39:         DO 40 I=1,L
-        40:         DO 40 J=1,L
-        41:         EN=EN+IS(I,J)*(IS(IP(I),J)+IS(I,IP(J)))
-        42:    40   MG=MG+IS(I,J)
-        43:         A(1)=A(1)+EN
-        44:         A(2)=A(2)+EN**2
-        45:         A(3)=A(3)+MG
-        46:         A(4)=A(4)+MG**2
-        47:    30   CONTINUE
+  ```fortran
+  26   C SIMULATION
+  27         DO 30 K=1,MCS+INT
+  28         KIJ=0
+  29         DO 31 I=1,L
+  30         DO 31 J=1,L
+  31         M=IS(IP(I),J)+IS(I,IP(J))+IS(IM(I),J)+IS(I,IM(J))
+  32         KIJ=KIJ+1
+  33         IS(I,J)=-1
+  34         IX=IAND(IX*5*11,2147483647)
+  35         IF(P(M).GT.V0*IX) IS(I,J)=1
+  36    31   CONTINUE
+  37   C DATA
+  38         IF(K.LE.INT) GOTO 30
+  39         EN=0
+  40         MG=0
+  41         DO 40 I=1,L
+  42         DO 40 J=1,L
+  43         EN=EN+IS(I,J)*(IS(IP(I),J)+IS(I,IP(J)))
+  44    40   MG=MG+IS(I,J)
+  45         A(1)=A(1)+EN
+  46         A(2)=A(2)+EN**2
+  47         A(3)=A(3)+MG
+  48         A(4)=A(4)+MG**2
+  49    30   CONTINUE
+  ```
 
 - After porting (`alps_run`):
 
-        56:   ! subroutine alps_run
-        57:   subroutine alps_run(caller)
-        58:     use ising_mod
-        59:     implicit none
-        60:     include "alps/fortran/alps_fortran.h"
-        61:     integer :: caller(2)
-        62:     integer :: i, j, M
-        63:     real*8 :: EN, MG
-        64:
-        65:     do i = 1, L
-        66:        do j = 1, L
-        67:           M = IS(IP(i), j) + IS(i, IP(j)) + IS(IM(i), j) + IS(i, IM(j))
-        68:           IS(i, j) = -1
-        69:
-        70:           IX = IAND(IX * 5 * 11, 2147483647)
-        71:           if(P(M).gt.V0*IX) IS(i, j) = 1
-        72:        end do
-        73:     end do
-        74:
-        75:     EN = 0.0D0
-        76:     MG = 0.0D0
-        77:     do i = 1, L
-        78:        do j = 1, L
-        79:           EN = EN + IS(i, j) * (IS(IP(i), j) + IS(i, IP(j)))
-        80:           MG = MG + IS(i, j)
-        81:        end do
-        82:     end do
-        83:
-        84:     call alps_accumulate_observable(EN, 1, &
-               ALPS_DOUBLE_PRECISION, "Energy", caller)
-        85:     call alps_accumulate_observable(MG, 1, &
-               ALPS_DOUBLE_PRECISION, "Magnetization", caller)
-        86:     K = K + 1
-        87:
-        88:     return
-        89:   end subroutine alps_run
+  ```fortran
+  subroutine alps_run(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    integer :: i, j, M
+    real*8 :: EN, MG
 
-The calculation (lines 65–82) is identical to the original. The outer `DO 30` loop is absent — ALPS calls `alps_run` repeatedly instead. Line 86 increments `K` to track iterations. Lines 84–85 record results via `alps_accumulate_observable`; the summation and squaring done manually in the original (lines 43–46) is handled automatically by the observable.
+    do i = 1, L
+       do j = 1, L
+          M = IS(IP(i), j) + IS(i, IP(j)) + IS(IM(i), j) + IS(i, IM(j))
+          IS(i, j) = -1
+
+          IX = IAND(IX * 5 * 11, 2147483647)
+          if(P(M).gt.V0*IX) IS(i, j) = 1
+       end do
+    end do
+
+    EN = 0.0D0
+    MG = 0.0D0
+    do i = 1, L
+       do j = 1, L
+          EN = EN + IS(i, j) * (IS(IP(i), j) + IS(i, IP(j)))
+          MG = MG + IS(i, j)
+       end do
+    end do
+
+    call alps_accumulate_observable(EN, 1, &
+         ALPS_DOUBLE_PRECISION, "Energy", caller)
+    call alps_accumulate_observable(MG, 1, &
+         ALPS_DOUBLE_PRECISION, "Magnetization", caller)
+    K = K + 1
+
+    return
+  end subroutine alps_run
+  ```
+
+The calculation loops are identical to the original. The outer `DO 30 K=1,MCS+INT` loop is gone — ALPS calls `alps_run` repeatedly instead, and `K = K + 1` at the end tracks how many times it has been called. The calls to `alps_accumulate_observable` record results directly; the summation and squaring done manually in the original (into `A(1)`–`A(4)`) is handled automatically by the observable.
 
 - After porting (`alps_progress`):
 
-        103:  ! alps_progress
-        104:  subroutine alps_progress(prgrs, caller)
-        105:    use ising_mod
-        106:    implicit none
-        107:    include "alps/fortran/alps_fortran.h"
-        108:    integer :: caller(2)
-        109:    real*8 :: prgrs
-        110:
-        111:    prgrs = K / (INT + MCS)
-        112:
-        113:  end subroutine alps_progress
+  ```fortran
+  subroutine alps_progress(prgrs, caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    real*8 :: prgrs
+
+    prgrs = K / (INT + MCS)
+
+  end subroutine alps_progress
+  ```
 
 `alps_progress` controls when iteration stops. Once `prgrs ≥ 1.0` (i.e., `K ≥ INT + MCS`), ALPS stops calling `alps_run`.
 
 #### Thermalization Check
 
-In the original code, the thermalization check is embedded in the main loop (line 36). After porting it becomes a separate subroutine.
+In the original code, the thermalization check is embedded in the main loop. After porting it becomes a separate subroutine.
 
 - Before porting:
 
-        36:         IF(K.LE.INT) GOTO 30
+  ```fortran
+  38         IF(K.LE.INT) GOTO 30
+  ```
 
 - After porting (`alps_is_thermalized`):
 
-        115:  ! alps_is_thermalized
-        116:  subroutine alps_is_thermalized(thrmlz, caller)
-        117:    use ising_mod
-        118:    implicit none
-        119:    include "alps/fortran/alps_fortran.h"
-        120:    integer :: caller(2)
-        121:    integer :: thrmlz
-        122:
-        123:    if(K >= INT) then
-        124:       thrmlz = 1
-        125:    else
-        126:       thrmlz = 0
-        127:    end if
-        128:
-        129:    return
-        130:  end subroutine alps_is_thermalized
+  ```fortran
+  subroutine alps_is_thermalized(thrmlz, caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+    integer :: thrmlz
+
+    if(K >= INT) then
+       thrmlz = 1
+    else
+       thrmlz = 0
+    end if
+
+    return
+  end subroutine alps_is_thermalized
+  ```
 
 As with `alps_progress`, the thermalization state is determined from the iteration counter `K`. When `thrmlz = 1`, ALPS begins saving measurement results.
 
@@ -536,19 +586,21 @@ When using ALPS, output and post-processing are handled automatically. The outpu
 
 - Before porting:
 
-        48:   C STATISTICS
-        49:         DO 50 I=1,4
-        50:    50   A(I)=A(I)/MCS
-        51:         C=(A(2)-A(1)**2)/L**2/TEMP**2
-        52:         X=(A(4)-A(3)**2)/L**2/TEMP
-        53:         ENG=A(1)/L**2
-        54:         AMG=A(3)/L**2
-        55:         WRITE(6,100) TEMP,L,ENG,C,AMG,X
-        56:    100  FORMAT(' TEMP=',F10.5,' SIZE=',I5,
-        57:        * /' ENG =',F10.5,' C   =',F10.5,
-        58:        * /' MAG =',F10.5,' X   =',F10.5)
+  ```fortran
+  50   C STATISTICS
+  51         DO 50 I=1,4
+  52    50   A(I)=A(I)/MCS
+  53         C=(A(2)-A(1)**2)/L**2/TEMP**2
+  54         X=(A(4)-A(3)**2)/L**2/TEMP
+  55         ENG=A(1)/L**2
+  56         AMG=A(3)/L**2
+  57         WRITE(6,100) TEMP,L,ENG,C,AMG,X
+  58    100  FORMAT(' TEMP=',F10.5,' SIZE=',I5,
+  59        * /' ENG =',F10.5,' C   =',F10.5,
+  60        * /' MAG =',F10.5,' X   =',F10.5)
+  ```
 
-- After porting: no code required.
+- After porting: no code required. The scheduler collects the `Energy` and `Magnetization` observables and writes standard ALPS result files automatically — see [Running the Ported Program](#running-the-ported-program) below.
 
 #### Finalization
 
@@ -558,20 +610,21 @@ The original code has no explicit cleanup because it uses static arrays. After p
 
 - After porting (`alps_finalize`):
 
-        160:  ! alps_finalize
-        161:  subroutine alps_finalize(caller)
-        162:    use ising_mod
-        163:    implicit none
-        164:    include "alps/fortran/alps_fortran.h"
-        165:    integer :: caller(2)
-        166:
-        167:    deallocate(IP)
-        168:    deallocate(IM)
-        169:    deallocate(P)
-        170:    deallocate(IS)
-        171:
-        172:    return
-        173:  end subroutine alps_finalize
+  ```fortran
+  subroutine alps_finalize(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+
+    deallocate(IP)
+    deallocate(IM)
+    deallocate(P)
+    deallocate(IS)
+
+    return
+  end subroutine alps_finalize
+  ```
 
 #### Restart Support
 
@@ -581,37 +634,39 @@ Implementing `alps_save` and `alps_load` adds checkpoint/restart capability. The
 
 - After porting (`alps_save`):
 
-        132:  ! alps_save
-        133:  subroutine alps_save(caller)
-        134:    use ising_mod
-        135:    implicit none
-        136:    include "alps/fortran/alps_fortran.h"
-        137:    integer :: caller(2)
-        138:
-        139:    call alps_dump(K, 1, ALPS_INT, caller)
-        140:    call alps_dump(IX, 1, ALPS_INT, caller)
-        141:    call alps_dump(IS, L * L, ALPS_INT, caller)
-        142:
-        143:    return
-        144:  end subroutine alps_save
+  ```fortran
+  subroutine alps_save(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer caller(2)
+
+    call alps_dump(K, 1, ALPS_INT, caller)
+    call alps_dump(IX, 1, ALPS_INT, caller)
+    call alps_dump(IS, L * L, ALPS_INT, caller)
+
+    return
+  end subroutine alps_save
+  ```
 
 Only the variables needed to resume computation (`K`, `IX`, `IS`) are saved.
 
 - After porting (`alps_load`):
 
-        146:  ! alps_load
-        147:  subroutine alps_load(caller)
-        148:    use ising_mod
-        149:    implicit none
-        150:    include "alps/fortran/alps_fortran.h"
-        151:    integer :: caller(2)
-        152:
-        153:    call alps_restore(K, 1, ALPS_INT, caller)
-        154:    call alps_restore(IX, 1, ALPS_INT, caller)
-        155:    call alps_restore(IS, L * L, ALPS_INT, caller)
-        156:
-        157:    return
-        158:  end subroutine alps_load
+  ```fortran
+  subroutine alps_load(caller)
+    use ising_mod
+    implicit none
+    include "alps/fortran/alps_fortran.h"
+    integer :: caller(2)
+
+    call alps_restore(K, 1, ALPS_INT, caller)
+    call alps_restore(IX, 1, ALPS_INT, caller)
+    call alps_restore(IS, L * L, ALPS_INT, caller)
+
+    return
+  end subroutine alps_load
+  ```
 
 Data must be restored in the same order it was saved. Note that when an ALPS program restarts, `alps_init` is called before `alps_load`, so memory allocation and variable initialization happen in `alps_init` as usual — `alps_load` only needs to restore the saved values.
 
@@ -621,33 +676,86 @@ To run with thread-level parallelism, all module variables accessed by the paral
 
 - After porting (multi-thread):
 
-        1:    module ising_mod
-        2:      implicit none
-        3:      real, parameter :: V0 = .465661288D-9
-        4:
-        5:      integer, allocatable, dimension(:) :: IP, IM
-        6:      integer, allocatable, dimension(:,:) :: IS
-        7:      real*8, allocatable, dimension(:) :: P
-        8:      integer :: K, MCS, INT, L, IX
-        9:      real :: TEMP
-        10:   !$omp threadprivate (K, MCS, INT, TEMP, IP, IM, P, IS, IX, L)
-        11:   end module ising_mod
+  ```fortran
+  module ising_mod
+    implicit none
+    real, parameter :: V0 = .465661288D-9
 
-### About `main.C`
+    integer, allocatable, dimension(:) :: IP, IM
+    integer, allocatable, dimension(:,:) :: IS
+    real*8, allocatable, dimension(:) :: P
+    integer :: K, MCS, INT, L, IX
+    real :: TEMP
+    !$omp threadprivate (K, MCS, INT, TEMP, IP, IM, P, IS, IX, L)
+  end module ising_mod
+  ```
 
-The `main.C` file provides the program entry point. The body of `main` itself does not need to change; update only the metadata strings as described in the [Entry Point](#entry-point) section above.
+This is exactly the `ising_mod` shown in [Variable Declaration](#variable-declaration) above — `ising_impl.f90` as shipped already includes this line, since the tutorial file shows the finished, thread-safe program rather than the intermediate single-threaded version.
+
+### About `ising.C`
+
+The `ising.C` file provides the program entry point, exactly as described in [Entry Point](#entry-point) above. The body of `main` itself does not need to change; update only the metadata strings for your own program.
 
 ### About `CMakeLists.txt`
 
-Update `CMakeLists.txt` to match your source file names. The following is a complete example:
+Update `CMakeLists.txt` to match your own source file names, following the same pattern shown in [Editing the CMakeLists.txt](#editing-the-cmakeliststxt) above — this is, in fact, exactly the real `CMakeLists.txt` used to build this tutorial:
 
-    cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
-    
-    project(tutorial)
-    
-    find_package(ALPS REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
-    message(STATUS "ALPS version: ${ALPS_VERSION}")
-    include(${ALPS_USE_FILE})
-    
-    add_executable(tutorial main.C tutorial.f90)
-    target_link_libraries(tutorial ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```cmake
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+project(alpsize NONE)
+
+# find ALPS Library
+find_package(ALPS REQUIRED PATHS ${ALPS_ROOT_DIR} $ENV{ALPS_HOME} NO_SYSTEM_ENVIRONMENT_PATH)
+message(STATUS "Found ALPS: ${ALPS_ROOT_DIR} (revision: ${ALPS_VERSION})")
+include(${ALPS_USE_FILE})
+
+# enable C, C++, and Fortran compilers
+enable_language(C CXX Fortran)
+
+# rule for generating ising program
+add_executable(ising ising.C ising_impl.f90)
+target_link_libraries(ising ${ALPS_LIBRARIES} ${ALPS_FORTRAN_LIBRARIES})
+```
+
+## Running the Ported Program
+
+Build it the same way as the `hello` sample in [Integration-02](../alpsize02):
+
+```bash
+$ cmake -DALPS_ROOT_DIR=${ALPS_ROOT} .
+$ make
+```
+
+The tutorial directory ships a ready-made `ising_params` parameter file with four clones, each at a different temperature, lattice size, and sweep count:
+
+```
+ALGORITHM = "ising"
+{ TEMPERATURE = 2.5; MCS = 1000; INT = 1000; L=10; }
+{ TEMPERATURE = 2.3; MCS = 900; INT = 1100; L=20; }
+{ TEMPERATURE = 2.1; MCS = 800; INT = 1200; L=30; }
+{ TEMPERATURE = 1.9; MCS = 700; INT = 1300; L=40; }
+```
+
+Convert it to XML and run, exactly as in Integration-02:
+
+```bash
+$ cp ${SAMPLES}/alpsize-11-fortran-ising/ising_params .
+$ parameter2xml ising_params
+$ ./ising ising_params.in.xml
+```
+
+Because `alps_init` and `alps_finalize` in the shipped `ising_impl.f90` print a short diagnostic banner (see the callout in [Initialization](#initialization) above), each clone announces itself as it starts and finishes, for example:
+
+```
+----- alps_init( 0 ) -----
+   TEMP =  2.5000000000000000
+   MCS =  1000
+   INT =  1000
+   L =  10
+```
+
+Once all four clones finish, ALPS writes the accumulated `Energy` and `Magnetization` observables — with automatic error bars, exactly as `alps::alea` provides in the C++ tutorials — to the standard ALPS result files, which you can inspect with the usual ALPS/`pyalps` tools referenced throughout the [ALPS documentation](https://alps.comp-phys.org).
+
+## What's Next?
+
+This completes the ALPS integration tutorial series. You have now seen the same underlying scheduler — parameters, observables, checkpointing, parallel clones — driven from plain C ([Integration-00](../alpsize00)), explained at the build-system level ([Integration-01](../alpsize01)), and driven from Fortran ([Integration-02](../alpsize02) and this page). Return to the [Integration section overview](../) for the full list of tutorials, or to the [ALPS lattice library](../../intro/latticehowtos) and [Methods documentation](../../methods) to see what else ALPS can simulate once your own code is integrated.
