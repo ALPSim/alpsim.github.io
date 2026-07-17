@@ -5,15 +5,15 @@ toc: true
 weight: 3
 ---
 
-In the simulation of lattice models, one usually considers a model defined on an infinite or finite lattice. Here, we explain how to specify both in XML format.
+格子模型は通常、無限格子あるいはその有限の一部分の上で定義されます。ここでは、単位胞とその基底ベクトルから出発して、両方を XML 形式でどのように指定するかを説明します。
 
-## Infinite Lattices
+## 無限格子
 
-Lattices are created by replicating a unit cell through translation by integer multiples of the basic vectors of the lattice, as shown here in two dimensions:
+格子は、単位胞を格子の基底ベクトルの整数倍だけ並進させて複製することで作られます。2次元の場合を以下に示します。
 
 ![Infinite lattice with unit cell.](../figs/tutoriallatticehowtolattice1.gif)
 
-Such a lattice is described by an (optional) name and the dimensionality. Additionally we can specify the cartesian coordinates of the basis vectors of the lattice. For above lattice this would be:
+このような格子は、（任意の）名前と次元数によって記述されます。さらに、格子の基底ベクトルの直交座標（Cartesian coordinates）を指定することもできます。上の格子の場合は次のようになります。
 
     <LATTICE name="2D" dimension="2">
     <BASIS>
@@ -22,7 +22,7 @@ Such a lattice is described by an (optional) name and the dimensionality. Additi
     </BASIS>
     </LATTICE>
 
-Basis vectors can also be specified in a symbolic and parametrized way, such as:
+基底ベクトルは、次のように記号的・パラメータ化された形で指定することもできます。
 
     <LATTICE name="2D" dimension="2">
     <PARAMETER name="a" default="1"/>
@@ -30,19 +30,21 @@ Basis vectors can also be specified in a symbolic and parametrized way, such as:
     <PARAMETER name="phi" default="Pi/2"/>
     <BASIS>
         <VECTOR>   a 0 </VECTOR>
-        <VECTOR> b*sin(phi) b*cos(phi) </VECTOR>
+        <VECTOR> b*cos(phi) b*sin(phi) </VECTOR>
     </BASIS>
     </LATTICE>
 
-## Finite lattices
+ここに示した既定値では、これは具体的な値（`phi=Pi/2`）を直接与えた場合と同じ正方格子になります：第1のベクトルは x 軸に沿っており、第2のベクトルは長さ `b`、第1のベクトルに対して角度 `phi` をなします。
 
-### Finite extent
+## 有限格子
 
-Most (but not all) computer simulations do not work on the infinite lattice presented above, but instead on a finite part of the lattice. There are many ways in which such a finite lattice can be defined. Any finite subset of a lattice is a finite lattice, the possibilities are infinite. To start with we define the most widespread lattice fo finite extent, where a cell is translated at most a finite number of times in any direction, e.g. a square, rectangular, cubic or hypercubic lattice, where we specify the extent in any of the dimensions.
+### 有限の広がり
+
+（すべてではありませんが）ほとんどの計算機シミュレーションは、上で示した無限格子ではなく、格子の有限な部分の上で行われます。このような有限格子を定義する方法は数多くあります。格子の任意の有限部分集合はそれ自体が有限格子であるため、可能性は無限にあります。まず、最もよく使われる有限の広がりを持つ格子を定義しましょう。これは、セルが各方向に高々有限回だけ並進されるもので、例えば正方格子・長方形格子・立方格子・超立方格子などがあり、それぞれの次元について広がりを指定します。
 
 ![A finite lattice](../figs/tutoriallatticehowtolattice2.gif)
 
-To create a finite lattice one defines
+有限格子を作成するには、次のように定義します。
 
     <FINITELATTICE name="5x3">
     <LATTICE name="2D" dimension="2"/>
@@ -50,14 +52,14 @@ To create a finite lattice one defines
     <EXTENT dimension="2" size="3"/>
     </FINITELATTICE>
 
-If the dimension attribute is omitted, the extent is assumed to apply to all dimensions, e.g. a cubic lattice of linear size 4 would be:
+dimension 属性を省略した場合、その広がりはすべての次元に適用されると仮定されます。例えば、線形サイズ4の立方格子は次のようになります。
 
     <FINITELATTICE>
     <LATTICE dimension="3"/>
     <EXTENT size="4"/>
     </FINITELATTICE>
 
-Not all dimensions need to be finite, and an infinite strip of width two can be specified as
+すべての次元が有限である必要はなく、幅2の無限に長いストリップは次のように指定できます。
 
 ![A mixed lattice with finite and infinite dimensions](../figs/tutoriallatticehowtolattice3.gif)
 
@@ -66,7 +68,7 @@ Not all dimensions need to be finite, and an infinite strip of width two can be 
     <EXTENT dimension="2" size="2"/>
     </FINITELATTICE>
 
-In many applications the exact extent is not constant, but an input parameter specified by the user. We can again use a `<PARAMETER>` element to specify the extent. For an L x 2 strip this is:
+多くのアプリケーションでは、広がりは一定ではなく、ユーザーが指定する入力パラメータです。ここでも `<PARAMETER>` 要素を使って広がりを指定できます。L × 2 のストリップの場合は次のようになります。
 
     <FINITELATTICE>
     <LATTICE name="2D" dimension="2"/>
@@ -75,7 +77,7 @@ In many applications the exact extent is not constant, but an input parameter sp
     <EXTENT dimension="2" size="2"/>
     </FINITELATTICE>
 
-If we want to have a strip of size L x W, with a default value of 2 for the width in case that W is not specified we provide both a size and a parameter attribute:
+L × W のサイズのストリップで、W が指定されなかった場合の既定値を2としたい場合は、size 属性と parameter 属性の両方を指定します。
 
     <FINITELATTICE>
     <LATTICE name="2D" dimension="2"/>
@@ -85,7 +87,7 @@ If we want to have a strip of size L x W, with a default value of 2 for the widt
     <EXTENT dimension="2" size="W" />
     </FINITELATTICE>
 
-Finally, it is often the case that we consider a square (or cubic) lattice of the same extent L in all dimensions, unless we specifically provide other dimensions (e.g. W for the width or H for the height). This can be described as:
+最後に、W（幅）や H（高さ）などの他の次元を明示的に指定しない限り、すべての次元で同じ広がり L を持つ正方（あるいは立方）格子を考えることがよくあります。これは次のように記述できます。
 
     <FINITELATTICE>
     <LATTICE name="3D" dimension="3"/>
@@ -97,16 +99,16 @@ Finally, it is often the case that we consider a square (or cubic) lattice of th
     <EXTENT dimension="3" size="H" />
     </FINITELATTICE>
 
-The first defined parameter specifies the dimension. Thus if only L is specified by the user, we get an LxLxL cube, if L and W are specified an LxWxW block. If L and H are specified we get an LxLxH block and if all of L, W and H are defined we get an LxWxH block.
+`L` は常に第1次元の広がりを設定し、それ以外は上書きされない限り既定値にフォールバックします。したがって、ユーザーが `L` のみを指定した場合は L×L×L の立方体、`L` と `W` を指定した場合は L×W×W の直方体になります。`L` と `H` を指定した場合は L×L×H の直方体、`L`、`W`、`H` をすべて指定した場合は L×W×H の直方体になります。
 
-## Boundary conditions
+## 境界条件
 
-For finite lattices in addition to the extent the boundary conditions need to be specifed. Widely used boundary conditions are:
+有限格子では、広がりに加えて境界条件も指定する必要があります。広く使われる境界条件は次の通りです。
 
-- open: the lattice has open edges, and the boundary cells do not have any neighbor on one or more sides
-- periodic: the lattice is assumed to be periodic, i.e. moving out of the lattice on one side, one reenters the lattice on the opposite side. The right neighbor of the rightmost cell is the left-most, and the upper neighbor of the uppermost cell is the lowest cell. For a two-dimensional lattice this looks like a torus.
+- open（開放）：格子は開いた端を持ち、境界のセルは一方あるいは複数の方向に隣接するセルを持ちません
+- periodic（周期的）：格子は周期的であると仮定されます。すなわち、一方の端から格子の外に出ると、反対側の端から格子に再び入ります。最も右のセルの右隣は最も左のセルであり、最も上のセルの上隣は最も下のセルです。2次元格子の場合、これはトーラスのような形になります。
 
-For these two types of boundary conditions we have defined a `<BOUNDARY>` element, with a type attribute that can take either of these values. E.g. for a periodic LxL square lattice:
+これら2種類の境界条件に対して、いずれかの値を取る type 属性を持つ `<BOUNDARY>` 要素を定義しています。例えば、周期的な L × L の正方格子の場合は次のようになります。
 
     <FINITELATTICE>
     <LATTICE name="2D" dimension="2"/>
@@ -114,18 +116,18 @@ For these two types of boundary conditions we have defined a `<BOUNDARY>` elemen
     <BOUNDARY type="periodic" />
     </FINITELATTICE>
 
-Or for a strip that is periodic in the long and open in the short direction:
+あるいは、長い方向には周期的で、短い方向には開放的なストリップの場合は次のようになります。
 
     <FINITELATTICE name="strip">
     <LATTICE name="strip" dimension="2"/>
     <PARAMETER name="W" default="2" />
-    <EXTENT dimension=1 size="L" />
-    <EXTENT dimension=2 size="W" />
+    <EXTENT dimension="1" size="L" />
+    <EXTENT dimension="2" size="W" />
     <BOUNDARY dimension="1" type="periodic" />
     <BOUNDARY dimension="2" type="open" />
     </FINITELATTICE>
 
-Alternatively, if the boundary condition is to be defined at run-time, again a `<PARAMETER>` element can be specified to denote the name of the parameter that will determine the boundary condition and optionally provide a default value:
+あるいは、境界条件を実行時に決めたい場合は、境界条件を決めるパラメータの名前を示す `<PARAMETER>` 要素を指定し、必要に応じて既定値を与えることもできます。
 
     <FINITELATTICE>
     <LATTICE name="cube" dimension="3"/>
@@ -134,8 +136,11 @@ Alternatively, if the boundary condition is to be defined at run-time, again a `
     <BOUNDARY type="BC" />
     </FINITELATTICE>
 
-This will specify a cubic lattice with boundary conditions given by the parameter "BC", and periodic boundary conditions as default. [edit] Referencing lattices
-Instead of defining a lattice every time, we can also refer to a previously defined lattice. E.g. instead of defining
+これにより、パラメータ `BC` によって境界条件が与えられ、既定では周期的境界条件となる立方格子が指定されます。
+
+## 格子の参照
+
+毎回格子を定義する代わりに、以前に定義した格子を参照することもできます。例えば、次のように定義する代わりに：
 
     <FINITELATTICE name = "finite tilted 2D">
     <LATTICE name="tilted 2D" dimension="2">
@@ -150,23 +155,25 @@ Instead of defining a lattice every time, we can also refer to a previously defi
     <BOUNDARY type="BC" />
     </FINITELATTICE>
 
-We can first define the infinite lattice:
+まず無限格子を定義しておき：
 
-    <LATTICE name="tilted 2D" dimension="2"
+    <LATTICE name="tilted 2D" dimension="2">
     <BASIS>
         <VECTOR>   1  0 </VECTOR>
-        <VECTOR> 0.5, 1 </VECTOR>
+        <VECTOR> 0.5 1 </VECTOR>
     </BASIS>
     </LATTICE>
 
-And then every time we define a finite sublattice refer to this lattice by using a ref attribute in the lattice element instead of repeating the definition:
+そして、有限な部分格子を定義するたびに、定義を繰り返す代わりに lattice 要素の ref 属性を使ってこの格子を参照します。
 
     <FINITELATTICE name = "finite tilted 2D">
-    <LATTICE ref="tilted 2D">
+    <LATTICE ref="tilted 2D"/>
     <PARAMETER name="BC" default="periodic" />
     <EXTENT dimension="1" size="L" />
     <EXTENT dimension="2" size="W" />
     <BOUNDARY type="BC" />
     </FINITELATTICE>
 
+---
 
+このセクションの他の内容の概要については、[格子の定義](..) を参照してください。シミュレーションで格子を選択するための `LATTICE`／`GRAPH` 入力パラメータについては、[共通パラメータ](../../parameters) を参照してください。他の ALPS ドキュメントのセクションについては、[はじめに](../..) を参照してください。
