@@ -7,7 +7,7 @@ weight: 1
 
 ## Overview
 
-In the ALPS library simulations are based on the scheduler library which allows you to specify parameters for your simulations, including multiple definitions of parameters (e.g. if you want to simulate a physical system at a couple of temperatures). The scheduler library will then start jobs for every single parameter set, either on a serial or parallel machine, and uses checkpoints to prevent data loss when exceeding machine walltimes. The scheduler library asks for a job file which specifies task files for every set of parameters for which a Monte Carlo simulation shall be run. The job and task files are given in XML format. The scheduler will read in these files and write observables into the task file. An example job file could look like this:
+ALPS のシミュレーションはスケジューラライブラリの上に構築されています。これにより、シミュレーションのパラメータを指定でき、また一度に複数のパラメータの組を指定することもできます（例えば、ある物理系をいくつもの異なる温度でシミュレーションしたい場合など）。スケジューラライブラリは、パラメータの組ごとに1つのジョブを、シリアルマシンあるいは並列マシン上で開始し、定期的にチェックポイント――実行中の状態のスナップショット――を書き出すことで、実行がマシンの実行時間制限を超えたり中断されたりした場合にもデータが失われないようにします。再開されたジョブは最初からではなく、直近のチェックポイントから再開されます。スケジューラはジョブファイルから入力を読み込みます。ジョブファイルには、実行すべきシミュレーションのパラメータの組ごとに1つのタスクファイルが列挙されています。ジョブファイルとタスクファイルはどちらも XML 形式で与えられます：スケジューラはタスクファイルから入力パラメータを読み込み、測定された物理量をそのタスクファイルに書き戻します。ジョブファイルの例は次のようになります。
 
     <JOB>
     <OUTPUT file="parm.xml"/>
@@ -25,7 +25,7 @@ In the ALPS library simulations are based on the scheduler library which allows 
     </TASK> 
     </JOB>
 
-and an example task file like:
+`<JOB>` 自体が持つ `<OUTPUT>` 要素は、ジョブ全体の要約ファイルの名前を指定しており、このファイルはタスクが進行・完了するたびにチェックポイントの際に更新されます。各 `<TASK>` は1つのパラメータの組に対応します：`status` 属性は進行状況を示し（`new` はまだ開始されていないタスク、`running` はスケジューラが着手したタスク、`finished` は完了したタスクを表します）、`<INPUT>` はそのタスクのパラメータを保持するタスクファイルの名前、`<OUTPUT>` は結果が書き出されるファイルの名前を示します。タスクファイル（ここでは `parm.task1.in.xml`）の例は次のようになります。
 
     <SIMULATION>
     <PARAMETERS>
@@ -35,21 +35,25 @@ and an example task file like:
     <PARAMETER name="THERMALIZATION">100</PARAMETER>
     </PARAMETERS> 
     </SIMULATION>
-    
-Here we will discuss how to prepare, run, and evaluate ALPS simulations. ALPS 2 supports two ways of performing simulations:
 
-- [Using the command line \(with limited evaluation tools\)](../commandline)
-- [Using Python](../usepython)
+各 `<PARAMETER>` エントリは1つの `name`／値のペアであり、プレーンテキストのパラメータファイルや Python のパラメータ辞書で指定するパラメータと本質的に同じものです――違うのは構文だけです。実際には、ジョブファイルやタスクファイルの XML を手で書くことはほとんどありません：以下の2つのワークフローはどちらも、コマンドラインツールの `parameter2xml`、あるいは Python の `pyalps.writeInputFiles`／`pyalps.writeParameterFile` によって、これらを自動的に生成します。ここで XML 形式を示したのは主に、直接調べたりデバッグしたりする必要が生じたときに、その構造を見て分かるようにするためです。
 
-Both ways produce the same output files. Command line and Python can be mixed and matched as you desire. The common features are the three phases of a simulation:
+このセクションでは、ALPS のシミュレーションを準備・実行・評価する方法について説明します。ALPS には、そのための2つの方法があります。
 
-- Preparing the input files
-- Running the simulation
-- Evaluating the results 
+- [コマンドラインの使用（評価ツールは限定的）](../commandline)
+- [Python の使用](../usepython)
 
-## Comment on random number generators
+どちらの方法も同じ出力ファイルを生成し、必要に応じて自由に組み合わせて使うことができます。いずれの方法でも、シミュレーションは同じ3つの段階を経ます。
 
-Whenever you use Monte-Carlo simulations, you need to remember that you work with pseudo-random numbers. There is always a small chance that your application is just by chance the one that shows that a so-far good pseudo random number generator is not ideal. Hence, as is standard practice for all high-accuracy Monte Carlo simuations, you should run a simulation with more than one random number generator if you strive for high accuracy. The RNG parameter of the simulation allows you to change the random number generator in order to validate your results.
+- 入力ファイルの準備
+- シミュレーションの実行
+- 結果の評価
+
+## 乱数生成器についての注意
+
+モンテカルロシミュレーションを実行する際は、常に擬似乱数を扱っているということを忘れないでください。これまでよく検証されてきた擬似乱数生成器であっても、あなたの特定のアプリケーションがその欠陥を露呈させる最初のケースになってしまう可能性は、常にわずかながら存在します。そのため、高精度なモンテカルロ計算における標準的な作法として、異なる生成器――[`RNG` パラメータ](../../parameters#additional-parameters-for-monte-carlo-simulations)で設定します――でシミュレーションを再実行し、結果が変わらないことを確認すべきです。
+
+`RNG` を含む、ほとんどの ALPS アプリケーションに共通するパラメータの一覧については、[共通パラメータ](../../parameters) を参照してください。ALPS ドキュメントの他のセクションの概要については、[はじめに](../..) を参照してください。
 
 
 
