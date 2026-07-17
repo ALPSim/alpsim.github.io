@@ -5,9 +5,8 @@ toc: true
 weight: 5
 ---
 
-As similar lattices, finite lattices and graphs will appear in many models and simulations, it is of advantage to define commonly used lattices and graphs in a "library", and just refer to them by name, e.g. as input parameter to a simulation. The first step is to divide the definition of the `<LATTICEGRAPH>` into four parts:
+Since similar lattices, finite lattices, and graphs appear again and again in many models and simulations, it is advantageous to define the commonly used ones once, in a "library," and refer to them by name — for example, as an input parameter to a simulation. The first step is to divide the definition of a `<LATTICEGRAPH>` into four parts:
 
-    <verbatim>
     <LATTICE name="square" dimension="2">
     <BASIS>
         <VECTOR> 1 0 </VECTOR>
@@ -36,7 +35,7 @@ As similar lattices, finite lattices and graphs will appear in many models and s
     <UNITCELL ref="complex example"/>
     </LATTICEGRAPH>
     
-Here we made use of the predefinition of named lattices and unit cells (e.g. in a library), which we can then combine be referencing them in the `<LATTICEGRAPH>` element. Now we can define a `<LATTICES>` element, which can contain any number of `<LATTICE>`, `<FINITELATTICE>`, `<UNITCELL>`, `<GRAPH>` and `<LATTICEGRAPH>` elements. For example
+Here we made use of previously defined, named lattices and unit cells (e.g. in a library), which we can then combine by referencing them in the `<LATTICEGRAPH>` element. Now we can define a `<LATTICES>` element, which can contain any number of `<LATTICE>`, `<FINITELATTICE>`, `<UNITCELL>`, `<GRAPH>`, and `<LATTICEGRAPH>` elements. For example:
 
     <LATTICES>
     <LATTICE name="chain lattice" dimension="1">
@@ -62,6 +61,11 @@ Here we made use of the predefinition of named lattices and unit cells (e.g. in 
     <VERTEX/>
     <EDGE><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="0 1"/></EDGE>
     <EDGE><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    </UNITCELL>
+    <UNITCELL name="anisotropic2d" dimension="2">
+    <VERTEX/>
+    <EDGE type="0"><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    <EDGE type="1"><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="0 1"/></EDGE>
     </UNITCELL>
     <UNITCELL name="simple3d" dimension="3" vertices="1">
     <VERTEX/>
@@ -118,3 +122,9 @@ Here we made use of the predefinition of named lattices and unit cells (e.g. in 
     <UNITCELL ref="anisotropic2d"/>
     </LATTICEGRAPH>
     </LATTICES>
+
+The `anisotropic2d` unit cell mirrors `simple2d`, but gives the two bond directions different edge types (`0` and `1`), so that a model can assign a different coupling to each — for example, `J0` along the first lattice direction and `J1` along the second.
+
+---
+
+For an overview of the rest of this section, see [Lattice Definitions](..). For the `LATTICE`/`GRAPH` input parameters used to select a lattice or graph by name in a simulation, see [Common Parameters](../../parameters). For the other ALPS documentation sections, see the [General Introduction](../..).
