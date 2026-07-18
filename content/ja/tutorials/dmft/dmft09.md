@@ -9,241 +9,113 @@ toc: true
 
 この例では、[Georges らによる DMFT のレビュー論文](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)の図11を再現します。この6本の曲線は、相互作用 $U=3D/\sqrt{2}$ を持つベーテ格子上の半充填 Hubbard 模型が、冷却に伴って反強磁性相へと転移していく様子を示しています。
 
-これらの例は、コマンドラインで直接コマンドを実行するか、python スクリプトを実行することで開始できます。DMFT パラメータの組の一つを手動で実行する場合、例えば `tutorials/dmft-02-hybridization` 内の `beta_14_U3_tsqrt2` ディレクトリに入り、dmft コード `/opt/alps/bin/dmft hybrid.param` を実行すると、同じ結果が得られます。
+このチュートリアルは [DMFT-02 Hybridization](../dmft02)、[DMFT-03 Interaction](../dmft03)、[DMFT-07 Hirsch-Fye](../dmft07) を統合したものです。同じ物理的な点を、アルゴリズム的に独立な3種類の不純物ソルバーで解き、その結果を1つのプロット上で直接比較します。
 
-注：この例は、チュートリアル [DMFT-02 Hybridization](../dmft02)、[DMFT-03 Interaction](../dmft03)、[DMFT-07 Hirsch-Fye](../dmft07) を統合したものです。
+### 模型
 
-### ハイブリダイゼーション展開 CT-HYB
+チュートリアル02・03・07と同様に、単バンド Hubbard 模型
 
-まず、連続時間量子モンテカルロコードであるハイブリダイゼーション展開アルゴリズム CT-HYB を実行します。CT-HYB シミュレーションは、1反復あたり約1分かかります。このシミュレーションを実行するためのパラメータファイルは、ディレクトリ `tutorials/dmft-02-hybridization` にあります。
+$$
+\hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
+$$
 
-主なパラメータは以下の通りです。
+をベーテ格子上、半充填（$\mu=0$）で解きます。$t=0.707106781186547=1/\sqrt{2}$（半バンド幅 $D=2t=\sqrt{2}$）、$U=3$ とすることで、[Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) と同様に $U=3D/\sqrt{2}$ となります。`ANTIFERROMAGNET=1` によりネール自己無撞着が可能になっているため、この点を様々な $\beta$ にわたって冷却することで、どの不純物ソルバーを使っても同じ図11の金属-反強磁性絶縁体クロスオーバーが再現されます。
 
-```
-SEED = 0;                    // Monte Carlo Random Number Seed
-THERMALIZATION = 1000;       // Thermalization Sweeps
-SWEEPS = 100000000;          // Total Sweeps to be computed
-MAX_TIME = 60;               // Maximum time to run the simulation
-BETA = 12.;                  // Inverse temperature
-SITES = 1;                   // This is a single site DMFT simulation, so Sites is 1
-N = 1000;                    // auxiliary discretization of the imaginary-time Green's function
-NMATSUBARA = 1000;           // The number of Matsubara frequencies
-U = 3;                       // Interaction energy
-t = 0.707106781187;          // hopping parameter. For the Bethe lattice considered here $W=2D=4t$
-MU = 0;                      // Chemical potential
-H = 0;                       // Magnetic field
-SYMMETRIZATION = 0;          // We are not enforcing a paramagnetic self consistency condition
-SOLVER = Hybridization;      // The Hybridization solver
-```
+### パラメータ
 
-コマンドラインでシミュレーションを開始するには、次のように入力します。
+各ソルバーの完全な注釈付きパラメータファイルは、対応するチュートリアルに記載されています。ここでは、共通点 $\beta=12$ において、ソルバーごとに異なる設定のみを再掲します。
+
+| パラメータ | 意味 | CT-HYB（[DMFT-02](../dmft02)） | CT-INT（[DMFT-03](../dmft03)） | Hirsch-Fye（[DMFT-07](../dmft07)） |
+| :-------- | :------ | :----------------------------- | :----------------------------- | :---------------------------------- |
+| `SOLVER` | 不純物ソルバー | `"hybridization"` | `"Interaction Expansion"` | `"hirschfye"` |
+| `N` | 虚時間離散化数 | $250$ | $500$ | $16$（意図的に小さい。[DMFT-07](../dmft07#手法の選択) 参照） |
+| ソルバー固有 | 追加パラメータ | `N_MEAS`、`N_ORDER`、`SC_WRITE_DELTA` | `ALPHA`、`HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
+| 共通 | `U`、`t`、`BETA`、`MU`、`H`、`FLAVORS`、`ANTIFERROMAGNET`、`SYMMETRIZATION`、`NMATSUBARA`、`OMEGA_LOOP`、`SITES`、`SEED` | 3つのソルバーすべてで共通（上の「模型」を参照） | | |
+
+### シミュレーションの実行
+
+各ソルバーの短縮版スクリプトは、それぞれ自分のチュートリアルディレクトリに `parm_beta_6.0` と `parm_beta_12.0` を書き出し、実行します。
 
 ```
-dmft hybrid.param
+cd tutorials/dmft-02-hybridization && python tutorial2.py    # CT-HYB
+cd tutorials/dmft-03-interaction   && python tutorial3.py    # CT-INT
+cd tutorials/dmft-07-hirschfye     && python tutorial7.py    # Hirsch-Fye
 ```
 
-このコードは最大10回の自己無撞着反復を実行します。プログラムを実行したディレクトリの出力先には、グリーン関数ファイル G_tau_i、自己エネルギー（selfenergy_i）、周波数空間でのグリーン関数 G_omega_i が見つかります。これらの例における G_tau はスピンアップとスピンダウンの2列から成ります。$\beta$ における値は負の密度であり、これが誤差の範囲を超えて異なる場合、系は反強磁性相にあります。python シェルで以下の行を実行することで、異なる $\beta$ に対するグリーン関数をプロットし、結果を [Georges ら](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)の図11と比較できます。以下の Hirsch-Fye の節では、離散時間量子モンテカルロコードである Hirsch Fye コードを用いて同じ結果を再現します。求解器に対するコマンドを除いて、パラメータは同じです。
-
-例の中の `tutorials/dmft-02-hybridization` ディレクトリに、（\*tsqrt2 という名前の）パラメータファイルがあります。あるいは、python スクリプト `tutorial2a.py` を実行することもできます。
+あるいは、パラメータファイルが生成された後であれば、コマンドラインで直接次のように実行することもできます。
 
 ```
-import pyalps
-import numpy as np
-import matplotlib.pyplot as plt
-import pyalps.pyplot
-
-#prepare the input parameters
-parms=[]
-for b in [6.,8.,10.,12.,14.,16.]:
-    parms.append(
-        {
-            'ANTIFERROMAGNET'     : 1,
-            'CONVERGED'           : 0.03,
-            'F'                   : 10,
-            'FLAVORS'             : 2,
-            'H'                   : 0,
-            'H_INIT'              : 0.2,
-            'MAX_IT'              : 10,
-            'MAX_TIME'            : 60,
-            'MU'                  : 0,
-            'N'                   : 1000,
-            'NMATSUBARA'          : 1000,
-            'N_FLIP'              : 0,
-            'N_MEAS'              : 10000,
-            'N_MOVE'              : 0,
-            'N_ORDER'             : 50,
-            'N_SHIFT'             : 0,
-            'OMEGA_LOOP'          : 1,
-            'OVERLAP'             : 0,
-            'SEED'                : 0,
-            'SITES'               : 1,
-            'SOLVER'              : 'Hybridization',
-            'SYMMETRIZATION'      : 0,
-            'TOLERANCE'           : 0.01,
-            'U'                   : 3,
-            't'                   : 0.707106781186547,
-            'SWEEPS'              : 100000000,
-            'THERMALIZATION'      : 1000,
-            'BETA'                : b,
-            'CHECKPOINT'          : 'solverdump_beta_'+str(b)+'.task1.out.h5',
-            'G0TAU_INPUT'         : 'G0_tau_input_beta_'+str(b)
-        }
-    )
-#write the input file and run the simulation
-for p in parms:
-    input_file = pyalps.writeParameterFile('parm_beta_'+str(p['BETA']),p)
-    res = pyalps.runDMFT(input_file)
+/path-to-alps-installation/bin/dmft tutorials/dmft-02-hybridization/parm_beta_12.0
+/path-to-alps-installation/bin/dmft tutorials/dmft-03-interaction/parm_beta_12.0
+/path-to-alps-installation/bin/dmft tutorials/dmft-07-hirschfye/parm_beta_12.0
 ```
 
-これらのシミュレーションを実行した後、出力結果を Hirsch Fye の節や DMFT のレビュー論文の Hirsch-Fye の結果、あるいは Interaction Expansion CT-INT の節の相互作用展開の結果と比較してください。シミュレーションを再実行するには、入力パラメータ G0OMEGA_INPUT を指定することで初期解を与えることができます。例えば G0omga_output を G0_omega_input にコピーし、パラメータファイルで G0OMEGA_INPUT = G0_omega_input と指定してから、コードを再実行してください。次のスクリプトを使ってグリーン関数をプロットすることで、反強磁性相への転移を観察できます。
+完全なスクリプトと注釈付きパラメータファイルについては、[DMFT-02](../dmft02#シミュレーションの実行)、[DMFT-03](../dmft03#シミュレーションの実行)、[DMFT-07](../dmft07#シミュレーションの実行) を参照してください。
+
+### 格子
+
+3つのソルバーはすべて、このシリーズ全体で使われている、無限配位数 $z\to\infty$ の極限のベーテ格子上で実行されます。ホッピングは $t=t^*/\sqrt{z}$ とスケールされ、半円形状態密度（半バンド幅 $D=2t$）が自己無撞着ループで解析的に評価されます。
 
 ```
-flavors=parms[0]['FLAVORS']
-listobs=[]   
-for f in range(0,flavors):
-    listobs.append('Green_'+str(f))
-
-ll=pyalps.load.Hdf5Loader()
-data = ll.ReadMeasurementFromFile(pyalps.getResultFiles(pattern='parm_beta_*h5'), respath='/simulation/results/G_tau', measurements=listobs, verbose=True)
-for d in pyalps.flatten(data):
-    d.x = d.x*d.props["BETA"]/float(d.props["N"])
-    d.props['label'] = r'$\beta=$'+str(d.props['BETA'])
-plt.figure()
-plt.xlabel(r'$\tau$')
-plt.ylabel(r'$G(\tau)$')
-plt.title('Hubbard model on the Bethe lattice')
-pyalps.pyplot.plot(data)
-plt.legend()
-plt.show()
+        o       o
+         \     /
+      t   \   /   t
+           \ /
+        o---o---o          o : lattice site, interaction U (on site)
+           / \              --- : bond, hopping amplitude t
+          /   \
+         /     \
+        o       o
 ```
 
-結果には比較的大きなノイズが見られることに気づくでしょう。これは、このような高温では展開次数が非常に小さくなり、測定手順の効率が下がるためです。統計精度は、総実行時間（MAX_TIME）を増やすか、複数の CPU で実行することで改善できます。MPI で実行するには、`mpirun -np procs dmft parameter_file` を試すか、お使いの MPI 環境の man ページを参照してください。
+異なる格子で同じ比較を行う方法については、[DMFT-08 格子](../dmft08) を参照してください。
 
-DMFT の自己無撞着計算の収束を確認したい場合は、`tutorial2b.py` を使って各反復ステップのグリーン関数をプロットできます。
+### 手法の選択
 
-```
-ll=pyalps.load.Hdf5Loader()
-for p in parms:
-    data = ll.ReadDMFTIterations(pyalps.getResultFiles(pattern='parm_beta_'+str(p['BETA'])+'.h5'), measurements=listobs, verbose=True)
-    grouped = pyalps.groupSets(pyalps.flatten(data), ['iteration'])
-    nd=[]
-    for group in grouped:
-        r = pyalps.DataSet()
-        r.y = np.array(group[0].y)
-        r.x = np.array([e*group[0].props['BETA']/float(group[0].props['N']) for e in group[0].x])
-        r.props = group[0].props
-        r.props['label'] = r.props['iteration']
-        nd.append( r )
-    plt.figure()
-    plt.xlabel(r'$\tau$')
-    plt.ylabel(r'$G(\tau)$')
-    plt.title(r'\beta = %.4s' %nd[0].props['BETA'])
-    pyalps.pyplot.plot(nd)
-    plt.legend()
-    plt.show()
-```
+CT-HYB、CT-INT、Hirsch-Fye は、互いに無関係な近似の上に構築されています。CT-HYB はハイブリダイゼーションを展開し、強結合で最も効率が良く、CT-INT は相互作用を展開し、弱〜中程度の結合で最も効率が良く、Hirsch-Fye は虚時間を $N$ 個のスライスに離散化し、外挿によって取り除く必要のある系統的な $(\Delta\tau)^2$ バイアスを持ちます（それぞれの詳細については [DMFT-02](../dmft02)、そして [DMFT-03](../dmft03#手法の選択) と [DMFT-07](../dmft07#手法の選択) の「手法の選択」の節を参照してください）。$U=3D/\sqrt{2}$ では、これら3つのアルゴリズムのいずれにとっても明らかに有利あるいは不利な領域で動作しているわけではないため、この点は互いを相互チェックするのに良い場所になります。3つのソルバーは共通の系統誤差を持たないため、収束した3つの結果すべてに現れる特徴──特に、冷却に伴う $G(\tau)$ の反強磁性的な分裂──は、特定のモンテカルロアルゴリズムの産物ではなく、物理模型と DMFT の自己無撞着性そのものの性質であるはずです。
 
-収束の様子は、より変化に敏感な自己エネルギーで観察するのが最良です。より滑らかなグリーン関数や自己エネルギーを得るには、より長いシミュレーションが必要であることに注意してください。
+### 出力データとプロット
 
-### 相互作用展開 CT-INT
-
-Hybridization Expansion CT-HYB の節と同じ計算を CT-INT コードで行ってみると勉強になります。このコードは（ハイブリダイゼーションではなく）相互作用を展開します。対応するパラメータファイルは非常によく似ており、ディレクトリ `tutorials/dmft-03-interaction` にあります。python でシミュレーションを実行したい場合は、`tutorial3a.py` および `tutorial3b.py` ファイルを使用できます。
-
-### Hirsch Fye
-
-離散時間モンテカルロコードである [Hirsch Fye コード](https://link.aps.org/doi/10.1103/PhysRevLett.56.2521)を実行し、連続時間の結果と比較します。Hirsch Fye アルゴリズムは[こちら](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)で解説されており、このレビュー論文はコードのオープンソース実装も提供しています。これまでに多くの改良が行われてきましたが（例えば Alvarez (2008) や [Nukala09](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111) を参照してください）、このアルゴリズムは[連続時間アルゴリズム](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)に取って代わられました。
-
-Hirsch Fye シミュレーションは、1反復あたり約1分かかります。このシミュレーションを実行するためのパラメータファイルは、[このチュートリアル](../dmft07)にあります。
-
-主なパラメータは以下の通りです。
-
-```
-SEED = 0;                    // Monte Carlo Random Number Seed
-THERMALIZATION = 10000;      // Thermalization Sweeps
-SWEEPS = 1000000;            // Total Sweeps to be computed
-MAX_TIME = 60;               // Maximum time to run the simulation
-BETA = 12.;                  // Inverse temperature
-SITES = 1;                   // This is a single site DMFT simulation, so Sites is 1
-N = 16;                      // Number of time slices (you will see that this parameter is rather small)
-NMATSUBARA = 500;            // The number of Matsubara frequencies
-U = 3;                       // Interaction energy
-t = 0.707106781187;          // hopping parameter. For the Bethe lattice considered here $W=2D=4t$
-MU = 0;                      // Chemical potential
-H = 0;                       // Magnetic field
-SYMMETRIZATION = 0;          // We are not enforcing a paramagnetic self consistency condition
-SOLVER = /opt/alps/bin/hirschfye;  // The path to the external Hirsch Fye solver
-```
-
-シミュレーションを開始するには、次のように入力します。
-
-```
-dmft hirschfye.param
-```
-
-あるいは、python スクリプト `tutorial7a.py` を実行します。
+（チュートリアル02・03・07のように）各ソルバーの結果を別々にプロットするのではなく、このチュートリアルの主眼は、3つすべてを同じ図の上に重ねて表示することにあります。
 
 ```
 import pyalps
 import numpy as np
 import matplotlib.pyplot as plt
-import pyalps.pyplot
+import pyalps.plot
 
-#prepare the input parameters 
-parms=[]
-for b in [6.,8.,10.,12.,14.,16.]: 
-    parms.append(
-        { 
-            'ANTIFERROMAGNET'     : 1,
-            'CONVERGED'           : 0.03,
-            'FLAVORS'             : 2,
-            'H'                   : 0,
-            'MAX_IT'              : 10,
-            'MAX_TIME'            : 60,
-            'MU'                  : 0,
-            'N'                   : 16,
-            'NMATSUBARA'          : 500, 
-            'OMEGA_LOOP'          : 1,
-            'SEED'                : 0, 
-            'SITES'               : 1,
-            'SOLVER'              : '/opt/alps/bin/hirschfye',
-            'SYMMETRIZATION'      : 0,
-            'TOLERANCE'           : 0.01,
-            'U'                   : 3,
-            't'                   : 0.707106781186547,
-            'SWEEPS'              : 1000000,
-            'THERMALIZATION'      : 10000,
-            'BETA'                : b,
-            'G0OMEGA_INPUT'       : 'G0_omega_input_beta_'+str(b),
-            'BASENAME'            : 'hirschfye.param'
-        }
-    )
+listobs = ['0']  # flavor 0
 
-#write the input file and run the simulation
-for p in parms:
-    input_file = pyalps.writeParameterFile('parm_beta_'+str(p['BETA']),p)
-    res = pyalps.runDMFT(input_file)
-```
+files = {
+    'CT-HYB'     : 'tutorials/dmft-02-hybridization/parm_beta_12.0.h5',
+    'CT-INT'     : 'tutorials/dmft-03-interaction/parm_beta_12.0.h5',
+    'Hirsch-Fye' : 'tutorials/dmft-07-hirschfye/parm_beta_12.0.h5',
+}
 
-このコードは最大10回の自己無撞着反復を実行します。プログラムを実行したディレクトリの出力先には、グリーン関数ファイル G_tau_i、自己エネルギー（selfenergy_i）、周波数空間でのグリーン関数 G_omega_i が見つかります。これらの例における G_tau はスピンアップとスピンダウンの2列から成ります。$\beta$ における値は負の密度であり、これが誤差の範囲を超えて異なる場合、系は反強磁性相にあります。python シェルで以下の行を実行することで、異なる $\beta$ に対するグリーン関数をプロットし、結果を [Georges ら](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)の図11と比較できます。
+alldata = []
+for solver, fname in files.items():
+    data = pyalps.loadMeasurements([fname], respath='/simulation/results/G_tau', what=listobs, verbose=False)
+    for d in pyalps.flatten(data):
+        d.x = d.x*d.props["BETA"]/float(d.props["N"])
+        d.props['label'] = solver
+        alldata.append(d)
 
-```
-flavors=parms[0]['FLAVORS']
-listobs=[]   
-for f in range(0,flavors):
-    listobs.append('Green_'+str(f))
-
-ll=pyalps.load.Hdf5Loader()
-data = ll.ReadMeasurementFromFile(pyalps.getResultFiles(pattern='parm_beta_*h5'), respath='/simulation/results/G_tau', measurements=listobs, verbose=True)
-for d in pyalps.flatten(data):
-    d.x = d.x*d.props["BETA"]/float(d.props["N"])
-    d.props['label'] = r'$\beta=$'+str(d.props['BETA'])
 plt.figure()
 plt.xlabel(r'$\tau$')
-plt.ylabel(r'$G(\tau)$')
-plt.title('Hubbard model on the Bethe lattice')
-pyalps.pyplot.plot(data)
+plt.ylabel(r'$G_{flavor=0}(\tau)$')
+plt.title('DMFT-09: Neel transition at BETA=12, solver comparison')
+pyalps.plot.plot(alldata)
 plt.legend()
 plt.show()
 ```
 
-離散時間法であるため、HF は $\Delta\tau$ による離散化誤差の影響を受けます。パラメータの組を一つ選び、$N$ を徐々に大きくしながら実行してみてください。また、ここでは（ほぼ）収束した入力バス関数を用いて DMFT シミュレーションを実行していることに注意してください。ファイル G0_omega_input を削除すると、自由解から計算を再開し、収束の様子を観察することができます。
+これは3つの独立な確率的シミュレーションを比較するものであるため、実際に得られる数値はそれぞれの実行の `SEED`、`MAX_TIME`、計算機の速度に依存しますが、3本の曲線は、それぞれの誤差範囲内で一致するはずです──ただし、[DMFT-07](../dmft07#まとめと今後の課題) で提案されているように外挿しない限り、Hirsch-Fye の `N=16` による離散化バイアスは CT-HYB や CT-INT との比較で目に見える形で現れます。ソルバーを最初からではなく部分的に収束した解から再実行することもできます：目的の `G0omega_output` を新しいファイル名にコピーし、再実行する前にパラメータファイル（あるいは対応する python の辞書）で `G0OMEGA_INPUT` を指定してください。
+
+### まとめと今後の課題
+
+同じネール転移を CT-HYB、CT-INT、Hirsch-Fye で解き、3つすべてが一致することを確認することは、DMFT-02・DMFT-03・DMFT-07 がソルバー固有のアーティファクトではなく、同じ物理へと収束していることを直接確認する手段になります。
+
+1. 上記の統合プロットを（`tutorial2_long.py`、`tutorial3_long.py`、`tutorial7_long.py` を用いて）$\beta$ の6つの値すべてに拡張し、各温度で3つのソルバーすべてを重ねた、図11との完全な比較を再現してみましょう。
+2. 固定した実行時間のもとで、$\beta=12$ において3つのソルバーのうちどれが最も小さい誤差棒を与えるでしょうか。系がより常磁性側に近い $\beta=6$ では、その順位は変わるでしょうか。
+3. Hirsch-Fye の結果を統合プロットに含める前に、$\Delta\tau\to0$ へ外挿してみましょう（[DMFT-07](../dmft07#まとめと今後の課題) 参照）。外挿した曲線は、CT-HYB や CT-INT に目に見えて近づくでしょうか。
+4. [DMFT-06](../dmft06) では、常磁性金属相において、[Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) の図15にある厳密対角化／Hirsch-Fye のベンチマークと比較する、類似のソルバー間比較を行っています。この2つの比較を見比べてみましょう：ソルバー間の一致は、チュートリアル06の常磁性金属とここで扱った反強磁性相のどちらでより得やすいでしょうか。
