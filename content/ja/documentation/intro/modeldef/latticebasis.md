@@ -1,11 +1,11 @@
 
 ---
-title: Lattice Basis
+title: 格子基底
 toc: true
 weight: 3
 ---
 
-The basis of a lattice model is specified by giving a site basis for each type of site (vertex) in the lattice. If there is just one type of site, only one site basis needs to be given, either by referencing a previously defined [site basis](../sitebasis) or by declaring it inline:
+格子モデルの基底は、格子中の各サイト（頂点）タイプごとにサイト基底を与えることで指定します。サイトのタイプが 1 種類しかない場合は、サイト基底を 1 つだけ与えればよく、以前定義した[サイト基底](../sitebasis)を参照することも、その場でインラインに宣言することもできます。
 
     <BASIS name="spin">
     <SITEBASIS ref="spin"/>
@@ -18,20 +18,20 @@ The basis of a lattice model is specified by giving a site basis for each type o
     </SITEBASIS>
     </BASIS>
 
-Like `<SITEBASIS>`, the `<BASIS>` element takes a name attribute, by which it can later be referenced from a `<HAMILTONIAN>` (see [Hamiltonian Descriptions](../hamiltonian)). It contains a `<SITEBASIS>` element which is used as the default for all sites, either referencing a previously defined one by a ref attribute, as in the first example, or declaring the full site basis inline, as in the second. (The first example's `ref="spin"` points to the parametrized `spin` site basis defined in [Quantum Operators](../operators), used throughout the rest of this page.)
+`<SITEBASIS>` と同様、`<BASIS>` 要素も name 属性を持ち、後で `<HAMILTONIAN>` から参照できます（[ハミルトニアンの記述](../hamiltonian)を参照）。`<BASIS>` はすべてのサイトのデフォルトとして使われる `<SITEBASIS>` 要素を 1 つ含みます。これは、最初の例のように ref 属性で以前定義したサイト基底を参照することも、2 番目の例のようにサイト基底全体をインラインで宣言することもできます。（最初の例の `ref="spin"` は、[量子演算子](../operators)で定義されているパラメータ化された `spin` サイト基底を指しており、このページの残りの部分でもこれを使い続けます。）
 
-## Lattices with more than one site per unit cell
+## 単位胞に複数のサイトを持つ格子
 
-If the lattice contains more than one site per unit cell, the `<BASIS>` command should contain one `<SITEBASIS>` entry for each site of the unit cell. Each entry should have a different type, corresponding to the definitions given in the lattice library file (see [Lattice Definitions](../../latticehowtos)).
+格子の単位胞に複数のサイトが含まれる場合、`<BASIS>` コマンドには単位胞の各サイトに対応する `<SITEBASIS>` エントリを 1 つずつ含める必要があります。各エントリには、格子ライブラリファイル中の定義に対応する異なる type を指定します（[格子定義](../../latticehowtos)を参照）。
 
-The following basis is a valid example for the Hilbert space of a bipartite lattice:
+以下の基底は、二部格子のヒルベルト空間を表す有効な例です。
 
     <BASIS name="Kondo lattice">
     <SITEBASIS type="0" ref="fermion"/>
     <SITEBASIS type="1" ref="spin-1/2"/>
     </BASIS>
 
-In some spin models we might have the same local site basis but with the magnitude of the spin varying by site type. For example, we can set the value of the spin on sites of type 0 and 1 through the parameters `local_S0` and `local_S1`, while still providing suitable defaults:
+一部のスピンモデルでは、局所的なサイト基底自体は同じでも、スピンの大きさがサイトのタイプによって異なる場合があります。例えば、パラメータ `local_S0` と `local_S1` によってタイプ 0 とタイプ 1 のサイトのスピンの値を設定しつつ、適切なデフォルト値も用意することができます。
 
     <BASIS name="spin">
     <SITEBASIS type="0" ref="spin">
@@ -46,9 +46,9 @@ In some spin models we might have the same local site basis but with the magnitu
     </SITEBASIS>
     </BASIS>
 
-Here `local_spin` is the parameter the `spin` site basis itself uses internally to set `S` (see [Quantum Operators](../operators)); the chain of defaults means a user gets a sensible fallback at every level: leave everything unset and both site types get spin 1/2 from `local_S`; set `local_S=1` and both types become spin-1; or override `local_S0`/`local_S1` directly to give the two site types different spins.
+ここで `local_spin` は、`spin` サイト基底が内部で `S` を設定するために使っているパラメータです（[量子演算子](../operators)を参照）。このデフォルト値の連鎖により、どの段階でもユーザーに妥当なフォールバックが用意されます。何も設定しなければ、両方のサイトタイプは `local_S` によりスピン 1/2 になります。`local_S=1` と設定すれば両方のタイプがスピン 1 になります。あるいは `local_S0`/`local_S1` を直接上書きすれば、2 つのサイトタイプに異なるスピンを持たせることができます。
 
-When adding more site types this can become cumbersome, and the ALPS format allows a shortcut. If no `type` is specified, the `<SITEBASIS>` matches any site, and the wildcard character `#` in any parameter name is replaced by the site type. That way the above example can be extended to an infinite number of site types and written more compactly as:
+サイトタイプが増えるとこの書き方は煩雑になるため、ALPS の形式では簡略記法が用意されています。type を指定しなければ、`<SITEBASIS>` は任意のサイトにマッチし、パラメータ名中のワイルドカード文字 `#` はそのサイトのタイプに置き換えられます。これにより、上の例は無限個のサイトタイプに拡張しつつ、次のようにより簡潔に書くことができます。
 
     <BASIS name="spin">
     <SITEBASIS ref="spin">
@@ -58,17 +58,17 @@ When adding more site types this can become cumbersome, and the ALPS format allo
     </SITEBASIS>
     </BASIS>
 
-## Constraints
+## 制約
 
-Finally, the basis can be restricted to a sector where a quantum number, summed over all sites, takes a fixed value. For example, to restrict a spin basis to a fixed total `Sz` equal to the parameter `Sz_total`, a `<CONSTRAINT>` element can be added:
+最後に、基底はある量子数（全サイトについて和を取ったもの）が固定値を取るセクターに制限することもできます。例えば、スピン基底を全 `Sz` がパラメータ `Sz_total` に等しいセクターに制限するには、`<CONSTRAINT>` 要素を追加します。
 
     <BASIS name="spin">
     <SITEBASIS ref="spin"/>
     <CONSTRAINT quantumnumber="Sz" value="Sz_total"/>
     </BASIS>
 
-Restricting to a sector like this reduces the size of the Hilbert space, which matters most for methods that work with the full Hilbert space directly, such as exact diagonalization.
+このようにセクターに制限することでヒルベルト空間のサイズが縮小されます。これは、厳密対角化のようにヒルベルト空間全体を直接扱う手法にとって特に重要です。
 
 ---
 
-For an overview of the rest of this section, see [ALPS Model Definitions](..). For the single-site bases combined here, see [Site Basis](../sitebasis). For the other ALPS documentation sections, see the [General Introduction](../..).
+本セクションの他のページの概要については [ALPS モデル定義](..) を参照してください。ここで組み合わされている単一サイトの基底については [サイト基底](../sitebasis) を参照してください。ALPS ドキュメントの他のセクションについては [総合案内](../..) を参照してください。

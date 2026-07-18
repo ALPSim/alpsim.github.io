@@ -1,11 +1,11 @@
 
 ---
-title: Hamiltonian Descriptions
+title: 哈密顿量描述
 toc: true
 weight: 5
 ---
 
-With these elements we can now describe the Hamiltonian of a model. A simple hardcore boson model could be:
+有了这些元素之后，我们现在就可以描述一个模型的哈密顿量了。一个简单的硬核玻色子模型可以写成：
 
     <HAMILTONIAN name="hardcore boson">
     <PARAMETER name="mu" default="0"/>
@@ -23,13 +23,13 @@ With these elements we can now describe the Hamiltonian of a model. A simple har
     </BONDTERM>
     </HAMILTONIAN>
 
-First, default values can be specified for parameters such as coupling constants by using `<PARAMETER>` elements. Next, one `<BASIS>` element specifies the basis used for the model, either fully specified inline or by a reference (using the `ref` attribute).
+首先，可以用 `<PARAMETER>` 元素为耦合常数等参数指定默认值。接下来，一个 `<BASIS>` 元素指定该模型所使用的基，既可以完全内联给出，也可以通过引用（使用 ref 属性）给出。
 
-The terms of the Hamiltonian are next specified by site terms, associated with the sites of the lattice, and bond terms, associated with the bonds. Each of the `<SITETERM>` and `<BONDTERM>` elements can optionally take a type attribute, specifying which type of site (or bond) the term applies to — the same types specified in the lattice description. Omitting the type attribute applies the term to all sites or bonds for which no other term is explicitly specified.
+哈密顿量的各项接下来由格点项和键项来指定：格点项与格子的格点相关联，键项与格子的键相关联。每个 `<SITETERM>` 和 `<BONDTERM>` 元素都可以选择性地带一个 type 属性，指定该项适用于哪种类型的格点（或键）——与格子描述中给出的类型相同。省略 type 属性会使该项应用于所有未被其他项显式指定的格点或键。
 
-The `<SITETERM>` elements contain terms of the Hamiltonian associated with a single site. In the above example the term `mu` refers to the parameter `mu` while the term `n` refers to the operator `n` described in [Quantum Operators](../operators). In the `<BONDTERM>` elements, the operators must refer to two different sites; this is done by adding the site index in parentheses after the operator, e.g. as in `n(i)` to act on site `i`. The source and target attributes name the variables used to refer to the two sites (`i` and `j` in the example).
+`<SITETERM>` 元素包含哈密顿量中与单个格点相关联的项。在上面的例子中，项 `mu` 指的是参数 `mu`，而项 `n` 指的是[量子算符](../operators)中描述的算符 `n`。在 `<BONDTERM>` 元素中，算符必须涉及两个不同的格点；这是通过在算符后面的括号中加入格点索引来实现的，例如用 `n(i)` 表示作用在格点 `i` 上。source 和 target 属性给出了用来指代这两个格点的变量名（在这个例子中是 `i` 和 `j`）。
 
-To simplify writing Hamiltonians, previously defined site and bond operators can be reused instead of writing out matrix elements again. For a transverse field spin model we can use the `Sx` and `exchange` operators defined in [Quantum Operators](../operators):
+为了简化哈密顿量的书写，可以直接重用之前定义好的格点算符和键算符，而不必重新写出矩阵元。对于一个横场自旋模型，我们可以使用[量子算符](../operators)中定义的 `Sx` 和 `exchange` 算符：
 
     <HAMILTONIAN name="spin">
     <PARAMETER name="J" default="1"/>
@@ -44,7 +44,7 @@ To simplify writing Hamiltonians, previously defined site and bond operators can
     </BONDTERM>
     </HAMILTONIAN>
 
-Site-type dependent coupling terms can either be specified as in the first example, giving a type attribute restricting the applicability of a site or bond term, or by using the `#` wildcard character in the name of coupling constants, which will be replaced by the type of the site or bond as in:
+依赖格点/键类型的耦合项既可以像第一个例子那样，通过 type 属性限定格点项或键项的适用范围来指定，也可以在耦合常数名称中使用 `#` 通配符字符，该字符会被替换为格点或键的类型，例如：
 
     <HAMILTONIAN name="spin">
     <PARAMETER name="J" default="1"/>
@@ -62,10 +62,10 @@ Site-type dependent coupling terms can either be specified as in the first examp
     </BONDTERM>
     </HAMILTONIAN>
 
-We can now specify `h0` and `Gamma0` on sites of type 0 and `J0` on bonds of type 0, `h1`, `Gamma1`, and `J1` for type 1, and so on — this is exactly how, e.g., the `anisotropic2d` unit cell (see [A Library of Lattices and Graphs](../../latticehowtos/library)) lets a model assign different couplings `J0`/`J1` to bonds along each lattice direction. `J`, `h`, and `Gamma` here are the same parameters described in [ALPS Model Definitions](..).
+这样我们就可以为类型 0 的格点指定 `h0` 和 `Gamma0`、为类型 0 的键指定 `J0`，为类型 1 指定 `h1`、`Gamma1` 和 `J1`，依此类推——例如，`anisotropic2d` 晶胞（参见[格子与图库](../../latticehowtos/library)）正是通过这种方式，让模型可以为沿不同格子方向的键分别指定不同的耦合 `J0`/`J1`。这里的 `J`、`h` 和 `Gamma` 与 [ALPS 模型定义](..)中描述的是同一批参数。
 
-Extensions to more complex terms, such as 3- and 4-site terms, are in preparation and will be included here as soon as the ALPS libraries support such terms.
+更复杂项的扩展，例如三格点项和四格点项，目前正在开发中，一旦 ALPS 库支持此类项，就会在此处补充说明。
 
 ---
 
-For an overview of the rest of this section, see [ALPS Model Definitions](..). For the operators used in these Hamiltonian terms, see [Quantum Operators](../operators). For the other ALPS documentation sections, see the [General Introduction](../..).
+关于本节其余部分的概览，参见 [ALPS 模型定义](..)。关于这些哈密顿量项中使用的算符，参见[量子算符](../operators)。关于 ALPS 文档的其他章节，参见[总体介绍](../..)。

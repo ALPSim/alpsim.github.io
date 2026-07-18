@@ -1,54 +1,54 @@
 
 ---
-title: Introduction
+title: はじめに
 toc: true
 weight: 1
 ---
 
-As part of the ALPS project we need to describe quantum lattice models in a common XML format, separately from the lattice they live on. Keeping the model definition independent of the lattice means the same Hamiltonian (e.g. the Heisenberg model) can be simulated on any lattice, and the same simulation application can run any model, without changing any code.
+ALPS プロジェクトの一部として、量子格子モデルを、それが乗る格子とは切り離して共通の XML 形式で記述する必要があります。モデルの定義を格子から独立させておくことで、同じハミルトニアン（例えばハイゼンベルクモデル）をどんな格子上でもシミュレートでき、また同じシミュレーションアプリケーションでどんなモデルでも実行できるようになります。コードを変更する必要はありません。
 
-This page covers the following topics:
+このページでは、次のトピックを扱います。
 
-- [How to specify the basis of a single site](../sitebasis)
-- [How to combine single-site bases into the basis of the whole lattice](../latticebasis)
-- [How to define the quantum operators from which a Hamiltonian is built](../operators)
-- [How to assemble a Hamiltonian from parameters, a basis, and site/bond terms](../hamiltonian)
+- [単一サイトの基底を指定する方法](../sitebasis)
+- [単一サイトの基底を格子全体の基底へと組み合わせる方法](../latticebasis)
+- [ハミルトニアンを組み立てる量子演算子の定義方法](../operators)
+- [パラメータ、基底、サイト項/ボンド項からハミルトニアンを組み立てる方法](../hamiltonian)
 
-## The default model library file
+## デフォルトのモデルライブラリファイル
 
-The model library file defines the Hilbert space and the Hamiltonian of the problem. The default model library is found in `$ALPSPATH/lib/xml/models.xml`, and it contains many of the commonly used models:
+モデルライブラリファイルは、問題のヒルベルト空間とハミルトニアンを定義します。デフォルトのモデルライブラリは `$ALPSPATH/lib/xml/models.xml` にあり、よく使われる多くのモデルが含まれています。
 
-| **model name** | **list of available parameters** | **remark** |
+| **モデル名** | **利用可能なパラメータ一覧** | **備考** |
 | :------------- | :-------------------------------- | :--------- |
-| spin | J Jz Jxy J0 Jz0 Jxy0 J1 Jz1 Jxy1 h Gamma D K K0 K1 | anisotropic (XXZ) exchange, optionally with a field, single-ion anisotropy, and biquadratic terms |
-| boson Hubbard | mu t V U t0 t1 V0 V1 | |
-| hardcore boson | same as above | boson Hubbard model with on-site occupation restricted to 0 or 1, equivalent to the `U → ∞` limit |
-| fermion Hubbard | same as above | spinful fermions; `U` couples opposite-spin occupation on the same site |
-| spinless fermions | mu t V t0 t1 V0 V1 | no `U`, since two spinless fermions cannot occupy the same site |
-| Kondo lattice | mu t J | conduction electrons (`mu`, `t`) exchange-coupled (`J`) to localized spins |
-| t-J | mu t J V t0 t1 t2 V0 V1 V2 J0 J1 J2 | effective low-energy model for the Hubbard model in the large-`U` limit |
+| spin（スピン） | J Jz Jxy J0 Jz0 Jxy0 J1 Jz1 Jxy1 h Gamma D K K0 K1 | 異方的（XXZ）交換相互作用。磁場、一イオン異方性、双二次項をオプションで追加可能 |
+| boson Hubbard（ボーズ・ハバード） | mu t V U t0 t1 V0 V1 | |
+| hardcore boson（ハードコアボソン） | 上と同じ | サイトの占有数を 0 または 1 に制限したボーズ・ハバードモデル。`U → ∞` の極限に相当 |
+| fermion Hubbard（フェルミオン・ハバード） | 上と同じ | スピンを持つフェルミオン。`U` は同一サイト上の逆スピン占有数どうしを結合する |
+| spinless fermions（スピンレスフェルミオン） | mu t V t0 t1 V0 V1 | `U` は存在しない。2 つのスピンレスフェルミオンは同一サイトを占有できないため |
+| Kondo lattice（近藤格子） | mu t J | 伝導電子（`mu`、`t`）が局在スピンと交換相互作用（`J`）で結合する |
+| t-J | mu t J V t0 t1 t2 V0 V1 V2 J0 J1 J2 | 大きな `U` の極限におけるハバードモデルの有効低エネルギーモデル |
 
-The parameters above refer to the following physical quantities:
+上記のパラメータは、それぞれ次の物理量に対応します。
 
-| **symbol(s)** | **meaning** |
+| **記号** | **意味** |
 | :------------ | :---------- |
-| `mu` | chemical potential |
-| `t`, `t0`, `t1`, `t2` | hopping amplitude (site- or bond-type dependent) |
-| `U` | on-site interaction |
-| `V`, `V0`, `V1`, `V2` | nearest-neighbor (bond) interaction |
-| `J`, `J0`, `J1`, `J2` | isotropic exchange coupling, or the t-J model's superexchange |
-| `Jz`, `Jz0`, `Jz1` | Ising (`Sz·Sz`) part of an anisotropic (XXZ) exchange coupling |
-| `Jxy`, `Jxy0`, `Jxy1` | XY (transverse) part of an anisotropic exchange coupling |
-| `h` | uniform longitudinal field, coupling to `Sz` |
-| `Gamma` | transverse field, coupling to `Sx` |
-| `D` | single-ion anisotropy, coupling to `(Sz)^2` |
-| `K`, `K0`, `K1` | biquadratic exchange, coupling to `(Si·Sj)^2` |
+| `mu` | 化学ポテンシャル |
+| `t`、`t0`、`t1`、`t2` | ホッピング振幅（サイトまたはボンドのタイプに依存） |
+| `U` | オンサイト相互作用 |
+| `V`、`V0`、`V1`、`V2` | 最近接（ボンド）相互作用 |
+| `J`、`J0`、`J1`、`J2` | 等方的交換相互作用、または t-J モデルにおける超交換相互作用 |
+| `Jz`、`Jz0`、`Jz1` | 異方的（XXZ）交換相互作用のイジング（`Sz·Sz`）部分 |
+| `Jxy`、`Jxy0`、`Jxy1` | 異方的交換相互作用の XY（横成分）部分 |
+| `h` | `Sz` に結合する一様な縦磁場 |
+| `Gamma` | `Sx` に結合する横磁場 |
+| `D` | `(Sz)^2` に結合する一イオン異方性 |
+| `K`、`K0`、`K1` | `(Si·Sj)^2` に結合する双二次交換相互作用 |
 
-These models were introduced in the following original papers: the Heisenberg exchange model by [Heisenberg (1928)](https://doi.org/10.1007/BF01328601), the Hubbard model by [Hubbard (1963)](https://doi.org/10.1098/rspa.1963.0204), the Bose-Hubbard model by [Fisher et al. (1989)](https://doi.org/10.1103/PhysRevB.40.546), the Kondo lattice model by [Doniach (1977)](https://doi.org/10.1016/0378-4363(77)90190-5), and the t-J model by [Anderson (1987)](https://doi.org/10.1126/science.235.4793.1196) and [Zhang and Rice (1988)](https://doi.org/10.1103/PhysRevB.37.3759).
+これらのモデルは、それぞれ次の原論文で導入されました。ハイゼンベルク交換モデルは [Heisenberg (1928)](https://doi.org/10.1007/BF01328601)、ハバードモデルは [Hubbard (1963)](https://doi.org/10.1098/rspa.1963.0204)、ボーズ・ハバードモデルは [Fisher et al. (1989)](https://doi.org/10.1103/PhysRevB.40.546)、近藤格子モデルは [Doniach (1977)](https://doi.org/10.1016/0378-4363(77)90190-5)、t-J モデルは [Anderson (1987)](https://doi.org/10.1126/science.235.4793.1196) と [Zhang and Rice (1988)](https://doi.org/10.1103/PhysRevB.37.3759) によって導入されました。
 
-## General structure of a model library file
+## モデルライブラリファイルの一般的な構造
 
-The typical structure of a model library is the following:
+モデルライブラリの典型的な構造は次のとおりです。
 
     <MODEL>
     <SITEBASIS name="..."> ... </SITEBASIS>
@@ -56,8 +56,8 @@ The typical structure of a model library is the following:
     <HAMILTONIAN name="..."> ... </HAMILTONIAN>
     </MODEL>
 
-The `<SITEBASIS>` command defines the Hilbert space (basis) of a single site, the `<BASIS>` command defines the Hilbert space of the whole lattice, and the `<HAMILTONIAN>` defines the Hamiltonian.
+`<SITEBASIS>` は単一サイトのヒルベルト空間（基底）を、`<BASIS>` は格子全体のヒルベルト空間を、`<HAMILTONIAN>` はハミルトニアンを定義します。
 
 ---
 
-For an overview of the rest of this section, see [ALPS Model Definitions](..). For how the lattice itself is specified, see [Lattice Definitions](../../latticehowtos). For the other ALPS documentation sections, see the [General Introduction](../..).
+本セクションの他のページの概要については [ALPS モデル定義](..) を参照してください。格子そのものの指定方法については [格子定義](../../latticehowtos) を参照してください。ALPS ドキュメントの他のセクションについては [総合案内](../..) を参照してください。

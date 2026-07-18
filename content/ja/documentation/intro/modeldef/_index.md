@@ -1,28 +1,28 @@
 
 ---
-title: ALPS Model Definitions
+title: ALPS モデル定義
 toc: true
 weight: 5
 ---
 
-As part of the ALPS project we need to describe quantum lattice models in a common XML format, independent of the lattice they run on (see [Lattice Definitions](../latticehowtos) for that half of an ALPS input file). This section builds that format up in stages: from the model library file and its overall `<MODEL>`/`<SITEBASIS>`/`<BASIS>`/`<HAMILTONIAN>` structure, through the basis of a single site and of the full lattice, to the quantum operators and Hamiltonian terms built from them.
+ALPS プロジェクトの一部として、量子格子モデルを、それが乗る格子とは独立に共通の XML 形式で記述する必要があります（格子側については [格子定義](../latticehowtos) を参照）。本セクションでは、この形式を段階的に構築していきます。モデルライブラリファイルとその全体構造である `<MODEL>`/`<SITEBASIS>`/`<BASIS>`/`<HAMILTONIAN>` から始め、単一サイトの基底、格子全体の基底を経て、そこから組み立てられる量子演算子とハミルトニアン項へと進みます。
 
-## [Introduction](intro)
+## [はじめに](intro)
 
-An overview of the ALPS model library file (`lib/xml/models.xml`), the built-in models it provides (spin, boson/fermion Hubbard, t-J, Kondo lattice, and more) with a glossary of their parameters and citations to the original papers, and the four-part `<MODEL>`/`<SITEBASIS>`/`<BASIS>`/`<HAMILTONIAN>` structure used to define a custom model.
+ALPS モデルライブラリファイル（`lib/xml/models.xml`）の概要、そこに含まれる組み込みモデル（スピン、ボソン/フェルミオン・ハバードモデル、t-J モデル、近藤格子モデルなど）についてのパラメータ一覧と元論文の引用、およびカスタムモデルの定義に使う `<MODEL>`/`<SITEBASIS>`/`<BASIS>`/`<HAMILTONIAN>` の 4 部構成について説明します。
 
-## [Site Basis](sitebasis)
+## [サイト基底](sitebasis)
 
-How to describe the Hilbert space of a single site with one or more `<QUANTUMNUMBER>` elements, including fermionic vs. bosonic quantum numbers, parametrized ranges and defaults, and models such as the t-J model where several equivalent choices of quantum numbers are possible.
+1 つ以上の `<QUANTUMNUMBER>` 要素を用いて単一サイトのヒルベルト空間を記述する方法。フェルミオン的量子数とボソン的量子数の違い、パラメータ化された範囲とデフォルト値、そして t-J モデルのように複数の等価な量子数の選び方が存在するモデルについて扱います。
 
-## [Lattice Basis](latticebasis)
+## [格子基底](latticebasis)
 
-How to combine single-site bases into the basis of the whole lattice with `<BASIS>`, covering lattices with more than one site per unit cell (including the `#` wildcard shortcut for per-type parameters), and how to restrict the basis with a `<CONSTRAINT>` on a summed quantum number (e.g. total `Sz`).
+`<BASIS>` を用いて単一サイトの基底を格子全体の基底へと組み合わせる方法。単位胞に複数のサイトを持つ格子（タイプごとのパラメータを表す `#` ワイルドカードの省略記法を含む）、および `<CONSTRAINT>` を用いてサイトについて総和した量子数（例えば全 `Sz`）で基底を制限する方法を扱います。
 
-## [Quantum Operators](operators)
+## [量子演算子](operators)
 
-How to define the operators the Hamiltonian is built from: simple site operators with an explicit matrix element and quantum-number `<CHANGE>` (e.g. `Splus`, `bdag`, `cdag_up`), complex `<SITEOPERATOR>`s built from simpler ones (e.g. `Sx`), and two-site `<BONDOPERATOR>`s (e.g. `exchange`, `fermion_hop`).
+ハミルトニアンを組み立てるための演算子の定義方法。明示的な行列要素と量子数の `<CHANGE>` を持つ単純なサイト演算子（`Splus`、`bdag`、`cdag_up` など）、より単純な演算子から組み立てられる複合的な `<SITEOPERATOR>`（`Sx` など）、および 2 サイトにまたがる `<BONDOPERATOR>`（`exchange`、`fermion_hop` など）を扱います。
 
-## [Hamiltonian Descriptions](hamiltonian)
+## [ハミルトニアンの記述](hamiltonian)
 
-How to assemble a `<HAMILTONIAN>` from `<PARAMETER>` defaults, a `<BASIS>` reference, and `<SITETERM>`/`<BONDTERM>` elements — including type-dependent couplings, either via an explicit `type` attribute or the `#` wildcard.
+`<PARAMETER>` のデフォルト値、`<BASIS>` への参照、`<SITETERM>`/`<BONDTERM>` 要素から `<HAMILTONIAN>` を組み立てる方法。明示的な `type` 属性または `#` ワイルドカードによる、タイプに依存した結合の指定方法を含みます。

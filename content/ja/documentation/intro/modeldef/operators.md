@@ -1,13 +1,13 @@
 
 ---
-title: Quantum Operators
+title: 量子演算子
 toc: true
 weight: 4
 ---
 
-## Simple site operators
+## 単純なサイト演算子
 
-The basic quantum operators from which the Hamiltonian operators will be built are specified by a name, a matrix element, and, optionally, the changes the operator causes to quantum numbers. These operators are defined within the site basis. Examples are:
+ハミルトニアンの演算子を組み立てる基本的な量子演算子は、名前、行列要素、そして（オプションで）その演算子が量子数に引き起こす変化によって指定されます。これらの演算子はサイト基底の中で定義されます。例えば次のとおりです。
 
     <SITEBASIS name="spin">
     <PARAMETER name="local_spin" default="1/2"/>
@@ -61,29 +61,29 @@ The basic quantum operators from which the Hamiltonian operators will be built a
     </OPERATOR>
     </SITEBASIS>
 
-Unlike `bdag`/`b`, the fermionic creation/annihilation operators `cdag_up`/`c_up` have a matrix element of plain `1` rather than a square root, since `Nup` only ever takes the two values 0 and 1: the `<QUANTUMNUMBER>`'s own `max="1"` already forbids double occupancy, so no occupation-dependent prefactor is needed. Declaring `Nup`/`Ndown` as `type="fermionic"` (as explained in [Site Basis](../sitebasis)) is what makes these operators anticommute correctly with fermionic operators on other sites — this is exactly what lets `cdag_up`/`c_up` be combined into the `fermion_hop` bond operator below.
+`bdag`/`b` とは異なり、フェルミオン的な生成・消滅演算子 `cdag_up`/`c_up` の行列要素は平方根ではなく単なる `1` です。これは `Nup` が 0 と 1 の 2 つの値しか取らないためです。`<QUANTUMNUMBER>` 自身の `max="1"` によってすでに二重占有が禁止されているため、占有数に依存する係数は不要です。`Nup`/`Ndown` を `type="fermionic"` として宣言すること（[サイト基底](../sitebasis)で説明済み）が、これらの演算子を他のサイトのフェルミオン演算子と正しく反交換させる理由であり、まさにこれによって下記の `fermion_hop` ボンド演算子で `cdag_up`/`c_up` を組み合わせることができます。
 
-The optional `<CHANGE>` element states that applying the operator shifts the given quantum number by the specified amount — `Splus` raises `Sz` by 1, `Sminus` lowers it by 1, and `bdag`/`b` raise/lower `N` by 1. An operator with no `<CHANGE>` element, like `Sz` or `n` above, is diagonal: it leaves every quantum number unchanged. In the specification of the matrix element, the value of the quantum numbers can be referred to through the name of the quantum number (`S`, `Sz`, `N` in these examples) — always evaluated using the values of the *initial* state, before the `<CHANGE>` is applied.
+オプションの `<CHANGE>` 要素は、その演算子を作用させると指定された量子数が指定量だけ変化することを表します —— `Splus` は `Sz` を 1 だけ増やし、`Sminus` は 1 だけ減らし、`bdag`/`b` は `N` を 1 だけ増減させます。上の `Sz` や `n` のように `<CHANGE>` 要素を持たない演算子は対角的であり、すべての量子数を変化させません。行列要素の表記の中では、量子数の名前（この例では `S`、`Sz`、`N`）を使ってその値を参照できます —— これは常に `<CHANGE>` が適用される前の*初期*状態の値で評価されます。
 
-## Complex site operators
+## 複合サイト演算子
 
-In addition to the simple site operators which change a quantum number in a unique way, one can construct more complex site operators such as the `Sx` spin operator:
+量子数を一意に変化させる単純なサイト演算子に加えて、例えば `Sx` スピン演算子のような、より複雑なサイト演算子を組み立てることもできます。
 
     <SITEOPERATOR name="Sx" site="i">
     1/2*(Splus(i)+Sminus(i))
     </SITEOPERATOR>
 
-or an operator counting on-site boson pairs, used e.g. in the on-site interaction term of the Bose-Hubbard Hamiltonian:
+あるいは、ボーズ・ハバードハミルトニアンのオンサイト相互作用項などで使われる、オンサイトのボソン対を数える演算子もあります。
 
     <SITEOPERATOR name="double_occupancy" site="x">
     n(x)*(n(x)-1)/2
     </SITEOPERATOR>
 
-These operator definitions can use any other simple or complex site operator. The argument given to the operator in parentheses is the symbolic name for the site, which is specified by the site attribute in the `<SITEOPERATOR>` element.
+これらの演算子の定義では、他の任意の単純または複合サイト演算子を使用できます。演算子に括弧付きで渡される引数は、そのサイトを表す記号名であり、`<SITEOPERATOR>` 要素の site 属性で指定されます。
 
-## Complex bond operators
+## 複合ボンド演算子
 
-Similar to the complex site operator, we can also define two-site, or bond, operators. The first example below is the Heisenberg exchange interaction `S(x)·S(y)`, written in terms of `Sz`, `Splus`, and `Sminus`; the second is a spin-conserving fermion hopping term, written in terms of independent up- and down-spin operators:
+複合サイト演算子と同様に、2 サイトにまたがる演算子、すなわちボンド演算子も定義できます。以下の最初の例は、`Sz`、`Splus`、`Sminus` を用いて書かれたハイゼンベルク交換相互作用 `S(x)·S(y)` です。2 番目の例は、独立なアップスピンおよびダウンスピン演算子を用いて書かれた、スピンを保存するフェルミオンのホッピング項です。
 
     <BONDOPERATOR name="exchange" source="x" target="y">
     Sz(x)*Sz(y)+1/2*(Splus(x)*Sminus(y)+Sminus(x)*Splus(y))
@@ -93,8 +93,8 @@ Similar to the complex site operator, we can also define two-site, or bond, oper
     cdag_up(x)*c_up(y)+cdag_up(y)*c_up(x)+cdag_down(x)*c_down(y)+cdag_down(y)*c_down(x)
     </BONDOPERATOR>
 
-where we now have two sites, labeled `source` and `target`. All the operators defined on this page — simple site, complex site, and bond — can be referenced by name in the `<SITETERM>`/`<BONDTERM>` elements of a `<HAMILTONIAN>` (see [Hamiltonian Descriptions](../hamiltonian)), and in custom measurement definitions (see [ALPS Custom Measurement](../../measuredef)).
+ここでは 2 つのサイトがあり、それぞれ source と target というラベルが付いています。このページで定義したすべての演算子 —— 単純なサイト演算子、複合サイト演算子、ボンド演算子 —— は、`<HAMILTONIAN>` の `<SITETERM>`/`<BONDTERM>` 要素の中で名前によって参照できるほか（[ハミルトニアンの記述](../hamiltonian)を参照）、カスタム測定の定義の中でも使用できます（[ALPS カスタム測定](../../measuredef)を参照）。
 
 ---
 
-For an overview of the rest of this section, see [ALPS Model Definitions](..). For how these operators are assembled into a Hamiltonian, see [Hamiltonian Descriptions](../hamiltonian). For the other ALPS documentation sections, see the [General Introduction](../..).
+本セクションの他のページの概要については [ALPS モデル定義](..) を参照してください。これらの演算子がどのようにハミルトニアンへと組み立てられるかについては [ハミルトニアンの記述](../hamiltonian) を参照してください。ALPS ドキュメントの他のセクションについては [総合案内](../..) を参照してください。
