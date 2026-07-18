@@ -5,30 +5,29 @@ toc: true
 weight: 4
 ---
 
-In the simulation of lattice models, one usually considers a model defined on an infinite or finite lattice. Here, we explain how to specify both in XML format.
+The previous HOWTOs showed how to describe an arbitrary graph directly, and how to describe a lattice's geometry through a unit cell and its basis vectors. Here we combine the two: decorating each copy of a lattice's unit cell with a small graph to build the actual graph that gets simulated.
 
 ## A simple graph
 
-The graphs in most physics simulations are not irregular graphs, but built up regularly, like a lattice
+The graphs in most physics simulations are not irregular, but are built up regularly, like a lattice:
 
 ![The first simple graph.](../figs/tutoriallatticehowtolatticegraph1.gif)
 
-We can capture the regularity of this graph by putting it down onto a lattice:
+We can capture the regularity of this graph by placing it on a lattice:
 
 ![The graph on a lattice.](../figs/tutoriallatticehowtolatticegraph2.gif)
 
-This lattice can be described by a unit cell, and the graph built up from a "unit cell graph" on the unit cell:
+This lattice can be described by a unit cell, with the full graph built up by decorating every copy of that unit cell with the same "unit cell graph":
 
 ![Unit cell graph.](../figs/tutoriallatticehowtolatticegraph3.gif)
 
-The "unit cell graph" consists of a single vertex, and there is a edge to the same vertex in the neighboring cell. We can describe such a graph on a lattice in XML, by combining a LATTICE or FINITELATTICE with a UNITCELL element describing the graph on the unit cell from which the full graph is created:
+The unit cell graph here consists of a single vertex, with an edge to the same vertex in the neighboring cell. We can describe such a graph on a lattice in XML by combining a `<LATTICE>` or `<FINITELATTICE>` with a `<UNITCELL>` element describing the graph on the unit cell from which the full graph is created:
 
     <LATTICEGRAPH>
         <FINITELATTICE>
         <LATTICE dimension="1"/>
             <EXTENT size="6"/>
             <BOUNDARY type="open"/>
-        </LATTICE>
         </FINITELATTICE>
         <UNITCELL dimension="1" vertices="1">
         <VERTEX/>
@@ -39,13 +38,13 @@ The "unit cell graph" consists of a single vertex, and there is a edge to the sa
         </UNITCELL>
     </LATTICEGRAPH>
   
-The edge in the unit cell goes from vertex 1 in the cell to vertex 1 in the cell to the right (with an offset +1), as described in the EDGE element. The offet of 0 in the SOURCE element was omitted, as 0 is the default value for the offet.
+The edge in the unit cell goes from vertex 1 in the cell to vertex 1 in the cell to the right (with an offset of +1), as described in the `<EDGE>` element. The offset of 0 for the `<SOURCE>` element was omitted, since 0 is its default value.
 
-To describe an infinite chain we would use a LATTICE element instead of the FINITELATTICE one.
+To describe an infinite chain, we would use a `<LATTICE>` element instead of the `<FINITELATTICE>` one.
 
 ## A complex example
 
-We can again describe graphs with colored edges and vertices, or add other attributes like coordinates to the vertices. Also, for the description of the lattice the full machinery described for the lattice is available. We will show one example for a complex periodic graph on an L x W rectangular lattice:
+We can again describe graphs with colored edges and vertices, or add other attributes like coordinates to the vertices. Also, the lattice part of a `<LATTICEGRAPH>` can use the full machinery described in [Lattice and Unit Cells](../unitcell), including finite extents, boundary conditions, and referencing a previously defined lattice. We will show one example for a complex periodic graph on an L x W rectangular lattice:
 
 ![A complex periodic graph on a lattice.](../figs/tutoriallatticehowtolatticegraph4.jpg)
 
@@ -63,8 +62,10 @@ The XML description is:
     </LATTICE>
     <FINITELATTICE name="rectangular periodic" dimension="2">
         <LATTICE ref="square"/>
+        <PARAMETER name="L"/>
+        <PARAMETER name="W" default="L"/>
         <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W,L"/>
+        <EXTENT dimension="2" size="W"/>
         <BOUNDARY type="periodic"/>
     </FINITELATTICE>
     <UNITCELL name="complex example" dimension="2" vertices="2">
@@ -79,7 +80,7 @@ The XML description is:
         <UNITCELL ref="complex example"/>
     </LATTICEGRAPH>
     
-Here we made us of the predefinition of named lattices and unit cells (e.g. in a library), which we can then combine by referencing them in the LATTICEGRAPH element. Alternatively we could have defined everything in the LATTICEGRAPH element:
+Here we made use of previously defined, named lattices and unit cells (e.g. from a library), which we can then combine by referencing them in the `<LATTICEGRAPH>` element. Alternatively, we could have defined everything in the `<LATTICEGRAPH>` element:
 
     <LATTICEGRAPH>
         <FINITELATTICE dimension="2">
@@ -88,8 +89,11 @@ Here we made us of the predefinition of named lattices and unit cells (e.g. in a
             <VECTOR> 1 0 </VECTOR>
             <VECTOR> 0 1 </VECTOR>
             </BASIS>
+        </LATTICE>
+        <PARAMETER name="L"/>
+        <PARAMETER name="W" default="L"/>
         <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W,L"/>
+        <EXTENT dimension="2" size="W"/>
         <BOUNDARY type="periodic"/>
         </FINITELATTICE>
         <UNITCELL dimension="2" vertices="2">
@@ -101,6 +105,10 @@ Here we made us of the predefinition of named lattices and unit cells (e.g. in a
         </UNITCELL>
     </LATTICEGRAPH>
   
-Since both coordinates for the vertices in the unit cell, as well as basis vectors for the lattice are given, the coordinates of all vertices can be calculated.
+Since both the vertex coordinates in the unit cell and the basis vectors of the lattice are given, the coordinates of all vertices can be calculated.
+
+---
+
+For an overview of the rest of this section, see [Lattice Definitions](..). For the `LATTICE`/`GRAPH` input parameters used to select a graph in a simulation, see [Common Parameters](../../parameters). For the other ALPS documentation sections, see the [General Introduction](../..).
 
   

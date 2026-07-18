@@ -5,9 +5,8 @@ toc: true
 weight: 5
 ---
 
-As similar lattices, finite lattices and graphs will appear in many models and simulations, it is of advantage to define commonly used lattices and graphs in a "library", and just refer to them by name, e.g. as input parameter to a simulation. The first step is to divide the definition of the `<LATTICEGRAPH>` into four parts:
+似たような格子・有限格子・グラフは多くの模型やシミュレーションで繰り返し登場するため、よく使うものを一度だけ「ライブラリ」として定義しておき、（例えばシミュレーションの入力パラメータとして）名前で参照できるようにしておくと便利です。最初のステップは、`<LATTICEGRAPH>` の定義を次の4つの部分に分けることです。
 
-    <verbatim>
     <LATTICE name="square" dimension="2">
     <BASIS>
         <VECTOR> 1 0 </VECTOR>
@@ -36,7 +35,7 @@ As similar lattices, finite lattices and graphs will appear in many models and s
     <UNITCELL ref="complex example"/>
     </LATTICEGRAPH>
     
-Here we made use of the predefinition of named lattices and unit cells (e.g. in a library), which we can then combine be referencing them in the `<LATTICEGRAPH>` element. Now we can define a `<LATTICES>` element, which can contain any number of `<LATTICE>`, `<FINITELATTICE>`, `<UNITCELL>`, `<GRAPH>` and `<LATTICEGRAPH>` elements. For example
+ここでは、以前に定義しておいた名前付きの格子と単位胞を利用し、それらを `<LATTICEGRAPH>` 要素の中で参照して組み合わせています。ここで、任意の数の `<LATTICE>`、`<FINITELATTICE>`、`<UNITCELL>`、`<GRAPH>`、`<LATTICEGRAPH>` 要素を含むことができる `<LATTICES>` 要素を定義できます。例えば：
 
     <LATTICES>
     <LATTICE name="chain lattice" dimension="1">
@@ -62,6 +61,11 @@ Here we made use of the predefinition of named lattices and unit cells (e.g. in 
     <VERTEX/>
     <EDGE><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="0 1"/></EDGE>
     <EDGE><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    </UNITCELL>
+    <UNITCELL name="anisotropic2d" dimension="2">
+    <VERTEX/>
+    <EDGE type="0"><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    <EDGE type="1"><SOURCE vertex="1" offset="0 0"/><TARGET vertex="1" offset="0 1"/></EDGE>
     </UNITCELL>
     <UNITCELL name="simple3d" dimension="3" vertices="1">
     <VERTEX/>
@@ -118,3 +122,9 @@ Here we made use of the predefinition of named lattices and unit cells (e.g. in 
     <UNITCELL ref="anisotropic2d"/>
     </LATTICEGRAPH>
     </LATTICES>
+
+`anisotropic2d` 単位胞は `simple2d` と同じ構造ですが、2つのボンド方向に異なる辺タイプ（`0` と `1`）を与えています。これにより、模型はそれぞれに異なる結合定数を割り当てることができます――例えば、格子の第1方向には `J0`、第2方向には `J1` というように。
+
+---
+
+このセクションの他の内容の概要については、[格子の定義](..) を参照してください。シミュレーションで格子やグラフを名前で選択するための `LATTICE`／`GRAPH` 入力パラメータについては、[共通パラメータ](../../parameters) を参照してください。他の ALPS ドキュメントのセクションについては、[はじめに](../..) を参照してください。

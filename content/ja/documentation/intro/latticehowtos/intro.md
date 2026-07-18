@@ -5,25 +5,44 @@ toc: true
 weight: 1
 ---
 
-## How to specify lattices (graphs) within the ALPS-framework?
+## ALPS フレームワークにおける格子とグラフの指定
 
-In this section we explain how lattices and graphs are specified within the ALPS-framework. In simulations for lattice models, it is then convenient to specify the lattice used for the simulation in an input file.
+このセクションでは、ALPS フレームワーク内で格子とグラフをどのように指定するかを説明します。格子をシミュレーションプログラムに直接組み込む（ハードコードする）のではなく、入力ファイルの一部として指定することで、同じアプリケーションを変更なしにさまざまな格子形状に対して再利用できます。
 
-We explain the following issues:
+このページでは、次のトピックを扱います。
 
-- [How to specify a simple graph in terms of vertices and edges](../simplegraph)
-- [How to specify lattices and unit cells](../unitcell)
-- [How to specify graphs corresponding to a lattice with a unit cell](../latticegraph)
-- [How to create a library of lattices and graphs](../library)
-- [How to check a graph generated from a lattice definition](../checklattice)
+- [頂点と辺によって単純グラフを指定する方法](../simplegraph)
+- [格子と単位胞を指定する方法](../unitcell)
+- [単位胞を持つ格子に対応するグラフを指定する方法](../latticegraph)
+- [格子とグラフのライブラリを作成する方法](../library)
+- [格子定義から生成されたグラフを確認する方法](../checklattice)：`printgraph` ツールを使い、ALPS アプリケーションが内部で行うのとまったく同じ方法で格子定義からグラフを再生成することで、意図した通りになっているかを確認します
 
-## Existing lattices (graphs) in the ALPS Lattice library
+## ALPS 格子ライブラリに既に含まれている格子（グラフ）
 
-### Most common lattices (graphs) at a glance
+### よく使われる格子（グラフ）の一覧
+
+最もよく使われる9種類の格子は既にライブラリに組み込まれており、自分で XML を書かなくても `LATTICE` パラメータで名前を指定するだけで直接選択できます。
+
+| # | `LATTICE` | パラメータ | 備考 |
+| :- | :-------- | :--------- | :----- |
+| 1 | `chain lattice` | `L`（長さ） | 周期的、均質 |
+| 2 | `open chain lattice` | `L`（長さ） | 開放、均質 |
+| 3 | `square lattice` | `L`（長さ）、`W`（幅、既定値 `L`） | 周期的、均質 |
+| 4 | `open square lattice` | `L`（長さ）、`W`（幅、既定値 `L`） | 開放、均質 |
+| 5 | `Kagome lattice` | `L`（長さ）、`W`（幅、既定値 `L`） | 周期的、均質 |
+| 6 | `honeycomb lattice` | `L`（長さ）、`W`（幅、既定値 `L`） | 周期的、均質 |
+| 7 | `inhomogeneous square lattice` | `L`（長さ）、`W`（幅、既定値 `L`） | 開放、非均質 |
+| 8 | `simple cubic lattice` | `L`（長さ）、`W`（幅、既定値 `L`）、`H`（高さ、既定値 `W`） | 周期的、均質 |
+| 9 | `inhomogeneous simple cubic lattice` | `L`（長さ）、`W`（幅、既定値 `L`）、`H`（高さ、既定値 `W`） | 開放、非均質 |
+
 ![Common lattices (graphs) in ALPS](../figs/commonalpslattices.jpg)
 
-### Entire archive of lattices (graphs)
+### 格子（グラフ）のアーカイブ全体
 
-The entire archive of the ALPS Lattice library can be found in the XML file `<lib/xml/lattices.xml>`.
+格子（グラフ）のアーカイブ全体は、XML ファイル `$ALPSPATH/lib/xml/lattices.xml` にあります。
+
+---
+
+シミュレーションでこれらの格子を選択するための `LATTICE`／`GRAPH` 入力パラメータについては、[共通パラメータ](../../parameters) を参照してください。このセクションの他の内容の概要については、[格子の定義](..) を参照してください。他の ALPS ドキュメントのセクションについては、[はじめに](../..) を参照してください。
 
 
