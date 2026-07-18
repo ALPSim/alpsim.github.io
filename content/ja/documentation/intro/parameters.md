@@ -1,73 +1,73 @@
 
 ---
-title: Common Parameters
+title: 共通パラメータ
 math: true
 toc: true
 weight: 7
 ---
 
-The following input parameters are common to most of the ALPS applications
+以下の入力パラメータは、ほとんどの ALPS アプリケーションに共通です
 
-## Lattice definition
+## 格子の定義
 
-ALPS applications on lattices specify the lattice with the following three parameters
+格子上で動作する ALPS アプリケーションは、次の 3 つのパラメータで格子を指定します
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| LATTICE_LIBRARY | lattices.xml | path to a file containing lattice descriptions |
-| LATTICE | | name of the lattice, specified by dimensionality, extent and unit cell. |
-| GRAPH | | as an alternative to a lattice, also a specific arbitrary graph defined in the lattice library can be specified. |
+| LATTICE_LIBRARY | lattices.xml | 格子の記述を含むファイルへのパス |
+| LATTICE | | 次元、大きさ、単位胞によって指定される格子の名前。 |
+| GRAPH | | 格子の代わりに、格子ライブラリで定義された特定の任意のグラフを指定することもできます。 |
 
-In addition, the lattice description can require further parameters (e.g. L or W) as specified in the lattice description file.
+さらに、格子の記述ファイルで指定されているとおり、格子の記述には他のパラメータ（例えば L や W）が必要になることがあります。
 
-## Model definition 
+## モデルの定義
 
-ALPS quantum lattice models can be specified using the following parameters
+ALPS の量子格子モデルは、次のパラメータを使って指定できます
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| MODEL_LIBRARY | models.xml | path to a file containing model descriptions |
-| MODEL | | name of the model (for example "spin" or "boson") |
+| MODEL_LIBRARY | models.xml | モデルの記述を含むファイルへのパス |
+| MODEL | | モデルの名前（例えば "spin" や "boson"） |
 
-The model description can also require further parameters (e.g. S=1/2 or S=1, h=0.5 for spin models, t=1.5 or mu=0.5 for boson models) as specified in the model description file.
+モデルの記述には、モデル記述ファイルで指定されているとおり、他のパラメータ（例えばスピンモデルの S=1/2 や S=1、h=0.5、ボソンモデルの t=1.5 や mu=0.5 など）が必要になることもあります。
 
-## Parameters for finite temperature simulations
+## 有限温度シミュレーションのパラメータ
 
-| **Parameter** | **Meaning** |
+| **パラメータ** | **意味** |
 | :------------ | :---------- |
-| T | the temperature |
-| BETA | inverse of temperature (if temperature is not given) |
+| T | 温度 |
+| BETA | 温度の逆数（温度が与えられていない場合） |
 
-## Additional parameters for Monte Carlo simulations 
+## モンテカルロシミュレーションの追加パラメータ
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| SEED | 0 | The random number seed used in the next run. After using a seed in the creation of a Monte Carlo run, this value gets incremented by one. |
-| RNG | "mt19937" | The pseudo-random number generator to be used. Allowed values are "lagged_fibonacci607" and "mt19937". |
-| WORK_FACTOR | 1 | A factor by which the work that needs to be done for a simulation is multiplied in load balancing. |
-| SWEEPS | | number of Monte Carlo steps (after thermalization) |
-| THERMALIZATION | | Number of Monte Carlo sweeps for thermalization |
+| SEED | 0 | 次の実行で使用される乱数の種。あるモンテカルロ実行の作成にある種を使用すると、この値は 1 だけ増加します。 |
+| RNG | "mt19937" | 使用する擬似乱数生成器。指定できる値は "lagged_fibonacci607" と "mt19937" です。 |
+| WORK_FACTOR | 1 | 負荷分散において、あるシミュレーションに必要な作業量を掛け合わせる係数。 |
+| SWEEPS | | （熱化後の）モンテカルロステップ数 |
+| THERMALIZATION | | 熱化のためのモンテカルロスイープ回数 |
 
-These are parameters set in the parameter file itself. When running from the command line, the scheduler also accepts a separate set of runtime flags — such as `--time-limit`, `--checkpoint-time`, `--Tmin`/`--Tmax`, and `--mpi`/`--Nmin`/`--Nmax` for parallel runs — passed directly to the program rather than written into the parameter file; see [Using the command line](../runalps/commandline) for the full list.
+これらはパラメータファイル自体で設定するパラメータです。コマンドラインから実行する場合、スケジューラはこれとは別に、`--time-limit`、`--checkpoint-time`、`--Tmin`/`--Tmax`、並列実行用の `--mpi`/`--Nmin`/`--Nmax` といった、パラメータファイルに書く代わりにプログラムへ直接渡す実行時フラグも受け付けます。完全な一覧については [コマンドラインの使用](../runalps/commandline) を参照してください。
 
-## Additional parameters for exact diagonalization 
+## 厳密対角化の追加パラメータ
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| CONSERVED_QUANTUMNUMBERS | | specifies conserved global quantum numbers which are used to split the computation into smaller computations for the different sectors. If more than one quantum number is conserved, the quantum numbers are listed in double quotes and separated by commas as in CONSERVED_QUANTUMNUMBERS="N,Sz" |
-| N_total, Sz_total, ... | | and similar parameters might be defined for your model through a constraint in your model definition. These constraints will be used if these parameters are specified and the quantumnumber is listed in CONSERVED_QUANTUMNUMBERS. |
-| TRANSLATION_SYMMETRY | true | fulldiag and sparsediag exploit translational symmetry and classify eigenstates by their momentum quantum numbers when possible. This symmetry reductions can be switched off with TRANSLATION_SYMMETRY=false. |
-| TOTAL_MOMENTUM | | fixes the value of the total momentum. Further explanations can be found below. |
-| MEASURE_ENERGY | false | if no measurements are explicitly specified, fulldiag and sparsediag do not store any information on eigenstates by default. Of course, the energy can always be computed for any eigenstate. If you wish to have this in the output and no other measurements are specified, you can specify MEASURE_ENERGY=true. |
+| CONSERVED_QUANTUMNUMBERS | | 保存される大域的な量子数を指定し、計算を各セクターごとのより小さな計算に分割するために使われます。保存される量子数が複数ある場合は、CONSERVED_QUANTUMNUMBERS="N,Sz" のように、二重引用符で囲みカンマで区切って列挙します。 |
+| N_total、Sz_total など | | モデル定義中の制約を通じて、モデルに対してこれらに類するパラメータが定義されることがあります。これらのパラメータが指定され、かつ対応する量子数が CONSERVED_QUANTUMNUMBERS に列挙されている場合に、これらの制約が使用されます。 |
+| TRANSLATION_SYMMETRY | true | fulldiag と sparsediag は並進対称性を利用し、可能な場合は運動量量子数によって固有状態を分類します。この対称性による簡約は TRANSLATION_SYMMETRY=false で無効にできます。 |
+| TOTAL_MOMENTUM | | 全運動量の値を固定します。詳しい説明は以下を参照してください。 |
+| MEASURE_ENERGY | false | 測定が明示的に指定されていない場合、fulldiag と sparsediag はデフォルトでは固有状態に関する情報を一切保存しません。もちろん、エネルギーはどの固有状態についても常に計算できます。他に測定を指定せずにエネルギーを出力に含めたい場合は、MEASURE_ENERGY=true と指定してください。 |
 
-**Note:** Instead of true and false, you can also specify 1 and 0, respectively.
+**注:** true と false の代わりに、それぞれ 1 と 0 を指定することもできます。
 
-If the lattice supports translation symmetries, you can specify the total momentum quantum numbers, but you should be quite careful in doing so.
-TOTAL_MOMENTUM takes the momentum quantum numbers as a vector, i.e. a space\-separated list of numbers. Typically, each momentum quantum number $k_i$ will be of the form
+格子が並進対称性をサポートしている場合、全運動量量子数を指定することもできますが、その際には十分注意する必要があります。
+TOTAL_MOMENTUM は運動量量子数をベクトルとして、すなわち空白区切りの数値の並びとして受け取ります。通常、各運動量量子数 $k_i$ は次の形をとります
 
 $k_i = 2\pi n_i/L_i$,
 
-where $n_i$ is an integer and $L_i$ the linear extent in the corresponding direction. It is possible to specify a symbolic number such as 2*Pi/5 if you put the values in quotation marks, e.g. TOTAL_MOMENTUM="2*Pi/5 0".
+ここで $n_i$ は整数、$L_i$ は対応する方向の線形の大きさです。値を引用符で囲めば、2*Pi/5 のような記号表現を指定することもできます。例えば TOTAL_MOMENTUM="2*Pi/5 0" のようにします。
 
-**Warning:** An illegal value of TOTAL_MOMENTUM may lead to incorrect results without any further error message.
+**警告:** TOTAL_MOMENTUM に不正な値を指定すると、それ以上のエラーメッセージなしに誤った結果につながることがあります。
 

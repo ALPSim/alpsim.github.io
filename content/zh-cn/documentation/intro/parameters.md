@@ -1,73 +1,73 @@
 
 ---
-title: Common Parameters
+title: 常用参数
 math: true
 toc: true
 weight: 7
 ---
 
-The following input parameters are common to most of the ALPS applications
+以下输入参数是大多数 ALPS 应用程序共有的
 
-## Lattice definition
+## 格子定义
 
-ALPS applications on lattices specify the lattice with the following three parameters
+在格子上运行的 ALPS 应用程序通过以下三个参数来指定格子
 
-| **Parameter** | **Default** | **Meaning** |
+| **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| LATTICE_LIBRARY | lattices.xml | path to a file containing lattice descriptions |
-| LATTICE | | name of the lattice, specified by dimensionality, extent and unit cell. |
-| GRAPH | | as an alternative to a lattice, also a specific arbitrary graph defined in the lattice library can be specified. |
+| LATTICE_LIBRARY | lattices.xml | 包含格子描述的文件路径 |
+| LATTICE | | 格子的名称，由维数、大小和晶胞指定。 |
+| GRAPH | | 作为格子的替代，也可以指定格子库中定义的某个具体的任意图。 |
 
-In addition, the lattice description can require further parameters (e.g. L or W) as specified in the lattice description file.
+此外，格子描述可能还需要格子描述文件中指定的其他参数（例如 L 或 W）。
 
-## Model definition 
+## 模型定义
 
-ALPS quantum lattice models can be specified using the following parameters
+ALPS 量子格点模型可以通过以下参数指定
 
-| **Parameter** | **Default** | **Meaning** |
+| **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| MODEL_LIBRARY | models.xml | path to a file containing model descriptions |
-| MODEL | | name of the model (for example "spin" or "boson") |
+| MODEL_LIBRARY | models.xml | 包含模型描述的文件路径 |
+| MODEL | | 模型的名称（例如 "spin" 或 "boson"） |
 
-The model description can also require further parameters (e.g. S=1/2 or S=1, h=0.5 for spin models, t=1.5 or mu=0.5 for boson models) as specified in the model description file.
+模型描述可能还需要模型描述文件中指定的其他参数（例如自旋模型的 S=1/2 或 S=1、h=0.5，玻色子模型的 t=1.5 或 mu=0.5）。
 
-## Parameters for finite temperature simulations
+## 有限温度模拟的参数
 
-| **Parameter** | **Meaning** |
+| **参数** | **含义** |
 | :------------ | :---------- |
-| T | the temperature |
-| BETA | inverse of temperature (if temperature is not given) |
+| T | 温度 |
+| BETA | 温度的倒数（如果未给出温度） |
 
-## Additional parameters for Monte Carlo simulations 
+## 蒙特卡罗模拟的附加参数
 
-| **Parameter** | **Default** | **Meaning** |
+| **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| SEED | 0 | The random number seed used in the next run. After using a seed in the creation of a Monte Carlo run, this value gets incremented by one. |
-| RNG | "mt19937" | The pseudo-random number generator to be used. Allowed values are "lagged_fibonacci607" and "mt19937". |
-| WORK_FACTOR | 1 | A factor by which the work that needs to be done for a simulation is multiplied in load balancing. |
-| SWEEPS | | number of Monte Carlo steps (after thermalization) |
-| THERMALIZATION | | Number of Monte Carlo sweeps for thermalization |
+| SEED | 0 | 下一次运行所用的随机数种子。每次用某个种子创建一次蒙特卡罗运行之后，该值会自动加一。 |
+| RNG | "mt19937" | 所使用的伪随机数生成器。允许的取值为 "lagged_fibonacci607" 和 "mt19937"。 |
+| WORK_FACTOR | 1 | 负载均衡中，用于放大某次模拟所需工作量的系数。 |
+| SWEEPS | | 蒙特卡罗步数（热化之后） |
+| THERMALIZATION | | 用于热化的蒙特卡罗扫描次数 |
 
-These are parameters set in the parameter file itself. When running from the command line, the scheduler also accepts a separate set of runtime flags — such as `--time-limit`, `--checkpoint-time`, `--Tmin`/`--Tmax`, and `--mpi`/`--Nmin`/`--Nmax` for parallel runs — passed directly to the program rather than written into the parameter file; see [Using the command line](../runalps/commandline) for the full list.
+以上是在参数文件本身中设置的参数。当从命令行运行时，调度程序还接受一组单独的运行时标志——例如 `--time-limit`、`--checkpoint-time`、`--Tmin`/`--Tmax`，以及用于并行运行的 `--mpi`/`--Nmin`/`--Nmax`——这些标志直接传给程序，而不是写在参数文件中；完整列表参见[使用命令行](../runalps/commandline)。
 
-## Additional parameters for exact diagonalization 
+## 精确对角化的附加参数
 
-| **Parameter** | **Default** | **Meaning** |
+| **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| CONSERVED_QUANTUMNUMBERS | | specifies conserved global quantum numbers which are used to split the computation into smaller computations for the different sectors. If more than one quantum number is conserved, the quantum numbers are listed in double quotes and separated by commas as in CONSERVED_QUANTUMNUMBERS="N,Sz" |
-| N_total, Sz_total, ... | | and similar parameters might be defined for your model through a constraint in your model definition. These constraints will be used if these parameters are specified and the quantumnumber is listed in CONSERVED_QUANTUMNUMBERS. |
-| TRANSLATION_SYMMETRY | true | fulldiag and sparsediag exploit translational symmetry and classify eigenstates by their momentum quantum numbers when possible. This symmetry reductions can be switched off with TRANSLATION_SYMMETRY=false. |
-| TOTAL_MOMENTUM | | fixes the value of the total momentum. Further explanations can be found below. |
-| MEASURE_ENERGY | false | if no measurements are explicitly specified, fulldiag and sparsediag do not store any information on eigenstates by default. Of course, the energy can always be computed for any eigenstate. If you wish to have this in the output and no other measurements are specified, you can specify MEASURE_ENERGY=true. |
+| CONSERVED_QUANTUMNUMBERS | | 指定守恒的全局量子数，用于将计算拆分为针对不同扇区的更小规模计算。如果有多个量子数守恒，则将这些量子数用双引号括起来并以逗号分隔，如 CONSERVED_QUANTUMNUMBERS="N,Sz" |
+| N_total、Sz_total 等 | | 可以通过模型定义中的约束为你的模型定义类似的参数。当指定了这些参数并且相应的量子数出现在 CONSERVED_QUANTUMNUMBERS 中时，这些约束就会被使用。 |
+| TRANSLATION_SYMMETRY | true | fulldiag 和 sparsediag 会利用平移对称性，并在可能的情况下按动量量子数对本征态进行分类。可以通过 TRANSLATION_SYMMETRY=false 关闭这种对称性约化。 |
+| TOTAL_MOMENTUM | | 固定总动量的取值。更多说明见下文。 |
+| MEASURE_ENERGY | false | 如果没有显式指定任何测量，fulldiag 和 sparsediag 默认不会存储关于本征态的任何信息。当然，任何本征态的能量总是可以计算的。如果你希望在没有指定其他测量的情况下将能量包含在输出中，可以设置 MEASURE_ENERGY=true。 |
 
-**Note:** Instead of true and false, you can also specify 1 and 0, respectively.
+**注意：** 除了 true 和 false，你也可以分别用 1 和 0 来表示。
 
-If the lattice supports translation symmetries, you can specify the total momentum quantum numbers, but you should be quite careful in doing so.
-TOTAL_MOMENTUM takes the momentum quantum numbers as a vector, i.e. a space\-separated list of numbers. Typically, each momentum quantum number $k_i$ will be of the form
+如果格子支持平移对称性，你可以指定总动量量子数，但在这样做时应当十分小心。
+TOTAL_MOMENTUM 以矢量的形式给出动量量子数，即用空格分隔的一组数字。通常，每个动量量子数 $k_i$ 具有如下形式
 
 $k_i = 2\pi n_i/L_i$,
 
-where $n_i$ is an integer and $L_i$ the linear extent in the corresponding direction. It is possible to specify a symbolic number such as 2*Pi/5 if you put the values in quotation marks, e.g. TOTAL_MOMENTUM="2*Pi/5 0".
+其中 $n_i$ 是整数，$L_i$ 是对应方向上的线度。如果将取值放在引号中，也可以指定诸如 2*Pi/5 这样的符号表达式，例如 TOTAL_MOMENTUM="2*Pi/5 0"。
 
-**Warning:** An illegal value of TOTAL_MOMENTUM may lead to incorrect results without any further error message.
+**警告：** TOTAL_MOMENTUM 的非法取值可能会导致错误的结果，而不会给出任何进一步的错误提示。
 
