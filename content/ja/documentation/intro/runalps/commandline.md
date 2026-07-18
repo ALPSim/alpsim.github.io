@@ -5,11 +5,11 @@ toc: true
 weight: 2
 ---
 
-## Preparing the input
+## 入力の準備
 
-Since the XML format of the job and task files is probably not what you want to deal with on a daily basis, the parameter2xml tool lets you specify the simulation parameters in a plain text file which is converted to the XML format for your conveniece.
+ジョブファイルやタスクファイルの XML 形式を日常的に直接扱いたくはないでしょうから、`parameter2xml` ツールを使えば、シミュレーションのパラメータをプレーンテキストのファイルで指定でき、それを自動的に XML に変換してくれます。
 
-The `parameter2xml` tool transforms a plain text parameter file into the above XML format,thereby creating the job and all necessary task files. The parameter file consists of a number of parameter assignments of the form:
+`parameter2xml` ツールは、プレーンテキストのパラメータファイルを、[はじめに](../intro) で説明した XML 形式のジョブファイルおよび必要なすべてのタスクファイルに変換します。パラメータファイルは、次のような形式のパラメータ代入の並びから構成されます。
 
     MODEL="Ising";
     SWEEPS=1000;
@@ -18,85 +18,85 @@ The `parameter2xml` tool transforms a plain text parameter file into the above X
     { L=10; T=0.1; }
     { L=20; T=0.05; }
 
-where each group of assignments inside a block of curly braces {...} indicates a set of parameters for a single simulation. Assignments outside of a block of curly braces are valid globally for all simulation after the point of definition. Strings are given in double quotes, as in "Ising".
+波括弧 {...} のブロック内にある代入の各グループは、1つのタスクに対するパラメータの組を表します。波括弧のブロックの外にある代入は、その定義以降のすべてのタスクに対してグローバルに有効です。文字列は "Ising" のように二重引用符で与えます。
 
-Two parameters have a special meaning:
+次の2つのパラメータには特別な意味があります。
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **既定値** | **意味** |
 | :------------ | :---------- | :---------- |
-| SEED | 0 | The random number seed used in the next Monte Carlo run created. After using a seed in the creation of a Monte Carlo run, this value gets incremented by one. |
-| WORK_FACTOR 1 | A factor by which the work that needs to be done for a simulation is multiplied in load balancing. |
+| SEED | 0 | 次に作成されるモンテカルロ実行で使われる擬似乱数生成器のシード値。あるシードが実行の作成に使われると、この値は1だけ増加します。 |
+| WORK_FACTOR | 1 | 負荷分散において、あるシミュレーションに必要な作業量に乗じられる係数。 |
 
- The syntax to invoke `parameter2xml` is:
- 
+`parameter2xml` を呼び出す構文は次の通りです。
+
     parameter2xml [-f] parameterfile [xmlfileprefix]
 
-which converts a parameterfile into a set of XML files, starting with the prefix given as optional second argument. The default for the second argument is the name as the parameterfile.
-The `parameter2xml` tool checks the existence of output XML files, and ask the user if he/she really wants to overwrite the input files. One can force `parameter2xml` to overwrite the input XMLs by "-f" option.
+これはパラメータファイルを一連の XML ファイルに変換し、オプションの第2引数として与えられた接頭辞から始まる名前を付けます。この第2引数の既定値は、パラメータファイル自身の名前です。
+`parameter2xml` ツールは、これらの名前を持つ出力 XML ファイルが既に存在するかどうかを確認し、本当に上書きしてよいかを尋ねます。`-f` オプションを使うと、`parameter2xml` に強制的にそれらを上書きさせることができます。
 
-## Invoking the program
+## プログラムの起動
 
-### Running the simulation on a serial machine
+### シリアルマシン上でシミュレーションを実行する
 
-The simulation is started by first creating the job file, and then giving the name of the XML job file as argument to the program. In our example, the program is called my_program and the sequence for running it is:
+シミュレーションは、まずジョブファイルを作成し、次にその XML ジョブファイルの名前を引数としてプログラムに与えることで開始されます。この例ではプログラムを `my_program` と呼ぶことにすると、実行の手順は次のようになります。
 
     parameter2xml parm job 
-    my_program  job.in.xml
+    my_program job.in.xml
 
-The results will be stored in a file `job.out.xml`, which refers to the files j`ob.task1.out.xml`, `job.task2.out.xml` and `job.task3.out.xml` for the results of the three simulations.
+結果はファイル `job.out.xml` に保存され、このファイルは3つのシミュレーションの結果に対応するファイル `job.task1.out.xml`、`job.task2.out.xml`、`job.task3.out.xml` を参照します。
 
-#### Command line options
+#### コマンドラインオプション
 
-The program takes a number of command line options, to control the behavior of the scheduler. These options are most useful for Monte Carlo simulations.
+このプログラムは、スケジューラの挙動を制御するための、いくつかのコマンドラインオプションを取ります。これらのオプションは、モンテカルロシミュレーションで特に有用です。
 
-| **Option** | **Default** | **Description** |
+| **オプション** | **既定値** | **説明** |
 | :--------- | :---------- | :-------------- |
-| --time-limit timelimit | infinity | gives the time (in seconds) which the program should run before writing a final checkpoint and exiting. |
-| --checkpoint-time checkpointtime | 1800 | gives the time (in seconds) after which the program should write a checkpoint. |
-| --Tmin checkingtime | 60 | gives the minimum time (in seconds) which the scheduler waits before checking (again) whether a simulation is finished. |
-| --Tmax checkingtime | 900 | gives the maximum time (in seconds) which the scheduler waits before checking (again) whether a simulation is finished. |
-| --write-xml | | with this option the result will be written to the .out.xml files, while otherwise it is only written to the hdf5-files. |
+| --time-limit timelimit | 無限大 | 最終チェックポイントを書き出して終了するまでにプログラムが実行してよい時間（秒）を指定します。 |
+| --checkpoint-time checkpointtime | 1800 | プログラムがチェックポイントを書き出すべき間隔の時間（秒）を指定します。 |
+| --Tmin checkingtime | 60 | スケジューラがシミュレーションの終了を（再度）確認するまでに待つ最小時間（秒）を指定します。 |
+| --Tmax checkingtime | 900 | スケジューラがシミュレーションの終了を（再度）確認するまでに待つ最大時間（秒）を指定します。 |
+| --write-xml | | このオプションを指定すると、結果は `.out.xml` ファイルにも書き出されます。指定しない場合、結果は HDF5 ファイルにのみ書き出されます。 |
 
-### Running the simulation on a parallel machine
+### 並列マシン上でシミュレーションを実行する
 
-is as easy as running it on a single machine. We will give the example using MPI. After starting the MPI environment (using e.g. lamboot for LAM MPI), you run the program in parallel using mpirun. In our example, e.g. to run it on four processes you do:
+並列マシン上でシミュレーションを実行するのは、シリアルマシン上で実行するのと同じくらい簡単です。ここでは Open MPI を用いた例を示します。MPI 環境を起動するための別個のステップは不要で、`mpirun` を使って直接プログラムを並列に実行できます（複数ノードで実行する場合は `--hostfile` でホストファイルを指定してください）。例えば、4プロセスで実行するには次のようにします。
 
     parameter2xml parm job 
     mpirun -np 4 my_program --mpi job.in.xml
- 
- #### Command line options
- 
- In addition to the command line options for the sequential program there are two more for the parallel program:
- 
- | **Option** | **Default** | **Description** |
+
+#### コマンドラインオプション
+
+シリアル版プログラムのコマンドラインオプションに加えて、並列版プログラムにはさらに2つのオプションがあります。
+
+| **オプション** | **既定値** | **説明** |
 | :--------- | :---------- | :-------------- |
-| --mpi | | specifies that the program should be run in MPI mode |
-| --Nmax numprocs | infinity | gives the maximum number of processes to assign to a simulation. |
-| --Nmin numprocs | 1 | gives the minimum number of processes to assign to a simulation. |
+| --mpi | | プログラムを MPI モードで実行するよう指定します |
+| --Nmax numprocs | 無限大 | 1つのシミュレーションに割り当てるプロセス数の上限を指定します。 |
+| --Nmin numprocs | 1 | 1つのシミュレーションに割り当てるプロセス数の下限を指定します。 |
 
-If there are more processors available than simulations, more than one Monte Carlo run will be started for each simulation. 
+シミュレーションの数より利用可能なプロセッサの数の方が多い場合、1つのシミュレーションに対して複数のモンテカルロ実行が開始されます。
 
-## Analyzing the simulation results 
+## シミュレーション結果の解析
 
-During the simulations expectation values of a couple of observables (specified and implemented in the simulation code) are measured and stored in the respective task files. To archive the task files produced from a simulation and to extract data from these files or the archive respectively a couple of tools are documented in the following.
+シミュレーション中には、（シミュレーションコード内で指定・実装された）いくつかの物理量の期待値が測定され、それぞれのタスクファイルに保存されます。あるシミュレーションで生成されたタスクファイルをアーカイブしたり、それらのファイルやアーカイブからデータを取り出したりするために、いくつかのツールが以下で説明されています。
 
 ### `convert2xml`
 
-The simulation output files only contain the collected measurements from all runs. Details about the individual Monte Carlo runs for each simulation can be obtained by converting the checkpoint files to XML, using the `convert2xml` tool, e.g.:
+シミュレーションの出力ファイルには、すべての実行から集約された測定値のみが含まれています。個々のモンテカルロ実行についての詳細情報は、`convert2xml` ツールを使ってチェックポイントファイルを XML に変換することで得られます。例えば次のようにします。
 
     convert2xml run-file
 
-This will produce an xml file of the task, containing information extracted from this Monte Carlo run.
+これにより、このモンテカルロ実行から抽出された情報を含む、そのタスクの XML ファイルが生成されます。
 
-### Evaluation of observables
+### 物理量の評価
 
-There are the following binaries for evaluation using the command line: `dirloop_sse_evalute`, `spin_mc_evaluate`, `worm_evaluate`, `fulldiag_evaluate` and `qwl_evaluate`. Three of them (`dirloop_sse_evaluate`, `spinmc_evaluate` and `worm_evaluate`) take the same syntax:
+コマンドラインでの評価用に、次のバイナリが用意されています：`dirloop_sse_evaluate`、`spinmc_evaluate`、`worm_evaluate`、`fulldiag_evaluate`、`qwl_evaluate`。このうち3つ（`dirloop_sse_evaluate`、`spinmc_evaluate`、`worm_evaluate`）は同じ構文を取ります。
 
     spinmc_evaluate [--write-xml] job.task1.out.xml [job.task2.out.xml ... ]
 
-This will calculate additional observables (e.g. specific heat, compressibility, ...) which have not been computed while the simulation, using the stored mc-data files. Using the '--write-xml' will write everything back to the .out.xml files. Without this flag the result will be written to the hdf5-files only.
-For the syntax of the other two binaries (`fulldiag_evaluate` and `qwl_evaluate`) please see the Tutorials on QWL and ED.
-The structure of the evalute programs is relatively easy. It is straight forward to create or modify such evaluate-programs. The following example reads the expectation values of the particle number operators n and n2 of the simulation of a bosonic Hubbard model, calculates the expectation value of the compressibility and writes it back to the checkpoint.
+これにより、保存されているモンテカルロデータを用いて、シミュレーション自体では計算されなかった追加の物理量（比熱、圧縮率など）が計算されます。`--write-xml` を使うと、結果はすべて `.out.xml` ファイルに書き戻されます。このフラグを指定しない場合、結果は HDF5 ファイルにのみ書き出されます。
+他の2つのバイナリの構文については、それぞれ `qwl_evaluate` と `fulldiag_evaluate` を使用している [MC-06 QWL](../../../../tutorials/mcs/mc06) と [ED-06 Full Diagonalization](../../../../tutorials/ed/ed06) のチュートリアルを参照してください。
+評価プログラムの構造は比較的単純であり、そのような評価プログラムを自分で作成したり改変したりするのは難しくありません。以下の例は、あるボース・ハバード模型のシミュレーションについて、粒子数演算子 n と n2 の期待値を読み込み、圧縮率の期待値を計算して、それをチェックポイントに書き戻します。
 
     #include <alps/scheduler.h>
     #include <alps/alea.h>
@@ -124,11 +124,13 @@ The structure of the evalute programs is relatively easy. It is straight forward
     {
         alps::scheduler::BasicFactory<alps::scheduler::MCSimulation,alps::scheduler::DummyMCRun> factory;
         alps::scheduler::init(factory);
-        boost::filesystem::path p(argv[1],boost::filesystem::native);
+        boost::filesystem::path p(argv[1]);
         evaluate(p,std::cout);
     }
 
-Note that ALPS 2 provides much easier analysis and evaluation of data in Python, and this C++ example should only be used by those who require analysis in their C++ programs.
+ALPS では、Python を用いることで、データの解析・評価がはるかに簡単に行えることに注意してください（[Python の使用](../usepython) を参照）。この C++ の例は、C++ プログラム内で解析を行う必要がある場合にのみ使用してください。
+
+ほとんどの ALPS アプリケーションに共通する入力パラメータについては、[共通パラメータ](../../parameters) を参照してください。このページで扱っているスケジューラのオプション（`--time-limit`、`--checkpoint-time`、`--Tmin`／`--Tmax`、`--mpi`、`--Nmin`／`--Nmax`、`--write-xml`）は、パラメータファイルに書き込むものではなく、スケジューラ自体に渡すコマンドラインフラグである点に注意してください。このセクションの他の内容の概要については、[シミュレーションの実行](../..) を参照してください。
 
 
 

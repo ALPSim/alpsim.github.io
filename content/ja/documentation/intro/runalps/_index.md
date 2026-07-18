@@ -5,6 +5,16 @@ toc: true
 weight: 1
 ---
 
-- [Introduction](intro)
-- [Using the command line \(with limited evaluation tools\)](commandline)
-- [Using Python](usepython)
+ALPS のシミュレーションは、コマンドラインと Python のどちらから操作する場合でも、入力の準備・シミュレーションの実行・結果の評価という同じ3つの段階を経ます。このセクションでは、まずその基盤となるジョブ／タスクの仕組みを一度だけ説明し、その後で2つのワークフローそれぞれについて詳しく解説します。
+
+## [はじめに](intro)
+
+ALPS のスケジューラライブラリがシミュレーションをどのように組織するかを説明します：パラメータの組ごとに1つのタスクを列挙するジョブファイル、パラメータと（後には）結果を保持するタスクファイル、そして以下の両ワークフローに共通する3つの段階（準備・実行・評価）について扱います。また、高精度なモンテカルロ計算では、生成器固有のバイアスを排除するために（`RNG` パラメータを介して）複数の乱数生成器で再実行すべき理由についても説明します。
+
+## [コマンドラインの使用（評価ツールは限定的）](commandline)
+
+Python を使わずに ALPS を操作する方法を説明します：`parameter2xml` を用いてプレーンテキストのパラメータファイルをジョブ／タスクの XML に変換する方法、シリアルマシン上で、あるいは並列マシン上で MPI を用いてシミュレーションのバイナリを直接起動する方法（`--time-limit`、`--checkpoint-time`、`--mpi`、`--Nmin`／`--Nmax` オプションを含む）、そして `convert2xml` や各種 `*_evaluate` バイナリ（`spinmc_evaluate`、`worm_evaluate`、`dirloop_sse_evaluate` など）を用いてその後に結果を評価する方法を扱います。最後に、圧縮率のような派生量を計算する独自の evaluate プログラムを C++ で書く例を示します。
+
+## [Python の使用](usepython)
+
+日常的に ALPS のシミュレーションを実行・解析するための推奨方法です。完全な例を通して一通りの流れを説明します：`pyalps` のインポート、`pyalps.writeInputFiles` を用いてパラメータ辞書の Python リストとして入力を準備する方法、`pyalps.runApplication` によるシリアルまたは並列での実行、そして（`pyalps.loadMeasurements` による）結果の読み込み、（Grace や Gnuplot への出力にも対応した `pyalps.plot` による）プロット、正しい jackknife 誤差棒を伴う Binder cumulant のような派生量の評価まで扱います。最後に、`tutorials/intro-01-basics` にある完全なサンプルスクリプトと、タスクごとに分割されたより小さな版へのリンクを示します。

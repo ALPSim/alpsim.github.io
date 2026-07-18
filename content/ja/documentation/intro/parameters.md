@@ -48,6 +48,8 @@ The model description can also require further parameters (e.g. S=1/2 or S=1, h=
 | SWEEPS | | number of Monte Carlo steps (after thermalization) |
 | THERMALIZATION | | Number of Monte Carlo sweeps for thermalization |
 
+These are parameters set in the parameter file itself. When running from the command line, the scheduler also accepts a separate set of runtime flags — such as `--time-limit`, `--checkpoint-time`, `--Tmin`/`--Tmax`, and `--mpi`/`--Nmin`/`--Nmax` for parallel runs — passed directly to the program rather than written into the parameter file; see [Using the command line](../runalps/commandline) for the full list.
+
 ## Additional parameters for exact diagonalization 
 
 | **Parameter** | **Default** | **Meaning** |

@@ -1,41 +1,41 @@
 ---
-description: "ALPS Documentation"
+description: "ALPS 文档"
 icon: house
 cascade:
     type: docs
 ---
-ALPS documentation includes basic theory, code and data structure of various simulation models, as well as available libraries and API calls.
+ALPS 文档涵盖了基础理论、各类模拟模型的代码与数据结构，以及可用的库和 API 调用。
 
-## [Introduction](intro)
+## [简介](intro)
 
-How to run ALPS: installing the package, setting up input files, choosing lattices and models, and evaluating your simulation results.
+如何运行 ALPS：安装软件包、设置输入文件、选择格子与模型，以及评估模拟结果。
 
-## [Models](models)
+## [模型](models)
 
-An overview of the quantum and classical lattice models supported by ALPS, from the Ising and Heisenberg models to the Hubbard and t-J models.
+ALPS 所支持的量子与经典格点模型概览，从 Ising 模型、Heisenberg 模型到 Hubbard 模型、t-J 模型。
 
-## [Methods](methods)
+## [方法](methods)
 
-The simulation methods ALPS implements to solve these models, including exact diagonalization, classical and quantum Monte Carlo, and DMRG.
+ALPS 为求解这些模型所实现的模拟方法，包括精确对角化、经典与量子蒙特卡罗方法，以及 DMRG。
 
 ## [API](api)
 
-Reference documentation for the `pyalps` Python functions used to run applications, load measurement data, and evaluate results in the ALPS tutorials.
+`pyalps` 中用于运行应用、加载测量数据、评估结果的 Python 函数的参考文档，这些函数在 ALPS 教程中被广泛使用。
 
-## [Libraries](lib)
+## [库](lib)
 
-Documentation for the underlying ALPS C++ libraries — general utilities, random numbers, parameter parsing, lattices, models, and more — that ALPS applications are built on.
+ALPS 应用所依赖的底层 ALPS C++ 库的文档——通用工具、随机数、参数解析、格子、模型等等。
 
-## [Development](codedev)
+## [开发](codedev)
 
-Tutorials on writing your own simulations with the ALPS libraries and scheduler, in both Python and C++.
+关于如何使用 ALPS 库与调度器编写自己的模拟程序的教程，涵盖 Python 与 C++ 两种方式。
 
-## [Integrating Your Code with ALPS](alpsize)
+## [将你的代码与 ALPS 集成](alpsize)
 
-A step-by-step guide to integrating your own C, C++, or Fortran application with ALPS parameters, measurements, and the parapack scheduler.
+将你自己的 C、C++ 或 Fortran 应用与 ALPS 的参数、测量以及 parapack 调度器集成的分步指南。
 
-## [Publications](pubs)
+## [文献](pubs)
 
-Guidance on which papers to cite — the original algorithm, the specific application, and the ALPS library itself — when publishing work that uses ALPS.
+关于发表使用 ALPS 完成的工作时应引用哪些论文的指南——原始算法的论文、具体应用的论文，以及 ALPS 库本身的论文。
 
 
