@@ -1,35 +1,67 @@
 ---
-title: Bose-Hubbard Model
+title: Bose-Hubbard 模型
 math: true
+toc: true
 weight: 9
 ---
 
-## Introduction
+## 简介
 
-The **Bose-Hubbard model** is a cornerstone of theoretical physics, particularly in the study of quantum many-body systems and ultracold atomic gases. It describes the behavior of interacting bosons on a lattice, capturing the competition between kinetic energy (boson hopping) and potential energy (on-site interactions). This model is widely used to understand phenomena such as quantum phase transitions, superfluidity, and Mott insulation.
+**Bose-Hubbard 模型**是 [Hubbard 模型](../hubbard)的玻色版本：它描述的不是带自旋的费米子，而是普通的玻色子在格子上跃迁，并且共享同一格点需要付出能量代价。与费米子的产生、湮灭算符不同，玻色算符 $b_i^\dagger, b_i$ 满足普通的对易关系 $[b_i, b_j^\dagger] = \delta_{ij}$，完全没有泡利不相容原理——原则上任意数量的玻色子都可以堆积在同一个格点上，正是相互作用能量 $U$ 单独阻止了这种情况的发生。
 
-The Bose-Hubbard model is defined by the following Hamiltonian:
+这一模型基本上以其现代形式，由 [Fisher, Weichman, Grinstein, and Fisher (1989)](https://doi.org/10.1103/PhysRevB.40.546) 提出，作为格点上相互作用玻色子的通用描述——当时的研究动机来自多孔介质中吸附的氦、颗粒超导体以及 Josephson 结阵列，远早于它如今占主导地位的应用场景。这一应用场景的到来，源于 [Jaksch, Bruder, Cirac, Gardiner, and Zoller (1998)](https://doi.org/10.1103/PhysRevLett.81.3108) 提出：束缚在光学晶格——由激光束干涉形成的、形似蛋托的周期势——中的超冷原子，恰好实现了这一哈密顿量，且其参数只需通过调节激光强度即可调控；随后 [Greiner, Mandel, Esslinger, Hänsch, and Bloch (2002)](https://doi.org/10.1038/415039a) 在实验室中直接观测到了该模型的核心量子相变，这是整个冷原子量子模拟领域的奠基性实验之一。
+
+哈密顿量为
 
 $$
 H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + \frac{U}{2} \sum_i n_i (n_i - 1) - \mu \sum_i n_i,
 $$
 
-where:
-- $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
-- $U$ is the on-site interaction strength, representing the energy cost of having multiple bosons on the same site,
-- $\mu$ is the chemical potential, controlling the total number of bosons in the system,
-- $b_i^\dagger$ and $b_i$ are the bosonic creation and annihilation operators at site $i$,
-- $n_i = b_i^\dagger b_i$ is the number operator, representing the boson occupation at site $i$.
+其中：
+- $t$ 是最近邻格点 $\langle i,j \rangle$ 之间的跃迁振幅，
+- $U$ 是在位相互作用强度，即在同一格点上放置多个玻色子所需付出的能量代价，
+- $\mu$ 是化学势，控制系统中玻色子的总数，
+- $b_i^\dagger$ 和 $b_i$ 是格点 $i$ 处的玻色产生和湮灭算符，
+- $n_i = b_i^\dagger b_i$ 是数算符，表示格点 $i$ 处的玻色子占据数。
 
-The first term in the Hamiltonian describes the kinetic energy of bosons hopping between lattice sites, favoring delocalization and the formation of a superfluid phase. The second term represents the on-site interaction energy, which penalizes multiple bosons occupying the same site and favors localization. The third term, involving the chemical potential $\mu$, controls the overall particle density in the system.
+这正是 ALPS 模型库中内置的 `boson Hubbard` 模型——完整参数列表参见[模型参数术语表](../../intro/modeldef/intro)。取 $U \to \infty$ 将彻底禁止双占据，得到本节别处所讨论的[硬核玻色子模型](../hardcorebm)。
 
-## Phenomena
-The Bose-Hubbard model exhibits a rich phase diagram, with two primary phases:
-1. **Superfluid phase**: At small $U/t$, bosons delocalize across the lattice, forming a coherent superfluid state with long-range phase coherence.
-2. **Mott insulating phase**: At large $U/t$, bosons localize at individual lattice sites due to strong repulsive interactions, leading to a gapped insulating state with integer boson occupancy per site.
+## 模型的物理
 
-The transition between these phases is a paradigmatic example of a **quantum phase transition**, driven by quantum fluctuations rather than thermal effects. This transition has been experimentally observed in ultracold atomic gases trapped in optical lattices, making the Bose-Hubbard model a key tool for understanding and simulating quantum many-body phenomena.
+**两种相互竞争的倾向，一张相图。** 跃迁项 $t$ 有利于玻色子离域化，在整个格子上形成一个定义明确、相位相干的量子态——即**超流体**。相互作用项 $U$ 则恰好相反：它有利于每个格点被固定的整数个玻色子占据，完全没有相位相干性——即 **Mott 绝缘体**。哪种倾向占上风，取决于比值 $t/U$ 以及由 $\mu$ 设定的密度，梳理这一竞争关系就描绘出了该模型著名的 **Mott 瓣**相图：在每个整数填充 $n = 1, 2, 3, \ldots$ 处，$(\mu/U, t/U)$ 平面上都存在一个从 $t=0$ 延伸出来的瓣状区域，在该区域内系统是一个有能隙的 Mott 绝缘体；而在瓣状区域之外的任何地方，包括任何非整数填充，基态都是超流体。
 
-The Bose-Hubbard model is also closely related to other models in condensed matter physics, such as the **Josephson junction array** and the **XY model**, and serves as a foundation for studying more complex systems, including disordered and long-range interacting bosonic systems.
+**穿越同一相变的两种方式。** 超流体到 Mott 绝缘体的相变可以通过两种物理上不同的方式到达，[Fisher et al. (1989)](https://doi.org/10.1103/PhysRevB.40.546) 指出这两种方式受不同的物理规律支配。沿着 $t/U$ 方向、恰好在整数填充处笔直穿过某个 Mott 瓣的顶端，是在固定密度下穿越相变；由于此时的相变涉及在可对易背景之上真正的量子（粒子数）涨落，它属于比经典 XY 模型高一维的同一个普适类。而偏离瓣顶来调节密度，则是直接加入或移除一团稀薄的粒子或空穴气体，它们几乎一出现就以类平均场的指数凝聚成超流体——这是离开 Mott 相的一种性质不同的"一般性"方式。
 
-## Methods
+**相位涨落与 Josephson 物理。** 在超流相深处、靠近 Mott 边界的地方，玻色场的振幅涨落被强烈抑制，而其相位却仍能相对自由地涨落；由此得到的低能有效理论是一个量子 XY 模型，形式上与一个 Josephson 结阵列完全相同，跃迁 $t$ 扮演着相邻"岛"之间 Josephson 耦合的角色。这正是 Fisher 等人最初把颗粒超导体和 Josephson 结阵列与格点玻色子一并处理时所依据的同一种有效描述。
+
+**加入无序：玻色玻璃。** 如果化学势被设置为随格点变化的随机量——例如模拟基底格子或陷阱中的无序——那么在 Mott 绝缘体和超流体之间就会出现第三种相：**玻色玻璃**，这是一种无能隙但非超流的相，其中玻色子被无序（而非相互作用）所局域化。[Fisher et al. (1989)](https://doi.org/10.1103/PhysRevB.40.546) 相当普遍地证明了，一旦存在无序，玻色玻璃就必然介于 Mott 绝缘体与超流体之间，因此从 Mott 绝缘体直接到超流体的相变，是纯净格子所特有的现象。
+
+## 现象
+
+- **超流性**：在小 $U/t$（或偏离整数填充）时，玻色子在格子上离域化，形成一个具有长程相位相干性和非零超流刚度的相干态。
+- **Mott 绝缘化**：在大 $U/t$ 且整数填充时，相互作用把整数个玻色子钉扎在每个格点上，为所有激发打开能隙，形成不可压缩的绝缘体。
+- **超流体-Mott 量子相变**：由量子涨落（而非热涨落）驱动，根据相变是在固定整数密度下穿越（经过某个 Mott 瓣的顶端）还是通过改变密度本身来穿越（见上文），存在两种不同的普适类。
+- **玻色玻璃**：存在无序时，Mott 绝缘体与超流体之间会介入一个无能隙、绝缘但非超流的相。
+- **直接的实验实现**：上述整张相图都已经用光学晶格中的超冷原子绘制出来，这使得 Bose-Hubbard 模型成为少数几个其相变已经被逐个原子直接观测到的强关联格点模型之一。
+
+## 方法
+
+与本节中其他费米型模型不同，排斥相互作用的玻色子在量子蒙特卡罗方法中、在任意维度下都没有符号问题——粒子交换不会带来使模拟失效的负号——这正是 ALPS 为这一模型提供多个专用 QMC 程序的原因：
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **Worm 算法** —— 参见[Worm 算法](../../methods/qmc/worm) | 在任意维度下都没有符号问题；在包括巨正则系综在内的任意填充下都高效 | 仅限于没有符号问题的模型（本模型满足这一点） | 求解超流体-Mott 相变的参考方法；参见 [MC-05](../../../tutorials/mcs/mc05) |
+| **有向 Worm 算法** —— 参见 [DWA](../../methods/qmc/dwa) | 对陷阱中的非均匀系统（例如谐振阱）有高效的更新方式 | 该实现在当前 ALPS 中已被弃用，且仅限于在位相互作用 | 陷阱光学晶格系统中的密度分布；参见 [DWA-01](../../../tutorials/mcs/dwa/dwa01) 和 [DWA-02](../../../tutorials/mcs/dwa/dwa02) |
+| **随机级数展开** —— 参见 [SSE](../../methods/qmc/sse) | 无符号问题的有限温度算法，最初为自旋模型开发，后推广到玻色子 | 与其他 QMC 方法一样，仅限于无符号问题的模型（这里不构成实际限制） | Bose-Hubbard 模型的有限温度热力学 |
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 在把每格点占据数截断为某个最大值 `Nmax` 后，对小系统给出精确结果 | 仅限于小型团簇和适中的 `Nmax` | 小系统基准测试 |
+| **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维链高度精确 | 对真正的二维/三维系统效率较低 | 一维 Bose-Hubbard 链的基态 |
+
+无序系统可以用同一个 worm 程序来研究——参见[玻色玻璃](../../methods/qmc/boseglass)中给出的示例参数文件——而光学晶格本身的单粒子能带结构则在[光学晶格中的玻色子](../../methods/qmc/bhol)中讨论。
+
+- [MC-05：用 worm QMC 程序模拟 Bose-Hubbard 模型](../../../tutorials/mcs/mc05) —— 在单位填充的二维正方格子上定位超流体-Mott 相变
+- [DWA-01：使用有向 worm 的蒙特卡罗模拟](../../../tutorials/mcs/dwa/dwa01) —— 用有向 worm 算法重新考察同一个相变
+- [DWA-02：密度分布](../../../tutorials/mcs/dwa/dwa02) —— 谐振阱中玻色子的密度分布，可与真实的光学晶格实验直接比较
+
+---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。
