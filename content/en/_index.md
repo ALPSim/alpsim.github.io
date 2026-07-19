@@ -28,6 +28,7 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 {{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
 {{< cta-button text="Governance" link="govern" icon="account_balance" >}}
 {{< cta-button text="Tutorials" link="tutorials/" icon="school" >}}
+{{< cta-button text="Models" link="documentation/models/" icon="science" >}}
 {{< cta-button text="Discord" link="https://discord.gg/JRNWnnva9g" icon="forum" >}}
 {{< cta-button text="FAQ" link="faqs" icon="help" >}}
 {{< cta-button text="Papers" link="documentation/pubs/" icon="library_books" >}}
