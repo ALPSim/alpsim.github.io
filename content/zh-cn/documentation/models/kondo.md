@@ -1,51 +1,48 @@
 ---
-title: Kondo Lattice Model
+title: Kondo 晶格模型
 math: true
+toc: true
 weight: 10
 ---
 
-## Introduction
+## 简介
 
-In condensed matter physics, the **Kondo lattice model (KLM)** is used to describe the interaction between localized magnetic moments and conduction electrons in a metallic system. This model is particularly important for understanding the behavior of heavy fermion materials, where the interplay between localized f-electrons and delocalized conduction electrons leads to rich and complex phenomena such as Kondo screening, magnetic ordering, and unconventional superconductivity.
+**Kondo 晶格模型（KLM）**是 [Anderson 杂质模型](../impurity)的周期性、多杂质推广：不再是单个局域磁矩嵌入传导电子海中，而是整个晶格的局域磁矩——通常每个格点一个，来自稀土或锕系化合物中部分填充的 $f$ 轨道——耦合到一个共享的传导电子海。它是**重费米子材料**的标准最简模型，在其中，杂质页面中介绍的磁有序与 Kondo 屏蔽之间的竞争，如今在整个晶格上相干地展开。
 
-The Hamiltonian for the Kondo Lattice Model can be written as:
+这一模型，以及使其变得可处理的物理图像，由 [Doniach (1977)](https://doi.org/10.1016/0378-4363(77)90190-5) 提出。哈密顿量为
 
 $$
-H = H_{\text{band}} + H_{\text{Kondo}}
+H = \sum_{k,\sigma} \varepsilon_k c_{k\sigma}^\dagger c_{k\sigma} + J \sum_i \mathbf{S}_i \cdot \mathbf{s}_i,
 $$
 
-where:
-- $H_{\text{band}}$ describes the kinetic energy of the conduction electrons:
-  $$
-  H_{\text{band}} = \sum_{k, \sigma} \epsilon_k c_{k\sigma}^\dagger c_{k\sigma}
-  $$
-  Here, $c_{k\sigma}^\dagger$ and $c_{k\sigma}$ are the creation and annihilation operators for conduction electrons with momentum $k$ and spin $\sigma$, and $\epsilon_k$ is the dispersion relation.
+其中 $c_{k\sigma}^\dagger, c_{k\sigma}$ 产生和湮灭动量为 $k$、自旋为 $\sigma$、色散关系为 $\varepsilon_k$ 的传导电子，$\mathbf{S}_i$ 是格点 $i$ 处的局域自旋，$\mathbf{s}_i$ 是同一格点处传导电子的自旋密度，$J$（通常为反铁磁性，$J>0$）是二者之间的交换耦合。正如单杂质 Kondo 模型通过 Schrieffer-Wolff 变换从 Anderson 杂质模型中导出一样，Kondo 晶格模型也以完全相同的方式，从**周期 Anderson 模型**——即格子上*每个*格点都有一个 Anderson 杂质——出发，在把每个格点的电荷涨落积掉之后得到。这一模型所需的双子格基（一种传导电子格点类型，一种局域自旋格点类型）的具体示例，已经在 ALPS 的[格子基](../../intro/modeldef/latticebasis)页面中给出。
 
-- $H_{\text{Kondo}}$ represents the Kondo interaction between the localized spins $\mathbf{S}_i$ and the conduction electrons:
-  $$
-  H_{\text{Kondo}} = J \sum_i \mathbf{S}_i \cdot \mathbf{s}_i
-  $$
-  Here, $\mathbf{s}_i$ is the spin density of the conduction electrons at site $i$, and $J$ is the exchange coupling constant.
-  
-The above KLM describes three key components of the model:
-- **Localized Magnetic Moments**: In the KLM, localized magnetic moments (often represented by spins) are associated with atoms in a periodic lattice. These moments arise from partially filled f-orbitals in rare-earth or actinide compounds.
+## 模型的物理
 
-- **Conduction Electrons**: The conduction electrons are delocalized and form a Fermi sea. They interact with the localized spins through an exchange coupling, typically described by the Kondo interaction.
+**两个相互竞争的能标：Doniach 图像。** 正如[Anderson 杂质模型](../impurity)页面所述，一个耦合到传导电子海的单一局域磁矩，会在 Kondo 温度 $T_K \sim D\,e^{-1/(2\rho_0 J)}$ 以下被屏蔽。但在晶格中，传导电子还会在不同局域磁矩之间媒介一种*间接*磁性交换，称为 **RKKY 相互作用**，其特征能标为 $T_{\text{RKKY}} \sim \rho_0 J^2$。[Doniach (1977)](https://doi.org/10.1016/0378-4363(77)90190-5) 指出，这两个能标对耦合 $J$ 的依赖方式截然不同：在小 $J$ 时，幂律的 RKKY 能标超过指数级小的 Kondo 能标，因此局域磁矩会在 Kondo 屏蔽有机会发生之前就形成磁有序（通常为反铁磁性）；在大 $J$ 时，指数增长的 $T_K$ 最终会超过 $T_{\text{RKKY}}$，Kondo 屏蔽占据上风，基态转变为一个非磁性的、被完全屏蔽的重费米子态。调节 $J\rho_0$ 穿过这两个能标相交的那一点——即 **Doniach 图**——会驱动一次真正的磁性量子相变，而与之相关的**重费米子量子临界点**，是实际材料中量子临界性研究得最深入的例子之一。
 
-- **Kondo Interaction**: The interaction between the localized spins and the conduction electrons is modeled by an antiferromagnetic exchange coupling, often denoted as $J$. This coupling leads to the Kondo effect, where the localized spins are screened by the conduction electrons at low temperatures.
+**相干屏蔽与重费米液体。** 在 Doniach 图中被 Kondo 屏蔽的一侧，屏蔽并非独立地发生在每个格点上，而是在整个晶格上相干地进行，由此产生一个真正的费米液体——但其准粒子的有效质量可达裸电子质量的数百倍，因为每个准粒子在传播时如今都会"拖着"一个局域磁矩一起走。一个更微妙的进一步后果是，由此产生的费米面所包围的体积，把局域磁矩也算作巡游电子海的一部分（即"大"费米面），这与磁有序相中不包含这些磁矩的"小"费米面形成对比——这一区别在量子临界点本身处变得尤为微妙，至今仍是活跃的争论话题。
 
-## Phenomena
+**通向非常规超导的一条道路。** 正如掺杂 Mott 绝缘体被认为会在 [Hubbard 模型](../hubbard)和 [t-J 模型](../tj)中驱动非常规超导一样，把重费米子化合物调节到其 Doniach 量子临界点附近，也常常会揭示出一个非常规超导的"穹顶"，人们认为它是由邻近磁有序背后的同一种磁涨落所媒介的，而非声子。第一个被发现的这类材料——重费米子超导体 CeCu$_2$Si$_2$（[Steglich et al. (1979)](https://doi.org/10.1103/PhysRevLett.43.1892)）——同时也是第一个被证实其配对机制源于电子-电子相互作用、而非常规 BCS 理论中电子-声子耦合的超导体。
 
-The Kondo Lattice Model exhibits a variety of intriguing physical phenomena, including:
+## 现象
 
-- **Kondo Screening**: At low temperatures, the localized spins are screened by the conduction electrons, forming a non-magnetic ground state known as the Kondo singlet.
+- **Kondo 屏蔽**：在低温下，每个局域自旋都被传导电子逐渐屏蔽成一个非磁性的 Kondo 单态，正如[Anderson 杂质模型](../impurity)页面所述，只不过如今发生在整个晶格上。
+- **重费米子行为**：整个晶格上的相干屏蔽产生了有效质量被强烈增强的准粒子，这是重费米子化合物的标志性特征。
+- **RKKY 驱动的磁有序**：在小 $J\rho_0$ 时，传导电子媒介的 RKKY 相互作用战胜 Kondo 屏蔽，使局域磁矩产生反铁磁（较少见的情形下为铁磁）有序。
+- **重费米子量子临界性**：调节 $J\rho_0$、压力或磁场穿过 Doniach 转变，会驱动一次磁性量子相变，其附近常常伴随着反常的非费米液体行为。
+- **非常规超导**：在量子临界点附近，许多重费米子材料——从 CeCu$_2$Si$_2$ 开始——都会出现被认为由磁性（而非声子）涨落所媒介的超导电性。
 
-- **Heavy Fermion Behavior**: The screening of localized spins leads to the formation of quasiparticles with greatly enhanced effective masses, giving rise to heavy fermion behavior.
+## 方法
 
-- **Magnetic Ordering**: Depending on the strength of the Kondo interaction and the lattice structure, the system can exhibit magnetic ordering, such as antiferromagnetism or ferromagnetism.
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **DMFT** —— 参见[动力学平均场理论](../../methods/dmft/dmft) | 非微扰地捕捉 Kondo 屏蔽与 Doniach 竞争；ALPS 自身的杂化展开求解器最初正是在这个模型上被开发和演示的（[Werner and Millis (2006)](https://doi.org/10.1103/PhysRevB.74.155107)） | 只有在无穷维时才是精确的；忽略了驱动磁有序波矢的 RKKY 相互作用的动量依赖性 | Kondo 屏蔽与磁有序之间的 Doniach 竞争；另见 [Georges, Kotliar, Krauth, and Rozenberg (1996)](https://doi.org/10.1103/RevModPhys.68.13) 撰写的一般性 DMFT 综述 |
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小型团簇给出精确结果 | 由于希尔伯特空间同时包含传导电子和局域自由度，仅限于小型团簇 | 小团簇基准测试 |
+| **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维 Kondo 链和梯子高度精确 | 对真正的二维/三维系统效率较低 | 一维 Kondo 晶格链的基态 |
 
-- **Unconventional Superconductivity**: In some heavy fermion materials, the Kondo lattice model can give rise to unconventional superconducting states with non-trivial pairing symmetries.
+与 [Hubbard 模型](../hubbard)一样，除了特殊的、无符号问题的情形外，ALPS 中没有针对一般 Kondo 晶格模型的格点量子蒙特卡罗程序：它是一个真正意义上的费米型格点问题，DMFT（而非直接的格点 QMC）是 ALPS 中可用的标准大规模方法。目前没有专门针对这一模型的 ALPS 教程，但[格子基](../../intro/modeldef/latticebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其双子格结构，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程则是了解底层 DMFT 机制的自然起点。
 
+---
 
-## Methods
-
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。

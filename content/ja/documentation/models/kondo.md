@@ -1,51 +1,48 @@
 ---
-title: Kondo Lattice Model
+title: 近藤格子モデル
 math: true
+toc: true
 weight: 10
 ---
 
-## Introduction
+## はじめに
 
-In condensed matter physics, the **Kondo lattice model (KLM)** is used to describe the interaction between localized magnetic moments and conduction electrons in a metallic system. This model is particularly important for understanding the behavior of heavy fermion materials, where the interplay between localized f-electrons and delocalized conduction electrons leads to rich and complex phenomena such as Kondo screening, magnetic ordering, and unconventional superconductivity.
+**近藤格子モデル（KLM）**は、[アンダーソン不純物モデル](../impurity)の周期的な、多不純物への一般化です。伝導電子の海に埋め込まれた単一の局在モーメントの代わりに、格子全体にわたる局在モーメント——典型的には希土類やアクチノイド化合物中の部分的に満たされた $f$ 軌道に由来し、各サイトに 1 つずつ存在します——が、共有された伝導電子の海に結合します。これは**重い電子系物質**の標準的な最小モデルであり、そこでは不純物のページで紹介した磁気秩序と近藤遮蔽の間の競合が、格子全体にわたってコヒーレントに展開します。
 
-The Hamiltonian for the Kondo Lattice Model can be written as:
+このモデル、およびそれを扱いやすくする物理的描像は、[Doniach (1977)](https://doi.org/10.1016/0378-4363(77)90190-5) によって導入されました。ハミルトニアンは
 
 $$
-H = H_{\text{band}} + H_{\text{Kondo}}
+H = \sum_{k,\sigma} \varepsilon_k c_{k\sigma}^\dagger c_{k\sigma} + J \sum_i \mathbf{S}_i \cdot \mathbf{s}_i,
 $$
 
-where:
-- $H_{\text{band}}$ describes the kinetic energy of the conduction electrons:
-  $$
-  H_{\text{band}} = \sum_{k, \sigma} \epsilon_k c_{k\sigma}^\dagger c_{k\sigma}
-  $$
-  Here, $c_{k\sigma}^\dagger$ and $c_{k\sigma}$ are the creation and annihilation operators for conduction electrons with momentum $k$ and spin $\sigma$, and $\epsilon_k$ is the dispersion relation.
+で与えられます。ここで $c_{k\sigma}^\dagger, c_{k\sigma}$ は分散 $\varepsilon_k$ を持つ運動量 $k$、スピン $\sigma$ の伝導電子を生成・消滅させ、$\mathbf{S}_i$ はサイト $i$ における局在スピン、$\mathbf{s}_i$ は同じサイトにおける伝導電子のスピン密度、$J$（通常は反強磁性的、$J>0$）はそれらの間の交換結合です。単一不純物の近藤モデルがシュリーファー・ウォルフ変換によってアンダーソン不純物モデルから導かれるのとまったく同じように、近藤格子モデルも、格子の*すべての*サイトにアンダーソン不純物がある**周期アンダーソンモデル**から、各サイトの電荷ゆらぎを消去することによって同じ方法で導かれます。このモデルが必要とする 2 副格子構造（伝導電子のサイトタイプ 1 つと、局在スピンのサイトタイプ 1 つ）の具体例は、すでに ALPS の[格子基底](../../intro/modeldef/latticebasis)のページで示されています。
 
-- $H_{\text{Kondo}}$ represents the Kondo interaction between the localized spins $\mathbf{S}_i$ and the conduction electrons:
-  $$
-  H_{\text{Kondo}} = J \sum_i \mathbf{S}_i \cdot \mathbf{s}_i
-  $$
-  Here, $\mathbf{s}_i$ is the spin density of the conduction electrons at site $i$, and $J$ is the exchange coupling constant.
-  
-The above KLM describes three key components of the model:
-- **Localized Magnetic Moments**: In the KLM, localized magnetic moments (often represented by spins) are associated with atoms in a periodic lattice. These moments arise from partially filled f-orbitals in rare-earth or actinide compounds.
+## モデルの物理
 
-- **Conduction Electrons**: The conduction electrons are delocalized and form a Fermi sea. They interact with the localized spins through an exchange coupling, typically described by the Kondo interaction.
+**2 つの競合するエネルギースケール：ドニアック描像。** [アンダーソン不純物モデル](../impurity)のページで見たように、伝導電子の海に結合した単一の局在モーメントは、近藤温度 $T_K \sim D\,e^{-1/(2\rho_0 J)}$ 以下で遮蔽されます。しかし格子の中では、伝導電子は異なる局在モーメントの間に*間接的な*磁気的交換相互作用も媒介します。これは **RKKY 相互作用**と呼ばれ、その特徴的なエネルギースケールは $T_{\text{RKKY}} \sim \rho_0 J^2$ です。[Doniach (1977)](https://doi.org/10.1016/0378-4363(77)90190-5) は、この 2 つのスケールが結合 $J$ に対してまったく異なる依存性を持つことを指摘しました。小さな $J$ では、べき乗則の RKKY スケールが指数関数的に小さい近藤スケールを上回るため、近藤遮蔽が始まる前に局在モーメントが磁気的に秩序化します（典型的には反強磁性的に）。大きな $J$ では、指数関数的な $T_K$ が最終的に $T_{\text{RKKY}}$ を上回り、近藤遮蔽が勝って、基底状態は代わりに非磁性の、完全に遮蔽された重い電子系状態になります。これら 2 つのスケールが交差する点を境に $J\rho_0$ を調整すること——**ドニアック図**——は、本物の磁気量子相転移を引き起こし、それに伴う**重い電子系の量子臨界点**は、実材料における量子臨界性の中で最も盛んに研究されている例の一つです。
 
-- **Kondo Interaction**: The interaction between the localized spins and the conduction electrons is modeled by an antiferromagnetic exchange coupling, often denoted as $J$. This coupling leads to the Kondo effect, where the localized spins are screened by the conduction electrons at low temperatures.
+**コヒーレントな遮蔽と重いフェルミ液体。** ドニアック図の近藤遮蔽側では、遮蔽は各サイトで独立に起こるのではなく、格子全体にわたってコヒーレントに起こり、本物のフェルミ液体を生み出します——ただしその準粒子は、伝播する際に局在モーメントを「引きずって」いくため、裸の電子質量の数百倍にも達する有効質量を持ちます。さらに微妙な帰結として、得られるフェルミ面が囲む体積は、局在モーメントを遍歴電子の海の一部として数え入れます（「大きな」フェルミ面）。これは、局在モーメントを含まない磁気秩序相の「小さな」フェルミ面とは対照的です——この区別は、量子臨界点そのものにおいて特に微妙になり、今なお活発に議論されています。
 
-## Phenomena
+**非従来型超伝導への道筋。** モット絶縁体をドープすることが [ハバードモデル](../hubbard)や [t-J モデル](../tj)において非従来型超伝導を駆動すると考えられているのとちょうど同じように、重い電子系化合物をそのドニアック量子臨界点の近くまで調整すると、しばしば非従来型超伝導のドームが現れます。これは、フォノンによってではなく、近くの磁気秩序の原因となっているのと同じ磁気ゆらぎによって媒介されると考えられています。最初に発見されたこの種の物質、重い電子系超伝導体 CeCu$_2$Si$_2$（[Steglich et al. (1979)](https://doi.org/10.1103/PhysRevLett.43.1892)）は、通常の BCS 理論における電子‐フォノン結合ではなく、電子‐電子相互作用が対形成機構であることが示された史上初めての超伝導体でもありました。
 
-The Kondo Lattice Model exhibits a variety of intriguing physical phenomena, including:
+## 現象
 
-- **Kondo Screening**: At low temperatures, the localized spins are screened by the conduction electrons, forming a non-magnetic ground state known as the Kondo singlet.
+- **近藤遮蔽**：低温では、それぞれの局在スピンが伝導電子によって徐々に遮蔽され、非磁性の近藤一重項になります——[アンダーソン不純物モデル](../impurity)のページとまったく同様ですが、今度は格子全体にわたって起こります。
+- **重い電子系的振る舞い**：格子全体にわたるコヒーレントな遮蔽により、強く増大した有効質量を持つ準粒子が生み出されます。これは重い電子系化合物を特徴づける兆候です。
+- **RKKY による磁気秩序**：小さな $J\rho_0$ では、伝導電子が媒介する RKKY 相互作用が近藤遮蔽に打ち勝ち、局在モーメントに反強磁性的な（まれに強磁性的な）秩序が生じます。
+- **重い電子系の量子臨界性**：$J\rho_0$、圧力、あるいは磁場を調整してドニアック転移を横切ると磁気量子相転移が駆動され、しばしばその近傍で異常な非フェルミ液体的振る舞いを伴います。
+- **非従来型超伝導**：量子臨界点の近くでは、CeCu$_2$Si$_2$ を皮切りに、多くの重い電子系物質が、フォノンではなく磁気的なゆらぎによって媒介されると考えられる超伝導を示します。
 
-- **Heavy Fermion Behavior**: The screening of localized spins leads to the formation of quasiparticles with greatly enhanced effective masses, giving rise to heavy fermion behavior.
+## 手法
 
-- **Magnetic Ordering**: Depending on the strength of the Kondo interaction and the lattice structure, the system can exhibit magnetic ordering, such as antiferromagnetism or ferromagnetism.
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **DMFT** —— [動的平均場理論](../../methods/dmft/dmft) を参照 | 近藤遮蔽とドニアック競合を非摂動的に捉える；ALPS 自身のハイブリダイゼーション展開ソルバーは、もともとまさにこのモデルの上で開発・実証された（[Werner and Millis (2006)](https://doi.org/10.1103/PhysRevB.74.155107)） | 無限次元でのみ厳密；磁気秩序の波数ベクトルを決める RKKY 相互作用の運動量依存性を無視する | 近藤遮蔽と磁気秩序の間のドニアック競合；[Georges, Kotliar, Krauth, and Rozenberg (1996)](https://doi.org/10.1103/RevModPhys.68.13) による一般的な DMFT レビューも参照 |
+| **ED** —— [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) を参照 | 小さなクラスターに対して厳密な結果が得られる | ヒルベルト空間が伝導電子と局在自由度の両方を含むため、小さなクラスターに限られる | 小クラスターのベンチマーク |
+| **DMRG** —— [密度行列繰り込み群](../../methods/dmrg/dmrg) を参照 | 1 次元近藤鎖やはしごに対して非常に高精度 | 真に 2 次元・3 次元の系には効率が落ちる | 1 次元近藤格子鎖の基底状態 |
 
-- **Unconventional Superconductivity**: In some heavy fermion materials, the Kondo lattice model can give rise to unconventional superconducting states with non-trivial pairing symmetries.
+[ハバードモデル](../hubbard)と同様に、符号問題のない特殊な場合を除けば、ALPS には一般的な近藤格子モデルのための格子量子モンテカルロアプリケーションはありません。これは正真正銘フェルミオン的な格子問題であり、直接的な格子 QMC ではなく DMFT が、ALPS で利用可能な標準的な大規模手法です。このモデルに特化した ALPS のチュートリアルはありませんが、[格子基底](../../intro/modeldef/latticebasis)のページはその 2 副格子構造を ALPS のモデル XML 形式でどのように定義するかを示しており、[ハバードモデル](../hubbard)のページにある DMFT チュートリアル群は、背後にある DMFT の仕組みを学ぶための自然な出発点となります。
 
+---
 
-## Methods
-
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。
