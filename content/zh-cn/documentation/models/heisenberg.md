@@ -1,45 +1,81 @@
 ---
-title: Heisenberg Model
+title: 海森堡模型
 math: true
+toc: true
 weight: 3
 ---
 
-## Introduction
+## 简介
 
-The **Heisenberg model** is one of the most fundamental and widely studied models in condensed matter physics and quantum magnetism. It was introduced by Werner Heisenberg in 1928 to describe the magnetic properties of materials, particularly the exchange interactions between localized spins in a crystal lattice. The model has since been used for understanding magnetic ordering, spin dynamics, and quantum phase transitions in a variety of systems.
+两个位于相邻原子上的电子，通过普通的库仑相互作用彼此排斥，这种相互作用本身完全不关心自旋。但由于电子是费米子，泡利不相容原理要求：如果两个电子的自旋组合成反对称的单态，它们的空间波函数就必须是对称的；如果自旋组合成对称的三重态，空间波函数就必须是反对称的——而这两种空间波函数具有不同的库仑能量。把问题中的空间部分消去之后，剩下的就是两个电子之间纯粹依赖自旋的有效相互作用：**交换相互作用**，由 Werner Heisenberg 于 1928 年提出（[Heisenberg (1928)](https://doi.org/10.1007/BF01328601)），作为固体中磁性的微观起源。这里完全不涉及真正的磁力——这种相互作用纯粹是库仑相互作用，加上电子作为不可区分费米子这一量子力学要求所带来的副产物。
 
-The Hamiltonian of the Heisenberg model is given by:
+把这种相互作用在整个格子上求和，就得到了**海森堡模型**，
 
 $$
 H = J \sum_{\langle i,j \rangle} \mathbf{S}_i \cdot \mathbf{S}_j,
 $$
 
-where
-- $\mathbf{S}_i$: Spin vector at site $i$.
-- $J$: Exchange interaction strength. $J < 0$ for ferromagnetic interactions (spins favor alignment), and $J > 0$ for antiferromagnetic interactions (spins favor anti-alignment).
-- $\langle i,j \rangle$: Sum over nearest-neighbor pairs.
+其中 $\mathbf{S}_i$ 是格点 $i$ 上的自旋，$J$ 是交换耦合（$J<0$ 有利于铁磁排列，$J>0$ 有利于反铁磁排列），求和遍历所有最近邻对 $\langle i,j \rangle$。同一个哈密顿量描述了两种颇为不同的物理情形，具体取决于 $\mathbf{S}_i$ 的含义：
 
-For quantum spins, $\mathbf{S}_i$ are spin operators obeying the commutation relations of angular momentum. For classical spins, $\mathbf{S}_i$ are unit vectors in 3D space.
+- 在**经典海森堡模型**中，$\mathbf{S}_i$ 是一个普通的三分量单位矢量，可以指向空间中任意方向，$\mathbf{S}_i \cdot \mathbf{S}_j$ 就是日常意义下的点积。这是一个统计力学模型，用经典蒙特卡罗方法模拟。
+- 在**量子海森堡模型**中，$\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ 是一组确定大小 $S$（最常见的是 $S=1/2$）的量子自旋算符，满足角动量对易关系 $[S_i^x, S_i^y] = i S_i^z$（及其循环置换）——同一个自旋的不同分量彼此并不对易，因此一个自旋永远不可能同时在多个方向上都取确定值。
 
-## Phenomena
+**本网站主要关注量子版本。** ALPS 的精确对角化、DMRG 以及量子蒙特卡罗程序都以量子海森堡模型为目标，下文链接的大多数教程也都是围绕它展开的；经典模型主要作为对比出现（参见下文的 [MC-02 教程](../../../tutorials/mcs/mc02)，它将两者并列模拟），由经典蒙特卡罗程序 `spinmc` 处理，这也正是[伊辛模型](../ising)所使用的同一个程序。
 
-The Heisenberg model has been instrumental in understanding a wide range of magnetic phenomena, including:
-1. **Ferromagnetism**: Alignment of spins in the same direction, leading to a macroscopic magnetic moment.
-2. **Antiferromagnetism**: Alternating alignment of spins, resulting in no net magnetization but strong local ordering.
-3. **Spin waves and magnons**: Collective excitations of spins that propagate through the lattice.
-4. **Quantum phase transitions**: Transitions between different magnetic ground states driven by quantum fluctuations.
+## 模型的物理
 
-The model is highly versatile and can be extended to include additional terms, such as anisotropy, external magnetic fields, or longer-range interactions, to describe more complex magnetic systems.
+**连续对称性，不同于伊辛模型。** 点积 $\mathbf{S}_i \cdot \mathbf{S}_j$ 在把系统中*每一个*自旋都朝同一方向、旋转相同角度时保持不变——这是一种连续的 $SU(2)$（对经典自旋而言则是 $O(3)$）对称性。这与[伊辛模型](../ising)的出发点在性质上完全不同：伊辛模型中 $J S_i^z S_j^z$ 的耦合只具有"同时翻转所有自旋"这一离散的 $\mathbb{Z}_2$ 对称性。正如下文所述，这种对称性上的差异，对模型能否在低维中形成有序，有着直接而显著的影响。
 
-## Methods
+**经典模型：有序及其限度。** 在任意格子上，当 $J<0$ 时，经典基态只是简单地让所有自旋沿同一个（任意的）方向排列（铁磁性）。当 $J>0$ 且格子是二分格子（即可以分成两个相互嵌套的子格，例如简单的正方或立方格子）时，基态是奈尔态，两个子格分别指向相反方向（反铁磁性）；而在非二分格子上（例如三角格子），反铁磁耦合无法同时全部满足，这一现象称为*阻挫*。但这种有序能否在有限温度下存续，则强烈依赖于维度：由于被破坏的是连续对称性而非离散对称性，[Mermin-Wagner 定理](https://doi.org/10.1103/PhysRevLett.17.1133)排除了各向同性、短程相互作用的海森堡模型在一维或二维中于非零温度下出现自发磁有序的可能——序参量*方向*上的长波长涨落只需极小的能量代价，就足以在低维中破坏任何有序。这与经典伊辛模型正好相反：伊辛模型的离散对称性已经使其在二维中就能发生真正的有限温度相变。因此，经典海森堡模型要在 $T>0$ 时形成有序，需要三维；在一维和二维中，经典模型有趣的物理更多体现在 $T=0$ 处，或者体现在涨落本身的性质上，而不是真正的长程有序。有序经典基态之上的低能激发是**自旋波**（量子化后称为**磁振子**）：自旋围绕有序方向缓慢的、长波长的进动，其无能隙性正是有序所破坏的连续对称性所导致的直接结果——即戈德斯通模。
 
-The Heisenberg model can be solved by various numerical methods. Below is a summary of some key numerical techniques:
+**一维量子模型：精确解与 Haldane 猜想。** 一维自旋 1/2 反铁磁海森堡链，是极少数拥有完全精确解的相互作用量子多体模型之一，这一精确解由 Hans Bethe 在 1931 年利用如今被称为 *Bethe 拟设* 的方法给出（[Bethe (1931)](https://doi.org/10.1007/BF01341708)）。它的基态完全没有长程序（与 Mermin-Wagner 的结论一致），但却是*临界的*：自旋关联随距离按幂律（而非指数）衰减，低能谱是无能隙的。因此，当 Duncan Haldane 在 1983 年提出（[Haldane (1983)](https://doi.org/10.1016/0375-9601(83)90631-X)）这种无能隙性其实只属于*半整数*自旋时，这一结果着实令人惊讶：整数自旋（$S=1, 2, \ldots$）的反铁磁海森堡链，其基态反而是唯一的、无序的，并与所有激发之间存在一个有限的能隙——即 **Haldane 能隙**——其关联按指数（而非幂律）衰减。半整数自旋链（$S=1/2, 3/2, \ldots$）则依然是无能隙的。整数自旋链与半整数自旋链之间这种鲜明的、并不显然的区别，是一维量子磁性中最著名的成果之一，并且在下文链接的 ED 和 DMRG 教程中直接可见——这些教程并列计算并比较了自旋 1/2 链和自旋 1 链。
 
-| Method                     | Strengths                                                                 | Limitations                                                                 | Applications                                                                 |
-|----------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| **ED**  | Exact results for small systems; Captures full quantum correlations. | Limited to small systems | Small spin chains or clusters; Benchmarking other methods.            |
-| **QMC** | Handles larger systems; Finite-T       | Sign problem for frustrated or fermionic systems.                         | Phase diagrams; Finite-temperature properties.                  |
-| **DMRG** | Highly accurate for 1D systems; Efficient for low-entanglement states. | Less efficient for 2D/3D or highly entangled systems.                        | Ground state; Low-energy excitations.                     |
-| **DMFT** | Captures local correlations. | Neglects non-local correlations.                   | Mott transition; Spectral properties                     |
+**阻挫与二聚化。** 在自旋 1/2 链上加入次近邻耦合 $J_2$（这是一种明确的阻挫相互作用，因为它在非二分的路径上与最近邻耦合 $J_1$ 相互竞争），即使链是半整数自旋，也同样可以打开一个能隙：在特定比值 $J_2/J_1 = 1/2$（Majumdar-Ghosh 点）处，精确基态是已知的解析解，是单态二聚体的简单乘积态，与所有激发之间存在有限能隙。更一般地，两条耦合在一起的自旋 1/2 链（"双腿梯子"）*总是*有能隙的，无论梯格耦合的符号或强度如何——这是一种从原本无能隙的基本单元出发，实现有能隙、无序量子磁性的简单而稳健的方式。
+
+## 现象
+
+- **铁磁性与反铁磁性**：当 $J<0$ 时，自旋倾向于平行排列，产生宏观磁矩；当 $J>0$ 且格子为二分格子时，自旋倾向于反平行（奈尔）排列，没有净磁矩，但存在很强的交错有序。
+- **自旋波与磁振子**：有序磁体（无论经典还是量子）中无能隙、长波长的激发，其存在是由交换相互作用被自发破坏的连续对称性所保证的。
+- **低维中有序的缺失**：根据 Mermin-Wagner 定理，各向同性的海森堡模型在一维或二维中，无法在任何非零温度下形成磁有序——这与伊辛模型形成鲜明对比，伊辛模型的离散对称性已经允许它在二维中就发生有序。
+- **有能隙与无能隙的量子基态**：一维自旋 1/2 链是无能隙的、临界的（Bethe 拟设）；整数自旋链是有能隙的（Haldane 能隙）；阻挫（例如 Majumdar-Ghosh 点）或几何结构（例如双腿梯子）即使对半整数自旋也可以打开能隙。判断一条给定的链或梯子究竟属于哪一种情形，往往正是下文教程所要解决的核心问题。
+- **量子相变**：调节阻挫耦合、梯子的梯格强度，或外加场，可以在零温下驱动量子模型在有能隙与无能隙（或不同有序）基态之间转变——这与[横场伊辛模型](../transising)页面中介绍的是同一种普遍现象。
+
+## 方法
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小系统给出精确结果；能捕捉完整的量子谱和纠缠 | 由于希尔伯特空间随系统尺寸指数增长，仅限于小系统 | 小型链、梯子和团簇的能隙、谱与有限尺寸标度；用于检验其他方法 |
+| **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维系统的基态和低能激发给出高精度结果；对低纠缠态高效 | 对二维/三维系统或高纠缠态效率较低 | 一维链和梯子的基态能量、能隙、局域可观测量与关联函数 |
+| **QMC** —— 参见[随机级数展开](../../methods/qmc/sse) | 可处理比 ED 或 DMRG 大得多的系统；能获得有限温度性质 | 阻挫或费米型的海森堡类模型可能存在符号问题（二分格子上无阻挫的自旋模型则不会） | 有限温度热力学、磁化率与相图，包括二维和三维情形 |
+
+由于量子海森堡模型是 ALPS 中的核心模型，几乎每一种方法的教程中都会用到它：
+
+**精确对角化（`sparsediag`/`fulldiag`）：**
+- [ED-01：稀疏对角化（Lanczos）](../../../tutorials/ed/ed01) —— 建立一个自旋 1 海森堡链，并在基态上计算自定义测量
+- [ED-02：一维量子系统的自旋能隙](../../../tutorials/ed/ed02) —— 直接计算自旋 1 链的 Haldane 能隙
+- [ED-03：一维量子系统的谱](../../../tutorials/ed/ed03) —— 海森堡链、双腿梯子以及孤立二聚体的动量分辨谱
+- [ED-04：一维临界谱的共形场论描述](../../../tutorials/ed/ed04) —— 无能隙的临界自旋 1/2 海森堡链及其共形场论算符谱
+- [ED-05：受阻挫自旋链中的相变](../../../tutorials/ed/ed05) —— $J_1$–$J_2$ 链与 Majumdar-Ghosh 二聚化相变
+- [ED-06：完全对角化](../../../tutorials/ed/ed06) —— 海森堡链、梯子以及磁性分子的有限温度热力学
+
+**密度矩阵重整化群（`dmrg`）：**
+- [DMRG-01：简介](../../../tutorials/dmrg/dmrg01) —— 自旋 1/2 与自旋 1 海森堡链的基态
+- [DMRG-02：计算能隙](../../../tutorials/dmrg/dmrg02) —— 提取激发能隙，包括 Haldane 能隙
+- [DMRG-03：计算局域可观测量](../../../tutorials/dmrg/dmrg03) —— 不同磁化区间下的局域磁化分布
+- [DMRG-04：计算关联](../../../tutorials/dmrg/dmrg04) —— 两点自旋关联函数与关联长度
+- [自旋链的基态能量（Jupyter notebook）](../../../tutorials/jupyter/dmrg/groundstatespinchain) —— 自旋 1/2 链基态能量的收敛过程
+
+**量子蒙特卡罗（`looper`、`dirloop_sse`、量子 Wang-Landau）：**
+- [MC-02：用经典 MC 和 looper QMC 程序计算磁化率](../../../tutorials/mcs/mc02) —— 直接并列比较经典与量子海森堡模型
+- [MC-03：用有向环 QMC 程序计算磁化曲线](../../../tutorials/mcs/mc03) —— 链和有能隙梯子在外场驱动下的磁化行为
+- [MC-04：QMC 程序中的自定义测量](../../../tutorials/mcs/mc04) —— 自旋-自旋关联函数与反铁磁结构因子
+- [MC-06：扩展系综模拟（量子 Wang-Landau）](../../../tutorials/mcs/mc06) —— 单次模拟即可得到海森堡链和梯子完整的有限温度热力学
+- [MC-08：量子自旋模型中的量子相变](../../../tutorials/mcs/mc08) —— 定位并刻画耦合海森堡梯子中的量子相变
+
+**Jupyter notebooks：**
+- [自旋 1 海森堡链的自旋能隙](../../../tutorials/jupyter/ed/spingapspinoneheisenbergchain) —— Haldane 能隙计算的交互式版本
+- [一维系统的谱](../../../tutorials/jupyter/ed/spectra1dsystems) —— 动量分辨谱计算的交互式版本
 
 ---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。
