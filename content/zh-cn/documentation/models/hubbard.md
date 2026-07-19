@@ -1,51 +1,78 @@
 ---
-title: Hubbard Model
+title: Hubbard 模型
 math: true
+toc: true
 weight: 5
 ---
 
-## Introduction
+## 简介
 
-The **Hubbard model** was first introduced by John Hubbard in 1963 to describe the behavior of electrons in a lattice, particularly in transition metal oxides and other materials with strong electron-electron interactions. It was later extended to describe any Fermions with on-site interactions on a lattice. If only one energy band is used to form the lattice model, then each lattice site can accommodate at most $2s+1$ Fermions with spin $s$.
+按照普通的能带理论，电子在格子上跃迁本应简单地扩展开来，以最小化其动能。但当两个电子试图占据同一个原子轨道时，它们也会感受到彼此之间完整的库仑排斥。**Hubbard 模型**在普通的单粒子跃迁之上，只保留了电子-电子相互作用中这一个最本质的部分——任何双占据格点都要付出的能量代价 $U$——从而成为格子上相互作用电子的最简单模型。尽管（或者说正因为）如此简单，它却捕捉到了凝聚态物理中一些最重要的现象：Mott 金属-绝缘体转变、巡游磁性，以及在其掺杂后的低能极限下，被认为是铜氧化物高温超导背后物理机制的一部分。
 
-The one-band Hubbard model with spin-$\frac{1}{2}$ Fermions is given by the following Hamiltonian
+这一模型在 1963 年由多个研究组各自独立提出，其中 [John Hubbard 的论文](https://doi.org/10.1098/rspa.1963.0204)使这一模型得名。关于现代综述，模型的解析方面可参见 [Arovas, Berg, Kivelson, and Raghu (2022)](https://doi.org/10.1146/annurev-conmatphys-031620-102024)，专门针对求解该模型所用数值方法的综述可参见 [Qin, Schäfer, Andergassen, Corboz, and Gull (2022)](https://doi.org/10.1146/annurev-conmatphys-090921-033948)。
+
+自旋 1/2 费米子的单带 Hubbard 模型（最常被研究的情形）由如下哈密顿量给出
 
 $$
-H = -t \sum_{\langle i,j \rangle, \sigma} \left( c_{i,\sigma}^\dagger c_{j,\sigma} + \text{h.c.} \right) + U \sum_i n_{i,\uparrow} n_{i,\downarrow},
+H = -t \sum_{\langle i,j \rangle, \sigma} \left( c_{i,\sigma}^\dagger c_{j,\sigma} + \text{h.c.} \right) + U \sum_i n_{i,\uparrow} n_{i,\downarrow} - \mu \sum_{i,\sigma} n_{i,\sigma},
 $$
 
-where 
+其中：
+- $c_{i,\sigma}^\dagger$ 和 $c_{i,\sigma}$ 分别是在格点 $i$ 产生和湮灭自旋为 $\sigma$（向上 $\uparrow$ 或向下 $\downarrow$）的费米子的算符，h.c. 表示厄米共轭，
+- $t$ 是相邻格点 $\langle i,j \rangle$ 之间的跃迁振幅，
+- $U$ 是在位相互作用能量，只有当某个格点被双占据时才需要付出（$U>0$：排斥；$U<0$：吸引），
+- $n_{i,\sigma} = c_{i,\sigma}^\dagger c_{i,\sigma}$ 是格点 $i$ 上自旋 $\sigma$ 的数算符，
+- $\mu$ 是化学势，用于控制电子密度（填充度）。
 
-- $c_{i,\sigma}^\dagger$ and $c_{i,\sigma}$ are creation and annihilation operators for a fermion with spin $\sigma$ (up $\uparrow$ or down $\downarrow$) at site $i$ and $\text{h.c.}$ represents Hermitian Conjugate. 
-- $t$ is hopping amplitude between neighboring sites $\langle i,j \rangle$.
-- $U$ is on-site interaction energy, with $U > 0$ corresponding to repulsive interactions and $U < 0$ corresponding to attractive interactions.
-- $n_{i,\sigma} = c_{i,\sigma}^\dagger c_{i,\sigma}$ is number operator for fermions with spin $\sigma$ at site $i$.
+因此每个格点可以容纳 0、1（自旋向上或向下）或 2（一上一下各一个）个电子。这正是 ALPS 模型库中内置的 `fermion Hubbard` 模型——完整参数列表参见[模型参数术语表](../../intro/modeldef/intro)。动能项（有利于电子离域、呈能带行为）与相互作用项（有利于电子局域化，每个格点一个）之间的竞争——再加上由 $\mu$ 设定的密度以及温度——几乎决定了这个模型全部丰富的物理。
 
-The first term of the Hamiltonian describes the kinetic energy of the many-body system with particles hopping between neighboring sites. The second term represents the potential energy of the system. The competition between the kinetic energy, potential energy, as well as the temperature can lead to interesting properties.
+## 模型的物理
 
-## Phenomena
+**Mott 转变：相互作用如何击败能带理论。** 普通的能带理论预言，半满能带（平均每个格点一个电子）总是金属，因为此时费米能级正好位于部分填充能带的中间。Hubbard 模型给出的最重要的一课是：这个预言完全可能是错的。在半填充情形下，一旦 $U$ 相对于带宽（$\sim t$）足够大，任何电子跃迁到已被占据的相邻格点上都要付出巨大的能量 $U$，于是电子实际上不再移动，尽管能带理论断言它们不应该如此。这种由相互作用驱动、而非由能带结构驱动的金属-绝缘体转变称为 **Mott 转变**，其结果所形成的绝缘态——每个格点上都局域着一个电子——称为 **Mott 绝缘体**。
 
-1. **Metal-Insulator Transition**:
-   - The Fermi-Hubbard model exhibits a metal-insulator transition known as the **Mott transition**. At half-filling (one electron per site), for large $U/t$, the system becomes a Mott insulator, where electrons are localized due to strong repulsion, preventing conduction.
-   - For small $U/t$, the system behaves as a metal, with electrons freely hopping across the lattice.
+**从 Hubbard 到 Heisenberg：超交换。** 然而 Mott 绝缘体在磁学上并非死气沉沉。虽然在 $U$ 很大时真实的跃迁被禁止，但*虚*跃迁——电子短暂地跃迁到相邻格点又跳回来——却并不被禁止，普通的二阶微扰论表明，这一过程会使基态能量降低一个量级为 $t^2/U$ 的量。关键在于，泡利不相容原理只允许相邻两个电子在自旋*相反*时发生这种虚跃迁；如果它们自旋相同，这一跃迁则被彻底禁止，因为目标格点无法再接受第二个相同自旋的电子。这种不对称性意味着真实基态更倾向于让相邻自旋反向排列，于是在半填充且 $U/t$ 很大时，Hubbard 模型的有效低能描述恰好就是反铁磁的[海森堡模型](../heisenberg)，交换耦合为
 
-2. **Magnetism**:
-   - In the Mott insulating phase, the Fermi-Hubbard model can exhibit magnetic ordering. At half-filling and large $U/t$, the effective low-energy Hamiltonian reduces to the **Heisenberg model**, which describes antiferromagnetic interactions between spins.
+$$
+J = \frac{4t^2}{U}.
+$$
 
-3. **Superconductivity**:
-   - For attractive interactions $U < 0$, the model can exhibit superconductivity, where fermions pair up to form Cooper pairs.
+这一机制被称为**超交换**，是几乎所有 Mott 绝缘体（包括高温铜氧化物超导体的母体化合物）中反铁磁性的微观起源。
 
-4. **Doping and Phase Separation**:
-   - When the system is doped away from half-filling (e.g., by adding or removing electrons), rich phases such as stripe order, charge density waves, and high-temperature superconductivity can emerge.
+**掺杂 Mott 绝缘体。** 通过增加或移除电子而偏离半填充（即"掺杂"），会破坏上述简单的奈尔有序图像，并开启这一领域中最丰富、也最尚未有定论的物理。在大 $U$ 极限下，掺杂后的模型退化为 [t-J 模型](../tj)，反铁磁性、超导性以及各种电荷和自旋序（例如条纹相）之间由此产生的竞争，被普遍认为是理解铜氧化物高温超导的关键所在——尽管对这个看似简单得令人吃惊的哈密顿量已经研究了六十年，这个问题至今仍未完全解决。
 
+## 现象
 
-## Methods
+- **Mott 金属-绝缘体转变**：在半填充时，系统在小 $U/t$ 下是金属，在大 $U/t$ 下是 Mott 绝缘体，二者之间存在一个转变（在有限温度下则是一个交叉）。
+- **磁性**：在 Mott 绝缘相中，超交换在半填充时产生反铁磁序；在偏离半填充或其他密度下，铁磁性以及更复杂的磁性序也是可能的。
+- **超导性**：对于吸引相互作用（$U<0$），模型直接有利于电子配对；对于物理上更常见的排斥情形（$U>0$），人们相信非常规（非声子媒介）超导会在掺杂 Mott 绝缘体时出现——这正是将这一模型与铜氧化物联系起来进行研究的核心动机。
+- **掺杂、条纹相与非费米液体行为**：偏离半填充时，模型可以呈现电荷/自旋条纹序、相分离，以及在某些区域中不符合普通金属费米液体图像的行为。
 
-Various numerical methods for solving Fermi-Hubbard model are listed in the following table:
+## 方法
 
-| Method                  | Strengths                              | Limitations                          | Applications                          |
-|-------------------------|----------------------------------------|--------------------------------------|---------------------------------------|
-| **ED**   | Exact results for small systems; Captures full quantum correlations.        | Limited to small systems.             | Small-system properties; Benchmarking other methods.               |
-| **QMC**     | Handles larger systems; Finite-T.       | Sign problem for fermions.            | Phase diagrams; Finite-temperature properties.        |
-| **DMRG**                    | Highly accurate for 1D systems; Efficient for low-entanglement states.         | Less efficient for 2D/3D or highly entangled systems.             | Ground state; Low-energy excitations.  |
-| **DMFT**                    | Captures local correlations.            | Neglects non-local correlations.      | Mott transition; Spectral properties  |
+在 ALPS 中具体而言：
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小系统给出精确结果；能捕捉完整的多体谱 | 由于希尔伯特空间按 $4^N$（每个格点 4 个态）增长，仅限于小型团簇 | 小系统基准；对称性分辨的谱 |
+| **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维及准一维（梯子）几何结构高度精确 | 对真正的二维/三维系统效率较低 | Hubbard 链和梯子的基态与低能性质 |
+| **DMFT** —— 参见[动力学平均场理论](../../methods/dmft/dmft) | 非微扰地捕捉局域关联和 Mott 转变；在无穷维（例如 Bethe 晶格）中是精确的 | 忽略非局域（动量依赖）的关联和涨落 | Mott 转变；局域谱函数；有限温度相图 |
+
+与 ALPS 中其他自旋和玻色子模型不同，ALPS 中没有针对一般费米型 Hubbard 模型的格点量子蒙特卡罗程序：除了一些特殊情形（例如二分格子上的半填充，或一维情形）之外，臭名昭著的费米子**符号问题**会使直接的格点 QMC 在低温下计算代价极其高昂，而 ALPS 也没有包含行列式/辅助场 QMC 程序。取而代之，ALPS 的连续时间 QMC 算法（CT-HYB、CT-INT）被用作 DMFT 中的*杂质*求解器——关于这些求解器的全面综述，参见 [Gull, Millis, Lichtenstein, Rubtsov, Troyer, and Werner (2011)](https://doi.org/10.1103/RevModPhys.83.349)——这也是为什么在 ALPS 中，DMFT 而非直接的格点 QMC，才是求解 Hubbard 模型的标准大规模方法。
+
+若想了解这些方法、以及许多 ALPS 中未实现的其他方法（辅助场 QMC、宽圆柱上的 DMRG、图表蒙特卡罗等等），在同一个看似简单的二维正方格子 Hubbard 模型上彼此比较的结果如何，请参见 [Simons Collaboration 的基准测试研究](https://doi.org/10.1103/PhysRevX.5.041041)，该研究将大量最先进的数值方法相互交叉验证——这是理解关于这个模型哪些内容真正可靠、哪些尚不可靠的必读文献。
+
+ALPS 的 DMFT 教程始终以 Hubbard 模型为例：
+
+- [DMFT-01：DMFT 简介](../../../tutorials/dmft/dmft01) —— 阐述将格点 Hubbard 模型映射为自洽量子杂质问题的 DMFT 近似
+- [DMFT-02：CT-HYB 求解器](../../../tutorials/dmft/dmft02)、[DMFT-03：CT-INT 求解器](../../../tutorials/dmft/dmft03) 以及 [DMFT-07：Hirsch-Fye 求解器](../../../tutorials/dmft/dmft07) —— 分别用三种不同的杂质求解器，追踪 Bethe 晶格上 Hubbard 模型的金属-反铁磁绝缘体转变
+- [DMFT-04：Mott 转变](../../../tutorials/dmft/dmft04) —— 作为 $U$ 的函数的顺磁 Mott 转变
+- [DMFT-06：顺磁金属与外推误差](../../../tutorials/dmft/dmft06) —— 将 QMC 求解器与 Hirsch-Fye 和精确对角化进行基准比较
+- [DMFT-08：设定特定的格子](../../../tutorials/dmft/dmft08) —— 从 Bethe 晶格推广到正方、立方和六方格子
+- [DMFT-09：单格点 DMFT 中的奈尔转变](../../../tutorials/dmft/dmft09) —— 用全部三种求解器比较反铁磁奈尔转变
+- [Bethe 晶格上 Hubbard 模型的 DMFT（Jupyter notebook）](../../../tutorials/jupyter/dmft/dmftbethehubbard) —— 同一 Bethe 晶格 DMFT 计算的交互式介绍
+
+除了 DMFT 之外，[ED-06：完全对角化](../../../tutorials/ed/ed06) 还将小型正方格子上的 Hubbard 模型作为附加练习，利用对称性（动量和粒子数）使计算变得可行。
+
+---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。
