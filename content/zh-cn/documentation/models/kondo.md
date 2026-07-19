@@ -1,7 +1,7 @@
 ---
 title: Kondo Lattice Model
 math: true
-weight: 9
+weight: 10
 ---
 
 ## Introduction

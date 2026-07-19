@@ -1,7 +1,7 @@
 ---
 title: Hardcore Boson Model
 math: true
-weight: 7
+weight: 8
 ---
 
 ## Introduction

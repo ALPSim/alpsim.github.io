@@ -37,6 +37,11 @@ weight: 4
     icon=""
   >}}
   {{< hextra/feature-card
+    title="Anderson Impurity Model"
+    link="impurity"
+    icon=""
+  >}}
+  {{< hextra/feature-card
     title="Hardcore Boson Model"
     link="hardcorebm"
     icon=""

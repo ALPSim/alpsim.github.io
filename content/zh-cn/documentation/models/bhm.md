@@ -1,7 +1,7 @@
 ---
 title: Bose-Hubbard Model
 math: true
-weight: 8
+weight: 9
 ---
 
 ## Introduction
