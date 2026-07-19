@@ -1,39 +1,64 @@
 ---
-title: Hardcore Boson Model
+title: ハードコアボソンモデル
 math: true
+toc: true
 weight: 8
 ---
 
-## Introduction
+## はじめに
 
-The **hardcore boson model** is a fundamental theoretical framework in condensed matter physics and quantum many-body theory, used to study systems of bosonic particles with an infinite on-site repulsion that prevents more than one particle from occupying the same lattice site. This constraint, known as the "hardcore" condition, mimics the Pauli exclusion principle for fermions but applied to bosons, making the model a unique bridge between bosonic and fermionic behavior.
+**ハードコアボソンモデル**は、[ボーズ・ハバードモデル](../bhm)の $U \to \infty$ 極限に残るものです。ボソンは依然として格子サイト間をホッピングしますが、オンサイト斥力が今や非常に強くなり、二重占有はコストが高いというだけでなく、完全に禁止されます。各サイトは空であるか、単一占有であるかのいずれかしかありません——これは、[t-J モデル](../tj)がフェルミオン的なハバードモデルに対して行うのとまったく同じ単純化を、フェルミオンではなくボソンに対して適用したものです。
 
-In the hardcore boson model, the particles are described by creation ($b_i^\dagger$) and annihilation ($b_i$) operators that obey modified commutation relations due to the hardcore constraint. Specifically, the operators satisfy:
+このモデル、より正確には以下で述べる自旋 1/2 系との厳密な等価性は、[Matsubara and Matsuda (1956)](https://doi.org/10.1143/PTP.16.569) によって、液体ヘリウムの超流動転移の格子モデルとして導入されました——これは、正真正銘の相互作用する量子多体問題を、厳密に等価なスピンモデルへと写像した最も初期の例の一つです。
 
-$$
-[b_i, b_j^\dagger] = \delta_{ij} (1 - 2 b_i^\dagger b_i), \quad (b_i^\dagger)^2 = (b_i)^2 = 0,
-$$
-
-where the condition $(b_i^\dagger)^2 = 0$ enforces the hardcore constraint, ensuring that no more than one boson can occupy a single site. The Hamiltonian of the hardcore boson model typically includes terms for particle hopping and interactions, and can be written as:
+二重占有が禁止されているため、ハードコアボソン演算子は修正された交換関係を満たします。
 
 $$
-H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + V \sum_{\langle i,j \rangle} n_i n_j,
+[b_i, b_j^\dagger] = \delta_{ij} (1 - 2 b_i^\dagger b_i), \qquad (b_i^\dagger)^2 = (b_i)^2 = 0,
 $$
 
-where:
-- $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
-- $V$ is the interaction strength between bosons on neighboring sites,
-- $n_i = b_i^\dagger b_i$ is the number operator, representing the occupation of site $i$.
+ここで $(b_i^\dagger)^2 = 0$ は、この制約を直接的に強制しています。すでに占有されているサイトに 2 個目のボソンを生成しようとすると、単純にゼロになるのです。異なるサイトの演算子どうしは、通常のボソン演算子とまったく同様に交換します——修正されるのはオンサイトの代数関係だけです。ハミルトニアンは
 
-The first term in the Hamiltonian describes the kinetic energy of bosons hopping between lattice sites, while the second term accounts for interactions between bosons on adjacent sites. Depending on the values of $t$ and $V$, the system can exhibit a variety of phases, including superfluid, Mott insulating, and charge-density-wave phases.
+$$
+H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + V \sum_{\langle i,j \rangle} n_i n_j - \mu \sum_i n_i
+$$
 
-## Phenomena
-The hardcore boson model is widely used to explore phenomena such as:
-- **Quantum phase transitions**: Transitions between superfluid and insulating phases driven by changes in parameters like density or interaction strength.
-- **Bose-Einstein condensation**: The emergence of macroscopic coherence in systems of interacting bosons.
-- **Quantum magnetism**: Mapping the model to spin systems, where hardcore bosons can represent spin excitations.
+で与えられます。ここで $t$ はホッピング振幅、$V$ はボソン間の最近接相互作用、$n_i = b_i^\dagger b_i$ はサイト $i$ の占有数（今や厳密に 0 か 1）、$\mu$ は化学ポテンシャルです。これはまさに、[サイト基底](../../intro/modeldef/sitebasis)と[ハミルトニアンの記述](../../intro/modeldef/hamiltonian)のページで ALPS のモデル XML 形式を紹介する際に一貫して使われている例そのものです。
 
-Despite its simplicity, the hardcore boson model captures essential features of strongly correlated bosonic systems and serves as a valuable tool for understanding quantum many-body physics. It is also closely related to other models, such as the XY model and the Heisenberg model, through mappings between bosonic and spin degrees of freedom.
+## モデルの物理
 
-## Methods
+**スピン 1/2 への厳密な写像：松原・松田変換。** ハードコアボソンのサイトはちょうど 2 つの状態——空または占有——しか持たないため、これは代数的にスピン 1/2 自由度とまったく同一であり、次の対応関係で結ばれます。
 
+$$
+b_i^\dagger = S_i^+, \qquad b_i = S_i^-, \qquad n_i = S_i^z + \tfrac{1}{2}.
+$$
+
+これを上記のハミルトニアンに代入すると、ホッピング項は横断的（XY）交換 $-2t \sum_{\langle i,j \rangle} (S_i^x S_j^x + S_i^y S_j^y)$ に、相互作用項はイジング交換 $V \sum_{\langle i,j \rangle} S_i^z S_j^z$ に、そして $\mu$ を吸収した磁場項になります——言い換えると、これはまさに、ボソン密度によって定まる磁場のもとにある、異方的（XXZ）[ハイゼンベルクモデル](../heisenberg)そのものです。重要なのは、[スピンレスフェルミオンモデル](../sfm)のページでフェルミオンに対して用いたジョルダン・ウィグナー変換とは異なり、この写像には非局所的な弦がまったく必要ないという点です。異なるサイトのボソンはもともと交換するため、松原・松田変換は完全に局所的であり、1 次元に限らず*任意の*空間次元で成り立ちます。
+
+**超流動性と磁気秩序は同じ現象である。** この等価性により、ハードコアボソンモデルの相図は、[ハイゼンベルクモデル](../heisenberg)のページにある XXZ モデルの相図へと直接置き換わります。超流動秩序——ゼロでない、位相のそろった期待値 $\langle b_i \rangle$——は、まさに横断的（XY）磁気秩序 $\langle S_i^x \rangle, \langle S_i^y \rangle \neq 0$ です。可換な、市松模様に秩序化したモット/電荷密度波絶縁体——ボソンが一方の副格子を優先的に占める状態——は、まさに $z$ 方向のネール秩序です。ボソン言語における超流動-絶縁体量子相転移と、スピン言語における秩序-無秩序量子相転移は、この厳密な写像のもとでは、2 組の異なる変数を通して見た同じ転移にほかなりません。
+
+**実材料での実現：磁場誘起マグノン凝縮。** この等価性は形式的なものだけではありません。スピンギャップを持つ——すなわち、すべての磁気励起との間にエネルギーギャップを持つ、一意で非縮退な基底状態を持つ——実際の量子磁性体では、十分に強い外部磁場によってこのギャップを閉じ、系を磁気秩序状態へと駆動することができます。ハードコアボソンの言葉では、磁場は化学ポテンシャル $\mu$ の役割を果たし、ギャップがあり磁化していない状態はボソンの真空（あるいはモット絶縁体）であり、磁場誘起の秩序状態は文字通りマグノンのボーズ・アインシュタイン凝縮です——[Nikuni, Oshikawa, Oosawa, and Tanaka (2000)](https://doi.org/10.1103/PhysRevLett.84.5868) は、この記述を用いて、量子磁性体 TlCuCl$_3$ で実験的に観測された磁場誘起秩序化をうまく説明しました。
+
+## 現象
+
+- **超流動性**：低密度または弱い相互作用 $V$ では、ハードコアボソンは非局在化して位相のそろった超流体になります——スピン言語では、これは横断的（XY）磁気秩序に相当します。
+- **モット/電荷密度波絶縁化**：可換な充填率（例えば二部格子上の半充填）で $V$ が大きい場合、ボソンは市松模様に局在化します——スピン言語では、これはネール秩序に相当します。
+- **量子相転移**：密度や $V/t$ を調整すると、[ボーズ・ハバードモデル](../bhm)ですでに論じたのと同じ超流動-絶縁体転移が駆動されます。これは今や、異方的なスピン 1/2 モデルの磁気秩序転移へと厳密に写像できます。
+- **マグノンのボーズ・アインシュタイン凝縮**：実際のギャップを持つ量子磁性体における磁場誘起の秩序化転移は、ハードコアボソン的なマグノンのボーズ・アインシュタイン凝縮として定量的に記述されます（上記参照）。
+
+## 手法
+
+このモデルはスピン 1/2 ハミルトニアンに厳密に写像されるため、[ハイゼンベルクモデル](../heisenberg)に適用できるあらゆる手法がここでも適用でき、しかもどの次元でも符号問題がありません。
+
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **Worm アルゴリズム / SSE** —— [Worm アルゴリズム](../../methods/qmc/worm) / [SSE](../../methods/qmc/sse) を参照 | どのような充填率、どのような次元でも符号問題がない | このモデルに特有の制限はない | 超流剛性、相図、有限温度の性質 |
+| **Loop アルゴリズム** —— [量子モンテカルロ](../../methods/qmc) を参照 | ちょうど半充填（$\mu = 0$）で非常に効率的。この場合、写像されたスピンモデルには磁場がない | 半充填からずれると、化学ポテンシャルが磁場項になり、loop アルゴリズムはうまく扱えない；その場合は worm/SSE コードを使う | 半充填（粒子・正孔対称）の相図 |
+| **ED** —— [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) を参照 | 小さな系に対して厳密な結果が得られる；ハードコア制約が追加コストなしに局所ヒルベルト空間に組み込まれる | 小さな系に限られる | 小系のベンチマーク |
+| **DMRG** —— [密度行列繰り込み群](../../methods/dmrg/dmrg) を参照 | 1 次元鎖やはしごに対して非常に高精度 | 真に 2 次元・3 次元の系には効率が落ちる | 1 次元ハードコアボソン鎖の基底状態 |
+
+このモデル名を冠した専用の ALPS チュートリアルはありませんが、これは [ALPS モデル定義](../../intro/modeldef)の各ページを通じて使われている実例であり、[ボーズ・ハバードモデル](../bhm)のチュートリアル（MC-05、DWA-01、DWA-02）は、密接に関連する有限 $U$ モデルにおいて、同じ worm およびディレクテッド worm の手法を示しています。
+
+---
+
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。
