@@ -1,43 +1,43 @@
 ---
-title: Models in ALPS
+title: ALPS のモデル
 math: true
 weight: 4
 ---
 
-ALPS provides built-in support for a range of standard quantum lattice models used throughout condensed matter physics, from simple classical spin models to strongly correlated fermion and boson models. Each page below introduces the model's Hamiltonian, the phenomena it captures, and the numerical methods commonly used to solve it.
+ALPS は、凝縮系物理学で広く使われている標準的な量子格子モデルを幅広くサポートしています。単純な古典スピンモデルから、強く相関したフェルミオン系・ボソン系まで扱うことができます。以下の各ページでは、それぞれのモデルのハミルトニアン、そのモデルが捉える現象、そして解析によく使われる数値手法を紹介します。
 
-## [Ising Model](ising)
+## [イジングモデル](ising)
 
-The classical Ising model describes spins that can point up or down, coupled to their nearest neighbors and to an external field. It is one of the simplest models exhibiting a finite-temperature phase transition between ordered (ferro- or antiferromagnetic) and disordered phases, and is exactly solvable in one and two dimensions.
+古典イジングモデルは、上下いずれかを向くスピンが、最近接のスピンおよび外部磁場と結合するモデルです。有限温度で秩序相（強磁性または反強磁性）と無秩序相の間の相転移を示す最も単純なモデルの 1 つであり、1 次元および 2 次元では厳密に解くことができます。
 
-## [Transverse Field Ising Model](transising)
+## [横磁場イジングモデル](transising)
 
-Adding a transverse magnetic field to the Ising model introduces quantum fluctuations that compete with the classical Ising exchange, driving a zero-temperature quantum phase transition. The transverse field Ising model is a paradigmatic testbed for quantum criticality and universal scaling behavior.
+イジングモデルに横磁場を加えると、古典的なイジング交換相互作用と競合する量子ゆらぎが導入され、絶対零度における量子相転移が引き起こされます。横磁場イジングモデルは、量子臨界性と普遍的なスケーリング則を調べるための典型的な題材です。
 
-## [Heisenberg Model](heisenberg)
+## [ハイゼンベルクモデル](heisenberg)
 
-The Heisenberg model couples full spin vectors — rather than just their z-components — on neighboring lattice sites through an isotropic exchange interaction. It is the archetypal model of quantum magnetism, capturing ferro- and antiferromagnetism, spin waves, and quantum phase transitions.
+ハイゼンベルクモデルは、z 成分だけでなくスピンベクトル全体を、等方的な交換相互作用によって隣接する格子サイト間で結合させるモデルです。量子磁性の典型的なモデルであり、強磁性・反強磁性、スピン波、量子相転移を記述します。
 
-## [Spinless Fermion Model](sfm)
+## [スピンレスフェルミオンモデル](sfm)
 
-This model describes fermions hopping on a lattice with a nearest-neighbor density-density interaction, but without any spin degree of freedom. Stripped of spin physics, it isolates the effects of particle statistics, interactions, and lattice geometry, and serves as a building block for richer fermionic models.
+このモデルは、スピン自由度を持たないフェルミオンが、最近接密度-密度相互作用をともないながら格子上をホッピングする様子を記述します。スピンの物理を取り除くことで、粒子統計性、相互作用、格子の幾何構造がそれぞれ及ぼす効果を切り分けて調べることができ、より複雑なフェルミオンモデルを組み立てるための土台となります。
 
-## [Hubbard Model](hubbard)
+## [ハバードモデル](hubbard)
 
-The Hubbard model adds an on-site interaction between opposite-spin fermions to nearest-neighbor hopping, making it the canonical model of strongly correlated electrons. It captures the Mott metal-insulator transition, magnetism, and, in some regimes, superconductivity, and underlies much of the theory of high-temperature superconductors.
+ハバードモデルは、最近接ホッピングに加えて、同じサイトを占める逆スピンのフェルミオン間にオンサイト相互作用を導入したもので、強相関電子系の代表的なモデルです。モット金属-絶縁体転移や磁性、さらにある種のパラメータ領域では超伝導も記述でき、高温超伝導の理論の基盤となっています。
 
-## [t-J Model](tj)
+## [t-J モデル](tj)
 
-Derived from the Hubbard model in the limit of strong on-site repulsion, the t-J model describes electrons hopping on a lattice where double occupancy of any site is forbidden, combined with an antiferromagnetic exchange between neighboring spins. It is widely used to study the low-energy physics of doped Mott insulators, including high-temperature superconductivity.
+t-J モデルは、強いオンサイト斥力の極限でハバードモデルから導かれる有効モデルで、二重占有が禁止された格子上を電子がホッピングし、隣接するスピン間に反強磁性的な交換相互作用が働く系を記述します。ドープされたモット絶縁体の低エネルギー物理、特に高温超伝導の研究に広く用いられています。
 
-## [Hardcore Boson Model](hardcorebm)
+## [ハードコアボソンモデル](hardcorebm)
 
-The hardcore boson model describes bosons hopping on a lattice with an infinite on-site repulsion that restricts occupation of each site to 0 or 1 particle — a bosonic analogue of the Pauli exclusion principle. It connects naturally to quantum spin-1/2 models and arises as a limit of the Bose-Hubbard model.
+ハードコアボソンモデルは、無限大のオンサイト斥力によって各サイトの占有数が 0 か 1 に制限されたボソンが格子上をホッピングする系を記述します。これはフェルミオンにおけるパウリの排他原理のボソン版といえます。量子スピン 1/2 モデルと自然に結びついており、ボーズ・ハバードモデルの極限としても現れます。
 
-## [Bose-Hubbard Model](bhm)
+## [ボーズ・ハバードモデル](bhm)
 
-The Bose-Hubbard model describes interacting bosons on a lattice, balancing hopping — which favors delocalization — against an on-site interaction that favors localization. Its phase diagram features a superfluid phase and a gapped Mott-insulating phase, connected by a quantum phase transition realized experimentally with ultracold atoms in optical lattices.
+ボーズ・ハバードモデルは、格子上で相互作用するボソンを記述するモデルで、非局在化を促すホッピング項と、局在化を促すオンサイト相互作用項とが競合します。相図には超流動相と、ギャップの開いたモット絶縁相が現れ、両者をつなぐ量子相転移は光格子中の超低温原子を用いた実験で実際に観測されています。
 
-## [Kondo Lattice Model](kondo)
+## [近藤格子モデル](kondo)
 
-The Kondo lattice model couples a lattice of localized magnetic moments to a sea of itinerant conduction electrons through an antiferromagnetic exchange interaction. It is the standard model for heavy-fermion materials, giving rise to Kondo screening, heavy quasiparticles, magnetic ordering, and unconventional superconductivity.
+近藤格子モデルは、局在磁気モーメントからなる格子と、遍歴伝導電子の海とを、反強磁性的な交換相互作用によって結合させるモデルです。重い電子系物質の標準的なモデルであり、近藤遮蔽、重い準粒子、磁気秩序、非従来型超伝導といった現象を引き起こします。

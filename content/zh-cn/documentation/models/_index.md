@@ -1,43 +1,43 @@
 ---
-title: Models in ALPS
+title: ALPS 中的模型
 math: true
 weight: 4
 ---
 
-ALPS provides built-in support for a range of standard quantum lattice models used throughout condensed matter physics, from simple classical spin models to strongly correlated fermion and boson models. Each page below introduces the model's Hamiltonian, the phenomena it captures, and the numerical methods commonly used to solve it.
+ALPS 内置支持凝聚态物理中广泛使用的一系列标准量子格点模型，从简单的经典自旋模型到强关联的费米子和玻色子模型。以下每一页都会介绍相应模型的哈密顿量、它所描述的物理现象，以及求解该模型常用的数值方法。
 
-## [Ising Model](ising)
+## [伊辛模型](ising)
 
-The classical Ising model describes spins that can point up or down, coupled to their nearest neighbors and to an external field. It is one of the simplest models exhibiting a finite-temperature phase transition between ordered (ferro- or antiferromagnetic) and disordered phases, and is exactly solvable in one and two dimensions.
+经典伊辛模型描述的是只能指向上或下的自旋，它们与最近邻自旋以及外场耦合。这是最简单的、在有限温度下呈现出有序（铁磁或反铁磁）相与无序相之间相变的模型之一，并且在一维和二维中都可以严格求解。
 
-## [Transverse Field Ising Model](transising)
+## [横场伊辛模型](transising)
 
-Adding a transverse magnetic field to the Ising model introduces quantum fluctuations that compete with the classical Ising exchange, driving a zero-temperature quantum phase transition. The transverse field Ising model is a paradigmatic testbed for quantum criticality and universal scaling behavior.
+在伊辛模型中加入横向磁场会引入量子涨落，它与经典的伊辛交换相互作用相互竞争，从而驱动出一个零温量子相变。横场伊辛模型是研究量子临界性和普适标度行为的典型模型。
 
-## [Heisenberg Model](heisenberg)
+## [海森堡模型](heisenberg)
 
-The Heisenberg model couples full spin vectors — rather than just their z-components — on neighboring lattice sites through an isotropic exchange interaction. It is the archetypal model of quantum magnetism, capturing ferro- and antiferromagnetism, spin waves, and quantum phase transitions.
+海森堡模型通过各向同性的交换相互作用，将相邻格点上完整的自旋矢量（而不仅仅是它们的 z 分量）耦合起来。它是量子磁性最典型的模型，能够描述铁磁性与反铁磁性、自旋波以及量子相变。
 
-## [Spinless Fermion Model](sfm)
+## [无自旋费米子模型](sfm)
 
-This model describes fermions hopping on a lattice with a nearest-neighbor density-density interaction, but without any spin degree of freedom. Stripped of spin physics, it isolates the effects of particle statistics, interactions, and lattice geometry, and serves as a building block for richer fermionic models.
+该模型描述在格子上跃迁、并带有最近邻密度-密度相互作用的费米子，但不包含任何自旋自由度。去掉了自旋物理之后，它能够单独展现粒子统计性、相互作用和格子几何结构各自的效应，也是构造更复杂费米子模型的基础。
 
-## [Hubbard Model](hubbard)
+## [Hubbard 模型](hubbard)
 
-The Hubbard model adds an on-site interaction between opposite-spin fermions to nearest-neighbor hopping, making it the canonical model of strongly correlated electrons. It captures the Mott metal-insulator transition, magnetism, and, in some regimes, superconductivity, and underlies much of the theory of high-temperature superconductors.
+Hubbard 模型在最近邻跃迁的基础上，为占据同一格点的相反自旋费米子加入了在位相互作用，是强关联电子体系的经典模型。它能够描述 Mott 金属-绝缘体转变、磁性，在某些参数区间还能出现超导，是高温超导理论的重要基础。
 
-## [t-J Model](tj)
+## [t-J 模型](tj)
 
-Derived from the Hubbard model in the limit of strong on-site repulsion, the t-J model describes electrons hopping on a lattice where double occupancy of any site is forbidden, combined with an antiferromagnetic exchange between neighboring spins. It is widely used to study the low-energy physics of doped Mott insulators, including high-temperature superconductivity.
+t-J 模型是在强在位排斥极限下由 Hubbard 模型导出的有效模型，描述电子在禁止双占据的格子上跃迁，同时相邻自旋之间存在反铁磁交换相互作用。它被广泛用于研究掺杂 Mott 绝缘体的低能物理，包括高温超导现象。
 
-## [Hardcore Boson Model](hardcorebm)
+## [硬核玻色子模型](hardcorebm)
 
-The hardcore boson model describes bosons hopping on a lattice with an infinite on-site repulsion that restricts occupation of each site to 0 or 1 particle — a bosonic analogue of the Pauli exclusion principle. It connects naturally to quantum spin-1/2 models and arises as a limit of the Bose-Hubbard model.
+硬核玻色子模型描述在格子上跃迁的玻色子，其无穷大的在位排斥将每个格点的占据数限制为 0 或 1 —— 这是泡利不相容原理在玻色子上的类比。它与量子自旋 1/2 模型有着自然的联系，也是 Bose-Hubbard 模型的一个极限情形。
 
-## [Bose-Hubbard Model](bhm)
+## [Bose-Hubbard 模型](bhm)
 
-The Bose-Hubbard model describes interacting bosons on a lattice, balancing hopping — which favors delocalization — against an on-site interaction that favors localization. Its phase diagram features a superfluid phase and a gapped Mott-insulating phase, connected by a quantum phase transition realized experimentally with ultracold atoms in optical lattices.
+Bose-Hubbard 模型描述格子上相互作用的玻色子，其中有利于离域化的跃迁项与有利于局域化的在位相互作用项相互竞争。它的相图包含一个超流相和一个能隙打开的 Mott 绝缘相，二者之间的量子相变已经在光学晶格中的超冷原子实验中被观测到。
 
-## [Kondo Lattice Model](kondo)
+## [Kondo 晶格模型](kondo)
 
-The Kondo lattice model couples a lattice of localized magnetic moments to a sea of itinerant conduction electrons through an antiferromagnetic exchange interaction. It is the standard model for heavy-fermion materials, giving rise to Kondo screening, heavy quasiparticles, magnetic ordering, and unconventional superconductivity.
+Kondo 晶格模型通过反铁磁交换相互作用，将一个局域磁矩组成的晶格与巡游导带电子的海耦合在一起。它是重费米子材料的标准模型，能够导致 Kondo 屏蔽、重准粒子、磁有序以及非常规超导等现象。
