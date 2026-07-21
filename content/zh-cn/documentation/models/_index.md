@@ -1,55 +1,43 @@
 ---
-title: Models in ALPS
+title: ALPS 中的模型
 math: true
 weight: 4
 ---
 
-<br>
-{{< hextra/feature-grid maxcolumns="2" >}}
- {{< hextra/feature-card
-    title="Ising Model"
-    link="ising"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Transverse Field Ising Model"
-    link="transising"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Heisenberg Model"
-    link="heisenberg"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Spinless Fermion Model"
-    link="sfm"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Hubbard Model"
-    link="hubbard"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="t-J Model"
-    link="tj"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Hardcore Boson Model"
-    link="hardcorebm"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Bose-Hubbard Model"
-    link="bhm"
-    icon=""
-  >}}
-  {{< hextra/feature-card
-    title="Kondo Lattice Model"
-    link="kondo"
-    icon=""
-  >}}
-{{< /hextra/feature-grid >}}
+ALPS 内置支持凝聚态物理中广泛使用的一系列标准量子格点模型，从简单的经典自旋模型到强关联的费米子和玻色子模型。以下每一页都会介绍相应模型的哈密顿量、它所描述的物理现象，以及求解该模型常用的数值方法。
 
+## [伊辛模型](ising)
+
+经典伊辛模型描述的是只能指向上或下的自旋，它们与最近邻自旋以及外场耦合。这是最简单的、在有限温度下呈现出有序（铁磁或反铁磁）相与无序相之间相变的模型之一，并且在一维和二维中都可以严格求解。
+
+## [横场伊辛模型](transising)
+
+在伊辛模型中加入横向磁场会引入量子涨落，它与经典的伊辛交换相互作用相互竞争，从而驱动出一个零温量子相变。横场伊辛模型是研究量子临界性和普适标度行为的典型模型。
+
+## [海森堡模型](heisenberg)
+
+海森堡模型通过各向同性的交换相互作用，将相邻格点上完整的自旋矢量（而不仅仅是它们的 z 分量）耦合起来。它是量子磁性最典型的模型，能够描述铁磁性与反铁磁性、自旋波以及量子相变。
+
+## [无自旋费米子模型](sfm)
+
+该模型描述在格子上跃迁、并带有最近邻密度-密度相互作用的费米子，但不包含任何自旋自由度。去掉了自旋物理之后，它能够单独展现粒子统计性、相互作用和格子几何结构各自的效应，也是构造更复杂费米子模型的基础。
+
+## [Hubbard 模型](hubbard)
+
+Hubbard 模型在最近邻跃迁的基础上，为占据同一格点的相反自旋费米子加入了在位相互作用，是强关联电子体系的经典模型。它能够描述 Mott 金属-绝缘体转变、磁性，在某些参数区间还能出现超导，是高温超导理论的重要基础。
+
+## [t-J 模型](tj)
+
+t-J 模型是在强在位排斥极限下由 Hubbard 模型导出的有效模型，描述电子在禁止双占据的格子上跃迁，同时相邻自旋之间存在反铁磁交换相互作用。它被广泛用于研究掺杂 Mott 绝缘体的低能物理，包括高温超导现象。
+
+## [硬核玻色子模型](hardcorebm)
+
+硬核玻色子模型描述在格子上跃迁的玻色子，其无穷大的在位排斥将每个格点的占据数限制为 0 或 1 —— 这是泡利不相容原理在玻色子上的类比。它与量子自旋 1/2 模型有着自然的联系，也是 Bose-Hubbard 模型的一个极限情形。
+
+## [Bose-Hubbard 模型](bhm)
+
+Bose-Hubbard 模型描述格子上相互作用的玻色子，其中有利于离域化的跃迁项与有利于局域化的在位相互作用项相互竞争。它的相图包含一个超流相和一个能隙打开的 Mott 绝缘相，二者之间的量子相变已经在光学晶格中的超冷原子实验中被观测到。
+
+## [Kondo 晶格模型](kondo)
+
+Kondo 晶格模型通过反铁磁交换相互作用，将一个局域磁矩组成的晶格与巡游导带电子的海耦合在一起。它是重费米子材料的标准模型，能够导致 Kondo 屏蔽、重准粒子、磁有序以及非常规超导等现象。
