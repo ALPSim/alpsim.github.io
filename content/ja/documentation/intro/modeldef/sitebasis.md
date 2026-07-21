@@ -1,11 +1,11 @@
 
 ---
-title: Site Basis
+title: サイト基底
 toc: true
 weight: 2
 ---
 
-Basis states of a single site are described by one or more quantum numbers as in:
+単一サイトの基底状態は、1 つ以上の量子数によって記述されます。例えば次のとおりです。
 
     <SITEBASIS name="hardcore boson">
     <QUANTUMNUMBER name="N" min="0" max="1"/>
@@ -21,20 +21,20 @@ Basis states of a single site are described by one or more quantum numbers as in
     <QUANTUMNUMBER name="Ndown" min="0" max="1" type="fermionic"/>
     </SITEBASIS>
 
-The first example above describes a hardcore boson (one bosonic mode with occupation restricted to 0 or 1), the second a spin-1/2, and the third a spinful fermion that allows double occupancy (independent `Nup` and `Ndown`, each ranging over 0 or 1).
+上の最初の例はハードコアボソン（占有数が 0 または 1 に制限された 1 つのボソンモード）を、2 番目はスピン 1/2 を、3 番目は二重占有を許すスピンを持つフェルミオン（独立な `Nup` と `Ndown` がそれぞれ 0 または 1 を取る）を表しています。
 
-Note that the spin-1/2 example above declares both `S` and `Sz`, even though `Sz` alone would already distinguish the two states: the total spin `S` is needed separately because it appears in the matrix elements of the spin operators defined in [Quantum Operators](../operators).
+上のスピン 1/2 の例では、`Sz` だけですでに 2 つの状態を区別できるにもかかわらず、`S` と `Sz` の両方が宣言されている点に注意してください。全スピン `S` を別途必要とするのは、[量子演算子](../operators)で定義されるスピン演算子の行列要素の中にそれが現れるためです。
 
-The `<SITEBASIS>` takes a name attribute by which it can later be referenced. The `<QUANTUMNUMBER>` elements each take a name attribute, and minimum and maximum values via the min and max attributes. The quantum numbers can take values between min, min+1, min+2 ... up to max. Optionally, a type attribute can be set to bosonic (the default) or fermionic. It should be set to fermionic when the quantum number counts a fermionic degree of freedom (e.g. a fermion occupation number), so that operators built from it anticommute correctly with fermionic operators on other sites.
+`<SITEBASIS>` には name 属性があり、後でこれを使って参照できます。各 `<QUANTUMNUMBER>` 要素には name 属性があり、min 属性と max 属性で最小値・最大値を指定します。量子数は min、min+1、min+2、…、max までの値を取ることができます。また、オプションとして type 属性に bosonic（ボソン的、デフォルト）または fermionic（フェルミオン的）を設定できます。この量子数がフェルミオン的自由度（例えばフェルミオンの占有数）を数えるものである場合には fermionic に設定すべきです。そうすることで、そこから作られる演算子が他のサイトのフェルミオン演算子と正しく反交換するようになります。
 
-The range of the quantum numbers can be parametrized by input parameters, and a `default` can be specified such as in
+量子数の取りうる範囲は入力パラメータによってパラメータ化でき、次のように `default` を指定することもできます。
 
     <SITEBASIS name="boson">
     <PARAMETER name="Nmax" default="infinity"/>
     <QUANTUMNUMBER name="N" min="0" max="Nmax"/>
     </SITEBASIS>
 
-For more complicated models, such as a t-J model, sometimes several equivalent choices of quantum numbers are possible. We can label the states either by the particle number and spin, or by the number of up and down spins:
+t-J モデルのようなより複雑なモデルでは、複数の等価な量子数の選び方が存在することがあります。状態を粒子数とスピンでラベル付けすることも、アップスピンとダウンスピンの数でラベル付けすることもできます。
 
     <SITEBASIS name="t-J">
     <QUANTUMNUMBER name="N" min="0" max="1" type="fermionic"/>
@@ -47,8 +47,8 @@ For more complicated models, such as a t-J model, sometimes several equivalent c
     <QUANTUMNUMBER name="Ndown" min="0" max="1-Nup" type="fermionic"/>
     </SITEBASIS>
 
-In the first version, `min="N/2" max="N/2"` pins `S` to exactly `N/2` rather than letting it range freely: an empty site (`N=0`) is forced to have `S=0`, and a singly occupied site (`N=1`) is forced to have `S=1/2`, which is exactly the no-double-occupancy constraint that defines the t-J model. The two site bases describe the same three physical states (empty, spin up, spin down) and are equally valid; which one is more convenient depends on the Hamiltonian: the `N`,`S` basis is natural when the total spin is a useful quantum number, while the `Nup`,`Ndown` basis is often simpler when writing operators that act separately on the up- and down-spin fermions, such as the `cdag_up`/`c_up` operators in the `fermion_hop` example in [Quantum Operators](../operators).
+最初のバージョンでは、`min="N/2" max="N/2"` によって `S` が自由に取りうる値ではなく厳密に `N/2` に固定されます。空のサイト（`N=0`）は必ず `S=0` となり、単一占有のサイト（`N=1`）は必ず `S=1/2` となります。これはまさに t-J モデルを定義する「二重占有禁止」の制約そのものです。この 2 つのサイト基底は、同じ 3 つの物理的な状態（空、アップスピン、ダウンスピン）を記述しており、どちらも同様に有効です。どちらがより便利かはハミルトニアンによります。全スピンが有用な量子数である場合は `N`、`S` 基底が自然であり、[量子演算子](../operators)の `fermion_hop` の例にある `cdag_up`/`c_up` のように、アップスピンとダウンスピンのフェルミオンにそれぞれ作用する演算子を書く場合には `Nup`、`Ndown` 基底の方がしばしば簡単です。
 
 ---
 
-For an overview of the rest of this section, see [ALPS Model Definitions](..). For how single-site bases are combined into the basis of the whole lattice, see [Lattice Basis](../latticebasis). For the other ALPS documentation sections, see the [General Introduction](../..).
+本セクションの他のページの概要については [ALPS モデル定義](..) を参照してください。単一サイトの基底が格子全体の基底へどのように組み合わされるかについては [格子基底](../latticebasis) を参照してください。ALPS ドキュメントの他のセクションについては [総合案内](../..) を参照してください。

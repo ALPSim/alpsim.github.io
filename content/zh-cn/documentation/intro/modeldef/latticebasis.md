@@ -1,11 +1,11 @@
 
 ---
-title: Lattice Basis
+title: 格子基
 toc: true
 weight: 3
 ---
 
-The basis of a lattice model is specified by giving a site basis for each type of site (vertex) in the lattice. If there is just one type of site, only one site basis needs to be given, either by referencing a previously defined [site basis](../sitebasis) or by declaring it inline:
+格子模型的基是通过为格子中每一种格点（顶点）类型给出一个格点基来指定的。如果格子中只有一种格点类型，那么只需给出一个格点基，既可以引用之前定义好的[格点基](../sitebasis)，也可以直接内联声明：
 
     <BASIS name="spin">
     <SITEBASIS ref="spin"/>
@@ -18,20 +18,20 @@ The basis of a lattice model is specified by giving a site basis for each type o
     </SITEBASIS>
     </BASIS>
 
-Like `<SITEBASIS>`, the `<BASIS>` element takes a name attribute, by which it can later be referenced from a `<HAMILTONIAN>` (see [Hamiltonian Descriptions](../hamiltonian)). It contains a `<SITEBASIS>` element which is used as the default for all sites, either referencing a previously defined one by a ref attribute, as in the first example, or declaring the full site basis inline, as in the second. (The first example's `ref="spin"` points to the parametrized `spin` site basis defined in [Quantum Operators](../operators), used throughout the rest of this page.)
+和 `<SITEBASIS>` 一样，`<BASIS>` 元素也有一个 name 属性，之后可以从 `<HAMILTONIAN>` 中引用它（参见[哈密顿量描述](../hamiltonian)）。它包含一个 `<SITEBASIS>` 元素，作为所有格点默认使用的基，既可以像第一个例子那样通过 ref 属性引用先前定义的格点基，也可以像第二个例子那样内联声明完整的格点基。（第一个例子中的 `ref="spin"` 指向[量子算符](../operators)中定义的参数化 `spin` 格点基，本页其余部分都会用到它。）
 
-## Lattices with more than one site per unit cell
+## 每个晶胞包含多个格点的格子
 
-If the lattice contains more than one site per unit cell, the `<BASIS>` command should contain one `<SITEBASIS>` entry for each site of the unit cell. Each entry should have a different type, corresponding to the definitions given in the lattice library file (see [Lattice Definitions](../../latticehowtos)).
+如果格子的晶胞包含多个格点，`<BASIS>` 命令中应该为晶胞的每个格点各包含一个 `<SITEBASIS>` 条目，每个条目应有不同的 type，与格子库文件中给出的定义相对应（参见[格子定义](../../latticehowtos)）。
 
-The following basis is a valid example for the Hilbert space of a bipartite lattice:
+下面的基是一个二分格子希尔伯特空间的有效示例：
 
     <BASIS name="Kondo lattice">
     <SITEBASIS type="0" ref="fermion"/>
     <SITEBASIS type="1" ref="spin-1/2"/>
     </BASIS>
 
-In some spin models we might have the same local site basis but with the magnitude of the spin varying by site type. For example, we can set the value of the spin on sites of type 0 and 1 through the parameters `local_S0` and `local_S1`, while still providing suitable defaults:
+在某些自旋模型中，我们可能希望不同格点类型使用相同的局域格点基，但自旋大小随格点类型而不同。例如，我们可以通过参数 `local_S0` 和 `local_S1` 分别设置类型 0 和类型 1 格点上的自旋值，同时仍然提供合理的默认值：
 
     <BASIS name="spin">
     <SITEBASIS type="0" ref="spin">
@@ -46,9 +46,9 @@ In some spin models we might have the same local site basis but with the magnitu
     </SITEBASIS>
     </BASIS>
 
-Here `local_spin` is the parameter the `spin` site basis itself uses internally to set `S` (see [Quantum Operators](../operators)); the chain of defaults means a user gets a sensible fallback at every level: leave everything unset and both site types get spin 1/2 from `local_S`; set `local_S=1` and both types become spin-1; or override `local_S0`/`local_S1` directly to give the two site types different spins.
+这里 `local_spin` 是 `spin` 格点基内部用来设置 `S` 的参数（参见[量子算符](../operators)）；这条默认值链条使得用户在每一层都能得到一个合理的回退值：如果什么都不设置，两种格点类型都会通过 `local_S` 得到自旋 1/2；设置 `local_S=1` 后两种类型都变为自旋 1；也可以直接覆盖 `local_S0`/`local_S1`，让两种格点类型拥有不同的自旋。
 
-When adding more site types this can become cumbersome, and the ALPS format allows a shortcut. If no `type` is specified, the `<SITEBASIS>` matches any site, and the wildcard character `#` in any parameter name is replaced by the site type. That way the above example can be extended to an infinite number of site types and written more compactly as:
+当格点类型增多时，这种写法会变得繁琐，为此 ALPS 格式提供了一种简写。如果没有指定 type，`<SITEBASIS>` 将匹配任意格点，并且参数名中的通配符 `#` 会被替换为该格点的类型。这样一来，上面的例子就可以扩展到任意多种格点类型，并更紧凑地写成：
 
     <BASIS name="spin">
     <SITEBASIS ref="spin">
@@ -58,17 +58,17 @@ When adding more site types this can become cumbersome, and the ALPS format allo
     </SITEBASIS>
     </BASIS>
 
-## Constraints
+## 约束
 
-Finally, the basis can be restricted to a sector where a quantum number, summed over all sites, takes a fixed value. For example, to restrict a spin basis to a fixed total `Sz` equal to the parameter `Sz_total`, a `<CONSTRAINT>` element can be added:
+最后，基还可以被限制在某个扇区中，在该扇区内某个对所有格点求和后的量子数取固定值。例如，要将自旋基限制在总 `Sz` 等于参数 `Sz_total` 的扇区，可以添加一个 `<CONSTRAINT>` 元素：
 
     <BASIS name="spin">
     <SITEBASIS ref="spin"/>
     <CONSTRAINT quantumnumber="Sz" value="Sz_total"/>
     </BASIS>
 
-Restricting to a sector like this reduces the size of the Hilbert space, which matters most for methods that work with the full Hilbert space directly, such as exact diagonalization.
+像这样限制到某个扇区可以缩小希尔伯特空间的规模，这对于直接在完整希尔伯特空间中工作的方法（例如精确对角化）尤其重要。
 
 ---
 
-For an overview of the rest of this section, see [ALPS Model Definitions](..). For the single-site bases combined here, see [Site Basis](../sitebasis). For the other ALPS documentation sections, see the [General Introduction](../..).
+关于本节其余部分的概览，参见 [ALPS 模型定义](..)。关于这里组合所用的单格点基，参见[格点基](../sitebasis)。关于 ALPS 文档的其他章节，参见[总体介绍](../..)。
