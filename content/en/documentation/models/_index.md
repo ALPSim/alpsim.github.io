@@ -30,6 +30,10 @@ The Hubbard model adds an on-site interaction between opposite-spin fermions to 
 
 Derived from the Hubbard model in the limit of strong on-site repulsion, the t-J model describes electrons hopping on a lattice where double occupancy of any site is forbidden, combined with an antiferromagnetic exchange between neighboring spins. It is widely used to study the low-energy physics of doped Mott insulators, including high-temperature superconductivity.
 
+## [Anderson Impurity Model](impurity)
+
+Unlike the lattice models above, the Anderson impurity model describes a single correlated orbital coupled to a continuous bath of otherwise non-interacting conduction electrons. It is the foundational model of quantum impurity physics, giving rise to local-moment formation and the Kondo effect, and it sits at the computational heart of dynamical mean-field theory.
+
 ## [Hardcore Boson Model](hardcorebm)
 
 The hardcore boson model describes bosons hopping on a lattice with an infinite on-site repulsion that restricts occupation of each site to 0 or 1 particle — a bosonic analogue of the Pauli exclusion principle. It connects naturally to quantum spin-1/2 models and arises as a limit of the Bose-Hubbard model.

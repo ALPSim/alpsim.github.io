@@ -1,45 +1,81 @@
 ---
-title: Heisenberg Model
+title: ハイゼンベルクモデル
 math: true
+toc: true
 weight: 3
 ---
 
-## Introduction
+## はじめに
 
-The **Heisenberg model** is one of the most fundamental and widely studied models in condensed matter physics and quantum magnetism. It was introduced by Werner Heisenberg in 1928 to describe the magnetic properties of materials, particularly the exchange interactions between localized spins in a crystal lattice. The model has since been used for understanding magnetic ordering, spin dynamics, and quantum phase transitions in a variety of systems.
+隣接する原子上にある 2 つの電子は、スピンにはまったく関係しない普通のクーロン相互作用によって互いに反発します。しかし電子はフェルミオンであるため、パウリの排他原理により、2 つのスピンが反対称な一重項に組み合わさる場合には空間波動関数は対称に、対称な三重項に組み合わさる場合には空間波動関数は反対称になることが強制されます——そしてこの 2 つの空間波動関数はクーロンエネルギーが異なります。問題の空間部分を消去すると、後に残るのは 2 つの電子の間の純粋にスピンに依存した有効相互作用、すなわち**交換相互作用**です。これは 1928 年に Werner Heisenberg によって、固体における磁性の微視的起源として導入されました（[Heisenberg (1928)](https://doi.org/10.1007/BF01328601)）。この相互作用は、クーロン相互作用と、電子が区別できないフェルミオンであるという量子力学的な要請とが組み合わさった副産物にすぎません。
 
-The Hamiltonian of the Heisenberg model is given by:
+これを格子全体にわたって足し合わせると、**ハイゼンベルクモデル**、
 
 $$
 H = J \sum_{\langle i,j \rangle} \mathbf{S}_i \cdot \mathbf{S}_j,
 $$
 
-where
-- $\mathbf{S}_i$: Spin vector at site $i$.
-- $J$: Exchange interaction strength. $J < 0$ for ferromagnetic interactions (spins favor alignment), and $J > 0$ for antiferromagnetic interactions (spins favor anti-alignment).
-- $\langle i,j \rangle$: Sum over nearest-neighbor pairs.
+が得られます。ここで $\mathbf{S}_i$ は格子サイト $i$ におけるスピン、$J$ は交換結合（$J<0$ は強磁性的な整列を好み、$J>0$ は反強磁性的な整列を好みます）であり、和はすべての最近接対 $\langle i,j \rangle$ にわたって取られます。同じハミルトニアンでも、$\mathbf{S}_i$ が何を意味するかによって、かなり異なる 2 つの物理的状況を記述します。
 
-For quantum spins, $\mathbf{S}_i$ are spin operators obeying the commutation relations of angular momentum. For classical spins, $\mathbf{S}_i$ are unit vectors in 3D space.
+- **古典ハイゼンベルクモデル**では、$\mathbf{S}_i$ は空間中の任意の方向を向くことができる普通の 3 成分単位ベクトルであり、$\mathbf{S}_i \cdot \mathbf{S}_j$ は通常の内積です。これは統計力学のモデルであり、古典モンテカルロ法でシミュレートされます。
+- **量子ハイゼンベルクモデル**では、$\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ は、決まった大きさ $S$（最も一般的には $S=1/2$）を持つ量子スピン演算子のベクトルであり、角運動量の交換関係 $[S_i^x, S_i^y] = i S_i^z$（およびその巡回置換）に従います——同じスピンの各成分どうしは交換しないため、1 つのスピンが複数の方向について同時に確定した向きを持つことは決してできません。
 
-## Phenomena
+**このサイトでは主に量子版を扱います。** ALPS の厳密対角化、DMRG、量子モンテカルロの各アプリケーションはいずれも量子ハイゼンベルクモデルを対象としており、以下にリンクするチュートリアルの大部分もこのモデルを扱っています。古典モデルは主に比較対象として登場します（両者を並べてシミュレートする、下記の [MC-02 チュートリアル](../../../tutorials/mcs/mc02) を参照）。古典モデルは、[イジングモデル](../ising)でも使われているのと同じ古典モンテカルロアプリケーション `spinmc` によって扱われます。
 
-The Heisenberg model has been instrumental in understanding a wide range of magnetic phenomena, including:
-1. **Ferromagnetism**: Alignment of spins in the same direction, leading to a macroscopic magnetic moment.
-2. **Antiferromagnetism**: Alternating alignment of spins, resulting in no net magnetization but strong local ordering.
-3. **Spin waves and magnons**: Collective excitations of spins that propagate through the lattice.
-4. **Quantum phase transitions**: Transitions between different magnetic ground states driven by quantum fluctuations.
+## モデルの物理
 
-The model is highly versatile and can be extended to include additional terms, such as anisotropy, external magnetic fields, or longer-range interactions, to describe more complex magnetic systems.
+**イジングモデルとは異なる連続対称性。** 内積 $\mathbf{S}_i \cdot \mathbf{S}_j$ は、系の*すべての*スピンを同じ角度だけ、任意の方向に回転させても不変です——これは連続的な $SU(2)$（古典スピンの場合は $O(3)$）対称性です。これは[イジングモデル](../ising)の出発点とは性質的にまったく異なります。イジングモデルの $J S_i^z S_j^z$ という結合は、すべてのスピンを同時に反転させるという離散的な $\mathbb{Z}_2$ 対称性しか持ちません。後述のように、この対称性の違いは、モデルが低次元でそもそも秩序化できるかどうかに、直接的かつ劇的な影響を及ぼします。
 
-## Methods
+**古典モデル：秩序とその限界。** どのような格子であっても、$J<0$ のとき古典的な基底状態は単純にすべてのスピンを同じ（任意の）方向に揃えます（強磁性）。$J>0$ で格子が二部格子（互いに入れ子になった 2 つの副格子に分割できる格子、例えば単純な正方格子や立方格子）である場合、基底状態はネール状態であり、2 つの副格子が互いに反対方向を向きます（反強磁性）。二部格子でない格子（例えば三角格子）では、反強磁性的な結合をすべて同時に満たすことができません。これを*フラストレーション*と呼びます。しかし、このような秩序が有限温度で生き残るかどうかは、次元に強く依存します。破れる対称性が離散的ではなく連続的であるため、[マーミン・ワグナーの定理](https://doi.org/10.1103/PhysRevLett.17.1133)により、短距離相互作用を持つ等方的なハイゼンベルクモデルでは、1 次元あるいは 2 次元において、有限温度での自発的な磁気秩序は起こり得ないことが示されます——秩序変数の*向き*に関する長波長のゆらぎは、どれだけでも小さいエネルギーコストで済んでしまい、低次元では常に秩序を破壊してしまうのです。これは古典イジングモデルとは正反対です。イジングモデルは離散対称性を持つため、すでに 2 次元で本物の有限温度相転移が起こります。したがって、古典ハイゼンベルクモデルが $T>0$ で秩序化するには 3 次元が必要です。1 次元や 2 次元では、古典モデルの興味深い物理は、真の長距離秩序としてではなく、$T=0$ において、あるいはゆらぎそのものの性質として現れます。秩序化した古典的基底状態の上に現れる低エネルギー励起は**スピン波**（量子化すると**マグノン**）です。これは、秩序化した方向のまわりでスピンがゆっくりと長波長で歳差運動するもので、そのギャップレス性は、秩序化によって破れる連続対称性の直接の帰結——すなわちゴールドストーンモード——です。
 
-The Heisenberg model can be solved by various numerical methods. Below is a summary of some key numerical techniques:
+**1 次元量子モデル：厳密解とハルデイン予想。** 1 次元のスピン 1/2 反強磁性ハイゼンベルク鎖は、完全な厳密解を持つ数少ない相互作用する量子多体モデルの一つであり、この解は 1931 年に Hans Bethe によって、現在では*ベーテ仮説*と呼ばれる方法を用いて得られました（[Bethe (1931)](https://doi.org/10.1007/BF01341708)）。その基底状態はまったく長距離秩序を持ちません（マーミン・ワグナーの結論と整合的です）が、*臨界的*です。スピン相関は距離とともに指数関数的にではなく、べき乗則的に減衰し、低エネルギースペクトルはギャップレスです。それだけに、1983 年に Duncan Haldane が（[Haldane (1983)](https://doi.org/10.1016/0375-9601(83)90631-X)）、このギャップレス性は実は*半整数*スピンに特有のものであると主張したとき、大きな驚きをもって迎えられました。整数スピン（$S=1, 2, \ldots$）の反強磁性ハイゼンベルク鎖は、代わりに一意な無秩序の基底状態を持ち、すべての励起との間に有限のエネルギーギャップ——**ハルデインギャップ**——を持ち、相関はべき乗則ではなく指数関数的に減衰します。半整数スピン鎖（$S=1/2, 3/2, \ldots$）は依然としてギャップレスのままです。整数スピン鎖と半整数スピン鎖の間のこの鋭く、自明ではない違いは、1 次元量子磁性における最も名高い成果の一つであり、以下にリンクする ED および DMRG のチュートリアルで直接確認できます。これらのチュートリアルでは、スピン 1/2 鎖とスピン 1 鎖を並べて計算し比較しています。
 
-| Method                     | Strengths                                                                 | Limitations                                                                 | Applications                                                                 |
-|----------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| **ED**  | Exact results for small systems; Captures full quantum correlations. | Limited to small systems | Small spin chains or clusters; Benchmarking other methods.            |
-| **QMC** | Handles larger systems; Finite-T       | Sign problem for frustrated or fermionic systems.                         | Phase diagrams; Finite-temperature properties.                  |
-| **DMRG** | Highly accurate for 1D systems; Efficient for low-entanglement states. | Less efficient for 2D/3D or highly entangled systems.                        | Ground state; Low-energy excitations.                     |
-| **DMFT** | Captures local correlations. | Neglects non-local correlations.                   | Mott transition; Spectral properties                     |
+**フラストレーションと二量体化。** スピン 1/2 鎖に次近接結合 $J_2$ を加えると（これは、非二部的な経路上で最近接結合 $J_1$ と競合する、明示的にフラストレートした相互作用です）、半整数スピンの鎖であっても、やはりギャップを開くことができます。特定の比 $J_2/J_1 = 1/2$（マジュムダール・ゴーシュ点）では、厳密な基底状態が解析的に知られており、それは一重項ダイマーの単純な積状態であり、すべての励起との間に有限のギャップを持ちます。より一般に、結合した 2 本のスピン 1/2 鎖（「2 本足はしご」）は、ラング結合の符号や強さによらず、*常に*ギャップを持ちます——これは、それ自体はギャップレスな構成要素から出発して、ギャップを持つ無秩序な量子磁性を実現する、単純で頑健な方法です。
+
+## 現象
+
+- **強磁性と反強磁性**：$J<0$ のときスピンは平行な整列を好み、巨視的な磁気モーメントを生じます。$J>0$ で格子が二部格子の場合、スピンは反平行（ネール）配置を好み、正味のモーメントはありませんが強い千鳥状の秩序が生じます。
+- **スピン波とマグノン**：秩序化した磁性体（古典的でも量子的でも）が持つ、ギャップレスで長波長の励起であり、その存在は、交換相互作用の連続対称性が自発的に破れることによって保証されます。
+- **低次元における秩序の欠如**：マーミン・ワグナーの定理により、等方的なハイゼンベルクモデルは 1 次元あるいは 2 次元では、いかなる非零温度でも磁気秩序を持つことができません——これは、離散対称性のためにすでに 2 次元で秩序化できるイジングモデルとは鮮明な対照をなします。
+- **ギャップのある量子基底状態とギャップレスな量子基底状態**：1 次元のスピン 1/2 鎖はギャップレスで臨界的です（ベーテ仮説）。整数スピン鎖はギャップを持ちます（ハルデインギャップ）。フラストレーション（例えばマジュムダール・ゴーシュ点）や幾何構造（例えば 2 本足はしご）は、半整数スピンであってもギャップを開くことがあります。ある鎖やはしごがこれらのどの領域に属するかを判定することは、以下のチュートリアルで扱われる中心的な問いであることがよくあります。
+- **量子相転移**：フラストレートした結合、はしごのラング結合の強さ、あるいは印加磁場を調整することで、量子モデルをゼロ温度でギャップのある状態とギャップレスな状態の間で（あるいは異なる秩序状態の間で）駆動することができます。これは [横磁場イジングモデル](../transising) のページで紹介したのと同じ一般的な現象です。
+
+## 手法
+
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **ED** —— [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) を参照 | 小さな系に対して厳密な結果が得られる；エンタングルメントを含む量子スペクトル全体を捉えられる | ヒルベルト空間が系のサイズに対して指数関数的に増大するため、小さな系に限られる | 小さな鎖・はしご・クラスターのギャップ、スペクトル、有限サイズスケーリング；他の手法の検証 |
+| **DMRG** —— [密度行列繰り込み群](../../methods/dmrg/dmrg) を参照 | 1 次元系の基底状態と低エネルギー励起について非常に高精度；低エンタングルメント状態に対して効率的 | 2 次元・3 次元系や高エンタングルメント状態には効率が落ちる | 1 次元の鎖やはしごの基底状態エネルギー、ギャップ、局所観測量、相関関数 |
+| **QMC** —— [確率級数展開](../../methods/qmc/sse) を参照 | ED や DMRG よりもはるかに大きな系を扱える；有限温度の性質にアクセスできる | フラストレートした、あるいはフェルミオン的なハイゼンベルク型モデルは符号問題に悩まされることがある（二部格子上のフラストレートしていないスピンモデルはそうではない） | 有限温度の熱力学、磁化率、相図（2 次元・3 次元を含む） |
+
+量子ハイゼンベルクモデルは ALPS の中心的なモデルであるため、ほぼすべての手法のチュートリアルで題材として使われています。
+
+**厳密対角化（`sparsediag`/`fulldiag`）：**
+- [ED-01: 疎行列対角化（Lanczos）](../../../tutorials/ed/ed01) —— スピン 1 のハイゼンベルク鎖を設定し、基底状態に対するカスタム測定を計算します
+- [ED-02: 1 次元量子系のスピンギャップ](../../../tutorials/ed/ed02) —— スピン 1 鎖のハルデインギャップを直接計算します
+- [ED-03: 1 次元量子系のスペクトル](../../../tutorials/ed/ed03) —— ハイゼンベルク鎖、2 本足はしご、孤立したダイマーの運動量分解スペクトル
+- [ED-04: 1 次元臨界スペクトルの共形場理論による記述](../../../tutorials/ed/ed04) —— ギャップレスで臨界的なスピン 1/2 ハイゼンベルク鎖とその共形場理論的な演算子内容
+- [ED-05: フラストレートしたスピン鎖における相転移](../../../tutorials/ed/ed05) —— $J_1$–$J_2$ 鎖とマジュムダール・ゴーシュ二量体化転移
+- [ED-06: 完全対角化](../../../tutorials/ed/ed06) —— ハイゼンベルク鎖、はしご、磁性分子の有限温度熱力学
+
+**密度行列繰り込み群（`dmrg`）：**
+- [DMRG-01: 導入](../../../tutorials/dmrg/dmrg01) —— スピン 1/2 とスピン 1 のハイゼンベルク鎖の基底状態
+- [DMRG-02: ギャップの計算](../../../tutorials/dmrg/dmrg02) —— ハルデインギャップを含む励起ギャップの抽出
+- [DMRG-03: 局所観測量の計算](../../../tutorials/dmrg/dmrg03) —— 異なる磁化セクターにおける局所磁化プロファイル
+- [DMRG-04: 相関の計算](../../../tutorials/dmrg/dmrg04) —— 2 点スピン相関関数と相関長
+- [スピン鎖の基底状態エネルギー（Jupyter ノートブック）](../../../tutorials/jupyter/dmrg/groundstatespinchain) —— スピン 1/2 鎖の基底状態エネルギーの収束
+
+**量子モンテカルロ（`looper`、`dirloop_sse`、量子 Wang-Landau）：**
+- [MC-02: 古典 MC と looper QMC コードによる磁化率の計算](../../../tutorials/mcs/mc02) —— 古典的モデルと量子的なハイゼンベルクモデルを直接並べて比較します
+- [MC-03: ディレクテッドループ QMC コードによる磁化曲線の計算](../../../tutorials/mcs/mc03) —— 磁場によって駆動される鎖とギャップのあるはしごの磁化
+- [MC-04: QMC コードにおけるカスタム測定](../../../tutorials/mcs/mc04) —— スピン-スピン相関関数と反強磁性構造因子
+- [MC-06: 拡張アンサンブルシミュレーション（量子 Wang-Landau）](../../../tutorials/mcs/mc06) —— 1 回のシミュレーションでハイゼンベルク鎖とはしごの有限温度熱力学全体を求めます
+- [MC-08: 量子スピンモデルにおける量子相転移](../../../tutorials/mcs/mc08) —— 結合したハイゼンベルクはしごにおける量子相転移を特定し特徴づけます
+
+**Jupyter ノートブック：**
+- [スピン 1 ハイゼンベルク鎖のスピンギャップ](../../../tutorials/jupyter/ed/spingapspinoneheisenbergchain) —— ハルデインギャップ計算のインタラクティブ版
+- [1 次元系のスペクトル](../../../tutorials/jupyter/ed/spectra1dsystems) —— 運動量分解スペクトル計算のインタラクティブ版
 
 ---
+
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。

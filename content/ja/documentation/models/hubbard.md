@@ -1,51 +1,79 @@
 ---
-title: Hubbard Model
+title: ハバードモデル
 math: true
+toc: true
 weight: 5
 ---
 
-## Introduction
+## はじめに
 
-The **Hubbard model** was first introduced by John Hubbard in 1963 to describe the behavior of electrons in a lattice, particularly in transition metal oxides and other materials with strong electron-electron interactions. It was later extended to describe any Fermions with on-site interactions on a lattice. If only one energy band is used to form the lattice model, then each lattice site can accommodate at most $2s+1$ Fermions with spin $s$.
+通常のバンド理論によれば、格子上をホッピングする電子は運動エネルギーを最小化するように単純に広がっていくはずです。しかし 2 つの電子が同じ原子軌道を占有しようとすると、両者はその間に働く完全な強さのクーロン反発も感じることになります。**ハバードモデル**は、通常の 1 粒子ホッピングに加えて、電子間相互作用のうちこの単一の本質的な部分——二重占有されたサイトに課されるエネルギーコスト $U$——だけを保持しており、それによって格子上の相互作用する電子の最も単純なモデルとなっています。冷却原子や光格子の研究コミュニティでは、これはしばしば**フェルミ・ハバードモデル**と呼ばれます。これは、ボソン版である[ボーズ・ハバードモデル](../bhm)と明確に区別するためで、両者はともに光格子中の超冷原子を用いて実験的に実現でき、違いは使われる原子の量子統計だけです。この単純さにもかかわらず（あるいはむしろそれゆえに）、このモデルは凝縮系物理学における最も重要な現象のいくつかを捉えています。モット金属-絶縁体転移、遍歴磁性、そしてそのドープされた低エネルギー極限においては、銅酸化物における高温超伝導の背後にあると考えられている物理の一部です。
 
-The one-band Hubbard model with spin-$\frac{1}{2}$ Fermions is given by the following Hamiltonian
+このモデルは 1963 年に複数の研究グループによって独立に導入されましたが、そのうち [John Hubbard の論文](https://doi.org/10.1098/rspa.1963.0204)がこのモデルに名前を与えました。現代的なレビューとしては、モデルの解析的な側面については [Arovas, Berg, Kivelson, and Raghu (2022)](https://doi.org/10.1146/annurev-conmatphys-031620-102024) を、これを解くための数値的手法に特化したレビューとしては [Qin, Schäfer, Andergassen, Corboz, and Gull (2022)](https://doi.org/10.1146/annurev-conmatphys-090921-033948) を参照してください。
+
+スピン 1/2 のフェルミオンに対する単一バンドのハバードモデル（最も一般的に研究される場合）は、次のハミルトニアンで与えられます。
 
 $$
-H = -t \sum_{\langle i,j \rangle, \sigma} \left( c_{i,\sigma}^\dagger c_{j,\sigma} + \text{h.c.} \right) + U \sum_i n_{i,\uparrow} n_{i,\downarrow},
+H = -t \sum_{\langle i,j \rangle, \sigma} \left( c_{i,\sigma}^\dagger c_{j,\sigma} + \text{h.c.} \right) + U \sum_i n_{i,\uparrow} n_{i,\downarrow} - \mu \sum_{i,\sigma} n_{i,\sigma},
 $$
 
-where 
+ここで、
 
-- $c_{i,\sigma}^\dagger$ and $c_{i,\sigma}$ are creation and annihilation operators for a fermion with spin $\sigma$ (up $\uparrow$ or down $\downarrow$) at site $i$ and $\text{h.c.}$ represents Hermitian Conjugate. 
-- $t$ is hopping amplitude between neighboring sites $\langle i,j \rangle$.
-- $U$ is on-site interaction energy, with $U > 0$ corresponding to repulsive interactions and $U < 0$ corresponding to attractive interactions.
-- $n_{i,\sigma} = c_{i,\sigma}^\dagger c_{i,\sigma}$ is number operator for fermions with spin $\sigma$ at site $i$.
+- $c_{i,\sigma}^\dagger$ と $c_{i,\sigma}$ はサイト $i$ でスピン $\sigma$（上向き $\uparrow$ または下向き $\downarrow$）のフェルミオンを生成・消滅させる演算子であり、h.c. はエルミート共役を表します。
+- $t$ は最近接サイト $\langle i,j \rangle$ 間のホッピング振幅です。
+- $U$ はオンサイト相互作用エネルギーで、あるサイトが二重に占有されているときにのみ課されます（$U>0$：斥力、$U<0$：引力）。
+- $n_{i,\sigma} = c_{i,\sigma}^\dagger c_{i,\sigma}$ はサイト $i$ におけるスピン $\sigma$ の数演算子です。
+- $\mu$ は化学ポテンシャルで、電子密度（充填率）を制御します。
 
-The first term of the Hamiltonian describes the kinetic energy of the many-body system with particles hopping between neighboring sites. The second term represents the potential energy of the system. The competition between the kinetic energy, potential energy, as well as the temperature can lead to interesting properties.
+したがって各サイトは 0 個、1 個（スピン上向きまたは下向き）、あるいは 2 個（上向きと下向きが 1 個ずつ）の電子を持つことができます。これは ALPS のモデルライブラリに組み込まれている `fermion Hubbard` モデルそのものです——パラメータの一覧全体については[モデルパラメータ用語集](../../intro/modeldef/intro)を参照してください。運動エネルギー項（非局在化した、バンド的な電子を好む）と相互作用項（局在化した、1 サイトに 1 個の電子を好む）との競合が——$\mu$ によって設定される密度や温度とあいまって——このモデルの豊かな物理のほぼすべてを担っています。
 
-## Phenomena
+## モデルの物理
 
-1. **Metal-Insulator Transition**:
-   - The Fermi-Hubbard model exhibits a metal-insulator transition known as the **Mott transition**. At half-filling (one electron per site), for large $U/t$, the system becomes a Mott insulator, where electrons are localized due to strong repulsion, preventing conduction.
-   - For small $U/t$, the system behaves as a metal, with electrons freely hopping across the lattice.
+**モット転移：相互作用がバンド理論に打ち勝つ理由。** 通常のバンド理論は、半分満たされたバンド（平均してサイトあたり電子 1 個）は常に金属であると予言します。なぜなら、この場合フェルミ準位は部分的に占有されたバンドのちょうど真ん中に位置するからです。ハバードモデルが教えてくれる最も重要な教訓は、この予言が単純に間違っている場合があるということです。半充填において、$U$ がバンド幅（$\sim t$）に比べて十分大きくなると、電子がすでに占有されている隣接サイトにホッピングするには大きなエネルギー $U$ が必要になるため、バンド理論がそうすべきでないと言っているにもかかわらず、電子は事実上動かなくなってしまいます。このバンド構造ではなく相互作用によって駆動される金属-絶縁体転移は**モット転移**と呼ばれ、その結果生じる、すべてのサイトに 1 個の電子が局在した絶縁状態は**モット絶縁体**と呼ばれます。
 
-2. **Magnetism**:
-   - In the Mott insulating phase, the Fermi-Hubbard model can exhibit magnetic ordering. At half-filling and large $U/t$, the effective low-energy Hamiltonian reduces to the **Heisenberg model**, which describes antiferromagnetic interactions between spins.
+**ハバードからハイゼンベルクへ：超交換。** しかしモット絶縁体は磁気的に不活性というわけではありません。$U$ が大きいときには実際のホッピングは禁止されていますが、*仮想的な*ホッピング——電子が隣接サイトへ一瞬だけホッピングして戻ってくる過程——は禁止されておらず、通常の 2 次摂動論により、これが基底状態のエネルギーを $t^2/U$ のオーダーで下げることが示されます。ここで重要なのは、パウリの排他原理により、隣接する 2 つの電子のスピンが*反対向き*である場合にのみ、この仮想的なホッピングが許されるという点です。スピンが同じ向きの場合、行き先のサイトは同じスピンの電子をもう 1 個受け入れることができないため、このホッピングは完全に禁止されます。この非対称性のため、真の基底状態は隣接するスピンが反平行に並ぶことを好み、半充填かつ大きな $U/t$ では、ハバードモデルの有効な低エネルギー記述は、まさに反強磁性の[ハイゼンベルクモデル](../heisenberg)そのものになります。交換結合は
 
-3. **Superconductivity**:
-   - For attractive interactions $U < 0$, the model can exhibit superconductivity, where fermions pair up to form Cooper pairs.
+$$
+J = \frac{4t^2}{U}
+$$
 
-4. **Doping and Phase Separation**:
-   - When the system is doped away from half-filling (e.g., by adding or removing electrons), rich phases such as stripe order, charge density waves, and high-temperature superconductivity can emerge.
+で与えられます。この機構は**超交換**と呼ばれ、高温銅酸化物超伝導体の母物質を含む、ほぼすべてのモット絶縁体における反強磁性の微視的起源です。
 
+**モット絶縁体のドーピング。** 電子を追加または除去して半充填からずらす（「ドーピングする」）と、上記の単純なネール秩序の描像は崩れ、この分野で最も豊かで、かつ最も決着のついていない物理が展開されます。大きな $U$ では、ドープされたモデルは [t-J モデル](../tj)に帰着し、反強磁性、超伝導、そして（ストライプ秩序のような）さまざまな電荷・スピン秩序の間に生じる競合が、銅酸化物における高温超伝導を理解する鍵を握っていると広く信じられています——この見かけ上単純なハミルトニアンを 60 年にわたって研究してきたにもかかわらず、この問題はいまだに完全には解決されていません。
 
-## Methods
+## 現象
 
-Various numerical methods for solving Fermi-Hubbard model are listed in the following table:
+- **モット金属-絶縁体転移**：半充填では、系は小さな $U/t$ で金属的であり、大きな $U/t$ でモット絶縁体になります。両者の間には転移（有限温度ではクロスオーバー）があります。
+- **磁性**：モット絶縁相では、超交換によって半充填で反強磁性秩序が生じます。半充填からずれた密度や他の密度では、強磁性やより複雑な磁気秩序も可能です。
+- **超伝導**：引力相互作用（$U<0$）の場合、モデルは直接的に電子対形成を好みます。物理的により一般的な斥力の場合（$U>0$）では、モット絶縁体をドープすることで非従来型（フォノンを媒介としない）超伝導が生じると考えられています——これが、このモデルを銅酸化物と関連づけて研究する中心的な動機です。
+- **ドーピング、ストライプ、非フェルミ液体的振る舞い**：半充填からずれると、モデルは電荷・スピンのストライプ秩序、相分離、そしていくつかの領域では通常の金属のフェルミ液体的描像に当てはまらない振る舞いを示すことがあります。
 
-| Method                  | Strengths                              | Limitations                          | Applications                          |
-|-------------------------|----------------------------------------|--------------------------------------|---------------------------------------|
-| **ED**   | Exact results for small systems; Captures full quantum correlations.        | Limited to small systems.             | Small-system properties; Benchmarking other methods.               |
-| **QMC**     | Handles larger systems; Finite-T.       | Sign problem for fermions.            | Phase diagrams; Finite-temperature properties.        |
-| **DMRG**                    | Highly accurate for 1D systems; Efficient for low-entanglement states.         | Less efficient for 2D/3D or highly entangled systems.             | Ground state; Low-energy excitations.  |
-| **DMFT**                    | Captures local correlations.            | Neglects non-local correlations.      | Mott transition; Spectral properties  |
+## 手法
+
+ALPS に限って言えば：
+
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **ED** —— [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) を参照 | 小さな系に対して厳密な結果が得られる；多体スペクトル全体を捉えられる | ヒルベルト空間が $4^N$（1 サイトあたり 4 状態）で増大するため、小さなクラスターに限られる | 小系のベンチマーク；対称性で分解されたスペクトル |
+| **DMRG** —— [密度行列繰り込み群](../../methods/dmrg/dmrg) を参照 | 1 次元および準 1 次元（はしご）の幾何構造に対して非常に高精度 | 真に 2 次元・3 次元の系には効率が落ちる | ハバード鎖・はしごの基底状態と低エネルギー特性 |
+| **DMFT** —— [動的平均場理論](../../methods/dmft/dmft) を参照 | 局所相関とモット転移を非摂動的に捉える；無限次元（例えばベーテ格子）では厳密 | 非局所的（運動量依存の）相関やゆらぎを無視する | モット転移；局所スペクトル関数；有限温度相図 |
+
+ALPS の他のスピンモデルやボソンモデルとは異なり、ALPS には一般的なフェルミオン的ハバードモデルのための格子量子モンテカルロアプリケーションはありません。特殊な場合（例えば二部格子上の半充填、あるいは 1 次元）を除けば、悪名高いフェルミオンの**符号問題**によって、低温での直接的な格子 QMC は法外に高くつくため、ALPS には行列式・補助場 QMC アプリケーションが含まれていません。その代わり、ALPS の連続時間 QMC アルゴリズム（CT-HYB、CT-INT）は DMFT における*不純物*ソルバーとして使われています——これらのソルバーについての包括的なレビューは [Gull, Millis, Lichtenstein, Rubtsov, Troyer, and Werner (2011)](https://doi.org/10.1103/RevModPhys.83.349) を参照してください——このため ALPS では、直接的な格子 QMC ではなく DMFT が、ハバードモデルに対する標準的な大規模手法となっています。
+
+これらの手法、および ALPS には実装されていない他の多くの手法（補助場 QMC、幅の広い円柱上での DMRG、ダイアグラム量子モンテカルロなど）が、同じ、一見単純に見える 2 次元正方格子ハバードモデルに対してどのように比較されるかについては、[Simons Collaboration のベンチマーク研究](https://doi.org/10.1103/PhysRevX.5.041041)を参照してください。この研究では、最先端の数値的手法が互いに幅広く相互検証されています——このモデルについて何が信頼でき、何がまだそうでないのかを理解するための必読文献です。
+
+ALPS の DMFT チュートリアルでは、一貫してハバードモデルが題材として使われています。
+
+- [DMFT-01: DMFT 入門](../../../tutorials/dmft/dmft01) —— 格子ハバードモデルを自己無撞着な量子不純物問題へ写像する DMFT 近似の動機づけ
+- [DMFT-02: CT-HYB ソルバー](../../../tutorials/dmft/dmft02)、[DMFT-03: CT-INT ソルバー](../../../tutorials/dmft/dmft03)、[DMFT-07: Hirsch-Fye ソルバー](../../../tutorials/dmft/dmft07) —— 3 種類の異なる不純物ソルバーを用いて、ベーテ格子上のハバードモデルの金属-反強磁性絶縁体転移を追跡します
+- [DMFT-04: モット転移](../../../tutorials/dmft/dmft04) —— $U$ の関数としての常磁性モット転移
+- [DMFT-06: 常磁性金属と外挿誤差](../../../tutorials/dmft/dmft06) —— QMC ソルバーを Hirsch-Fye および厳密対角化に対してベンチマークします
+- [DMFT-08: 特定の格子の設定](../../../tutorials/dmft/dmft08) —— ベーテ格子を超えて、正方格子、立方格子、六方格子へと拡張します
+- [DMFT-09: 単一サイト DMFT におけるネール転移](../../../tutorials/dmft/dmft09) —— 3 種類すべてのソルバーで反強磁性ネール転移を比較します
+- [ベーテ格子上のハバードモデルの DMFT（Jupyter ノートブック）](../../../tutorials/jupyter/dmft/dmftbethehubbard) —— 同じベーテ格子 DMFT 計算のインタラクティブな導入
+
+DMFT に加えて、[ED-06: 完全対角化](../../../tutorials/ed/ed06) では、対称性（運動量と粒子数）を利用して計算を扱いやすくしながら、小さな正方格子上のハバードモデルを追加の演習として扱っています。
+
+---
+
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。
