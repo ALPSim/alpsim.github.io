@@ -23,7 +23,7 @@ Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up
 
 1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
 
-2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1. Apart from a global factor of order of the length, do you see a difference between the convergence behaviour in the two cases? *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
+2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1, and compare the convergence behaviour in the two cases, apart from a global factor of order of the length. *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
 
 3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
 
@@ -314,11 +314,9 @@ $$
 e_0/J = \frac{E_0(L)}{L-1}.
 $$
 
-Do you get values really close to the ones listed in [DMRG-02](../dmrg02)? What is wrong with the underlying assumption?
-
 The correct way is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing it.
 
-1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond. What do the results look like now?
+1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
 
 2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighbouring sites and use:
 $$
@@ -326,3 +324,9 @@ e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\r
 $$
 
 for sites $i,i+1$ at the chain center.
+
+## Questions
+
+- Apart from a global factor set by the chain length, do you see a difference between how the convergence in $D$ deteriorates with system size for the spin-1/2 chain versus the spin-1 chain?
+- Comparing $e_0/J=E_0(L)/(L-1)$ to the exact thermodynamic-limit energies per site quoted in [DMRG-02](../dmrg02), do you get values that are really close? What is wrong with the underlying assumption?
+- Using $e_0/J=(E_0(L+2)-E_0(L))/2$ instead, for the same chain lengths, what do the results look like now?

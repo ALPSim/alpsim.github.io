@@ -87,7 +87,7 @@ and plot them:
 
 ## Magnetisation in the Spin-1/2 Chain
 
-Repeat a similar calculation for the spin-1/2 chain in the lowest magnetisation sectors. What do you observe here?
+Repeat a similar calculation for the spin-1/2 chain in the lowest magnetisation sectors.
 
 ### Using parameter files
 
@@ -109,3 +109,7 @@ The following parameter file will accomplish this, downloadable [here](https://g
 ### Using Python
 
 Apart from the obvious parameter changes, the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half.py) is the same as the `spin_one` script explained above.
+
+## Questions
+
+- Repeating the local-magnetization calculation for the spin-1/2 chain in its lowest magnetisation sectors, what do you observe, compared to the spin-1 case above?

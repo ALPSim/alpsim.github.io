@@ -173,9 +173,9 @@ print('Gap:', energies[1]-energies[0])
 
 ### Extrapolating The Gap To The Thermodynamic Limit
 
-In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger. Discuss why this might be.
+In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger.
 
-In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error). What does the plot of the gap versus $1/L$ look like now?
+In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
 
 Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
@@ -190,11 +190,9 @@ Assume you have $\Delta (L)$ with machine precision, either by a suitable extrap
 
 As the effects of the open ends will decrease as $1/L$, it always makes sense to first plot the gaps $\Delta (L)$ versus $1/L$, as was already done in the spin-1/2 case. Produce such a plot.
 
-What you see is a curve that is quite straight for small L and then starts bending upward. What gap would you obtain if you extrapolate the linear part of the curve naively? (This question is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.) Is it over- or underestimated?
+What you see is a curve that is quite straight for small L and then starts bending upward.
 
-What gap do you read off if you take the longest chain you have? Is it over- or underestimated?
-
-The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$. What does the curve now look like for big lengths? Extrapolate the gap.
+The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$, and extrapolate the gap from it.
 
 The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy:
 
@@ -208,6 +206,16 @@ $$
 \Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 
 $$
 
-and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$. How close do you get to the result $\Delta/J=0.41052$?
+and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$.
 
-For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted and start worrying: why is the finite gap the right one and the vanishing gap the wrong one? Is this a physics lottery? In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+
+## Questions
+
+- Why does the curvature of the gap-vs-$1/L$ plot straighten out as $D$ is increased at fixed chain lengths?
+- Extrapolating the gap in $D$ (or in the truncation error) at each fixed length before plotting versus $1/L$: what does the plot look like now, compared to the first attempt at fixed $D$?
+- If you extrapolate only the linear (small-$L$) part of the $\Delta(L)$ vs. $1/L$ curve for the spin-1 chain naively, what gap do you obtain, and is it over- or underestimated? (This is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.)
+- What gap do you read off if you instead take the longest chain you have, and is it over- or underestimated?
+- Plotting the gap as $\Delta(L)$ versus $1/L^2$ instead of $1/L$: what does the curve now look like for large lengths, and what gap do you extrapolate?
+- How close does your extrapolated gap come to the accepted value $\Delta/J=0.41052$?
+- The gap between magnetization sectors 0 and 1 is essentially zero, while the gap between sectors 1 and 2 is finite. Why is the finite gap the physically correct one and the vanishing gap the wrong one — is this a physics lottery?

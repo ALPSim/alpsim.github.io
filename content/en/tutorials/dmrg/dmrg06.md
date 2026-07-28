@@ -21,9 +21,7 @@ This gives the energy of each bond individually, but we are interested in the th
 
 Obviously, the bonds that are closest to the thermodynamic limit behaviour are those in the chain center. So, the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$.
 
-Before you do this, however, plot for some values of $D$ and not too small $L e_0(i)$ versus $i$ (as a check of the program, you may also consider the three contributions individually before you do the sum. What relationship between them should exist?).
-
-What do you observe for spin-1? And what for spin-1/2?
+Before you do this, however, plot for some values of $D$ and not too small $L$, $e_0(i)$ versus $i$ (as a check of the program, you may also consider the three contributions individually before you do the sum).
 
 For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends make themselves felt very strongly due to criticality and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond; you immediately gain lots of accuracy. This is yet another example that it is worthwhile to have a close look at the actual output of DMRG by considering various local or (here) almost local observables.
 
@@ -125,7 +123,7 @@ In the spin-1 chain, we do expect exponential decay (with an analytic modificati
 
 Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
 
-From the log-lin plot, extract a correlation length. It will depend (and in fact monotonically increase with) $D$. Has it converged when you reach e.g. $D=300$? How does this compare to the convergence for the same number of states of local or quasi-local observables such as magnetization or energy?
+From the log-lin plot, extract a correlation length. It will depend (and in fact monotonically increase with) $D$.
 
 In fact, the calculation of correlation lengths is much harder to converge than that of the local quantities. This is due to the fact that a more profound algorithmic analysis reveals DMRG to be an algorithm geared especially well to the optimal representation of local quantities, not so much non-local ones as long-ranged correlators.
 
@@ -190,4 +188,10 @@ What we can do to cure this, is to attach one spin-1/2 before the first and afte
 
 In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2, and be characterized by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
 
-For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length. What do you get?
+For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length.
+
+## Questions
+
+- Plotting $e_0(i)$ versus $i$ for various $D$ (not too small $L$): what do you observe for the spin-1 chain, and what for the spin-1/2 chain? Considering the three contributions to $e_0(i)$ individually before summing them, what relationship between them should exist?
+- Has the correlation length converged by the time you reach $D=300$, and how does this compare to the convergence of local or quasi-local observables such as the magnetization or energy at the same $D$?
+- For a chain of length $L=192$ and $D=200$, extracting the correlation length from the ground-state magnetization profile this way: what correlation length do you get?
