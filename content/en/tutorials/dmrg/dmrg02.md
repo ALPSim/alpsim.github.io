@@ -31,41 +31,24 @@ $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
 $$
 
-This means that the spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$. Let us check where $\eta=1$ comes from instead of just asserting it. A critical exponent is, by definition, the logarithmic derivative of the correlator with respect to distance in the asymptotic limit:
+The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arrises from a marginally irrelevant operator and does not contribute to scaling as discussed in {place link to ED 4 or 5, see which one has this scaling}.  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
 
 $$
-\eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln C(r)}{d\ln r} , \qquad C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r} ,
-$$
-
-where we have stripped off the staggered sign $(-1)^{|i-j|}$ so that $C(r)$ is a smooth envelope. Taking the logarithm of the correlator:
-
-$$
-\ln C(r) = \tfrac{1}{2}\ln(\ln r) - \ln r ,
-$$
-
-and differentiating with respect to $x \equiv \ln r$ (which is the same as differentiating with respect to $\ln r$) gives:
-
-$$
-\frac{d\ln C}{d\ln r} = \frac{d}{dx}\left(\tfrac{1}{2}\ln x - x\right) = \frac{1}{2x} - 1 = \frac{1}{2\ln r} - 1 .
+\eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,
 $$
 
 So the exponent measured at any finite distance $r$ is:
 
 $$
-\eta_{\rm eff}(r) = -\frac{d\ln C}{d\ln r} = 1 - \frac{1}{2\ln r} .
+C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r},\qquad
+\eta(r) =  1 - \frac{1}{2\ln r} = 1.
 $$
 
-Taking the limit $r\rightarrow\infty$ then gives the asymptotic exponent:
-
-$$
-\eta = \lim_{r\rightarrow\infty} \eta_{\rm eff}(r) = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1 - \lim_{r\rightarrow\infty}\frac{1}{2\ln r} = 1 .
-$$
-
-The square root of a logarithm in $C(r)$ does not change the leading power law, it only shifts the *effective* exponent measured at finite $r$ below its asymptotic value $\eta=1$. This is exactly the correction referred to above, and it can be beautifully verified by DMRG calculations on very long chains. But because $\ln r$ itself grows so slowly, $1/(2\ln r)$ vanishes only very slowly with $r$ — so on any finite chain accessible to DMRG, $\eta_{\rm eff}(r)$ will sit visibly below 1 and creep towards it only gradually. For a first pass we ignore this correction and simply use $\eta=1$ as the target, but keep in mind that your numerically extracted exponent will typically undershoot it.
+This is exactly the correction referred to above, and it can be beautifully verified by DMRG calculations on very long chains. But because $\ln r$ itself grows so slowly, $1/(2\ln r)$ vanishes only very slowly with $r$ — so on any finite chain accessible to DMRG, $\eta_{\rm eff}(r)$ will sit visibly below 1 and creep towards it only gradually. For a first pass we ignore this correction and simply use $\eta=1$ as the target, but keep in mind that your numerically extracted exponent will typically undershoot it.
 
 ### Spin-1 Chain
 
-For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out ([F.D.M. Haldane, Phys. Rev. Lett. 50, 1153 (1983)](https://doi.org/10.1103/PhysRevLett.50.1153)) that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications right for this system.
+For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications right for this system.
 
 Unlike the spin-1/2 chain, the spin-1 chain has no properties that can be calculated exactly by analytical means. We have to rely completely on numerics when it comes to quantitative statements.
 
