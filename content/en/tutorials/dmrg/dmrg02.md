@@ -31,7 +31,7 @@ $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
 $$
 
-The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arrises from a marginally irrelevant operator and does not contribute to scaling, as discussed for the same Heisenberg chain in [ED-04](../../ed/ed04).  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
+The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arises from a marginally irrelevant operator and does not modify scaling asymptotically, as discussed in [ED-04](../../ed/ed04).  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
 
 $$
 \eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,
