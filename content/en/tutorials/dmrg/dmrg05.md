@@ -36,7 +36,7 @@ The following parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd
 
 ### Using Python
 
-The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one.py) runs one simulation for each of the three spin sectors.
+The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one.py) runs one simulation for each of the three spin sectors:
 
     import pyalps
     import numpy as np
@@ -62,7 +62,7 @@ The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d
     input_file = pyalps.writeInputFiles('parm_spin_one',parms)
     res = pyalps.runApplication('dmrg',input_file,writexml=True)
 
-After loading the data files, we can extract the results for the local magnetization
+After loading the data files, we can extract the results for the local magnetization:
 
     data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one'))
 
@@ -75,7 +75,7 @@ After loading the data files, we can extract the results for the local magnetiza
                 s.y = s.y.flatten()
                 curves.append(s)
 
-and plot them.
+and plot them:
 
     plt.figure()
     pyalps.plot.plot(curves)

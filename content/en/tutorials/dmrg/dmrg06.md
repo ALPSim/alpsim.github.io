@@ -11,7 +11,7 @@ The most important correlation functions in many-body physics are two-point corr
 
 ### Another Go At The Energy Per Bond
 
-As already mentioned above, the ground state energy per bond in both spin-1/2 and spin-1 chain is given by
+As already mentioned above, the ground state energy per bond in both spin-1/2 and spin-1 chain is given by:
 
 $$
 e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
@@ -37,7 +37,7 @@ What you should see, is a power law on short distances, but a faster (in fact, e
 
 #### Using parameter files
 
-The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half) will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric.
+The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half) will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -58,7 +58,7 @@ The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/bl
 
 #### Using Python
 
-The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) sets up three runs with different numbers of states $D$ and loads the results.
+The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) sets up three runs with different numbers of states $D$ and loads the results:
 
     import pyalps
     import numpy as np
@@ -88,7 +88,7 @@ The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899fe
     
     data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
 
-Now we can extract e.g. Sz:Sz correlations
+Now we can extract e.g. Sz:Sz correlations:
 
     curves = []
     for run in data:
@@ -107,7 +107,7 @@ Now we can extract e.g. Sz:Sz correlations
                 d.y = abs(s.y[0][indices])
            
                 curves.append(d)
-and plot them vs. site distance.
+and plot them vs. site distance:
 
     plt.figure()
     pyalps.plot.plot(curves)
@@ -154,7 +154,7 @@ The parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899fe
 
 #### Using Python
 
-The main difference of the script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) with respect to the previous one is the definition of lattice and model.
+The main difference of the script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) with respect to the previous one is the definition of lattice and model:
 
     parms = []
     L = 32

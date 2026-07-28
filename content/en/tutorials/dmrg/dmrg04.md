@@ -7,13 +7,13 @@ toc: true
 
 ## Calculating The Gap
 
-As already mentioned, the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state
+As already mentioned, the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state:
 
 $$
 \Delta = E_1 - E_0
 $$
 
-in the thermodynamic limit. This means we have to solve two problems, (i) the calculation of
+in the thermodynamic limit. This means we have to solve two problems, (i) the calculation of:
 
 $$
 \Delta(L) = E_1 (L) - E_0 (L)
@@ -35,7 +35,7 @@ Let us do this calculation first for the spin-1/2 chain:
 
 ##### Using parameter files
 
-In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap.
+In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
 
 ```python
 LATTICE="open chain lattice"
@@ -54,7 +54,7 @@ It is important to notice that the entanglement entropy in this example is total
 
 ##### Using Python
 
-The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the [DMRG-02](../dmrg02) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates.
+The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
 
 ```python
 import pyalps
@@ -80,7 +80,7 @@ res = pyalps.runApplication('dmrg',input_file,writexml=True)
 data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
 ```
 
-While iterating over all measurements, we then extract the energies
+While iterating over all measurements, we then extract the energies:
 
 ```python
 energies = np.empty(0)
@@ -91,7 +91,7 @@ for s in data[0]:
         print(s.props['observable'], ':', s.y[0])
 ```
 
-and calculate the gap.
+and calculate the gap:
 
 ```python
 energies.sort()
@@ -123,7 +123,7 @@ You can download this file from here: [`spin_one_half_triplet`](https://github.c
 
 ##### Using Python
 
-The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters.
+The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
 
 ```python
 import pyalps
@@ -149,7 +149,7 @@ input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
 res = pyalps.runApplication('dmrg',input_file,writexml=True)
 ```
 
-After loading the results in the usual way we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary.
+After loading the results in the usual way we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary:
 
 ```python
 data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
@@ -165,7 +165,7 @@ for run in data:
             energies[sz] = s.y[0]
 ```
 
-Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors
+Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors:
 
 ```python
 print('Gap:', energies[1]-energies[0])
@@ -196,13 +196,13 @@ What gap do you read off if you take the longest chain you have? Is it over- or 
 
 The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$. What does the curve now look like for big lengths? Extrapolate the gap.
 
-The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy
+The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy:
 
 $$
 E(k) = E_0 + \sqrt{\Delta^2 + c^2 (k-\pi)^2}.
 $$
 
-For the open boundary conditions, we may approximate $k-\pi$ by $1/L$ (think about a particle in a box), which gives a finite-system size gap of
+For the open boundary conditions, we may approximate $k-\pi$ by $1/L$ (think about a particle in a box), which gives a finite-system size gap of:
 
 $$
 \Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 

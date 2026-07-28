@@ -24,7 +24,7 @@ In a last remark, let us consider the *truncation error*, which is a good indica
 
 ### Vive la difference ...
 
-The most important difference to other numerical methods is that DMRG prefers open boundary conditions, such that there are two chain ends at site 1 and $L$, not a closed loop as for example exact diagonalization and most analytical methods would prefer. This will lead to some of the more subtle aspects of DMRG calculations that show up throughout this tutorial series, from the special lattice needed for the spin-1 chain in [DMRG-02](../dmrg02) to the boundary-vs-bulk distinction in the excitations studied in [DMRG-05](../dmrg05).
+The most important difference to other numerical methods is that DMRG prefers open boundary conditions, such that there are two chain ends at site 1 and $L$, not a closed loop as for example exact diagonalization and most analytical methods would prefer. This will lead to some of the more subtle aspects of DMRG calculations that show up throughout this tutorial series, from the special lattice needed for the spin-1 chain in [DMRG-03](../dmrg03) to the boundary-vs-bulk distinction in the excitations studied in [DMRG-05](../dmrg05).
 
 ## The ALPS DMRG Code and Its Control Parameters
 
@@ -66,11 +66,3 @@ Default input values are not recommended. DMRG convergence is strongly affected 
 In order to determine if enough sweeps have been performed, one could look at the spatial distribution of the correlations, or local quantities such as the spin magnetization, or the particle density. For instance, in a model that is symmetric under reflections, we should expect that these observables will also be symmetric. Another quantity that should be symmetric is the entanglement entropy. If this behavior is not reflected in the results, it is likely that this is due to not having enough sweeps in the calculation (another plausible scenario is phase separation).
 
 If the Hamiltonian preserves quantum numbers, such as Sz or N, it is then possible to fix these values to run the simulation in a subspace of reduced dimension. This results in much faster runs, and reduced memory usage.
-
-## Roadmap
-
-- [DMRG-02 Ground State Energies](../dmrg02) — sets up the first `dmrg` runs, computing ground state energies of the spin-1/2 and spin-1 Heisenberg chains for fixed system sizes, and extracting the energy per site (or per bond) in the thermodynamic limit.
-- [DMRG-03 Heisenberg Spin Chains](../dmrg03) — introduces the two models used throughout the series in depth: the critical, gapless spin-1/2 chain and the gapped, non-critical spin-1 (Haldane) chain, with the exact and numerical benchmark values used in the tutorials that follow.
-- [DMRG-04 Gaps](../dmrg04) — computes the singlet-triplet gap of the spin-1/2 chain and the Haldane gap of the spin-1 chain at finite length, and extrapolates both to the thermodynamic limit.
-- [DMRG-05 Local Observables](../dmrg05) — uses the local magnetization profile to tell boundary excitations from bulk excitations in the spin-1 chain, a subtlety introduced by DMRG's preference for open boundary conditions.
-- [DMRG-06 Correlations](../dmrg06) — computes spin-spin correlation functions, extracting the critical power-law exponent of the spin-1/2 chain and the correlation length of the spin-1 chain.
