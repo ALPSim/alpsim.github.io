@@ -1,60 +1,70 @@
 
 ---
-title: DMRG-02 Gaps
+title: DMRG-02 Ground State Energies
 math: true
 toc: true
 ---
 
-## Calculating The Gap
-
-As already mentioned, the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state
+In this tutorial we put the `dmrg` code and the control parameters introduced in [DMRG-01](../dmrg01) to work on the simplest possible target: the ground state energy. We consider the spin-1/2 and spin-1 antiferromagnetic Heisenberg chains of length $L$ with open boundary conditions,
 
 $$
-\Delta = E_1 - E_0
+H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
-in the thermodynamic limit. This means we have to solve two problems, (i) the calculation of
+A full discussion of the physics of these two models — including their gaps and the asymptotic decay of their spin correlations — is deferred to [DMRG-03](../dmrg03); here we only need the Hamiltonian itself to set up the calculation.
 
-$$
-\Delta(L) = E_1 (L) - E_0 (L)
-$$
+## Ground State Energies
 
-for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of DMRG's preference for open boundary conditions it is somewhat more complicated than in the more usual case of periodic boundary conditions.
+The first question we usually ask is about the ground state $| \psi_0 \rangle$ and its energy $E_0$. Here we have to distinguish two cases.
 
-### Getting The Gap For Finite Systems
+First, we might be interested in the ground state energy for a given Hamiltonian on a chain of a given length $L$. Secondly, we might be interested in the energy per site (or per bond) in the thermodynamic limit.
 
-Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
+### Fixed Length Ground State Energies
 
-1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described well.
+Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up ground state energy calculations for numbers of states $D=50,100,150,200,300$. For each length, tabulate the truncation error and the ground state energies as a function of $D$. Experiment carefully with the number of sweeps to assure that for a given length and number of states your result is actually converged.
 
-2. The smarter way reduces the gap calculation to the calculation of two ground states. In many quantum systems, the ground state and the first excited state differ by a good quantum number and therefore are both ground states in the respective sectors. For example, for the spin-1/2 chain, the ground state is a singlet of total spin 0, and hence the ground state in the sector of magnetization 0. The first excited state is a triplet of total spin 1, i.e. consists of one excited state of magnetization 0, and the ground states of the sectors of magnetization +1 and -1, respectively. It can, therefore, be calculated as the ground state in magnetization sector +1.
+1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
 
-Let us do this calculation first for the spin-1/2 chain:
+2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1. Apart from a global factor of order of the length, do you see a difference between the convergence behaviour in the two cases? *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
 
-#### Example: without quantum numbers
+3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
 
-##### Using parameter files
+#### The one dimensional S=1/2 Heisenberg chain
 
-In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap.
+##### Single run
+
+The first example consists of setting up a simulation for a spin-1/2 Heisenberg chain with 32 sites, and open boundary conditions, keeping 100 states.
+
+###### Using parameter files
+
+The parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half) sets the most important parameters.
 
 ```python
 LATTICE="open chain lattice"
-MODEL="spin"
-CONSERVED_QUANTUMNUMBERS="N,Sz"
+MODEL="spin" 
+CONSERVED_QUANTUMNUMBERS="N,Sz" 
 Sz_total=0
 J=1
 SWEEPS=4
-{L=32, MAXSTATES=100
-NUMBER_EIGENVALUES=2}
+NUMBER_EIGENVALUES=1
+L=32 
+{MAXSTATES=100}
 ```
-    
-Notice that we only added the last line, specifying the number of eigenstates to calculate. By targeting both states, the algorithm ensures that both are represented accurately. However, this is not quite true if we keep only 100 states. Compare the energy for the ground-state obtained with the present parameter file, and the previous simulation targeting only the ground state.
 
-It is important to notice that the entanglement entropy in this example is totally meaningless, since the algorithm is calculating a density matrix mixing two states.
+Using the following sequence of commands you can first convert the input parameters to XML and then run the application `dmrg`:
 
-##### Using Python
+```python
+parameter2xml spin_one_half
+dmrg --write-xml spin_one_half.in.xml
+```
 
-The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the DMRG-01 tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates.
+The output file `spin_one_half.task1.out.xml` contains all the computed quantities and can be viewed with a standard internet browser.
+
+DMRG will perform four sweeps, (four half-sweps from left to right and four half-sweeps from right to left) growing the basis in steps of MAXSTATES/(2\*SWEEPS) until reaching the MAXSTATES=100 value we have declared. This is a convenient default option, but the number of states can be customized, as we show in the spin S=1 example below.
+
+###### Using Python
+
+To set up and run the simulation in Python we use the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half.py). The first part of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application.
 
 ```python
 import pyalps
@@ -69,145 +79,252 @@ parms = [ {
         'Sz_total'                  : 0,
         'J'                         : 1,
         'SWEEPS'                    : 4,
+        'NUMBER_EIGENVALUES'        : 1,
         'L'                         : 32,
-        'MAXSTATES'                 : 100,
-        'NUMBER_EIGENVALUES'        : 2
+        'MAXSTATES'                 : 100
        } ]
 
-input_file = pyalps.writeInputFiles('parm_spin_one_half_gap',parms)
+input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
 res = pyalps.runApplication('dmrg',input_file,writexml=True)
-
-data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
 ```
 
-While iterating over all measurements, we then extract the energies
+To run this, in your computer terminal type
+```python 
+python spin_one_half.py
+```
+We now have the same output files as in the command line version.
+
+Next, we load the properties of the ground state measured by the DMRG code
 
 ```python
-energies = np.empty(0)
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```
+and print them to the terminal.
+
+```python
 for s in data[0]:
-    if s.props['observable'] == 'Energy':
-        energies = s.y
-    else:
-        print(s.props['observable'], ':', s.y[0])
+    print(s.props['observable'], ':', s.y[0])
 ```
 
-and calculate the gap.
+Additionally, we can load detailed data for each iteration step.
 
 ```python
-energies.sort()
-print('Energies:', end=' ')
-for e in energies:
-    print(e, end=' ')
-print('\nGap:', abs(energies[1]-energies[0]))
+iter = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'),
+                          what=['Iteration Energy','Iteration Truncation Error'])
 ```
 
-#### Example: with quantum numbers
+The above allows us to look at how the DMRG algorithm converged to the final results.
 
-To calculate the singlet-triplet gap taking advantage of quantum number conservation we need to perform two independent simulations, one with Sz=0, and another one with Sz=1. The difference of the two energies will yield the gap.
+We finally plot the convergence of various quantities as functions of iterations.
+```python
+plt.figure()
+pyalps.plot.plot(iter[0][0])
+plt.title('Iteration history of ground state energy (S=1/2)')
+plt.ylim(-15,0)
+plt.ylabel('$E_0$')
+plt.xlabel('iteration')
 
-##### Using parameter files
+plt.figure()
+pyalps.plot.plot(iter[0][1])
+plt.title('Iteration history of truncation error (S=1/2)')
+plt.yscale('log')
+plt.ylabel('error')
+plt.xlabel('iteration')
 
-This means that we only need to change the value of Sz_total in the spin_one_half parameter file:
+plt.show()
+```
+
+##### Multiple runs
+
+###### Using parameter files
+
+We now proceed to illustrate how to setup several runs in a single parameter file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple). We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
 
 ```python
 LATTICE="open chain lattice"
-MODEL="spin"
-CONSERVED_QUANTUMNUMBERS="N,Sz"
-Sz_total=1
 SWEEPS=4
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+MODEL="spin", Sz_total=0
 J=1
-{L=32, MAXSTATES=40}
+NUMBER_EIGENVALUES=1
+L=32
+{ MAXSTATES=20 }
+{ MAXSTATES=40 }
+{ MAXSTATES=60 }
 ```
 
-You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
-
-##### Using Python
-
-The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters.
+As we can see, the main difference with the previous example exists in the parameters encoded in the brackets. As before, we run:
 
 ```python
-import pyalps
-import numpy as np
-import matplotlib.pyplot as plt
-import pyalps.plot
+parameter2xml spin_one_half_multiple
+dmrg --write-xml spin_one_half_multiple.in.xml
+```
 
-parms = []
-for sz in [0,1]:
-    parms.append( { 
+In this case, we will find three output files `spin_one_half_multiple.task#.out.xml` containing the results.
+
+###### Using Python
+
+The script [`spin_one_half_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple.py) sets up three Python dictionaries of parameters with differing MAXSTATES
+
+```python
+parms= []
+for m in [20,40,60]:
+    parms.append({ 
         'LATTICE'                   : "open chain lattice", 
         'MODEL'                     : "spin",
         'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-        'Sz_total'                  : sz,
+        'Sz_total'                  : 0,
         'J'                         : 1,
         'SWEEPS'                    : 4,
+        'NUMBER_EIGENVALUES'        : 1,
         'L'                         : 32,
-        'MAXSTATES'                 : 40,
-        'NUMBER_EIGENVALUES'        : 1
-       } )
-       
-input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
-res = pyalps.runApplication('dmrg',input_file,writexml=True)
+        'MAXSTATES'                 : m
+       })
+
 ```
 
-After loading the results in the usual way we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary.
+After writing parameter files, running the dmrg application, and loading the results in the same way as for the single run above, we can print the measurements from all runs.
 
 ```python
-data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
-
-# print results:
-energies = {}
 for run in data:
-    print('S_z =', run[0].props['Sz_total'])
     for s in run:
-        print('\t', s.props['observable'], ':', s.y[0])
-        if s.props['observable'] == 'Energy':
-            sz = s.props['Sz_total']
-            energies[sz] = s.y[0]
+        print(s.props['observable'], ':', s.y[0])
 ```
 
-Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors
+#### The one dimensional S=1 Heisenberg chain
+
+The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing
 
 ```python
-print('Gap:', energies[1]-energies[0])
+python build_lattice.py 6
 ```
 
-### Extrapolating The Gap To The Thermodynamic Limit
+we shall obtain the output
 
-In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger. Discuss why this might be.
+```python
+<LATTICES>
+<GRAPH name = "open chain lattice with special edges" dimension="1" vertices="6" edges="5">
+<VERTEX id="1" type="0"><COORDINATE>0</COORDINATE></VERTEX>
+<VERTEX id="2" type="1"><COORDINATE>2</COORDINATE></VERTEX>
+<VERTEX id="3" type="1"><COORDINATE>3</COORDINATE></VERTEX>
+<VERTEX id="4" type="1"><COORDINATE>4</COORDINATE></VERTEX>
+<VERTEX id="5" type="1"><COORDINATE>5</COORDINATE></VERTEX>
+<VERTEX id="6" type="0"><COORDINATE>6</COORDINATE></VERTEX>
+<EDGE source="1" target="2" id="1" type="0" vector="1"/>
+<EDGE source="2" target="3" id="2" type="0" vector="1"/>
+<EDGE source="3" target="4" id="3" type="0" vector="1"/>
+<EDGE source="4" target="5" id="4" type="0" vector="1"/>
+<EDGE source="5" target="6" id="5" type="0" vector="1"/>
+</GRAPH>
+</LATTICES>
+```
 
-In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error). What does the plot of the gap versus $1/L$ look like now?
+As we can see, the lattice is defined as a one-dimensional graph that contains six vertices, and edges connecting nearest neighbors. The first and last vertices are of type "0", while the others are of type "1". We shall use this definition to implement the model on top of this lattice, which should contain information about the degrees of freedom living on these vertices.
 
-Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
+The way to do this is by specifying the parameters:
 
+```python
+local_S0=0.5
+local_S1=1
+```
 
-The case of the spin-1/2 chain is a bit frustrating, because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
+To run a lattice with 32 sites we shall then type
 
-Let us therefore turn to a more rewarding question, what is the gap of the spin-1 antiferromagnetic Heisenberg chain?
+```python
+python build_lattice.py 32 > my_lattice.xml
+```
 
-Here, there is a nasty twist, which we will only state and perform at the moment, but explain later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
+##### Using parameter files
 
-Assume you have $\Delta (L)$ with machine precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ with $D=300$ states each and 5 sweeps.
+Let us see how the final parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one) should look like:
 
-As the effects of the open ends will decrease as $1/L$, it always makes sense to first plot the gaps $\Delta (L)$ versus $1/L$, as was already done in the spin-1/2 case. Produce such a plot.
+```python
+LATTICE_LIBRARY="my_lattice.xml"
+LATTICE="open chain lattice with special edges"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+J=1
+SWEEPS=4
+NUMBER_EIGENVALUES=1
+{MAXSTATES=100}
+```
 
-What you see is a curve that is quite straight for small L and then starts bending upward. What gap would you obtain if you extrapolate the linear part of the curve naively? (This question is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.) Is it over- or underestimated?
+Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler one is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modifing the previous parameter file by replacing the lattice definition as follows:
 
-What gap do you read off if you take the longest chain you have? Is it over- or underestimated?
+```python
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 32"
+```
+where we have included the lattice size in the name.
 
-The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$. What does the curve now look like for big lengths? Extrapolate the gap.
+##### Using Python
 
-The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy
+The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one.py) defines the parameters in a Python dictionary.
+
+```python
+parms = [ { 
+        'LATTICE_LIBRARY'           : 'my_lattice.xml',
+        'LATTICE'                   : 'open chain lattice with special edges',
+        'MODEL'                     : 'spin',
+        'local_S0'                  : '0.5',
+        'local_S1'                  : '1',
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : 0,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'NUMBER_EIGENVALUES'        : 1,
+        'MAXSTATES'                 : 100
+       } ]
+```
+
+Apart from parameter and file name changes, it is the same as the `spin_one_half.py` script explained above.
+
+##### Multiple runs
+
+###### Using parameter files
+
+Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named [`spin_one_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple) as follows:
+
+```python
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 32"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+J=1 
+NUMBER_EIGENVALUES=1 
+SWEEPS=4
+{ MAXSTATES=20 } 
+{ MAXSTATES=40 }
+{ MAXSTATES=60 }
+```
+
+###### Using Python
+
+The same runs can be set up with the script [`spin_one_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple.py), which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
+
+### Ground State Energies Per Site (Bond)
+
+If we look closely at the Hamiltonian, the energy of a chain of length $L$ does not sit on the $L$ sites, but on the $L-1$ bonds. A first (naive) attempt therefore consists of taking the results of the last simulations and calculating
 
 $$
-E(k) = E_0 + \sqrt{\Delta^2 + c^2 (k-\pi)^2}.
+e_0/J = \frac{E_0(L)}{L-1}.
 $$
 
-For the open boundary conditions, we may approximate $k-\pi$ by $1/L$ (think about a particle in a box), which gives a finite-system size gap of
+Do you get values really close to the ones listed in [DMRG-03](../dmrg03)? What is wrong with the underlying assumption?
 
+The correct way is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing it.
+
+1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond. What do the results look like now?
+
+2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighbouring sites and use
 $$
-\Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 
+e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$
 
-and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$. How close do you get to the result $\Delta/J=0.41052$?
-
-For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted and start worrying: why is the finite gap the right one and the vanishing gap the wrong one? Is this a physics lottery? In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+for sites $i,i+1$ at the chain center.

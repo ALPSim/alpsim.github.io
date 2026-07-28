@@ -1,111 +1,68 @@
 
 ---
-title: DMRG-03 Local Observables
+title: DMRG-03 Heisenberg Spin Chains
 math: true
 toc: true
 ---
 
-We consider observables that are linked to one specific site to be local observables. In the case of spin chains, the meaningful local observable is the local magnetization $\langle S^z_i \rangle$ .
+## Models: Heisenberg Spin Chains
 
-## Excitations in the Spin-1 Chain
+For applications of DMRG, we consider two models, namely the spin-1/2 and the spin-1 antiferromagnetic Heisenberg chains of length L given by the following Hamiltonian,
 
-Take a chain of length $L=96$ and $D=200$. Calculate the local magnetization $\langle S^z_i \rangle$  and plot it versus the site $i$ for the ground states in the magnetisation sectors 0, 1, and 2.
+$$
+H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
+$$
 
-What you should obtain is an essentially flat curve for sector 0, a magnetisation which is essentially concentrated at the chain ends for sector 1, and a magnetisation which is both at the chain ends and in the bulk of the chain for sector 2. This means that the first excitation of the open chain is a boundary excitation, which would not exist on a closed system, and the second excitation of the open chain is a boundary plus a bulk excitation, which is the one we are interested in. For an as of now unknown reason, the energy of the first bulk excitation therefore has to be extracted from comparing sectors 1 and 2.
+The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behaviour and pose very different challenges to the DMRG algorithm. Having already computed ground state energies for both chains in [DMRG-02](../dmrg02), let us now briefly review their physical properties in more depth, so that we know what to expect from the gap and correlation calculations of the following tutorials.
 
-The moral of the story is that by looking at this local observable, we can distinguish boundary from bulk excitations in the spin-1 chain.
+### Spin-1/2 Chain
 
-### Using parameter files
+The ground state of the spin-1/2 chain can be constructed exactly by the Bethe ansatz; we therefore know its ground state energy exactly. In the thermodynamic limit $L\rightarrow\infty$ the energy per site is given by
 
-The following parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one) will setup three individual runs, one for each spin sector (same as before, we shall use a smaller system and number of states for illustration):
+$$
+E_0/J = 1/4 - \ln 2 = -0.4431471805599... 
+$$
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    J=1
-    NUMBER_EIGENVALUES=1
-    SWEEPS=4
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MAXSTATES=40
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+Ground state energies as such are of limited interest if not compared to other energies. But this one can serve as a beautiful benchmark of the DMRG method, as you may already have verified in DMRG-02. Of more interest is whether the ground state is separated from the excited states by an energy difference that survives also in the thermodynamic limit, i.e. whether the *gap* is vanishing or not. For the spin-1/2 chain, the gap is 0.
 
-### Using Python
+At the same time, one may ask what the correlation between spins on different sites looks like. One knows for the infinitely long spin-1/2 chain that asymptotically (i.e. for $|i-j| \rightarrow \infty$)
 
-The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one.py) runs one simulation for each of the three spin sectors.
+$$
+ \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
+$$
 
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = []
-    for sz in [0,1,2]:
-        parms.append( { 
-            'LATTICE_LIBRARY'           : 'my_lattices.xml',
-            'LATTICE'                   : 'open chain lattice with special edges 32',
-            'MODEL'                     : "spin",
-            'local_S0'                  : '0.5',
-            'local_S1'                  : '1',
-            'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-            'Sz_total'                  : sz,
-            'J'                         : 1,
-            'SWEEPS'                    : 4,
-            'NUMBER_EIGENVALUES'        : 1,
-            'MAXSTATES'                 : 40,
-            'MEASURE_LOCAL[Local magnetization]'   : 'Sz'
-    } )
-    
-    input_file = pyalps.writeInputFiles('parm_spin_one',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
+This means that the spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*; in this case the exponent of the power law is obviously $-1$. There is also an additional square root of a logarithm correction which can be beautifully verified by DMRG calculations on very long chains, but given the very slow increase of the logarithm with its argument, we can ignore it in a first go.
 
-After loading the data files, we can extract the results for the local magnetization
+### Spin-1 Chain
 
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one'))
+For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications right for this system.
 
-    curves = []
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Local magnetization':
-                sz = s.props['Sz_total']
-                s.props['label'] = '$S_z = ' + str(sz) + '$'
-                s.y = s.y.flatten()
-                curves.append(s)
+Unlike the spin-1/2 chain, the spin-1 chain has no properties that can be calculated exactly by analytical means. We have to rely completely on numerics when it comes to quantitative statements.
 
-and plot them.
+The ground state energy per site is given by
 
-    plt.figure()
-    pyalps.plot.plot(curves)
-    plt.legend()
-    plt.title('Magnetization of antiferromagnetic Heisenberg chain (S=1)')
-    plt.ylabel('local magnetization')
-    plt.xlabel('site')
-    plt.show()
+$$
+ E_0/J = -1.401484039 ... .
+ $$
 
-## Magnetisation in the Spin-1/2 Chain
+Again, the question of the existence of a gap is more important, and here one of the big differences to the spin-1/2 chain becomes visible: in the thermodynamic limit, the gap in the spin-1 chain is finite and given by
 
-Repeat a similar calculation for the spin-1/2 chain in the lowest magnetisation sectors. What do you observe here?
+$$
+ \Delta/J = 0.41052 
+ $$
 
-### Using parameter files
+to five-digit accuracy.
 
-The following parameter file will accomplish this, downloadable [here](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half):
+The question for the behaviour of the spin-spin correlations leads to yet another big difference to the spin-1/2 case. The correlations read asymptotically (i.e. for $|i-j| \rightarrow \infty$)
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    SWEEPS=4
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_LOCAL[Local magnetization]=Sz
-    L=32
-    MAXSTATES=40
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+$$
+ \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\exp (-|i-j|/\xi)}{\sqrt{|i-j|}}  .
+$$
 
-### Using Python
+The dominant contribution is now the exponential decay which happens on a length scale $\xi$, the *correlation length* which in this particular case is found numerically to be $\xi=6.02$. There is an analytic (power law) correction by a square root of the distance in the denominator, but this is often neglected in calculations of the correlation length, as it is a slow contribution compared to the fast exponential decay. It would matter, of course, if the correlation length were much larger.
 
-Apart from the obvious parameter changes, the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half.py) is the same as the `spin_one` script explained above.
+The spin-1 chain is therefore a prime example for a *non-critical* quantum system with finite gap and exponentially decaying correlations. As it will turn out, for DMRG this type of system is much easier to simulate.
+
+### Plan Of The Remaining Tutorials
+
+Having established these benchmark values, [DMRG-04](../dmrg04) shows how to extract the gap $\Delta$ from DMRG calculations at finite $L$ and how to extrapolate it to the thermodynamic limit, [DMRG-05](../dmrg05) uses local observables such as the magnetization profile to distinguish boundary from bulk excitations, and [DMRG-06](../dmrg06) computes the spin-spin correlation functions directly, extracting the power-law exponent for the spin-1/2 chain and the correlation length $\xi$ for the spin-1 chain.
