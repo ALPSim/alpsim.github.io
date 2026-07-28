@@ -55,11 +55,17 @@ $$
 \eta_{\rm eff}(r) = -\frac{d\ln C}{d\ln r} = 1 - \frac{1}{2\ln r} .
 $$
 
-As $r\rightarrow\infty$, $1/(2\ln r)\rightarrow 0$ and $\eta_{\rm eff}(r)\rightarrow 1$: the square root of a logarithm in $C(r)$ does not change the leading power law, it only shifts the *effective* exponent measured at finite $r$ below its asymptotic value $\eta=1$. This is exactly the correction referred to above, and it can be beautifully verified by DMRG calculations on very long chains. But because $\ln r$ itself grows so slowly, $1/(2\ln r)$ vanishes only very slowly with $r$ — so on any finite chain accessible to DMRG, $\eta_{\rm eff}(r)$ will sit visibly below 1 and creep towards it only gradually. For a first pass we ignore this correction and simply use $\eta=1$ as the target, but keep in mind that your numerically extracted exponent will typically undershoot it.
+Taking the limit $r\rightarrow\infty$ then gives the asymptotic exponent:
+
+$$
+\eta = \lim_{r\rightarrow\infty} \eta_{\rm eff}(r) = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1 - \lim_{r\rightarrow\infty}\frac{1}{2\ln r} = 1 .
+$$
+
+The square root of a logarithm in $C(r)$ does not change the leading power law, it only shifts the *effective* exponent measured at finite $r$ below its asymptotic value $\eta=1$. This is exactly the correction referred to above, and it can be beautifully verified by DMRG calculations on very long chains. But because $\ln r$ itself grows so slowly, $1/(2\ln r)$ vanishes only very slowly with $r$ — so on any finite chain accessible to DMRG, $\eta_{\rm eff}(r)$ will sit visibly below 1 and creep towards it only gradually. For a first pass we ignore this correction and simply use $\eta=1$ as the target, but keep in mind that your numerically extracted exponent will typically undershoot it.
 
 ### Spin-1 Chain
 
-For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications right for this system.
+For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out ([F.D.M. Haldane, Phys. Rev. Lett. 50, 1153 (1983)](https://doi.org/10.1103/PhysRevLett.50.1153)) that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications right for this system.
 
 Unlike the spin-1/2 chain, the spin-1 chain has no properties that can be calculated exactly by analytical means. We have to rely completely on numerics when it comes to quantitative statements.
 
