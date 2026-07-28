@@ -31,7 +31,7 @@ $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
 $$
 
-The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arrises from a marginally irrelevant operator and does not contribute to scaling as discussed in {place link to ED 4 or 5, see which one has this scaling}.  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
+The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arrises from a marginally irrelevant operator and does not contribute to scaling, as discussed for the same Heisenberg chain in [ED-04](../../ed/ed04).  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
 
 $$
 \eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,
@@ -41,7 +41,7 @@ So the exponent measured at any finite distance $r$ is:
 
 $$
 C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r},\qquad
-\eta(r) =  1 - \frac{1}{2\ln r} = 1.
+\eta = \lim_{r\rightarrow\infty} \eta(r) = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1.
 $$
 
 This is exactly the correction referred to above, and it can be beautifully verified by DMRG calculations on very long chains. But because $\ln r$ itself grows so slowly, $1/(2\ln r)$ vanishes only very slowly with $r$ — so on any finite chain accessible to DMRG, $\eta_{\rm eff}(r)$ will sit visibly below 1 and creep towards it only gradually. For a first pass we ignore this correction and simply use $\eta=1$ as the target, but keep in mind that your numerically extracted exponent will typically undershoot it.
