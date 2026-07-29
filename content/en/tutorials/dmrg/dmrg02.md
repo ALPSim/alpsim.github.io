@@ -31,16 +31,15 @@ $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
 $$
 
-The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}/|i-j|^{\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arises from a marginally irrelevant operator and does not modify scaling asymptotically, as discussed in [ED-04](../../ed/ed04).  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
+The spin-1/2 chain is *critical*, i.e. the antiferromagnetic correlations between spins decay with their distance following a *power law*, $\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}\cdot|i-j|^{-\eta}$, with critical exponent $\eta=-1$. The nasty looking logarithm arises from a marginally irrelevant operator and does not modify scaling asymptotically, as discussed in [ED-04](../../ed/ed04).  A critical exponent is, by definition, the logarithmic derivative of the correlator $C(r)$ with respect to distance in the asymptotic limit:
 
 $$
-\eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,
+\eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,\qquad C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r}
 $$
 
 So the exponent measured at any finite distance $r$ is:
 
 $$
-C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r},\qquad
 \eta = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1.
 $$
 
@@ -48,7 +47,7 @@ This is exactly the correction referred to above, and it can be beautifully veri
 
 ### Spin-1 Chain
 
-For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications right for this system.
+For decades, people thought that the spin-1 chain would behave similarly, of course with some quantitative differences due to the different spin lengths. It came as a big surprise in 1982 when Duncan Haldane pointed out that there should be a fundamental difference between isotropic antiferromagnetic Heisenberg chains depending on the length of the spin, namely between half-integer spins ($S=1/2,3/2,...$) and integer spins ($S=1$), with the difference being most pronounced for small spin lengths. Hence, the spin-1 chain became the focus of strong interest, and in fact DMRG had some of its most important early applications for this system.
 
 Unlike the spin-1/2 chain, the spin-1 chain has no properties that can be calculated exactly by analytical means. We have to rely completely on numerics when it comes to quantitative statements.
 
@@ -74,7 +73,7 @@ $$
 
 The dominant contribution is now the exponential decay which happens on a length scale $\xi$, the *correlation length* which in this particular case is found numerically to be $\xi=6.02$. There is an analytic (power law) correction by a square root of the distance in the denominator, but this is often neglected in calculations of the correlation length, as it is a slow contribution compared to the fast exponential decay. It would matter, of course, if the correlation length were much larger.
 
-The spin-1 chain is therefore a prime example for a *non-critical* quantum system with finite gap and exponentially decaying correlations. As it will turn out, for DMRG this type of system is much easier to simulate.
+The spin-1 chain is therefore a prime example for a *non-critical* quantum system with finite gap and exponentially decaying correlations. As it turns out, this is the ideal type of system for DMRG to simulate.
 
 ### Plan Of The Remaining Tutorials
 
