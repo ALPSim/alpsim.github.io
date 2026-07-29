@@ -41,7 +41,7 @@ So the exponent measured at any finite distance $r$ is:
 
 $$
 C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r},\qquad
-\eta = \lim_{r\rightarrow\infty} \eta(r) = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1.
+\eta = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1.
 $$
 
 This is exactly the correction referred to above, and it can be beautifully verified by DMRG calculations on very long chains. But because $\ln r$ itself grows so slowly, $1/(2\ln r)$ vanishes only very slowly with $r$ — so on any finite chain accessible to DMRG, $\eta_{\rm eff}(r)$ will sit visibly below 1 and creep towards it only gradually. For a first pass we ignore this correction and simply use $\eta=1$ as the target, but keep in mind that your numerically extracted exponent will typically undershoot it.
