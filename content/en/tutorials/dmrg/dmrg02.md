@@ -23,7 +23,7 @@ $$
 E_0/J = 1/4 - \ln 2 = -0.4431471805599... 
 $$
 
-Ground state energies as such are of limited interest if not compared to other energies. But this one can serve as a beautiful benchmark of the DMRG method, as we will verify numerically in [DMRG-03](../dmrg03). Of more interest is whether the ground state is separated from the excited states by an energy difference that survives also in the thermodynamic limit, i.e. whether the *gap* is vanishing or not. For the spin-1/2 chain, the gap is 0.
+Ground state energies as such are of limited interest if not compared to other energies. However, this one can serve as a beautiful benchmark of the DMRG method, as we will verify numerically in [DMRG-03](../dmrg03). Of more interest is whether the ground state is separated from the excited states by an energy difference that survives also in the thermodynamic limit, i.e. whether the *gap* is vanishing or not. For the spin-1/2 chain, the gap is 0.
 
 At the same time, one may ask what the correlation between spins on different sites looks like. One knows for the infinitely long spin-1/2 chain that asymptotically (i.e. for $|i-j| \rightarrow \infty$):
 
