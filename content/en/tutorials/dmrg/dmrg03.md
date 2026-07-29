@@ -13,9 +13,7 @@ $$
 
 ## Ground State Energies
 
-The first question we usually ask is about the ground state $| \psi_0 \rangle$ and its energy $E_0$. Here we have to distinguish two cases.
-
-First, we might be interested in the ground state energy for a given Hamiltonian on a chain of a given length $L$. Secondly, we might be interested in the energy per site (or per bond) in the thermodynamic limit.
+When studying a model Hamiltonian, the first question we usually ask is what is the ground state $| \psi_0 \rangle$ and its energy $E_0$. For the Heisenberg chain of length $L$, and other similar systems, we might be more interested in the energy per site (or per bond) in the thermodynamic limit. Both of these will be considered below.
 
 ### Fixed Length Ground State Energies
 
@@ -250,7 +248,7 @@ NUMBER_EIGENVALUES=1
 {MAXSTATES=100}
 ```
 
-Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler one is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modifing the previous parameter file by replacing the lattice definition as follows:
+Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler approach is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
 
 ```python
 LATTICE_LIBRARY="my_lattices.xml"
@@ -314,16 +312,16 @@ $$
 e_0/J = \frac{E_0(L)}{L-1}.
 $$
 
-The correct way is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing it.
+The correct approach is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing this.
 
 1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
 
-2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighbouring sites and use:
+2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighbouring sites:
 $$
 e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$
 
-for sites $i,i+1$ at the chain center.
+for sites $i$ and $i+1$ at the chain center.
 
 ## Questions
 
