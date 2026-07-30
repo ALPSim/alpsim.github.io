@@ -1,193 +1,229 @@
 
 ---
-title: DMRG-04 Correlations
+title: DMRG-04 Gaps
 math: true
 toc: true
 ---
 
-## Correlation Functions
+## Calculating The Gap
 
-The most important correlation functions in many-body physics are two-point correlators, i.e. correlators that involve two sites $i$ and $j$, such as $\langle S^+_i S^-_j \rangle$. Short-ranged ones determine energies (in the typical short-ranged Hamiltonians of correlation physics), long-ranged ones determine correlation lengths.
-
-### Another Go At The Energy Per Bond
-
-As already mentioned above, the ground state energy per bond in both spin-1/2 and spin-1 chain is given by
+As already mentioned in [DMRG-02](../dmrg02), the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state:
 
 $$
-e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
+\Delta = E_1 - E_0
 $$
 
-This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance.
+in the thermodynamic limit. This means we have to solve two problems, (i) the calculation of:
 
-Obviously, the bonds that are closest to the thermodynamic limit behaviour are those in the chain center. So, the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$.
+$$
+\Delta(L) = E_1 (L) - E_0 (L)
+$$
 
-Before you do this, however, plot for some values of $D$ and not too small $L e_0(i)$ versus $i$ (as a check of the program, you may also consider the three contributions individually before you do the sum. What relationship between them should exist?).
+for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of DMRG's preference for open boundary conditions it is somewhat more complicated than in the more usual case of periodic boundary conditions.
 
-What do you observe for spin-1? And what for spin-1/2?
+### Getting The Gap For Finite Systems
 
-For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends make themselves felt very strongly due to criticality and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond; you immediately gain lots of accuracy. This is yet another example that it is worthwhile to have a close look at the actual output of DMRG by considering various local or (here) almost local observables.
+Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
 
-### Spin-Spin Correlations: Spin-1/2
+1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described accurately.
 
-Take a relatively long chain (say, $L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+2. The smarter way reduces the gap calculation to the calculation of two ground states. In many quantum systems, the ground state and the first excited state differ by a good quantum number and therefore are both ground states in the respective sectors. For example, for the spin-1/2 chain, the ground state is a singlet of total spin 0, and hence the ground state in the sector of magnetization 0. The first excited state is a triplet of total spin 1, i.e. consists of one excited state of magnetization 0, and the ground states of the sectors of magnetization +1 and -1, respectively. It can, therefore, be calculated as the ground state in magnetization sector +1.
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is l. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible; there are also other ways of doing this (like averaging over several correlators with same site distance, also more or less centered). As we expect a power law, use a log-log plot. Take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
+Let us start by doing these calculation for the spin-1/2 chain.
 
-What you should see, is a power law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power laws by such superpositions - at large distance, the slowest exponential decay will survive all the others, replacing the power law by an exponential law. The larger you choose $D$, the further you push out this crossover.
+#### Example: without quantum numbers
 
-#### Using parameter files
+##### Using parameter files
 
-The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half) will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric.
+In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    L=32
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
-
-#### Using Python
-
-The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) sets up three runs with different numbers of states $D$ and loads the results.
-
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = []
-    for D in [20,40,60]:
-        parms.append( { 
-            'LATTICE'                               : 'open chain lattice', 
-            'MODEL'                                 : 'spin',
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 6,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'L'                                     : 32,
-            'MAXSTATES'                             : D,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-            } )
-            
-    input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```python
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+J=1
+SWEEPS=4
+{L=32, MAXSTATES=100
+NUMBER_EIGENVALUES=2}
+```
     
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+Notice that we only added the last line, specifying the number of eigenstates to calculate. By targeting both states, the algorithm ensures that both are represented accurately. However, this is not quite true if we keep only 100 states. Compare the energy for the ground-state obtained with the present parameter file with the previous simulation targeting only the ground state.
 
-Now we can extract e.g. Sz:Sz correlations
+It is important to notice that the entanglement entropy in this example is totally meaningless since the algorithm is calculating a density matrix mixing two states. In short, the algorithm targets both the ground state and first excited state in the $S_z=0$ sector, causing classical mixing uncertainty rather than pure quantum entanglement. To properly calculate entanglment entropy, one needs to independently diagonalize both the singlet and triplet sectors to avoid this mixing.
 
-    curves = []
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Diagonal spin correlations':
-                d = pyalps.DataSet()
-                d.props['observable'] = 'Sz correlations'
-                d.props['label'] = 'D = '+str(s.props['MAXSTATES'])
-                L = int(s.props['L'])
-                d.x = np.arange(L)
-           
-                # sites with increasing distance l symmetric to the chain center
-                site1 = np.array([int(-(l+1)/2.0) for l in range(0,L)]) + L/2
-                site2 = np.array([int(  l   /2.0) for l in range(0,L)]) + L/2
-                indices = L*site1 + site2
-                d.y = abs(s.y[0][indices])
-           
-                curves.append(d)
-and plot them vs. site distance.
+##### Using Python
 
-    plt.figure()
-    pyalps.plot.plot(curves)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.legend()
-    plt.title('Spin correlations in antiferromagnetic Heisenberg chain (S=1/2)')
-    plt.ylabel('correlations $| \\langle S^z_{L/2-l/2} S^z_{L/2+l/2} \\rangle |$')
-    plt.xlabel('distance $l$')
-    plt.show()
+The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
 
-### Spin-Spin Correlations: Spin-1
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
 
-In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again, choose a long chain (say,$L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+parms = [ { 
+        'LATTICE'                   : "open chain lattice", 
+        'MODEL'                     : "spin",
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : 0,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'L'                         : 32,
+        'MAXSTATES'                 : 100,
+        'NUMBER_EIGENVALUES'        : 2
+       } ]
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
+input_file = pyalps.writeInputFiles('parm_spin_one_half_gap',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
 
-From the log-lin plot, extract a correlation length. It will depend (and in fact monotonically increase with) $D$. Has it converged when you reach e.g. $D=300$? How does this compare to the convergence for the same number of states of local or quasi-local observables such as magnetization or energy?
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
+```
 
-In fact, the calculation of correlation lengths is much harder to converge than that of the local quantities. This is due to the fact that a more profound algorithmic analysis reveals DMRG to be an algorithm geared especially well to the optimal representation of local quantities, not so much non-local ones as long-ranged correlators.
+While iterating over all measurements, we then extract the energies:
 
-#### Using parameter files
+```python
+energies = np.empty(0)
+for s in data[0]:
+    if s.props['observable'] == 'Energy':
+        energies = s.y
+    else:
+        print(s.props['observable'], ':', s.y[0])
+```
 
-The parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one) looks much like the one for the previous example, but replacing the lattice and the model as follows:
+and calculate the gap:
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+```python
+energies.sort()
+print('Energies:', end=' ')
+for e in energies:
+    print(e, end=' ')
+print('\nGap:', abs(energies[1]-energies[0]))
+```
 
-#### Using Python
+#### Example: with quantum numbers
 
-The main difference of the script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) with respect to the previous one is the definition of lattice and model.
+To calculate the singlet-triplet gap taking advantage of quantum number conservation we need to perform two independent simulations, one with Sz=0, and another one with Sz=1. The difference of the two energies will yield the gap.
 
-    parms = []
-    L = 32
-    for D in [20,40,60]:
-        parms.append( { 
-            'LATTICE_LIBRARY'                       : 'my_lattices.xml',
-            'LATTICE'                               : 'open chain lattice with special edges '+str(L),
-            'MODEL'                                 : 'spin',
-            'local_S0'                              : 0.5,
-            'local_S1'                              : 1,
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 4,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'MAXSTATES'                             : D,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-        } )
+##### Using parameter files
 
-After running the simulation, correlations can be extracted and plotted in the same way as before.
+This means that we only need to change the value of Sz_total in the spin_one_half parameter file:
 
-### Sometimes There Is A Way Out
+```python
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=1
+SWEEPS=4
+J=1
+{L=32, MAXSTATES=40}
+```
 
-In the special case of the spin-1 chain, we have a loophole for the calculation of the correlation length, which is related to the weird observation that the first excitation was not a bulk excitation. It can be shown that a good toy model for a spin-1 chain is given as follows: at each site of a spin-1, you put two spin-1/2, and construct the spin-1 states from the triplet states of the two spin-1/2 at each site. The ground state is then approximated quite well by a state where you link two spin-1/2 on *neighbouring* sites by a singlet state.
+You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
 
-In this construction, for open boundary conditions (but not periodic ones), on the first and on the last site there will be two lonely spins-1/2 without partner. These two spins-1/2 can form 4 states among themselves, which in the toy model are degenerate: the ground state is four-fold degenerate. In the real spin-1 chain, this four-fold degeneracy (from one state of total spin 0 and three of total spin 1) is only achieved in the thermodynamic limit when the two spins are totally removed from each other. This is why there was no gap between magnetization sectors 0 and 1. The first bulk excitation needs magnetization 2.
+##### Using Python
 
-What we can do to cure this, is to attach one spin-1/2 before the first and after the last site, taking the same bond Hamiltonian, that link up to the two lonely spins by a singlet state. You may check that now the gap is between magnetization sectors 0 and 1!
+The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
 
-In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2, and be characterized by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
 
-For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length. What do you get?
+parms = []
+for sz in [0,1]:
+    parms.append( { 
+        'LATTICE'                   : "open chain lattice", 
+        'MODEL'                     : "spin",
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : sz,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'L'                         : 32,
+        'MAXSTATES'                 : 40,
+        'NUMBER_EIGENVALUES'        : 1
+       } )
+       
+input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```
+
+After loading the results in the usual way, we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary:
+
+```python
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
+
+# print results:
+energies = {}
+for run in data:
+    print('S_z =', run[0].props['Sz_total'])
+    for s in run:
+        print('\t', s.props['observable'], ':', s.y[0])
+        if s.props['observable'] == 'Energy':
+            sz = s.props['Sz_total']
+            energies[sz] = s.y[0]
+```
+
+Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors:
+
+```python
+print('Gap:', energies[1]-energies[0])
+```
+
+### Extrapolating The Gap To The Thermodynamic Limit
+
+In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger (see Questions below).
+
+In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
+
+The plot below shows the spin-1/2 singlet-triplet gap versus $1/L$ at fixed $D=100$: the four points sit close to a straight line through a small but clearly nonzero intercept, illustrating exactly the frustration described below — with only these four chain lengths it is hard to tell a genuinely vanishing gap from a very small finite one.
+
+![](/figs/dmrg/extrapolationGapSHalf.png)
+
+Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
+
+
+The case of the spin-1/2 chain is a bit frustrating because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But, who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
+
+Let us therefore turn to a more rewarding question, what is the gap of the spin-1 antiferromagnetic Heisenberg chain?
+
+Here, there is a nasty twist, which we will only state and perform at the moment, but explain later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
+
+Assume you have $\Delta (L)$ within your machine's precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ all with $D=300$ states and 5 sweeps.
+
+The effects of the open ends will decrease as $1/L$, so it makes sense to first plot the gaps $\Delta (L)$ versus $1/L$. This was already done in the spin-1/2 case to produce such a plot. What you see is a curve that is quite straight for small L and then starts bending upward. It would be ideal to have an idea of what the asymptotic behaviour is (the curved part for long lengths), analytically or approximately, to extrapolate. It is common to produce a plot of the gap $\Delta (L)$ versus $1/L^2$ to do so.
+
+The plot below shows the spin-1 gap versus $1/L^2$ at fixed $D=200$: the points now lie on a good straight line, extrapolating to an intercept close to the accepted Haldane gap $\Delta/J=0.41052$ (see [DMRG-02](../dmrg02)) — a much better behaved extrapolation than the spin-1/2 case above, consistent with the $1/L^2$ convergence derived below.
+
+![](/figs/dmrg/extrapolationGapSOne.png)
+
+This procedure was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy:
+
+$$
+E(k) = E_0 + \sqrt{\Delta^2 + c^2 (k-\pi)^2}.
+$$
+
+For the open boundary conditions, we may approximate $k-\pi$ by $1/L$ (think about a particle in a box), which gives a finite-system size gap of:
+
+$$
+\Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 
+$$
+
+and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$.
+
+For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically, but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+
+## Summary
+
+DMRG resolves the (likely vanishing) gap of the critical spin-1/2 chain and the finite Haldane gap of the spin-1 chain, but the two require different extrapolation strategies — $1/L$ for the near-gapless case versus $1/L^2$ for the gapped one — reflecting their different long-distance physics; [DMRG-05](../dmrg05) explains why the spin-1 gap must specifically be taken between magnetization sectors 1 and 2.
+
+## Questions
+
+- Why does the curvature of the gap-vs-$1/L$ plot straighten out as $D$ is increased at fixed chain lengths?
+- Extrapolating the gap in $D$ (or in the truncation error) at each fixed length before plotting versus $1/L$: what does the plot look like now, compared to the first attempt at fixed $D$?
+- If you extrapolate only the linear (small-$L$) part of the $\Delta(L)$ vs. $1/L$ curve for the spin-1 chain naively, what gap do you obtain, and is it over- or underestimated? (This is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.)
+- What gap do you read off if you instead take the longest chain you have, and is it over- or underestimated?
+- Plotting the gap as $\Delta(L)$ versus $1/L^2$ instead of $1/L$: what does the curve now look like for large lengths, and what gap do you extrapolate?
+- How close does your extrapolated gap come to the accepted value $\Delta/J=0.41052$ from [DMRG-02](../dmrg02)?
+- The gap between magnetization sectors 0 and 1 is essentially zero, while the gap between sectors 1 and 2 is finite. Why is the finite gap the physically correct one and the vanishing gap the wrong one — is this a physics lottery?
