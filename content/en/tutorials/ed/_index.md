@@ -7,7 +7,7 @@ math: true
 ---
 
 The ALPS exact-diagonalization tutorials cover the `sparsediag` and `fulldiag` applications for finite quantum lattice models.
-`sparsediag` uses the iterative Lanczos algorithm to compute the lowest eigenstates in each symmetry sector (total $S_z$, momentum, ...), while `fulldiag` diagonalizes the full Hamiltonian to obtain the complete spectrum and, from it, finite-temperature thermodynamics.
+`sparsediag` uses the iterative Lanczos algorithm to compute the lowest eigenstates in each symmetry sector (e.g. total $S_z$, momentum, ...), while `fulldiag` diagonalizes the full Hamiltonian to obtain the complete spectrum and, from it, finite-temperature thermodynamics.
 Because both methods work directly with the Hamiltonian matrix, the results are numerically exact — free of the statistical and sign-problem errors that limit quantum Monte Carlo — at the cost of an exponentially growing Hilbert space that restricts the accessible system sizes to a few tens of sites at most.
 The tutorials progress from basic eigenstate measurements, through finite-size scaling of excitation gaps and full spectra, to the identification of quantum phase transitions and their conformal field theory description, and finally to full diagonalization for thermodynamic quantities of finite systems.
 
