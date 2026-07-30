@@ -25,11 +25,11 @@ for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermo
 
 Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
 
-1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described well.
+1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described accurately.
 
 2. The smarter way reduces the gap calculation to the calculation of two ground states. In many quantum systems, the ground state and the first excited state differ by a good quantum number and therefore are both ground states in the respective sectors. For example, for the spin-1/2 chain, the ground state is a singlet of total spin 0, and hence the ground state in the sector of magnetization 0. The first excited state is a triplet of total spin 1, i.e. consists of one excited state of magnetization 0, and the ground states of the sectors of magnetization +1 and -1, respectively. It can, therefore, be calculated as the ground state in magnetization sector +1.
 
-Let us do this calculation first for the spin-1/2 chain:
+Let us start by doing these calculation for the spin-1/2 chain.
 
 #### Example: without quantum numbers
 
@@ -48,9 +48,9 @@ SWEEPS=4
 NUMBER_EIGENVALUES=2}
 ```
     
-Notice that we only added the last line, specifying the number of eigenstates to calculate. By targeting both states, the algorithm ensures that both are represented accurately. However, this is not quite true if we keep only 100 states. Compare the energy for the ground-state obtained with the present parameter file, and the previous simulation targeting only the ground state.
+Notice that we only added the last line, specifying the number of eigenstates to calculate. By targeting both states, the algorithm ensures that both are represented accurately. However, this is not quite true if we keep only 100 states. Compare the energy for the ground-state obtained with the present parameter file with the previous simulation targeting only the ground state.
 
-It is important to notice that the entanglement entropy in this example is totally meaningless, since the algorithm is calculating a density matrix mixing two states.
+It is important to notice that the entanglement entropy in this example is totally meaningless since the algorithm is calculating a density matrix mixing two states. In short, the algorithm targets both the ground state and first excited state in the $S_z=0$ sector, causing classical mixing uncertainty rather than pure quantum entanglement. To properly calculate entanglment entropy, one needs to independently diagonalize both the singlet and triplet sectors to avoid this mixing.
 
 ##### Using Python
 
@@ -149,7 +149,7 @@ input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
 res = pyalps.runApplication('dmrg',input_file,writexml=True)
 ```
 
-After loading the results in the usual way we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary:
+After loading the results in the usual way, we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary:
 
 ```python
 data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
@@ -173,7 +173,7 @@ print('Gap:', energies[1]-energies[0])
 
 ### Extrapolating The Gap To The Thermodynamic Limit
 
-In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger.
+In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger (see Questions below).
 
 In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
 
@@ -184,25 +184,21 @@ The plot below shows the spin-1/2 singlet-triplet gap versus $1/L$ at fixed $D=1
 Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
 
-The case of the spin-1/2 chain is a bit frustrating, because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
+The case of the spin-1/2 chain is a bit frustrating because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But, who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
 
 Let us therefore turn to a more rewarding question, what is the gap of the spin-1 antiferromagnetic Heisenberg chain?
 
 Here, there is a nasty twist, which we will only state and perform at the moment, but explain later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
 
-Assume you have $\Delta (L)$ with machine precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ with $D=300$ states each and 5 sweeps.
+Assume you have $\Delta (L)$ within your machine's precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ all with $D=300$ states and 5 sweeps.
 
-As the effects of the open ends will decrease as $1/L$, it always makes sense to first plot the gaps $\Delta (L)$ versus $1/L$, as was already done in the spin-1/2 case. Produce such a plot.
-
-What you see is a curve that is quite straight for small L and then starts bending upward.
-
-The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$, and extrapolate the gap from it.
+The effects of the open ends will decrease as $1/L$, so it makes sense to first plot the gaps $\Delta (L)$ versus $1/L$. This was already done in the spin-1/2 case to produce such a plot. What you see is a curve that is quite straight for small L and then starts bending upward. It would be ideal to have an idea of what the asymptotic behaviour is (the curved part for long lengths), analytically or approximately, to extrapolate. It is common to produce a plot of the gap $\Delta (L)$ versus $1/L^2$ to do so.
 
 The plot below shows the spin-1 gap versus $1/L^2$ at fixed $D=200$: the points now lie on a good straight line, extrapolating to an intercept close to the accepted Haldane gap $\Delta/J=0.41052$ — a much better behaved extrapolation than the spin-1/2 case above, consistent with the $1/L^2$ convergence derived below.
 
 ![](/figs/dmrg/extrapolationGapSOne.png)
 
-The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy:
+This procedure was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy:
 
 $$
 E(k) = E_0 + \sqrt{\Delta^2 + c^2 (k-\pi)^2}.
@@ -216,7 +212,7 @@ $$
 
 and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$.
 
-For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically, but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
 
 ## Summary
 

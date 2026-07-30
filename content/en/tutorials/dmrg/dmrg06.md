@@ -11,27 +11,23 @@ The most important correlation functions in many-body physics are two-point corr
 
 ### Another Go At The Energy Per Bond
 
-As already mentioned above, the ground state energy per bond in both spin-1/2 and spin-1 chain is given by:
+As already mentioned in [DMRG-02](../dmrg02), the ground state energy per bond in both spin-1/2 and spin-1 chains are given by:
 
 $$
-e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
+e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle.
 $$
 
-This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance.
+This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance. Obviously, the bonds that are closest this asymptotic behaviour are those in the chain center, so the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$ after fixing $D$. Before you do this, plot $e_0(i)$ versus $i$ for a few values of $D$ and $L$, that are not too small (as a check of the program, you may also consider the three contributions individually before you do the sum).
 
-Obviously, the bonds that are closest to the thermodynamic limit behaviour are those in the chain center. So, the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$.
-
-Before you do this, however, plot for some values of $D$ and not too small $L$, $e_0(i)$ versus $i$ (as a check of the program, you may also consider the three contributions individually before you do the sum).
-
-For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends make themselves felt very strongly due to criticality and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond; you immediately gain lots of accuracy. This is yet another example that it is worthwhile to have a close look at the actual output of DMRG by considering various local or (here) almost local observables.
+For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends are felt very strongly, due to criticality, and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond: you immediately gain lots of accuracy. This is yet another demonstration that it is worthwhile to have a close look at the actual output of DMRG by considering various local or (here) almost local observables.
 
 ### Spin-Spin Correlations: Spin-1/2
 
 Take a relatively long chain (say, $L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is l. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible; there are also other ways of doing this (like averaging over several correlators with same site distance, also more or less centered). As we expect a power law, use a log-log plot. Take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
+Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$, where you round the positions such that their distance is $l$. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible. There are other ways of doing this, like averaging over several correlators with same site distance (also more or less centered). Since we expect a power-law, use a log-log plot, where you should take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
 
-What you should see, is a power law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power laws by such superpositions - at large distance, the slowest exponential decay will survive all the others, replacing the power law by an exponential law. The larger you choose $D$, the further you push out this crossover.
+What you should see, is a power-law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power-laws by such superpositions - at large distances, the slowest exponential decay will survive all the others, replacing the power-law by an exponential law. The larger you choose $D$, the further you push out this crossover.
 
 #### Using parameter files
 
@@ -89,7 +85,7 @@ The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899fe
     
     data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
 
-Now we can extract e.g. Sz:Sz correlations:
+Now we can extract e.g. $\langle S^z_iS^z_j\rangle$ correlations:
 
     curves = []
     for run in data:
@@ -122,7 +118,7 @@ and plot them vs. site distance:
 
 ### Spin-Spin Correlations: Spin-1
 
-In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again, choose a long chain (say,$L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again, choose a long chain (say, $L=192$), and calculate $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
 
 Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
 
@@ -188,11 +184,11 @@ After running the simulation, correlations can be extracted and plotted in the s
 
 In the special case of the spin-1 chain, we have a loophole for the calculation of the correlation length, which is related to the weird observation that the first excitation was not a bulk excitation. It can be shown that a good toy model for a spin-1 chain is given as follows: at each site of a spin-1, you put two spin-1/2, and construct the spin-1 states from the triplet states of the two spin-1/2 at each site. The ground state is then approximated quite well by a state where you link two spin-1/2 on *neighbouring* sites by a singlet state.
 
-In this construction, for open boundary conditions (but not periodic ones), on the first and on the last site there will be two lonely spins-1/2 without partner. These two spins-1/2 can form 4 states among themselves, which in the toy model are degenerate: the ground state is four-fold degenerate. In the real spin-1 chain, this four-fold degeneracy (from one state of total spin 0 and three of total spin 1) is only achieved in the thermodynamic limit when the two spins are totally removed from each other. This is why there was no gap between magnetization sectors 0 and 1. The first bulk excitation needs magnetization 2.
+In this construction, for open boundary conditions (but not periodic ones), on the first and on the last site there will be two lonely spin-1/2 without partner. These two spin-1/2 particles can form 4 states among themselves, which in the toy model the ground state is four-fold degenerate. In the real spin-1 chain, this four-fold degeneracy (from one state of total spin 0 and three of total spin 1) is only achieved in the thermodynamic limit when the two spins are totally removed from each other. This is why there was no gap between magnetization sectors 0 and 1. The first bulk excitation needs magnetization 2.
 
-What we can do to cure this, is to attach one spin-1/2 before the first and after the last site, taking the same bond Hamiltonian, that link up to the two lonely spins by a singlet state. You may check that now the gap is between magnetization sectors 0 and 1!
+To cure this, we can attach one spin-1/2 operator on each side of the lattice, taking the same bond Hamiltonian for these new sites, linking the two lonely spins by a singlet state. You may check that now there is a gap between magnetization sectors 0 and 1!
 
-In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2, and be characterized by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
+In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2. We can characterize this by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
 
 For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length.
 

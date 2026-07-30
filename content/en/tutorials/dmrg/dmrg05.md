@@ -9,7 +9,7 @@ We consider observables that are linked to one specific site to be local observa
 
 ## Excitations in the Spin-1 Chain
 
-Take a chain of length $L=96$ and $D=200$. Calculate the local magnetization $\langle S^z_i \rangle$  and plot it versus the site $i$ for the ground states in the magnetisation sectors 0, 1, and 2.
+Take a chain of length $L=96$ and $D=200$, and calculate the local magnetization $\langle S^z_i \rangle$. Plot it versus the site $i$ for the ground states in the magnetization sectors 0, 1, and 2.
 
 What you should obtain is an essentially flat curve for sector 0, a magnetisation which is essentially concentrated at the chain ends for sector 1, and a magnetisation which is both at the chain ends and in the bulk of the chain for sector 2. This means that the first excitation of the open chain is a boundary excitation, which would not exist on a closed system, and the second excitation of the open chain is a boundary plus a bulk excitation, which is the one we are interested in. For an as of now unknown reason, the energy of the first bulk excitation therefore has to be extracted from comparing sectors 1 and 2.
 
@@ -96,7 +96,7 @@ Repeat a similar calculation for the spin-1/2 chain in the lowest magnetisation 
 
 ### Using parameter files
 
-The following parameter file will accomplish this, downloadable [here](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half):
+The following parameter file will accomplish this task, downloadable [here](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half):
 
     LATTICE="open chain lattice"
     MODEL="spin"
