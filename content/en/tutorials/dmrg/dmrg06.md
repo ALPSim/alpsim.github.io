@@ -25,7 +25,7 @@ For the spin-1/2 chain, bond energies oscillate strongly between odd and even nu
 
 Take a relatively long chain (say, $L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$, where you round the positions such that their distance is $l$. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible. There are other ways of doing this, like averaging over several correlators with same site distance (also more or less centered). Since we expect a power-law, use a log-log plot, where you should take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
+Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$, where you round the positions such that their distance is $l$. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible. There are other ways of doing this, like averaging over several correlators with same site distance (also more or less centered). Since we expect a power-law with critical exponent $\eta=1$ (see [DMRG-02](../dmrg02)), use a log-log plot, where you should take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
 
 What you should see, is a power-law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power-laws by such superpositions - at large distances, the slowest exponential decay will survive all the others, replacing the power-law by an exponential law. The larger you choose $D$, the further you push out this crossover.
 
@@ -122,7 +122,7 @@ In the spin-1 chain, we do expect exponential decay (with an analytic modificati
 
 Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
 
-From the log-lin plot, extract a correlation length. It will depend (and in fact monotonically increase with) $D$.
+From the log-lin plot, extract a correlation length, and compare it to the benchmark value $\xi=6.02$ quoted in [DMRG-02](../dmrg02). It will depend (and in fact monotonically increase with) $D$.
 
 In fact, the calculation of correlation lengths is much harder to converge than that of the local quantities. This is due to the fact that a more profound algorithmic analysis reveals DMRG to be an algorithm geared especially well to the optimal representation of local quantities, not so much non-local ones as long-ranged correlators.
 
@@ -200,4 +200,4 @@ Correlation functions directly expose the qualitative difference between the two
 
 - Plotting $e_0(i)$ versus $i$ for various $D$ (not too small $L$): what do you observe for the spin-1 chain, and what for the spin-1/2 chain? Considering the three contributions to $e_0(i)$ individually before summing them, what relationship between them should exist?
 - Has the correlation length converged by the time you reach $D=300$, and how does this compare to the convergence of local or quasi-local observables such as the magnetization or energy at the same $D$?
-- For a chain of length $L=192$ and $D=200$, extracting the correlation length from the ground-state magnetization profile this way: what correlation length do you get?
+- For a chain of length $L=192$ and $D=200$, extracting the correlation length from the ground-state magnetization profile this way: what correlation length do you get, and how does it compare to $\xi=6.02$ from [DMRG-02](../dmrg02)?

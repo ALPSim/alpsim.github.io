@@ -130,7 +130,7 @@ plt.xlabel('iteration')
 plt.show()
 ```
 
-For the single run above (L=32, MAXSTATES=100), the ground state energy warms up during the infinite-system growth and settles to its converged value within about 50 iterations, while the truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
+For the single run above (L=32, MAXSTATES=100), the ground state energy warms up during the infinite-system growth and settles to its converged value within about 50 iterations — compare it to the exact thermodynamic-limit energy per site quoted in [DMRG-02](../dmrg02) — while the truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
 
 ![](/figs/dmrg/dmrg_energy_truncation.png)
 

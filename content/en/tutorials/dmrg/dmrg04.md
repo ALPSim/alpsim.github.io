@@ -7,7 +7,7 @@ toc: true
 
 ## Calculating The Gap
 
-As already mentioned, the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state:
+As already mentioned in [DMRG-02](../dmrg02), the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state:
 
 $$
 \Delta = E_1 - E_0
@@ -194,7 +194,7 @@ Assume you have $\Delta (L)$ within your machine's precision, either by a suitab
 
 The effects of the open ends will decrease as $1/L$, so it makes sense to first plot the gaps $\Delta (L)$ versus $1/L$. This was already done in the spin-1/2 case to produce such a plot. What you see is a curve that is quite straight for small L and then starts bending upward. It would be ideal to have an idea of what the asymptotic behaviour is (the curved part for long lengths), analytically or approximately, to extrapolate. It is common to produce a plot of the gap $\Delta (L)$ versus $1/L^2$ to do so.
 
-The plot below shows the spin-1 gap versus $1/L^2$ at fixed $D=200$: the points now lie on a good straight line, extrapolating to an intercept close to the accepted Haldane gap $\Delta/J=0.41052$ — a much better behaved extrapolation than the spin-1/2 case above, consistent with the $1/L^2$ convergence derived below.
+The plot below shows the spin-1 gap versus $1/L^2$ at fixed $D=200$: the points now lie on a good straight line, extrapolating to an intercept close to the accepted Haldane gap $\Delta/J=0.41052$ (see [DMRG-02](../dmrg02)) — a much better behaved extrapolation than the spin-1/2 case above, consistent with the $1/L^2$ convergence derived below.
 
 ![](/figs/dmrg/extrapolationGapSOne.png)
 
@@ -225,5 +225,5 @@ DMRG resolves the (likely vanishing) gap of the critical spin-1/2 chain and the 
 - If you extrapolate only the linear (small-$L$) part of the $\Delta(L)$ vs. $1/L$ curve for the spin-1 chain naively, what gap do you obtain, and is it over- or underestimated? (This is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.)
 - What gap do you read off if you instead take the longest chain you have, and is it over- or underestimated?
 - Plotting the gap as $\Delta(L)$ versus $1/L^2$ instead of $1/L$: what does the curve now look like for large lengths, and what gap do you extrapolate?
-- How close does your extrapolated gap come to the accepted value $\Delta/J=0.41052$?
+- How close does your extrapolated gap come to the accepted value $\Delta/J=0.41052$ from [DMRG-02](../dmrg02)?
 - The gap between magnetization sectors 0 and 1 is essentially zero, while the gap between sectors 1 and 2 is finite. Why is the finite gap the physically correct one and the vanishing gap the wrong one — is this a physics lottery?
