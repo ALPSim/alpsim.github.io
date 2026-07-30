@@ -54,6 +54,9 @@ The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/bl
     { MAXSTATES=40 }
     { MAXSTATES=60 }
 
+    parameter2xml spin_one_half
+    dmrg --write-xml spin_one_half.in.xml
+
 #### Using Python
 
 The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) sets up three runs with different numbers of states $D$ and loads the results:
@@ -150,6 +153,9 @@ The parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899fe
     { MAXSTATES=40 }
     { MAXSTATES=60 }
 
+    parameter2xml spin_one
+    dmrg --write-xml spin_one.in.xml
+
 #### Using Python
 
 The main difference of the script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) with respect to the previous one is the definition of lattice and model:
@@ -189,6 +195,10 @@ What we can do to cure this, is to attach one spin-1/2 before the first and afte
 In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2, and be characterized by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
 
 For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length.
+
+## Summary
+
+Correlation functions directly expose the qualitative difference between the two chains — power-law decay for the critical spin-1/2 chain versus exponential decay for the gapped spin-1 chain — while also showing where DMRG itself is least accurate, since long-ranged correlations converge far more slowly in $D$ than local quantities like the energy.
 
 ## Questions
 

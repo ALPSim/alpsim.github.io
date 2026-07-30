@@ -177,6 +177,10 @@ In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,6
 
 In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
 
+The plot below shows the spin-1/2 singlet-triplet gap versus $1/L$ at fixed $D=100$: the four points sit close to a straight line through a small but clearly nonzero intercept, illustrating exactly the frustration described below — with only these four chain lengths it is hard to tell a genuinely vanishing gap from a very small finite one.
+
+![](/figs/dmrg/extrapolationGapSHalf.png)
+
 Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
 
@@ -194,6 +198,10 @@ What you see is a curve that is quite straight for small L and then starts bendi
 
 The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$, and extrapolate the gap from it.
 
+The plot below shows the spin-1 gap versus $1/L^2$ at fixed $D=200$: the points now lie on a good straight line, extrapolating to an intercept close to the accepted Haldane gap $\Delta/J=0.41052$ — a much better behaved extrapolation than the spin-1/2 case above, consistent with the $1/L^2$ convergence derived below.
+
+![](/figs/dmrg/extrapolationGapSOne.png)
+
 The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy:
 
 $$
@@ -209,6 +217,10 @@ $$
 and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$.
 
 For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+
+## Summary
+
+DMRG resolves the (likely vanishing) gap of the critical spin-1/2 chain and the finite Haldane gap of the spin-1 chain, but the two require different extrapolation strategies — $1/L$ for the near-gapless case versus $1/L^2$ for the gapped one — reflecting their different long-distance physics; [DMRG-05](../dmrg05) explains why the spin-1 gap must specifically be taken between magnetization sectors 1 and 2.
 
 ## Questions
 

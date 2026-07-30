@@ -32,32 +32,17 @@ Besides inputs such as the Hamiltonian and lattice geometry, the DMRG simulation
 
 ### DMRG-specific parameters
 
-**NUMBER_EIGENVALUES**
-Number of eigenstates and energies to calculate. Default is 1, should be set to 2 to calculate gaps.
-
-**SWEEPS**
-Number of DMRG sweeps for the finite-size algorithm. Each sweep involves a left-to-right half-sweep, and a right-to-left half-sweep.
-
-**NUM_WARMUP_STATES**
-Number of initial states to grow the DMRG blocks. If not specified, the algorithm will use a default value of 20 states.
-
-**STATES**
-Number of DMRG states kept on each half sweep. The user should specify either 2*SWEEPS different values of STATES or one MAXSTATES or NUMSTATES value.
-
-**MAXSTATES**
-Maximum number of DMRG states kept. The user may choose to specify either STATES values for each half-sweep, or a MAXSTATES or NUMSTATES that the program will use to grow the basis. The program will automatically determine how many states to use for each sweep, increasing the basis size in steps of STATES/(2*SWEEPS) until reaching MAXSTATES.
-
-**NUMSTATES**
-Constant number of DMRG states kept for all sweeps.
-
-**TRUNCATION_ERROR** 
-Users can choose to set the tolerance for the simulation, instead of the number of states. The program will automatically determine how many states to keep in order to satisfy this tolerance. Care must be taken, since this could lead to an uncontrollable growth in the basis size, and a crash as a consequence. It is therefore advisable to also specify the maximum number of states as a constraint, using either MAXSTATES or NUMSTATES, as explained above.
-
-**LANCZOS_TOLERANCE** 
-Tolerance for the diagonalization (Davidson/Lanczos) part of the code. the default value is 10^-7.
-
-**CONSERVED_QUANTUMNUMBERS**
-Quantum numbers conserved by the model of interest. They will be used in the code in order to reduce matrices into block forms. If no value is specified for a particular quantum number, the program will work in the grand canonical ensemble. For instance, for spin chains if you do not specify Sz_total, the program will use a Hilbert space with dim=$2^N$ states. Running in "canonical" (by setting Sz_total=0, for instance) will improve performance considerably by working in a subspace with the reduced dimension. For an example of how to do this, take a look at the parms file included with the dmrg code.
+| Parameter | Meaning | Default |
+|---|---|---|
+| `NUMBER_EIGENVALUES` | number of eigenstates and energies to calculate; set to 2 to calculate gaps | 1 |
+| `SWEEPS` | number of DMRG sweeps for the finite-size algorithm (one sweep = one left-to-right half-sweep + one right-to-left half-sweep) | — |
+| `NUM_WARMUP_STATES` | number of initial states used to grow the DMRG blocks | 20 |
+| `STATES` | number of DMRG states kept on each half-sweep; specify either `2*SWEEPS` values of `STATES`, or a single `MAXSTATES`/`NUMSTATES` value instead | — |
+| `MAXSTATES` | maximum number of DMRG states kept; the basis grows in steps of `STATES/(2*SWEEPS)` until reaching this value | — |
+| `NUMSTATES` | constant number of DMRG states kept for every sweep | — |
+| `TRUNCATION_ERROR` | tolerance for the simulation, used instead of a fixed number of states; best combined with `MAXSTATES`/`NUMSTATES` to bound basis growth, since an unconstrained tolerance can grow the basis uncontrollably | — |
+| `LANCZOS_TOLERANCE` | tolerance for the Davidson/Lanczos diagonalization step | $10^{-7}$ |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers conserved by the model, used to block-diagonalize the Hamiltonian; if unset, the run uses the grand canonical ensemble (e.g. the full $2^N$-dimensional Hilbert space for a spin chain instead of a fixed-`Sz_total` subspace) | — |
 
 ### How to choose the right parameters
 

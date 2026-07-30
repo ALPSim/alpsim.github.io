@@ -130,6 +130,10 @@ plt.xlabel('iteration')
 plt.show()
 ```
 
+For the single run above (L=32, MAXSTATES=100), the ground state energy warms up during the infinite-system growth and settles to its converged value within about 50 iterations, while the truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
+
+![](/figs/dmrg/dmrg_energy_truncation.png)
+
 ##### Multiple runs
 
 ###### Using parameter files
@@ -322,6 +326,10 @@ e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\r
 $$
 
 for sites $i$ and $i+1$ at the chain center.
+
+## Summary
+
+DMRG converges the ground-state energy of both the spin-1/2 and spin-1 open chains to high accuracy within a few dozen iterations, but the naive per-site energy estimate $E_0(L)/(L-1)$ is a poor stand-in for the thermodynamic-limit energy per bond, since it does not correct for the open boundary conditions; a center-bond estimate is needed instead.
 
 ## Questions
 

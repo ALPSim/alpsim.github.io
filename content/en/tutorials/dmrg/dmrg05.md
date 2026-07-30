@@ -34,6 +34,11 @@ The following parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd
     { Sz_total=1 }
     { Sz_total=2 }
 
+Using the usual sequence of commands to convert and run it:
+
+    parameter2xml spin_one
+    dmrg --write-xml spin_one.in.xml
+
 ### Using Python
 
 The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one.py) runs one simulation for each of the three spin sectors:
@@ -106,9 +111,16 @@ The following parameter file will accomplish this, downloadable [here](https://g
     { Sz_total=1 }
     { Sz_total=2 }
 
+    parameter2xml spin_one_half
+    dmrg --write-xml spin_one_half.in.xml
+
 ### Using Python
 
 Apart from the obvious parameter changes, the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half.py) is the same as the `spin_one` script explained above.
+
+## Summary
+
+The local magnetization profile cleanly separates boundary excitations from bulk excitations in the open spin-1 chain, which is why the physically relevant (bulk) gap studied in [DMRG-04](../dmrg04) must be read off between magnetization sectors 1 and 2 rather than 0 and 1.
 
 ## Questions
 
