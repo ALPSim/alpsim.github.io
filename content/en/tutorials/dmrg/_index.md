@@ -1,6 +1,6 @@
 
 ---
-title: Density Matrix Renormalization Group
+title: Density Matrix Renormalization Group (DMRG)
 description: "Tutorials for ALPS"
 toc: true
 weight: 3
