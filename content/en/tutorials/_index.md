@@ -9,7 +9,7 @@ cascade:
     type: docs
 ---
 These tutorials guide you through the major simulation methods available in ALPS, from classical and quantum Monte Carlo to tensor-network and mean-field approaches.
-Each tutorial sets up a concrete model — typically a spin chain, Hubbard model, or Bose-Hubbard system — and walks through choosing parameters, running the simulation, and analysing the output.
+Each tutorial sets up a concrete model — typically a spin chain, Hubbard model, or Bose-Hubbard system — and walks through choosing parameters, running the simulation, and analyzing the output.
 The example systems are intentionally small so that every calculation completes in minutes on a laptop.
 All tutorials are available as Python scripts; a growing collection of [Jupyter Notebooks](jupyter) provides an interactive alternative.
 
@@ -26,7 +26,7 @@ Topics include sparse Lanczos diagonalization, spin-gap scaling in one-dimension
 ## [Density Matrix Renormalization Group (DMRG)](dmrg)
 
 Tutorials for the DMRG method applied to one-dimensional quantum systems.
-The series introduces the algorithm and its convergence, then demonstrates how to extract energy gaps, measure local observables such as magnetization profiles, and compute two-point correlation functions — key quantities for identifying quantum phases and critical behaviour.
+The series introduces the algorithm and its convergence, then demonstrates how to extract energy gaps, measure local observables such as magnetization profiles, and compute two-point correlation functions — key quantities for identifying quantum phases and critical behavior.
 
 ## [Dynamical Mean Field Theory (DMFT)](dmft)
 
@@ -40,7 +40,7 @@ These tutorials bridge the gap between the built-in ALPS library and the full ge
 
 ## [Jupyter Notebooks](jupyter)
 
-Interactive Jupyter notebook versions of selected ALPS tutorials, organised by method.
+Interactive Jupyter notebook versions of selected ALPS tutorials, organized by method.
 Each notebook combines code, equations, and plots in a single document that can be downloaded and run locally, making it straightforward to modify parameters and explore results interactively.
 
 

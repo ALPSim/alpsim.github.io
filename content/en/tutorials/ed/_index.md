@@ -23,10 +23,10 @@ These tutorials introduce the custom measurements available on the computed eige
 ## Conformal Field Theory and Quantum Criticality
 
 At a quantum critical point, the finite-size spectrum of a 1D lattice model encodes the operator content of the underlying conformal field theory (CFT): energy gaps scale as $1/L$ with universal amplitudes set by the scaling dimensions of the CFT operators.
-These tutorials use `sparsediag` to extract that operator content directly from finite-size spectra, and use it to locate and characterise a quantum phase transition.
+These tutorials use `sparsediag` to extract that operator content directly from finite-size spectra, and use it to locate and characterize a quantum phase transition.
 
 - [ED-04 Conformal field theory description of 1D critical spectra](ed04) — computes the finite-size spectra of the critical transverse-field Ising chain and the critical Heisenberg chain, and matches the extracted scaling dimensions to the known CFT primary fields and their descendants.
-- [ED-05 Phase transition in a frustrated spin chain](ed05) — adds a next-nearest-neighbour coupling $J_2$ to the Heisenberg chain and locates the critical point separating the gapless and dimerized (Majumdar-Ghosh) phases by tracking level crossings and gaps in different symmetry sectors, then revisits the CFT content exactly at criticality.
+- [ED-05 Phase transition in a frustrated spin chain](ed05) — adds a next-nearest-neighbor coupling $J_2$ to the Heisenberg chain and locates the critical point separating the gapless and dimerized (Majumdar-Ghosh) phases by tracking level crossings and gaps in different symmetry sectors, then revisits the CFT content exactly at criticality.
 
 ## Full Diagonalization (`fulldiag`)
 

@@ -13,7 +13,7 @@ $$
 H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
-The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behaviour and pose very different challenges to the DMRG algorithm. Let us briefly review their physical properties.
+The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behavior and pose very different challenges to the DMRG algorithm. Let us briefly review their physical properties.
 
 ### Spin-1/2 Chain
 
@@ -53,7 +53,7 @@ $$
 
 to five-digit accuracy.
 
-The question for the behaviour of the spin-spin correlations leads to yet another big difference to the spin-1/2 case. The correlations read asymptotically (i.e. for $|i-j| \rightarrow \infty$)
+The question for the behavior of the spin-spin correlations leads to yet another big difference to the spin-1/2 case. The correlations read asymptotically (i.e. for $|i-j| \rightarrow \infty$)
 
 $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\exp (-|i-j|/\xi)}{\sqrt{|i-j|}}  .
@@ -83,7 +83,7 @@ The second key control parameter is of course the system size $L$.
 
 The third control parameter(s) can only be understood by looking even closer at the DMRG algorithm. In order to find the best approximation to a state, DMRG proceeds in two steps:
 
-1. In a first step (so-called *infinite-system* DMRG) the algorithm tries to find good subspaces by iteratively analyzing chains of length 2, 4, 6, until the desired system size $L$ is reached. The procedure consists of splitting the chain in every iteration and insert two new sites at the center; the name comes from the fact that this procedure can of course be carried on infinitely, to take $L$ to infinity; but don't expect very meaningful results as you approach infinity! A second remark is that this procedure favours chains of even length for DMRG treatment.
+1. In a first step (so-called *infinite-system* DMRG) the algorithm tries to find good subspaces by iteratively analyzing chains of length 2, 4, 6, until the desired system size $L$ is reached. The procedure consists of splitting the chain in every iteration and insert two new sites at the center; the name comes from the fact that this procedure can of course be carried on infinitely, to take $L$ to infinity; but don't expect very meaningful results as you approach infinity! A second remark is that this procedure favors chains of even length for DMRG treatment.
 2. In a second step (so-called *finite-system* DMRG) DMRG deals with the fact that the subspace selection for shorter chains could not yet take into account all the quantum fluctuations and correlations that would be present in the chain of final length $L$. What the method does, is to go through a series of further iterations to improve the quality of the subspaces. One such iteration visiting all sites of a chain is referred to as a *sweep* in DMRG. The number of sweeps is the last important control parameter: if it is too small, the precision of the results for a given $D$ is not achieved; if it is too large, the calculational effort could be wasted, although it is of course always good to err on the safe side.
 
 In a last remark, let us consider the *truncation error*, which is a good indicator of the accuracy achieved by a DMRG run. In a simplified perspective, at each point in the algorithm DMRG makes one step in the direction of exponential growth of state space and then asks how much accuracy can be retained if not allowing that step, by means of an analysis of a density matrix regarding the distribution of weights (eigenvalues) corresponding to its eigenstates. The approximations of DMRG are then reflected in the fact that some statistical weight has to be discarded, which is the so-called truncation error. In many DMRG applications, it can be as small as $10^{-12}$, showing that the approximations made by DMRG are extremely light, which is the reason for the enormous success of the method. For the purpose of the tutorial it is important to know that the error in local quantities (energies, magnetizations, ...) is roughly proportional to (but usually quite a bit larger than) the truncation error, provided that the number of sweeps is large enough.
@@ -141,7 +141,7 @@ Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up
 
 1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
 
-2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1. Apart from a global factor of order of the length, do you see a difference between the convergence behaviour in the two cases? *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
+2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1. Apart from a global factor of order of the length, do you see a difference between the convergence behavior in the two cases? *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
 
 3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
 
@@ -438,7 +438,7 @@ The correct way is to eliminate the effect of the open boundary conditions by co
 
 1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond. What do the results look like now?
 
-2. The less costly and usual way would be to use correlators (as discussed further below, so we postpone this exercise until then) between neighbouring sites and use
+2. The less costly and usual way would be to use correlators (as discussed further below, so we postpone this exercise until then) between neighboring sites and use
 $$
 e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$

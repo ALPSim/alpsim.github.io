@@ -19,7 +19,7 @@ $$
 
 This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance.
 
-Obviously, the bonds that are closest to the thermodynamic limit behaviour are those in the chain center. So, the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$.
+Obviously, the bonds that are closest to the thermodynamic limit behavior are those in the chain center. So, the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$.
 
 Before you do this, however, plot for some values of $D$ and not too small $L e_0(i)$ versus $i$ (as a check of the program, you may also consider the three contributions individually before you do the sum. What relationship between them should exist?).
 
@@ -182,7 +182,7 @@ After running the simulation, correlations can be extracted and plotted in the s
 
 ### Sometimes There Is A Way Out
 
-In the special case of the spin-1 chain, we have a loophole for the calculation of the correlation length, which is related to the weird observation that the first excitation was not a bulk excitation. It can be shown that a good toy model for a spin-1 chain is given as follows: at each site of a spin-1, you put two spin-1/2, and construct the spin-1 states from the triplet states of the two spin-1/2 at each site. The ground state is then approximated quite well by a state where you link two spin-1/2 on *neighbouring* sites by a singlet state.
+In the special case of the spin-1 chain, we have a loophole for the calculation of the correlation length, which is related to the weird observation that the first excitation was not a bulk excitation. It can be shown that a good toy model for a spin-1 chain is given as follows: at each site of a spin-1, you put two spin-1/2, and construct the spin-1 states from the triplet states of the two spin-1/2 at each site. The ground state is then approximated quite well by a state where you link two spin-1/2 on *neighboring* sites by a singlet state.
 
 In this construction, for open boundary conditions (but not periodic ones), on the first and on the last site there will be two lonely spins-1/2 without partner. These two spins-1/2 can form 4 states among themselves, which in the toy model are degenerate: the ground state is four-fold degenerate. In the real spin-1 chain, this four-fold degeneracy (from one state of total spin 0 and three of total spin 1) is only achieved in the thermodynamic limit when the two spins are totally removed from each other. This is why there was no gap between magnetization sectors 0 and 1. The first bulk excitation needs magnetization 2.
 

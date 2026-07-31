@@ -181,7 +181,7 @@ From the figure below, you can clearly see that the errors do not converge for l
 
 ## Cluster updates
 
-Near the critical temperature, the correlation length $\xi$ grows large and local updates become highly inefficient: each accepted move flips a single spin, so it takes $O(\xi^2)$ sweeps merely to decorrelate two neighbouring spins.
+Near the critical temperature, the correlation length $\xi$ grows large and local updates become highly inefficient: each accepted move flips a single spin, so it takes $O(\xi^2)$ sweeps merely to decorrelate two neighboring spins.
 This *critical slowing down* means the autocorrelation time diverges as
 $$\tau \sim L^z,$$
 where $z \approx 2$ for local updates but $z \approx 0.25$ for cluster algorithms such as Wolff or Swendsen–Wang.
