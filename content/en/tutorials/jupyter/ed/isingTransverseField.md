@@ -18,7 +18,7 @@ $$
 H=J_{z} \sum_{\langle i,j \rangle} S^i_z S^j_z + \Gamma \sum_i S^i_x
 $$
 
-Here, the first sum runs over pairs of nearest neighbours. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J\gt 0$ and ferromagnetic for $J \lt 0$. The system is exactly solvable ([P. Pfeuty, Annals of Physics: 57, 79-90 (1970)](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)).
+Here, the first sum runs over pairs of nearest neighbors. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J\gt 0$ and ferromagnetic for $J \lt 0$. The system is exactly solvable ([P. Pfeuty, Annals of Physics: 57, 79-90 (1970)](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)).
 
 In the above equation, $\Delta$ refers to the scaling dimension of that field. The scaling fields occur in groups: the lowest one, referred to as primary field, comes with an infinite number of descendants with scaling dimension $\Delta + m$, $m \in \lbrace 1, 2, 3, ... \rbrace$.
 

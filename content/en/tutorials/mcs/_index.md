@@ -15,7 +15,7 @@ The tutorials progress from fundamental diagnostics such as autocorrelation time
 ## Choosing a Code
 
 Before starting a simulation it is important to select the algorithm best suited to your model and observable.
-The guide below compares the four QMC representations available in ALPS — `looper`, `dirloop_sse`, `worm`, and `qwl` — and summarises their respective strengths and limitations.
+The guide below compares the four QMC representations available in ALPS — `looper`, `dirloop_sse`, `worm`, and `qwl` — and summarizes their respective strengths and limitations.
 
 - [Which code to choose for your simulation?](com)
 
@@ -33,7 +33,7 @@ The method is revisited later to study finite-size scaling and the second-order 
 
 The `looper` code implements the loop algorithm in an operator-loop representation and is most efficient for isotropic spin models without a magnetic field.
 The `dirloop_sse` code uses directed loops in the stochastic series expansion (SSE) representation; it handles models with anisotropy or an external magnetic field that break the spin-inversion symmetry required by `looper`.
-These tutorials cover susceptibilities of Heisenberg chains and ladders, magnetization curves in a field, and the identification of a quantum phase transition in a dimerised lattice.
+These tutorials cover susceptibilities of Heisenberg chains and ladders, magnetization curves in a field, and the identification of a quantum phase transition in a dimerized lattice.
 
 - [MC-02 Calculating magnetic susceptibilities by the classical MC and looper QMC codes](mc02)
 - [MC-03 Calculating magnetization curves by the directed loop QMC code](mc03)

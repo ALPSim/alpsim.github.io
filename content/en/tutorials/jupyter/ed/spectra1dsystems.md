@@ -16,7 +16,7 @@ In this tutorial we will calculate the energy spectra of the quantum Heisenberg 
 
 The Hamiltonian for the spin-1/2 Heisenberg chain is given by 
 $$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
-where $J>0$ for antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^i$ and $\mathbf{S}^j$, and the spin-spin interaction consists of three components, i.e., 
+where $J>0$ for antiferromagnetic interactions between two nearest-neighbor spins $\mathbf{S}^i$ and $\mathbf{S}^j$, and the spin-spin interaction consists of three components, i.e., 
 $$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
 
 The basis states are usually chosen to be the eigen states of $S_z$ operator. For a spin-1/2 system, there are two basis states for each lattice site, $|-1/2\rangle$ and $|+1/2\rangle$. The application of $S_x$ and $S_y$ operators on these basis states can be expressed in terms of raising $S^{\dagger}$ and lowering $S^{-}$ operators:
@@ -118,7 +118,7 @@ Below is the energy spectrum for a 1D Heisenberg chain:
 
 The Hamiltonian for the two-leg spin-1/2 Heisenberg chain is given by 
 $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
-where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, $J_0>0$ is the intra-chain antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^{\alpha i}$ and $\mathbf{S}^{\alpha j}$ in the same chain, and $J_1>0$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ from the first leg and $\mathbf{S}^{2 i}$ from the second leg with $i=1,2,\cdots,L$. 
+where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, $J_0>0$ is the intra-chain antiferromagnetic interactions between two nearest-neighbor spins $\mathbf{S}^{\alpha i}$ and $\mathbf{S}^{\alpha j}$ in the same chain, and $J_1>0$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ from the first leg and $\mathbf{S}^{2 i}$ from the second leg with $i=1,2,\cdots,L$. 
 
 #### Simulation
 
@@ -207,7 +207,7 @@ Below shows the energy spectrum for a Heisenberg ladder:
 
 For our third simulation, we start with the same Hamiltonian as in the previous case
 $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
-where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, we set $J_0=0$, i.e., no intra-chain interactions between two nearest-neighbour spins, and $J_1=1$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ and $\mathbf{S}^{2 i}$ with $i=1,2,\cdots,L$. The system then becomes $L$ isolated dimers. 
+where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, we set $J_0=0$, i.e., no intra-chain interactions between two nearest-neighbor spins, and $J_1=1$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ and $\mathbf{S}^{2 i}$ with $i=1,2,\cdots,L$. The system then becomes $L$ isolated dimers. 
 
 #### Simulation
 
