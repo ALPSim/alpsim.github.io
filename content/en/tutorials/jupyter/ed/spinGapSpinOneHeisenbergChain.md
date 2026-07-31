@@ -12,7 +12,7 @@ In this tutorial we will learn how to use the sparse diagonalization program (La
 
 The Hamiltonian for the spin-1 Heisenberg chain is given by 
 $$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
-where $J>0$ for antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^i$ and $\mathbf{S}^j$, and the spin-spin interaction consists of three components, i.e., 
+where $J>0$ for antiferromagnetic interactions between two nearest-neighbor spins $\mathbf{S}^i$ and $\mathbf{S}^j$, and the spin-spin interaction consists of three components, i.e., 
 $$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
 
 The basis states are usually chosen to be the eigen states of $S_z$ operator. For a spin-1 system, there are three basis states for each lattice site, $|-1\rangle$, $|0\rangle$, and $|+1\rangle$. The application of $S_x$ and $S_y$ operators on these basis states can be expressed in terms of raising $S^{\dagger}$ and lowering $S^{-}$ operators:

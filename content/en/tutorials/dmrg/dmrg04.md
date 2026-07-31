@@ -173,7 +173,7 @@ print('Gap:', energies[1]-energies[0])
 
 ### Extrapolating The Gap To The Thermodynamic Limit
 
-In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger (see Questions below).
+In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behavior gets better when $D$ gets larger (see Questions below).
 
 In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
 
@@ -192,7 +192,7 @@ Here, there is a nasty twist, which we will only state and perform at the moment
 
 Assume you have $\Delta (L)$ within your machine's precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ all with $D=300$ states and 5 sweeps.
 
-The effects of the open ends will decrease as $1/L$, so it makes sense to first plot the gaps $\Delta (L)$ versus $1/L$. This was already done in the spin-1/2 case to produce such a plot. What you see is a curve that is quite straight for small L and then starts bending upward. It would be ideal to have an idea of what the asymptotic behaviour is (the curved part for long lengths), analytically or approximately, to extrapolate. It is common to produce a plot of the gap $\Delta (L)$ versus $1/L^2$ to do so.
+The effects of the open ends will decrease as $1/L$, so it makes sense to first plot the gaps $\Delta (L)$ versus $1/L$. This was already done in the spin-1/2 case to produce such a plot. What you see is a curve that is quite straight for small L and then starts bending upward. It would be ideal to have an idea of what the asymptotic behavior is (the curved part for long lengths), analytically or approximately, to extrapolate. It is common to produce a plot of the gap $\Delta (L)$ versus $1/L^2$ to do so.
 
 The plot below shows the spin-1 gap versus $1/L^2$ at fixed $D=200$: the points now lie on a good straight line, extrapolating to an intercept close to the accepted Haldane gap $\Delta/J=0.41052$ (see [DMRG-02](../dmrg02)) — a much better behaved extrapolation than the spin-1/2 case above, consistent with the $1/L^2$ convergence derived below.
 
@@ -212,7 +212,7 @@ $$
 
 and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$.
 
-For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically, but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+For those that also did the gap between the ground states of magnetization sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted. In fact, there is a very good reason why the spin-1 chain shows this peculiar behavior for open boundary conditions that can be found analytically, but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
 
 ## Summary
 
@@ -222,7 +222,7 @@ DMRG resolves the (likely vanishing) gap of the critical spin-1/2 chain and the 
 
 - Why does the curvature of the gap-vs-$1/L$ plot straighten out as $D$ is increased at fixed chain lengths?
 - Extrapolating the gap in $D$ (or in the truncation error) at each fixed length before plotting versus $1/L$: what does the plot look like now, compared to the first attempt at fixed $D$?
-- If you extrapolate only the linear (small-$L$) part of the $\Delta(L)$ vs. $1/L$ curve for the spin-1 chain naively, what gap do you obtain, and is it over- or underestimated? (This is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.)
+- If you extrapolate only the linear (small-$L$) part of the $\Delta(L)$ vs. $1/L$ curve for the spin-1 chain naively, what gap do you obtain, and is it over- or underestimated? (This is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behavior on reachable length scales.)
 - What gap do you read off if you instead take the longest chain you have, and is it over- or underestimated?
 - Plotting the gap as $\Delta(L)$ versus $1/L^2$ instead of $1/L$: what does the curve now look like for large lengths, and what gap do you extrapolate?
 - How close does your extrapolated gap come to the accepted value $\Delta/J=0.41052$ from [DMRG-02](../dmrg02)?

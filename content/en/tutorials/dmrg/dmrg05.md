@@ -11,7 +11,7 @@ We consider observables that are linked to one specific site to be local observa
 
 Take a chain of length $L=96$ and $D=200$, and calculate the local magnetization $\langle S^z_i \rangle$. Plot it versus the site $i$ for the ground states in the magnetization sectors 0, 1, and 2.
 
-What you should obtain is an essentially flat curve for sector 0, a magnetisation which is essentially concentrated at the chain ends for sector 1, and a magnetisation which is both at the chain ends and in the bulk of the chain for sector 2. This means that the first excitation of the open chain is a boundary excitation, which would not exist on a closed system, and the second excitation of the open chain is a boundary plus a bulk excitation, which is the one we are interested in. For an as of now unknown reason, the energy of the first bulk excitation therefore has to be extracted from comparing sectors 1 and 2.
+What you should obtain is an essentially flat curve for sector 0, a magnetization which is essentially concentrated at the chain ends for sector 1, and a magnetization which is both at the chain ends and in the bulk of the chain for sector 2. This means that the first excitation of the open chain is a boundary excitation, which would not exist on a closed system, and the second excitation of the open chain is a boundary plus a bulk excitation, which is the one we are interested in. For an as of now unknown reason, the energy of the first bulk excitation therefore has to be extracted from comparing sectors 1 and 2.
 
 The moral of the story is that by looking at this local observable, we can distinguish boundary from bulk excitations in the spin-1 chain.
 
@@ -90,9 +90,9 @@ and plot them:
     plt.xlabel('site')
     plt.show()
 
-## Magnetisation in the Spin-1/2 Chain
+## Magnetization in the Spin-1/2 Chain
 
-Repeat a similar calculation for the spin-1/2 chain in the lowest magnetisation sectors.
+Repeat a similar calculation for the spin-1/2 chain in the lowest magnetization sectors.
 
 ### Using parameter files
 
@@ -124,4 +124,4 @@ The local magnetization profile cleanly separates boundary excitations from bulk
 
 ## Questions
 
-- Repeating the local-magnetization calculation for the spin-1/2 chain in its lowest magnetisation sectors, what do you observe, compared to the spin-1 case above?
+- Repeating the local-magnetization calculation for the spin-1/2 chain in its lowest magnetization sectors, what do you observe, compared to the spin-1 case above?
