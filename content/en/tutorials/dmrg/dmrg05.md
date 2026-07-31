@@ -96,7 +96,7 @@ Repeat a similar calculation for the spin-1/2 chain in the lowest magnetization 
 
 ### Using parameter files
 
-The following parameter file will accomplish this task, downloadable [here](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half):
+The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half) will accomplish this task:
 
     LATTICE="open chain lattice"
     MODEL="spin"
