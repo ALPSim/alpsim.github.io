@@ -13,7 +13,7 @@ $$
 H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
-The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behaviour and pose very different challenges to the DMRG algorithm. Before running any DMRG calculations, let us briefly review their physical properties, so that we have exact and numerical benchmark values in hand for the ground state energy, gap, and correlation calculations of the following tutorials.
+The reason why we are choosing these two models, which you may already know from other tutorials, is that despite their superficial similarity they exhibit completely different physical behavior and pose very different challenges to the DMRG algorithm. Before running any DMRG calculations, let us briefly review their physical properties, so that we have exact and numerical benchmark values in hand for the ground state energy, gap, and correlation calculations of the following tutorials.
 
 ### Spin-1/2 Chain
 
@@ -65,7 +65,7 @@ $$
 
 to five-digit accuracy.
 
-The question for the behaviour of the spin-spin correlations leads to yet another big difference to the spin-1/2 case. The correlations read asymptotically (i.e. for $|i-j| \rightarrow \infty$):
+The question for the behavior of the spin-spin correlations leads to yet another big difference to the spin-1/2 case. The correlations read asymptotically (i.e. for $|i-j| \rightarrow \infty$):
 
 $$
  \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\exp (-|i-j|/\xi)}{\sqrt{|i-j|}}  .

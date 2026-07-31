@@ -21,7 +21,7 @@ Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up
 
 1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
 
-2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1, and compare the convergence behaviour in the two cases, apart from a global factor of order of the length. *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
+2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1, and compare the convergence behavior in the two cases, apart from a global factor of order of the length. *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
 
 3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
 
@@ -320,7 +320,7 @@ The correct approach is to eliminate the effect of the open boundary conditions 
 
 1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
 
-2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighbouring sites:
+2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighboring sites:
 $$
 e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$
