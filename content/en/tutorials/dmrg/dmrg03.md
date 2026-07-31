@@ -193,7 +193,30 @@ for run in data:
 
 #### The one dimensional S=1 Heisenberg chain
 
-The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing:
+The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice.
+
+##### Lattice
+
+An open S=1 Heisenberg chain hosts a free effective spin-1/2 at each end (the origin of the fourfold ground-state degeneracy discussed in [DMRG-04](../dmrg04)), which pollutes the low-energy spectrum used to extract bulk quantities. Capping the chain with an explicit spin-1/2 at each end absorbs these edge states, leaving a clean bulk spectrum to work with. This is exactly what `build_lattice.py` encodes: the same open chain as the S=1/2 case above, but with the two boundary sites given `local_S0` instead of the bulk `local_S1`:
+
+```
+Regular open chain (5 sites, all spin S=1):
+
+      J       J       J       J
+  o-------o-------o-------o-------o
+  1       2       3       4       5
+  S=1     S=1     S=1     S=1     S=1
+
+
+Open chain with the two special edges added for the S=1 tutorial (7 sites):
+
+      J       J       J       J       J       J
+  o-------o-------o-------o-------o-------o-------o
+  0       1       2       3       4       5       6
+  S=1/2   S=1     S=1     S=1     S=1     S=1     S=1/2
+```
+
+For instance, by typing:
 
 ```python
 python build_lattice.py 6
