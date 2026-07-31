@@ -37,7 +37,7 @@ $$
 \eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,\qquad C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r}
 $$
 
-So the exponent measured at any finite distance $r$ is:
+So the critical exponent is:
 
 $$
 \eta = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1.

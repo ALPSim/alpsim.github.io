@@ -130,7 +130,7 @@ plt.xlabel('iteration')
 plt.show()
 ```
 
-For the single run above (L=32, MAXSTATES=100), the ground state energy warms up during the infinite-system growth and settles to its converged value within about 50 iterations — compare it to the exact thermodynamic-limit energy per site quoted in [DMRG-02](../dmrg02) — while the truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
+For the single run above (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-13.9973156$ within about 50 iterations — since $J=1$ here, this value is directly $E_0/J$. Dividing by the 31 bonds gives $E_0/(31J)\approx-0.4515$, while dividing by all 32 sites gives $E_0/(32J)\approx-0.4374$; these bracket the exact thermodynamic-limit energy per site quoted in [DMRG-02](../dmrg02), $E_0/J=1/4-\ln2=-0.4431471806$. The truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
 
 ![](/figs/dmrg/dmrg_energy_truncation.png)
 
@@ -193,7 +193,30 @@ for run in data:
 
 #### The one dimensional S=1 Heisenberg chain
 
-The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice. For instance, by typing:
+The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice.
+
+##### Lattice
+
+An open S=1 Heisenberg chain hosts a free effective spin-1/2 at each end (the origin of the fourfold ground-state degeneracy discussed in [DMRG-04](../dmrg04)), which pollutes the low-energy spectrum used to extract bulk quantities. Capping the chain with an explicit spin-1/2 at each end absorbs these edge states, leaving a clean bulk spectrum to work with. This is exactly what `build_lattice.py` encodes: the same open chain as the S=1/2 case above, but with the two boundary sites given `local_S0` instead of the bulk `local_S1`:
+
+```
+Regular open chain (5 sites, all spin S=1):
+
+      J       J       J       J
+  o-------o-------o-------o-------o
+  1       2       3       4       5
+  S=1     S=1     S=1     S=1     S=1
+
+
+Open chain with the two special edges added for the S=1 tutorial (7 sites):
+
+      J       J       J       J       J       J
+  o-------o-------o-------o-------o-------o-------o
+  0       1       2       3       4       5       6
+  S=1/2   S=1     S=1     S=1     S=1     S=1     S=1/2
+```
+
+For instance, by typing:
 
 ```python
 python build_lattice.py 6
@@ -282,6 +305,10 @@ parms = [ {
 
 Apart from parameter and file name changes, it is the same as the `spin_one_half.py` script explained above.
 
+For this S=1 single run (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-42.6513851$ within about 30 iterations — since $J=1$ here, this value is directly $E_0/J$. This chain isn't uniform (30 bulk spin-1 sites plus the 2 spin-1/2 edge sites), so "per site" is ambiguous; dividing by the 31 bonds instead gives $E_0/(31J)\approx-1.3759$, while dividing by just the 30 bulk sites gives $E_0/(30J)\approx-1.4217$. These bracket the numerical thermodynamic-limit energy per site quoted in [DMRG-02](../dmrg02), $E_0/J=-1.401484039$, as expected for a finite chain — even with the special edges added to suppress boundary effects. The truncation error shows the same sawtooth convergence pattern as the spin-1/2 case above, bottoming out near machine precision at the end of each half-sweep and rising again as the next half-sweep begins:
+
+![](/figs/dmrg/dmrg_energy_truncation_spin_one.png)
+
 ##### Multiple runs
 
 ###### Using parameter files
@@ -320,7 +347,7 @@ The correct approach is to eliminate the effect of the open boundary conditions 
 
 1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
 
-2. The less costly and usual way would be to use correlators (as discussed in [DMRG-06](../dmrg06)) between neighboring sites:
+2. The less costly and usual way would be to use correlators (as discussed further in [DMRG-06](../dmrg06)) between neighboring sites:
 $$
 e_0/J = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
 $$
