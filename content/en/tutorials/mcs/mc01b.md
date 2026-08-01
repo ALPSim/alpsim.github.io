@@ -87,6 +87,9 @@ plt.show()
 
 Inspect the resulting plot: the observable should settle to a roughly stationary value after an initial transient.
 If the time series is still drifting at the end of the run, or if it shows a clear trend in the early sweeps that extends well into the measurement phase, the thermalization period (`THERMALIZATION`) is too short and must be increased.
+For the parameters above (`THERMALIZATION=10000`), the time series already fluctuates around a stable mean with no visible drift, indicating that thermalization was sufficient:
+
+![](/figs/mcs01btimeseries.png)
 
 ### Automated check: `pyalps.checkSteadyState`
 
@@ -122,6 +125,6 @@ If the check fails, increase `SWEEPS` and rerun the simulation.
 ## Questions
 
 - Shorten the `THERMALIZATION` period significantly (e.g. to 100 sweeps). Can you see the initial transient in the time series? Does `checkSteadyState` flag it?
-- How does the required thermalization length change as you move away from the critical temperature? Try $T = 1.5$ and $T = 3.5$.
+- How does the required thermalization length change as you move away from the critical temperature? Try: $T=1.5$ and $T=3.5$.
 - Increase and decrease `SWEEPS` by a factor of ten. How do the error bars on the magnetization change? Does this match the expected $1/\sqrt{N}$ scaling?
 - Why is it important to check both equilibration and convergence? Can a simulation pass one check and fail the other?

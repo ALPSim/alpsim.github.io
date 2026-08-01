@@ -7,7 +7,7 @@ weight: 1
 
 ## Quantum phase transitions in the Bose-Hubbard model
 
-**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only.
+**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions.
 
 As an example of the directed worm algorithm QMC code, we will study a quantum phase transition in the Bose-Hubbard model.
 

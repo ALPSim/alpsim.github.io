@@ -186,7 +186,7 @@ We now compare the results for the chain and the ladder. For this, we do not nee
 - What are the significant differences between the two plots, particularly at small values of the field strength  h ?
 - What is the physical interpretation of these differences? How does the excitation spectrum of each system explain this?
 
-We will revisit these questions in the DMRG/MPS tutorial.
+We will revisit these questions in the DMRG tutorial series.
 
 ```
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
