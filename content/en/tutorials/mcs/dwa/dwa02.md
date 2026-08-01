@@ -7,7 +7,7 @@ weight: 2
 
 ## Density profile
 
-**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions only.
+**Attention:** this implementation of the directed worm algorithm is deprecated and will be removed in a future version of ALPS. It should currently only be used for Bose-Hubbard models with on-site interactions.
 
 As a second example of the directed worm algorithm QMC code, we will study the density profile of the Bose-Hubbard model subject to an harmonic trap.
 
@@ -38,7 +38,7 @@ We create the parameter file `parm2a` to set up a Monte Carlo simulation of a $2
     { T=1. }
     
 
-We load the local density measurements from all output files starting with `parm2a`.
+We load the local density measurements from all output files starting with `parm2a`:
 
     import pyalps
     import pyalps.plot as aplt;
@@ -50,7 +50,7 @@ and visualize the column integrated density:
 
 ### Cross section density
 
-We want to observe a Mott plateau in the trapand therefore create the parameter file `parm2b` to set up a Monte Carlo simulation of the Bose-Hubbard model with a large interaction strength:
+We want to observe a Mott plateau in the trap and therefore create the parameter file `parm2b` to set up a Monte Carlo simulation of the Bose-Hubbard model with a large interaction strength:
 
     LATTICE="inhomogeneous simple cubic lattice"
     L=21
