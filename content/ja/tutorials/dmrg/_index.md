@@ -4,17 +4,24 @@ title: Density Matrix Renormalization Group
 description: "Tutorials for ALPS"
 toc: true
 weight: 3
+math: true
 ---
 
-- [DMRG-01 Density Matrix Renormalization Group Introduction](dmrg01)
-- [DMRG-02 Calculating gaps](dmrg02)
-- [DMRG-03 Calculating local observables](dmrg03)
-- [DMRG-04 Calculating correlations](dmrg04)
+密度行列繰り込み群（DMRG）は、ヒルベルト空間を最も重要な $D$ 次元部分空間に反復的に切り詰めることで、一次元量子格子模型の基底状態（および少数の低励起状態）の精度の高い近似を求める手法です。これらのチュートリアルでは、ALPS の `dmrg` アプリケーションを使用し、スピン-1/2 およびスピン-1 反強磁性ハイゼンベルク鎖を例に取り上げます。この二つの模型は表面上は似ていますが、低エネルギー物理においては根本的に異なる振る舞いをするため、この手法を検証するための理想的なテストベッドとなっています。
 
+DMRG は Steven White によって二つの画期的な論文で提案されました：[Density matrix formulation for quantum renormalization groups](https://doi.org/10.1103/PhysRevLett.69.2863)（Phys. Rev. Lett. 69, 2863, 1992）および [Density-matrix algorithms for quantum renormalization groups](https://doi.org/10.1103/PhysRevB.48.10345)（Phys. Rev. B 48, 10345, 1993）で、それぞれ手法の定式化と有限系改良（有限系掃引）が述べられており、今日 ALPS が使用するアルゴリズムの基礎となっています。詳細な背景と参考文献については [DMRG 参照ページ](../../documentation/methods/dmrg/dmrg) をご覧ください。
 
+## 入門
 
+- [DMRG-01 入門](dmrg01) — `dmrg` 実行ファイルと DMRG アルゴリズム（無限系掃引・有限系掃引、切り詰め誤差）およびその制御パラメータを紹介します。
 
+## 模型の物理と基底状態エネルギー
 
+- [DMRG-02 ハイゼンベルクスピン鎖](dmrg02) — 二つの模型の物理を詳しく紹介します：Bethe 仮設によって厳密に解けるギャップレスの臨界スピン-1/2 鎖、およびギャップを持つ非臨界スピン-1（ハルデン）鎖。以降のシリーズで用いる基準値もここで示します。
+- [DMRG-03 基底状態エネルギー](dmrg03) — 最初の `dmrg` 計算を実行し、固定長でのスピン-1/2 鎖とスピン-1 鎖の基底状態エネルギーを計算し、熱力学極限における格子点当たり（あるいは結合当たり）のエネルギーへ外挿します。
 
+## 励起状態と相関関数
 
-
+- [DMRG-04 エネルギーギャップ](dmrg04) — 有限系でのスピン-1/2 鎖の一重項-三重項ギャップとスピン-1 鎖のハルデンギャップを計算し、両者を熱力学極限へ外挿します。
+- [DMRG-05 局所オブザーバブル](dmrg05) — 局所磁化プロファイルを用いてスピン-1 鎖における境界励起とバルク励起を区別します。これは DMRG が開放境界条件を好むことから生じる微妙な点です。
+- [DMRG-06 相関関数](dmrg06) — スピン-スピン相関関数を計算し、スピン-1/2 鎖の臨界べき乗則指数とスピン-1 鎖の相関長を抽出します。

@@ -1,193 +1,228 @@
 
 ---
-title: DMRG-04 Correlations
+title: DMRG-04 Gaps
 math: true
 toc: true
 ---
 
-## Correlation Functions
+## 计算能隙
 
-The most important correlation functions in many-body physics are two-point correlators, i.e. correlators that involve two sites $i$ and $j$, such as $\langle S^+_i S^-_j \rangle$. Short-ranged ones determine energies (in the typical short-ranged Hamiltonians of correlation physics), long-ranged ones determine correlation lengths.
-
-### Another Go At The Energy Per Bond
-
-As already mentioned above, the ground state energy per bond in both spin-1/2 and spin-1 chain is given by
+如 [DMRG-02](../dmrg02) 中已提到的，量子系统的能隙是热力学极限下第一激发态与基态之间的能量差：
 
 $$
-e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle 
+\Delta = E_1 - E_0
 $$
 
-This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance.
+这意味着我们必须解决两个问题：（i）计算有限系统尺寸下的：
 
-Obviously, the bonds that are closest to the thermodynamic limit behaviour are those in the chain center. So, the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$.
+$$
+\Delta(L) = E_1 (L) - E_0 (L)
+$$
 
-Before you do this, however, plot for some values of $D$ and not too small $L e_0(i)$ versus $i$ (as a check of the program, you may also consider the three contributions individually before you do the sum. What relationship between them should exist?).
+以及（ii）将 $\Delta (L)$ 外推至热力学极限 $L= \infty$。后者并非 DMRG 所特有的问题，但由于 DMRG 偏好开放边界条件，它比通常更常见的周期性边界条件情形要略为复杂。
 
-What do you observe for spin-1? And what for spin-1/2?
+### 获取有限系统的能隙
 
-For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends make themselves felt very strongly due to criticality and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond; you immediately gain lots of accuracy. This is yet another example that it is worthwhile to have a close look at the actual output of DMRG by considering various local or (here) almost local observables.
+显然，我们必须能够获取第一激发态及其能量。DMRG 基本上有两种方法：一种是万能但不够优雅的方法，另一种是更巧妙但并非在所有情况下都适用的方法。
 
-### Spin-Spin Correlations: Spin-1/2
+1. 朴素的方法是设置一个同时计算两个态的 DMRG 计算。然而，对于给定的态数目，精度会有所下降，因为两个不同的量子态都需要被精确描述。
 
-Take a relatively long chain (say, $L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+2. 更巧妙的方法是将能隙计算化为两个基态的计算。在许多量子系统中，基态和第一激发态具有不同的好量子数，因此分别是各自量子数扇区中的基态。例如，对于自旋-1/2 链，基态是总自旋为 0 的单重态，即磁化量子数 0 扇区的基态。第一激发态是总自旋为 1 的三重态，即由磁化量子数 0 的一个激发态以及磁化量子数 +1 和 -1 扇区的基态组成。因此，它可以被计算为磁化量子数 +1 扇区中的基态。
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is l. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible; there are also other ways of doing this (like averaging over several correlators with same site distance, also more or less centered). As we expect a power law, use a log-log plot. Take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
+让我们从自旋-1/2 链的计算开始。
 
-What you should see, is a power law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power laws by such superpositions - at large distance, the slowest exponential decay will survive all the others, replacing the power law by an exponential law. The larger you choose $D$, the further you push out this crossover.
+#### 示例：不使用量子数
 
-#### Using parameter files
+##### 使用参数文件
 
-The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half) will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric.
+在下面的例子中，我们在自旋 S=1/2 链的参数文件 [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) 中添加一行，告知代码我们还要计算第一激发态的能量。算法将构建一个同时针对两个态的密度矩阵：基态和第一激发态，两者均在 Sz=0 子空间中。由于第一激发态是三重态，这将给出单重态-三重态能隙：
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    L=32
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
-
-#### Using Python
-
-The script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) sets up three runs with different numbers of states $D$ and loads the results.
-
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = []
-    for D in [20,40,60]:
-        parms.append( { 
-            'LATTICE'                               : 'open chain lattice', 
-            'MODEL'                                 : 'spin',
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 6,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'L'                                     : 32,
-            'MAXSTATES'                             : D,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-            } )
-            
-    input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```python
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+J=1
+SWEEPS=4
+{L=32, MAXSTATES=100
+NUMBER_EIGENVALUES=2}
+```
     
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+注意，我们只添加了最后一行，指定了要计算的本征态数目。通过同时针对两个态，算法确保两者都被精确表示。然而，若只保留 100 个态，这并不完全成立。请将本参数文件得到的基态能量与仅针对基态的上一次模拟进行比较。
 
-Now we can extract e.g. Sz:Sz correlations
+重要的是要注意，本例中的纠缠熵完全没有意义，因为算法正在计算一个混合了两个态的密度矩阵。简单来说，算法同时针对 $S_z=0$ 扇区的基态和第一激发态，导致的是经典混合不确定性而非纯量子纠缠。要正确计算纠缠熵，需要对单重态扇区和三重态扇区分别独立对角化，以避免这种混合。
 
-    curves = []
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Diagonal spin correlations':
-                d = pyalps.DataSet()
-                d.props['observable'] = 'Sz correlations'
-                d.props['label'] = 'D = '+str(s.props['MAXSTATES'])
-                L = int(s.props['L'])
-                d.x = np.arange(L)
-           
-                # sites with increasing distance l symmetric to the chain center
-                site1 = np.array([int(-(l+1)/2.0) for l in range(0,L)]) + L/2
-                site2 = np.array([int(  l   /2.0) for l in range(0,L)]) + L/2
-                indices = L*site1 + site2
-                d.y = abs(s.y[0][indices])
-           
-                curves.append(d)
-and plot them vs. site distance.
+##### 使用 Python
 
-    plt.figure()
-    pyalps.plot.plot(curves)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.legend()
-    plt.title('Spin correlations in antiferromagnetic Heisenberg chain (S=1/2)')
-    plt.ylabel('correlations $| \\langle S^z_{L/2-l/2} S^z_{L/2+l/2} \\rangle |$')
-    plt.xlabel('distance $l$')
-    plt.show()
+脚本 [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) 运行与 [DMRG-03](../dmrg03) 教程中自旋-1/2 脚本相同的模拟，只是将请求的 NUMBER_EIGENVALUES 改为 2，并加载所有这些本征态的数据：
 
-### Spin-Spin Correlations: Spin-1
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
 
-In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again, choose a long chain (say,$L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+parms = [ { 
+        'LATTICE'                   : "open chain lattice", 
+        'MODEL'                     : "spin",
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : 0,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'L'                         : 32,
+        'MAXSTATES'                 : 100,
+        'NUMBER_EIGENVALUES'        : 2
+       } ]
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
+input_file = pyalps.writeInputFiles('parm_spin_one_half_gap',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
 
-From the log-lin plot, extract a correlation length. It will depend (and in fact monotonically increase with) $D$. Has it converged when you reach e.g. $D=300$? How does this compare to the convergence for the same number of states of local or quasi-local observables such as magnetization or energy?
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
+```
 
-In fact, the calculation of correlation lengths is much harder to converge than that of the local quantities. This is due to the fact that a more profound algorithmic analysis reveals DMRG to be an algorithm geared especially well to the optimal representation of local quantities, not so much non-local ones as long-ranged correlators.
+在遍历所有测量时，我们提取能量：
 
-#### Using parameter files
+```python
+energies = np.empty(0)
+for s in data[0]:
+    if s.props['observable'] == 'Energy':
+        energies = s.y
+    else:
+        print(s.props['observable'], ':', s.y[0])
+```
 
-The parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one) looks much like the one for the previous example, but replacing the lattice and the model as follows:
+并计算能隙：
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+```python
+energies.sort()
+print('Energies:', end=' ')
+for e in energies:
+    print(e, end=' ')
+print('\nGap:', abs(energies[1]-energies[0]))
+```
 
-#### Using Python
+#### 示例：使用量子数
 
-The main difference of the script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) with respect to the previous one is the definition of lattice and model.
+要利用量子数守恒来计算单重态-三重态能隙，我们需要进行两次独立模拟，一次 Sz=0，另一次 Sz=1。两个能量之差即为能隙。
 
-    parms = []
-    L = 32
-    for D in [20,40,60]:
-        parms.append( { 
-            'LATTICE_LIBRARY'                       : 'my_lattices.xml',
-            'LATTICE'                               : 'open chain lattice with special edges '+str(L),
-            'MODEL'                                 : 'spin',
-            'local_S0'                              : 0.5,
-            'local_S1'                              : 1,
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 4,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'MAXSTATES'                             : D,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-        } )
+##### 使用参数文件
 
-After running the simulation, correlations can be extracted and plotted in the same way as before.
+这意味着我们只需更改 spin_one_half 参数文件中 Sz_total 的值：
 
-### Sometimes There Is A Way Out
+```python
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=1
+SWEEPS=4
+J=1
+{L=32, MAXSTATES=40}
+```
 
-In the special case of the spin-1 chain, we have a loophole for the calculation of the correlation length, which is related to the weird observation that the first excitation was not a bulk excitation. It can be shown that a good toy model for a spin-1 chain is given as follows: at each site of a spin-1, you put two spin-1/2, and construct the spin-1 states from the triplet states of the two spin-1/2 at each site. The ground state is then approximated quite well by a state where you link two spin-1/2 on *neighbouring* sites by a singlet state.
+可从此处下载该文件：[`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet)。
 
-In this construction, for open boundary conditions (but not periodic ones), on the first and on the last site there will be two lonely spins-1/2 without partner. These two spins-1/2 can form 4 states among themselves, which in the toy model are degenerate: the ground state is four-fold degenerate. In the real spin-1 chain, this four-fold degeneracy (from one state of total spin 0 and three of total spin 1) is only achieved in the thermodynamic limit when the two spins are totally removed from each other. This is why there was no gap between magnetization sectors 0 and 1. The first bulk excitation needs magnetization 2.
+##### 使用 Python
 
-What we can do to cure this, is to attach one spin-1/2 before the first and after the last site, taking the same bond Hamiltonian, that link up to the two lonely spins by a singlet state. You may check that now the gap is between magnetization sectors 0 and 1!
+脚本 [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) 通过两个 Python 参数字典对两个 Sz 扇区各运行一次模拟：
 
-In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2, and be characterized by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
 
-For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length. What do you get?
+parms = []
+for sz in [0,1]:
+    parms.append( { 
+        'LATTICE'                   : "open chain lattice", 
+        'MODEL'                     : "spin",
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : sz,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'L'                         : 32,
+        'MAXSTATES'                 : 40,
+        'NUMBER_EIGENVALUES'        : 1
+       } )
+       
+input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```
+
+以通常方式加载结果后，打印两个扇区的测量结果，并将每个 Sz 值的基态能量保存到字典中：
+
+```python
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
+
+# print results:
+energies = {}
+for run in data:
+    print('S_z =', run[0].props['Sz_total'])
+    for s in run:
+        print('\t', s.props['observable'], ':', s.y[0])
+        if s.props['observable'] == 'Energy':
+            sz = s.props['Sz_total']
+            energies[sz] = s.y[0]
+```
+
+然后，我们可以将能隙计算为 Sz=1 和 Sz=0 扇区之间的能量差：
+
+```python
+print('Gap:', energies[1]-energies[0])
+```
+
+### 将能隙外推至热力学极限
+
+第一次尝试：固定 $D=50,100,150$，计算长度 $L=32,64,96,128$ 的能隙。对于固定 $D$，绘制能隙与 $1/L$ 的关系图。你应该看到，对于较小的 $D$，结果不会落在过零点的直线上，而是从直线向上弯曲。这种行为随着 $D$ 增大而改善（见下方思考题）。
+
+第二次更有意义的尝试：固定链长 $L=32,64,96,128$，改变 $D=50,100,150,200$，以便对每个固定链长在 $D$（或如上所述的截断误差）方向外推能隙，然后使用这些外推值绘制能隙与 $1/L$ 的关系图。
+
+下图显示了固定 $D=100$ 时自旋-1/2 单重态-三重态能隙与 $1/L$ 的关系：四个点接近一条通过较小但明显非零截距的直线，恰好说明了下面描述的困境——仅凭这四个链长，很难区分真正消失的能隙和极小的有限能隙。
+
+![](/figs/dmrg/extrapolationGapSHalf.png)
+
+修改文件 [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple)，为不同系统尺寸和不同态数目的 Sz=0 和 Sz=1 设置所有运行。使用五次扫描，按照教程中概述的步骤外推能隙值。
+
+自旋-1/2 链的情形有些令人沮丧，因为即使将计算机推到极限，你所能得出的结论也不过是：在你的能力范围内，能隙似乎极小，因此很可能消失。但谁能告诉你这不是能隙为 $e^{-50}$ 这样的情形呢？这当然是对即便高度精确的数值方法也存在局限性的清醒认识。
+
+因此，让我们转向一个更有成效的问题：自旋-1 反铁磁海森堡链的能隙是多少？
+
+这里有一个奇特之处，我们目前只是说明并执行，但稍后会解释：计算能隙不是在磁化量子数 0 和 1 扇区的基态之间，而是在扇区 1 和 2 之间。如果你愿意，也可以对 0 和 1 进行计算，以供后续参考，但以下内容是针对 1 和 2 的情形。
+
+假设你已经以机器精度确定了 $\Delta (L)$，无论是通过上述适当的外推还是通过非常高精度的计算。如果不想进行前者，可以对系统尺寸 $L=8,16,32,48,64,96,128,192,256$ 使用 $D=300$ 个态和 5 次扫描来计算能隙。
+
+开放端的影响将以 $1/L$ 的方式减小，因此首先绘制能隙 $\Delta (L)$ 与 $1/L$ 的关系图是合理的。自旋-1/2 情形已经这样做过。你所看到的是一条对小 $L$ 相当直，然后开始向上弯曲的曲线。理想情况下应了解渐近行为（长链的弯曲部分）是什么（解析上或近似地），以便进行外推。通常绘制能隙 $\Delta (L)$ 与 $1/L^2$ 的关系图来做到这一点。
+
+下图显示了固定 $D=200$ 时自旋-1 能隙与 $1/L^2$ 的关系：点现在落在一条很好的直线上，外推到的截距接近公认的 Haldane 能隙 $\Delta/J=0.41052$（见 [DMRG-02](../dmrg02)）——这比上面自旋-1/2 情形的外推行为好得多，与下面推导的 $1/L^2$ 收敛性一致。
+
+![](/figs/dmrg/extrapolationGapSOne.png)
+
+该过程实际上是由以下论证所启发的：从 Haldane 用非线性 sigma 模型对自旋-1 链的分析中，可以预期最低激发（对于周期性边界条件可以用动量 $k$ 标记）在 $k=\pi$ 附近，能量为：
+
+$$
+E(k) = E_0 + \sqrt{\Delta^2 + c^2 (k-\pi)^2}.
+$$
+
+对于开放边界条件，我们可以近似 $k-\pi \approx 1/L$（类比箱中粒子），这给出有限尺寸的能隙为：
+
+$$
+\Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 
+$$
+
+这表明在渐近极限下，收敛行为本质上是 $1/L^2$。
+
+对于那些也计算了磁化量子数 0 和 1 扇区基态之间能隙的人，请说明那里得到的能隙本质上为零。其余人可以将这一结果视为已知。事实上，为什么自旋-1 链在开放边界条件下表现出这种奇特行为，有一个很好的解析原因，即使我们不幸地不知道这一原因，我们也可以立即发现问题！这可以通过观察局域可观测量来做到。
+
+## 小结
+
+DMRG 能够分辨临界自旋-1/2 链（可能消失的）能隙和自旋-1 链有限的 Haldane 能隙，但这两种情形需要不同的外推策略——对近无能隙情形用 $1/L$，对有能隙情形用 $1/L^2$——反映了它们不同的长程物理；[DMRG-05](../dmrg05) 解释了为何自旋-1 能隙必须专门取磁化量子数扇区 1 和 2 之间的值。
+
+## 思考题
+
+- 在固定链长时增大 $D$，能隙与 $1/L$ 关系图的曲率为何会变直？
+- 在固定各链长后先在 $D$（或截断误差）方向外推能隙，再绘制与 $1/L$ 的关系图：与第一次固定 $D$ 的尝试相比，结果现在是什么样的？
+- 若只是朴素地外推自旋-1 链 $\Delta(L)$ 与 $1/L$ 曲线的线性（小 $L$）部分，你会得到什么能隙？是高估还是低估？（这在链的关联长度很长，以至于在可达链长上很难看到渐近行为时尤为重要。）
+- 如果用你拥有的最长链来读取能隙，结果是高估还是低估？
+- 改用 $\Delta(L)$ 与 $1/L^2$ 作图：对大链长，曲线现在是什么样的？你外推得到什么能隙？
+- 你外推得到的能隙与 [DMRG-02](../dmrg02) 中的公认值 $\Delta/J=0.41052$ 相差多少？
+- 磁化量子数扇区 0 和 1 之间的能隙本质上为零，而扇区 1 和 2 之间的能隙是有限的。为什么有限能隙是物理上正确的，而消失的能隙是错误的——这是物理上的彩票吗？
