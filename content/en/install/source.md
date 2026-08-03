@@ -187,10 +187,29 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 
 
 ### Troubleshooting
-<common>
-* **TEST**
-</common>
+
 <details>
+<summary><strong>Common Pitfalls</strong></summary>
+
+* **Boost/Python ABI mismatch** <br> To avoid an ABI issue, make sure the Python version your Boost was built against is similar to the Python version being used to build ALPS. Consider rebuilding a stale Boost library.
+* **Check which Python is actually being used** <br> Confirm the path of the Python CMake selects matches the version you expect. Keep in mind there can be several Pythons on one machine — Homebrew, conda, the OS-provided one (Linux distro Python or Apple's bundled Python), etc. — and CMake may not pick the one you intended.
+  * A virtual environment inserts another Python path ahead of the others in your `PATH`, which can silently corrupt the build if it's active without you noticing.
+  * When in doubt, CMake should probably be pointed at the native Python that ships with your OS rather than one of these alternates.
+* **Check `CMakeCache.txt`** <br> After configuring, grep the cache in your build directory to see exactly which Python CMake locked in:
+  ```ShellSession
+  grep -i python build/CMakeCache.txt
+  ```
+  Compare that against the Python you actually intend to build against:
+  ```ShellSession
+  which python3
+  python3 -c "import sys; print(sys.executable)"
+  ```
+  If they don't match, delete the build directory and set explicitly by reconfiguring with: `-DPython3_EXECUTABLE=/path/to/python3`.
+
+</details>
+
+<details>
+
 * **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
 * **Python errors** <br> Ensure Python ≥ 3.9 is installed and that `numpy` and `scipy` are installed for the same Python that CMake selects. On macOS, CMake may pick the Xcode-bundled Python rather than your Homebrew/MacPorts Python — check the `Found Python:` line in the CMake output and pin the interpreter with `-DPython3_EXECUTABLE=/path/to/python3` if needed (see the [Verify Dependencies](#verify-dependencies) step).
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
