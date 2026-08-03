@@ -17,10 +17,10 @@ The reason why we are choosing these two models, which you may already know from
 
 ### Spin-1/2 Chain
 
-The ground state of the spin-1/2 chain can be constructed exactly by the Bethe ansatz; we therefore know its ground state energy exactly. In the thermodynamic limit $L\rightarrow\infty$ the energy per site is given by:
+The ground state of the spin-1/2 chain can be constructed exactly by the Bethe ansatz; we therefore know its ground state energy exactly. The intensive ground-state energy is properly defined as energy per bond, $e_0/J \equiv E_0(L)/[(L-1)J]$ (as used throughout [DMRG-03](../dmrg03)); but in the thermodynamic limit $L\rightarrow\infty$, the number of bonds $L-1$ and the number of sites $L$ become indistinguishable, so this is conventionally — if loosely — called the energy *per site*:
 
 $$
-E_0/J = 1/4 - \ln 2 = -0.4431471805599... 
+e_0/J = 1/4 - \ln 2 = -0.4431471805599... 
 $$
 
 Ground state energies as such are of limited interest if not compared to other energies. However, this one can serve as a beautiful benchmark of the DMRG method, as we will verify numerically in [DMRG-03](../dmrg03). Of more interest is whether the ground state is separated from the excited states by an energy difference that survives also in the thermodynamic limit, i.e. whether the *gap* is vanishing or not. For the spin-1/2 chain, the gap is 0.
@@ -51,10 +51,10 @@ For decades, people thought that the spin-1 chain would behave similarly, of cou
 
 Unlike the spin-1/2 chain, the spin-1 chain has no properties that can be calculated exactly by analytical means. We have to rely completely on numerics when it comes to quantitative statements.
 
-The ground state energy per site is given by:
+The same intensive quantity $e_0/J$ (per bond, conventionally called per site in this thermodynamic-limit sense) is given by:
 
 $$
- E_0/J = -1.401484039 ... .
+ e_0/J = -1.401484039 ... .
  $$
 
 Again, the question of the existence of a gap is more important, and here one of the big differences to the spin-1/2 chain becomes visible: in the thermodynamic limit, the gap in the spin-1 chain is finite and given by:
