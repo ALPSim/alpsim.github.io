@@ -17,7 +17,7 @@ The moral of the story is that by looking at this local observable, we can disti
 
 ### Using parameter files
 
-The following parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one) will setup three individual runs, one for each spin sector (same as before, we shall use a smaller system and number of states for illustration):
+The following parameter file <a href="../codes/dmrg-05-local-observables/spin_one" download>`spin_one`</a> will setup three individual runs, one for each spin sector (same as before, we shall use a smaller system and number of states for illustration):
 
     LATTICE_LIBRARY="my_lattices.xml"
     LATTICE="open chain lattice with special edges 32"
@@ -41,7 +41,7 @@ Using the usual sequence of commands to convert and run it:
 
 ### Using Python
 
-The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one.py) runs one simulation for each of the three spin sectors:
+The script <a href="../codes/dmrg-05-local-observables/spin_one.py" download>`spin_one.py`</a> runs one simulation for each of the three spin sectors:
 
     import pyalps
     import numpy as np
@@ -96,7 +96,7 @@ Repeat a similar calculation for the spin-1/2 chain in the lowest magnetization 
 
 ### Using parameter files
 
-The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half) will accomplish this task:
+The following parameter file <a href="../codes/dmrg-05-local-observables/spin_one_half" download>`spin_one_half`</a> will accomplish this task:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -116,7 +116,7 @@ The following parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/bl
 
 ### Using Python
 
-Apart from the obvious parameter changes, the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half.py) is the same as the `spin_one` script explained above.
+Apart from the obvious parameter changes, the script <a href="../codes/dmrg-05-local-observables/spin_one_half.py" download>`spin_one_half.py`</a> is the same as the `spin_one` script explained above.
 
 ## Summary
 

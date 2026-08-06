@@ -35,7 +35,7 @@ Let us start by doing these calculation for the spin-1/2 chain.
 
 ##### Using parameter files
 
-In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
+In this example below, we include a line in the parameter file for the spin S=1/2 chain <a href="../codes/dmrg-04-gaps/spin_one_half_gap" download>`spin_one_half_gap`</a> to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
 
 ```python
 LATTICE="open chain lattice"
@@ -54,7 +54,7 @@ It is important to notice that the entanglement entropy in this example is total
 
 ##### Using Python
 
-The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
+The script <a href="../codes/dmrg-04-gaps/spin_one_half_gap.py" download>`spin_one_half_gap.py`</a> runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
 
 ```python
 import pyalps
@@ -119,11 +119,11 @@ J=1
 {L=32, MAXSTATES=40}
 ```
 
-You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
+You can download this file from here: <a href="../codes/dmrg-04-gaps/spin_one_half_triplet" download>`spin_one_half_triplet`</a>.
 
 ##### Using Python
 
-The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
+The script <a href="../codes/dmrg-04-gaps/spin_one_half_triplet.py" download>`spin_one_half_triplet.py`</a> runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
 
 ```python
 import pyalps
@@ -181,7 +181,7 @@ The plot below shows the spin-1/2 singlet-triplet gap versus $1/L$ at fixed $D=1
 
 ![](/figs/dmrg/extrapolationGapSHalf.png)
 
-Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
+Modify the file <a href="../codes/dmrg-04-gaps/spin_one_half_multiple" download>`spin_one_half_multiple`</a> to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
 
 The case of the spin-1/2 chain is a bit frustrating because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But, who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
