@@ -29,7 +29,7 @@ LATTICE="square lattice"
 T=2.269186
 J=1
 THERMALIZATION=10000
-SWEEPS=50000
+SWEEPS=100000
 UPDATE="local"
 MODEL="Ising"
 {L=48;}
@@ -57,8 +57,9 @@ parms = [{
     'L'               : 48,
     'J'               : 1.,
     'T'               : 2.269186,
+    'UPDATE'          : "local",
     'THERMALIZATION'  : 10000,
-    'SWEEPS'          : 50000,
+    'SWEEPS'          : 100000,
     }]
 ```
 
@@ -69,27 +70,55 @@ input_file = pyalps.writeInputFiles('parm1a', parms)
 pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 ```
 
-### Inspecting the time series
+### How ALPS stores the time series
 
-The most direct way to check equilibration is to plot the time series of a measured observable.
-We load the magnetization time series from the output file and plot it:
+`pyalps.loadTimeSeries` does not return one value per sweep. ALPS keeps at most 128 bins, doubling the bin size as the run grows, and stores the **sum** over each bin — so this run's ~130,000 sweeps arrive as ~125 bins of 1024 sweeps each, with values a factor `bin_size` too large. Divide by the bin size, which is an HDF5 attribute on the dataset:
 
 ```Python
-files = pyalps.getResultFiles(prefix='parm1a')
-ts_M = pyalps.loadTimeSeries(files[0], '|Magnetization|')
+import h5py
+import numpy as np
 
-plt.plot(ts_M)
+files = pyalps.getResultFiles(prefix='parm1a')
+
+ts_M = np.array(pyalps.loadTimeSeries(files[0], '|Magnetization|'))
+with h5py.File(files[0].replace('.xml', '.h5'), 'r') as f:
+    bin_size = f['/simulation/results/|Magnetization|/timeseries/data'].attrs['binsize']
+ts_M = ts_M / bin_size          # bin sums -> |M| per sweep
+```
+
+Plotting the raw array against its index instead labels the axis in bins while implying sweeps, understating the length of the run by three orders of magnitude.
+
+### Inspecting the time series
+
+Plot against the true sweep number and overlay the *running mean* — the average of all bins up to that point. Single bins fluctuate wildly; the running mean of an equilibrated chain converges smoothly onto the final answer, while an unthermalized one stays biased for a long time.
+
+```Python
+sweep = 10000 + (np.arange(len(ts_M)) + 0.5) * bin_size   # 10000 = THERMALIZATION
+running_mean = np.cumsum(ts_M) / np.arange(1, len(ts_M) + 1)
+
+plt.plot(sweep, ts_M, lw=1.0, alpha=0.5, label='binned |M|')
+plt.plot(sweep, running_mean, lw=2.6, color='black', label='running mean')
+plt.axhline(ts_M.mean(), ls='--', lw=1.4, color='0.55')
 plt.xlabel('Monte Carlo sweep')
-plt.ylabel('|Magnetization|')
-plt.title('Magnetization time series')
+plt.ylabel('|M|')
+plt.legend()
 plt.show()
 ```
 
-Inspect the resulting plot: the observable should settle to a roughly stationary value after an initial transient.
-If the time series is still drifting at the end of the run, or if it shows a clear trend in the early sweeps that extends well into the measurement phase, the thermalization period (`THERMALIZATION`) is too short and must be increased.
-For the parameters above (`THERMALIZATION=10000`), the time series already fluctuates around a stable mean with no visible drift, indicating that thermalization was sufficient:
-
 ![](/figs/mcs01btimeseries.png)
+
+Panel **(a)** uses `THERMALIZATION=0`, averaged over 32 `SEED` values because a single run at $T_c$ is far too noisy to see the transient; panel **(b)** is the run defined above, with `THERMALIZATION=10000`. In both panels the grey dashed line is the equilibrium value $|M| = 0.616$, and the shaded band marks the thermalization sweeps.
+
+- **A real transient is one-way.** `spinmc` starts from an ordered configuration, so $|M|$ decays onto the equilibrium value within the first 1000–2000 sweeps (panel (a)).
+- **Panel (b) cannot show one.** Thermalization sweeps are never measured — they are absent from the output file entirely, not merely plotted off to the left.
+- **The deep excursions are not transients.** They recur at comparable depth throughout the run: equilibrium critical fluctuations. ALPS reports `AUTOCORR` = $\tau \approx 158$ sweeps here, and one bin spans $\approx 6.5\,\tau$, so swings this large are expected.
+- **`THERMALIZATION=10000` is about $63\,\tau$** — ample, and the running mean settles without drift. But a stable-looking mean is not proof of stationarity, which is what the test below is for.
+
+If the running mean is still drifting one way at the end of the run, increase `THERMALIZATION`.
+
+{{< callout type="info" >}}
+`spinmc` only checks whether it is finished at intervals set by `--Tmin`, so it overshoots `SWEEPS` — this run recorded about 128,500 measurements rather than 100,000. Harmless: extra equilibrium samples only improve the statistics.
+{{< /callout >}}
 
 ### Automated check: `pyalps.checkSteadyState`
 
@@ -121,6 +150,8 @@ data = pyalps.checkConvergence(data)
 ```
 
 If the check fails, increase `SWEEPS` and rerun the simulation.
+
+In practice, for this particular setup — the Ising model exactly at $T_c$ with **local** (single-spin-flip) updates — `checkConvergence` can keep failing even at many times the `SWEEPS` used above. This is *critical slowing down*: local-update autocorrelation times grow with system size near a critical point, so the run needs proportionally more sweeps for the binned error estimate to stabilize. Increasing `SWEEPS` further will eventually converge it, but a more efficient fix is to switch to a cluster algorithm (e.g. Wolff or Swendsen-Wang updates), which largely eliminates critical slowing down.
 
 ## Questions
 
