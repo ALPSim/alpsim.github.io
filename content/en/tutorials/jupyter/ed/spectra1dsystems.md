@@ -14,7 +14,7 @@ In this tutorial we will calculate the energy spectra of the quantum Heisenberg 
 
 #### Introduction
 
-The Hamiltonian for the spin-1/2 Heisenberg chain is given by 
+The Hamiltonian for the spin-1/2 Heisenberg chain, first introduced by [W. Heisenberg, Zeitschrift für Physik 49, 619-636 (1928)](https://doi.org/10.1007/BF01328601), is given by 
 $$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
 where $J>0$ for antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^i$ and $\mathbf{S}^j$, and the spin-spin interaction consists of three components, i.e., 
 $$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
@@ -29,6 +29,15 @@ where $S=1/2$ and $s=-1/2, 1/2$.
 
 With the above basis states for each lattice site, the Hamiltonian can be written as a Hermitian matrix. The size of the matrix can be reduced when the total magnetization is fixed, i.e., setting Sz_total = 0 (singlet sector) or Sz_total = 1 (triplet sector) in the simulations. To further reduce the size of the Hamiltonian matrix and obtain the momentum dependence of the energy spectra, we can further restrict the simulations in different lattice momentum sectors $P=0, 1, 2, \cdots$. 
 
+**Parameters:** `LATTICE="chain lattice"`, `MODEL="spin"`, `local_S=0.5`, `J=1`, `CONSERVED_QUANTUMNUMBERS="Sz"`, `Sz_total=0`, and `L=10,12,14,16`.
+
+**Lattice:**
+```
+   J     J     J           J
+o-----o-----o-----o-- ... --o     (periodic chain, L sites, coupling J on every bond)
+```
+
+**Method choice:** the Hilbert space is $2^L$, e.g. $2^{16}=65536$ at the largest size — small enough for `sparsediag`'s Lanczos algorithm to find the full low-energy spectrum in every $(S_z, P)$ sector in seconds.
 
 #### Simulation
 
@@ -120,6 +129,19 @@ The Hamiltonian for the two-leg spin-1/2 Heisenberg chain is given by
 $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
 where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, $J_0>0$ is the intra-chain antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^{\alpha i}$ and $\mathbf{S}^{\alpha j}$ in the same chain, and $J_1>0$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ from the first leg and $\mathbf{S}^{2 i}$ from the second leg with $i=1,2,\cdots,L$. 
 
+**Parameters:** `LATTICE="ladder"`, `MODEL="spin"`, `local_S=0.5`, `J0=1`, `J1=1`, `CONSERVED_QUANTUMNUMBERS="Sz"`, `Sz_total=0`, and `L=6,8,10`.
+
+**Lattice:**
+```
+o--J0--o--J0--o    (leg 1)
+|      |      |
+J1     J1     J1
+|      |      |
+o--J0--o--J0--o    (leg 2, L rungs total)
+```
+
+**Method choice:** the ladder has $2L$ sites, so the Hilbert space is $2^{2L}$ — $2^{20}\approx10^6$ at $L=10$ — still well within reach of `sparsediag`'s Lanczos solver once the $S_z=0$ restriction is applied.
+
 #### Simulation
 
 We first import the required modules.
@@ -209,6 +231,19 @@ For our third simulation, we start with the same Hamiltonian as in the previous 
 $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
 where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, we set $J_0=0$, i.e., no intra-chain interactions between two nearest-neighbour spins, and $J_1=1$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ and $\mathbf{S}^{2 i}$ with $i=1,2,\cdots,L$. The system then becomes $L$ isolated dimers. 
 
+**Parameters:** same `ladder` lattice and `spin` model as above, but with `J0=0` (legs decoupled) and `J1=1`, for `L=6,8,10`.
+
+**Lattice:**
+```
+o      o      o
+|      |      |
+J1     J1     J1     (J0 = 0: no leg bonds → L independent dimers)
+|      |      |
+o      o      o
+```
+
+**Method choice:** setting $J_0=0$ decouples the ladder into $L$ independent 2-site dimers, so the exact spectrum is known analytically (each dimer contributes a singlet at $E=-3J_1/4$ and a triplet at $E=J_1/4$); this case is included as a sanity check on the `sparsediag` results for the coupled ladder above.
+
 #### Simulation
 
 We first import the required modules.
@@ -292,5 +327,32 @@ plt.pyplot.ylim(0,2.5)
 plt.pyplot.show()
 ```
 
-The energy spectrum for Heisenberg isomers is shown below:
-![Energy spectrum Heisenberg isomers](/figs/ed/spectrumisolateddimers.png)
+The energy spectrum for the isolated Heisenberg dimers is shown below:
+![Energy spectrum of isolated Heisenberg dimers](/figs/ed/spectrumisolateddimers.png)
+
+### Results
+
+Ground-state energies and the gap to the first excited state, from running the code above:
+
+| System | $L$ | $E_0$ | $E_0/L$ | Gap to $E_1$ |
+|---|---|---|---|---|
+| Chain | 10 | -4.51545 | -0.45154 | 0.42324 |
+| Chain | 12 | -5.38739 | -0.44895 | 0.35585 |
+| Chain | 14 | -6.26355 | -0.44740 | 0.30711 |
+| Chain | 16 | -7.14230 | -0.44639 | 0.27019 |
+| Ladder | 6 | -7.01325 | -0.58444 | 0.62657 |
+| Ladder | 8 | -9.28325 | -0.58020 | 0.55740 |
+| Ladder | 10 | -11.57719 | -0.57772 | 0.52811 |
+| Dimers | 6 | -4.50000 | -0.75000 | 1.00000 |
+| Dimers | 8 | -6.00000 | -0.75000 | 1.00000 |
+| Dimers | 10 | -7.50000 | -0.75000 | 1.00000 |
+
+The chain's $E_0/L$ is trending toward the exact thermodynamic-limit value $-\ln2+1/4\approx-0.4431$ as $L$ grows, and the isolated-dimer case reproduces the exact analytic result $E_0/L=-3J_1/4=-0.75$ and gap $=J_1=1$ to machine precision — a useful check that the ladder result in between ($J_0=J_1=1$) is trustworthy.
+
+### Summary and Outlook
+
+Exact diagonalization on finite 1D lattices reproduces the expected gapless spectrum of the Heisenberg chain, the larger spin gap of the two-leg ladder (a consequence of the extra inter-chain coupling), and the exactly solvable isolated-dimer limit used here as a benchmark.
+
+1. As $J_1/J_0$ is increased from the isolated-chain limit, at what point does the ladder's gap approach the isolated-dimer value $J_1$?
+2. How would you expect the momentum-resolved spectrum to change for a three-leg ladder?
+3. Can you verify the isolated-dimer results analytically from the two-site Heisenberg Hamiltonian?

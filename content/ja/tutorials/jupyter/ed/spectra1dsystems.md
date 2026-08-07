@@ -1,6 +1,6 @@
 ---
-title: Spectra of 1D Quantum Systems
-description: "Jupyter md file for 1D spectra"
+title: 1次元量子系のスペクトル
+description: "1次元スペクトル用のJupyter mdファイル"
 toc: true
 math: true
 weight: 13
@@ -8,33 +8,42 @@ cascade:
     type: docs
 ---
 
-In this tutorial we will calculate the energy spectra of the quantum Heisenberg model on various 1D lattices. The main work will be done by the `sparsediag` application, which implements the Lanczos algorithm, an iterative eigensolver, to obtain energies in different momentum sectors. The collected data will be plotted to show the energy-momentum spectra of 1D quantum Heisenberg model on various 1D lattices.
+このチュートリアルでは、様々な1次元格子上の量子ハイゼンベルグモデルのエネルギースペクトルを計算します。主な計算は `sparsediag` アプリケーションによって行われます。これは反復固有値解法であるランチョス法を実装しており、異なる運動量セクターにおけるエネルギーを求めます。得られたデータをプロットし、様々な1次元格子上での1次元量子ハイゼンベルグモデルのエネルギー-運動量スペクトルを示します。
 
-### Heisenberg Chain
+### ハイゼンベルグ鎖
 
-#### Introduction
+#### はじめに
 
-The Hamiltonian for the spin-1/2 Heisenberg chain is given by 
+スピン1/2ハイゼンベルグ鎖のハミルトニアンは、[W. Heisenberg, Zeitschrift für Physik 49, 619-636 (1928)](https://doi.org/10.1007/BF01328601) によって最初に導入され、次式で与えられます。
 $$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
-where $J>0$ for antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^i$ and $\mathbf{S}^j$, and the spin-spin interaction consists of three components, i.e., 
+ここで、$J>0$ は最近接スピン $\mathbf{S}^i$ と $\mathbf{S}^j$ の間の反強磁性相互作用に対応し、スピン間相互作用は次の3つの成分から構成されます。
 $$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
 
-The basis states are usually chosen to be the eigen states of $S_z$ operator. For a spin-1/2 system, there are two basis states for each lattice site, $|-1/2\rangle$ and $|+1/2\rangle$. The application of $S_x$ and $S_y$ operators on these basis states can be expressed in terms of raising $S^{\dagger}$ and lowering $S^{-}$ operators:
+基底ベクトルとして通常選ばれるのは $S_z$ 演算子の固有状態です。スピン1/2系の場合、各格子サイトには $|-1/2\rangle$ と $|+1/2\rangle$ という2つの基底ベクトルがあります。これらの基底ベクトルに対する $S_x$ と $S_y$ 演算子の作用は、上昇演算子 $S^{\dagger}$ と下降演算子 $S^{-}$ を用いて次のように表すことができます。
 $$S_x=\frac{1}{2}(S^{\dagger}+S^{-})$$,
 $$S_y=\frac{1}{2i}(S^{\dagger}-S^{-})$$, 
-who act on the basis states in the following way:
+これらは基底ベクトルに対して次のように作用します。
 $$S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle$$,
 $$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
-where $S=1/2$ and $s=-1/2, 1/2$.
+ここで、$S=1/2$、$s=-1/2, 1/2$ です。
 
-With the above basis states for each lattice site, the Hamiltonian can be written as a Hermitian matrix. The size of the matrix can be reduced when the total magnetization is fixed, i.e., setting Sz_total = 0 (singlet sector) or Sz_total = 1 (triplet sector) in the simulations. To further reduce the size of the Hamiltonian matrix and obtain the momentum dependence of the energy spectra, we can further restrict the simulations in different lattice momentum sectors $P=0, 1, 2, \cdots$. 
+各格子サイトについての上記の基底ベクトルを用いると、ハミルトニアンはエルミート行列として表すことができます。全磁化を固定する、すなわちシミュレーションにおいて Sz_total = 0（一重項セクター）または Sz_total = 1（三重項セクター）と設定することで、行列のサイズを縮小することができます。ハミルトニアン行列のサイズをさらに縮小し、エネルギースペクトルの運動量依存性を得るために、シミュレーションを異なる格子運動量セクター $P=0, 1, 2, \cdots$ にさらに制限することができます。 
 
+**パラメータ：** `LATTICE="chain lattice"`、`MODEL="spin"`、`local_S=0.5`、`J=1`、`CONSERVED_QUANTUMNUMBERS="Sz"`、`Sz_total=0`、および `L=10,12,14,16`。
 
-#### Simulation
+**格子：**
+```
+   J     J     J           J
+o-----o-----o-----o-- ... --o     (periodic chain, L sites, coupling J on every bond)
+```
 
-To obtain the energy spectrum for the Heisenberg chain, we follow the steps below.
+**手法の選択：** ヒルベルト空間の次元は $2^L$ であり、最大サイズでは $2^{16}=65536$ となります——これは十分小さく、`sparsediag` のランチョス法があらゆる $(S_z, P)$ セクターの完全な低エネルギースペクトルを数秒で求めることができます。
 
-We first import the required modules.
+#### シミュレーション
+
+ハイゼンベルグ鎖のエネルギースペクトルを得るために、以下の手順に従います。
+
+まず、必要なモジュールをインポートします。
 
 
 ```python
@@ -44,7 +53,7 @@ import matplotlib as plt
 import pyalps.plot
 ```
 
-Prepare the input parameters for 4 different lattice sizes: $L=10, 12, 14$, and $16$.
+4種類の異なる格子サイズ $L=10, 12, 14$、および $16$ に対して入力パラメータを準備します。
 
 
 ```python
@@ -63,7 +72,7 @@ for l in [10, 12, 14, 16]:
     )
 ```
 
-Write the input file and run the simulation.
+入力ファイルを書き込み、シミュレーションを実行します。
 
 
 ```python
@@ -72,7 +81,7 @@ res = pyalps.runApplication('sparsediag',input_file)
 ```
 
 
-Load all measurements for all states, and collect spectra over all momenta for every simulation.
+全ての状態の全ての測定結果を読み込み、各シミュレーションについて全ての運動量にわたるスペクトルを収集します。
 
 
 ```python
@@ -93,7 +102,7 @@ for sim in data:
   spectra[l] = spectrum
 ```
 
-Plot the energy vs. momentum spectrum.
+エネルギー対運動量のスペクトルをプロットします。
 
 
 ```python
@@ -109,20 +118,33 @@ plt.pyplot.show()
 
 ```
 
-Below is the energy spectrum for a 1D Heisenberg chain:
+以下は1次元ハイゼンベルグ鎖のエネルギースペクトルです。
 ![Energy spectrum Heisenberg chain](/figs/ed/spectrumchain.png)
 
-### Two-leg Heisenberg Ladder
+### 二本足ハイゼンベルグ梯子
 
-#### Introduction
+#### はじめに
 
-The Hamiltonian for the two-leg spin-1/2 Heisenberg chain is given by 
+二本足スピン1/2ハイゼンベルグ鎖のハミルトニアンは次式で与えられます。
 $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
-where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, $J_0>0$ is the intra-chain antiferromagnetic interactions between two nearest-neighbour spins $\mathbf{S}^{\alpha i}$ and $\mathbf{S}^{\alpha j}$ in the same chain, and $J_1>0$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ from the first leg and $\mathbf{S}^{2 i}$ from the second leg with $i=1,2,\cdots,L$. 
+ここで、$\alpha=1,2$ は2本の足（鎖）を表し、$i,j=1,2,\cdots,L$ は鎖内の格子サイトを示します。$J_0>0$ は同じ鎖内の最近接スピン $\mathbf{S}^{\alpha i}$ と $\mathbf{S}^{\alpha j}$ の間の鎖内反強磁性相互作用であり、$J_1>0$ は最初の足の $\mathbf{S}^{1 i}$ と2番目の足の $\mathbf{S}^{2 i}$（$i=1,2,\cdots,L$）の間の鎖間スピン結合です。 
 
-#### Simulation
+**パラメータ：** `LATTICE="ladder"`、`MODEL="spin"`、`local_S=0.5`、`J0=1`、`J1=1`、`CONSERVED_QUANTUMNUMBERS="Sz"`、`Sz_total=0`、および `L=6,8,10`。
 
-We first import the required modules.
+**格子：**
+```
+o--J0--o--J0--o    (leg 1)
+|      |      |
+J1     J1     J1
+|      |      |
+o--J0--o--J0--o    (leg 2, L rungs total)
+```
+
+**手法の選択：** 梯子は $2L$ 個のサイトを持つため、ヒルベルト空間の次元は $2^{2L}$ となり、$L=10$ では $2^{20}\approx10^6$ になります——$S_z=0$ の制限を適用すれば、これは依然として `sparsediag` のランチョス法の求解可能な範囲内です。
+
+#### シミュレーション
+
+まず、必要なモジュールをインポートします。
 
 
 ```python
@@ -132,7 +154,7 @@ import matplotlib as plt
 import pyalps.plot
 ```
 
-Prepare the input parameters by setting values for the intra- and inter-chain interactions J0 and J1, and the chain lengths L=6,8, and 10.
+鎖内相互作用と鎖間相互作用 J0 および J1 の値、そして鎖長 L=6、8、10 を設定して、入力パラメータを準備します。
 
 
 ```python
@@ -153,7 +175,7 @@ for l in [6, 8, 10]:
 
 ```
 
-Write the input file and run the simulation
+入力ファイルを書き込み、シミュレーションを実行します
 
 
 ```python
@@ -162,7 +184,7 @@ res = pyalps.runApplication('sparsediag',input_file)
 ```
 
 
-Load all measurements for all states, and collect spectra over all momenta for every simulation.
+全ての状態の全ての測定結果を読み込み、各シミュレーションについて全ての運動量にわたるスペクトルを収集します。
 
 
 ```python
@@ -183,7 +205,7 @@ for sim in data:
   spectra[l] = spectrum
 ```
 
-Plot the energy spectrum.
+エネルギースペクトルをプロットします。
 
 
 ```python
@@ -198,20 +220,33 @@ plt.pyplot.ylim(0,2.5)
 plt.pyplot.show()
 ```
 
-Below shows the energy spectrum for a Heisenberg ladder:
+以下はハイゼンベルグ梯子のエネルギースペクトルを示しています。
 ![Energy spectrum Heisenberg ladder](/figs/ed/spectrumladder.png)
 
-### Isolated Dimers
+### 孤立二量体
 
-#### Introduction
+#### はじめに
 
-For our third simulation, we start with the same Hamiltonian as in the previous case
+3番目のシミュレーションでは、前の場合と同じハミルトニアンから出発します。
 $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
-where, $\alpha=1,2$ denotes the two legs/chains, $i,j=1,2,\cdots,L$ label lattice sites within a chain, we set $J_0=0$, i.e., no intra-chain interactions between two nearest-neighbour spins, and $J_1=1$ is the inter-chain spin-spin coupling between $\mathbf{S}^{1 i}$ and $\mathbf{S}^{2 i}$ with $i=1,2,\cdots,L$. The system then becomes $L$ isolated dimers. 
+ここで、$\alpha=1,2$ は2本の足（鎖）を表し、$i,j=1,2,\cdots,L$ は鎖内の格子サイトを示します。ここで $J_0=0$ とし、すなわち最近接スピン間の鎖内相互作用をなくし、$J_1=1$ は $\mathbf{S}^{1 i}$ と $\mathbf{S}^{2 i}$（$i=1,2,\cdots,L$）の間の鎖間スピン結合とします。この結果、系は $L$ 個の孤立二量体となります。 
 
-#### Simulation
+**パラメータ：** 上記と同じ `ladder` 格子と `spin` モデルですが、`J0=0`（両足が非結合）および `J1=1` とし、`L=6,8,10` です。
 
-We first import the required modules.
+**格子：**
+```
+o      o      o
+|      |      |
+J1     J1     J1     (J0 = 0: no leg bonds → L independent dimers)
+|      |      |
+o      o      o
+```
+
+**手法の選択：** $J_0=0$ とすることで、梯子は $L$ 個の独立した2サイト二量体に分離されるため、厳密なスペクトルは解析的に知られています（各二量体は $E=-3J_1/4$ の一重項と $E=J_1/4$ の三重項を与えます）。この場合は、上記の結合梯子に対する `sparsediag` の結果を検証するための健全性チェックとして含まれています。
+
+#### シミュレーション
+
+まず、必要なモジュールをインポートします。
 
 
 ```python
@@ -221,7 +256,7 @@ import matplotlib as plt
 import pyalps.plot
 ```
 
-Prepare the input parameters.
+入力パラメータを準備します。
 
 
 ```python
@@ -241,7 +276,7 @@ for l in [6, 8, 10]:
     )
 ```
 
-Write the input file and run the simulation.
+入力ファイルを書き込み、シミュレーションを実行します。
 
 
 ```python
@@ -250,14 +285,14 @@ res = pyalps.runApplication('sparsediag',input_file)
 ```
 
 
-Load all measurements for all states.
+全ての状態の全ての測定結果を読み込みます。
 
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_dimers'))
 ```
 
-Collect spectra over all momenta for every simulation.
+各シミュレーションについて、全ての運動量にわたるスペクトルを収集します。
 
 
 ```python
@@ -277,7 +312,7 @@ for sim in data:
 
 ```
 
-We then plot the energy spectrum.
+次に、エネルギースペクトルをプロットします。
 
 
 ```python
@@ -292,5 +327,32 @@ plt.pyplot.ylim(0,2.5)
 plt.pyplot.show()
 ```
 
-The energy spectrum for Heisenberg isomers is shown below:
-![Energy spectrum Heisenberg isomers](/figs/ed/spectrumisolateddimers.png)
+以下にハイゼンベルグ二量体のエネルギースペクトルを示します。
+![Energy spectrum of isolated Heisenberg dimers](/figs/ed/spectrumisolateddimers.png)
+
+### 結果
+
+上記のコードを実行して得られた基底状態のエネルギーと第一励起状態へのエネルギーギャップ：
+
+| 系 | $L$ | $E_0$ | $E_0/L$ | $E_1$ へのギャップ |
+|---|---|---|---|---|
+| 鎖 | 10 | -4.51545 | -0.45154 | 0.42324 |
+| 鎖 | 12 | -5.38739 | -0.44895 | 0.35585 |
+| 鎖 | 14 | -6.26355 | -0.44740 | 0.30711 |
+| 鎖 | 16 | -7.14230 | -0.44639 | 0.27019 |
+| 梯子 | 6 | -7.01325 | -0.58444 | 0.62657 |
+| 梯子 | 8 | -9.28325 | -0.58020 | 0.55740 |
+| 梯子 | 10 | -11.57719 | -0.57772 | 0.52811 |
+| 二量体 | 6 | -4.50000 | -0.75000 | 1.00000 |
+| 二量体 | 8 | -6.00000 | -0.75000 | 1.00000 |
+| 二量体 | 10 | -7.50000 | -0.75000 | 1.00000 |
+
+鎖の $E_0/L$ は $L$ が大きくなるにつれて、厳密な熱力学極限値 $-\ln2+1/4\approx-0.4431$ に近づいていきます。また、孤立二量体の場合は、機械精度で厳密な解析結果 $E_0/L=-3J_1/4=-0.75$ とギャップ $=J_1=1$ を再現しており、これはその中間にある梯子の結果（$J_0=J_1=1$）が信頼できることを確認する有用な検証となっています。
+
+### まとめと展望
+
+有限1次元格子における厳密対角化は、ハイゼンベルグ鎖に期待されるギャップレススペクトル、二本足梯子におけるより大きなスピンギャップ（これは追加の鎖間結合の結果です）、そして本稿でベンチマークとして用いた厳密に解ける孤立二量体極限を再現します。
+
+1. 孤立鎖極限から $J_1/J_0$ を増加させていくと、梯子のギャップはどの時点で孤立二量体の値 $J_1$ に近づきますか？
+2. 3本足梯子の場合、運動量分解されたスペクトルはどのように変化すると予想されますか？
+3. 2サイトハイゼンベルグハミルトニアンから孤立二量体の結果を解析的に検証できますか？

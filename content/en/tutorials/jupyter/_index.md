@@ -15,7 +15,7 @@ Below are a collection of ALPS simulations in Jupyter notebooks. You can learn a
 
 - [Energy Gap of a Spin-1 Heisenberg Chain](ed/spingapspinoneheisenbergchain) <a href = "/codes/ed/spinGapSpinOneHeisenbergChain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Energy Spectra of 1D Systems: Chain, Ladder, and Isomers](ed/spectra1dsystems) <a href = "/codes/ed/spectra1DSystems.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [Energy Spectra of 1D Systems: Chain, Ladder, and Dimers](ed/spectra1dsystems) <a href = "/codes/ed/spectra1DSystems.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
 ## Density Matrix Renormalization Group
 
