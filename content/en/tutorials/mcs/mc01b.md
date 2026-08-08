@@ -107,17 +107,25 @@ plt.show()
 
 ![](/figs/mcs01btimeseries.png)
 
-Panel **(a)** uses `THERMALIZATION=0`, averaged over 32 `SEED` values because a single run at $T_c$ is far too noisy to see the transient; panel **(b)** is the run defined above, with `THERMALIZATION=10000`. In both panels the grey dashed line is the equilibrium value $|M| = 0.616$, and the shaded band marks the thermalization sweeps.
+Panel **(a)** uses `THERMALIZATION=0` and panel **(b)** uses `THERMALIZATION=10000`. Both panels are averaged over ~30 independent `SEED` values, so the only variable that differs between them is `THERMALIZATION`. The grey dashed line is the equilibrium value $|M| = 0.616$. The shaded band marks the thermalization sweeps in (a), and the discarded thermalization sweeps in (b).
 
 - **A real transient is one-way.** `spinmc` starts from an ordered configuration, so $|M|$ decays onto the equilibrium value within the first 1000–2000 sweeps (panel (a)).
-- **Panel (b) cannot show one.** Thermalization sweeps are never measured — they are absent from the output file entirely, not merely plotted off to the left.
-- **The deep excursions are not transients.** They recur at comparable depth throughout the run: equilibrium critical fluctuations. ALPS reports `AUTOCORR` = $\tau \approx 158$ sweeps here, and one bin spans $\approx 6.5\,\tau$, so swings this large are expected.
-- **`THERMALIZATION=10000` is about $63\,\tau$** — ample, and the running mean settles without drift. But a stable-looking mean is not proof of stationarity, which is what the test below is for.
+- **`THERMALIZATION=10000` is about $60\,\tau$** — ample, and the running mean settles without drift. But a stable-looking mean is not proof of stationarity, which is what the test below is for.
 
 If the running mean is still drifting one way at the end of the run, increase `THERMALIZATION`.
 
+### What a single run actually looks like
+
+The averaged figure above hides how noisy one production run is. Re-plotting the *same* two simulations from a single seed each:
+
+![](/figs/mcs01btimeseries-singlerun.png)
+
+- **The fluctuations are identical in both panels.** Measured per-bin standard deviations are 0.099 (a) and 0.101 (b) — a ratio of 1.02. Thermalization removes the *bias* from the starting configuration; it does nothing to the width of the equilibrium distribution.
+- **The deep excursions are not transients.** They recur at comparable depth throughout the run: these are equilibrium critical fluctuations. ALPS reports `AUTOCORR` = $\tau \approx 168$ sweeps here, so one 1024-sweep bin holds only about three independent samples and swings this large are expected.
+- **Panel (a) no longer shows the transient.** This single seed sits in a high-$|M|$ excursion for its whole 8500 sweeps, so the running mean drifts downward without ever reaching 0.616. The transient is a drop of only 0.14, smaller than the 0.099 single-run noise.
+
 {{< callout type="info" >}}
-`spinmc` only checks whether it is finished at intervals set by `--Tmin`, so it overshoots `SWEEPS` — this run recorded about 128,500 measurements rather than 100,000. Harmless: extra equilibrium samples only improve the statistics.
+`spinmc` only checks whether it is finished at intervals set by `--Tmin`, so it overshoots `SWEEPS` — these runs recorded 110,000–137,000 measurements rather than 100,000, and the overshoot varies from run to run. Harmless for statistics (extra equilibrium samples only help), but note that ALPS doubles its bin size as a run grows, so runs of different lengths can end up with *different* bin sizes. Check the `binsize` attribute before averaging several runs together.
 {{< /callout >}}
 
 ### Automated check: `pyalps.checkSteadyState`
