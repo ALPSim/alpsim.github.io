@@ -90,42 +90,27 @@ Plotting the raw array against its index instead labels the axis in bins while i
 
 ### Inspecting the time series
 
-Plot against the true sweep number and overlay the *running mean* — the average of all bins up to that point. Single bins fluctuate wildly; the running mean of an equilibrated chain converges smoothly onto the final answer, while an unthermalized one stays biased for a long time.
+Plot against the true sweep number and use the *running mean* — the average of all bins up to that point. Single bins fluctuate wildly, but the running mean of an equilibrated chain converges smoothly onto the final answer, while an unthermalized one stays biased for a long time.
 
 ```Python
 sweep = 10000 + (np.arange(len(ts_M)) + 0.5) * bin_size   # 10000 = THERMALIZATION
 running_mean = np.cumsum(ts_M) / np.arange(1, len(ts_M) + 1)
 
-plt.plot(sweep, ts_M, lw=1.0, alpha=0.5, label='binned |M|')
-plt.plot(sweep, running_mean, lw=2.6, color='black', label='running mean')
-plt.axhline(ts_M.mean(), ls='--', lw=1.4, color='0.55')
+plt.plot(sweep, running_mean, lw=2.0, color='black')
+plt.axhline(0.6244, ls='--', lw=1.4, color='0.55')
 plt.xlabel('Monte Carlo sweep')
 plt.ylabel('|M|')
-plt.legend()
 plt.show()
 ```
 
 ![](/figs/mcs01btimeseries.png)
 
-Panel **(a)** uses `THERMALIZATION=0` and panel **(b)** uses `THERMALIZATION=10000`. Both panels are averaged over ~30 independent `SEED` values, so the only variable that differs between them is `THERMALIZATION`. The grey dashed line is the equilibrium value $|M| = 0.616$. The shaded band marks the thermalization sweeps in (a), and the discarded thermalization sweeps in (b).
+Each panel shows the running mean of $|M|$ for a different `THERMALIZATION`, with the dashed line marking the equilibrium value $|M| = 0.6244(33)$ measured from the thermalized runs. All three panels use the same bin size (1024 sweeps) and the same ensemble of 30 `SEED` values, so `THERMALIZATION` is the only difference between them.
 
-- **A real transient is one-way.** `spinmc` starts from an ordered configuration, so $|M|$ decays onto the equilibrium value within the first 1000–2000 sweeps (panel (a)).
-- **`THERMALIZATION=10000` is about $60\,\tau$** — ample, and the running mean settles without drift. But a stable-looking mean is not proof of stationarity, which is what the test below is for.
-
-If the running mean is still drifting one way at the end of the run, increase `THERMALIZATION`.
-
-### What a single run actually looks like
-
-The averaged figure above hides how noisy one production run is. Re-plotting the *same* two simulations from a single seed each:
-
-![](/figs/mcs01btimeseries-singlerun.png)
-
-- **The fluctuations are identical in both panels.** Measured per-bin standard deviations are 0.099 (a) and 0.101 (b) — a ratio of 1.02. Thermalization removes the *bias* from the starting configuration; it does nothing to the width of the equilibrium distribution.
-- **The deep excursions are not transients.** They recur at comparable depth throughout the run: these are equilibrium critical fluctuations. ALPS reports `AUTOCORR` = $\tau \approx 168$ sweeps here, so one 1024-sweep bin holds only about three independent samples and swings this large are expected.
-- **Panel (a) no longer shows the transient.** This single seed sits in a high-$|M|$ excursion for its whole 8500 sweeps, so the running mean drifts downward without ever reaching 0.616. The transient is a drop of only 0.14, smaller than the 0.099 single-run noise.
+With `THERMALIZATION=0` the running mean starts near 0.67 — `spinmc` begins from an ordered configuration — and takes a few thousand sweeps to fall onto the dashed line. With 10000 or 20000 sweeps discarded there is no such decay; the early wander in those panels is just the running mean averaging over very few bins, and it settles onto the same value. If the running mean is still drifting one way at the end of the run, increase `THERMALIZATION`.
 
 {{< callout type="info" >}}
-`spinmc` only checks whether it is finished at intervals set by `--Tmin`, so it overshoots `SWEEPS` — these runs recorded 110,000–137,000 measurements rather than 100,000, and the overshoot varies from run to run. Harmless for statistics (extra equilibrium samples only help), but note that ALPS doubles its bin size as a run grows, so runs of different lengths can end up with *different* bin sizes. Check the `binsize` attribute before averaging several runs together.
+`spinmc` only checks whether it is finished at intervals set by `--Tmin`, so it overshoots `SWEEPS` — these runs recorded rather more than 100,000 measurements, and the overshoot varies from run to run. Harmless for statistics, but note that ALPS doubles its bin size as a run grows, so runs of different lengths can end up with *different* bin sizes. Check the `binsize` attribute before averaging several runs together.
 {{< /callout >}}
 
 ### Automated check: `pyalps.checkSteadyState`
