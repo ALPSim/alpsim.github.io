@@ -97,7 +97,7 @@ sweep = 10000 + (np.arange(len(ts_M)) + 0.5) * bin_size   # 10000 = THERMALIZATI
 running_mean = np.cumsum(ts_M) / np.arange(1, len(ts_M) + 1)
 
 plt.plot(sweep, running_mean, lw=2.0, color='black')
-plt.axhline(0.6244, ls='--', lw=1.4, color='0.55')
+plt.axhline(0.6240, ls='--', lw=1.4, color='0.55')
 plt.xlabel('Monte Carlo sweep')
 plt.ylabel('|M|')
 plt.show()
@@ -105,9 +105,9 @@ plt.show()
 
 ![](/figs/mcs01btimeseries.png)
 
-Each panel shows the running mean of $|M|$ for a different `THERMALIZATION`, with the dashed line marking the equilibrium value $|M| = 0.6244(33)$ measured from the thermalized runs. All three panels use the same bin size (1024 sweeps) and the same ensemble of 30 `SEED` values, so `THERMALIZATION` is the only difference between them.
+Each panel shows the running mean of $|M|$ for a different `THERMALIZATION`, with the dashed line marking the equilibrium value $|M| = 0.6240(16)$ measured from the thermalized runs. All three panels use the same bin size (512 sweeps) and the same ensemble of 62 `SEED` values, so `THERMALIZATION` is the only difference between them.
 
-With `THERMALIZATION=0` the running mean starts near 0.67 — `spinmc` begins from an ordered configuration — and takes a few thousand sweeps to fall onto the dashed line. With 10000 or 20000 sweeps discarded there is no such decay; the early wander in those panels is just the running mean averaging over very few bins, and it settles onto the same value. If the running mean is still drifting one way at the end of the run, increase `THERMALIZATION`.
+With `THERMALIZATION=0` the running mean starts near 0.70 — `spinmc` begins from an ordered configuration — and takes about 5000 sweeps to fall onto the dashed line. With 10000 or 20000 sweeps discarded there is no such decay: those panels sit on the line from the first measurement. Quantitatively, the first point departs from the run's own asymptote by $11\,\sigma$ at `THERMALIZATION=0`, against $0.5\,\sigma$ and $0.1\,\sigma$ for 10000 and 20000 — the remaining small wander there is noise in the running mean, not a transient. If the running mean is still drifting one way at the end of the run, increase `THERMALIZATION`.
 
 {{< callout type="info" >}}
 `spinmc` only checks whether it is finished at intervals set by `--Tmin`, so it overshoots `SWEEPS` — these runs recorded rather more than 100,000 measurements, and the overshoot varies from run to run. Harmless for statistics, but note that ALPS doubles its bin size as a run grows, so runs of different lengths can end up with *different* bin sizes. Check the `binsize` attribute before averaging several runs together.
