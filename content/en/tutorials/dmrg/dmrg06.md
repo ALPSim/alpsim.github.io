@@ -17,21 +17,53 @@ $$
 e_0(i) = \frac{1}{2} (\langle S^+_i S^-_{i+1}\rangle  + \langle S^-_i S^+_{i+1}\rangle ) + \langle S^z_i S^z_{i+1} \rangle.
 $$
 
-This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance. Obviously, the bonds that are closest this asymptotic behavior are those in the chain center, so the direct approach would be to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$ and then in $L$ after fixing $D$. Before you do this, plot $e_0(i)$ versus $i$ for a few values of $D$ and $L$, that are not too small (as a check of the program, you may also consider the three contributions individually before you do the sum).
+This gives the energy of each bond individually, but we are interested in the thermodynamic limit, where all bonds are on equal footing and hence should have the same energy unless there is some physical breaking of translational invariance. The bonds closest to this asymptotic behavior are those in the chain center, so the direct approach is to calculate $e_0(L/2)$ and extrapolate it first in $D$ for fixed $L$, then in $L$ at fixed $D$. It is worth inspecting $e_0(i)$ against $i$ first, for a few values of $D$ and $L$ that are not too small; the three contributions can also be examined individually before summing them, as a check of the program.
 
-For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends are felt very strongly, due to criticality, and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond: you immediately gain lots of accuracy. This is yet another demonstration that it is worthwhile to have a close look at the actual output of DMRG by considering various local or (here) almost local observables.
+For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends are felt very strongly, due to criticality, and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond, which gains a great deal of accuracy. This is a further demonstration of the value of inspecting the actual output of DMRG through local, or here almost local, observables.
 
 ### Spin-Spin Correlations: Spin-1/2
 
-Take a relatively long chain (say, $L=192$), and calculate  $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+#### Lattice and correlations
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$, where you round the positions such that their distance is $l$. The purpose of this is to center the correlators about the chain center to make boundary effects as small as possible. There are other ways of doing this, like averaging over several correlators with same site distance (also more or less centered). Since we expect a power-law with critical exponent $\eta=1$ (see [DMRG-02](../dmrg02)), use a log-log plot, where you should take absolute values or multiply out the antiferromagnetic factor $(-1)^l$.
+```
+      J       J       J       J
+  o-------o-------o-------o-------o
+  1       2       3       4       5
+  S=1/2   S=1/2   S=1/2   S=1/2   S=1/2
+```
 
-What you should see, is a power-law on short distances, but a faster (in fact, exponential) decay for larger distances. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power-laws by such superpositions - at large distances, the slowest exponential decay will survive all the others, replacing the power-law by an exponential law. The larger you choose $D$, the further you push out this crossover.
+The plain open chain, spin-1/2 on every site.
+
+For a relatively long chain, say $L=192$, the correlator $\langle S^z_i S^z_j \rangle$ is calculated for a range of increasing $D$.
+
+The quantity plotted is $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$, with the positions rounded so that their separation is $l$. Centering the correlators on the chain makes boundary effects as small as possible; averaging over several correlators at the same separation is an equally valid alternative. Since a power law with critical exponent $\eta=1$ is expected (see [DMRG-02](../dmrg02)), a log-log plot is appropriate, taking absolute values or dividing out the antiferromagnetic factor $(-1)^l$.
+
+The result is a power law at short distances, crossing over to a faster, in fact exponential, decay at larger ones. This has two reasons: (i) the finite system size cuts off the power-law correlations; but as we took a large system size here, this should not matter too much. (ii) DMRG's algorithmic structure effectively generates correlators which are superpositions of up to $D^2$ purely exponential decays, and therefore can only mimic power-laws by such superpositions - at large distances, the slowest exponential decay will survive all the others, replacing the power-law by an exponential law. Larger $D$ pushes this crossover further out.
+
+![Diagonal spin correlations of the spin-1/2 chain against separation](/figs/dmrg/dmrg06_corr_halfchain_diag.png)
+
+**Figure 1.** $|C_l|$ against separation $l$ for the spin-1/2 chain, $L=64$, $D=100$, in the three lowest magnetization sectors. The decay is far slower than in the spin-1 case below, as expected for a critical chain.
+
+#### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE` | built-in open chain (see the [ALPS lattice library](../../../documentation/intro/latticehowtos)) | `open chain lattice` |
+| `L` | number of sites | 32 |
+| `MODEL` | quantum spin model | `spin` |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
+| `Sz_total` | magnetization sector | 0 |
+| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 6 |
+| `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
+| `MAXSTATES` | bond dimension $D$, swept to show convergence | 20, 40, 60 |
+| `MEASURE_AVERAGE[...]` | chain-averaged observables | `Sz`, `exchange` |
+| `MEASURE_LOCAL[...]` | site-resolved magnetization | `Sz` |
+| `MEASURE_CORRELATIONS[...]` | two-point correlators $\langle S^z_i S^z_j\rangle$ and $\langle S^+_i S^-_j\rangle$ | `Sz`, `Splus:Sminus` |
 
 #### Using parameter files
 
-The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_half" download>`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). In this example we consider a chain of length $L=32$ and we setup multiple runs with different numbers of states $D$. We use 6 sweeps. Make sure that the correlations look symmetric:
+The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_half" download>`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). The example uses a chain of length $L=32$ with multiple runs at different numbers of states $D$, and 6 sweeps. The correlations should come out symmetric:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -118,13 +150,50 @@ and plot them vs. site distance:
 
 ### Spin-Spin Correlations: Spin-1
 
-In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again, choose a long chain (say, $L=192$), and calculate $\langle S^z_i S^z_j \rangle$ for various increasing $D$.
+#### Lattice and correlations
 
-Now plot $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ where you round the positions such that their distance is $l$, as before. As we expect an exponential law, use a log-lin plot, again eliminating the negative signs.
+```
+      J       J       J       J       J       J
+  o-------o-------o-------o-------o-------o-------o
+  0       1       2       3       4       5       6
+  S=1/2   S=1     S=1     S=1     S=1     S=1     S=1/2
+```
 
-From the log-lin plot, extract a correlation length, and compare it to the benchmark value $\xi=6.02$ quoted in [DMRG-02](../dmrg02). It will depend (and in fact monotonically increase with) $D$.
+Note this is the *capped* chain, with a spin-1/2 on each end site, not the
+uniform spin-1 chain. The caps absorb the emergent boundary spins (see
+[DMRG-05](../dmrg05)), which keeps the correlators free of the edge-edge
+contribution that would otherwise dominate at large separation.
+
+In the spin-1 chain, we do expect exponential decay (with an analytic modification), so the exponential nature of the correlators of DMRG should fit well. Again a long chain is used, say $L=192$, with $\langle S^z_i S^z_j \rangle$ calculated for increasing $D$.
+
+The same $C_l = \langle S^z_{L/2-l/2} S^z_{L/2+l/2} \rangle$ is plotted, with positions rounded to separation $l$ as before. Since an exponential law is expected, a log-lin plot is used, again with the signs removed.
+
+A correlation length extracted from the log-lin plot can be compared with the benchmark value $\xi=6.02$ quoted in [DMRG-02](../dmrg02). It depends on $D$, and in fact increases monotonically with it.
+
+![Diagonal spin correlations of the capped spin-1 chain against separation](/figs/dmrg/dmrg06_corr_halfedge_diag.png)
+
+**Figure 2.** $|C_l|$ against separation $l$ for the capped spin-1 chain, $L=64$, $D=100$. The decay is exponential, and $\xi$ is read from the slope on this log-lin scale. On the *uniform* chain the same curve turns upward beyond $l \approx 30$, because at large separation both sites lie in the edge region and the correlator measures the boundary spins rather than the bulk — which is why the capped lattice is used here.
 
 In fact, the calculation of correlation lengths is much harder to converge than that of the local quantities. This is due to the fact that a more profound algorithmic analysis reveals DMRG to be an algorithm geared especially well to the optimal representation of local quantities, not so much non-local ones as long-ranged correlators.
+
+#### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE_LIBRARY` | custom lattice file | `my_lattices.xml` |
+| `LATTICE` | open chain with spin-1/2 end sites | `open chain lattice with special edges 32` |
+| `local_S0` | spin on the two end sites | 0.5 |
+| `local_S1` | spin on the interior sites | 1 |
+| `MODEL` | quantum spin model | `spin` |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
+| `Sz_total` | magnetization sector | 0 |
+| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 6 |
+| `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
+| `MAXSTATES` | bond dimension $D$, swept to show convergence | 20, 40, 60 |
+| `MEASURE_AVERAGE[...]` | chain-averaged observables | `Sz`, `exchange` |
+| `MEASURE_LOCAL[...]` | site-resolved magnetization | `Sz` |
+| `MEASURE_CORRELATIONS[...]` | two-point correlators $\langle S^z_i S^z_j\rangle$ and $\langle S^+_i S^-_j\rangle$ | `Sz`, `Splus:Sminus` |
 
 #### Using parameter files
 
@@ -186,11 +255,9 @@ In the special case of the spin-1 chain, we have a loophole for the calculation 
 
 In this construction, for open boundary conditions (but not periodic ones), on the first and on the last site there will be two lonely spin-1/2 without partner. These two spin-1/2 particles can form 4 states among themselves, which in the toy model the ground state is four-fold degenerate. In the real spin-1 chain, this four-fold degeneracy (from one state of total spin 0 and three of total spin 1) is only achieved in the thermodynamic limit when the two spins are totally removed from each other. This is why there was no gap between magnetization sectors 0 and 1. The first bulk excitation needs magnetization 2.
 
-To cure this, we can attach one spin-1/2 operator on each side of the lattice, taking the same bond Hamiltonian for these new sites, linking the two lonely spins by a singlet state. You may check that now there is a gap between magnetization sectors 0 and 1!
+To cure this, we can attach one spin-1/2 operator on each side of the lattice, taking the same bond Hamiltonian for these new sites, linking the two lonely spins by a singlet state. A gap then appears between magnetization sectors 0 and 1.
 
 In order to calculate the correlation length, one can also play the following trick: attach only one spin-1/2 at one end. This means that the ground state will now be doubly degenerate, in magnetization sectors +1/2 or -1/2. We can characterize this by the boundary site where there is NO spin-1/2 attached carrying finite magnetization, that decays into the bulk, with the correlation length.
-
-For a chain of length $L=192$ and $D=200$, calculate the ground state magnetization. Plot it (eliminating the sign oscillation) versus site in a log-lin plot and extract the correlation length.
 
 ## Summary
 

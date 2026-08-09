@@ -17,15 +17,27 @@ When studying a model Hamiltonian, the first question we usually ask is what is 
 
 ### Fixed Length Ground State Energies
 
-Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up ground state energy calculations for numbers of states $D=50,100,150,200,300$. For each length, tabulate the truncation error and the ground state energies as a function of $D$. Experiment carefully with the number of sweeps to assure that for a given length and number of states your result is actually converged.
+The calculations below use chains of length $L=32,64,96,128$, for both spin-1/2 and spin-1, with numbers of states $D=50,100,150,200,300$. For each length the truncation error and the ground state energy are recorded as a function of $D$. The number of sweeps must be chosen carefully, since a result is only meaningful once it has converged at the given length and number of states.
 
-1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
+Plotting the total energy against the truncation error exposes the connection between the two, and the ground state energies for each chain length can then be extrapolated to the $D\rightarrow\infty$ limit.
 
-2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1, and compare the convergence behavior in the two cases, apart from a global factor of order of the length. *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
-
-3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
+The convergence in $D$ deteriorates with system size for both chains, but not equally. Apart from a global factor of order of the length, convergence at large system sizes depends only weakly on length for the spin-1 chain, and much more strongly for the spin-1/2 chain. This is because spin-1 physics is dominated by segments of the order of the correlation length, whereas the spin-1/2 chain has no finite length scale because it is critical.
 
 #### The one dimensional S=1/2 Heisenberg chain
+
+##### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE` | built-in open chain, no lattice file required (see the [ALPS lattice library](../../../documentation/intro/latticehowtos)) | `open chain lattice` |
+| `MODEL` | quantum spin model (default $S=1/2$) | `spin` |
+| `L` | chain length | 32 |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed, used to block-diagonalize $H$ | `N,Sz` |
+| `Sz_total` | magnetization sector targeted | 0 |
+| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
+| `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
 
 ##### Single run
 
@@ -193,6 +205,22 @@ for run in data:
 
 #### The one dimensional S=1 Heisenberg chain
 
+##### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE_LIBRARY` | custom lattice file written by `build_lattice.py` | `my_lattice.xml` |
+| `LATTICE` | open chain whose two end vertices carry a separate type | `open chain lattice with special edges` |
+| `MODEL` | quantum spin model | `spin` |
+| `local_S0` | spin on the two end sites, added to absorb the edge states | 0.5 |
+| `local_S1` | spin on the interior sites | 1 |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed, used to block-diagonalize $H$ | `N,Sz` |
+| `Sz_total` | magnetization sector targeted | 0 |
+| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
+| `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
+
 The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script <a href="../codes/dmrg-03-ground-state-energies/build_lattice.py" download>`build_lattice.py`</a> that will generate the lattice for us. The only input is the number of sites in the lattice.
 
 ##### Lattice
@@ -345,7 +373,7 @@ $$
 
 The correct approach is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing this.
 
-1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
+1. Take the ground state energies of two chains of length $L$ and $L+2$, for the lengths already mentioned above, and form $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
 
 2. The less costly and usual way would be to use correlators (as discussed further in [DMRG-06](../dmrg06)) between neighboring sites:
 $$
