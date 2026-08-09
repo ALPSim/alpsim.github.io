@@ -33,7 +33,7 @@ ALPS（Algorithms and Libraries for Physics Simulations）は、量子および�
 {{< cta-button text="よくある質問" link="faqs" icon="help" >}}
 {{< cta-button text="論文" link="documentation/pubs/" icon="library_books" >}}
 {{< cta-button text="論文リンク" link="https://iopscience.iop.org/article/10.1088/1742-5468/2011/05/P05001" icon="article" >}}
-{{< cta-button text="引用" link="/data/bauer2011.bib" icon="format_quote" >}}
+{{< cta-button text="引用" link="documentation/pubs/" icon="format_quote" >}}
 </div>
 
 ### チュートリアル
