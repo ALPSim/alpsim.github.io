@@ -45,12 +45,13 @@ one singlet and one triplet, split only by an effective coupling transmitted thr
 
 Reading the magnetization sectors against that multiplet:
 
-| sector | state | $\langle S^z_i \rangle$ at the two ends |
-|---|---|---|
-| $S^z_{tot}=0$ | singlet, **or** the $S^z=0$ triplet member | $0$ / $0$ for either |
-| $S^z_{tot}=0$ | any superposition of the two, e.g. $\lvert \uparrow\downarrow\rangle$ | $+$ / $-$ |
-| $S^z_{tot}=1$ | $S^z=+1$ triplet member — both edge spins up | $+$ / $+$ |
-| $S^z_{tot}=2$ | edge triplet **plus** one bulk magnon | $+$ / $+$, with weight added in the bulk |
+| $S^z_{tot}$ | state | the two emergent edge spins |
+|:---:|---|---|
+| 0 | singlet ($S=0$) or $S^z=0$ triplet member ($S=1$), degenerate here | $0$ / $0$ for either; $+\tfrac{1}{2}$ / $-\tfrac{1}{2}$ for a superposition of them |
+| 1 | $S^z=+1$ **triplet** member — both edge spins up | $+\tfrac{1}{2}$ / $+\tfrac{1}{2}$ |
+| 2 | edge triplet **plus** one bulk magnon | $+\tfrac{1}{2}$ / $+\tfrac{1}{2}$, with weight added in the bulk |
+
+The $\pm\tfrac{1}{2}$ above is the *total* carried by each emergent edge spin, not the value on the end site itself. That spin is spread over roughly $\xi$ sites with alternating sign, so the site-resolved magnetization at the very end of the chain comes out near $0.53$ in Figure 1, decaying into the bulk.
 
 Two edge spin-1/2s can supply at most $S^z=1$ between them. Sector 2 is therefore the first sector that *cannot* be built from the boundary alone and is forced to contain a magnon, which is exactly why the bulk gap is the difference between sectors 1 and 2: the edge contribution is identical on both sides and cancels,
 
