@@ -20,9 +20,9 @@ We consider observables that are linked to one specific site to be local observa
 
 We begin with the uniform chain, in which every site — including the two ends — carries spin 1. Take a chain of $L=64$ spin-1 sites with $D=100$ states, and calculate the local magnetization $\langle S^z_i \rangle$. Plot it versus the site $i$ for the ground states in the magnetization sectors 0, 1, and 2.
 
-What you should obtain is an essentially flat curve for sector 0, a magnetization which is essentially concentrated at the chain ends for sector 1, and a magnetization which is both at the chain ends and in the bulk of the chain for sector 2. This means that the first excitation of the open chain is a boundary excitation, which would not exist on a closed system, and the second excitation of the open chain is a boundary plus a bulk excitation, which is the one we are interested in. The energy of the first bulk excitation therefore has to be extracted from comparing sectors 1 and 2; the reason is explained in [Which states the sectors contain](#which-states-the-sectors-contain) below.
+What you should obtain is an essentially flat curve for sector 0, a magnetization which is essentially concentrated at the chain ends for sector 1, and a magnetization which is both at the chains ends and in the bulk of the chain for sector 2, being the sector we will be interested in. These magnetizations describe the character of the first and second excitations. Note the boundary modes could not exist in a closed system making DMRG a ideal tool to study the spin-1 chain. 
 
-The moral of the story is that by looking at this local observable, we can distinguish boundary from bulk excitations in the spin-1 chain.
+We can extract the first bulk excitation therefore has to be extracted from comparing sectors 1 and 2 [Which states the sectors contain](#which-states-the-sectors-contain) below. The moral of the story is that by looking at this local observable, we can distinguish boundary from bulk excitations in the spin-1 chain.
 
 ### Spin-1/2 boundary: absorbing the edge states
 
@@ -33,9 +33,7 @@ The moral of the story is that by looking at this local observable, we can disti
   S=1/2   S=1     S=1     S=1     S=1     S=1     S=1/2
 ```
 
-Now change only the termination. Keep the same $L=64$ spin-1 sites and *attach* an extra spin-1/2 at each end, coupled to the chain by the same $J$: the interior is untouched and the lattice simply grows by two sites.
-
-The choice is not arbitrary. The degeneracy found above is a property of the *ends*, not of the bulk, so it can be removed without touching the phase: the attached spin-1/2 gives the dangling emergent spin-1/2 a partner to form a singlet with, screening it much as a Kondo impurity is screened. Two half-integer spins combine into an integer representation, which can be gapped symmetrically, so the fourfold manifold collapses to a single ground state. A spin-1 cap would not do this — it would simply lengthen the chain and reproduce the same free edge state one site further in.
+Now we keep the same $L=64$ spin-1 sites and *attach* an extra spin-1/2 at each end, coupled to the chain by the same $J$. The degeneracy found above is a property of the *ends*, not of the bulk, so it can be removed without touching the phase: the attached spin-1/2 gives the dangling emergent spin-1/2 a partner to form a singlet with, screening it much as a Kondo impurity is screened. Two half-integer spins combine into an integer representation, which can be gapped symmetrically, so the fourfold manifold collapses to a single ground state. A spin-1 cap would not do this — it would simply lengthen the chain and reproduce the same free edge state one site further in.
 
 Repeat the calculation on this lattice, again for sectors 0, 1 and 2. The excitations now behave quite differently:
 
