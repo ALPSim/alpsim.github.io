@@ -33,9 +33,8 @@ import pyalps.plot
 
 #prepare the input parameters
 parms = []
-L = 32
-for D in [20,40,60]:
-    parms.append( { 
+L = 64
+parms.append( {
         'LATTICE_LIBRARY'                       : 'my_lattices.xml',
         'LATTICE'                               : 'open chain lattice with special edges '+str(L),
         'MODEL'                                 : 'spin',
@@ -44,9 +43,9 @@ for D in [20,40,60]:
         'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
         'Sz_total'                              : 0,
         'J'                                     : 1,
-        'SWEEPS'                                : 4,
+        'SWEEPS'                                : 6,
         'NUMBER_EIGENVALUES'                    : 1,
-        'MAXSTATES'                             : D,
+        'MAXSTATES'                             : 100,
         'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
         'MEASURE_AVERAGE[Exchange]'             : 'exchange',
         'MEASURE_LOCAL[Local magnetization]'    : 'Sz',

@@ -33,17 +33,17 @@ import pyalps.plot
 
 #prepare the input parameters
 parms = []
-for D in [20,40,60]:
-    parms.append( { 
-        'LATTICE'                               : 'open chain lattice', 
+for sz in [0,1,2]:
+    parms.append( {
+        'LATTICE'                               : 'open chain lattice',
         'MODEL'                                 : 'spin',
         'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-        'Sz_total'                              : 0,
+        'Sz_total'                              : sz,
         'J'                                     : 1,
         'SWEEPS'                                : 6,
         'NUMBER_EIGENVALUES'                    : 1,
-        'L'                                     : 32,
-        'MAXSTATES'                             : D,
+        'L'                                     : 64,
+        'MAXSTATES'                             : 100,
         'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
         'MEASURE_AVERAGE[Exchange]'             : 'exchange',
         'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
@@ -65,7 +65,7 @@ for run in data:
         if s.props['observable'] == 'Diagonal spin correlations':
             d = pyalps.DataSet()
             d.props['observable'] = 'Sz correlations'
-            d.props['label'] = 'D = '+str(s.props['MAXSTATES'])
+            d.props['label'] = '$S_z^{tot}$ = '+str(s.props['Sz_total'])
             L = int(s.props['L'])
             d.x = np.arange(L)
             
