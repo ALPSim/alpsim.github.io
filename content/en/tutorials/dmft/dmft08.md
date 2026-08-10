@@ -77,7 +77,7 @@ Two lattice-specific mechanisms are available; both feed a k-integrated density 
           o       o
   ```
 
-Each DOS table was produced by a small histogram script — [`DOS_Square.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Square.py) (`GRID=4000`), [`DOS_Cubic.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Cubic.py) (`GRID=360`), and [`DOS_Hexagonal.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Hexagonal.py) (`GRID=4000`) — each integrating the tight-binding dispersion over the Brillouin zone on a `GRID`$\times$`GRID` k-point mesh. You can generate a DOS table for any other lattice the same way, or use the [ALPS lattice library](../../../documentation/intro/latticehowtos) as a reference for lattice geometries and coordination numbers when building your own.
+Each DOS table was produced by a small histogram script — <a href="../codes/dmft-08-lattices/DOS/DOS_Square.py" download>`DOS_Square.py`</a> (`GRID=4000`), <a href="../codes/dmft-08-lattices/DOS/DOS_Cubic.py" download>`DOS_Cubic.py`</a> (`GRID=360`), and <a href="../codes/dmft-08-lattices/DOS/DOS_Hexagonal.py" download>`DOS_Hexagonal.py`</a> (`GRID=4000`) — each integrating the tight-binding dispersion over the Brillouin zone on a `GRID`$\times$`GRID` k-point mesh. You can generate a DOS table for any other lattice the same way, or use the [ALPS lattice library](../../../documentation/intro/latticehowtos) as a reference for lattice geometries and coordination numbers when building your own.
 
 **TWODBS**: for the square and hexagonal lattices specifically, ALPS can instead evaluate the Hilbert transform directly as a live k-space integral at every self-consistency step (discretized on an $L\times L$ k-point mesh), without needing a pre-tabulated DOS file at all.
 
@@ -87,7 +87,7 @@ Each DOS table was produced by a small histogram script — [`DOS_Square.py`](ht
 
 ### Option DOSFILE
 
-For a general lattice, you have to provide the density of states of your lattice. Apart from that, several other changes are necessary in order to run the simulation. A working python script [`tutorial8a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8a.py) setting an input file, running the simulation, and plotting the result follows:
+For a general lattice, you have to provide the density of states of your lattice. Apart from that, several other changes are necessary in order to run the simulation. A working python script <a href="../codes/dmft-08-lattices/tutorial8a.py" download>`tutorial8a.py`</a> setting an input file, running the simulation, and plotting the result follows:
 
 ```
 import pyalps
@@ -192,7 +192,7 @@ For the case of two-dimensional lattices, there is an implementation of the Hilb
 - square lattice [set TWODBS=square] with nearest-neighbor [corresponding parameter: t] and next-nearest-neighbor hoppings [corresponding parameter: tprime]; the second moment EPSSQ_i is $4(t^2 + tprime^2)$;
 - hexagonal lattice [set TWODBS=hexagonal] with nearest-neighbor hoppings [corresponding parameter: t]; the second moment EPSSQ_i is $3t^2$.
 
-A working python script [`tutorial8b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8b.py) to produce the input file, run the simulation, and plot the result is shown here:
+A working python script <a href="../codes/dmft-08-lattices/tutorial8b.py" download>`tutorial8b.py`</a> to produce the input file, run the simulation, and plot the result is shown here:
 
 ```
 import pyalps

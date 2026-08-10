@@ -45,7 +45,7 @@ on the Bethe lattice, at half filling ($\mu=0$). Here the interaction $U$ is swe
 
 ### Running the simulation
 
-In order to run the simulations in python use [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py):
+In order to run the simulations in python use <a href="../codes/dmft-04-mott/tutorial4a.py" download>`tutorial4a.py`</a>:
 
 ```    
 import pyalps
@@ -184,7 +184,7 @@ You should observe that at small $U$ you find a metallic solution, and an insula
 
 ### Checking convergence
 
-The convergence may be checked by [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py):
+The convergence may be checked by <a href="../codes/dmft-04-mott/tutorial4b.py" download>`tutorial4b.py`</a>:
 
 ```
 import pyalps
