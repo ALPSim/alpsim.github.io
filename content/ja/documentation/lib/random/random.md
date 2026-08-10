@@ -122,7 +122,7 @@ The next example uses a polymorphic `buffered_uniform_01` generator as a uniform
 
 Stochastic simulations on parallel machines face an additional problem over simulations on a single CPU: we not only need one random number stream but uncorrelated random number streams for each CPU. Since massively parallel machines with 65536 CPUs exist, this can be a formidable challenge.
 
-The [Scalable Parallel Pseuo Random Number Generators Library (SPRNG)](http://www.sprng.org/) is a C-library that was designed to solve this challenge. As explained in detail in the [SPRNG paper](http://www.sprng.org/Version1.0/paper/node7.html), there are several methods of creating independent parallel random number streams, using parametrization of the generator, or cycle division techniques.
+The [Scalable Parallel Pseuo Random Number Generators Library (SPRNG)](https://web.archive.org/web/20260213000904/http://sprng.org/) is a C-library that was designed to solve this challenge. As explained in detail in the [SPRNG paper](https://web.archive.org/web/20260213000904/http://sprng.org/Version1.0/paper/node7.html), there are several methods of creating independent parallel random number streams, using parametrization of the generator, or cycle division techniques.
 
 Since the method to create independent streams depends on the choice of generator, no generic seeding can be implemented, but the seeding mechanism is specific to the generator. However, a common interface is possible, and we follow the design of the SPRNG library by requiring the following two parameters next to a global seed
 
@@ -198,7 +198,7 @@ The WELL generators provided by two instantiations [`well512a`](../../random/ref
 
 ### Introduction to Wrappers
 
-The [Scalable Parallel Pseuo Random Number Generators Library (SPRNG)](http://www.sprng.org/) is the most widely used and portable C-library for parallel random number generators. This header provides Boost.Random and TR1-conforming wrappers to the generators in the SPRNG library.
+The [Scalable Parallel Pseuo Random Number Generators Library (SPRNG)](https://web.archive.org/web/20260213000904/http://sprng.org/) is the most widely used and portable C-library for parallel random number generators. This header provides Boost.Random and TR1-conforming wrappers to the generators in the SPRNG library.
 
 ### SPRNG wrappers
 
@@ -234,7 +234,7 @@ The class members and their semantics are the same as those defined in the paral
 
 ### Building SPRNG
 
-The SPRNG wrappers are a header-only library but executables will need to be linked with the SPRNG library, which can be downloaded in source form from the [SPRNG web page](http://www.sprng.org/).
+The SPRNG wrappers are a header-only library but executables will need to be linked with the SPRNG library, which can be downloaded in source form from the [SPRNG web page](https://web.archive.org/web/20260213000904/http://sprng.org/).
 
 The path to the SPRNG library needs to be specified by either a statement
 

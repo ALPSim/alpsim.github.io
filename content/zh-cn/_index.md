@@ -28,11 +28,12 @@ ALPS（物理模拟算法与程序库）是一款面向量子和经典凝聚态�
 {{< cta-button text="问题反馈" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
 {{< cta-button text="领导团队" link="govern" icon="account_balance" >}}
 {{< cta-button text="教程指南" link="tutorials/" icon="school" >}}
+{{< cta-button text="模型" link="documentation/models/" icon="science" >}}
 {{< cta-button text="Discord" link="https://discord.gg/JRNWnnva9g" icon="forum" >}}
 {{< cta-button text="常见问题" link="faqs" icon="help" >}}
 {{< cta-button text="论文" link="documentation/pubs/" icon="library_books" >}}
 {{< cta-button text="论文链接" link="https://iopscience.iop.org/article/10.1088/1742-5468/2011/05/P05001" icon="article" >}}
-{{< cta-button text="引用" link="/data/bauer2011.bib" icon="format_quote" >}}
+{{< cta-button text="引用" link="documentation/pubs/" icon="format_quote" >}}
 </div>
 
 ### 教程

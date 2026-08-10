@@ -1,34 +1,56 @@
 ---
-title: Spinless Fermion Model
+title: スピンレスフェルミオンモデル
 math: true
+toc: true
 weight: 4
 ---
 
-## Introduction
+## はじめに
 
-The **spinless fermion model** is a fundamental theoretical framework in condensed matter physics used to study the behavior of fermionic particles in a lattice system, where the particles are assumed to have no intrinsic spin degree of freedom. This simplification allows researchers to focus on the effects of particle statistics, interactions, and lattice geometry without the added complexity of spin dynamics.
+**スピンレスフェルミオンモデル**は、スピン自由度をまったく持たないフェルミオンが格子上をホッピングする様子を記述します。[ハバードモデル](../hubbard)のように「上向き」と「下向き」の 2 種類があるのではなく、各サイトには 1 種類の粒子しかありません。現実の電子には必ずスピンがあるため、これは奇妙な単純化に聞こえるかもしれませんが、実際には有用で、物理的にも意味のある単純化です。フェルミ統計、相互作用、格子の幾何構造がそれぞれ及ぼす効果を、スピンによる余分な複雑さから切り離すことができ、またこれはスピン偏極したフェルミオン（例えば単一のスピン状態に用意された冷却原子で、この場合パウリの排他原理だけで、相互作用の有無にかかわらず、2 つの同種フェルミオンが同じサイトを占有することはすでに禁止されています）を直接記述するモデルでもあります。さらに、後述するように、これは実は異方的な量子ハイゼンベルク鎖が姿を変えたものにほかなりません。
 
-In this model, fermions are described by creation ($c_i^\dagger$) and annihilation ($c_i$) operators that obey the Pauli exclusion principle, ensuring that no two fermions can occupy the same quantum state simultaneously. The Hamiltonian of the system typically includes terms representing kinetic energy (hopping between lattice sites) and potential energy (interactions between particles). A general form of the Hamiltonian for the spinless fermion model is:
+フェルミオンは生成（$c_i^\dagger$）演算子と消滅（$c_i$）演算子によって記述され、これらはフェルミオンの反交換関係に従います。これによりパウリの排他原理が保証され、2 つのフェルミオンが同じサイトを占有することは決してありません。このモデルの一般的なハミルトニアンは
 
 $$
-H = -t \sum_{\langle i,j \rangle} \left( c_i^\dagger c_j + c_j^\dagger c_i \right) + V \sum_{\langle i,j \rangle} n_i n_j,
+H = -t \sum_{\langle i,j \rangle} \left( c_i^\dagger c_j + c_j^\dagger c_i \right) + V \sum_{\langle i,j \rangle} n_i n_j - \mu \sum_i n_i,
 $$
 
-where:
-- $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
-- $V$ is the interaction strength between fermions on neighboring sites,
-- $n_i = c_i^\dagger c_i$ is the number operator, representing the occupation of site $i$.
+で与えられます。ここで、
 
-The first term in the Hamiltonian describes the kinetic energy of fermions hopping between lattice sites, while the second term accounts for interactions between fermions on adjacent sites. Depending on the values of $t$ and $V$, the system can exhibit a variety of phases, including metallic, insulating, and charge-density-wave phases.
+- $t$ は最近接サイト $\langle i,j \rangle$ 間のホッピング振幅、
+- $V$ は隣接サイト上のフェルミオン間の相互作用の強さ（$V>0$ で斥力）、
+- $n_i = c_i^\dagger c_i$ はサイト $i$ の占有数（0 または 1）を表す数演算子、
+- $\mu$ は化学ポテンシャルで、フェルミオンの総数を制御します。
 
-## Phenomena
+これは、ALPS のモデルライブラリに組み込まれている `spinless fermions` モデルそのものであり、パラメータは `mu`、`t`、`V`（およびボンドタイプごとの変種である `t0`、`t1`、`V0`、`V1`）です——一覧全体については[モデルパラメータ用語集](../../intro/modeldef/intro)を参照してください。
 
-The spinless fermion model is widely used to explore phenomena such as:
-- **Quantum phase transitions**: Transitions between different ground states driven by quantum fluctuations.
-- **Localization and delocalization**: Understanding how disorder or interactions affect the mobility of particles.
-- **Topological phases**: Investigating the emergence of topological properties in low-dimensional systems.
+## モデルの物理
 
-Despite its simplicity, the spinless fermion model captures essential features of more complex systems and serves as a stepping stone for studying richer models, such as the Hubbard model, where spin degrees of freedom are included.
+**自由フェルミオン点。** $V=0$ では、モデルは格子上を運動する自由フェルミオンに帰着します。これは古典的な強束縛問題であり、どのような格子・どのような充填率に対してもフーリエ変換によって厳密に解くことができます。基底状態は単純なフェルミ海です——フェルミエネルギー以下の 1 粒子状態がすべて占有され、それより上はすべて空です——そしてそのほぼすべての性質（エネルギー、運動量分布、相関関数）が閉じた形で求まります。このモデルの興味深い物理は、すべて相互作用 $V$ に由来します。
 
-## Methods
+**姿を変えたスピン鎖：ジョルダン・ウィグナー写像。** 1 次元では、このモデルは実は新しいモデルでも何でもありません。横磁場イジングモデルを厳密に解くために使われたのと同じ[ジョルダン・ウィグナー変換](../transising)が、このスピンレスフェルミオン鎖を、[ハイゼンベルクモデル](../heisenberg)のページで紹介した異方的な量子ハイゼンベルク（XXZ）スピン 1/2 鎖へと写像します。ホッピング $t$ は面内（$S^xS^x+S^yS^y$）交換に、相互作用 $V$ はイジング的な（$S^zS^z$）交換になります。これは近似ではなく厳密な等価性であり、一方のモデルのすべての固有状態とすべての相関関数には、他方のモデルに対応する相手が存在します。これはまた、この名目上フェルミオン的なモデルが 1 次元において量子モンテカルロ法でまったく問題なく扱える理由も説明しています。スピン表示でシミュレートすれば、ハイゼンベルク鎖そのものとまったく同様に符号問題が生じません（下記の「手法」を参照）——悪名高いフェルミオンの符号問題は、正真正銘フェルミオン的なシミュレーションに特有の現象であり、ボソン（スピン）表示への厳密な写像が存在する場合には、そもそも生じないのです。
 
+**相図への影響。** このモデルは実質的に XXZ 鎖であるため、そのゼロ温度相図は、その確立された相図から直接導かれます。$|V| < 2t$ ではこの鎖はギャップレスです——これはラッティンジャー液体であり、1 次元における相互作用するフェルミオンに一般的な、臨界的な金属状態で、相関はべき乗則的に減衰します。$V > 2t$ では、強い斥力によって占有サイトと空のサイトが交互に並ぶことが有利になり、ギャップが開いて電荷密度波（CDW）絶縁体になります。これは XXZ 鎖のイジング的な反強磁性相に対応するフェルミオン側の描像です。$V < -2t$ では、強い引力によってフェルミオンが互いに集まろうとし、フェルミオンの多い領域と少ない領域への相分離が起こります。したがって $V/t$ を $\pm 2$ の付近で調整することは、これらの領域の間で、まさに[横磁場イジングモデル](../transising)のページで紹介したのと同種の、本物のゼロ温度量子相転移を引き起こします。
+
+**2 つの有名な拡張。** この基本モデルにさらに要素を加えることで、現代の凝縮系物理学において最も影響力のある 2 つのモデルが得られます。ホッピング振幅を二量体化する（鎖に沿って強い結合と弱い結合を交互に配置する）と、**Su-Schrieffer-Heeger（SSH）モデル**（[Su, Schrieffer, and Heeger (1979)](https://doi.org/10.1103/PhysRevLett.42.1698)）が得られます。これは 1 次元トポロジカル絶縁体の草分け的な例であり、もともとはポリアセチレン中のソリトン欠陥を説明するために導入されました。隣接サイト間に（密度-密度相互作用の代わりに）p 波対を加えると、**キタエフ鎖**（[Kitaev (2001)](https://doi.org/10.1070/1063-7869/44/10S/S29)）が得られます。そのトポロジカル相は、鎖の両端に対になっていないマヨラナ零モードを宿しており、トポロジカル量子計算の基礎となるモデルです。二量体化も対も、上記の基本モデルには含まれていませんが、どちらもこのモデルの上に直接組み立てられる、自然でよく知られた次の一歩です。
+
+## 現象
+
+- **ラッティンジャー液体物理**：$|V| < 2t$ では、1 次元スピンレスフェルミオン鎖はラッティンジャー液体の典型例です。これはギャップレスな状態であり、その低エネルギー物理は普遍的で、ギャップレスで相互作用する 1 次元フェルミオン系のほぼすべてに共通するものであり、高次元の金属におけるフェルミ液体的な振る舞いとはまったく異なります。
+- **電荷密度波秩序**：強い斥力（1 次元で $V > 2t$）のもとでは、フェルミオンは交互のサイトに配列し、格子の並進対称性を自発的に副格子対称性へと破ります——これは[ハイゼンベルクモデル](../heisenberg)のページで論じたネール秩序の、フェルミオン言語における直接的な対応物です。
+- **量子相転移**：$V = 2t$ における金属から CDW 絶縁体への転移（および $V=-2t$ における相分離への転移）は、温度ではなく相互作用の強さによって駆動されるゼロ温度量子相転移です。
+- **トポロジカル相**：基本モデル自体には存在しませんが、単純な拡張——二量体化されたホッピング（SSH モデル）や誘起された対（キタエフ鎖）——によって容易にアクセスでき、この単純な出発点をトポロジカル凝縮系物理学において最も研究されている 2 つのモデルへと変えます。
+
+## 手法
+
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **ED** —— [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) を参照 | 小さな系に対して厳密な結果が得られる；多体スペクトル全体を捉えられる | ヒルベルト空間が系のサイズに対して指数関数的に増大するため、小さな系に限られる | 小さな鎖やクラスター；他の手法の検証 |
+| **DMRG** —— [密度行列繰り込み群](../../methods/dmrg/dmrg) を参照 | 1 次元系の基底状態と低エネルギー励起について高精度な結果が得られる | 2 次元・3 次元系や高エンタングルメント状態には効率が落ちる | 1 次元鎖の基底状態、ギャップ、相関関数 |
+| **QMC** —— [確率級数展開](../../methods/qmc/sse) を参照 | 1 次元では、ハイゼンベルク鎖へのジョルダン・ウィグナー写像により符号問題が完全になく、大きな系にも有限温度にもアクセスできる | この写像（および符号問題のないシミュレーション）は 1 次元最近接ホッピングに特有のものであり、真に高次元あるいは長距離のフェルミオンモデルでは一般に符号問題が生じる | 有限温度の熱力学；大規模な 1 次元系 |
+
+このモデルの物理を直接研究する専用の ALPS チュートリアルはありませんが、[LM-02: カスタムモデルハミルトニアンの定義：スピン、フェルミオン、ボソン](../../../tutorials/lm/lm02) は、その 3 つの実例の一つとして、ALPS のモデル XML 形式でスピンレスフェルミオンモデルの `SITEBASIS`、`OPERATOR`、`HAMILTONIAN` の各部分をゼロから書く方法を示しています。
+
+---
+
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。

@@ -3,11 +3,11 @@
 {{- $text := .Get "text" -}}
 {{- $prim := .Get "prim" -}}
 {{- $error := .Get "err" -}}
-
+{{- $color := .Get "color" -}}
 {{- $external := hasPrefix $link "http" -}}
 {{- $href := cond (hasPrefix $link "/") ($link | relURL) $link -}}
-
 <a href="{{- $href -}}" class="btn {{ if $prim }}btn-primary{{ else if $error }}btn-outlined-error{{ else }}btn-outlined-primary{{ end }}"
+  {{ with $color }}style="background-color: {{ . }}; border-color: {{ . }};"{{ end }}
   {{ if $external }}target="_blank" rel="noreferrer"{{ end -}}>
   <span class="material-icons">{{ $icon }}</span>
   {{ with $text }}{{ . }}{{ end }}

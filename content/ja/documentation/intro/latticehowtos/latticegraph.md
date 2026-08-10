@@ -5,30 +5,29 @@ toc: true
 weight: 4
 ---
 
-In the simulation of lattice models, one usually considers a model defined on an infinite or finite lattice. Here, we explain how to specify both in XML format.
+これまでの HOWTO では、任意のグラフを直接記述する方法と、単位胞とその基底ベクトルを通じて格子の幾何学的構造を記述する方法を示しました。ここでは両者を組み合わせます：格子の単位胞の各コピーに小さなグラフを装飾し、実際にシミュレーションされるグラフを作り上げます。
 
-## A simple graph
+## 単純なグラフ
 
-The graphs in most physics simulations are not irregular graphs, but built up regularly, like a lattice
+多くの物理シミュレーションにおけるグラフは不規則なものではなく、格子のように規則的に組み立てられています。
 
 ![The first simple graph.](../figs/tutoriallatticehowtolatticegraph1.gif)
 
-We can capture the regularity of this graph by putting it down onto a lattice:
+このグラフの規則性は、格子の上に配置することで捉えることができます。
 
 ![The graph on a lattice.](../figs/tutoriallatticehowtolatticegraph2.gif)
 
-This lattice can be described by a unit cell, and the graph built up from a "unit cell graph" on the unit cell:
+この格子は単位胞によって記述でき、単位胞の各コピーを同じ「単位胞グラフ」で装飾することで、グラフ全体が組み立てられます。
 
 ![Unit cell graph.](../figs/tutoriallatticehowtolatticegraph3.gif)
 
-The "unit cell graph" consists of a single vertex, and there is a edge to the same vertex in the neighboring cell. We can describe such a graph on a lattice in XML, by combining a LATTICE or FINITELATTICE with a UNITCELL element describing the graph on the unit cell from which the full graph is created:
+ここでの単位胞グラフは単一の頂点から成り、隣のセルにある同じ頂点への辺を持ちます。このような格子上のグラフは、`<LATTICE>` あるいは `<FINITELATTICE>` と、単位胞上のグラフを記述する `<UNITCELL>` 要素を組み合わせることで、XML で記述できます。この単位胞から全体のグラフが作られます。
 
     <LATTICEGRAPH>
         <FINITELATTICE>
         <LATTICE dimension="1"/>
             <EXTENT size="6"/>
             <BOUNDARY type="open"/>
-        </LATTICE>
         </FINITELATTICE>
         <UNITCELL dimension="1" vertices="1">
         <VERTEX/>
@@ -39,21 +38,21 @@ The "unit cell graph" consists of a single vertex, and there is a edge to the sa
         </UNITCELL>
     </LATTICEGRAPH>
   
-The edge in the unit cell goes from vertex 1 in the cell to vertex 1 in the cell to the right (with an offset +1), as described in the EDGE element. The offet of 0 in the SOURCE element was omitted, as 0 is the default value for the offet.
+単位胞内の辺は、セル内の頂点1から、右隣のセルの頂点1へと（オフセット +1 で）向かっています。これは `<EDGE>` 要素で記述されています。`<SOURCE>` 要素のオフセット 0 は省略されていますが、これはそれが既定値だからです。
 
-To describe an infinite chain we would use a LATTICE element instead of the FINITELATTICE one.
+無限鎖を記述するには、`<FINITELATTICE>` の代わりに `<LATTICE>` 要素を使います。
 
-## A complex example
+## 複雑な例
 
-We can again describe graphs with colored edges and vertices, or add other attributes like coordinates to the vertices. Also, for the description of the lattice the full machinery described for the lattice is available. We will show one example for a complex periodic graph on an L x W rectangular lattice:
+色付きの辺や頂点を記述したり、頂点に座標のような他の属性を追加したりすることも、これまでと同様に可能です。また、`<LATTICEGRAPH>` の格子部分では、[格子と単位胞](../unitcell) で説明した仕組み――有限の広がり、境界条件、既に定義済みの格子の参照など――をすべて利用できます。ここでは、L × W の長方形格子上の複雑な周期的グラフの例を示します。
 
 ![A complex periodic graph on a lattice.](../figs/tutoriallatticehowtolatticegraph4.jpg)
 
-This graph on a lattice can be built from this complex unit cell graph decorating the rectangular lattice:
+この格子上のグラフは、長方形格子を装飾する次のような複雑な単位胞グラフから作ることができます。
 
 ![A complex graph in a unit cell.](../figs/tutoriallatticehowtolatticegraph5.jpg)
 
-The XML description is:
+XML による記述は次の通りです。
 
     <LATTICE name="square" dimension="2">
         <BASIS>
@@ -63,8 +62,10 @@ The XML description is:
     </LATTICE>
     <FINITELATTICE name="rectangular periodic" dimension="2">
         <LATTICE ref="square"/>
+        <PARAMETER name="L"/>
+        <PARAMETER name="W" default="L"/>
         <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W,L"/>
+        <EXTENT dimension="2" size="W"/>
         <BOUNDARY type="periodic"/>
     </FINITELATTICE>
     <UNITCELL name="complex example" dimension="2" vertices="2">
@@ -79,7 +80,7 @@ The XML description is:
         <UNITCELL ref="complex example"/>
     </LATTICEGRAPH>
     
-Here we made us of the predefinition of named lattices and unit cells (e.g. in a library), which we can then combine by referencing them in the LATTICEGRAPH element. Alternatively we could have defined everything in the LATTICEGRAPH element:
+ここでは、（例えばライブラリの中で）以前に定義しておいた名前付きの格子と単位胞を利用し、それらを `<LATTICEGRAPH>` 要素の中で参照して組み合わせています。あるいは、すべてを `<LATTICEGRAPH>` 要素の中で定義することもできます。
 
     <LATTICEGRAPH>
         <FINITELATTICE dimension="2">
@@ -88,8 +89,11 @@ Here we made us of the predefinition of named lattices and unit cells (e.g. in a
             <VECTOR> 1 0 </VECTOR>
             <VECTOR> 0 1 </VECTOR>
             </BASIS>
+        </LATTICE>
+        <PARAMETER name="L"/>
+        <PARAMETER name="W" default="L"/>
         <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W,L"/>
+        <EXTENT dimension="2" size="W"/>
         <BOUNDARY type="periodic"/>
         </FINITELATTICE>
         <UNITCELL dimension="2" vertices="2">
@@ -101,6 +105,8 @@ Here we made us of the predefinition of named lattices and unit cells (e.g. in a
         </UNITCELL>
     </LATTICEGRAPH>
   
-Since both coordinates for the vertices in the unit cell, as well as basis vectors for the lattice are given, the coordinates of all vertices can be calculated.
+単位胞内の頂点の座標と、格子の基底ベクトルの両方が与えられているため、すべての頂点の座標を計算することができます。
 
-  
+---
+
+このセクションの他の内容の概要については、[格子の定義](..) を参照してください。シミュレーションでグラフを選択するための `LATTICE`／`GRAPH` 入力パラメータについては、[共通パラメータ](../../parameters) を参照してください。他の ALPS ドキュメントのセクションについては、[はじめに](../..) を参照してください。

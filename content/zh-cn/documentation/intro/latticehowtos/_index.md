@@ -5,9 +5,28 @@ toc: true
 weight: 2
 ---
 
-- [Introduction](intro)
-- [Simple Graphs](simplegraph)
-- [Lattice and Unit Cells](unitcell)
-- [Lattices and Graphs](latticegraph)
-- [A library of Lattices and Graphs](library)
-- [Check Lattice Graph](checklattice)
+每一个 ALPS 格点模拟都运行在一个图上——由若干格点及其之间的键构成，以 XML 形式给出。本节将逐步构建这样的图：从显式给出顶点和边的任意图开始，经过用于描述规则（有限或无限）格子的晶胞机制，将二者结合成 ALPS 实际用于模拟的图，把结果整理成可复用的库，最后检验所定义的内容是否符合预期。
+
+## [简介](intro)
+
+为什么需要在输入文件中指定格子和图、下面五篇 HOWTO 的概览、ALPS 内置的最常见格子的参考图，以及指向完整 ALPS 格子库文件（`lib/xml/lattices.xml`）的链接。
+
+## [简单图](simplegraph)
+
+不假设任何规则性或格子结构，通过列出每一个 `<VERTEX>` 和 `<EDGE>` 来直接指定任意图的方法。涵盖带颜色的图（用于区分子格子或键类型的顶点、边 `type` 属性），以及为顶点附加空间坐标 `<COORDINATE>` 的方法。
+
+## [格子与晶胞](unitcell)
+
+如何将*规则*格子紧凑地描述为按平移重复的晶胞，而不必逐个手写每个格点。涵盖无限格子（通过 `<LATTICE>` 及其基矢量，基矢量既可以是数值的，也可以是符号化、参数化的）、具有给定延伸范围的有限格子（通过 `<FINITELATTICE>` 与 `<EXTENT>`，维度可以是固定值、参数化的，或部分维度为无限）、开放和周期性 `<BOUNDARY>` 边界条件，以及通过名称引用已定义的 `<LATTICE>` 而无需重新定义它。
+
+## [格子与图](latticegraph)
+
+如何通过给每个晶胞装饰上 `<UNITCELL>` 图（它自己的顶点和边，包括跨越到相邻晶胞的键），并将其与 `<LATTICE>` 或 `<FINITELATTICE>` 一起组合进 `<LATTICEGRAPH>` 元素中，从而把一个格子转化为 ALPS 实际模拟所用的图。以一个最简单的单顶点链，以及周期性矩形格子上更复杂的双顶点晶胞为例进行说明。
+
+## [格子与图的库](library)
+
+如何把带名字的 `<LATTICE>`、`<FINITELATTICE>`、`<UNITCELL>` 和 `<LATTICEGRAPH>` 定义收集到一个 `<LATTICES>` 元素中，使得模拟的输入文件可以通过名称（例如 `LATTICE="square lattice"`）引用某个格子，而不必每次都重复其完整定义——这正是 ALPS 内置格子库本身的组织方式。
+
+## [检查格子图](checklattice)
+
+如何用 `printgraph` 工具检验一个新的格子定义。该工具会以与 ALPS 应用程序内部生成图完全相同的方式，从参数文件生成图，从而让你在真正运行模拟之前，确认它与你的预期相符。

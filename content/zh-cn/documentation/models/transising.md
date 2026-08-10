@@ -1,47 +1,78 @@
 ---
-title: Transverse Field Ising Model
-description: "Introduction to Transverse Field Ising Model"
+title: 横场伊辛模型
+description: "带横场的量子伊辛模型：量子相变的最简模型，也是量子计算与量子模拟的标准试金石"
 toc: true
 math: true
 weight: 2
-cascade:
-    type: docs
 ---
 
-## Introduction
+## 简介
 
-The **transverse field Ising model (TFIM)** is a generalization of the classical Ising model that incorporates quantum mechanical effects. It is one of the most important models in quantum statistical mechanics and condensed matter physics, providing insights into quantum phase transitions, critical phenomena, and the interplay between classical and quantum fluctuations.
+**横场伊辛模型（TFIM）**是在经典[伊辛模型](../ising)——格子上通过自旋 $z$ 分量耦合——的基础上，加上一个垂直于该轴、沿 $x$ 方向的磁场。仅仅这一项改动，就把一个骨子里其实是经典的模型，变成了一个真正具有量子力学性质的模型，也使横场伊辛模型成为研究量子磁性和量子相变时最简单、也是被研究得最多的模型之一。
 
-The transverse field quantum Ising model is given by the Hamiltonian
+**为什么"普通的量子伊辛模型"其实并不量子。** 用量子自旋算符写出来，只含纵向（$z$ 方向）耦合的"普通"伊辛模型，
 
 $$
-H=J_{z} \sum_{\langle i,j \rangle} S_i^z S_j^z + \Gamma \sum_i S_i^x
+H_0 = J_z \sum_{\langle i,j \rangle} S_i^z S_j^z ,
 $$
 
-Here, the first sum runs over pairs of nearest neighbours. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J_z=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J_z\gt 0$ and ferromagnetic for $J_z \lt 0$. 
+看起来是量子力学的，但在任何动力学意义上其实都不是：$H_0$ 中的每一项都只由 $S^z$ 算符构成，而不同格点上的 $S^z$ 算符彼此总是对易的，因此哈密顿量中的每一项都与其他每一项对易。一组两两对易的项之和，自动就在经典自旋组态的基底下是对角的，所以 $H_0$ 的本征态恰好就是经典伊辛组态，本征能量也恰好就是经典伊辛能量——组态之间没有隧穿，基态中没有叠加，整个谱中也没有任何纠缠。
 
-## Phenomena
-Some interesting phenomena about the model are listed below.
+**横场改变了一切。** 沿 $x$ 方向加上一个场后，
 
-- **Quantum Phase Transitions**
-    + The TFIM exhibits a **quantum phase transition** at zero temperature, driven by the strength of the transverse field $\Gamma$.
-    	+ For $\Gamma \lt \Gamma_c$, the system is in an **ordered phase** (spontaneous symmetry breaking, e.g., ferromagnetic or antiferromagnetic order).
-    	+ For $\Gamma \gt \Gamma_c$, the system is in a **disordered phase** (quantum fluctuations dominate, and symmetry is restored).
+$$
+H=J_{z} \sum_{\langle i,j \rangle} S_i^z S_j^z + \Gamma \sum_i S_i^x,
+$$
 
-- **Quantum Criticality**
-    + Near the critical point $\Gamma = \Gamma_c$, the TFIM displays **quantum critical behavior**, characterized by universal scaling laws and critical exponents.
-    	+ This provides insights into the nature of quantum fluctuations and their role in driving phase transitions.
+这一切都被打破了：同一格点上的 $S_i^x$ 与 $S_i^z$ *不*对易，因此 $H$ 的这两项不能再同时对角化。它的本征态变成了由单自旋翻转联系起来的经典自旋组态的真正叠加（因为 $S^x$ 会把一个自旋在向上和向下之间翻转），这使得模型具有真正的量子动力学、基态纠缠，以及——正如下文讨论的——真正的量子相变，而这些在 $\Gamma = 0$ 时都不存在。
 
+这里，第一个求和遍历所有最近邻对，$\Gamma$ 被称为横场。在一维情形下，系统在 $\Gamma/J_z = \frac{1}{2}$ 处变得临界（见下文）。在 $\Gamma = 0$ 时，基态退化为经典伊辛基态：当 $J_z > 0$ 时为反铁磁，当 $J_z < 0$ 时为铁磁。
 
+**量子计算与量子模拟的试金石。** 由于它是同时具有经典极限和可调、不对易量子项的最简单的格点模型，横场伊辛模型已经成为远超凝聚态理论范畴的标准基准模型：
 
+- 它是**量子退火机**的天然目标哈密顿量：横场恰好提供了驱动退火过程所需的、经典组态之间的量子隧穿（[Kadowaki and Nishimori (1998)](https://doi.org/10.1103/PhysRevE.58.5355)），像 D-Wave 的量子退火机这类设备，正是围绕带有可控横场的伊辛型哈密顿量构建的。
+- 它是**模拟量子模拟器**——里德堡原子阵列、囚禁离子和超导量子比特器件——所实现的最早的非平庸哈密顿量之一，因为它足够简单，可以直接在实验中构造，同时又足够丰富，能够展现出真正的量子相变。
+- 它是介绍**量子算法**的课程和教材中的标准入门例子：它的两项恰好对应量子退火和量子近似优化算法（QAOA）中使用的两个不对易的基本构件（一个对角的"问题"哈密顿量和一个横场"混合"哈密顿量）。
 
-## Methods
+## 模型的物理
 
-The transverse field Ising model is exactly solvable ([P. Pfeuty, Annals of Physics: 57, 79-90 (1970)](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)).
-Many numerical methods have also been developed to solve the model for properties unobtainable in the exact solutions. 
+**单个自旋已经足以说明有序为何被破坏。** 在处理整个格子之前，不妨先看一个处于横场中的单个自旋，$H = \Gamma S^x$。$S^x$ 的本征态是等权重叠加态 $|{\pm x}\rangle = \frac{1}{\sqrt{2}}(|\!\uparrow\rangle \pm |\!\downarrow\rangle)$，因此无论其中哪一个是基态（取决于 $\Gamma$ 的符号），它都精确地满足 $\langle S^z \rangle = 0$。处于横场中的单个自旋永远无法指向 $z$ 方向，因为一旦 $\Gamma \neq 0$，$S^z$ 就不再是一个守恒的、有明确取值的量。这正是后续一切现象的微观根源：在格子上任意位置打开 $\Gamma$，都会不断试图使每个自旋的 $z$ 方向取向随机化，直接与 $J_z$ 的有序化倾向相竞争。
 
-| Method                  | Strengths                                                                 | Limitations                                                              | Applications                                                                 |
-|-------------------------|---------------------------------------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| **ED**   | Exact results for small systems; Captures full quantum correlations.        | Limited to small systems.             | Small-system properties; Benchmarking other methods.               |
-| **QMC**     | Handles larger systems; Finite-T.       | Sign problem for fermions.            | Phase diagrams; Finite-temperature properties.        |
+**极限情形。** 在 $\Gamma = 0$ 时，模型精确退化为[伊辛模型](../ising)页面所讨论的经典伊辛模型：基态是一个经典的反铁磁或铁磁图案，二重简并，因为同时翻转所有自旋不消耗任何能量。当 $\Gamma \to \infty$ 时，场项完全占主导，基态变为一个非简并的乘积态，每个自旋都沿 $+x$ 方向极化——这是一个没有任何序的、平庸的量子顺磁体，每个格点上都有 $\langle S_i^z \rangle = 0$。真正有趣的物理——下文将描述的量子相变——发生在中间的 $\Gamma$ 值处，此时两种极限描述都不再适用，两种相互竞争的倾向势均力敌。
 
+**通过 Jordan-Wigner 变换求得精确解。** 一维横场伊辛模型之所以特殊、之所以是如此受欢迎的入门例子，是因为它对任意 $\Gamma$ 和 $J_z$ 都可以被精确求解，而不仅仅是在上述两个极限情形下。Jordan 和 Wigner 提出的技巧，是把自旋 1/2 算符改写为费米子产生和湮灭算符，每个费米子算符还附带一条由它前面（沿链方向）所有自旋构成的非局域"字符串"——这是因为费米子反对易，而不同格点上的自旋算符却是对易的，需要这样的记账手段来协调。用这些费米子表示后，哈密顿量变成*二次型*的：这是一个自由费米子在格子上跃迁和配对的模型，费米子之间完全没有相互作用。任何这样的二次型费米子哈密顿量，都可以通过进一步的变量变换（Bogoliubov 变换）被精确对角化，从而得到费米子激发作为 $\Gamma$ 和 $J_z$ 函数的显式单粒子色散关系 $\epsilon(k)$。正是这个精确解（[Pfeuty (1970)](https://doi.org/10.1016/0003-4916(70)90270-8)）给出了上文提到的精确临界比 $\Gamma/J_z = \frac{1}{2}$：这恰好是激发能隙 $\min_k \epsilon(k)$ 闭合、标志相变发生的点。
+
+**畴壁与自旋翻转：同一激发的两副面孔。** Jordan-Wigner 费米子对原始自旋有一种直接的、物理上直观的解释。在有序相深处（$\Gamma \ll J_z$），相对于有序背景翻转一个自旋，并不会只产生一个缺陷，而是产生*两*个畴壁——分别位于被翻转自旋的两侧——每个畴壁分隔开磁化符号相反的两段区域；正是横场使得这些畴壁能够随后沿链逐格点跃迁，也使得畴壁对能够被产生或湮灭。在无序相深处（$\Gamma \gg J_z$），同样的费米子准粒子则更自然地被理解为相对于完全沿 $x$ 方向极化的背景翻转的单个自旋。这两者其实只是同一个类粒子激发在两种极限下的不同描述：随着 $\Gamma$ 从两侧趋近 $\Gamma_c$，它的能隙连续地缩小，并且恰好在相变点闭合，此时激发变为无能隙的，低能物理呈现出标度不变性。
+
+**$d$ 维的量子模型对应 $d+1$ 维的经典模型。** 更一般地，在任意空间维度 $d$ 下，$d$ 维的量子横场伊辛模型都可以被映射为一个 $(d+1)$ 维的*经典*伊辛模型。多出来的这一维代表虚时间：将量子力学算符 $e^{-\beta H}$ 切分成许多薄片，并在每一片之间插入一组完备的经典自旋组态（即 Suzuki-Trotter 分解），就把量子配分函数变成了生活在 $(d+1)$ 维格子上的普通经典伊辛模型的配分函数，横场则控制着相邻时间片之间耦合的强弱。这种量子-经典对应，既是通向纯经典[伊辛模型](../ising)页面的概念桥梁，也是下文量子蒙特卡罗方法之所以有效的实际原因：它们采样的正是高一维的等价经典模型的组态，恰如经典伊辛模型自身的蒙特卡罗方法直接采样经典自旋组态一样。特别是在一维横场伊辛模型的量子临界点处，空间和虚时间事实上处于完全平等的地位，因此该处的相变等价于二维经典伊辛模型恰好处于其自身临界点时的情形。
+
+## 现象
+
+**量子相变与经典相变的区别。** 经典伊辛模型的相变是由温度驱动的：只要把 $T$ 升得足够高，无论耦合 $J$ 多强，热涨落最终总会破坏有序。横场伊辛模型的相变则从本质上完全不同——它恰好发生在 $T=0$ 处，那里根本没有热涨落，而是纯粹由横场 $\Gamma$ 的强度驱动，也就是由上文介绍的那种*量子*涨落驱动。从形式上看，这表现为当 $\Gamma$ 越过 $\Gamma_c$ 时基态本身性质的定性变化——这一现象只有在无限大格子的极限下才会变得真正尖锐（数学上不解析），这一点与经典相变完全类似。
+
+- 当 $\Gamma < \Gamma_c$ 时，系统处于**有序相**：$J_z$ 项占主导，基态自发地破坏了模型的 $\mathbb{Z}_2$ 对称性——即所有格点同时进行 $S_i^z \to -S_i^z$ 的对称操作，哈密顿量在此操作下不变，但有序态却不是——从而选出两种可能有序组态中的一种。
+- 当 $\Gamma > \Gamma_c$ 时，系统处于**无序相**：场项占主导，量子涨落在整个格子中占据支配地位，$\mathbb{Z}_2$ 对称性得以恢复，因此处处都有 $\langle S_i^z \rangle = 0$，就像处于横场中的单个自旋那样。
+
+**序参量与自发对称破缺。** 自然的序参量与经典伊辛模型所用的相同，即 $m = \langle S_i^z \rangle$：它在整个无序相中为零，并随着 $\Gamma$ 从上方降到 $\Gamma_c$ 以下而从零开始连续增长——同样是一个*连续*（二级）相变，就像经典模型中一样，只不过现在是 $\Gamma$（而不是 $T$）的函数。如果你打算用数值方法计算这一点，有一个值得了解的细节：在任何有限格子上，$\mathbb{Z}_2$ 对称性都无法被真正破坏，因此两种有序组态会混合成对称和反对称的组合，分别构成基态和第一激发态，二者之间的能隙随格子增大呈指数级迅速缩小。只有在热力学极限下，这一能隙才会完全消失，真正的对称破缺——伴随着真正非零的序参量——才有可能出现。这种有限尺寸能隙分裂，在下文 [ED-04 教程](../../../tutorials/ed/ed04)所计算的低能谱中可以直接看到，也是在任何有限尺寸数值研究中判断自发对称破缺的一个非常通用、有用的诊断手段。
+
+**量子临界性。** 在 $\Gamma_c$ 附近，关联长度 $\xi$——大致衡量自旋之间的关联沿格子延伸多远——以 $\xi \sim |\Gamma - \Gamma_c|^{-\nu}$ 的方式发散，这与由温度驱动的经典连续相变完全类似。但由于这是一个量子相变，现在还存在一个以类似方式发散的*关联时间*，$\xi_\tau \sim \xi^{z}$，其特征由动力学临界指数 $z$ 描述，而这在经典相变中是没有对应物的。上文的量子-经典映射表明，一维横场伊辛模型的量子临界点等价于二维经典伊辛模型的临界点，空间与虚时间在其中对称地出现；相应地，这个量子临界点的 $z=1$，并且与[伊辛模型](../ising)页面上经典二维伊辛相变共享完全相同的临界指数——例如 $\nu = 1$ 和 $\eta = 1/4$，这与[MC-07 教程](../../../tutorials/mcs/mc07)中针对纯经典模型数值提取出的 $\eta$ 值完全相同。
+
+**超越伊辛模型本身的普适性。** 由于它是具有 $\mathbb{Z}_2$ 对称有序相、且由单一调节参数驱动的连续量子相变的最简单模型，横场伊辛模型的普适类描述了许多微观上看起来大不相同的其他体系的低能物理——包括某些结构性（铁电）相变、具有强易轴各向异性的量子磁体，以及更抽象地说，任何其低能物理可以约化为单个涨落的二态自由度、并与某种有序化相互作用相竞争的体系。这正是经典模型中已经介绍过的普适性现象，如今通过量子-经典对应被推广到了量子的情形。
+
+## 方法
+
+一维横场伊辛模型是可以精确求解的（[Pfeuty (1970)](https://doi.org/10.1016/0003-4916(70)90270-8)）。在一维之外，以及对于精确解无法给出的性质（例如远离热力学极限的有限尺寸谱），则需要数值方法：
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) | 对小系统给出精确结果；能捕捉完整的量子谱，包括纠缠 | 由于希尔伯特空间按 $2^N$ 增长，仅限于小系统 | 有限尺寸谱与临界/CFT 数据；用于检验其他方法 |
+| **QMC** —— 参见[随机级数展开](../../methods/qmc/sse) | 可处理大得多的系统；能获得有限温度性质 | 需要支持外场的 QMC 程序（例如 `dirloop_sse`，而非 `looper`）；误差是统计性的而非系统性的 | 相图；有限温度性质；大规模二维/三维系统 |
+
+以下两个教程直接演示了临界横场伊辛链：
+
+- [ED-04：一维临界谱的共形场论描述](../../../tutorials/ed/ed04) —— 使用 `sparsediag` 计算临界横场伊辛链的有限尺寸谱，并将提取出的标度维数与已知的共形场论算符谱相匹配
+- [横场量子伊辛模型（Jupyter notebook）](../../../tutorials/jupyter/ed/isingtransversefield) —— 同一计算的交互式、可运行版本
+
+---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。

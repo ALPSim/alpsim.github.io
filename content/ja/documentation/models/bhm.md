@@ -1,35 +1,68 @@
 ---
-title: Bose-Hubbard Model
+title: ボーズ・ハバードモデル
 math: true
-weight: 8
+toc: true
+weight: 9
 ---
 
-## Introduction
+## はじめに
 
-The **Bose-Hubbard model** is a cornerstone of theoretical physics, particularly in the study of quantum many-body systems and ultracold atomic gases. It describes the behavior of interacting bosons on a lattice, capturing the competition between kinetic energy (boson hopping) and potential energy (on-site interactions). This model is widely used to understand phenomena such as quantum phase transitions, superfluidity, and Mott insulation.
+**ボーズ・ハバードモデル**は[ハバードモデル](../hubbard)のボソン版です。スピンを持つフェルミオンの代わりに、格子上をホッピングする普通のボソンを記述し、同じサイトを共有するとエネルギーの代償を払わなければなりません。フェルミオンの生成・消滅演算子とは異なり、ボソン演算子 $b_i^\dagger, b_i$ は通常の交換関係 $[b_i, b_j^\dagger] = \delta_{ij}$ に従い、パウリの排他原理はまったくありません——原理的には、いくらでも多くのボソンが 1 つのサイトに積み重なることができ、それを妨げているのは相互作用エネルギー $U$ だけです。
 
-The Bose-Hubbard model is defined by the following Hamiltonian:
+このモデルは、本質的に現在の形で [Fisher, Weichman, Grinstein, and Fisher (1989)](https://doi.org/10.1103/PhysRevB.40.546) によって、格子に閉じ込められた相互作用するボソンの一般的な記述として導入されました——当時の動機は、多孔質媒体に吸着されたヘリウム、粒状超伝導体、ジョセフソン接合アレイであり、今日支配的となっている応用よりもずっと前のことでした。その応用は、[Jaksch, Bruder, Cirac, Gardiner, and Zoller (1998)](https://doi.org/10.1103/PhysRevLett.81.3108) が、光格子——レーザービームの干渉によって作られる卵パックのような形のポテンシャル——に捕捉された超冷原子が、レーザー強度を変えるだけで調整可能なパラメータを持つこのハミルトニアンをまさに実現すると提案したことで訪れました。そして [Greiner, Mandel, Esslinger, Hänsch, and Bloch (2002)](https://doi.org/10.1038/415039a) が、このモデルの中心的な量子相転移を実験室で直接観測し、これは冷却原子を用いた量子シミュレーションという分野全体の基礎を築いた実験の一つとなりました。
+
+ハミルトニアンは
 
 $$
 H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + \frac{U}{2} \sum_i n_i (n_i - 1) - \mu \sum_i n_i,
 $$
 
-where:
-- $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
-- $U$ is the on-site interaction strength, representing the energy cost of having multiple bosons on the same site,
-- $\mu$ is the chemical potential, controlling the total number of bosons in the system,
-- $b_i^\dagger$ and $b_i$ are the bosonic creation and annihilation operators at site $i$,
-- $n_i = b_i^\dagger b_i$ is the number operator, representing the boson occupation at site $i$.
+で与えられます。ここで、
 
-The first term in the Hamiltonian describes the kinetic energy of bosons hopping between lattice sites, favoring delocalization and the formation of a superfluid phase. The second term represents the on-site interaction energy, which penalizes multiple bosons occupying the same site and favors localization. The third term, involving the chemical potential $\mu$, controls the overall particle density in the system.
+- $t$ は最近接サイト $\langle i,j \rangle$ 間のホッピング振幅、
+- $U$ はオンサイト相互作用の強さで、同じサイトに複数のボソンを置くことのエネルギーコストです、
+- $\mu$ は化学ポテンシャルで、系のボソンの総数を制御します、
+- $b_i^\dagger$ と $b_i$ はサイト $i$ におけるボソンの生成・消滅演算子です、
+- $n_i = b_i^\dagger b_i$ は数演算子で、サイト $i$ におけるボソンの占有数を表します。
 
-## Phenomena
-The Bose-Hubbard model exhibits a rich phase diagram, with two primary phases:
-1. **Superfluid phase**: At small $U/t$, bosons delocalize across the lattice, forming a coherent superfluid state with long-range phase coherence.
-2. **Mott insulating phase**: At large $U/t$, bosons localize at individual lattice sites due to strong repulsive interactions, leading to a gapped insulating state with integer boson occupancy per site.
+これは ALPS のモデルライブラリに組み込まれている `boson Hubbard` モデルそのものです——パラメータの一覧全体については[モデルパラメータ用語集](../../intro/modeldef/intro)を参照してください。$U \to \infty$ とすると二重占有が完全に禁止され、本節の他の場所で扱う[ハードコアボソンモデル](../hardcorebm)が得られます。
 
-The transition between these phases is a paradigmatic example of a **quantum phase transition**, driven by quantum fluctuations rather than thermal effects. This transition has been experimentally observed in ultracold atomic gases trapped in optical lattices, making the Bose-Hubbard model a key tool for understanding and simulating quantum many-body phenomena.
+## モデルの物理
 
-The Bose-Hubbard model is also closely related to other models in condensed matter physics, such as the **Josephson junction array** and the **XY model**, and serves as a foundation for studying more complex systems, including disordered and long-range interacting bosonic systems.
+**2 つの競合する傾向、1 つの相図。** ホッピング項 $t$ は、格子全体にわたって明確に定義された、コヒーレントな量子位相を持つ非局在化したボソン——**超流体**——を好みます。相互作用項 $U$ はまさにその逆を好みます。すなわち、位相のコヒーレンスをまったく持たない、各サイトに固定された整数個のボソン——**モット絶縁体**——です。どちらの傾向が勝るかは比 $t/U$ と、$\mu$ によって設定される密度に依存し、この競合を描き出すことで、このモデルの有名な**モットローブ**の相図が得られます。それぞれの整数充填 $n = 1, 2, 3, \ldots$ において、$(\mu/U, t/U)$ 平面上に $t=0$ から伸びるローブ状の領域が存在し、その内部では系はギャップの開いたモット絶縁体です。ローブの外側では、非整数充填を含め、基底状態は常に超流体です。
 
-## Methods
+**同じ転移に至る 2 つの経路。** 超流体からモット絶縁体への転移は、物理的に異なる 2 つの経路で到達することができ、[Fisher et al. (1989)](https://doi.org/10.1103/PhysRevB.40.546) はこれらが異なる物理によって支配されていることを示しました。ちょうど整数充填でモットローブの先端をまっすぐ通り抜けるように $t/U$ を調整すると、固定密度で転移を横切ることになります。この場合の転移は、可換な背景の上での真の量子（粒子数）ゆらぎを伴うため、1 次元高い古典 XY モデルと同じ普遍類に属します。一方、ローブの先端からずれて密度そのものを変化させると、希薄な粒子またはホールのガスが直接加わったり取り除かれたりし、それらはほとんど出現すると同時に平均場的な指数を持って超流体へと凝縮します——これはモット相を離れる、質的に異なる「一般的な」経路です。
+
+**位相のゆらぎとジョセフソン物理。** 超流相の内部でモット境界に近いところでは、ボソン場の振幅のゆらぎは強く抑制される一方、その位相は比較的自由にゆらぐことができます。得られる低エネルギー理論は量子 XY モデルであり、形式的にはジョセフソン接合のアレイと同一で、ホッピング $t$ が隣接する「島」の間のジョセフソン結合の役割を果たします。これはまさに、Fisher らが粒状超伝導体やジョセフソン接合アレイを格子ボソンとともに扱う際に、もともと動機とした有効的な記述と同じものです。
+
+**無秩序を加える：ボーズグラス。** 化学ポテンシャルをサイトごとにランダムにする——例えば、基盤となる格子やトラップの無秩序をモデル化する——と、モット絶縁体と超流体の間に第 3 の相が現れます。**ボーズグラス**です。これはギャップレスですが超流体ではない相であり、ボソンは相互作用によってではなく無秩序によって局在化されています。[Fisher et al. (1989)](https://doi.org/10.1103/PhysRevB.40.546) は、無秩序が存在する限りボーズグラスが必ずモット絶縁体と超流体の間に介在しなければならないことを、かなり一般的に示しました。したがって、モットから超流体への直接の転移は、清浄な格子に特有の性質だということになります。
+
+## 現象
+
+- **超流動性**：小さな $U/t$（あるいは整数充填からずれた場合）では、ボソンは格子上で非局在化し、長距離の位相コヒーレンスと非ゼロの超流剛性を持つコヒーレントな状態を形成します。
+- **モット絶縁化**：大きな $U/t$ かつ整数充填では、相互作用が整数個のボソンを各サイトに固定し、すべての励起に対してギャップを開き、非圧縮性の絶縁体を作ります。
+- **超流体-モット量子相転移**：熱ゆらぎではなく量子ゆらぎによって駆動され、転移を固定整数密度で（モットローブの先端を通って）横切るか、密度そのものを変化させて横切るかによって、2 つの異なる普遍類が存在します（上記参照）。
+- **ボーズグラス**：無秩序があると、モット絶縁体と超流体の間にギャップレスで絶縁体的だが超流体ではない相が介在します。
+- **直接的な実験的実現**：上記の相図全体が光格子中の超冷原子を用いてマッピングされており、ボーズ・ハバードモデルは、その相転移が実験において原子 1 個ずつのレベルで直接観測された数少ない強相関格子モデルの一つとなっています。
+
+## 手法
+
+この節の他のフェルミオン的モデルとは異なり、斥力ボソンはどのような次元でも量子モンテカルロ法において符号問題を持ちません——粒子交換に由来してシミュレーションを損なう負符号が存在しないのです——これが、ALPS がこのモデルのために複数の専用 QMC アプリケーションを提供している理由です。
+
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **Worm アルゴリズム** —— [Worm アルゴリズム](../../methods/qmc/worm) を参照 | どのような次元でも符号問題がない；大正準集団を含め、あらゆる充填率で効率的 | 符号問題のないモデルに限られる（本モデルはこれを満たす） | 超流体-モット転移を調べる基準となる手法；[MC-05](../../../tutorials/mcs/mc05) を参照 |
+| **ディレクテッド Worm アルゴリズム** —— [DWA](../../methods/qmc/dwa) を参照 | トラップされた不均一系（例えば調和トラップ）に対して効率的な更新が可能 | この実装は現行の ALPS では非推奨であり、オンサイト相互作用のみに限られる | トラップされた光格子系における密度分布；[DWA-01](../../../tutorials/mcs/dwa/dwa01) と [DWA-02](../../../tutorials/mcs/dwa/dwa02) を参照 |
+| **確率級数展開** —— [SSE](../../methods/qmc/sse) を参照 | 符号問題のない有限温度アルゴリズムで、もともとスピンモデル用に開発されボソンに拡張された | 他の QMC 手法と同様、符号問題のないモデルに限られる（ここでは実際上の制限にはならない） | ボーズ・ハバードモデルの有限温度熱力学 |
+| **ED** —— [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) を参照 | サイトあたりの占有数を最大値 `Nmax` で打ち切った上で、小さな系に対して厳密な結果が得られる | 小さなクラスターと控えめな `Nmax` に限られる | 小系のベンチマーク |
+| **DMRG** —— [密度行列繰り込み群](../../methods/dmrg/dmrg) を参照 | 1 次元鎖に対して非常に高精度 | 真に 2 次元・3 次元の系には効率が落ちる | 1 次元ボーズ・ハバード鎖の基底状態 |
+
+無秩序系は同じ worm コードで研究でき——具体的なパラメータファイルの例については[ボーズグラス](../../methods/qmc/boseglass)を参照してください——光格子そのものの単一粒子バンド構造については[光格子中のボソン](../../methods/qmc/bhol)で論じられています。
+
+- [MC-05: worm QMC コードによるボーズ・ハバードモデルのシミュレーション](../../../tutorials/mcs/mc05) —— 単位充填の 2 次元正方格子上で超流体-モット転移を特定します
+- [DWA-01: ディレクテッド worm によるモンテカルロシミュレーション](../../../tutorials/mcs/dwa/dwa01) —— 同じ転移をディレクテッド worm アルゴリズムで再考します
+- [DWA-02: 密度分布](../../../tutorials/mcs/dwa/dwa02) —— 調和トラップ中のボソンの密度分布で、実際の光格子実験と直接比較できます
+
+---
+
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。

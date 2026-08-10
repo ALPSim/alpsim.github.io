@@ -28,11 +28,12 @@ ALPS（Algorithms and Libraries for Physics Simulations）は、量子および�
 {{< cta-button text="問題を報告" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
 {{< cta-button text="運営体制" link="govern" icon="account_balance" >}}
 {{< cta-button text="チュートリアル" link="tutorials/" icon="school" >}}
+{{< cta-button text="モデル" link="documentation/models/" icon="science" >}}
 {{< cta-button text="Discord" link="https://discord.gg/JRNWnnva9g" icon="forum" >}}
 {{< cta-button text="よくある質問" link="faqs" icon="help" >}}
 {{< cta-button text="論文" link="documentation/pubs/" icon="library_books" >}}
 {{< cta-button text="論文リンク" link="https://iopscience.iop.org/article/10.1088/1742-5468/2011/05/P05001" icon="article" >}}
-{{< cta-button text="引用" link="/data/bauer2011.bib" icon="format_quote" >}}
+{{< cta-button text="引用" link="documentation/pubs/" icon="format_quote" >}}
 </div>
 
 ### チュートリアル

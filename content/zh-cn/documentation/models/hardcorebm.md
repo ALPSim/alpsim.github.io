@@ -1,39 +1,64 @@
 ---
-title: Hardcore Boson Model
+title: 硬核玻色子模型
 math: true
-weight: 7
+toc: true
+weight: 8
 ---
 
-## Introduction
+## 简介
 
-The **hardcore boson model** is a fundamental theoretical framework in condensed matter physics and quantum many-body theory, used to study systems of bosonic particles with an infinite on-site repulsion that prevents more than one particle from occupying the same lattice site. This constraint, known as the "hardcore" condition, mimics the Pauli exclusion principle for fermions but applied to bosons, making the model a unique bridge between bosonic and fermionic behavior.
+**硬核玻色子模型**是 [Bose-Hubbard 模型](../bhm)在 $U \to \infty$ 极限下的产物：玻色子仍然在格点间跃迁，但在位排斥现在强到彻底禁止双占据，而不仅仅是使其代价高昂。每个格点只能为空或被单个玻色子占据——这与 [t-J 模型](../tj)对费米型 Hubbard 模型所做的简化完全相同，只不过这里作用的对象是玻色子而非费米子。
 
-In the hardcore boson model, the particles are described by creation ($b_i^\dagger$) and annihilation ($b_i$) operators that obey modified commutation relations due to the hardcore constraint. Specifically, the operators satisfy:
+这一模型——更准确地说，是它与下文所述自旋 1/2 系统之间的精确等价性——由 [Matsubara and Matsuda (1956)](https://doi.org/10.1143/PTP.16.569) 提出，作为液氦超流转变的格点模型——这是把一个真正的相互作用量子多体问题映射为精确等价的自旋模型的最早范例之一。
 
-$$
-[b_i, b_j^\dagger] = \delta_{ij} (1 - 2 b_i^\dagger b_i), \quad (b_i^\dagger)^2 = (b_i)^2 = 0,
-$$
-
-where the condition $(b_i^\dagger)^2 = 0$ enforces the hardcore constraint, ensuring that no more than one boson can occupy a single site. The Hamiltonian of the hardcore boson model typically includes terms for particle hopping and interactions, and can be written as:
+由于双占据被禁止，硬核玻色算符满足经过修正的对易关系：
 
 $$
-H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + V \sum_{\langle i,j \rangle} n_i n_j,
+[b_i, b_j^\dagger] = \delta_{ij} (1 - 2 b_i^\dagger b_i), \qquad (b_i^\dagger)^2 = (b_i)^2 = 0,
 $$
 
-where:
-- $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
-- $V$ is the interaction strength between bosons on neighboring sites,
-- $n_i = b_i^\dagger b_i$ is the number operator, representing the occupation of site $i$.
+其中 $(b_i^\dagger)^2 = 0$ 直接强制实施了这一约束：在已被占据的格点上再产生一个玻色子，结果直接为零。不同格点上的算符彼此仍然对易，与普通玻色算符完全一样——只有在位代数关系被修改了。哈密顿量为
 
-The first term in the Hamiltonian describes the kinetic energy of bosons hopping between lattice sites, while the second term accounts for interactions between bosons on adjacent sites. Depending on the values of $t$ and $V$, the system can exhibit a variety of phases, including superfluid, Mott insulating, and charge-density-wave phases.
+$$
+H = -t \sum_{\langle i,j \rangle} \left( b_i^\dagger b_j + \text{h.c.} \right) + V \sum_{\langle i,j \rangle} n_i n_j - \mu \sum_i n_i,
+$$
 
-## Phenomena
-The hardcore boson model is widely used to explore phenomena such as:
-- **Quantum phase transitions**: Transitions between superfluid and insulating phases driven by changes in parameters like density or interaction strength.
-- **Bose-Einstein condensation**: The emergence of macroscopic coherence in systems of interacting bosons.
-- **Quantum magnetism**: Mapping the model to spin systems, where hardcore bosons can represent spin excitations.
+其中 $t$ 是跃迁振幅，$V$ 是玻色子之间的最近邻相互作用，$n_i = b_i^\dagger b_i$ 是格点 $i$ 的占据数（现在严格取 0 或 1），$\mu$ 是化学势。这正是[格点基](../../intro/modeldef/sitebasis)和[哈密顿量描述](../../intro/modeldef/hamiltonian)页面中用来介绍 ALPS 模型 XML 格式的那个贯穿始终的示例。
 
-Despite its simplicity, the hardcore boson model captures essential features of strongly correlated bosonic systems and serves as a valuable tool for understanding quantum many-body physics. It is also closely related to other models, such as the XY model and the Heisenberg model, through mappings between bosonic and spin degrees of freedom.
+## 模型的物理
 
-## Methods
+**到自旋 1/2 的精确映射：Matsubara-Matsuda 变换。** 由于一个硬核玻色格点恰好只有两种状态——空或被占据——它在代数上与一个自旋 1/2 自由度完全相同，对应关系为
 
+$$
+b_i^\dagger = S_i^+, \qquad b_i = S_i^-, \qquad n_i = S_i^z + \tfrac{1}{2}.
+$$
+
+把这一关系代入上面的哈密顿量，跃迁项变为横向（XY）交换 $-2t \sum_{\langle i,j \rangle} (S_i^x S_j^x + S_i^y S_j^y)$，相互作用项变为伊辛交换 $V \sum_{\langle i,j \rangle} S_i^z S_j^z$，再加上一个吸收了 $\mu$ 的场项——换句话说，这恰好就是各向异性（XXZ）[海森堡模型](../heisenberg)，处于一个由玻色子密度所设定的场中。关键在于，与[无自旋费米子模型](../sfm)页面中用于费米子的 Jordan-Wigner 变换不同，这一映射不需要任何非局域的字符串：不同格点上的玻色子本就彼此对易，因此 Matsubara-Matsuda 变换是完全局域的，并且在*任意*空间维度下都成立，而不仅仅是一维。
+
+**超流性与磁有序是同一种现象。** 这一等价关系把硬核玻色子模型的相图，直接变成了[海森堡模型](../heisenberg)页面中 XXZ 模型的相图。超流有序——非零的、相位相干的期望值 $\langle b_i \rangle$——恰好就是横向（XY）磁有序，$\langle S_i^x \rangle, \langle S_i^y \rangle \neq 0$。一个可对易的、棋盘格有序的 Mott/电荷密度波绝缘体——玻色子优先占据某一个子格——恰好就是沿 $z$ 方向的奈尔序。玻色子语言中的超流体-绝缘体量子相变，与自旋语言中的有序-无序量子相变，在这一精确映射下，其实是用两组不同变量看到的同一个相变。
+
+**一个真实材料实现：场致磁振子凝聚。** 这一等价关系并不只是形式上的。在具有自旋能隙的真实量子磁体中——即基态唯一、非简并，并与所有磁性激发之间存在能隙——足够强的外磁场可以闭合这一能隙，把系统驱动进入磁有序态。在硬核玻色子语言中，磁场扮演的正是化学势 $\mu$ 的角色，有能隙、无磁性的态是玻色子的真空（或 Mott 绝缘体），而场致有序态则字面意义上就是磁振子的玻色-爱因斯坦凝聚体——[Nikuni, Oshikawa, Oosawa, and Tanaka (2000)](https://doi.org/10.1103/PhysRevLett.84.5868) 正是成功运用这一描述，解释了量子磁体 TlCuCl$_3$ 中实验观测到的场致有序现象。
+
+## 现象
+
+- **超流性**：在低密度或弱相互作用 $V$ 下，硬核玻色子离域化为相位相干的超流体——在自旋语言中，等价于横向（XY）磁有序。
+- **Mott/电荷密度波绝缘化**：在可对易填充（例如二分格子上的半填充）且 $V$ 较大时，玻色子局域化为棋盘格图案——在自旋语言中，等价于奈尔序。
+- **量子相变**：调节密度或 $V/t$，会驱动与 [Bose-Hubbard 模型](../bhm)中已经讨论过的同一种超流体-绝缘体相变，如今这一相变可以精确地映射为各向异性自旋 1/2 模型的磁有序转变。
+- **磁振子玻色-爱因斯坦凝聚**：真实有能隙量子磁体中的场致有序转变，可以定量地描述为硬核玻色子磁振子的玻色-爱因斯坦凝聚（见上文）。
+
+## 方法
+
+由于该模型精确映射为一个自旋 1/2 哈密顿量，适用于[海森堡模型](../heisenberg)的每一种方法在这里同样适用，且在任意维度下都没有符号问题：
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **Worm 算法 / SSE** —— 参见[Worm 算法](../../methods/qmc/worm) / [SSE](../../methods/qmc/sse) | 在任意填充、任意维度下都没有符号问题 | 没有针对该模型的特别局限 | 超流刚度、相图、有限温度性质 |
+| **Loop 算法** —— 参见[量子蒙特卡罗](../../methods/qmc) | 在恰好半填充（$\mu = 0$）时非常高效，此时映射得到的自旋模型没有场 | 偏离半填充时，化学势会变成一个场项，loop 算法处理得不好；此时应改用 worm/SSE 程序 | 半填充（粒子-空穴对称）相图 |
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小系统给出精确结果；硬核约束被无额外代价地内置于局域希尔伯特空间中 | 仅限于小系统 | 小系统基准测试 |
+| **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维链和梯子高度精确 | 对真正的二维/三维系统效率较低 | 一维硬核玻色子链的基态 |
+
+目前没有以此模型命名的专门 ALPS 教程，但它正是贯穿 [ALPS 模型定义](../../intro/modeldef)各页面的示例模型，而 [Bose-Hubbard 模型](../bhm)的教程（MC-05、DWA-01、DWA-02）则在密切相关的有限 $U$ 模型上演示了同样的 worm 和有向 worm 方法。
+
+---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。

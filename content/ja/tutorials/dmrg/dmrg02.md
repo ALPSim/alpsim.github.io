@@ -1,213 +1,80 @@
 
 ---
-title: DMRG-02 Gaps
+title: DMRG-02 Heisenberg Spin Chains
 math: true
 toc: true
 ---
 
-## Calculating The Gap
+## 模型：ハイゼンベルクスピン鎖
 
-As already mentioned, the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state
-
-$$
-\Delta = E_1 - E_0
-$$
-
-in the thermodynamic limit. This means we have to solve two problems, (i) the calculation of
+DMRG の応用として、長さ $L$ のスピン-1/2 およびスピン-1 反強磁性ハイゼンベルク鎖の二つの模型を考えます。ハミルトニアンは次の通りです：
 
 $$
-\Delta(L) = E_1 (L) - E_0 (L)
+H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
-for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of DMRG's preference for open boundary conditions it is somewhat more complicated than in the more usual case of periodic boundary conditions.
+他のチュートリアルですでにご存知かもしれないこの二つの模型を選んだ理由は、表面上の類似性にもかかわらず、全く異なる物理的振る舞いを示し、DMRG アルゴリズムに対しても全く異なる挑戦をもたらすからです。DMRG 計算を実行する前に、基底状態エネルギー、ギャップ、および以降のチュートリアルでの相関計算のための厳密・数値的な基準値を手元に準備するために、それらの物理的性質を簡単に復習しましょう。
 
-### Getting The Gap For Finite Systems
+### スピン-1/2 鎖
 
-Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
-
-1. The pedestrian way is to set up a DMRG calculation that calculates both states at the same time. However, for a given number of states the accuracy will somewhat decrease, as two different quantum states both have to be described well.
-
-2. The smarter way reduces the gap calculation to the calculation of two ground states. In many quantum systems, the ground state and the first excited state differ by a good quantum number and therefore are both ground states in the respective sectors. For example, for the spin-1/2 chain, the ground state is a singlet of total spin 0, and hence the ground state in the sector of magnetization 0. The first excited state is a triplet of total spin 1, i.e. consists of one excited state of magnetization 0, and the ground states of the sectors of magnetization +1 and -1, respectively. It can, therefore, be calculated as the ground state in magnetization sector +1.
-
-Let us do this calculation first for the spin-1/2 chain:
-
-#### Example: without quantum numbers
-
-##### Using parameter files
-
-In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap.
-
-```python
-LATTICE="open chain lattice"
-MODEL="spin"
-CONSERVED_QUANTUMNUMBERS="N,Sz"
-Sz_total=0
-J=1
-SWEEPS=4
-{L=32, MAXSTATES=40
-NUMBER_EIGENVALUES=2}
-```
-    
-Notice that we only added the last line, specifying the number of eigenstates to calculate. By targeting both states, the algorithm ensures that both are represented accurately. However, this is not quite true if we keep only 100 states. Compare the energy for the ground-state obtained with the present parameter file, and the previous simulation targeting only the ground state.
-
-It is important to notice that the entanglement entropy in this example is totally meaningless, since the algorithm is calculating a density matrix mixing two states.
-
-##### Using Python
-
-The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the DMRG-01 tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates.
-
-```python
-import pyalps
-import numpy as np
-import matplotlib.pyplot as plt
-import pyalps.plot
-
-parms = [ { 
-        'LATTICE'                   : "open chain lattice", 
-        'MODEL'                     : "spin",
-        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-        'Sz_total'                  : 0,
-        'J'                         : 1,
-        'SWEEPS'                    : 4,
-        'L'                         : 32,
-        'MAXSTATES'                 : 100,
-        'NUMBER_EIGENVALUES'        : 2
-       } ]
-
-input_file = pyalps.writeInputFiles('parm_spin_one_half_gap',parms)
-res = pyalps.runApplication('dmrg',input_file,writexml=True)
-
-data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_gap'))
-```
-
-While iterating over all measurements, we then extract the energies
-
-```python
-energies = np.empty(0)
-for s in data[0]:
-    if s.props['observable'] == 'Energy':
-        energies = s.y
-    else:
-        print(s.props['observable'], ':', s.y[0])
-```
-
-and calculate the gap.
-
-```python
-energies.sort()
-print('Energies:', end=' ')
-for e in energies:
-    print(e, end=' ')
-print('\nGap:', abs(energies[1]-energies[0]))
-```
-
-#### Example: with quantum numbers
-
-To calculate the singlet-triplet gap taking advantage of quantum number conservation we need to perform two independent simulations, one with Sz=0, and another one with Sz=1. The difference of the two energies will yield the gap.
-
-##### Using parameter files
-
-This means that we only need to change the value of Sz_total in the spin_one_half parameter file:
-
-```python
-LATTICE="open chain lattice"
-MODEL="spin"
-CONSERVED_QUANTUMNUMBERS="N,Sz"
-Sz_total=1
-SWEEPS=4
-J=1
-{L=32, MAXSTATES=40}
-```
-
-You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
-
-##### Using Python
-
-The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters.
-
-```python
-import pyalps
-import numpy as np
-import matplotlib.pyplot as plt
-import pyalps.plot
-
-parms = []
-for sz in [0,1]:
-    parms.append( { 
-        'LATTICE'                   : "open chain lattice", 
-        'MODEL'                     : "spin",
-        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-        'Sz_total'                  : sz,
-        'J'                         : 1,
-        'SWEEPS'                    : 4,
-        'L'                         : 32,
-        'MAXSTATES'                 : 40,
-        'NUMBER_EIGENVALUES'        : 1
-       } )
-       
-input_file = pyalps.writeInputFiles('parm_spin_one_half_triplet',parms)
-res = pyalps.runApplication('dmrg',input_file,writexml=True)
-```
-
-After loading the results in the usual way we print the measurements for both sectors and save the ground state energy for each Sz value in a dictionary.
-
-```python
-data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half_triplet'))
-
-# print results:
-energies = {}
-for run in data:
-    print('S_z =', run[0].props['Sz_total'])
-    for s in run:
-        print('\t', s.props['observable'], ':', s.y[0])
-        if s.props['observable'] == 'Energy':
-            sz = s.props['Sz_total']
-            energies[sz] = s.y[0]
-```
-
-Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=0 sectors
-
-```python
-print 'Gap:', energies[1]-energies[0]
-```
-
-### Extrapolating The Gap To The Thermodynamic Limit
-
-In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behaviour gets better when $D$ gets larger. Discuss why this might be.
-
-In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error). What does the plot of the gap versus $1/L$ look like now?
-
-Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
-
-
-The case of the spin-1/2 chain is a bit frustrating, because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
-
-Let us therefore turn to a more rewarding question, what is the gap of the spin-1 antiferromagnetic Heisenberg chain?
-
-Here, there is a nasty twist, which we will only state and perform at the moment, but explain later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
-
-Assume you have $\Delta (L)$ with machine precision, either by a suitable extrapolation as discussed above or by a very high accuracy calculation. If you don't want to do the former, calculate the gap for system sizes $L=8,16,32,48,64,96,128,192,256$ with $D=300$ states each and 5 sweeps.
-
-As the effects of the open ends will decrease as $1/L$, it always makes sense to first plot the gaps $\Delta (L)$ versus $1/L$, as was already done in the spin-1/2 case. Produce such a plot.
-
-What you see is a curve that is quite straight for small L and then starts bending upward. What gap would you obtain if you extrapolate the linear part of the curve naively? (This question is relevant for situations where the correlation length of the chain is so long that it becomes hard to see the asymptotic behaviour on reachable length scales.) Is it over- or underestimated?
-
-What gap do you read off if you take the longest chain you have? Is it over- or underestimated?
-
-The ideal would be to have an idea of what the asymptotic behaviour (the curved part for long lengths) is like analytically to extrapolate. Do a plot of the gap as $\Delta (L)$ versus $1/L^2$. What does the curve now look like for big lengths? Extrapolate the gap.
-
-The last plot was in fact motivated by the following argument: from Haldane's analysis of the spin-1 chain by the nonlinear sigma model, one expects that the lowest lying excitations (which for periodic boundary conditions can be labeled by a momentum $k$) are around $k=\pi$ and have an energy
+スピン-1/2 鎖の基底状態は Bethe 仮設によって厳密に構築できます。したがって、その基底状態エネルギーを厳密に知っています。熱力学極限 $L\rightarrow\infty$ における格子点あたりのエネルギーは：
 
 $$
-E(k) = E_0 + \sqrt{\Delta^2 + c^2 (k-\pi)^2}.
+E_0/J = 1/4 - \ln 2 = -0.4431471805599... 
 $$
 
-For the open boundary conditions, we may approximate $k-\pi$ by $1/L$ (think about a particle in a box), which gives a finite-system size gap of
+基底状態エネルギーは他のエネルギーと比較しない限り、それ自体では限られた意味しか持ちません。しかし、これは DMRG 法の美しい基準値として機能します。[DMRG-03](../dmrg03) で数値的に検証します。より興味深いのは、基底状態が励起状態から熱力学極限でも残るエネルギー差で分離されているかどうか、すなわち*ギャップ*がゼロかどうかです。スピン-1/2 鎖ではギャップはゼロです。
+
+同時に、異なるサイトのスピン間の相関がどのようなものかを問いたくなります。無限長のスピン-1/2 鎖では、漸近的に（すなわち $|i-j| \rightarrow \infty$ で）：
 
 $$
-\Delta(L) \approx \Delta \left( 1 + \frac{c^2}{2\Delta^2 L^2} \right) 
+ \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\sqrt{\ln|i-j|}}{|i-j|}  .
 $$
 
-and indicates that in the asymptotic limit the convergence should essentially be as $1/L^2$. How close do you get to the result $\Delta/J=0.41052$?
+スピン-1/2 鎖は*臨界*です。つまり、スピン間の反強磁性相関は距離に伴って*べき乗則*で減衰します：$\langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|}\cdot|i-j|^{-\eta}$、臨界指数は $\eta=1$。見苦しい対数は周辺的に非関連な演算子から来ており、漸近的にはスケーリングを変えませんが、[ED-04](../../ed/ed04) で議論されているように、ゆっくりと変化する乗法的因子を導入します。臨界指数は、漸近極限での距離に対する相関関数 $C(r)$ の対数微分として定義されます：
 
-For those that also did the gap between the ground states of magnetisation sectors 0 and 1, show that the gap you get there is essentially zero. All others, take this result for granted and start worrying: why is the finite gap the right one and the vanishing gap the wrong one? Is this a physics lottery? In fact, there is a very good reason why the spin-1 chain shows this peculiar behaviour for open boundary conditions that can be found analytically; but even if we were not so fortunate as to know it, we could detect the problem right away! This can be done by the observation of local observables.
+$$
+\eta \equiv -\lim_{r\rightarrow\infty} \frac{d\ln |C(r)|}{d\ln r} ,\qquad C(r) \equiv \left| \langle S^z_i S^z_j \rangle \right|_{|i-j|=r} \sim \frac{\sqrt{\ln r}}{r}
+$$
+
+したがって、有限の距離 $r$ で測定される指数は：
+
+$$
+\eta = \lim_{r\rightarrow\infty}\left(1 - \frac{1}{2\ln r}\right) = 1.
+$$
+
+これはまさに上で述べた補正であり、非常に長い鎖での DMRG 計算によって美しく検証できます。しかし $\ln r$ 自体の増大が非常に遅いため、$1/(2\ln r)$ は $r$ とともに非常にゆっくりとゼロに近づきます。したがって DMRG でアクセス可能な有限の鎖では、$\eta_{\rm eff}(r)$ は明らかに 1 より低い値をとり、それに向かってゆっくりと近づくだけです。最初の近似としてはこの補正を無視して $\eta=1$ を目標としますが、数値的に抽出した指数が典型的に下回ることを念頭に置いてください。
+
+### スピン-1 鎖
+
+何十年もの間、スピン-1 鎖はスピンの長さが異なることによる定量的な違いはあれ、スピン-1/2 鎖と同様の振る舞いをするだろうと考えられていました。1982 年に Duncan Haldane が、等方的反強磁性ハイゼンベルク鎖にはスピンの長さ、すなわち半整数スピン（$S=1/2,3/2,...$）と整数スピン（$S=1$）の間で根本的な違いがあるはずだと指摘したことは大きな驚きでした。この違いはスピンの長さが小さいほど顕著です。こうしてスピン-1 鎖は強い関心の焦点となり、実際 DMRG の最も重要な初期応用のいくつかはこの系に対してのものでした。
+
+スピン-1/2 鎖とは異なり、スピン-1 鎖には解析的手段で厳密に計算できる性質がありません。定量的な議論では、完全に数値計算に頼らなければなりません。
+
+格子点あたりの基底状態エネルギーは：
+
+$$
+ E_0/J = -1.401484039 ... .
+ $$
+
+ここでもギャップの存在の問題がより重要であり、スピン-1/2 鎖との大きな違いの一つがここに現れます：熱力学極限において、スピン-1 鎖のギャップは有限であり：
+
+$$
+ \Delta/J = 0.41052 
+ $$
+
+5桁の精度で与えられます。
+
+スピン-スピン相関の振る舞いの問題は、スピン-1/2 の場合とのさらに別の大きな違いをもたらします。相関は漸近的に（すなわち $|i-j| \rightarrow \infty$ で）：
+
+$$
+ \langle S^z_i S^z_j \rangle \sim (-1)^{|i-j|} \frac{\exp (-|i-j|/\xi)}{\sqrt{|i-j|}}  .
+$$
+
+主要な寄与は今や長さスケール $\xi$（*相関長*）で起きる指数減衰であり、この特定の場合では数値的に $\xi=6.02$ と求められます。分母に距離の平方根という解析的な（べき乗則）補正がありますが、速い指数減衰と比べて遅い寄与であるため、相関長の計算では通常無視されます。もちろん、相関長がもっと大きければ重要になるでしょう。
+
+したがって、スピン-1 鎖は有限のギャップと指数的に減衰する相関を持つ*非臨界*量子系の典型的な例です。実際のところ、これは DMRG がシミュレートするのに最も得意なタイプの系です。
+
+### 残りのチュートリアルの計画
+
+これらの基準値が確立されたところで、[DMRG-03](../dmrg03) では両鎖の基底状態エネルギーを数値的に計算する最初の `dmrg` 実行を行い、[DMRG-04](../dmrg04) では有限 $L$ の DMRG 計算からギャップ $\Delta$ を抽出し熱力学極限に外挿する方法を示し、[DMRG-05](../dmrg05) では磁化プロファイルなどの局所オブザーバブルを用いてスピン-1 鎖の境界励起とバルク励起を区別し、[DMRG-06](../dmrg06) ではスピン-スピン相関関数を直接計算してスピン-1/2 鎖のべき乗則指数とスピン-1 鎖の相関長 $\xi$ を抽出します。

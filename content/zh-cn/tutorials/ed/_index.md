@@ -1,22 +1,35 @@
-
 ---
 title: Exact Diagonalization
 description: "Tutorials for ALPS"
 toc: true
 weight: 2
+math: true
 ---
 
-- [ED-01 Sparse Diagonalization (Lanczos)](ed01)
-- [ED-02 Spin gaps of 1D quantum systems](ed02)
-- [ED-03 Spectra of 1D quantum systems](ed03)
-- [ED-04 Conformal field theory description of 1D critical spectra](ed04)
-- [ED-05 Phase transition in a frustrated spin chain](ed05)
-- [ED-06 Full Diagonalization](ed06) 
+ALPS 精确对角化教程涵盖 `sparsediag` 和 `fulldiag` 两个应用程序，用于有限量子格点模型。
+`sparsediag` 使用迭代的 Lanczos 算法计算每个对称性子空间（总 $S_z$、动量等）中的最低本征态，而 `fulldiag` 则对角化完整的哈密顿量以获得全部本征谱，并由此得到有限温度下的热力学量。
+由于这两种方法都直接处理哈密顿量矩阵，其结果在数值上是精确的——不存在限制量子蒙特卡罗方法的统计误差和符号问题——代价是希尔伯特空间随体系增大呈指数增长，因此可处理的体系尺寸最多只有几十个格点。
+这些教程从基本的本征态测量开始，逐步过渡到激发能隙和完整谱的有限尺寸标度，再到量子相变的判定及其共形场论描述，最后介绍用全对角化计算有限体系的热力学量。
 
+## 稀疏对角化（`sparsediag`）
 
+`sparsediag` 程序通过 Lanczos 算法逐个求解守恒量子数子空间中量子哈密顿量的最低本征态。
+以下教程首先介绍可在计算得到的本征态上进行的自定义测量，然后利用这些测量提取一维自旋链和梯子模型的激发能隙及完整低能谱。
 
+- [ED-01 Sparse Diagonalization (Lanczos)](ed01) — 针对一个较小的 S=1 海森堡链设置 `sparsediag`，展示如何在计算出的本征态上定义并读取自定义测量——关联函数和静态结构因子，包括命令行和 Python 两种方式。
+- [ED-02 Spin gaps of 1D quantum systems](ed02) — 通过对角化不同的 $S_z$ 子空间计算 S=1 海森堡链的单态-三重态能隙，并研究该能隙随链长的外推行为，从而在热力学极限下得到 Haldane 能隙。
+- [ED-03 Spectra of 1D quantum systems](ed03) — 计算海森堡链、二腿海森堡梯子以及孤立二聚体系统的动量分辨低能谱，说明晶格几何结构如何决定激发谱的形状。
 
+## 共形场论与量子临界性
 
+在量子临界点附近，一维格点模型的有限尺寸谱编码了其底层共形场论（CFT）的算符内容：能隙以 $1/L$ 标度，其普适振幅由 CFT 算符的标度维数决定。
+以下教程使用 `sparsediag` 直接从有限尺寸谱中提取这些算符内容，并据此定位和刻画量子相变。
 
+- [ED-04 Conformal field theory description of 1D critical spectra](ed04) — 计算临界横场伊辛链和临界海森堡链的有限尺寸谱，并将提取出的标度维数与已知的 CFT 初级场及其后代场进行比对。
+- [ED-05 Phase transition in a frustrated spin chain](ed05) — 在海森堡链中加入次近邻耦合 $J_2$，通过追踪不同对称性子空间中的能级交叉和能隙，定位分隔无能隙相与二聚化（Majumdar-Ghosh）相的临界点，随后在临界点处重新审视其 CFT 内容。
 
+## 全对角化（`fulldiag`）
 
+`fulldiag` 程序计算有限哈密顿量的完整谱，由此通过对所有本征态求和直接得到精确的有限温度热力学量——能量、比热、磁化率——且不带任何统计误差。
+
+- [ED-06 Full Diagonalization](ed06) — 计算 S=1 海森堡自旋链和梯子的热力学性质，以及包括耦合二聚体和 $V_{15}$ 分子团簇在内的小型磁性分子的热力学性质，并作为附加练习计算小型方格上哈伯德模型的热力学性质。

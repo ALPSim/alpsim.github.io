@@ -21,18 +21,19 @@ Since its inception, ALPS has been used by hundreds of researchers across at lea
 </div>
 
 <div class="btn-grid">
-{{< cta-button text="Get Started" link="start" icon="rocket_launch" >}}
+{{< cta-button text="Get Started" link="start" icon="rocket_launch" color="#3B5B8C" >}}
 {{< cta-button text="GitHub Source" link="https://github.com/ALPSim/ALPS" icon="code" >}}
 {{< cta-button text="Events" link="events" icon="event" >}}
 {{< cta-button text="Installation" link="install" icon="download" >}}
 {{< cta-button text="Issues" link="https://github.com/ALPSim/ALPS/issues" icon="bug_report" >}}
 {{< cta-button text="Governance" link="govern" icon="account_balance" >}}
 {{< cta-button text="Tutorials" link="tutorials/" icon="school" >}}
+{{< cta-button text="Models" link="documentation/models/" icon="science" >}}
 {{< cta-button text="Discord" link="https://discord.gg/JRNWnnva9g" icon="forum" >}}
 {{< cta-button text="FAQ" link="faqs" icon="help" >}}
 {{< cta-button text="Papers" link="documentation/pubs/" icon="library_books" >}}
 {{< cta-button text="Publication Link" link="https://iopscience.iop.org/article/10.1088/1742-5468/2011/05/P05001" icon="article" >}}
-{{< cta-button text="Cite" link="/data/bauer2011.bib" icon="format_quote" >}}
+{{< cta-button text="Cite" link="documentation/pubs/" icon="format_quote" >}}
 </div>
 
 ### Tutorials

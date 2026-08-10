@@ -1,37 +1,59 @@
 ---
-title: Ising Model
+title: 伊辛模型
 math: true
+toc: true
 weight: 1
 ---
 
-## Introduction
+## 简介
 
-The **Ising model** is one of the most fundamental and widely studied models in statistical mechanics and condensed matter physics. It was first proposed by Wilhelm Lenz in 1920 and later solved in one dimension by his student Ernst Ising in 1925. The model provides a simplified description of phase transitions and critical phenomena in magnetic systems.
+**伊辛模型**是最简单、也是影响最深远的磁性模型，也是统计力学中被研究得最多的模型之一。设想一个规则的格子，每个格点上都有一个只能指向上或下的"箭头"（自旋）——没有中间状态。每个自旋都倾向于与其最近邻自旋对齐（或者，根据相互作用符号的不同，反向排列），而热噪声则不断试图使自旋随机化。这两种效应——来自相互作用的有序倾向与来自温度的无序倾向——之间的竞争，正是这个模型如此丰富的原因：在低温下，自旋会锁定在一个共同的方向上；在高温下，它们各自独立涨落；而在两者之间，系统会经历一次真正的**相变**。
+
+这个模型以 Ernst Ising 的名字命名，他在 1925 年的博士论文中求解了一维情形（[Ising (1925)](https://doi.org/10.1007/BF02980577)）——这个问题是他的导师 Wilhelm Lenz 提出的。Ising 发现，在一维情形下，任何非零温度下都*不存在*相变：热涨落总会最终破坏有序。又过了二十年，Lars Onsager 才在 1944 年严格求解了二维模型（[Onsager (1944)](https://doi.org/10.1103/PhysRev.65.117)），证明二维情形下*确实*存在相变——这是理论物理中最著名的成果之一，也是伊辛模型至今仍是检验新方法和新算法的标准试金石的原因。关于该模型更全面的介绍和历史，参见[维基百科条目](https://en.wikipedia.org/wiki/Ising_model)。
+
+经典伊辛模型的哈密顿量为
 
 $$
 \mathcal{H} = J \sum_{\langle i,j \rangle} S_i^z S_j^z + h \sum_i S_i^z
 $$
 
-where:
-- $S_i^z$ and $S_j^z$ are up ($+1$) or down ($-1$) spins at lattice sites $i$ and $j$,
-- $J$ is the interaction strength between neighboring spins (antiferromagnetic if $J > 0$, ferromagnetic if $J < 0$),
-- $h$ is an external magnetic field,
-- The sum $\langle i,j \rangle$ runs over nearest-neighbor pairs of spins.
+其中：
+- $S_i^z, S_j^z \in \{+1, -1\}$ 是表示格点 $i$、$j$ 上自旋"向上"或"向下"的经典变量——由于这是一个经典统计力学模型，它们不是量子算符，
+- $J$ 是相邻自旋之间的相互作用强度：当 $J > 0$ 时耦合是反铁磁性的（相邻自旋倾向于指向相反方向），当 $J < 0$ 时耦合是铁磁性的（相邻自旋倾向于对齐），
+- $h$ 是外加磁场，偏向其中一个自旋方向，
+- 求和 $\langle i,j \rangle$ 遍历格子上所有最近邻自旋对。
 
+如果把经典变量 $S_i^z$ 替换为量子自旋 1/2 算符，并沿 $x$ 方向加上一个场，就得到[横场伊辛模型](../transising)——一个与之密切相关、但真正具有量子性质的模型。
 
-## Phenomena
-The Ising model has been applied to a wide range of physical systems and phenomena.
+## 现象
 
-- **Ferromagnetism**: For $J < 0$, spins tend to align in the same direction, leading to spontaneous magnetization at low temperatures.
-- **Antiferromagnetism**: For $J > 0$, spins tend to align in alternating directions, resulting in no net magnetization but strong local ordering.
-- **Phase Transitions**: The Ising model exhibits a phase transition from a disordered (paramagnetic) phase at high temperatures to an ordered (ferromagnetic or antiferromagnetic) phase at low temperatures.
+伊辛模型已被应用于极其广泛的物理体系和现象，远远超出了它最初研究磁性的动机。
 
-## Methods
+- **铁磁性**：当 $J < 0$ 时，自旋倾向于沿同一方向排列，即使在零场下，低温时也会出现自发的宏观磁化。
+- **反铁磁性**：当 $J > 0$ 时，自旋倾向于交替排列，结果是没有净磁化，但存在很强的局域（交错）有序。
+- **相变**：在二维或更高维度中，模型在某个临界温度 $T_c$ 处会发生相变：从高温下的无序（顺磁）相——此时平均磁化 $m = \langle S_i^z \rangle$ 为零——过渡到低温下 $m \neq 0$ 的有序相。这一相变是*连续的*（二级相变）：当温度从高于 $T_c$ 降到低于 $T_c$ 时，$m$ 是从零平滑增长的，而不是发生不连续的跃变。
+- **维度很关键**：一维链根本没有有限温度下的相变——真正的有序只在 $T=0$ 时出现。二维正方格子模型确实存在相变，并且已被 Onsager 严格求解；三维情形则没有已知的严格解，其临界指数必须通过数值方法（例如蒙特卡罗）或重整化群来获得。
+- **普适性**：许多截然不同的物理体系——磁体、发生有序-无序转变的二元合金，乃至液气临界点（通过等价的"格气"表述）——在各自的相变附近，与伊辛模型共享完全相同的临界指数。这种临界行为的*普适性*，是研究伊辛模型所得到的最重要的思想之一。
 
-The Ising model without the magnetic field can be exactly solved in 1D and 2D, but various numerical methods have also been developed to study its properties. Below is a summary of key numerical techniques related to ALPS:
+## 方法
 
-| Method                     | Strengths                                                                 | Limitations                                                                 | Applications                                                                 |
-|----------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| **MC** | Works well for large systems; Can handle finite temperatures.       | Slow convergence near critical points; Requires careful sampling.    | Phase transitions; Critical phenomena; Finite-temperature properties. |
-| **Cluster Algorithms (e.g., Wolff, Swendsen-Wang)** | Reduces critical slowing down; Efficient near critical points.      | Complex implementation; Limited to specific models.                  | Critical phenomena; Large-scale simulations.                         |
+不加磁场的伊辛模型在一维和二维中可以严格求解（见上文），但在这些特殊情形之外，以及为了直接研究有限尺寸系统，数值方法是必不可少的。下面总结了 ALPS 中可用的关键数值技术：
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **经典蒙特卡罗，局域（Metropolis）更新** —— 参见[局域更新](../../methods/spinmc/local) | 实现简单；几乎适用于任何经典自旋模型 | *临界慢化*：在 $T_c$ 附近，相邻构型高度关联，导致自关联时间发散，收敛变得非常缓慢 | 通用采样；远离临界点的系统 |
+| **团簇算法**（Wolff、Swendsen-Wang）—— 参见[团簇更新](../../methods/spinmc/cluster) | 一次翻转整簇取向相同的自旋，大幅降低临界慢化；在 $T_c$ 处依然高效 | 实现更复杂；对无外场的模型效果最佳 | 精确研究临界现象；有限尺寸标度 |
+
+ALPS 的经典蒙特卡罗程序 `spinmc` 对伊辛模型及相关经典自旋模型同时实现了局域更新和团簇更新——算法细节参见[经典蒙特卡罗](../../methods/spinmc)相关页面。
+
+由于任何模拟都无法研究无限大的格子，实际提取 $T_c$ 和临界指数依赖于*有限尺寸标度*。在相变附近，诸如磁化率或关联长度这样的量在无限系统中原本会发散，但在线度为 $L$ 的有限格子上，一旦关联长度增长到与 $L$ 相当，这种发散就会被截断——因此磁化率等量出现的（表观）峰值会被抹平，并偏离真实的 $T_c$，偏离量随着 $L$ 增大以一种普适的、可预测的方式减小。通过模拟若干不同的格子尺寸，比较磁化、磁化率、Binder 累积量等量在（表观）相变附近如何依赖于 $L$，就可以外推到热力学极限（$L \to \infty$），从而精确地读出临界温度和临界指数——尽管每一次具体的模拟都必然是有限的。
+
+以下三个教程完整地演示了如何用 `spinmc` 模拟二维伊辛模型：
+
+- [MC-01(a)：经典蒙特卡罗模拟与自关联](../../../tutorials/mcs/mc01a) —— 介绍该模型，并展示在 $T_c$ 附近使用局域更新时自关联时间如何急剧增长
+- [MC-01(b)：经典蒙特卡罗模拟与热化/收敛](../../../tutorials/mcs/mc01b) —— 诊断模拟是否已经热化并收敛
+- [MC-07：伊辛模型中的相变](../../../tutorials/mcs/mc07) —— 使用有限尺寸标度提取临界温度和临界指数
+
 ---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。

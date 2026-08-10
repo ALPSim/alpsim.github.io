@@ -257,6 +257,10 @@ markup:
 params:
   description: "International collaboration for developing opensource softwares for simulation of quantum lattice models, such as quantum spin systems, electron systems, etc"
   headTitle: "ALPS - Algorithms and Libraries for Physics Simulations"
+  math:
+    engine: katex
+    katex:
+      base: "https://cdn.jsdelivr.net/npm/katex@0.17.0/dist"
   theme:
     # light | dark | system
     default: system

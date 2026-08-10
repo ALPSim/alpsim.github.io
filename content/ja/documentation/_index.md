@@ -1,52 +1,41 @@
 ---
-description: "ALPS Documentation"
+description: "ALPS ドキュメント"
 icon: house
 cascade:
     type: docs
 ---
-ALPS documentation includes basic theory, code and data structure of various simulation models, as well as available libraries and API calls.<br><br>
+ALPS のドキュメントには、基礎理論、各種シミュレーションモデルのコードとデータ構造、および利用可能なライブラリと API 呼び出しが含まれています。
 
-{{< hextra/feature-grid maxcolumns="2" >}}
-  {{< hextra/feature-card
-    title="Introduction"
-    subtitle="How to run ALPS?"
-    link="intro"
-  >}}
-  {{< hextra/feature-card
-    title="Models"
-    subtitle="What does ALPS simulate?"
-    link="models"
-  >}}
-  {{< hextra/feature-card
-    title="Methods"
-    subtitle="How does ALPS simulate models?"
-    link="methods"
-  >}}
-  {{< hextra/feature-card
-    title="API"
-    subtitle="What API calls are available in ALPS?"
-    link="api"
-  >}}
-  {{< hextra/feature-card
-    title="Libraries"
-    subtitle="What libraries are available in ALPS?"
-    link="lib"
-  >}}
-  {{< hextra/feature-card
-    title="Development"
-    subtitle="How to develop codes for ALPS?"
-    link="codedev"
-  >}}
-  {{< hextra/feature-card
-    title="ALPSize"
-    subtitle="How to contribute your codes to ALPS?"
-    link="alpsize"
-  >}}
-  {{< hextra/feature-card
-    title="Publications"
-    subtitle="What papers to cite for using ALPS?"
-    link="pubs"
-  >}}
-{{< /hextra/feature-grid >}}
+## [はじめに](intro)
+
+ALPS の実行方法：パッケージのインストール、入力ファイルの設定、格子と模型の選択、シミュレーション結果の評価について。
+
+## [模型](models)
+
+Ising 模型・Heisenberg 模型から Hubbard 模型・t-J 模型まで、ALPS がサポートする量子・古典格子模型の概観。
+
+## [手法](methods)
+
+これらの模型を解くために ALPS が実装しているシミュレーション手法。厳密対角化、古典・量子モンテカルロ法、DMRG を含みます。
+
+## [API](api)
+
+ALPS のチュートリアルでアプリケーションの実行、測定データの読み込み、結果の評価に用いる `pyalps` の Python 関数のリファレンスドキュメント。
+
+## [ライブラリ](lib)
+
+ALPS アプリケーションの基盤となる、ALPS C++ ライブラリ――汎用ユーティリティ、乱数、パラメータ解析、格子、模型など――のドキュメント。
+
+## [開発](codedev)
+
+ALPS のライブラリとスケジューラを用いて、Python と C++ の両方で独自のシミュレーションを書くためのチュートリアル。
+
+## [自作コードの ALPS への統合](alpsize)
+
+独自の C、C++、あるいは Fortran アプリケーションを、ALPS のパラメータ・測定・parapack スケジューラと統合するための段階的なガイド。
+
+## [文献](pubs)
+
+ALPS を用いた研究を発表する際に、どの論文を引用すべきか――元となるアルゴリズムの論文、個々のアプリケーションの論文、そして ALPS ライブラリ自体の論文――についての指針。
 
 

@@ -31,7 +31,7 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 <details>
 <summary><strong> Ubuntu / Debian / WSL</strong> </summary>
 
-  ```ShellSession
+```ShellSession
 sudo apt update
 sudo apt install build-essential cmake \
                    libhdf5-dev \
@@ -44,22 +44,13 @@ pip install numpy scipy # python libraries
 python3 -m pip install numpy scipy
 ```
 
-> **Do not install Boost via `apt`.** ALPS must compile Boost from source for two reasons:
-> 1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
->    `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; the
->    `libboost-dev` packages do not set these, causing link errors.
-> 2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
->    exact Python interpreter that ALPS will use. Pre-built packages target the system
->    Python and will silently mismatch if you use a different one.
->
-> CMake handles both automatically: it downloads and compiles Boost 1.87 during
-> configuration (requires internet access). See the offline alternative in the build
-> step below if needed.
+> **Do not install Boost via `apt`.** ALPS must compile Boost from source instead —
+> see [Boost Error Details](#boost-error-details) in Troubleshooting for why, and how to build offline.
 </details>
 <details>
 <summary><strong> macOS (via Homebrew)</strong> </summary>
 
- ```ShellSession
+```ShellSession
 brew update
 brew install cmake hdf5 \
                openblas open-mpi # or: mpich
@@ -68,21 +59,8 @@ brew install cmake hdf5 \
 pip3 install numpy scipy
 ```
 
-> **Do not install Boost via Homebrew.** ALPS must compile Boost from source for two reasons:
-> 1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
->    `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; the
->    Homebrew `boost` formula does not set these, causing link errors.
-> 2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
->    exact Python interpreter that ALPS will use. The Homebrew Boost targets Homebrew's
->    own Python and will silently mismatch any other interpreter.
->
-> CMake handles both automatically: if `Boost_SRC_DIR` is not set, it downloads and
-> compiles Boost 1.87 during configuration (requires internet access). To build offline
-> or reuse a previously extracted archive, download it manually first:
-> ```ShellSession
-> curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-> tar -xzf boost_1_87_0.tar.gz
-> ```
+> **Do not install Boost via Homebrew.** ALPS must compile Boost from source instead —
+> see [Boost Error Details](#boost-error-details) in Troubleshooting for why, and how to build offline.
 </details>
 <details>
 <summary><strong> macOS (via MacPorts)</strong> </summary>
@@ -99,35 +77,16 @@ sudo port select --set mpi openmpi-clang20-fortran
 pip3 install numpy scipy
 ```
 
-> **Choosing an OpenMPI variant:** MacPorts ships a separate port for each compiler
-> version, named `openmpi-<compiler><version>` (e.g. `openmpi-clang20`,
-> `openmpi-gcc15`). The `clang20` variant shown above matches the LLVM Clang 20 port
-> and works alongside Apple's Xcode clang. If you use a different compiler, install the
-> matching variant and adjust the `port select` command accordingly.
->
-> The `port select` step is required: without it, the bare `mpirun`, `mpicc`, and
-> `mpicxx` wrappers that CMake looks for will not exist.
+> **Do not install `openmpi-clang20` without checking your compiler.** See
+> [Other Error Details](#other-error-details) in Troubleshooting for how to pick the right OpenMPI variant.
 
-> **Do not install Boost via MacPorts.** ALPS must compile Boost from source for two reasons:
-> 1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
->    `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; the
->    MacPorts `boost` ports do not set these, causing link errors.
-> 2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
->    exact Python interpreter that ALPS will use. MacPorts Boost targets MacPorts' own
->    Python and will silently mismatch any other interpreter.
->
-> CMake handles both automatically: if `Boost_SRC_DIR` is not set, it downloads and
-> compiles Boost 1.87 during configuration (requires internet access). To build offline
-> or reuse a previously extracted archive, download it manually first:
-> ```ShellSession
-> curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
-> tar -xzf boost_1_87_0.tar.gz
-> ```
+> **Do not install Boost via MacPorts.** ALPS must compile Boost from source instead —
+> see [Boost Error Details](#boost-error-details) in Troubleshooting for why, and how to build offline.
 </details>
 
 ### Verify Dependencies
 
- ```ShellSession
+```ShellSession
 gcc -v              # must be >= 10.5.0
 cmake --version     # must be >= 3.18
 mpirun --version    # OpenMPI 4.0 or MPICH 4
@@ -162,7 +121,7 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 
   ```ShellSession
   git clone https://github.com/alpsim/ALPS alps-src
-  cmake -S alps-src -B alps-build                                     \
+  cmake -S alps-src -B alps-build                                       \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
          -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF"
@@ -178,7 +137,7 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 > **Offline or slow-connection build:** By default CMake fetches Boost 1.87 at configure
 > time. To avoid the download, extract the archive manually first and pass the path:
 > ```ShellSession
-> cmake -S alps-src -B alps-build                                     \
+> cmake -S alps-src -B alps-build                                       \
 >        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
 >        -DBoost_SRC_DIR=</path/to/boost_1_87_0>                        \
 >        -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
@@ -187,11 +146,56 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 
 
 ### Troubleshooting
-<details>
+
+<details id="common-errors">
+<summary><strong>Common Errors</strong></summary>
+
+* **Boost/Python ABI mismatch** <br> To avoid an ABI issue, make sure the Python version your Boost was built against is similar to the Python version being used to build ALPS. Consider rebuilding a stale Boost library.
+* **Check which Python is actually being used** <br> Confirm the path of the Python CMake selects matches the version you expect. Keep in mind there can be several Pythons on one machine — Homebrew, conda, the OS-provided one (Linux distro Python or Apple's bundled Python), etc. — and CMake may not pick the one you intended.
+  * A virtual environment inserts another Python path ahead of the others in your `PATH`, which can silently corrupt the build if it's active without you noticing.
+  * When in doubt, CMake should probably be pointed at the native Python that ships with your OS rather than one of these alternates.
+* **Check `CMakeCache.txt`** <br> After configuring, grep the cache in your build directory to see exactly which Python CMake locked in:
+  ```ShellSession
+  grep -i python build/CMakeCache.txt
+  ```
+  Compare that against the Python you actually intend to build against:
+  ```ShellSession
+  which python3
+  python3 -c "import sys; print(sys.executable)"
+  ```
+  If they don't match, delete the build directory and set explicitly by reconfiguring with: `-DPython3_EXECUTABLE=/path/to/python3`.
+
+</details>
+
+<details id="boost-error-details">
+<summary><strong>Boost Error Details</strong></summary>
+
+* **Version Compatibility** <br> Building ALPS' Python bindings against NumPy ≥ 2.0 requires Boost ≥ 1.87 (NumPy 2.0 introduced API changes that only Boost 1.87+ handles). Boost 1.76–1.86 work only with NumPy < 2.0. See the [build notes](#build-notes) for tested compiler/Boost/Python combinations.
+* **Do not install Boost via `apt`, Homebrew, or MacPorts** <br> ALPS must compile Boost from source for two reasons:
+  1. **Custom compiler flags** — ALPS requires `-DBOOST_NO_AUTO_PTR` and
+     `-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF` for C++17/20 compatibility; package-manager
+     Boost builds do not set these, causing link errors.
+  2. **Python-ABI match** — the `Boost.Python` component must be compiled against the
+     exact Python interpreter that ALPS will use. Package-manager Boost builds target their
+     own bundled Python and will silently mismatch any other interpreter.
+
+  CMake handles both automatically: if `Boost_SRC_DIR` is not set, it downloads and
+  compiles Boost 1.87 during configuration (requires internet access). To build offline
+  or reuse a previously extracted archive, download it manually first:
+  ```ShellSession
+  curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
+  tar -xzf boost_1_87_0.tar.gz
+  ```
+
+</details>
+
+<details id="other-error-details">
+<summary><strong>Other Error Details</strong></summary>
+
 * **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), etc). [Cmake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
 * **Python errors** <br> Ensure Python ≥ 3.9 is installed and that `numpy` and `scipy` are installed for the same Python that CMake selects. On macOS, CMake may pick the Xcode-bundled Python rather than your Homebrew/MacPorts Python — check the `Found Python:` line in the CMake output and pin the interpreter with `-DPython3_EXECUTABLE=/path/to/python3` if needed (see the [Verify Dependencies](#verify-dependencies) step).
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
-* **Boost errors** <br> Building ALPS' Python bindings against NumPy ≥ 2.0 requires Boost ≥ 1.87 (NumPy 2.0 introduced API changes that only Boost 1.87+ handles). Boost 1.76–1.86 work only with NumPy < 2.0. See the [build notes](#build-notes) for tested compiler/Boost/Python combinations.
+* **Choosing a MacPorts OpenMPI variant** <br> MacPorts ships a separate port for each compiler version, named `openmpi-<compiler><version>` (e.g. `openmpi-clang20`, `openmpi-gcc15`). The `clang20` variant matches the LLVM Clang 20 port and works alongside Apple's Xcode clang. If you use a different compiler, install the matching variant and adjust the `port select` command accordingly. The `port select` step is required: without it, the bare `mpirun`, `mpicc`, and `mpicxx` wrappers that CMake looks for will not exist.
 
 </details>
 
@@ -215,9 +219,11 @@ third-party compilers (Homebrew GCC, MacPorts GCC/Clang) with `Boost` 1.86.0+.
 
 **`SDKROOT` — when and how to set it**
 
-`SDKROOT` tells the compiler where to find macOS system headers and frameworks.
+This environment variable tells the compiler where to find macOS system headers and frameworks.
 Apple's own Clang (the `cc`/`c++` you get after installing Xcode or Command Line Tools)
-locates the SDK automatically — **you do not need to set `SDKROOT` when using Apple Clang**.
+locates the SDK automatically.
+
+**You do not need to set `SDKROOT` when using Apple Clang.**
 
 Third-party compilers (Homebrew GCC, MacPorts GCC or LLVM Clang, etc.) do not know
 where the SDK lives and will fail with errors about missing system headers. Before
@@ -244,14 +250,18 @@ found by looking for the `Found Python:` line printed during configuration. If i
 the one you want, pin it explicitly — do not rely on `$(which python3)` as it may still
 resolve to the wrong interpreter. Use the full path instead:
 
+**Homebrew (Apple Silicon):**
 ```ShellSession
-# Homebrew (Apple Silicon):
 cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/homebrew/bin/python3
+```
 
-# Homebrew (Intel):
+**Homebrew (Intel):**
+```ShellSession
 cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/usr/local/bin/python3
+```
 
-# MacPorts:
+**MacPorts:**
+```ShellSession
 cmake -S alps-src -B alps-build ... -DPython3_EXECUTABLE=/opt/local/bin/python3
 ```
 

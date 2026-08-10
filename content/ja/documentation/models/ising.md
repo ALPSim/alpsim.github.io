@@ -1,37 +1,60 @@
 ---
-title: Ising Model
+title: イジングモデル
 math: true
+toc: true
 weight: 1
 ---
 
-## Introduction
+## はじめに
 
-The **Ising model** is one of the most fundamental and widely studied models in statistical mechanics and condensed matter physics. It was first proposed by Wilhelm Lenz in 1920 and later solved in one dimension by his student Ernst Ising in 1925. The model provides a simplified description of phase transitions and critical phenomena in magnetic systems.
+**イジングモデル**は、磁性体を表す最も単純で、かつ最も影響力の大きいモデルであり、統計力学全体の中でも最も広く研究されているモデルの一つです。規則正しい格子を思い浮かべてください。各サイトには、上か下のどちらかしか向けない「矢印」（スピン）が置かれています——その中間はありません。それぞれのスピンは最近接のスピンと同じ向きに揃おうとします（あるいは、相互作用の符号によっては逆向きに揃おうとします）が、熱雑音は絶えずスピンをランダム化しようとします。この 2 つの効果——相互作用による秩序化と、温度による無秩序化——のせめぎ合いこそが、このモデルを豊かなものにしています。低温ではスピンは共通の向きに固定され、高温では互いに独立にゆらぎ、その間のどこかで系は本物の**相転移**を起こします。
+
+このモデルは Ernst Ising にちなんで名付けられました。彼は 1925 年の博士論文で 1 次元の場合を厳密に解きました（[Ising (1925)](https://doi.org/10.1007/BF02980577)）——この問題は指導教員の Wilhelm Lenz が提示したものです。Ising は、1 次元では有限温度でいかなる相転移も起こらないことを見出しました。熱ゆらぎは最終的に必ず秩序を破壊してしまうのです。それから 20 年後、Lars Onsager が 1944 年に 2 次元モデルを厳密に解き（[Onsager (1944)](https://doi.org/10.1103/PhysRev.65.117)）、2 次元では本物の相転移が*実際に*起こることを示しました。これは理論物理学において最も名高い成果の一つであり、イジングモデルが今日に至るまで新しい手法やアルゴリズムを検証するための標準的な題材であり続けている理由でもあります。より広い概要と歴史については、[Wikipedia の記事](https://en.wikipedia.org/wiki/Ising_model)を参照してください。
+
+古典イジングモデルのハミルトニアンは次のように書けます。
 
 $$
 \mathcal{H} = J \sum_{\langle i,j \rangle} S_i^z S_j^z + h \sum_i S_i^z
 $$
 
-where:
-- $S_i^z$ and $S_j^z$ are up ($+1$) or down ($-1$) spins at lattice sites $i$ and $j$,
-- $J$ is the interaction strength between neighboring spins (antiferromagnetic if $J > 0$, ferromagnetic if $J < 0$),
-- $h$ is an external magnetic field,
-- The sum $\langle i,j \rangle$ runs over nearest-neighbor pairs of spins.
+ここで、
 
+- $S_i^z, S_j^z \in \{+1, -1\}$ は格子サイト $i$、$j$ における「上向き」または「下向き」のスピンを表す古典変数です——これは古典的な統計力学モデルであるため、量子演算子ではありません。
+- $J$ は隣接するスピン間の相互作用の強さです。$J > 0$ のとき結合は反強磁性的（隣接するスピンは反対向きを好む）、$J < 0$ のとき結合は強磁性的（隣接するスピンは同じ向きを好む）です。
+- $h$ は外部磁場で、一方のスピンの向きを優遇します。
+- 和 $\langle i,j \rangle$ は格子上のすべての最近接スピン対にわたって取られます。
 
-## Phenomena
-The Ising model has been applied to a wide range of physical systems and phenomena.
+古典変数 $S_i^z$ を量子スピン 1/2 演算子に置き換え、$x$ 方向に磁場を加えると、[横磁場イジングモデル](../transising)が得られます——これは密接に関連していますが、正真正銘の量子力学的なモデルです。
 
-- **Ferromagnetism**: For $J < 0$, spins tend to align in the same direction, leading to spontaneous magnetization at low temperatures.
-- **Antiferromagnetism**: For $J > 0$, spins tend to align in alternating directions, resulting in no net magnetization but strong local ordering.
-- **Phase Transitions**: The Ising model exhibits a phase transition from a disordered (paramagnetic) phase at high temperatures to an ordered (ferromagnetic or antiferromagnetic) phase at low temperatures.
+## 現象
 
-## Methods
+イジングモデルは、当初の磁性の研究という動機をはるかに超えて、驚くほど幅広い物理系や現象に応用されてきました。
 
-The Ising model without the magnetic field can be exactly solved in 1D and 2D, but various numerical methods have also been developed to study its properties. Below is a summary of key numerical techniques related to ALPS:
+- **強磁性**：$J < 0$ のとき、スピンは同じ向きに揃おうとし、ゼロ磁場下であっても低温で自発的なマクロな磁化が生じます。
+- **反強磁性**：$J > 0$ のとき、スピンは交互に揃おうとし、正味の磁化はゼロになりますが、強い局所的な（千鳥状の）秩序が生じます。
+- **相転移**：2 次元以上では、モデルはある臨界温度 $T_c$ で相転移を示します。高温側の無秩序（常磁性）相——ここでは平均磁化 $m = \langle S_i^z \rangle$ がゼロになります——から、低温側の $m \neq 0$ となる秩序相へと移り変わります。この転移は*連続的*（2 次）です。すなわち $m$ は、温度を $T_c$ を境に下げていくにつれてゼロから滑らかに増大し、不連続に飛ぶことはありません。
+- **次元性が重要**：1 次元鎖には有限温度での相転移がまったくありません——真の秩序は $T=0$ でのみ現れます。2 次元正方格子モデルには相転移が存在し、Onsager によって厳密に解かれています。3 次元では厳密解は知られておらず、臨界指数は数値的手法（例えばモンテカルロ法）またはくりこみ群によって求める必要があります。
+- **普遍性**：磁性体、秩序-無秩序転移を起こす二元合金、さらには（等価な「格子気体」表現を通じた）液体-気体臨界点といった、まったく異なる物理系が、それぞれの転移点近傍でイジングモデルとまったく同じ臨界指数を共有します。この臨界的振る舞いの*普遍性*こそ、イジングモデルの研究から生まれた最も重要な概念の一つです。
 
-| Method                     | Strengths                                                                 | Limitations                                                                 | Applications                                                                 |
-|----------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| **MC** | Works well for large systems; Can handle finite temperatures.       | Slow convergence near critical points; Requires careful sampling.    | Phase transitions; Critical phenomena; Finite-temperature properties. |
-| **Cluster Algorithms (e.g., Wolff, Swendsen-Wang)** | Reduces critical slowing down; Efficient near critical points.      | Complex implementation; Limited to specific models.                  | Critical phenomena; Large-scale simulations.                         |
+## 手法
+
+磁場のないイジングモデルは 1 次元と 2 次元で厳密に解けます（前述のとおり）が、それ以外の場合や、有限サイズ系そのものを直接調べたい場合には、数値的手法が欠かせません。以下に、ALPS で利用できる主要な数値手法をまとめます。
+
+| 手法 | 長所 | 短所 | 応用 |
+|---|---|---|---|
+| **古典モンテカルロ法、局所（メトロポリス）更新** —— [局所更新](../../methods/spinmc/local) を参照 | 実装が簡単；ほぼあらゆる古典スピンモデルに適用可能 | *臨界減速*：$T_c$ 付近では連続する配置間の相関が強くなり、自己相関時間が発散して収束が非常に遅くなる | 汎用的なサンプリング；臨界点から離れた系 |
+| **クラスターアルゴリズム**（Wolff、Swendsen-Wang）—— [クラスター更新](../../methods/spinmc/cluster) を参照 | 揃ったスピンのクラスター全体を一度に反転させ、臨界減速を大幅に低減；$T_c$ ちょうどでも効率的 | 実装がより複雑；磁場のないモデルで最も効果を発揮する | 臨界現象の精密な研究；有限サイズスケーリング |
+
+ALPS の古典モンテカルロアプリケーションである `spinmc` は、イジングモデルおよび関連する古典スピンモデルに対して局所更新とクラスター更新の両方を実装しています——アルゴリズムの詳細については [古典モンテカルロ法](../../methods/spinmc) のページを参照してください。
+
+無限格子をシミュレートすることはできないため、実際に $T_c$ と臨界指数を求めるには*有限サイズスケーリング*が必要になります。転移点の近くでは、磁化率や相関長といった量は無限系では本来発散するはずですが、線形サイズ $L$ の有限格子上では、相関長が $L$ 程度に達した時点でその発散が打ち切られます。そのため、例えば磁化率に見られる見かけ上のピークはなまり、$T_c$ からずれた位置に現れます。このずれは $L$ が大きくなるにつれて、普遍的で予測可能な形で小さくなっていきます。いくつかの格子サイズでシミュレーションを行い、磁化・磁化率・ビンダー累積量といった量が見かけの転移点付近で $L$ にどう依存するかを比較することで、熱力学極限（$L \to \infty$）への外挿が可能になり、個々のシミュレーションはあくまで有限であるにもかかわらず、臨界温度と臨界指数を精密に求めることができます。
+
+以下の 3 つのチュートリアルでは、`spinmc` を使って 2 次元イジングモデルをシミュレートする手順を最初から最後まで解説しています。
+
+- [MC-01(a): 古典モンテカルロシミュレーションと自己相関](../../../tutorials/mcs/mc01a) —— モデルを紹介し、局所更新を用いた場合に $T_c$ 付近で自己相関時間が急激に増大する様子を示します
+- [MC-01(b): 古典モンテカルロシミュレーションと熱化・収束](../../../tutorials/mcs/mc01b) —— シミュレーションが熱化し収束したかどうかを診断します
+- [MC-07: イジングモデルにおける相転移](../../../tutorials/mcs/mc07) —— 有限サイズスケーリングを用いて臨界温度と臨界指数を求めます
+
 ---
+
+ALPS の他のモデルの概要については [ALPS のモデル](..) を参照してください。

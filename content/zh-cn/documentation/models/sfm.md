@@ -1,34 +1,55 @@
 ---
-title: Spinless Fermion Model
+title: 无自旋费米子模型
 math: true
+toc: true
 weight: 4
 ---
 
-## Introduction
+## 简介
 
-The **spinless fermion model** is a fundamental theoretical framework in condensed matter physics used to study the behavior of fermionic particles in a lattice system, where the particles are assumed to have no intrinsic spin degree of freedom. This simplification allows researchers to focus on the effects of particle statistics, interactions, and lattice geometry without the added complexity of spin dynamics.
+**无自旋费米子模型**描述在格子上跃迁、但完全不携带自旋自由度的费米子——每个格点上只有一种粒子，而不像 [Hubbard 模型](../hubbard)中那样存在"向上"和"向下"两种。这听起来可能是一种不寻常的简化，毕竟真实的电子总是带有自旋，但这其实是一种有用且具有明确物理意义的简化：它把费米统计、相互作用和格子几何结构各自的效应，与自旋带来的额外复杂性隔离开来，并且它可以直接描述自旋极化的费米子（例如制备在单一自旋态上的冷原子，此时泡利不相容原理本身就已经禁止两个全同费米子占据同一格点，无需借助任何相互作用）。而且，正如下文所述，它其实还是各向异性量子海森堡链换了一副面孔而已。
 
-In this model, fermions are described by creation ($c_i^\dagger$) and annihilation ($c_i$) operators that obey the Pauli exclusion principle, ensuring that no two fermions can occupy the same quantum state simultaneously. The Hamiltonian of the system typically includes terms representing kinetic energy (hopping between lattice sites) and potential energy (interactions between particles). A general form of the Hamiltonian for the spinless fermion model is:
+费米子由产生（$c_i^\dagger$）和湮灭（$c_i$）算符描述，二者满足费米型反对易关系，从而保证泡利不相容原理：两个费米子永远不能占据同一格点。该模型的一般哈密顿量为
 
 $$
-H = -t \sum_{\langle i,j \rangle} \left( c_i^\dagger c_j + c_j^\dagger c_i \right) + V \sum_{\langle i,j \rangle} n_i n_j,
+H = -t \sum_{\langle i,j \rangle} \left( c_i^\dagger c_j + c_j^\dagger c_i \right) + V \sum_{\langle i,j \rangle} n_i n_j - \mu \sum_i n_i,
 $$
 
-where:
-- $t$ is the hopping amplitude between nearest-neighbor sites $\langle i,j \rangle$,
-- $V$ is the interaction strength between fermions on neighboring sites,
-- $n_i = c_i^\dagger c_i$ is the number operator, representing the occupation of site $i$.
+其中：
+- $t$ 是最近邻格点 $\langle i,j \rangle$ 之间的跃迁振幅，
+- $V$ 是相邻格点上费米子之间的相互作用强度（$V>0$ 为排斥），
+- $n_i = c_i^\dagger c_i$ 是数算符，表示格点 $i$ 的占据数（0 或 1），
+- $\mu$ 是化学势，控制费米子的总数。
 
-The first term in the Hamiltonian describes the kinetic energy of fermions hopping between lattice sites, while the second term accounts for interactions between fermions on adjacent sites. Depending on the values of $t$ and $V$, the system can exhibit a variety of phases, including metallic, insulating, and charge-density-wave phases.
+这正是 ALPS 模型库中内置的 `spinless fermions` 模型，参数为 `mu`、`t`、`V`（以及它们按键类型区分的变体 `t0`、`t1`、`V0`、`V1`）——完整列表参见[模型参数术语表](../../intro/modeldef/intro)。
 
-## Phenomena
+## 模型的物理
 
-The spinless fermion model is widely used to explore phenomena such as:
-- **Quantum phase transitions**: Transitions between different ground states driven by quantum fluctuations.
-- **Localization and delocalization**: Understanding how disorder or interactions affect the mobility of particles.
-- **Topological phases**: Investigating the emergence of topological properties in low-dimensional systems.
+**自由费米子点。** 当 $V=0$ 时，模型退化为格子上的自由费米子：这是经典的紧束缚问题，对任意格子和任意填充数都可以通过傅里叶变换严格求解。基态就是一个简单的费米海——费米能以下的单粒子态全部填满，以上的全部为空——它几乎所有的性质（能量、动量分布、关联函数）都有封闭形式的解。这个模型真正有趣的物理，完全来自相互作用 $V$。
 
-Despite its simplicity, the spinless fermion model captures essential features of more complex systems and serves as a stepping stone for studying richer models, such as the Hubbard model, where spin degrees of freedom are included.
+**乔装打扮的自旋链：Jordan-Wigner 映射。** 在一维情形下，这个模型其实根本不算是一个新模型：用来精确求解横场伊辛模型的同一个 [Jordan-Wigner 变换](../transising)，把无自旋费米子链映射到了[海森堡模型](../heisenberg)页面中介绍的各向异性量子海森堡（XXZ）自旋 1/2 链上，其中跃迁 $t$ 变成了面内（$S^xS^x+S^yS^y$）交换，相互作用 $V$ 则变成了伊辛型（$S^zS^z$）交换。这是一个精确的等价关系，而非近似：一个模型的每一个本征态和每一个关联函数，在另一个模型中都有对应的伙伴。这也解释了为什么量子蒙特卡罗对付这个名义上是费米子的模型时，在一维中完全没有困难：以自旋表示来模拟时，它和海森堡链本身一样，完全没有符号问题（见下文"方法"部分）——臭名昭著的费米子符号问题，是真正意义上费米子模拟才会出现的特征，一旦存在到玻色（自旋）表示的精确映射，它就根本不会出现。
 
-## Methods
+**对相图的影响。** 由于这个模型本质上就是 XXZ 链，它的零温相图可以直接从该模型已经确立的相图中得到：当 $|V| < 2t$ 时，链是无能隙的——这是一个 Luttinger 液体，是一维相互作用费米子普遍具有的临界、金属态，关联按幂律衰减；当 $V > 2t$ 时，强排斥使占据与空置格点交替排列更为有利，从而打开能隙，形成电荷密度波（CDW）绝缘体，这正是 XXZ 链中伊辛型反铁磁相所对应的费米子图像；当 $V < -2t$ 时，强吸引则使费米子倾向于聚集在一起，导致相分离为富费米子区域与贫费米子区域。因此，调节 $V/t$ 穿过 $\pm 2$，会在这些区域之间驱动真正的零温量子相变，正是[横场伊辛模型](../transising)页面中所介绍的那一类相变。
 
+**两个著名的推广。** 在这个基础模型上添加更多要素，会得到现代凝聚态物理中最具影响力的两个模型。将跃迁振幅二聚化（沿链交替出现强键和弱键）就得到了 **Su-Schrieffer-Heeger（SSH）模型**（[Su, Schrieffer, and Heeger (1979)](https://doi.org/10.1103/PhysRevLett.42.1698)），这是一维拓扑绝缘体的开创性例子，最初是为了解释聚乙炔中的孤子缺陷而提出的。在相邻格点之间加入 p 波配对（而非密度-密度相互作用）则得到了 **Kitaev 链**（[Kitaev (2001)](https://doi.org/10.1070/1063-7869/44/10S/S29)），其拓扑相在链的两端各自寄宿着未配对的 Majorana 零模——这是拓扑量子计算的基础模型之一。二聚化和配对在上述基础模型中都不存在，但两者都是建立在这一基础之上、广为人知的自然推广。
+
+## 现象
+
+- **Luttinger 液体物理**：当 $|V| < 2t$ 时，一维无自旋费米子链是 Luttinger 液体的典型例子——这是一种无能隙的状态，其低能物理具有普适性，几乎为所有无能隙、相互作用的一维费米子系统所共享，与高维金属中的费米液体行为截然不同。
+- **电荷密度波序**：在强排斥（一维中 $V > 2t$）下，费米子会排列在交替的格点上，自发地把格子的平移对称性破缺为子格对称性——这正是[海森堡模型](../heisenberg)页面所讨论的奈尔序在费米子语言下的直接对应。
+- **量子相变**：在 $V = 2t$ 处发生的金属到 CDW 绝缘体的转变（以及在 $V=-2t$ 处到相分离的转变），是由相互作用强度而非温度所驱动的零温量子相变。
+- **拓扑相**：基础模型本身并不具有拓扑相，但只需简单的推广——二聚化跃迁（SSH 模型）或诱导配对（Kitaev 链）——就能将这一简单的出发点变成拓扑凝聚态物理中被研究得最多的两个模型。
+
+## 方法
+
+| 方法 | 优点 | 局限性 | 应用 |
+|---|---|---|---|
+| **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小系统给出精确结果；能捕捉完整的多体谱 | 由于希尔伯特空间随系统尺寸指数增长，仅限于小系统 | 小型链和团簇；用于检验其他方法 |
+| **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维系统的基态和低能激发给出高精度结果 | 对二维/三维系统或高纠缠态效率较低 | 一维链的基态、能隙与关联函数 |
+| **QMC** —— 参见[随机级数展开](../../methods/qmc/sse) | 在一维中，借助 Jordan-Wigner 映射到海森堡链，完全没有符号问题，因此既可以处理大系统，也可以处理有限温度 | 这种映射（及其无符号问题的模拟）是一维最近邻跃迁所特有的；真正意义上的高维或长程费米子模型通常仍会遇到符号问题 | 有限温度热力学；大规模一维系统 |
+
+目前没有专门研究这个模型物理性质的 ALPS 教程，但 [LM-02：定义自定义模型哈密顿量：自旋、费米子和玻色子](../../../tutorials/lm/lm02) 作为其三个示例之一，展示了如何在 ALPS 模型 XML 格式中从零开始编写无自旋费米子模型的 `SITEBASIS`、`OPERATOR` 和 `HAMILTONIAN` 部分。
+
+---
+
+关于 ALPS 中其他模型的概览，参见 [ALPS 中的模型](..)。

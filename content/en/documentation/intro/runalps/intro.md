@@ -7,7 +7,7 @@ weight: 1
 
 ## Overview
 
-In the ALPS library simulations are based on the scheduler library which allows you to specify parameters for your simulations, including multiple definitions of parameters (e.g. if you want to simulate a physical system at a couple of temperatures). The scheduler library will then start jobs for every single parameter set, either on a serial or parallel machine, and uses checkpoints to prevent data loss when exceeding machine walltimes. The scheduler library asks for a job file which specifies task files for every set of parameters for which a Monte Carlo simulation shall be run. The job and task files are given in XML format. The scheduler will read in these files and write observables into the task file. An example job file could look like this:
+ALPS simulations are built on the scheduler library, which lets you specify the parameters for a simulation, including multiple parameter sets at once (for example, if you want to simulate a physical system at several different temperatures). The scheduler library then starts a job for each parameter set, on either a serial or a parallel machine, and writes periodic checkpoints — snapshots of the run's current state — so that no data is lost if a run is interrupted or exceeds the machine's walltime limit; a restarted run picks up from its most recent checkpoint instead of starting over. It reads its input from a job file, which lists one task file per parameter set for which a simulation is to be run. Job and task files are both given in XML format: the scheduler reads the task files for their input parameters and writes the measured observables back into them. An example job file could look like this:
 
     <JOB>
     <OUTPUT file="parm.xml"/>
@@ -25,7 +25,7 @@ In the ALPS library simulations are based on the scheduler library which allows 
     </TASK> 
     </JOB>
 
-and an example task file like:
+The `<OUTPUT>` element on the `<JOB>` itself names the job-level summary file, which the scheduler keeps up to date at every checkpoint as tasks progress and finish. Each `<TASK>` is one parameter set: its `status` attribute tracks progress (`new` for a task that has not started yet, `running` once the scheduler has picked it up, and `finished` once it completes), its `<INPUT>` names the task file holding that task's parameters, and its `<OUTPUT>` names the file the results will be written to. An example task file — here, `parm.task1.in.xml` — could look like this:
 
     <SIMULATION>
     <PARAMETERS>
@@ -35,21 +35,25 @@ and an example task file like:
     <PARAMETER name="THERMALIZATION">100</PARAMETER>
     </PARAMETERS> 
     </SIMULATION>
-    
-Here we will discuss how to prepare, run, and evaluate ALPS simulations. ALPS 2 supports two ways of performing simulations:
+
+Each `<PARAMETER>` entry is one `name`/value pair, identical to the parameters you would set in a plain-text parameter file or a Python parameter dictionary — only the syntax differs. In practice you will rarely write job and task XML by hand: both workflows below generate it for you, either with the `parameter2xml` command-line tool or with `pyalps.writeInputFiles`/`pyalps.writeParameterFile` in Python. The XML format is shown here mainly so that the structure is recognizable if you ever need to inspect or debug it directly.
+
+This section discusses how to prepare, run, and evaluate ALPS simulations. ALPS supports two ways of doing so:
 
 - [Using the command line \(with limited evaluation tools\)](../commandline)
 - [Using Python](../usepython)
 
-Both ways produce the same output files. Command line and Python can be mixed and matched as you desire. The common features are the three phases of a simulation:
+Both produce the same output files, and you can mix and match the two as needed. Either way, a simulation goes through the same three phases:
 
 - Preparing the input files
 - Running the simulation
 - Evaluating the results 
 
-## Comment on random number generators
+## A note on random number generators
 
-Whenever you use Monte-Carlo simulations, you need to remember that you work with pseudo-random numbers. There is always a small chance that your application is just by chance the one that shows that a so-far good pseudo random number generator is not ideal. Hence, as is standard practice for all high-accuracy Monte Carlo simuations, you should run a simulation with more than one random number generator if you strive for high accuracy. The RNG parameter of the simulation allows you to change the random number generator in order to validate your results.
+Whenever you run Monte Carlo simulations, remember that you are working with pseudo-random numbers. There is always a small chance that your particular application is the one that exposes a flaw in an otherwise well-tested pseudo-random number generator. Hence, as is standard practice for high-accuracy Monte Carlo work, you should rerun your simulation with a different generator — set via the [`RNG` parameter](../../parameters#additional-parameters-for-monte-carlo-simulations) — and check that your results do not change.
+
+For the full set of parameters common to most ALPS applications, including `RNG`, see [Common Parameters](../../parameters). For an overview of the rest of the ALPS documentation, see the [General Introduction](../..).
 
 
 
