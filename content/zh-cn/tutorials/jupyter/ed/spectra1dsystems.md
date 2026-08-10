@@ -1,5 +1,5 @@
 ---
-title: 维量子系统的能谱
+title: 一维量子系统的能谱
 description: "一维能谱的 Jupyter md 文件"
 toc: true
 math: true
