@@ -7,7 +7,7 @@ toc: true
 
 ## Excitations
 
-We consider observables that are linked to one specific site to be local observables. In the case of spin chains, the meaningful local observable is the local magnetization $\langle S^z_i \rangle$ . Its spatial profile tells us *where* the magnetization sits, which lets each magnetization sector be associated with a particular energy mode: a boundary mode costing almost nothing, or a bulk magnon costing the Haldane gap. We use this below to compare two boundary conditions applied to the same spin-1 chain.
+Observables linked to one specific site are known as local observables. In the case of spin chains, the meaningful local observable is the local magnetization $\langle S^z_i \rangle$ . Its spatial profile tells us *where* the magnetization sits, which lets each magnetization sector be associated with a particular energy mode: a boundary mode costing almost nothing, or a bulk magnon costing the Haldane gap. We use the spatial profiles of the magnetizations below to analyze the spin-1 chain subject to two different boundary conditions.
 
 
 ## Spin-1 boundary: the uniform chain
@@ -21,9 +21,9 @@ We consider observables that are linked to one specific site to be local observa
   S=1     S=1     S=1     S=1     S=1
 ```
 
-We begin with the uniform chain, in which every site — including the two ends — carries spin 1. The calculation uses a chain of $L=64$ spin-1 sites with $D=100$ states, taking the local magnetization $\langle S^z_i \rangle$ of the ground state in each of the magnetization sectors 0, 1 and 2, plotted against the site index $i$.
+We begin with the uniform chain, in which every site — including the two ends — carries spin 1. The calculation below uses a chain of $L=64$ spin-1 sites with $D=100$ states, taking the local magnetization $\langle S^z_i \rangle$ of the ground state in each of the magnetization sectors 0, 1 and 2, plotted against the site index $i$.
 
-Sector 0 gives a curve which is large at both chain ends but equal and opposite there, so that it sums to zero; for sector 1, a magnetization which is again concentrated at the chain ends, now with the same sign at both; and for sector 2, a magnetization which is both at the chain ends and in the bulk of the chain, this being the sector we will be interested in. Note that the boundary modes exist only because the chain has open ends — they would be absent on a ring — and open boundaries are the natural geometry for DMRG, which makes it an ideal tool for exposing them. These magnetizations describe the character of the first and second excitations.
+Sector 0 gives a curve which is large at both chain ends but equal and opposite there, so that it sums to zero. Sector 1 also has a magnetization which is again concentrated at the chain ends, but now with the same sign at both. Finally, sector 2 posseses a magnetization which is both at the chain ends and in the bulk of the chain, this being the sector we will be most interested in. Note that the boundary modes exist only because the chain has open ends: they would be absent on a ring. Open boundaries are the natural geometry for DMRG, which makes it an ideal tool to study edge modes. As we will see, these magnetizations describe the character of the first and second excitations.
 
 ![Local magnetization of the uniform spin-1 chain, L=64, D=100: (a) the singlet sector, (b) sectors 1 and 2](/figs/dmrg/dmrg05_uniform_sectors.png)
 
@@ -37,11 +37,11 @@ Sectors 0 and 1 are in fact degenerate: the state carrying $S^z_{tot}=1$ costs e
 
 ### Which states the sectors contain
 
-The reason sectors 0 and 1 are degenerate is that they hold *the same kind of state*. An open spin-1 chain in the Haldane phase carries an emergent spin-1/2 at each end: in the valence-bond picture every spin-1 is two spin-1/2s paired with its neighbours, and at an open end one half is left without a partner. Two such spin-1/2s combine into four nearly degenerate states,
+The reason sectors 0 and 1 are degenerate is that they hold *the same kind of state*. An open spin-1 chain in the Haldane phase carries an emergent spin-1/2 at each end: in the valence-bond picture every spin-1 is two spin-1/2s paired with its neighbours, and at an open end one half is left without a partner. Two such spin-1/2s combine into four nearly degenerate states, which is often transcribed as a tensor product in terms of a direct sum:
 
-$$\tfrac{1}{2} \otimes \tfrac{1}{2} = 0 \oplus 1,$$
+$$\tfrac{1}{2} \otimes \tfrac{1}{2} = 0 \oplus 1.$$
 
-one singlet and one triplet, split only by an effective coupling transmitted through the gapped bulk, which decays as $e^{-L/\xi}$ with $\xi \approx 6$ sites. At $L=64$ that splitting is already below $10^{-5}J$.
+This expression says combining two spin-1/2s results in one singlet and one triplet, split only by an effective coupling transmitted through the gapped bulk. This decays as $e^{-L/\xi}$ with $\xi \approx 6$ sites, so at $L=64$ that splitting is already below $10^{-5}J$.
 
 Reading the magnetization sectors against that multiplet:
 
