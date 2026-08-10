@@ -49,26 +49,25 @@ The result is a power law at short distances, crossing over to a faster, in fact
 | Parameter | Meaning | Value |
 |---|---|---|
 | `LATTICE` | built-in open chain (see the [ALPS lattice library](../../../documentation/intro/latticehowtos)) | `open chain lattice` |
-| `L` | number of sites | 32 |
+| `L` | number of sites | 64 |
 | `MODEL` | quantum spin model | `spin` |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
-| `Sz_total` | magnetization sector | 0 |
+| `Sz_total` | magnetization sector | 0, 1, 2 (one run each) |
 | `J` | nearest-neighbour Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 6 |
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
-| `MAXSTATES` | bond dimension $D$, swept to show convergence | 20, 40, 60 |
+| `MAXSTATES` | bond dimension $D$ kept after truncation | 100 |
 | `MEASURE_AVERAGE[...]` | chain-averaged observables | `Sz`, `exchange` |
 | `MEASURE_LOCAL[...]` | site-resolved magnetization | `Sz` |
 | `MEASURE_CORRELATIONS[...]` | two-point correlators $\langle S^z_i S^z_j\rangle$ and $\langle S^+_i S^-_j\rangle$ | `Sz`, `Splus:Sminus` |
 
 #### Using parameter files
 
-The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_half" download>`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). The example uses a chain of length $L=32$ with multiple runs at different numbers of states $D$, and 6 sweeps. The correlations should come out symmetric:
+The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_half" download>`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). The example uses a chain of length $L=64$ at $D=100$, with one run in each of the three lowest magnetization sectors, and 6 sweeps. The correlations should come out symmetric:
 
     LATTICE="open chain lattice"
     MODEL="spin"
     CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
     SWEEPS=6
     J=1
     NUMBER_EIGENVALUES=1
@@ -77,34 +76,35 @@ The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_hal
     MEASURE_LOCAL[Local magnetization]=Sz
     MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
     MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    L=32
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+    L=64
+    MAXSTATES=100
+    { Sz_total=0 }
+    { Sz_total=1 }
+    { Sz_total=2 }
 
     parameter2xml spin_one_half
     dmrg --write-xml spin_one_half.in.xml
 
 #### Using Python
 
-The script <a href="../codes/dmrg-06-correlations/spin_one_half.py" download>`spin_one_half.py`</a> sets up three runs with different numbers of states $D$ and loads the results:
+The script <a href="../codes/dmrg-06-correlations/spin_one_half.py" download>`spin_one_half.py`</a> sets up one run per magnetization sector and loads the results:
 
     import pyalps
     import numpy as np
     import matplotlib.pyplot as plt
     import pyalps.plot
     parms = []
-    for D in [20,40,60]:
+    for sz in [0,1,2]:
         parms.append( { 
             'LATTICE'                               : 'open chain lattice', 
             'MODEL'                                 : 'spin',
             'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
+            'Sz_total'                              : sz,
             'J'                                     : 1,
             'SWEEPS'                                : 6,
             'NUMBER_EIGENVALUES'                    : 1,
-            'L'                                     : 32,
-            'MAXSTATES'                             : D,
+            'L'                                     : 64,
+            'MAXSTATES'                             : 100,
             'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
             'MEASURE_AVERAGE[Exchange]'             : 'exchange',
             'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
@@ -125,7 +125,7 @@ Now we can extract e.g. $\langle S^z_iS^z_j\rangle$ correlations:
             if s.props['observable'] == 'Diagonal spin correlations':
                 d = pyalps.DataSet()
                 d.props['observable'] = 'Sz correlations'
-                d.props['label'] = 'D = '+str(s.props['MAXSTATES'])
+                d.props['label'] = '$S_z^{tot}$ = '+str(s.props['Sz_total'])
                 L = int(s.props['L'])
                 d.x = np.arange(L)
            
@@ -181,7 +181,7 @@ In fact, the calculation of correlation lengths is much harder to converge than 
 | Parameter | Meaning | Value |
 |---|---|---|
 | `LATTICE_LIBRARY` | custom lattice file | `my_lattices.xml` |
-| `LATTICE` | open chain with spin-1/2 end sites | `open chain lattice with special edges 32` |
+| `LATTICE` | open chain with spin-1/2 end sites | `open chain lattice with special edges 64` |
 | `local_S0` | spin on the two end sites | 0.5 |
 | `local_S1` | spin on the interior sites | 1 |
 | `MODEL` | quantum spin model | `spin` |
@@ -190,17 +190,17 @@ In fact, the calculation of correlation lengths is much harder to converge than 
 | `J` | nearest-neighbour Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 6 |
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
-| `MAXSTATES` | bond dimension $D$, swept to show convergence | 20, 40, 60 |
+| `MAXSTATES` | bond dimension $D$ kept after truncation | 100 |
 | `MEASURE_AVERAGE[...]` | chain-averaged observables | `Sz`, `exchange` |
 | `MEASURE_LOCAL[...]` | site-resolved magnetization | `Sz` |
 | `MEASURE_CORRELATIONS[...]` | two-point correlators $\langle S^z_i S^z_j\rangle$ and $\langle S^+_i S^-_j\rangle$ | `Sz`, `Splus:Sminus` |
 
 #### Using parameter files
 
-The parameter file <a href="../codes/dmrg-06-correlations/spin_one" download>`spin_one`</a> looks much like the one for the previous example, but replacing the lattice and the model as follows:
+The parameter file <a href="../codes/dmrg-06-correlations/spin_one" download>`spin_one`</a> looks much like the one for the previous example, but replacing the lattice and the model as follows. As above, the run shown here uses a smaller system than the more realistic $L=192$ quoted earlier: the 64-site capped chain from the lattice library, at $D=100$.
 
     LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
+    LATTICE="open chain lattice with special edges 64"
     MODEL="spin"
     local_S0=0.5
     local_S1=1
@@ -214,9 +214,7 @@ The parameter file <a href="../codes/dmrg-06-correlations/spin_one" download>`sp
     MEASURE_LOCAL[Local magnetization]=Sz
     MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
     MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+    MAXSTATES=100
 
     parameter2xml spin_one
     dmrg --write-xml spin_one.in.xml
@@ -226,9 +224,8 @@ The parameter file <a href="../codes/dmrg-06-correlations/spin_one" download>`sp
 The main difference of the script <a href="../codes/dmrg-06-correlations/spin_one.py" download>`spin_one.py`</a> with respect to the previous one is the definition of lattice and model:
 
     parms = []
-    L = 32
-    for D in [20,40,60]:
-        parms.append( { 
+    L = 64
+    parms.append( { 
             'LATTICE_LIBRARY'                       : 'my_lattices.xml',
             'LATTICE'                               : 'open chain lattice with special edges '+str(L),
             'MODEL'                                 : 'spin',
@@ -237,9 +234,9 @@ The main difference of the script <a href="../codes/dmrg-06-correlations/spin_on
             'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
             'Sz_total'                              : 0,
             'J'                                     : 1,
-            'SWEEPS'                                : 4,
+            'SWEEPS'                                : 6,
             'NUMBER_EIGENVALUES'                    : 1,
-            'MAXSTATES'                             : D,
+            'MAXSTATES'                             : 100,
             'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
             'MEASURE_AVERAGE[Exchange]'             : 'exchange',
             'MEASURE_LOCAL[Local magnetization]'    : 'Sz',

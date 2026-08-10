@@ -75,7 +75,7 @@ $$E(S^z_{tot}=2) - E(S^z_{tot}=1) = \big[\text{edge} + \text{magnon}\big] - \big
 
 ### Running it
 
-The uniform chain needs no lattice file — `open chain lattice` with `local_S=1` is enough. The parameter file sets up three runs, one per sector:
+The uniform chain needs no lattice file — `open chain lattice` with `local_S=1` is enough. The parameter file <a href="../codes/dmrg-05-local-observables/spin_one_uniform" download>`spin_one_uniform`</a> sets up three runs, one per sector:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -94,7 +94,7 @@ The uniform chain needs no lattice file — `open chain lattice` with `local_S=1
     parameter2xml spin_one_uniform
     dmrg --write-xml spin_one_uniform.in.xml
 
-or equivalently from Python:
+or equivalently from Python, with <a href="../codes/dmrg-05-local-observables/spin_one_uniform.py" download>`spin_one_uniform.py`</a>:
 
     import pyalps
     parms = []
@@ -176,7 +176,7 @@ Nothing about the bulk has changed: the Haldane gap, the correlation length and 
 
 ### Running it
 
-The capped chain does need a lattice file. `build_lattice.py` writes an open
+The capped chain does need a lattice file. <a href="../codes/dmrg-05-local-observables/build_lattice.py" download>`build_lattice.py`</a> writes an open
 chain whose two end vertices are given a separate type, so they can be assigned
 a different spin; pass it the **total** number of sites, i.e. two more than the
 number of spin-1 sites you want:
@@ -250,14 +250,14 @@ Repeat a similar calculation for the spin-1/2 chain in the lowest magnetization 
 | Parameter | Meaning | Value |
 |---|---|---|
 | `LATTICE` | built-in open chain (see the [ALPS lattice library](../../../documentation/intro/latticehowtos)) | `open chain lattice` |
-| `L` | number of sites | 32 |
+| `L` | number of sites | 64 |
 | `MODEL` | quantum spin model (default $S=1/2$) | `spin` |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
 | `Sz_total` | magnetization sector targeted | 0, 1, 2 (one run each) |
 | `J` | nearest-neighbour Heisenberg coupling | 1 |
-| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 6 |
 | `NUMBER_EIGENVALUES` | eigenstates requested per sector | 1 |
-| `MAXSTATES` | bond dimension $D$ | 40 |
+| `MAXSTATES` | bond dimension $D$ | 100 |
 | `MEASURE_LOCAL[...]` | site-resolved observable | `Sz` |
 
 ### Using parameter files
@@ -267,12 +267,12 @@ The following parameter file <a href="../codes/dmrg-05-local-observables/spin_on
     LATTICE="open chain lattice"
     MODEL="spin"
     CONSERVED_QUANTUMNUMBERS="N,Sz"
-    SWEEPS=4
+    SWEEPS=6
     J=1
     NUMBER_EIGENVALUES=1
     MEASURE_LOCAL[Local magnetization]=Sz
-    L=32
-    MAXSTATES=40
+    L=64
+    MAXSTATES=100
     { Sz_total=0 }
     { Sz_total=1 }
     { Sz_total=2 }
@@ -282,7 +282,7 @@ The following parameter file <a href="../codes/dmrg-05-local-observables/spin_on
 
 ### Using Python
 
-Apart from the obvious parameter changes, the script <a href="../codes/dmrg-05-local-observables/spin_one_half.py" download>`spin_one_half.py`</a> is the same as the `spin_one` script explained above.
+Apart from the obvious parameter changes, the script <a href="../codes/dmrg-05-local-observables/spin_one_half.py" download>`spin_one_half.py`</a> is the same as the `spin_one_uniform` script explained above.
 
 ## Summary
 
