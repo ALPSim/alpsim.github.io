@@ -69,7 +69,7 @@ and (for the interaction expansion version)
 python tutorial6b.py
 ```
 
-<a href="../codes/dmft-06-paramagnet/hyb/tutorial6a.py" download>`tutorial6a.py`</a> (CT-HYB):
+<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-06-paramagnet/hyb/tutorial6a.py" data-filename="tutorial6a.py" target="_blank" rel="noopener">`tutorial6a.py`</a> (CT-HYB):
 
 ```
 import pyalps
@@ -113,7 +113,7 @@ input_file = pyalps.writeParameterFile('parm_hyb',parms[0])
 res = pyalps.runDMFT(input_file)
 ```
 
-<a href="../codes/dmft-06-paramagnet/int/tutorial6b.py" download>`tutorial6b.py`</a> (CT-INT):
+<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-06-paramagnet/int/tutorial6b.py" data-filename="tutorial6b.py" target="_blank" rel="noopener">`tutorial6b.py`</a> (CT-INT):
 
 ```
 import pyalps

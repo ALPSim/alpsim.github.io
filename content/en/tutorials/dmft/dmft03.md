@@ -43,7 +43,7 @@ with nearest-neighbor hopping $t$, on-site interaction $U$, and chemical potenti
 
 ### Running the simulation
 
-The files for this tutorial can be found in the directory `tutorials/dmft-03-interaction`. As in Tutorial 02, you can run the short script <a href="../codes/dmft-03-interaction/tutorial3.py" download>`tutorial3.py`</a>, reproducing 2 of the 6 curves (runtime: roughly 10 minutes), or the long version <a href="../codes/dmft-03-interaction/tutorial3_long.py" download>`tutorial3_long.py`</a>, reproducing all 6 curves (runtime: roughly 30 minutes). CT-INT reaches a given statistical accuracy faster than CT-HYB in this weak-coupling regime, which is why `MAX_TIME` is set much lower here (10 seconds per iteration) than in Tutorial 02 (300 seconds).
+The files for this tutorial can be found in the directory `tutorials/dmft-03-interaction`. As in Tutorial 02, you can run the short script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3.py" data-filename="tutorial3.py" target="_blank" rel="noopener">`tutorial3.py`</a>, reproducing 2 of the 6 curves (runtime: roughly 10 minutes), or the long version <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3_long.py" data-filename="tutorial3_long.py" target="_blank" rel="noopener">`tutorial3_long.py`</a>, reproducing all 6 curves (runtime: roughly 30 minutes). CT-INT reaches a given statistical accuracy faster than CT-HYB in this weak-coupling regime, which is why `MAX_TIME` is set much lower here (10 seconds per iteration) than in Tutorial 02 (300 seconds).
 
 ```
 import pyalps
@@ -151,7 +151,7 @@ CT-INT and CT-HYB solve the same impurity problem with different diagrammatic ex
 
 ### Output data and plots
 
-Evaluation proceeds exactly as in [DMFT-02 Hybridization](../dmft02), using <a href="../codes/dmft-03-interaction/tutorial3eval.py" download>`tutorial3eval.py`</a> (identical in structure to `tutorial2eval.py`). First, the imaginary-time Green's function for both flavors, directly appended to `tutorial3.py`:
+Evaluation proceeds exactly as in [DMFT-02 Hybridization](../dmft02), using <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3eval.py" data-filename="tutorial3eval.py" target="_blank" rel="noopener">`tutorial3eval.py`</a> (identical in structure to `tutorial2eval.py`). First, the imaginary-time Green's function for both flavors, directly appended to `tutorial3.py`:
 
 ```
 listobs=['0', '1']   # we will plot both flavors 0 and 1
