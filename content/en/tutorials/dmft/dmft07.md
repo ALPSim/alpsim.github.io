@@ -43,7 +43,7 @@ on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqr
 
 ### Running the simulation
 
-The Hirsch-Fye simulation will run for about 20 seconds per iteration. The files for this tutorial can be found in the directory `tutorials/dmft-07-hirschfye`. As in Tutorials 02 and 03, you can run the short script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7.py" data-filename="tutorial7.py" target="_blank" rel="noopener">`tutorial7.py`</a>, reproducing 2 of the 6 curves (runtime: roughly 5 minutes), or the long version <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7_long.py" data-filename="tutorial7_long.py" target="_blank" rel="noopener">`tutorial7_long.py`</a>, reproducing all 6 curves.
+The Hirsch-Fye simulation will run for about 20 seconds per iteration. The files for this tutorial can be found in the directory `tutorials/dmft-07-hirschfye`. As in Tutorials 02 and 03, you can run the short script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7.py" data-filename="tutorial7.py" target="_blank" rel="noopener">`tutorial7.py`</a>, reproducing 2 of the 6 curves (runtime: roughly 5 minutes), or the long version <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7_long.py" data-filename="tutorial7_long.py" target="_blank" rel="noopener">`tutorial7_long.py`</a>, reproducing all 6 curves.
 
 ```
 import pyalps
@@ -165,7 +165,7 @@ Hirsch-Fye works very differently from CT-HYB and CT-INT: it Trotter-decomposes 
 
 ### Output data and plots
 
-For evaluation you may adapt `tutorial2eval.py` as described in [DMFT-02 Hybridization](../dmft02), or use <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7eval.py" data-filename="tutorial7eval.py" target="_blank" rel="noopener">`tutorial7eval.py`</a>, which is structurally identical to `tutorial2eval.py`: it plots the iteration-resolved $G(\tau)$, the occupation $n_0=-G_0(\tau=\beta^-)$ versus $\beta$, and the Matsubara-frequency Green's function and self-energy (via the Dyson equation), for both flavors.
+For evaluation you may adapt `tutorial2eval.py` as described in [DMFT-02 Hybridization](../dmft02), or use <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7eval.py" data-filename="tutorial7eval.py" target="_blank" rel="noopener">`tutorial7eval.py`</a>, which is structurally identical to `tutorial2eval.py`: it plots the iteration-resolved $G(\tau)$, the occupation $n_0=-G_0(\tau=\beta^-)$ versus $\beta$, and the Matsubara-frequency Green's function and self-energy (via the Dyson equation), for both flavors.
 
 ```
 import pyalps
