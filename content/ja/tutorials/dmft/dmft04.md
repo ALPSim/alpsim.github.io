@@ -45,7 +45,7 @@ $$
 
 ### シミュレーションの実行
 
-python でシミュレーションを実行するには、[`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py) を使用します。
+python でシミュレーションを実行するには、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-04-mott/tutorial4a.py" data-filename="tutorial4a.py" target="_blank" rel="noopener">`tutorial4a.py`</a> を使用します。
 
 ```    
 import pyalps
@@ -184,7 +184,7 @@ plt.show()
 
 ### 収束の確認
 
-収束は [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py) で確認できます。
+収束は <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-04-mott/tutorial4b.py" data-filename="tutorial4b.py" target="_blank" rel="noopener">`tutorial4b.py`</a> で確認できます。
 
 ```
 import pyalps

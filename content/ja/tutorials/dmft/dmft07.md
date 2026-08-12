@@ -43,7 +43,7 @@ $$
 
 ### シミュレーションの実行
 
-Hirsch-Fye シミュレーションは、1反復あたり約20秒かかります。このチュートリアルに必要なファイルはディレクトリ `tutorials/dmft-07-hirschfye` にあります。チュートリアル02・03と同様に、短縮版スクリプト [`tutorial7.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7.py) を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約5分）。あるいは完全版スクリプト [`tutorial7_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7_long.py) を実行すると、6本すべての曲線を再現します。
+Hirsch-Fye シミュレーションは、1反復あたり約20秒かかります。このチュートリアルに必要なファイルはディレクトリ `tutorials/dmft-07-hirschfye` にあります。チュートリアル02・03と同様に、短縮版スクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7.py" data-filename="tutorial7.py" target="_blank" rel="noopener">`tutorial7.py`</a> を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約5分）。あるいは完全版スクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7_long.py" data-filename="tutorial7_long.py" target="_blank" rel="noopener">`tutorial7_long.py`</a> を実行すると、6本すべての曲線を再現します。
 
 ```
 import pyalps
@@ -165,7 +165,7 @@ Hirsch-Fye は CT-HYB や CT-INT とはまったく異なる方法で動作し�
 
 ### 出力データとプロット
 
-結果の評価には、[DMFT-02 Hybridization](../dmft02) で説明した `tutorial2eval.py` を応用するか、`tutorial2eval.py` と構造的に同一である [`tutorial7eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7eval.py) を使用できます。このスクリプトは、反復ごとの $G(\tau)$、占有数 $n_0=-G_0(\tau=\beta^-)$ の $\beta$ 依存性、そして（Dyson 方程式による）松原周波数のグリーン関数と自己エネルギーを、両方のフレーバーについてプロットします。
+結果の評価には、[DMFT-02 Hybridization](../dmft02) で説明した `tutorial2eval.py` を応用するか、`tutorial2eval.py` と構造的に同一である <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7eval.py" data-filename="tutorial7eval.py" target="_blank" rel="noopener">`tutorial7eval.py`</a> を使用できます。このスクリプトは、反復ごとの $G(\tau)$、占有数 $n_0=-G_0(\tau=\beta^-)$ の $\beta$ 依存性、そして（Dyson 方程式による）松原周波数のグリーン関数と自己エネルギーを、両方のフレーバーについてプロットします。
 
 ```
 import pyalps

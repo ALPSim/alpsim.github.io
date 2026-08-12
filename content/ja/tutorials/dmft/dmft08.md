@@ -77,7 +77,7 @@ $$
           o       o
   ```
 
-各 DOS 表は小さなヒストグラム生成スクリプト──[`DOS_Square.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Square.py)（`GRID=4000`）、[`DOS_Cubic.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Cubic.py)（`GRID=360`）、[`DOS_Hexagonal.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Hexagonal.py)（`GRID=4000`）──によって、`GRID`$\times$`GRID` の k 点メッシュ上でタイトバインディング分散をブリルアンゾーン全体にわたって積分することで生成されています。他の格子についても同様の方法で自分で DOS 表を生成できますし、格子の幾何学的構造や配位数を調べる際の参考として [ALPS 格子ライブラリ](../../../documentation/intro/latticehowtos) を利用することもできます。
+各 DOS 表は小さなヒストグラム生成スクリプト──<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/DOS/DOS_Square.py" data-filename="DOS_Square.py" target="_blank" rel="noopener">`DOS_Square.py`</a>（`GRID=4000`）、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/DOS/DOS_Cubic.py" data-filename="DOS_Cubic.py" target="_blank" rel="noopener">`DOS_Cubic.py`</a>（`GRID=360`）、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/DOS/DOS_Hexagonal.py" data-filename="DOS_Hexagonal.py" target="_blank" rel="noopener">`DOS_Hexagonal.py`</a>（`GRID=4000`）──によって、`GRID`$\times$`GRID` の k 点メッシュ上でタイトバインディング分散をブリルアンゾーン全体にわたって積分することで生成されています。他の格子についても同様の方法で自分で DOS 表を生成できますし、格子の幾何学的構造や配位数を調べる際の参考として [ALPS 格子ライブラリ](../../../documentation/intro/latticehowtos) を利用することもできます。
 
 **TWODBS**：正方格子と六角格子については、事前に DOS 表を用意しなくても、自己無撞着計算の各ステップで Hilbert 変換を（$L\times L$ の k 点メッシュ上で離散化した）ライブな k 空間積分として直接評価することができます。
 
@@ -87,7 +87,7 @@ $$
 
 ### Option DOSFILE
 
-一般の格子の場合、その格子の状態密度を与える必要があります。それに加えて、シミュレーションを実行するにはいくつかの変更が必要です。入力ファイルを設定し、シミュレーションを実行し、結果をプロットする、実際に動作する python スクリプト [`tutorial8a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8a.py) を以下に示します。
+一般の格子の場合、その格子の状態密度を与える必要があります。それに加えて、シミュレーションを実行するにはいくつかの変更が必要です。入力ファイルを設定し、シミュレーションを実行し、結果をプロットする、実際に動作する python スクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/tutorial8a.py" data-filename="tutorial8a.py" target="_blank" rel="noopener">`tutorial8a.py`</a> を以下に示します。
 
 ```
 import pyalps
@@ -192,7 +192,7 @@ $$
 - 正方格子 [TWODBS=square と設定]。最近接ホッピング [対応するパラメータ：t] と次近接ホッピング [対応するパラメータ：tprime] を持ち、二次モーメント EPSSQ_i は $4(t^2 + tprime^2)$ です。
 - 六角格子 [TWODBS=hexagonal と設定]。最近接ホッピングのみを持ち [対応するパラメータ：t]、二次モーメント EPSSQ_i は $3t^2$ です。
 
-入力ファイルを生成し、シミュレーションを実行し、結果をプロットする、実際に動作する python スクリプト [`tutorial8b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8b.py) を以下に示します。
+入力ファイルを生成し、シミュレーションを実行し、結果をプロットする、実際に動作する python スクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/tutorial8b.py" data-filename="tutorial8b.py" target="_blank" rel="noopener">`tutorial8b.py`</a> を以下に示します。
 
 ```
 import pyalps

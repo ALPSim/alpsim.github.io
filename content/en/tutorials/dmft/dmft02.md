@@ -13,7 +13,7 @@ We start by running a continuous-time quantum Monte Carlo code: the hybridizatio
 
 The CT-HYB simulation will run for roughly 1 hour in total if you want to reproduce all 6 curves in Fig. 11 mentioned above. The files for this tutorial can be found in the directory `tutorials/dmft-02-hybridization`.
 
-All DMFT tutorials can be started using a python script. The python script generates parameter files, runs them, and plots the results. You can run the short script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2.py" data-filename="tutorial2.py" target="_blank" rel="noopener">`tutorial2.py`</a>, reproducing only 2 out of the 6 curves (runtime: roughly 20 minutes), or the long version <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2_long.py" data-filename="tutorial2_long.py" target="_blank" rel="noopener">`tutorial2_long.py`</a>, reproducing all 6 curves in the figure (runtime: roughly 1 hour).
+All DMFT tutorials can be started using a python script. The python script generates parameter files, runs them, and plots the results. You can run the short script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2.py" data-filename="tutorial2.py" target="_blank" rel="noopener">`tutorial2.py`</a>, reproducing only 2 out of the 6 curves (runtime: roughly 20 minutes), or the long version <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2_long.py" data-filename="tutorial2_long.py" target="_blank" rel="noopener">`tutorial2_long.py`</a>, reproducing all 6 curves in the figure (runtime: roughly 1 hour).
 
 The python script `tutorial2.py` automatically prepares the input files for the 2 simulations, `parm_beta_6.0` and `parm_beta_12.0`, and runs them (`/path-to-alps-installation/bin/dmft parm_beta_x`).
 
@@ -127,7 +127,7 @@ You will notice that the results are relatively noisy. This is because the expan
 
 ### Checking convergence
 
-If you want to check the convergence of your DMFT self-consistency, you can plot the Green's functions of different iterations using <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2eval.py" data-filename="tutorial2eval.py" target="_blank" rel="noopener">`tutorial2eval.py`</a>, whose code is shown here:
+If you want to check the convergence of your DMFT self-consistency, you can plot the Green's functions of different iterations using <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2eval.py" data-filename="tutorial2eval.py" target="_blank" rel="noopener">`tutorial2eval.py`</a>, whose code is shown here:
 
 ```
 listobs=['0']   # we look at a single flavor (=0) 

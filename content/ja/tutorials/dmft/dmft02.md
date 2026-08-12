@@ -13,7 +13,7 @@ toc: true
 
 上記の図11にある6本の曲線すべてを再現する場合、CT-HYB シミュレーションは全体で約1時間かかります。このチュートリアルに必要なファイルはディレクトリ `tutorials/dmft-02-hybridization` にあります。
 
-すべての DMFT チュートリアルは python スクリプトを用いて実行できます。このスクリプトはパラメータファイルを生成し、それらを実行し、結果をプロットします。短縮版のスクリプト [`tutorial2.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2.py) を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約20分）。あるいは完全版のスクリプト [`tutorial2_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2_long.py) を実行すると、図の6本すべての曲線を再現します（実行時間の目安：約1時間）。
+すべての DMFT チュートリアルは python スクリプトを用いて実行できます。このスクリプトはパラメータファイルを生成し、それらを実行し、結果をプロットします。短縮版のスクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2.py" data-filename="tutorial2.py" target="_blank" rel="noopener">`tutorial2.py`</a> を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約20分）。あるいは完全版のスクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2_long.py" data-filename="tutorial2_long.py" target="_blank" rel="noopener">`tutorial2_long.py`</a> を実行すると、図の6本すべての曲線を再現します（実行時間の目安：約1時間）。
 
 python スクリプト `tutorial2.py` は、2つのシミュレーション用の入力ファイル `parm_beta_6.0` と `parm_beta_12.0` を自動的に準備し、それらを実行します（`/path-to-alps-installation/bin/dmft parm_beta_x`）。
 
@@ -127,7 +127,7 @@ plt.show()
 
 ### 収束の確認
 
-DMFT の自己無撞着計算の収束を確認したい場合は、[`tutorial2eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2eval.py) を使って各反復ステップのグリーン関数をプロットできます。そのコードは以下の通りです。
+DMFT の自己無撞着計算の収束を確認したい場合は、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2eval.py" data-filename="tutorial2eval.py" target="_blank" rel="noopener">`tutorial2eval.py`</a> を使って各反復ステップのグリーン関数をプロットできます。そのコードは以下の通りです。
 
 ```
 listobs=['0']   # we look at a single flavor (=0) 

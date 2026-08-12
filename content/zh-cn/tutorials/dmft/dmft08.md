@@ -77,7 +77,7 @@ $$
           o       o
   ```
 
-每个 DOS 表都是由一个小型直方图生成脚本——[`DOS_Square.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Square.py)（`GRID=4000`）、[`DOS_Cubic.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Cubic.py)（`GRID=360`）、[`DOS_Hexagonal.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/DOS/DOS_Hexagonal.py)（`GRID=4000`）——通过在 `GRID`$\times$`GRID` 的 k 点网格上对紧束缚色散在整个布里渊区做积分而生成的。你也可以用同样的方法为任何其他格子生成 DOS 表，或者在构建自己的格子时，参考 [ALPS 格子库](../../../documentation/intro/latticehowtos) 了解格子几何结构和配位数。
+每个 DOS 表都是由一个小型直方图生成脚本——<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/DOS/DOS_Square.py" data-filename="DOS_Square.py" target="_blank" rel="noopener">`DOS_Square.py`</a>（`GRID=4000`）、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/DOS/DOS_Cubic.py" data-filename="DOS_Cubic.py" target="_blank" rel="noopener">`DOS_Cubic.py`</a>（`GRID=360`）、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/DOS/DOS_Hexagonal.py" data-filename="DOS_Hexagonal.py" target="_blank" rel="noopener">`DOS_Hexagonal.py`</a>（`GRID=4000`）——通过在 `GRID`$\times$`GRID` 的 k 点网格上对紧束缚色散在整个布里渊区做积分而生成的。你也可以用同样的方法为任何其他格子生成 DOS 表，或者在构建自己的格子时，参考 [ALPS 格子库](../../../documentation/intro/latticehowtos) 了解格子几何结构和配位数。
 
 **TWODBS**：对于正方格子和六角格子，ALPS 可以不依赖预先制表的 DOS 文件，而是在每一步自洽计算中，将 Hilbert 变换直接作为实时的 k 空间积分（在 $L\times L$ 的 k 点网格上离散化）来求值。
 
@@ -87,7 +87,7 @@ $$
 
 ### Option DOSFILE
 
-对于一般的格子，你需要提供该格子的态密度。除此之外，还需要做一些其他修改才能运行模拟。下面是一个可用的 python 脚本 [`tutorial8a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8a.py)，用于设置输入文件、运行模拟并绘制结果：
+对于一般的格子，你需要提供该格子的态密度。除此之外，还需要做一些其他修改才能运行模拟。下面是一个可用的 python 脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/tutorial8a.py" data-filename="tutorial8a.py" target="_blank" rel="noopener">`tutorial8a.py`</a>，用于设置输入文件、运行模拟并绘制结果：
 
 ```
 import pyalps
@@ -192,7 +192,7 @@ $$
 - 正方格子 [设置 TWODBS=square]，具有最近邻 [对应参数：t] 和次近邻跳跃 [对应参数：tprime]；二阶矩 EPSSQ_i 为 $4(t^2 + tprime^2)$；
 - 六角格子 [设置 TWODBS=hexagonal]，仅具有最近邻跳跃 [对应参数：t]；二阶矩 EPSSQ_i 为 $3t^2$。
 
-下面是一个用于生成输入文件、运行模拟并绘制结果的可用 python 脚本 [`tutorial8b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-08-lattices/tutorial8b.py)：
+下面是一个用于生成输入文件、运行模拟并绘制结果的可用 python 脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-08-lattices/tutorial8b.py" data-filename="tutorial8b.py" target="_blank" rel="noopener">`tutorial8b.py`</a>：
 
 ```
 import pyalps

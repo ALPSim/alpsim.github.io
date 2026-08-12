@@ -50,7 +50,7 @@ with orbital index $m=0,1$, intra-orbital hopping $t_m$, intra-orbital (Hubbard)
 
 We choose here a case with two bandwidths, $t_0=0.5$ and $t_1=1$, and density-density-like interactions of $U'=U/2$, $J=U/4$, with $U$ between $1.8$ and $2.8$: $U=1.8$ shows a Fermi-liquid-like behavior in both orbitals, $U=2.2$ is orbitally selective, and $U=2.8$ is insulating in both orbitals.
 
-The python command lines for running the simulations are found in <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py" data-filename="tutorial5a.py" target="_blank" rel="noopener">`tutorial5a.py`</a>:
+The python command lines for running the simulations are found in <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5a.py" data-filename="tutorial5a.py" target="_blank" rel="noopener">`tutorial5a.py`</a>:
 
 ```
 import pyalps
@@ -190,7 +190,7 @@ Because these are stochastic Monte Carlo results, the precise numbers depend on 
 
 ### Checking convergence
 
-Convergence may be checked with <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py" data-filename="tutorial5b.py" target="_blank" rel="noopener">`tutorial5b.py`</a>, which plots all iterations of $G_f^{it}(\tau)$ on a logarithmic scale, for both flavor 0 and flavor 2:
+Convergence may be checked with <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5b.py" data-filename="tutorial5b.py" target="_blank" rel="noopener">`tutorial5b.py`</a>, which plots all iterations of $G_f^{it}(\tau)$ on a logarithmic scale, for both flavor 0 and flavor 2:
 
 ```
 import pyalps

@@ -43,7 +43,7 @@ $$
 
 ### シミュレーションの実行
 
-このチュートリアルに必要なファイルはディレクトリ `tutorials/dmft-03-interaction` にあります。チュートリアル02と同様に、短縮版スクリプト [`tutorial3.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3.py) を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約10分）。あるいは完全版スクリプト [`tutorial3_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3_long.py) を実行すると、6本すべての曲線を再現します（実行時間の目安：約30分）。この弱結合領域では CT-INT が CT-HYB よりも短時間で同程度の統計精度に到達するため、`MAX_TIME` はチュートリアル02（1反復あたり300秒）よりもずっと短い、1反復あたり10秒に設定されています。
+このチュートリアルに必要なファイルはディレクトリ `tutorials/dmft-03-interaction` にあります。チュートリアル02と同様に、短縮版スクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3.py" data-filename="tutorial3.py" target="_blank" rel="noopener">`tutorial3.py`</a> を実行すると、6本のうち2本の曲線のみを再現します（実行時間の目安：約10分）。あるいは完全版スクリプト <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3_long.py" data-filename="tutorial3_long.py" target="_blank" rel="noopener">`tutorial3_long.py`</a> を実行すると、6本すべての曲線を再現します（実行時間の目安：約30分）。この弱結合領域では CT-INT が CT-HYB よりも短時間で同程度の統計精度に到達するため、`MAX_TIME` はチュートリアル02（1反復あたり300秒）よりもずっと短い、1反復あたり10秒に設定されています。
 
 ```
 import pyalps
@@ -151,7 +151,7 @@ CT-INT と CT-HYB は同じ不純物問題を異なる図式展開で解いて�
 
 ### 出力データとプロット
 
-結果の評価は [DMFT-02 Hybridization](../dmft02) とまったく同じ方法で、[`tutorial3eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3eval.py)（`tutorial2eval.py` と構造は同一）を用いて行えます。まず、`tutorial3.py` に続けて実行される、両フレーバーの虚時間グリーン関数のプロットです。
+結果の評価は [DMFT-02 Hybridization](../dmft02) とまったく同じ方法で、<a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3eval.py" data-filename="tutorial3eval.py" target="_blank" rel="noopener">`tutorial3eval.py`</a>（`tutorial2eval.py` と構造は同一）を用いて行えます。まず、`tutorial3.py` に続けて実行される、両フレーバーの虚時間グリーン関数のプロットです。
 
 ```
 listobs=['0', '1']   # we will plot both flavors 0 and 1
