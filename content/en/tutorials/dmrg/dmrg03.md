@@ -45,7 +45,7 @@ The first example consists of setting up a simulation for a spin-1/2 Heisenberg 
 
 ###### Using parameter files
 
-The parameter file <a href="../codes/dmrg-03-ground-state-energies/spin_one_half" download>`spin_one_half`</a> sets the most important parameters:
+The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half" data-filename="spin_one_half" target="_blank" rel="noopener">`spin_one_half`</a> sets the most important parameters:
 
 ```python
 LATTICE="open chain lattice"
@@ -72,7 +72,7 @@ DMRG will perform four sweeps, (four half-sweps from left to right and four half
 
 ###### Using Python
 
-To set up and run the simulation in Python we use the script <a href="../codes/dmrg-03-ground-state-energies/spin_one_half.py" download>`spin_one_half.py`</a>. The first part of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application:
+To set up and run the simulation in Python we use the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half.py" data-filename="spin_one_half.py" target="_blank" rel="noopener">`spin_one_half.py`</a>. The first part of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application:
 
 ```python
 import pyalps
@@ -150,7 +150,7 @@ For the single run above (L=32, MAXSTATES=100, J=1), the ground state energy war
 
 ###### Using parameter files
 
-We now proceed to illustrate how to setup several runs in a single parameter file <a href="../codes/dmrg-03-ground-state-energies/spin_one_half_multiple" download>`spin_one_half_multiple`</a>. We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
+We now proceed to illustrate how to setup several runs in a single parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half_multiple" data-filename="spin_one_half_multiple" target="_blank" rel="noopener">`spin_one_half_multiple`</a>. We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
 
 ```python
 LATTICE="open chain lattice"
@@ -176,7 +176,7 @@ In this case, we will find three output files `spin_one_half_multiple.task#.out.
 
 ###### Using Python
 
-The script <a href="../codes/dmrg-03-ground-state-energies/spin_one_half_multiple.py" download>`spin_one_half_multiple.py`</a> sets up three Python dictionaries of parameters with differing MAXSTATES:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half_multiple.py" data-filename="spin_one_half_multiple.py" target="_blank" rel="noopener">`spin_one_half_multiple.py`</a> sets up three Python dictionaries of parameters with differing MAXSTATES:
 
 ```python
 parms= []
@@ -221,7 +221,7 @@ for run in data:
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
 | `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
 
-The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script <a href="../codes/dmrg-03-ground-state-energies/build_lattice.py" download>`build_lattice.py`</a> that will generate the lattice for us. The only input is the number of sites in the lattice.
+The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/build_lattice.py" data-filename="build_lattice.py" target="_blank" rel="noopener">`build_lattice.py`</a> that will generate the lattice for us. The only input is the number of sites in the lattice.
 
 ##### Lattice
 
@@ -287,7 +287,7 @@ python build_lattice.py 32 > my_lattice.xml
 
 ##### Using parameter files
 
-Let us see how the final parameter file <a href="../codes/dmrg-03-ground-state-energies/spin_one" download>`spin_one`</a> should look like:
+Let us see how the final parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one" data-filename="spin_one" target="_blank" rel="noopener">`spin_one`</a> should look like:
 
 ```python
 LATTICE_LIBRARY="my_lattice.xml"
@@ -303,7 +303,7 @@ NUMBER_EIGENVALUES=1
 {MAXSTATES=100}
 ```
 
-Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler approach is to define all the lattices we need in a lattice library. We have included a <a href="../codes/dmrg-03-ground-state-energies/my_lattices.xml" download>`my_lattices.xml`</a> file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
+Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler approach is to define all the lattices we need in a lattice library. We have included a <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/my_lattices.xml" data-filename="my_lattices.xml" target="_blank" rel="noopener">`my_lattices.xml`</a> file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
 
 ```python
 LATTICE_LIBRARY="my_lattices.xml"
@@ -313,7 +313,7 @@ where we have included the lattice size in the name.
 
 ##### Using Python
 
-The script <a href="../codes/dmrg-03-ground-state-energies/spin_one.py" download>`spin_one.py`</a> defines the parameters in a Python dictionary:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one.py" data-filename="spin_one.py" target="_blank" rel="noopener">`spin_one.py`</a> defines the parameters in a Python dictionary:
 
 ```python
 parms = [ { 
@@ -341,7 +341,7 @@ For this S=1 single run (L=32, MAXSTATES=100, J=1), the ground state energy warm
 
 ###### Using parameter files
 
-Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named <a href="../codes/dmrg-03-ground-state-energies/spin_one_multiple" download>`spin_one_multiple`</a> as follows:
+Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_multiple" data-filename="spin_one_multiple" target="_blank" rel="noopener">`spin_one_multiple`</a> as follows:
 
 ```python
 LATTICE_LIBRARY="my_lattices.xml"
@@ -361,7 +361,7 @@ SWEEPS=4
 
 ###### Using Python
 
-The same runs can be set up with the script <a href="../codes/dmrg-03-ground-state-energies/spin_one_multiple.py" download>`spin_one_multiple.py`</a>, which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
+The same runs can be set up with the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_multiple.py" data-filename="spin_one_multiple.py" target="_blank" rel="noopener">`spin_one_multiple.py`</a>, which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
 
 ### Ground State Energies Per Site (Bond)
 

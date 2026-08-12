@@ -58,7 +58,7 @@ The built-in `open chain lattice`, spin-1/2 on every site; see the [ALPS lattice
 
 ##### Using parameter files
 
-In this example below, we include a line in the parameter file for the spin S=1/2 chain <a href="../codes/dmrg-04-gaps/spin_one_half_gap" download>`spin_one_half_gap`</a> to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
+In this example below, we include a line in the parameter file for the spin S=1/2 chain <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_gap" data-filename="spin_one_half_gap" target="_blank" rel="noopener">`spin_one_half_gap`</a> to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
 
 ```python
 LATTICE="open chain lattice"
@@ -77,7 +77,7 @@ It is important to notice that the entanglement entropy in this example is total
 
 ##### Using Python
 
-The script <a href="../codes/dmrg-04-gaps/spin_one_half_gap.py" download>`spin_one_half_gap.py`</a> runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_gap.py" data-filename="spin_one_half_gap.py" target="_blank" rel="noopener">`spin_one_half_gap.py`</a> runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
 
 ```python
 import pyalps
@@ -165,11 +165,11 @@ J=1
 {L=32, MAXSTATES=40}
 ```
 
-You can download this file from here: <a href="../codes/dmrg-04-gaps/spin_one_half_triplet" download>`spin_one_half_triplet`</a>.
+You can download this file from here: <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_triplet" data-filename="spin_one_half_triplet" target="_blank" rel="noopener">`spin_one_half_triplet`</a>.
 
 ##### Using Python
 
-The script <a href="../codes/dmrg-04-gaps/spin_one_half_triplet.py" download>`spin_one_half_triplet.py`</a> runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_triplet.py" data-filename="spin_one_half_triplet.py" target="_blank" rel="noopener">`spin_one_half_triplet.py`</a> runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
 
 ```python
 import pyalps
@@ -227,7 +227,7 @@ The plot below shows the spin-1/2 singlet-triplet gap versus $1/L$ at fixed $D=1
 
 ![](/figs/dmrg/extrapolationGapSHalf.png)
 
-Modify the file <a href="../codes/dmrg-04-gaps/spin_one_half_multiple" download>`spin_one_half_multiple`</a> to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
+Modify the file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_multiple" data-filename="spin_one_half_multiple" target="_blank" rel="noopener">`spin_one_half_multiple`</a> to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
 
 The case of the spin-1/2 chain is a bit frustrating: even pushing the computer to its limits, the most that can be said is that the gap appears extremely small and therefore is likely to vanish. Nothing in the data rules out a gap of, say, $e^{-50}$. This is a sobering reminder of the limits of even a highly accurate numerical method.
