@@ -144,7 +144,7 @@ plt.show()
 
 For the single run above (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-13.9973156\cdot J$ within about 50 iterations. Since the ground state energy is extensive, we divide by the 31 bonds to get the intensive per-bond energy $e_0/J = E_0/(31J)\approx-0.4515$, close to the exact thermodynamic-limit value $e_0/J=1/4-\ln2=-0.4431471806$ quoted in [DMRG-02](../dmrg02). The truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
 
-![](/figs/dmrg/dmrg_energy_truncation.png)
+![](/figs/dmrg/spin_one_half_energy_iteration.png)
 
 ##### Multiple runs
 
@@ -335,7 +335,7 @@ Apart from parameter and file name changes, it is the same as the `spin_one_half
 
 For this S=1 single run (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-42.6513851\cdot J$ within about 30 iterations. Dividing by the 31 bonds gives the intensive per-bond energy $e_0/J = E_0/(31J)\approx-1.3759$, close to the numerical thermodynamic-limit value $e_0/J=-1.401484039$ quoted in [DMRG-02](../dmrg02), as expected for a finite chain — even with the special edges added to suppress boundary effects. The truncation error shows the same sawtooth convergence pattern as the spin-1/2 case above, bottoming out near machine precision at the end of each half-sweep and rising again as the next half-sweep begins:
 
-![](/figs/dmrg/dmrg_energy_truncation_spin_one.png)
+![](/figs/dmrg/spin_one_energy_iteration.png)
 
 ##### Multiple runs
 
