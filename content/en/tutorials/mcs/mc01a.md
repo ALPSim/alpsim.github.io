@@ -23,7 +23,7 @@ This tutorial can be run either on the command line or in Python. We recommend t
 
 ### Setting up and running the simulation on the command line
 
-To set up and run the simulation on the command line, we first create a parameter file that specifies the parameters of the simulation(s). The <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01-autocorrelations/parm1a" data-filename="parm1a" target="_blank" rel="noopener">downloadable file</a> will be titled `parm1a`, with the following contents:
+To set up and run the simulation on the command line, we first create a parameter file that specifies the parameters of the simulation(s). The downloadable file will be titled <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01-autocorrelations/parm1a" data-filename="parm1a" target="_blank" rel="noopener">`parm1a`</a>, with the following contents:
 
 ```
 LATTICE="square lattice"
