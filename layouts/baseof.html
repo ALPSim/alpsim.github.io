@@ -17,5 +17,14 @@
     {{ end }}
     {{ partial "scripts.html" . }}
     {{- partial "chatbot.html" . -}}
+
+    <!-- Download tutorial scripts from ALPSim/ALPS without navigating away -->
+    {{- $dl := resources.Get "js/alps-download.js" -}}
+    {{- if hugo.IsProduction -}}
+      {{- $dl = $dl | minify | fingerprint -}}
+      <script defer src="{{ $dl.RelPermalink }}" integrity="{{ $dl.Data.Integrity }}"></script>
+    {{- else -}}
+      <script defer src="{{ $dl.RelPermalink }}"></script>
+    {{- end -}}
   </body>
 </html>

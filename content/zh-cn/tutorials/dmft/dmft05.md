@@ -50,7 +50,7 @@ $$
 
 这里我们选取的算例中，两条能带的带宽为 $t_0=0.5$ 和 $t_1=1$，密度-密度型相互作用为 $U'=U/2$、$J=U/4$，$U$ 取值在 $1.8$ 到 $2.8$ 之间：$U=1.8$ 时两条轨道均表现出费米液体行为，$U=2.2$ 时体系为轨道选择性的，而 $U=2.8$ 时两条轨道均为绝缘态。
 
-运行模拟的 python 命令可以在 [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py) 中找到：
+运行模拟的 python 命令可以在 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5a.py" data-filename="tutorial5a.py" target="_blank" rel="noopener">`tutorial5a.py`</a> 中找到：
 
 ```
 import pyalps
@@ -190,7 +190,7 @@ plt.show()
 
 ### 检验收敛性
 
-可以使用 [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py) 检验收敛性，它以对数坐标绘制味 0 和味 2 各自的所有迭代 $G_f^{it}(\tau)$：
+可以使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5b.py" data-filename="tutorial5b.py" target="_blank" rel="noopener">`tutorial5b.py`</a> 检验收敛性，它以对数坐标绘制味 0 和味 2 各自的所有迭代 $G_f^{it}(\tau)$：
 
 ```
 import pyalps

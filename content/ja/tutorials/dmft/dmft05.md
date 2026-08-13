@@ -50,7 +50,7 @@ $$
 
 ここでは、2つのバンド幅を $t_0=0.5$、$t_1=1$ とし、密度-密度型の相互作用を $U'=U/2$、$J=U/4$ とした場合を、$U$ を $1.8$ から $2.8$ の間で変化させて考えます。$U=1.8$ では両方の軌道でフェルミ液体的な振る舞いが見られ、$U=2.2$ では軌道選択的になり、$U=2.8$ では両方の軌道が絶縁的になります。
 
-シミュレーションを実行するための python コマンドは [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py) にあります。
+シミュレーションを実行するための python コマンドは <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5a.py" data-filename="tutorial5a.py" target="_blank" rel="noopener">`tutorial5a.py`</a> にあります。
 
 ```
 import pyalps
@@ -190,7 +190,7 @@ plt.show()
 
 ### 収束の確認
 
-収束は [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py) で確認でき、フレーバー0とフレーバー2それぞれについて、$G_f^{it}(\tau)$ のすべての反復を対数スケールでプロットします。
+収束は <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5b.py" data-filename="tutorial5b.py" target="_blank" rel="noopener">`tutorial5b.py`</a> で確認でき、フレーバー0とフレーバー2それぞれについて、$G_f^{it}(\tau)$ のすべての反復を対数スケールでプロットします。
 
 ```
 import pyalps

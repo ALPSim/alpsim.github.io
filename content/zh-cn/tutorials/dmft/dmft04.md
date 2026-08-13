@@ -45,7 +45,7 @@ $$
 
 ### 运行模拟
 
-要用 python 运行模拟，请使用 [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py)：
+要用 python 运行模拟，请使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-04-mott/tutorial4a.py" data-filename="tutorial4a.py" target="_blank" rel="noopener">`tutorial4a.py`</a>：
 
 ```    
 import pyalps
@@ -184,7 +184,7 @@ plt.show()
 
 ### 检验收敛性
 
-可以使用 [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py) 来检验收敛性：
+可以使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-04-mott/tutorial4b.py" data-filename="tutorial4b.py" target="_blank" rel="noopener">`tutorial4b.py`</a> 来检验收敛性：
 
 ```
 import pyalps

@@ -43,7 +43,7 @@ $$
 
 ### 运行模拟
 
-Hirsch-Fye 模拟每次迭代大约需要 20 秒。本教程所需的文件可以在目录 `tutorials/dmft-07-hirschfye` 中找到。与教程 02、03 一样，你可以运行简短版脚本 [`tutorial7.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7.py)，它只重现 6 条曲线中的 2 条（运行时间：约 5 分钟）；也可以运行完整版脚本 [`tutorial7_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7_long.py)，它会重现全部 6 条曲线。
+Hirsch-Fye 模拟每次迭代大约需要 20 秒。本教程所需的文件可以在目录 `tutorials/dmft-07-hirschfye` 中找到。与教程 02、03 一样，你可以运行简短版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7.py" data-filename="tutorial7.py" target="_blank" rel="noopener">`tutorial7.py`</a>，它只重现 6 条曲线中的 2 条（运行时间：约 5 分钟）；也可以运行完整版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7_long.py" data-filename="tutorial7_long.py" target="_blank" rel="noopener">`tutorial7_long.py`</a>，它会重现全部 6 条曲线。
 
 ```
 import pyalps
@@ -165,7 +165,7 @@ Hirsch-Fye 的工作方式与 CT-HYB、CT-INT 截然不同：它将 $e^{-\beta \
 
 ### 输出数据与绘图
 
-用于结果分析，你可以借助 [DMFT-02 Hybridization](../dmft02) 中说明的 `tutorial2eval.py`，也可以使用与之结构相同的 [`tutorial7eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7eval.py)：它会绘制按迭代分辨的 $G(\tau)$、占据数 $n_0=-G_0(\tau=\beta^-)$ 随 $\beta$ 的变化，以及（通过 Dyson 方程得到的）松原频率下的格林函数与自能，针对两个味都会绘制。
+用于结果分析，你可以借助 [DMFT-02 Hybridization](../dmft02) 中说明的 `tutorial2eval.py`，也可以使用与之结构相同的 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7eval.py" data-filename="tutorial7eval.py" target="_blank" rel="noopener">`tutorial7eval.py`</a>：它会绘制按迭代分辨的 $G(\tau)$、占据数 $n_0=-G_0(\tau=\beta^-)$ 随 $\beta$ 的变化，以及（通过 Dyson 方程得到的）松原频率下的格林函数与自能，针对两个味都会绘制。
 
 ```
 import pyalps

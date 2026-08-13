@@ -43,7 +43,7 @@ $$
 
 ### 运行模拟
 
-本教程所需的文件可以在目录 `tutorials/dmft-03-interaction` 中找到。与教程 02 一样，你可以运行简短版脚本 [`tutorial3.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3.py)，它只重现 6 条曲线中的 2 条（运行时间：约 10 分钟）；也可以运行完整版脚本 [`tutorial3_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3_long.py)，它会重现全部 6 条曲线（运行时间：约 30 分钟）。在这一弱耦合区域中，CT-INT 达到同等统计精度所需时间比 CT-HYB 更短，因此这里的 `MAX_TIME` 被设置为每次迭代 10 秒，远低于教程 02 中的 300 秒。
+本教程所需的文件可以在目录 `tutorials/dmft-03-interaction` 中找到。与教程 02 一样，你可以运行简短版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3.py" data-filename="tutorial3.py" target="_blank" rel="noopener">`tutorial3.py`</a>，它只重现 6 条曲线中的 2 条（运行时间：约 10 分钟）；也可以运行完整版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3_long.py" data-filename="tutorial3_long.py" target="_blank" rel="noopener">`tutorial3_long.py`</a>，它会重现全部 6 条曲线（运行时间：约 30 分钟）。在这一弱耦合区域中，CT-INT 达到同等统计精度所需时间比 CT-HYB 更短，因此这里的 `MAX_TIME` 被设置为每次迭代 10 秒，远低于教程 02 中的 300 秒。
 
 ```
 import pyalps
@@ -151,7 +151,7 @@ CT-INT 与 CT-HYB 用不同的图形展开求解同一个杂质问题，比较�
 
 ### 输出数据与绘图
 
-结果的分析方式与 [DMFT-02 Hybridization](../dmft02) 完全相同，使用 [`tutorial3eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3eval.py)（结构与 `tutorial2eval.py` 相同）。首先是紧接在 `tutorial3.py` 之后、绘制两个味的虚时间格林函数的代码：
+结果的分析方式与 [DMFT-02 Hybridization](../dmft02) 完全相同，使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3eval.py" data-filename="tutorial3eval.py" target="_blank" rel="noopener">`tutorial3eval.py`</a>（结构与 `tutorial2eval.py` 相同）。首先是紧接在 `tutorial3.py` 之后、绘制两个味的虚时间格林函数的代码：
 
 ```
 listobs=['0', '1']   # we will plot both flavors 0 and 1
