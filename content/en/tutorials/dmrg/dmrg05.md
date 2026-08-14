@@ -75,7 +75,7 @@ $$E(S^z_{tot}=2) - E(S^z_{tot}=1) = \big[\text{edge} + \text{magnon}\big] - \big
 
 ### Running it
 
-The uniform chain needs no lattice file — `open chain lattice` with `local_S=1` is enough. The parameter file <a href="../codes/dmrg-05-local-observables/spin_one_uniform" download>`spin_one_uniform`</a> sets up three runs, one per sector:
+The uniform chain needs no lattice file — `open chain lattice` with `local_S=1` is enough. The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_uniform" data-filename="spin_one_uniform" target="_blank" rel="noopener">`spin_one_uniform`</a> sets up three runs, one per sector:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -94,7 +94,7 @@ The uniform chain needs no lattice file — `open chain lattice` with `local_S=1
     parameter2xml spin_one_uniform
     dmrg --write-xml spin_one_uniform.in.xml
 
-or equivalently from Python, with <a href="../codes/dmrg-05-local-observables/spin_one_uniform.py" download>`spin_one_uniform.py`</a>:
+or equivalently from Python, with <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_uniform.py" data-filename="spin_one_uniform.py" target="_blank" rel="noopener">`spin_one_uniform.py`</a>:
 
     import pyalps
     parms = []
@@ -176,7 +176,7 @@ Nothing about the bulk has changed: the Haldane gap, the correlation length and 
 
 ### Running it
 
-The capped chain does need a lattice file. <a href="../codes/dmrg-05-local-observables/build_lattice.py" download>`build_lattice.py`</a> writes an open
+The capped chain does need a lattice file. <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/build_lattice.py" data-filename="build_lattice.py" target="_blank" rel="noopener">`build_lattice.py`</a> writes an open
 chain whose two end vertices are given a separate type, so they can be assigned
 a different spin; pass it the **total** number of sites, i.e. two more than the
 number of spin-1 sites you want:
@@ -184,7 +184,7 @@ number of spin-1 sites you want:
     python build_lattice.py 66 > my_lattice.xml
 
 That gives 64 spin-1 sites with a spin-1/2 attached at each end. The parameter
-file <a href="../codes/dmrg-05-local-observables/spin_one_capped" download>`spin_one_capped`</a> is then the same as before apart from the lattice and the two local spins:
+file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_capped" data-filename="spin_one_capped" target="_blank" rel="noopener">`spin_one_capped`</a> is then the same as before apart from the lattice and the two local spins:
 
     LATTICE_LIBRARY="my_lattice.xml"
     LATTICE="open chain lattice with special edges"
@@ -204,7 +204,7 @@ file <a href="../codes/dmrg-05-local-observables/spin_one_capped" download>`spin
     parameter2xml spin_one_capped
     dmrg --write-xml spin_one_capped.in.xml
 
-or from Python, with <a href="../codes/dmrg-05-local-observables/spin_one_capped.py" download>`spin_one_capped.py`</a>:
+or from Python, with <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_capped.py" data-filename="spin_one_capped.py" target="_blank" rel="noopener">`spin_one_capped.py`</a>:
 
     import pyalps
     parms = []
@@ -262,7 +262,7 @@ Repeat a similar calculation for the spin-1/2 chain in the lowest magnetization 
 
 ### Using parameter files
 
-The following parameter file <a href="../codes/dmrg-05-local-observables/spin_one_half" download>`spin_one_half`</a> will accomplish this task:
+The following parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_half" data-filename="spin_one_half" target="_blank" rel="noopener">`spin_one_half`</a> will accomplish this task:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -282,7 +282,7 @@ The following parameter file <a href="../codes/dmrg-05-local-observables/spin_on
 
 ### Using Python
 
-Apart from the obvious parameter changes, the script <a href="../codes/dmrg-05-local-observables/spin_one_half.py" download>`spin_one_half.py`</a> is the same as the `spin_one_uniform` script explained above.
+Apart from the obvious parameter changes, the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_half.py" data-filename="spin_one_half.py" target="_blank" rel="noopener">`spin_one_half.py`</a> is the same as the `spin_one_uniform` script explained above.
 
 ## Summary
 

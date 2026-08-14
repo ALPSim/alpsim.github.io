@@ -63,7 +63,7 @@ The result is a power law at short distances, crossing over to a faster, in fact
 
 #### Using parameter files
 
-The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_half" download>`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). The example uses a chain of length $L=64$ at $D=100$, with one run in each of the three lowest magnetization sectors, and 6 sweeps. The correlations should come out symmetric:
+The following parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one_half" data-filename="spin_one_half" target="_blank" rel="noopener">`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). The example uses a chain of length $L=64$ at $D=100$, with one run in each of the three lowest magnetization sectors, and 6 sweeps. The correlations should come out symmetric:
 
     LATTICE="open chain lattice"
     MODEL="spin"
@@ -87,7 +87,7 @@ The following parameter file <a href="../codes/dmrg-06-correlations/spin_one_hal
 
 #### Using Python
 
-The script <a href="../codes/dmrg-06-correlations/spin_one_half.py" download>`spin_one_half.py`</a> sets up one run per magnetization sector and loads the results:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one_half.py" data-filename="spin_one_half.py" target="_blank" rel="noopener">`spin_one_half.py`</a> sets up one run per magnetization sector and loads the results:
 
     import pyalps
     import numpy as np
@@ -197,7 +197,7 @@ In fact, the calculation of correlation lengths is much harder to converge than 
 
 #### Using parameter files
 
-The parameter file <a href="../codes/dmrg-06-correlations/spin_one" download>`spin_one`</a> looks much like the one for the previous example, but replacing the lattice and the model as follows. As above, the run shown here uses a smaller system than the more realistic $L=192$ quoted earlier: the 64-site capped chain from the lattice library, at $D=100$.
+The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one" data-filename="spin_one" target="_blank" rel="noopener">`spin_one`</a> looks much like the one for the previous example, but replacing the lattice and the model as follows. As above, the run shown here uses a smaller system than the more realistic $L=192$ quoted earlier: the 64-site capped chain from the lattice library, at $D=100$.
 
     LATTICE_LIBRARY="my_lattices.xml"
     LATTICE="open chain lattice with special edges 64"
@@ -221,7 +221,7 @@ The parameter file <a href="../codes/dmrg-06-correlations/spin_one" download>`sp
 
 #### Using Python
 
-The main difference of the script <a href="../codes/dmrg-06-correlations/spin_one.py" download>`spin_one.py`</a> with respect to the previous one is the definition of lattice and model:
+The main difference of the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one.py" data-filename="spin_one.py" target="_blank" rel="noopener">`spin_one.py`</a> with respect to the previous one is the definition of lattice and model:
 
     parms = []
     L = 64
