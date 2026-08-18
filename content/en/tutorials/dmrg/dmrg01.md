@@ -5,7 +5,21 @@ math: true
 toc: true
 ---
 
-In this tutorial series we learn how to use the `dmrg` application, ALPS's implementation of the density-matrix renormalization group, to compute ground state energies, excitation gaps, local observables, and correlation functions of one-dimensional quantum spin chains. There is a single executable, `dmrg` (found in the `bin` directory of your ALPS installation), that is used throughout every module of this series; what changes from module to module is which control parameters and measurements you request from it, not the executable itself. This first module introduces the algorithm and its control parameters; the following modules put them to work on progressively more demanding measurements.
+In this tutorial series we learn how to use the `dmrg` application, ALPS's implementation of the density-matrix renormalization group (DMRG), to compute ground state energies, excitation gaps, local observables, and correlation functions of one-dimensional quantum spin chains. There is a single executable, `dmrg` (found in the `bin` directory of your ALPS installation), that is used throughout every module of this series; what changes from module to module is which control parameters and measurements you request from it. This first module introduces the algorithm and its control parameters; the following modules put them to work on progressively more demanding measurements.
+
+## Introduction to Renormalization
+
+The advent of the DMRG algorithm was, in many ways, messy, and it took many years for the physics community to understand why the truncation process worked so spectacularly well on a theoretical level. The inspiration for DMRG follows from a notoriously difficult, but powerful, subject in quantum field theory known as the renormalization group (RG). The basic prescription of RG goes as follows: When dealing with a physical system, it is possible to throw out degrees of freedom (DOF) that have little to no effect on the underlying physics of interest. That is, RG compresses the theory.
+
+For an illustrative example of this compression, take the following non-interacting spin chain:
+
+$$
+H=-h\sum_{i=1}^{L}\sigma_i^z,
+$$
+
+where $h$ is an external field in the $z$-direction and $L$ is the length of the chain. If we probe the system with an energy less than $4h$ above the ground state, we can only access the ground state and the first excited-state manifold, where the latter consists of states with a single spin flipped. Since there are $L$ ways to flip a single spin, there are only $L+1$ relevant states out of the total $2^L$ states in the entire Hilbert space at this energy scale. Wilsonian RG is similar in spirit to this scenario, since one integrates out shells of momentum from the action, which reduces the DOF. This corresponds, roughly, to removing high-energy modes.
+
+The success of this method led Wilson to try out the same sort of procedure in his numerics. The basic procedure was simple: diagonalize a Hamiltonian and drop the high-energy modes. This procedure was later coined Numerical Renormalization Group (NRG), and the approach worked beautifully for models like the Kondo impurity problem, but not so well when a system was highly correlated, like the Heisenberg chain. It took many years of trial and error to realize that certain systems separate nicely into distinct energy manifolds, while others do not. Skipping all the details, it was discovered that performing a truncation based on the reduced density matrix was the superior approach, since this more accurately accounted for other physics, like entanglement. We now describe the algorithm in more detail.
 
 ## General Remarks
 
