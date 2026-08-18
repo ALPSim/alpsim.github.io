@@ -57,7 +57,7 @@ $$
 | **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小系统给出精确结果；硬核约束被无额外代价地内置于局域希尔伯特空间中 | 仅限于小系统 | 小系统基准测试 |
 | **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维链和梯子高度精确 | 对真正的二维/三维系统效率较低 | 一维硬核玻色子链的基态 |
 
-目前没有以此模型命名的专门 ALPS 教程，但它正是贯穿 [ALPS 模型定义](../../intro/modeldef)各页面的示例模型，而 [Bose-Hubbard 模型](../bhm)的教程（MC-05、DWA-01、DWA-02）则在密切相关的有限 $U$ 模型上演示了同样的 worm 和有向 worm 方法。
+目前没有以此模型命名的专门 ALPS 教程，但它正是贯穿 [ALPS 模型定义](../../intro/modeldef)各页面的示例模型，而 [Bose-Hubbard 模型](../bhm)的教程（MC-05）则在密切相关的有限 $U$ 模型上演示了同样的 worm 方法。
 
 ---
 

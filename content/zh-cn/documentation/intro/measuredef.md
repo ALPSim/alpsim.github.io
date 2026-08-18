@@ -32,7 +32,6 @@ weight: 6
 | `loop`（loop / 有向环算法） | 完全支持 |
 | `worm`（[Worm 算法](../../methods/qmc/worm)） | 完全支持 |
 | `sse`、`sse2`、`sse4`（[随机级数展开](../../methods/qmc/sse)） | 完全支持 |
-| `dwa`（有向蠕虫算法） | 完全支持 |
 | `fulldiag`（完全对角化） | 完全支持 |
 | `dmrg`（[传统的单块 DMRG](../../methods/dmrg/dmrg)） | 完全支持 |
 | `sparsediag`（[稀疏 / Lanczos 对角化](../../methods/ed/sparsediag)） | 不支持 —— 只能得到模型本身内置的可观测量（能量、量子数） |
@@ -40,7 +39,7 @@ weight: 6
 | `checksign` | 不支持 |
 | `mps_optim`/`mps_meas`（矩阵乘积态 DMRG） | 有自己独立实现的、更丰富的语法 —— 见下文 |
 
-对于上表中标注为“完全支持”的程序（`loop`、`worm`、`sse`/`sse2`/`sse4`、`dwa`、`fulldiag`、`dmrg`），如果自定义的 `Name` 与程序内置的可观测量名称（例如 `Local Density`、`Spin Correlations`）冲突，该自定义测量会被静默跳过，而使用内置的那个，同时会在标准错误输出中给出提示 —— 因此请为自定义测量取一个不会重名的名字。
+对于上表中标注为“完全支持”的程序（`loop`、`worm`、`sse`/`sse2`/`sse4`、`fulldiag`、`dmrg`），如果自定义的 `Name` 与程序内置的可观测量名称（例如 `Local Density`、`Spin Correlations`）冲突，该自定义测量会被静默跳过，而使用内置的那个，同时会在标准错误输出中给出提示 —— 因此请为自定义测量取一个不会重名的名字。
 
 矩阵乘积态 DMRG 程序（`mps_optim`/`mps_meas`）完全没有使用本页描述的这套机制；它有自己独立实现的版本，同样接受含义相同的 `MEASURE_LOCAL`、`MEASURE_AVERAGE` 和 `MEASURE_CORRELATIONS`，此外还有若干 ALPS 中其他程序都没有的扩展：`MEASURE_HALF_CORRELATIONS`（与 `MEASURE_CORRELATIONS` 类似，但不交换算符的顺序）、`MEASURE_LOCAL_AT`（将一串算符作用在一组显式指定的任意格点上），以及若干布尔开关，如 `MEASURE[EnergyVariance]`、`MEASURE[Entropy]` 和 `MEASURE[Renyi2]`。
 

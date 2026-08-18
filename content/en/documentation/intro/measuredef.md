@@ -32,7 +32,6 @@ The `MEASURE_LOCAL`/`MEASURE_AVERAGE`/`MEASURE_CORRELATIONS`/`MEASURE_STRUCTURE_
 | `loop` (loop/directed-loop algorithm) | Full support |
 | `worm` ([Worm Algorithm](../../methods/qmc/worm)) | Full support |
 | `sse`, `sse2`, `sse4` ([Stochastic Series Expansion](../../methods/qmc/sse)) | Full support |
-| `dwa` (directed worm algorithm) | Full support |
 | `fulldiag` (full diagonalization) | Full support |
 | `dmrg` ([legacy single-block DMRG](../../methods/dmrg/dmrg)) | Full support |
 | `sparsediag` ([sparse/Lanczos diagonalization](../../methods/ed/sparsediag)) | Not supported — only the observables built into the model itself (energies, quantum numbers) are available |
@@ -40,7 +39,7 @@ The `MEASURE_LOCAL`/`MEASURE_AVERAGE`/`MEASURE_CORRELATIONS`/`MEASURE_STRUCTURE_
 | `checksign` | Not supported |
 | `mps_optim`/`mps_meas` (matrix-product-state DMRG) | Has its own, independently implemented and richer syntax — see below |
 
-For the codes marked "full support" above (`loop`, `worm`, `sse`/`sse2`/`sse4`, `dwa`, `fulldiag`, `dmrg`), a custom `Name` that collides with one of the code's built-in observable names (e.g. `Local Density`, `Spin Correlations`) is silently skipped in favor of the built-in one, with a note to standard error — so give your custom measurements distinctive names.
+For the codes marked "full support" above (`loop`, `worm`, `sse`/`sse2`/`sse4`, `fulldiag`, `dmrg`), a custom `Name` that collides with one of the code's built-in observable names (e.g. `Local Density`, `Spin Correlations`) is silently skipped in favor of the built-in one, with a note to standard error — so give your custom measurements distinctive names.
 
 The matrix-product-state DMRG code (`mps_optim`/`mps_meas`) does not use the mechanism described on this page at all; it has its own reimplementation that accepts `MEASURE_LOCAL`, `MEASURE_AVERAGE`, and `MEASURE_CORRELATIONS` with the same meaning as above, plus several extensions with no equivalent elsewhere in ALPS: `MEASURE_HALF_CORRELATIONS` (like `MEASURE_CORRELATIONS`, but without exchanging the order of operators), `MEASURE_LOCAL_AT` (apply a sequence of operators to an explicit, arbitrary tuple of sites), and boolean flags such as `MEASURE[EnergyVariance]`, `MEASURE[Entropy]`, and `MEASURE[Renyi2]`.
 

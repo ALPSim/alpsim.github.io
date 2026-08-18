@@ -51,7 +51,6 @@ $$
 | 方法 | 优点 | 局限性 | 应用 |
 |---|---|---|---|
 | **Worm 算法** —— 参见[Worm 算法](../../methods/qmc/worm) | 在任意维度下都没有符号问题；在包括巨正则系综在内的任意填充下都高效 | 仅限于没有符号问题的模型（本模型满足这一点） | 求解超流体-Mott 相变的参考方法；参见 [MC-05](../../../tutorials/mcs/mc05) |
-| **有向 Worm 算法** —— 参见 [DWA](../../methods/qmc/dwa) | 对陷阱中的非均匀系统（例如谐振阱）有高效的更新方式 | 该实现在当前 ALPS 中已被弃用，且仅限于在位相互作用 | 陷阱光学晶格系统中的密度分布；参见 [DWA-01](../../../tutorials/mcs/dwa/dwa01) 和 [DWA-02](../../../tutorials/mcs/dwa/dwa02) |
 | **随机级数展开** —— 参见 [SSE](../../methods/qmc/sse) | 无符号问题的有限温度算法，最初为自旋模型开发，后推广到玻色子 | 与其他 QMC 方法一样，仅限于无符号问题的模型（这里不构成实际限制） | Bose-Hubbard 模型的有限温度热力学 |
 | **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 在把每格点占据数截断为某个最大值 `Nmax` 后，对小系统给出精确结果 | 仅限于小型团簇和适中的 `Nmax` | 小系统基准测试 |
 | **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维链高度精确 | 对真正的二维/三维系统效率较低 | 一维 Bose-Hubbard 链的基态 |
@@ -59,8 +58,6 @@ $$
 无序系统可以用同一个 worm 程序来研究——参见[玻色玻璃](../../methods/qmc/boseglass)中给出的示例参数文件——而光学晶格本身的单粒子能带结构则在[光学晶格中的玻色子](../../methods/qmc/bhol)中讨论。
 
 - [MC-05：用 worm QMC 程序模拟 Bose-Hubbard 模型](../../../tutorials/mcs/mc05) —— 在单位填充的二维正方格子上定位超流体-Mott 相变
-- [DWA-01：使用有向 worm 的蒙特卡罗模拟](../../../tutorials/mcs/dwa/dwa01) —— 用有向 worm 算法重新考察同一个相变
-- [DWA-02：密度分布](../../../tutorials/mcs/dwa/dwa02) —— 谐振阱中玻色子的密度分布，可与真实的光学晶格实验直接比较
 
 ---
 

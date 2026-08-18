@@ -32,7 +32,6 @@ weight: 6
 | `loop`（ループ / ディレクテッドループアルゴリズム） | 完全サポート |
 | `worm`（[ワームアルゴリズム](../../methods/qmc/worm)） | 完全サポート |
 | `sse`、`sse2`、`sse4`（[確率級数展開](../../methods/qmc/sse)） | 完全サポート |
-| `dwa`（ディレクテッドワームアルゴリズム） | 完全サポート |
 | `fulldiag`（完全対角化） | 完全サポート |
 | `dmrg`（[従来の単一ブロック DMRG](../../methods/dmrg/dmrg)） | 完全サポート |
 | `sparsediag`（[疎行列 / Lanczos 対角化](../../methods/ed/sparsediag)） | 非サポート —— モデル自体に組み込まれた物理量（エネルギー、量子数）のみ取得可能 |
@@ -40,7 +39,7 @@ weight: 6
 | `checksign` | 非サポート |
 | `mps_optim`/`mps_meas`（行列積状態 DMRG） | 独自に実装された、より豊富な構文を持つ —— 詳細は後述 |
 
-上表で「完全サポート」と記載されているコード（`loop`、`worm`、`sse`/`sse2`/`sse4`、`dwa`、`fulldiag`、`dmrg`）については、指定した `Name` がそのコードに組み込みの観測量名（例: `Local Density`、`Spin Correlations`）と衝突する場合、独自の測定は黙って無視され、組み込みの測定が優先されます（標準エラー出力に注意メッセージが出力されます）。そのため、独自の測定には他と重複しない名前を付けてください。
+上表で「完全サポート」と記載されているコード（`loop`、`worm`、`sse`/`sse2`/`sse4`、`fulldiag`、`dmrg`）については、指定した `Name` がそのコードに組み込みの観測量名（例: `Local Density`、`Spin Correlations`）と衝突する場合、独自の測定は黙って無視され、組み込みの測定が優先されます（標準エラー出力に注意メッセージが出力されます）。そのため、独自の測定には他と重複しない名前を付けてください。
 
 行列積状態 DMRG コード（`mps_optim`/`mps_meas`）は、このページで説明した仕組みを一切使用していません。代わりに独自に実装されたバージョンを持ち、上記と同じ意味で `MEASURE_LOCAL`、`MEASURE_AVERAGE`、`MEASURE_CORRELATIONS` を受け付けるほか、ALPS の他のどこにも存在しないいくつかの拡張機能を備えています: `MEASURE_HALF_CORRELATIONS`（`MEASURE_CORRELATIONS` と同様ですが、演算子の順序を入れ替えません）、`MEASURE_LOCAL_AT`（明示的に指定した任意のサイトの組に対して演算子の列を作用させます）、そして `MEASURE[EnergyVariance]`、`MEASURE[Entropy]`、`MEASURE[Renyi2]` のような真偽値フラグです。
 
