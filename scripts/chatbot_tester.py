@@ -329,7 +329,7 @@ GEN_TESTS: list[GenTest] = [
         source="mc-01 tutorial (parm1a: Ising, square lattice, cluster updates)",
         desc="SpinMC generator uses cluster update and correct params",
     ),
-    # ── Bose-Hubbard (mc-05, dwa-01 tutorials) ───────────────────
+    # ── Bose-Hubbard (mc-05 tutorial) ───────────────────
     GenTest(
         func_name="genBHM",
         expected=[
