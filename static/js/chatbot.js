@@ -265,7 +265,7 @@
         '<li><code>NONLOCAL=0</code> — required flag</li>' +
         '<li><code>V</code> — optional nearest-neighbor repulsion</li>' +
         '</ul>' +
-        'App: <code>worm</code> (standard QMC) or <code>dwa</code> (directed worm algorithm)<br><br>' +
+        'App: <code>worm</code> (standard QMC)<br><br>' +
         '<strong>&#9313; Hard-core bosons</strong> — <code>MODEL="hardcore boson"</code><br>' +
         'Hopping-only Hamiltonian; occupancy is strictly 0 or 1 per site (no U parameter).<br>' +
         '<ul>' +
@@ -273,7 +273,7 @@
         '<li><code>mu</code> — chemical potential</li>' +
         '<li><code>V</code> — optional NN repulsion</li>' +
         '</ul>' +
-        'App: <code>worm</code> or <code>dwa</code><br><br>' +
+        'App: <code>worm</code><br><br>' +
         '<strong>Typical lattice:</strong> <code>square lattice</code> (2D superfluid&ndash;Mott), <code>chain lattice</code> (1D)<br>' +
         'Phase diagram: superfluid (large t/U) &#8596; Mott insulator (large U/t)<br><br>' +
         'Try: <em>"create Bose-Hubbard input L=4 W=4 U=1 t=0.05"</em> or ' +
@@ -553,8 +553,6 @@
                       'qmc with field', 'spin qmc magnetic field'],
     qwl:             ['qwl', 'quantum wang-landau', 'wang landau spin', 'wang-landau qmc'],
     qmc:             ['qmc'],
-    dwa:             ['dwa', 'directed worm', 'bose-hubbard dwa', 'boson hubbard dwa',
-                      'directed worm boson'],
     bhm:             ['boson hubbard', 'bose hubbard', 'bose-hubbard', 'bhm', 'bose hubbard model',
                       'boson qmc', 'bosonic qmc', 'worm boson', 'boson worm',
                       'hubbard qmc', 'qmc hubbard', 'hubbard worm', 'hubbard model qmc'],
@@ -602,7 +600,7 @@
     /* Check longer / more-specific keys first to avoid false partial matches.
        Boson models must be checked before fermion_hubbard. */
     var order = ['ladder_dmrg', 'ladder_ed', 'ladder_fulldiag', 'coupled_ladders', 'ladder',
-                 'hardcore_boson', 'dwa', 'bhm',
+                 'hardcore_boson', 'bhm',
                  'fermion_hubbard',
                  'tfim', 'xy_ed', 'xy_model',
                  'spinmc', 'dirloop', 'loop', 'qwl', 'qmc',
@@ -1213,7 +1211,7 @@
       latticeDiagram(lattice) +
       codeBlock(py,   'Python (pyalps)') +
       codeBlock(parm, 'Parameter file') +
-      '<small>App: <code>' + algo + '</code> — use <code>worm</code> (standard) or <code>dwa</code> (directed worm algorithm)</small>';
+      '<small>App: <code>' + algo + '</code> — the standard worm QMC code</small>';
   }
 
   function genHardcoreBoson(p, algo) {
@@ -2177,7 +2175,6 @@
     '<li><strong>xy model</strong> — XY / XXZ model QMC (loop) or ED; params: Jxy, Jz</li>' +
     '<li><strong>qwl</strong> — Quantum Wang-Landau; MODEL="spin"; full density of states</li>' +
     '<li><strong>bhm</strong> — Bose-Hubbard QMC (worm alg.); MODEL="boson Hubbard"; params: t, U, mu, Nmax</li>' +
-    '<li><strong>dwa</strong> — Directed Worm Algorithm; same as bhm but uses dwa app</li>' +
     '<li><strong>hardcore boson</strong> — Hard-core boson QMC (worm); MODEL="hardcore boson"; params: t, mu, V</li>' +
     '<li><strong>fermion hubbard</strong> — Fermion Hubbard; MODEL="fermion Hubbard"; params: t, U, mu, Nup, Ndown; app: dmrg/sparsediag</li>' +
     '<li><strong>ed</strong> — Exact Diagonalization (ground state); MODEL="spin"</li>' +
@@ -2215,7 +2212,6 @@
       case 'loop': case 'dirloop': case 'looper': case 'qmc': return genQMC(params);
       case 'qwl':                       return genQWL(params);
       case 'bhm':                       return genBHM(params, 'worm');
-      case 'dwa':                       return genBHM(params, 'dwa');
       case 'hardcore_boson':            return genHardcoreBoson(params, 'worm');
       case 'fermion_hubbard':           return genFermionHubbard(params);
       case 'ed':                        return genED(params);
@@ -2258,7 +2254,7 @@
           return 'No problem! Ask me anything else about ALPS.';
         }
         return 'I didn\'t recognise that method. Please choose from: ' +
-               'spinmc, qmc, qwl, tfim, "xy model", bhm, dwa, "hardcore boson", "fermion hubbard", ' +
+               'spinmc, qmc, qwl, tfim, "xy model", bhm, "hardcore boson", "fermion hubbard", ' +
                'ed, fulldiag, dmrg, mps, tebd, dmft, ' +
                '"ladder qmc", "ladder ed", "ladder dmrg", "coupled ladders". ' +
                'Or type "cancel" to go back.';
