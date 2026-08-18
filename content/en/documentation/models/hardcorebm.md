@@ -57,7 +57,7 @@ Because the model maps exactly onto a spin-1/2 Hamiltonian, every method applica
 | **ED** — see [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | Exact results for small systems; the hardcore constraint is built into the local Hilbert space at no extra cost | Limited to small systems | Small-system benchmarks |
 | **DMRG** — see [Density Matrix Renormalization Group](../../methods/dmrg/dmrg) | Highly accurate for 1D chains and ladders | Less efficient for genuinely 2D/3D systems | Ground states of 1D hardcore-boson chains |
 
-There is no dedicated ALPS tutorial for this model by name, but it is the worked example used throughout the [ALPS Model Definitions](../../intro/modeldef) pages, and the [Bose-Hubbard Model](../bhm) tutorials (MC-05, DWA-01, DWA-02) illustrate the same worm and directed-worm methods on the closely related finite-$U$ model.
+There is no dedicated ALPS tutorial for this model by name, but it is the worked example used throughout the [ALPS Model Definitions](../../intro/modeldef) pages, and the [Bose-Hubbard Model](../bhm) tutorial (MC-05) illustrates the same worm method on the closely related finite-$U$ model.
 
 ---
 
