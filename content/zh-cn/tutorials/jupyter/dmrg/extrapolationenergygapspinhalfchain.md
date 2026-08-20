@@ -34,7 +34,7 @@ $$
 
 ```
    J     J     J             J
-o-----o-----o-----o-- ... --o     (L = 32, 64, 96, or 128 sites, open boundary conditions)
+o-----o-----o-----o-- ... --o     （L = 32、64、96 或 128 个格点，开放边界条件）
 ```
 
 与单一尺寸能隙教程中使用的`open chain lattice`相同，这里在四种长度下重复计算，以便将有限尺寸能隙外推到$L\to\infty$。其他内置晶格请参见[ALPS晶格库](../../../documentation/intro/latticehowtos)。

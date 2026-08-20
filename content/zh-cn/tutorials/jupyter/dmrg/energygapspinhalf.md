@@ -37,7 +37,7 @@ $$
 
 ```
    J     J     J             J
-o-----o-----o-----o-- ... --o     (32 sites, open boundary conditions)
+o-----o-----o-----o-- ... --o     （32 个格点，开放边界条件）
 ```
 
 之所以使用开链而不是周期链，是因为在保留态数`MAXSTATES`固定的情况下，DMRG在开边界条件下的精度最高，这也是一维DMRG计算的标准做法。有关其他内置晶格，请参见[ALPS晶格库](../../../documentation/intro/latticehowtos)。

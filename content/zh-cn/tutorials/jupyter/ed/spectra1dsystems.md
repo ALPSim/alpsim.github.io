@@ -34,7 +34,7 @@ $$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
 **晶格：**
 ```
    J     J     J           J
-o-----o-----o-----o-- ... --o     (periodic chain, L sites, coupling J on every bond)
+o-----o-----o-----o-- ... --o     （周期链，L 个格点，每条键上的耦合为 J）
 ```
 
 **方法选择：** 希尔伯特空间的维数为 $2^L$，例如在最大尺寸时 $2^{16}=65536$——这个规模足够小，使得 `sparsediag` 的 Lanczos 算法能够在几秒钟内求出每个 $(S_z, P)$ 区间内完整的低能谱。
@@ -133,11 +133,11 @@ $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \m
 
 **晶格：**
 ```
-o--J0--o--J0--o    (leg 1)
+o--J0--o--J0--o    （第 1 条腿）
 |      |      |
 J1     J1     J1
 |      |      |
-o--J0--o--J0--o    (leg 2, L rungs total)
+o--J0--o--J0--o    （第 2 条腿，共 L 个横档）
 ```
 
 **方法选择：** 梯子共有 $2L$ 个格点，因此希尔伯特空间维数为 $2^{2L}$——在 $L=10$ 时 $2^{20}\approx10^6$——在施加 $S_z=0$ 限制之后，这仍然完全在 `sparsediag` 的 Lanczos 求解器能力范围之内。
@@ -237,7 +237,7 @@ $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \m
 ```
 o      o      o
 |      |      |
-J1     J1     J1     (J0 = 0: no leg bonds → L independent dimers)
+J1     J1     J1     （J0 = 0：无腿间键 → L 个独立二聚体）
 |      |      |
 o      o      o
 ```

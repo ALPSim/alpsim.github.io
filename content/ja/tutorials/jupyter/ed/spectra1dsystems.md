@@ -34,7 +34,7 @@ $$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
 **格子：**
 ```
    J     J     J           J
-o-----o-----o-----o-- ... --o     (periodic chain, L sites, coupling J on every bond)
+o-----o-----o-----o-- ... --o     （周期鎖、L サイト、各ボンドの結合は J）
 ```
 
 **手法の選択：** ヒルベルト空間の次元は $2^L$ であり、最大サイズでは $2^{16}=65536$ となります——これは十分小さく、`sparsediag` のランチョス法があらゆる $(S_z, P)$ セクターの完全な低エネルギースペクトルを数秒で求めることができます。
@@ -133,11 +133,11 @@ $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \m
 
 **格子：**
 ```
-o--J0--o--J0--o    (leg 1)
+o--J0--o--J0--o    （第 1 レッグ）
 |      |      |
 J1     J1     J1
 |      |      |
-o--J0--o--J0--o    (leg 2, L rungs total)
+o--J0--o--J0--o    （第 2 レッグ、全 L ラング）
 ```
 
 **手法の選択：** 梯子は $2L$ 個のサイトを持つため、ヒルベルト空間の次元は $2^{2L}$ となり、$L=10$ では $2^{20}\approx10^6$ になります——$S_z=0$ の制限を適用すれば、これは依然として `sparsediag` のランチョス法の求解可能な範囲内です。
@@ -237,7 +237,7 @@ $$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \m
 ```
 o      o      o
 |      |      |
-J1     J1     J1     (J0 = 0: no leg bonds → L independent dimers)
+J1     J1     J1     （J0 = 0：レッグ間ボンドなし → L 個の独立した二量体）
 |      |      |
 o      o      o
 ```

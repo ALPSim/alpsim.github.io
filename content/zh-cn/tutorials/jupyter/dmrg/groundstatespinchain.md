@@ -34,7 +34,7 @@ DMRG方法本身由[S.R. White, Physical Review Letters 69, 2863-2866 (1992)](ht
 
 ```
    J     J     J             J
-o-----o-----o-----o-- ... --o     (32 sites, open boundary conditions)
+o-----o-----o-----o-- ... --o     （32 个格点，开放边界条件）
 ```
 
 一条由32个格点组成的`open chain lattice`——这是验证新DMRG设置是否正确收敛的标准、最简单的测试用例，之后才会用于更复杂的计算。其他内置晶格请参见[ALPS晶格库](../../../documentation/intro/latticehowtos)。

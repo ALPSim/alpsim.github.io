@@ -31,7 +31,7 @@ cascade:
 
 ## 动力学平均场理论
 
-- [Bethe 晶格上 Hubbard 模型的 DMFT 计算](dmft/dmftbethehubbard) <a href = "/codes/dmft/dmftBetheHubbard.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [贝特晶格上哈伯德模型的 DMFT 计算](dmft/dmftbethehubbard) <a href = "/codes/dmft/dmftBetheHubbard.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
 ## 量子计算
 

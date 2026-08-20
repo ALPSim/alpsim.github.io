@@ -34,7 +34,7 @@ $$
 
 ```
    J     J     J             J
-o-----o-----o-----o-- ... --o     (L = 32, 64, 96, or 128 sites, open boundary conditions)
+o-----o-----o-----o-- ... --o     （L = 32、64、96 または 128 サイト、開放境界条件）
 ```
 
 単一サイズのギャップに関するチュートリアルと同じ`open chain lattice`を用い、有限サイズのギャップを$L\to\infty$へ外挿できるように4つの長さで繰り返し計算します。その他の組み込み格子については[ALPS格子ライブラリ](../../../documentation/intro/latticehowtos)を参照してください。

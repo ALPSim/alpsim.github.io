@@ -34,7 +34,7 @@ DMRG自体は[S.R. White, Physical Review Letters 69, 2863-2866 (1992)](https://
 
 ```
    J     J     J             J
-o-----o-----o-----o-- ... --o     (32 sites, open boundary conditions)
+o-----o-----o-----o-- ... --o     （32 サイト、開放境界条件）
 ```
 
 32サイトの`open chain lattice`——これは、新しいDMRGの設定がより複雑な計算に用いる前に正しく収束することを確認するための、標準的かつ最も単純なテストケースです。他の組み込み格子については[ALPS格子ライブラリ](../../../documentation/intro/latticehowtos)を参照してください。

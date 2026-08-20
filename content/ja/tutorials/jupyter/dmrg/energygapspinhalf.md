@@ -37,7 +37,7 @@ $$
 
 ```
    J     J     J             J
-o-----o-----o-----o-- ... --o     (32 sites, open boundary conditions)
+o-----o-----o-----o-- ... --o     （32 サイト、開放境界条件）
 ```
 
 周期境界ではなく開放鎖を用いるのは、保持する状態数`MAXSTATES`を固定した場合、DMRGの精度は開放境界において最も高くなるためであり、これは1次元DMRG計算における標準的な手法です。その他の組み込み格子については、[ALPS格子ライブラリ](../../../documentation/intro/latticehowtos)を参照してください。
