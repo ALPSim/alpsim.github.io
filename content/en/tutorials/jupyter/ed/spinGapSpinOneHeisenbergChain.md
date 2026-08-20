@@ -41,15 +41,17 @@ The Heisenberg exchange Hamiltonian was introduced by [W. Heisenberg, Zeitschrif
 
 ### Lattice
 
-The `chain lattice` is a 1D open chain of `L` spin-1 sites coupled by nearest-neighbour exchange $J$:
+The `chain lattice` is a 1D **periodic** ring of `L` spin-1 sites coupled by nearest-neighbour exchange $J$:
 
 ```
-   J       J       J             J
-o-----o-----o-----o--- ... ---o
-S=1  S=1   S=1   S=1           S=1   (L sites, open boundary conditions)
+ S=1     S=1     S=1           S=1
+  o---J---o---J---o--- ... ---o
+  |                           |
+  +----------- J -------------+
+        (periodic ring, L sites)
 ```
 
-An open chain lets `sparsediag` restrict each simulation to a single `Sz_total` sector, which is what makes the singlet/triplet gap calculation below possible. See the [ALPS lattice library](../../../documentation/intro/latticehowtos) for other built-in lattices.
+The bond from the last site back to the first closes the ring. Periodic boundaries matter for this particular calculation: an *open* spin-1 chain carries effective $S=1/2$ spins localized at its two ends, and the near-degenerate edge states they produce sit inside the bulk gap, so the measured singlet/triplet splitting on an open chain is an edge excitation rather than the Haldane gap. Closing the chain into a ring removes the ends entirely, so the gap extracted below is the bulk gap that the extrapolation is after. See the [ALPS lattice library](../../../documentation/intro/latticehowtos) for other built-in lattices, including `open chain lattice`.
 
 ### Method Choice
 

@@ -38,7 +38,7 @@ Same `open chain lattice` as the single-size spin-1 gap tutorial, repeated at fo
 
 ### Method Choice
 
-The untruncated Hilbert space at $L=128$ is $3^{128}\approx3\times10^{61}$, making DMRG the only tractable method. Because the ground state is a near-degenerate doublet, `NUMBER_EIGENVALUES=4` is requested (not 2) so that both the ground-state doublet and the first-excited doublet are resolved in the same run — and, as the results below show, a fixed `SWEEPS=5` that works at smaller $L$ is not automatically enough to converge that doublet cleanly as $L$ grows.
+The untruncated Hilbert space at $L=128$ is $3^{128}\approx3\times10^{61}$, making DMRG the only tractable method. Because these runs are restricted to `Sz_total = 0`, where the open chain's four-state edge manifold shows up as a near-degenerate pair, `NUMBER_EIGENVALUES=4` is requested (not 2) so that both that pair and the first-excited pair are resolved in the same run — and, as the results below show, a fixed `SWEEPS=5` that works at smaller $L$ is not automatically enough to converge that doublet cleanly as $L$ grows.
 
 We first import the necessary libraries.
 
@@ -71,7 +71,7 @@ for lattice in [32, 64, 96, 128]:
         })
 ```
 
-Note that we will keep the lowest 4 energies in each DMRG run, since the ground state has 2-fold degeneracy, as known from the previous tutorial.
+Note that we will keep the lowest 4 energies in each DMRG run, since the `Sz_total = 0` sector contains two near-degenerate edge states, as known from the previous tutorial.
 
 We then write the input files and run the simulations. Warning: the simulation will take a while (about 20 - 30 minutes depending on the computer system you have). You can leave it running and come back later!
 

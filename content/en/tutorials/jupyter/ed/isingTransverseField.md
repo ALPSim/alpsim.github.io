@@ -53,15 +53,17 @@ With `Jz=-1` and `Gamma=0.5`, $\Gamma/J=0.5$, which is exactly the critical poin
 
 ### Lattice
 
-The `chain lattice` is a 1D open chain of `L` sites, with the Ising coupling $J_z$ living on the bonds and the transverse field $\Gamma$ acting on each site:
+The `chain lattice` is a 1D **periodic** ring of `L` sites, with the Ising coupling $J_z$ living on the bonds and the transverse field $\Gamma$ acting on each site:
 
 ```
-Γ   Γ   Γ   Γ         Γ
-o---o---o---o--- ... ---o
-  Jz  Jz  Jz              (L sites, open boundary conditions)
+ Γ       Γ       Γ             Γ
+ o--Jz---o--Jz---o--- ... ---o
+ |                            |
+ +------------ Jz ------------+
+        (periodic ring, L sites)
 ```
 
-An open chain is used (rather than a ring) because `sparsediag` exploits translational symmetry for periodic lattices differently, and the two finite sizes $L=10,12$ studied here are small enough that boundary effects are a minor correction to the bulk CFT spectrum. See the [ALPS lattice library](../../../documentation/intro/latticehowtos) for the full list of built-in lattices, including periodic variants.
+The ring closes on itself: the bond from the last site back to the first is what makes the lattice periodic. This is the right choice here for two reasons. Periodic boundaries preserve translational symmetry, so each eigenstate carries a well-defined lattice momentum — that is exactly the `TOTAL_MOMENTUM` quantum number the spectrum is plotted against below. They also have no open ends, so there are no edge states to contaminate the bulk conformal spectrum, and finite-size corrections to the CFT scaling dimensions fall off faster than they would on an open chain. If you want open boundaries instead, ALPS provides `open chain lattice`; see the [ALPS lattice library](../../../documentation/intro/latticehowtos) for the full list of built-in lattices.
 
 ### Method Choice
 
