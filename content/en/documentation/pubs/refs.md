@@ -218,13 +218,12 @@ E. Gull, A. J. Millis, A. I. Lichtenstein, A. N. Rubtsov, M. Troyer, and P. Wern
 
 **Implementation papers**
 
-M. Dolfi, B. Bauer, S. Keller, A. Kosenkov, T. Ewart, A. Kantian, T. Giamarchi, and M. Troyer, *Matrix product state applications for the ALPS project*, Comput. Phys. Commun. **185**, 3430 (2014).
+A. E. Feiguin, *The Density Matrix Renormalization Group*. In: A. Avella and F. Mancini (eds.), *Strongly Correlated Systems*, Springer Series in Solid-State Sciences **176**, 31–65 (2013).
 
 <div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1016/j.cpc.2014.08.019" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/1407.0872" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1016/j.cpc.2014.08.019" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/dolfi2014.bib" icon="format_quote" >}}
+{{< cta-button text="Chapter" link="https://doi.org/10.1007/978-3-642-35106-8_2" icon="article" >}}
+{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1007/978-3-642-35106-8_2" icon="manage_search" >}}
+{{< cta-button text="BibTeX" link="/data/feiguin2013.bib" icon="format_quote" >}}
 </div>
 
 **Algorithm papers**
@@ -261,40 +260,4 @@ K. Hallberg, *New Trends in Density Matrix Renormalization*, Adv. Phys. **55**, 
 {{< cta-button text="arXiv" link="https://arxiv.org/abs/cond-mat/0609039" icon="science" >}}
 {{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1080/00018730600766432" icon="manage_search" >}}
 {{< cta-button text="BibTeX" link="/data/hallberg2006.bib" icon="format_quote" >}}
-</div>
-
-G. Vidal, *Efficient Simulation of One-Dimensional Quantum Many-Body Systems*, Phys. Rev. Lett. **93**, 040502 (2004).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1103/PhysRevLett.93.040502" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/quant-ph/0310089" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1103/PhysRevLett.93.040502" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/vidal2004.bib" icon="format_quote" >}}
-</div>
-
-S. R. White and A. E. Feiguin, *Real-Time Evolution Using the Density Matrix Renormalization Group*, Phys. Rev. Lett. **93**, 076401 (2004).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1103/PhysRevLett.93.076401" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/cond-mat/0403310" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1103/PhysRevLett.93.076401" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/white2004.bib" icon="format_quote" >}}
-</div>
-
-A. J. Daley, C. Kollath, U. Schollwöck, and G. Vidal, *Time-dependent density-matrix renormalization-group using adaptive effective Hilbert spaces*, J. Stat. Mech. P04005 (2004).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1088/1742-5468/2004/04/P04005" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/cond-mat/0403313" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1088/1742-5468/2004/04/P04005" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/daley2004.bib" icon="format_quote" >}}
-</div>
-
-U. Schollwöck, *The density-matrix renormalization group in the age of matrix product states*, Ann. Phys. **326**, 96 (2011).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1016/j.aop.2010.09.012" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/1008.3477" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1016/j.aop.2010.09.012" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/schollwock2011.bib" icon="format_quote" >}}
 </div>
