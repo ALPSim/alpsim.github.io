@@ -11,17 +11,38 @@ cascade:
 このチュートリアルでは、疎行列対角化プログラム（Lanczosアルゴリズム）を用いて、さまざまな格子サイズ（$L=4, 6, 8$、および10）における1次元スピン1ハイゼンベルク鎖のエネルギーギャップを計算する方法を学びます。得られた有限格子のギャップは、熱力学極限（$L=\infty$）におけるエネルギーギャップを外挿するために用いられます。
 
 スピン1ハイゼンベルク鎖のハミルトニアンは次のように与えられます。
-$$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
+
+$$
+H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j,
+$$
+
 ここで、最近接スピン $\mathbf{S}^i$ と $\mathbf{S}^j$ の間の反強磁性的相互作用に対して $J>0$ であり、スピン間相互作用は次のように3つの成分から構成されます。
-$$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
+
+$$
+\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z.
+$$
 
 基底状態は通常、$S_z$ 演算子の固有状態として選ばれます。スピン1系の場合、各格子サイトに対して3つの基底状態、$|-1\rangle$、$|0\rangle$、$|+1\rangle$ が存在します。これらの基底状態への $S_x$ および $S_y$ 演算子の作用は、昇降演算子 $S^{\dagger}$ と $S^{-}$ を用いて次のように表せます。
-$$S_x=\frac{1}{2}(S^{\dagger}+S^{-})$$,
-$$S_y=\frac{1}{2i}(S^{\dagger}-S^{-})$$, 
+
+$$
+S_x=\frac{1}{2}(S^{\dagger}+S^{-}),
+$$
+
+$$
+S_y=\frac{1}{2i}(S^{\dagger}-S^{-}),
+$$
+
 これらは基底状態に対して次のように作用します。
-$$S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle$$,
-$$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
-ここで $S=1/2$、$s=-S, -S+1$ です。
+
+$$
+S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle,
+$$
+
+$$
+S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle,
+$$
+
+ここで $S=1$、$s=-1, 0, +1$ です。
 
 各格子サイトについて上記の基底状態を用いると、ハミルトニアンはエルミート行列として書くことができます。全磁化を固定する、すなわちシミュレーションにおいて Sz_total = 0（一重項セクター）または Sz_total = 1（三重項セクター）に設定することで、行列のサイズを縮小できます。
 
@@ -59,7 +80,6 @@ $$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
 
 まず、必要なモジュールをインポートします。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -69,7 +89,6 @@ import pyalps.fit_wrapper as fw
 ```
 
 次に、入力ファイルをPython辞書のリストとして準備します。
-
 
 ```python
 parms = []
@@ -91,22 +110,18 @@ for l in [4, 6, 8, 10, 12, 14]:
 
 入力ファイルを書き出し、シミュレーションを実行します。
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm2a',parms)
 res = pyalps.runApplication('sparsediag',input_file) #, MPI=4)
 ```
 
-
 次に、各システムサイズおよびスピンセクターのスペクトルを読み込みます。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm2a'))
 ```
 
 ギャップを抽出するために、いくつかの長さのリストと、各 (L,Sz) セクターにおける最小エネルギーを格納するPython辞書を作成する必要があります。
-
 
 ```python
 lengths = []
@@ -124,7 +139,6 @@ for sim in data:
 
 最後に、ギャップを 1/L の関数としてプロットし、その図を表示します。
 
-
 ```python
 gapplot = pyalps.DataSet()
 gapplot.x = 1./np.sort(lengths)
@@ -141,9 +155,7 @@ plt.xlim(0,0.25)
 plt.ylim(0,1.0)
 ```
 
-
 次に、L=8 から L=14 の範囲のデータをフィッティングし、熱力学極限（$L\rightarrow \infty$、すなわち $1/L\rightarrow 0$）におけるギャップを求めます。
-
 
 ```python
 pars = [fw.Parameter(0.411), fw.Parameter(1000), fw.Parameter(1)]

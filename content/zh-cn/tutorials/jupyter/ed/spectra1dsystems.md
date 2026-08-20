@@ -15,16 +15,37 @@ cascade:
 #### 引言
 
 自旋-1/2 海森堡链的哈密顿量最早由 [W. Heisenberg, Zeitschrift für Physik 49, 619-636 (1928)](https://doi.org/10.1007/BF01328601) 提出，其形式为 
-$$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
+
+$$
+H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j,
+$$
+
 其中 $J>0$ 对应于最近邻自旋 $\mathbf{S}^i$ 与 $\mathbf{S}^j$ 之间的反铁磁相互作用，自旋-自旋相互作用由三个分量组成，即 
-$$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
+
+$$
+\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z.
+$$
 
 基矢通常选取为 $S_z$ 算符的本征态。对于自旋-1/2 系统，每个晶格格点有两个基矢，$|-1/2\rangle$ 和 $|+1/2\rangle$。$S_x$ 和 $S_y$ 算符作用在这些基矢上的效果可以用升算符 $S^{\dagger}$ 和降算符 $S^{-}$ 表示：
-$$S_x=\frac{1}{2}(S^{\dagger}+S^{-})$$,
-$$S_y=\frac{1}{2i}(S^{\dagger}-S^{-})$$, 
+
+$$
+S_x=\frac{1}{2}(S^{\dagger}+S^{-}),
+$$
+
+$$
+S_y=\frac{1}{2i}(S^{\dagger}-S^{-}),
+$$
+
 它们作用在基矢上的方式如下：
-$$S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle$$,
-$$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
+
+$$
+S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle,
+$$
+
+$$
+S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle,
+$$
+
 其中 $S=1/2$，$s=-1/2, 1/2$。
 
 利用上述每个晶格格点的基矢，哈密顿量可以写成一个厄米矩阵。当固定总磁化强度时，矩阵的规模可以被缩小，即在模拟中设置 Sz_total = 0（单重态区间）或 Sz_total = 1（三重态区间）。为了进一步缩小哈密顿量矩阵的规模并得到能谱的动量依赖关系，我们可以进一步将模拟限制在不同的晶格动量区间 $P=0, 1, 2, \cdots$ 中。 
@@ -45,7 +66,6 @@ o-----o-----o-----o-- ... --o     （周期链，L 个格点，每条键上的�
 
 我们首先导入所需的模块。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -54,7 +74,6 @@ import pyalps.plot
 ```
 
 为 4 种不同的晶格尺寸准备输入参数：$L=10, 12, 14$ 和 $16$。
-
 
 ```python
 parms=[]
@@ -74,15 +93,12 @@ for l in [10, 12, 14, 16]:
 
 写入输入文件并运行模拟。
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm_chain',parms)
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-
 加载所有态的所有测量结果，并收集每次模拟在所有动量下的能谱。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_chain'))
@@ -103,7 +119,6 @@ for sim in data:
 ```
 
 绘制能量-动量谱。
-
 
 ```python
 plt.pyplot.figure()
@@ -126,7 +141,11 @@ plt.pyplot.show()
 #### 引言
 
 双腿自旋-1/2 海森堡链的哈密顿量为 
-$$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
+
+$$
+H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i},
+$$
+
 其中，$\alpha=1,2$ 表示两条腿/链，$i,j=1,2,\cdots,L$ 标记链内的晶格格点，$J_0>0$ 是同一条链内最近邻自旋 $\mathbf{S}^{\alpha i}$ 与 $\mathbf{S}^{\alpha j}$ 之间的链内反铁磁相互作用，$J_1>0$ 是第一条腿的 $\mathbf{S}^{1 i}$ 与第二条腿的 $\mathbf{S}^{2 i}$（$i=1,2,\cdots,L$）之间的链间自旋-自旋耦合。 
 
 **参数：** `LATTICE="ladder"`、`MODEL="spin"`、`local_S=0.5`、`J0=1`、`J1=1`、`CONSERVED_QUANTUMNUMBERS="Sz"`、`Sz_total=0`，以及 `L=6,8,10`。
@@ -146,7 +165,6 @@ o--J0--o--J0--o    （第 2 条腿，共 L 个横档）
 
 我们首先导入所需的模块。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -155,7 +173,6 @@ import pyalps.plot
 ```
 
 通过设置链内和链间相互作用 J0 和 J1 的值，以及链长 L=6、8 和 10，准备输入参数。
-
 
 ```python
 parms=[]
@@ -177,15 +194,12 @@ for l in [6, 8, 10]:
 
 写入输入文件并运行模拟
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm_ladder',parms)
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-
 加载所有态的所有测量结果，并收集每次模拟在所有动量下的能谱。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_ladder'))
@@ -207,7 +221,6 @@ for sim in data:
 
 绘制能谱。
 
-
 ```python
 plt.pyplot.figure()
 pyalps.plot.plot(spectra.values())
@@ -228,7 +241,11 @@ plt.pyplot.show()
 #### 引言
 
 在第三个模拟中，我们从与前一情形相同的哈密顿量出发
-$$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
+
+$$
+H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i},
+$$
+
 其中，$\alpha=1,2$ 表示两条腿/链，$i,j=1,2,\cdots,L$ 标记链内的晶格格点，我们设定 $J_0=0$，即最近邻自旋之间没有链内相互作用，而 $J_1=1$ 是 $\mathbf{S}^{1 i}$ 与 $\mathbf{S}^{2 i}$（$i=1,2,\cdots,L$）之间的链间自旋-自旋耦合。此时系统变为 $L$ 个孤立的二聚体。 
 
 **参数：** 与上文相同的 `ladder` 晶格和 `spin` 模型，但设定 `J0=0`（两腿解耦）和 `J1=1`，`L=6,8,10`。
@@ -248,7 +265,6 @@ o      o      o
 
 我们首先导入所需的模块。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -257,7 +273,6 @@ import pyalps.plot
 ```
 
 准备输入参数。
-
 
 ```python
 parms=[]
@@ -278,22 +293,18 @@ for l in [6, 8, 10]:
 
 写入输入文件并运行模拟。
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm_dimers',parms)
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-
 加载所有态的所有测量结果。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_dimers'))
 ```
 
 收集每次模拟在所有动量下的能谱。
-
 
 ```python
 spectra = {}
@@ -313,7 +324,6 @@ for sim in data:
 ```
 
 然后我们绘制能谱。
-
 
 ```python
 plt.pyplot.figure()

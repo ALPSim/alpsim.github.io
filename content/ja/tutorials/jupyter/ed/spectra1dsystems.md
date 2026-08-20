@@ -15,16 +15,37 @@ cascade:
 #### はじめに
 
 スピン1/2ハイゼンベルグ鎖のハミルトニアンは、[W. Heisenberg, Zeitschrift für Physik 49, 619-636 (1928)](https://doi.org/10.1007/BF01328601) によって最初に導入され、次式で与えられます。
-$$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
+
+$$
+H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j,
+$$
+
 ここで、$J>0$ は最近接スピン $\mathbf{S}^i$ と $\mathbf{S}^j$ の間の反強磁性相互作用に対応し、スピン間相互作用は次の3つの成分から構成されます。
-$$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
+
+$$
+\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z.
+$$
 
 基底ベクトルとして通常選ばれるのは $S_z$ 演算子の固有状態です。スピン1/2系の場合、各格子サイトには $|-1/2\rangle$ と $|+1/2\rangle$ という2つの基底ベクトルがあります。これらの基底ベクトルに対する $S_x$ と $S_y$ 演算子の作用は、上昇演算子 $S^{\dagger}$ と下降演算子 $S^{-}$ を用いて次のように表すことができます。
-$$S_x=\frac{1}{2}(S^{\dagger}+S^{-})$$,
-$$S_y=\frac{1}{2i}(S^{\dagger}-S^{-})$$, 
+
+$$
+S_x=\frac{1}{2}(S^{\dagger}+S^{-}),
+$$
+
+$$
+S_y=\frac{1}{2i}(S^{\dagger}-S^{-}),
+$$
+
 これらは基底ベクトルに対して次のように作用します。
-$$S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle$$,
-$$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
+
+$$
+S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle,
+$$
+
+$$
+S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle,
+$$
+
 ここで、$S=1/2$、$s=-1/2, 1/2$ です。
 
 各格子サイトについての上記の基底ベクトルを用いると、ハミルトニアンはエルミート行列として表すことができます。全磁化を固定する、すなわちシミュレーションにおいて Sz_total = 0（一重項セクター）または Sz_total = 1（三重項セクター）と設定することで、行列のサイズを縮小することができます。ハミルトニアン行列のサイズをさらに縮小し、エネルギースペクトルの運動量依存性を得るために、シミュレーションを異なる格子運動量セクター $P=0, 1, 2, \cdots$ にさらに制限することができます。 
@@ -45,7 +66,6 @@ o-----o-----o-----o-- ... --o     （周期鎖、L サイト、各ボンドの�
 
 まず、必要なモジュールをインポートします。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -54,7 +74,6 @@ import pyalps.plot
 ```
 
 4種類の異なる格子サイズ $L=10, 12, 14$、および $16$ に対して入力パラメータを準備します。
-
 
 ```python
 parms=[]
@@ -74,15 +93,12 @@ for l in [10, 12, 14, 16]:
 
 入力ファイルを書き込み、シミュレーションを実行します。
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm_chain',parms)
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-
 全ての状態の全ての測定結果を読み込み、各シミュレーションについて全ての運動量にわたるスペクトルを収集します。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_chain'))
@@ -103,7 +119,6 @@ for sim in data:
 ```
 
 エネルギー対運動量のスペクトルをプロットします。
-
 
 ```python
 plt.pyplot.figure()
@@ -126,7 +141,11 @@ plt.pyplot.show()
 #### はじめに
 
 二本足スピン1/2ハイゼンベルグ鎖のハミルトニアンは次式で与えられます。
-$$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
+
+$$
+H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i},
+$$
+
 ここで、$\alpha=1,2$ は2本の足（鎖）を表し、$i,j=1,2,\cdots,L$ は鎖内の格子サイトを示します。$J_0>0$ は同じ鎖内の最近接スピン $\mathbf{S}^{\alpha i}$ と $\mathbf{S}^{\alpha j}$ の間の鎖内反強磁性相互作用であり、$J_1>0$ は最初の足の $\mathbf{S}^{1 i}$ と2番目の足の $\mathbf{S}^{2 i}$（$i=1,2,\cdots,L$）の間の鎖間スピン結合です。 
 
 **パラメータ：** `LATTICE="ladder"`、`MODEL="spin"`、`local_S=0.5`、`J0=1`、`J1=1`、`CONSERVED_QUANTUMNUMBERS="Sz"`、`Sz_total=0`、および `L=6,8,10`。
@@ -146,7 +165,6 @@ o--J0--o--J0--o    （第 2 レッグ、全 L ラング）
 
 まず、必要なモジュールをインポートします。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -155,7 +173,6 @@ import pyalps.plot
 ```
 
 鎖内相互作用と鎖間相互作用 J0 および J1 の値、そして鎖長 L=6、8、10 を設定して、入力パラメータを準備します。
-
 
 ```python
 parms=[]
@@ -177,15 +194,12 @@ for l in [6, 8, 10]:
 
 入力ファイルを書き込み、シミュレーションを実行します
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm_ladder',parms)
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-
 全ての状態の全ての測定結果を読み込み、各シミュレーションについて全ての運動量にわたるスペクトルを収集します。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_ladder'))
@@ -207,7 +221,6 @@ for sim in data:
 
 エネルギースペクトルをプロットします。
 
-
 ```python
 plt.pyplot.figure()
 pyalps.plot.plot(spectra.values())
@@ -228,7 +241,11 @@ plt.pyplot.show()
 #### はじめに
 
 3番目のシミュレーションでは、前の場合と同じハミルトニアンから出発します。
-$$H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i}$$,
+
+$$
+H = J_0\sum_{\langle \alpha i,\alpha j \rangle} \mathbf{S}^{\alpha i} \cdot \mathbf{S}^{\alpha j} + J_1\sum_{\langle 1 i,2 i \rangle} \mathbf{S}^{1 i} \cdot \mathbf{S}^{2 i},
+$$
+
 ここで、$\alpha=1,2$ は2本の足（鎖）を表し、$i,j=1,2,\cdots,L$ は鎖内の格子サイトを示します。ここで $J_0=0$ とし、すなわち最近接スピン間の鎖内相互作用をなくし、$J_1=1$ は $\mathbf{S}^{1 i}$ と $\mathbf{S}^{2 i}$（$i=1,2,\cdots,L$）の間の鎖間スピン結合とします。この結果、系は $L$ 個の孤立二量体となります。 
 
 **パラメータ：** 上記と同じ `ladder` 格子と `spin` モデルですが、`J0=0`（両足が非結合）および `J1=1` とし、`L=6,8,10` です。
@@ -248,7 +265,6 @@ o      o      o
 
 まず、必要なモジュールをインポートします。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -257,7 +273,6 @@ import pyalps.plot
 ```
 
 入力パラメータを準備します。
-
 
 ```python
 parms=[]
@@ -278,22 +293,18 @@ for l in [6, 8, 10]:
 
 入力ファイルを書き込み、シミュレーションを実行します。
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm_dimers',parms)
 res = pyalps.runApplication('sparsediag',input_file)
 ```
 
-
 全ての状態の全ての測定結果を読み込みます。
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm_dimers'))
 ```
 
 各シミュレーションについて、全ての運動量にわたるスペクトルを収集します。
-
 
 ```python
 spectra = {}
@@ -313,7 +324,6 @@ for sim in data:
 ```
 
 次に、エネルギースペクトルをプロットします。
-
 
 ```python
 plt.pyplot.figure()

@@ -11,17 +11,38 @@ cascade:
 在本教程中，我们将学习如何使用稀疏对角化程序（Lanczos 算法）计算一维自旋-1 海森堡链在不同晶格尺寸（$L=4, 6, 8$ 和 10）下的能隙。所得到的有限晶格能隙随后被用于外推热力学极限（$L=\infty$）下的能隙。
 
 自旋-1 海森堡链的哈密顿量为
-$$H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j$$,
+
+$$
+H = J\sum_{\langle i,j \rangle} \mathbf{S}^i \cdot \mathbf{S}^j,
+$$
+
 其中 $J>0$ 对应最近邻自旋 $\mathbf{S}^i$ 和 $\mathbf{S}^j$ 之间的反铁磁相互作用，自旋-自旋相互作用由三个分量组成，即
-$$\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z$$.
+
+$$
+\mathbf{S}^i \cdot \mathbf{S}^j=S^i_xS^j_x+S^i_yS^j_y+S^i_zS^j_z.
+$$
 
 基态通常选取为 $S_z$ 算符的本征态。对于自旋-1 系统，每个晶格格点有三个基态，$|-1\rangle$、$|0\rangle$ 和 $|+1\rangle$。$S_x$ 和 $S_y$ 算符对这些基态的作用可以用升算符 $S^{\dagger}$ 和降算符 $S^{-}$ 表示：
-$$S_x=\frac{1}{2}(S^{\dagger}+S^{-})$$,
-$$S_y=\frac{1}{2i}(S^{\dagger}-S^{-})$$, 
+
+$$
+S_x=\frac{1}{2}(S^{\dagger}+S^{-}),
+$$
+
+$$
+S_y=\frac{1}{2i}(S^{\dagger}-S^{-}),
+$$
+
 它们对基态的作用方式为：
-$$S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle$$,
-$$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
-其中 $S=1/2$，$s=-S, -S+1$。
+
+$$
+S^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle,
+$$
+
+$$
+S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle,
+$$
+
+其中 $S=1$，$s=-1, 0, +1$。
 
 利用上述每个晶格格点的基态，哈密顿量可以写成一个厄米矩阵。当总磁化强度固定时，矩阵的规模可以被缩减，即在模拟中设置 Sz_total = 0（单重态区块）或 Sz_total = 1（三重态区块）。
 
@@ -59,7 +80,6 @@ $$S^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle$$,
 
 我们首先导入所需的模块。
 
-
 ```python
 import pyalps
 import numpy as np
@@ -69,7 +89,6 @@ import pyalps.fit_wrapper as fw
 ```
 
 然后我们将输入文件准备为一系列 Python 字典。
-
 
 ```python
 parms = []
@@ -91,22 +110,18 @@ for l in [4, 6, 8, 10, 12, 14]:
 
 我们写入输入文件并运行模拟。
 
-
 ```python
 input_file = pyalps.writeInputFiles('parm2a',parms)
 res = pyalps.runApplication('sparsediag',input_file) #, MPI=4)
 ```
 
-
 接下来我们加载每个系统尺寸和自旋区块的能谱：
-
 
 ```python
 data = pyalps.loadSpectra(pyalps.getResultFiles(prefix='parm2a'))
 ```
 
 为了提取能隙，我们需要写几行 Python 代码，建立一个长度列表以及一个记录每个 (L,Sz) 区块最低能量的 Python 字典：
-
 
 ```python
 lengths = []
@@ -124,7 +139,6 @@ for sim in data:
 
 最后，我们绘制能隙关于 1/L 的函数图像并显示该图。
 
-
 ```python
 gapplot = pyalps.DataSet()
 gapplot.x = 1./np.sort(lengths)
@@ -141,9 +155,7 @@ plt.xlim(0,0.25)
 plt.ylim(0,1.0)
 ```
 
-
 然后我们对 L=8 到 L=14 范围内的数据进行拟合，以得到热力学极限（$L\rightarrow \infty$，即 $1/L\rightarrow 0$）下的能隙。
-
 
 ```python
 pars = [fw.Parameter(0.411), fw.Parameter(1000), fw.Parameter(1)]
