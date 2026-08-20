@@ -111,7 +111,7 @@ import matplotlib.pyplot as plt
 
 ```python
 parms = []
-# Loop over second coupling constant
+# 遍历第二个耦合常数
 for J2 in [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6]:
     parms.append({
         'GRAPH'      : "4-site mixed",
@@ -145,7 +145,7 @@ for Lsets in data:
     lowestE = pyalps.flatten(Lsets)[0].y[0]
     E0.append(lowestE)
     
-# Set the scatter plot label
+# 设置散点图标签
 lbl="J1=1.0, Gamma=0.5"
 plt.scatter(x,E0, label=lbl)
 plt.legend()

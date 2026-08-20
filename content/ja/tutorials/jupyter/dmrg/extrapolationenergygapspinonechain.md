@@ -130,7 +130,7 @@ $$
 
 
 ```python
-# create data set for plot: gap vs. (1/L)^2
+# プロット用のデータセットを作成する：ギャップ対 (1/L)^2
 gapplot = pyalps.DataSet()
 gapplot.props['xlabel']='$1/L^2$'
 gapplot.props['ylabel']='Gap $\Delta/J$'
@@ -152,19 +152,19 @@ for measure in sorted_data:
 gapplot.x = x
 gapplot.y = y
 
-# plot the gap vs. (1/L)^2 curve:
+# ギャップ対 (1/L)^2 の曲線をプロットする：
 plt.figure()
 pyalps.plot.plot(gapplot)
 plt.legend()
 plt.xlim(0,0.0011)
 plt.ylim(0.3,0.5)
 
-# fit the curve with a linear function
+# 線形関数で曲線をフィッティングする
 pars = [fw.Parameter(0.1), fw.Parameter(0.2)]
 f = lambda self, x, p: p[0]()+p[1]()*x
 fw.fit(None, f, pars, np.array(gapplot.y), np.array(gapplot.x))
 
-# plot the fitted curve
+# フィッティング曲線をプロットする
 x = np.linspace(0.0, 0.0011, 100)
 plt.plot(x, f(None,x,pars))
 

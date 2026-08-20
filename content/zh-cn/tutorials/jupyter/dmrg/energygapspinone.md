@@ -114,7 +114,7 @@ print('\nGap:', abs(energies[1]-energies[0]), abs(energies[2]-energies[1]))
 import pyalps
 import numpy as np
 
-#prepare the input parameters
+#准备输入参数
 parms = []
 sz_tot = [0,1]
 for sz in sz_tot:

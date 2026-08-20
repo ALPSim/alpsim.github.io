@@ -87,7 +87,7 @@ import math
 
 
 ```python
-# Some general parameters with different lattice sizes:
+# 異なる格子サイズにおける一般的なパラメータ：
 parms = []
 for L in [10,12]:
     parms.append({
@@ -124,7 +124,7 @@ E0 = {}
 E1 = {}
 for Lsets in data:
     L = pyalps.flatten(Lsets)[0].props['L']
-    # Make a big list of all energy values
+    # すべてのエネルギー値を1つの大きなリストにまとめる
     allE = []
     for q in pyalps.flatten(Lsets):
         allE += list(q.y)

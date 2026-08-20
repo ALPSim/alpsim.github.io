@@ -87,7 +87,7 @@ import math
 
 
 ```python
-# Some general parameters with different lattice sizes:
+# 不同晶格尺寸下的一些通用参数：
 parms = []
 for L in [10,12]:
     parms.append({
@@ -124,7 +124,7 @@ E0 = {}
 E1 = {}
 for Lsets in data:
     L = pyalps.flatten(Lsets)[0].props['L']
-    # Make a big list of all energy values
+    # 把所有能量值汇总成一个大列表
     allE = []
     for q in pyalps.flatten(Lsets):
         allE += list(q.y)

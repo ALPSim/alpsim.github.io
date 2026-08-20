@@ -122,19 +122,19 @@ gapplot.y = y
 
 
 ```python
-# plot the gap vs. 1/L curve:
+# 绘制能隙关于 1/L 的曲线：
 plt.figure()
 pyalps.plot.plot(gapplot)
 plt.legend()
 plt.xlim(0,0.04)
 plt.ylim(0,0.2)
 
-# fit the curve with a linear function
+# 用线性函数拟合曲线
 pars = [fw.Parameter(0.1), fw.Parameter(0.2)]
 f = lambda self, x, p: p[0]()+p[1]()*x
 fw.fit(None, f, pars, np.array(gapplot.y), np.array(gapplot.x))
 
-# plot the fitted curve
+# 绘制拟合曲线
 x = np.linspace(0.0, 0.035, 100)
 plt.plot(x, f(None,x,pars))
 
