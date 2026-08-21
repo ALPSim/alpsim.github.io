@@ -130,15 +130,6 @@ L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, *Optimal Monte Carlo 
 {{< cta-button text="BibTeX" link="/data/pollet2004.bib" icon="format_quote" >}}
 </div>
 
-N. V. Prokof'ev, B. V. Svistunov, and I. S. Tupitsyn, *Exact, Complete and Universal Continuous-Time Worldline Monte Carlo Approach to the Statistics of Discrete Quantum Systems*, Phys. Lett. A **238**, 253 (1998).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1016/S0375-9601(97)00957-2" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/cond-mat/9703200" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1016/S0375-9601(97)00957-2" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/prokofev1998.bib" icon="format_quote" >}}
-</div>
-
 M. Troyer, F. Alet, S. Trebst, and S. Wessel, *Non-local Updates for Quantum Monte Carlo Simulations*, AIP Conf. Proc. **690**, 156 (2003).
 
 <div class="btn-grid-4">
