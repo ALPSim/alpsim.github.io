@@ -1,6 +1,6 @@
 ---
-title: Transverse Field Quantum Ising Model
-description: "Jupyter md file for transverse field ising"
+title: 横磁場量子イジングモデル
+description: "横磁場イジングのJupyter mdファイル"
 toc: true
 math: true
 weight: 11
@@ -8,21 +8,21 @@ cascade:
     type: docs
 ---
 
-### Introduction
+### はじめに
 
-In this tutorial, we will look at critical spin chains and make a connection to their description in terms of conformal field theory.
+本チュートリアルでは、臨界スピン鎖を取り上げ、それらの共形場理論による記述との関連を見ていきます。
 
-The model we will consider is the critical Ising chain, given by the Hamiltonian
+ここで扱うモデルは臨界イジング鎖であり、そのハミルトニアンは次のように与えられます
 
 $$
 H=J_{z} \sum_{\langle i,j \rangle} S^i_z S^j_z + \Gamma \sum_i S^i_x
 $$
 
-Here, the first sum runs over pairs of nearest neighbours. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J\gt 0$ and ferromagnetic for $J \lt 0$. The system is exactly solvable ([P. Pfeuty, Annals of Physics: 57, 79-90 (1970)](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)).
+ここで、最初の和は最近接格子点対について取られます。$\Gamma$ は横磁場と呼ばれ、系は $\Gamma/J=\frac{1}{2}$ で臨界的になります。$\Gamma=0$ の場合、基底状態は $J\gt 0$ では反強磁性、$J \lt 0$ では強磁性になります。この系は厳密に解くことができます（[P. Pfeuty, Annals of Physics 57, 79-90 (1970)](https://doi.org/10.1016/0003-4916(70)90270-8)）。
 
-In the above equation, $\Delta$ refers to the scaling dimension of that field. The scaling fields occur in groups: the lowest one, referred to as primary field, comes with an infinite number of descendants with scaling dimension $\Delta + m$, $m \in \lbrace 1, 2, 3, ... \rbrace$.
+上式において、$\Delta$ はその場のスケーリング次元を表します。スケーリング場はいくつかの組として現れます。最も低いものは一次場（primary field）と呼ばれ、それに付随してスケーリング次元 $\Delta + m$（$m \in \lbrace 1, 2, 3, ... \rbrace$）を持つ無限個の子孫場（descendants）が存在します。
 
-In the exact solution of the Ising model (Eq. (3.7) in [the paper P. Pfeuty](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)), the long-range correlations are found to decay as:
+イジングモデルの厳密解において（[Pfeuty の論文](https://doi.org/10.1016/0003-4916(70)90270-8)の式 (3.7)）、長距離相関は次のように減衰することが分かります：
 $$
 \langle S^i_z S^{i+n}_z \rangle \sim n^{-2\times 1/8}
 $$
@@ -32,14 +32,46 @@ $$
 $$
 \langle S^i_x S^{i+n}_x \rangle \sim n^{-2\times 1}
 $$
-Additionally, we expect the scaling dimension of the identity operator to be 0.
+さらに、恒等演算子のスケーリング次元は 0 になると予想されます。
 
-We therefore expect scaling dimensions of 0, 1/8, 1, 1+1/8 to appear in the CFT of the Ising model. To see this, we will rescale all energies of the spectrum according to $E \rightarrow \frac{E-E_0}{(E_1-E_0)8}$. This will force the two lowest states to occur where we expect the scaling dimensions; we can then check whether the rest of the spectrum is consistent with this.
+したがって、イジングモデルの共形場理論には 0、1/8、1、1+1/8 のスケーリング次元が現れると予想されます。これを確認するために、スペクトルのすべてのエネルギーを $E \rightarrow \frac{E-E_0}{(E_1-E_0)8}$ に従って再スケーリングします。これにより、最も低い2つの状態が予想されるスケーリング次元の位置に強制的に一致させられます。その上で、残りのスペクトルがこれと矛盾しないかどうかを確認できます。
 
+### パラメータ
 
-### Simulation
+| パラメータ | 意味 | 値 |
+|---|---|---|
+| `LATTICE` | 鎖に用いる格子 | `chain lattice` |
+| `MODEL` | ハミルトニアンファミリー | `spin` |
+| `local_S` | 各格子点のスピン量子数 | `0.5` |
+| `Jxy` | 面内（$S_xS_x+S_yS_y$）結合、ここでは未使用 | `0` |
+| `Jz` | イジング（$S_zS_z$）結合 $J_z$ | `-1` |
+| `Gamma` | 横磁場 $\Gamma$ | `0.5` |
+| `NUMBER_EIGENVALUES` | 保持する低エネルギー固有状態の数 | `5` |
+| `L` | 鎖の長さ | `10, 12` |
 
-We will first import some modules:
+`Jz=-1`、`Gamma=0.5` のとき、$\Gamma/J=0.5$ となり、これはまさにこのモデルの臨界点です。
+
+### 格子
+
+`chain lattice` は `L` 個のサイトからなる1次元の**周期的**な環であり、イジング結合 $J_z$ はボンド上に、横磁場 $\Gamma$ は各サイトに作用します：
+
+```
+ Γ       Γ       Γ             Γ
+ o--Jz---o--Jz---o--- ... ---o
+ |                            |
+ +------------ Jz ------------+
+        （周期的な環、L サイト）
+```
+
+この環はそれ自身で閉じています。最後のサイトから最初のサイトへ戻るボンドこそが、この格子を周期的にしているものです。ここで周期境界条件を選ぶ理由は2つあります。周期境界条件は並進対称性を保つため、各固有状態は明確に定義された格子運動量を持ちます。これはまさに、以下でスペクトルをプロットする際の横軸となる `TOTAL_MOMENTUM` 量子数です。また、周期境界条件には開いた端が存在しないため、バルクの共形スペクトルを汚染する端状態がなく、共形場理論のスケーリング次元に対する有限サイズ補正も開放鎖の場合より速く減衰します。代わりに開放境界条件を使いたい場合、ALPS には `open chain lattice` が用意されています。組み込み格子の完全な一覧については、[ALPS 格子ライブラリ](../../../documentation/intro/latticehowtos)を参照してください。
+
+### 手法の選択
+
+スピン1/2鎖の完全なヒルベルト空間の次元は $2^L$ であり、$L=10$ では $2^{10}=1024$、$L=12$ では $2^{12}=4096$ です。必要なのは（全スペクトルではなく）最も低い数個の固有状態のみであるため、`sparsediag` が実装する反復的なランチョス法が自然な選択となります。これは、完全対角化に比べてはるかに少ない行列-ベクトル積の回数で最低固有値を収束させることができ、ここで扱う2つのヒルベルト空間サイズはどちらもその処理能力に対して十分小さいものです（各システムサイズあたりの実行時間は1秒未満です）。
+
+### シミュレーション
+
+まず、いくつかのモジュールをインポートします：
 
 
 ```python
@@ -51,11 +83,11 @@ import copy
 import math
 ```
 
-Then, let us set up the parameters for two system sizes. Be careful to use the transverse field $\Gamma$, not the longitudinal field $h$.
+次に、2つのシステムサイズについてパラメータを設定しましょう。縦磁場 $h$ ではなく、横磁場 $\Gamma$ を使うように注意してください。
 
 
 ```python
-# Some general parameters with different lattice sizes:
+# 異なる格子サイズにおける一般的なパラメータ：
 parms = []
 for L in [10,12]:
     parms.append({
@@ -71,7 +103,7 @@ for L in [10,12]:
 
 ```
 
-As you can see, we will simulate two system sizes. Now let's set up the input files and run the simulation:
+ご覧のとおり、2つのシステムサイズをシミュレートします。それでは入力ファイルを設定し、シミュレーションを実行しましょう：
 
 
 ```python
@@ -83,8 +115,8 @@ data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix=prefix))
 ```
 
 
-To perform CFT assignments, we need to calculate the ground state and the first excited state for each L.
-The output of the above load operation will be a hierarchical list sorted by L, so we can just iterate through it
+共形場理論への対応付けを行うためには、各 L について基底状態と第一励起状態を計算する必要があります。
+上記の読み込み操作の出力は L でソートされた階層的なリストになるため、単純にそれを反復処理すればよいです
 
 
 ```python
@@ -92,7 +124,7 @@ E0 = {}
 E1 = {}
 for Lsets in data:
     L = pyalps.flatten(Lsets)[0].props['L']
-    # Make a big list of all energy values
+    # すべてのエネルギー値を1つの大きなリストにまとめる
     allE = []
     for q in pyalps.flatten(Lsets):
         allE += list(q.y)
@@ -101,7 +133,7 @@ for Lsets in data:
     E1[L] = allE[1]
 ```
 
-Subtract E0, divide by gap, multiply by 1/8, which we know to be the smallest non-vanishing scaling dimension of the Ising CFT
+E0 を引き、ギャップで割り、1/8 を掛けます。これはイジング共形場理論において最小の非自明なスケーリング次元であることが分かっています
 
 
 ```python
@@ -112,7 +144,7 @@ for q in pyalps.flatten(data):
 spectrum = pyalps.collectXY(data, 'TOTAL_MOMENTUM', 'Energy', foreach=['L'])
 ```
 
-Plot the first few exactly known scaling dimensions
+最初のいくつかの厳密に既知のスケーリング次元をプロットします
 
 
 ```python
@@ -135,5 +167,24 @@ plt.show()
 
 ```
 
-The result of the simulation is shown in the figure:
+シミュレーションの結果を図に示します：
 ![Energy scaling for quantum ising model.](/figs/ed/energyscaling.png)
+
+### 結果
+
+臨界点（$J_z=-1$、$\Gamma=0.5$）で上記のコードを実行すると、基底状態と第一励起状態の生のエネルギーが得られます：
+
+| $L$ | $E_0$ | $E_1$ | $E_1-E_0$ |
+|---|---|---|---|
+| 10 | -3.19623 | -3.15688 | 0.03935 |
+| 12 | -3.83065 | -3.79788 | 0.03277 |
+
+再スケーリング $E \rightarrow (E-E_0)/[(E_1-E_0)\times 8]$ の後、この構成によりこれら2つの状態はスケーリング次元 $0$ と $1/8$ に対応します。プロットは、残りの低エネルギースペクトルが予想値 $1$ および $1+1/8$ の近傍に収まっているかどうかを示しています。
+
+### まとめと展望
+
+有限サイズの臨界イジング鎖の再スケーリングされた励起スペクトルは、$c=1/2$ の共形場理論が予言するスケーリング次元 $0,\ 1/8,\ 1,\ 1+1/8$ を再現しており、この格子モデルの低エネルギーセクターに対する場の理論的な同定を裏付けています。
+
+1. $L$ を12より大きくしていくと、共形場理論の予言との一致はどのように変化するでしょうか？
+2. 臨界点から離れる（$\Gamma/J \neq 0.5$）と、スペクトルはどのように変化するでしょうか？
+3. $1+1/8$ より上の次の子孫場の組のスケーリング次元を特定できますか？
