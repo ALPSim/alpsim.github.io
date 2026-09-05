@@ -288,3 +288,30 @@
   display: block !important;
 }
 
+
+/* Install-from-source page: the two top-level "Installing with / without root
+   access" toggles read as section headings, so they are distinguishable from
+   the per-system pulldowns nested inside them. Colour is left to the theme —
+   the rule uses a neutral grey that works in both light and dark mode. */
+details.install-section > summary {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-top: 1.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.35);
+}
+
+details.install-section[open] > summary {
+  margin-bottom: 1rem;
+}
+
+/* Nested pulldowns sit slightly indented, so the grouping is visible at a glance. */
+details.install-section > details {
+  margin-left: 0.75rem;
+}
+
+/* Install page: the agent-section sub-steps use roman numerals so they are not
+   confused with the numbered steps that contain them. */
+.roman-list ol {
+  list-style-type: lower-roman;
+}
