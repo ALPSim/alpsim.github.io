@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-04 Mott
+title: DMFT-04 莫特转变
 math: true
 toc: true
 ---
@@ -38,10 +38,10 @@ $$
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $20$、$0.001$ |
 | `SOLVER` | 杂质求解器 | `"hybridization"`（CT-HYB） |
 | `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ |
-| `N_MEAS` | 测量之间的蒙特卡罗更新次数 | $1000$ |
+| `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $1000$ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ |
 | `CHECKPOINT` | 检查点／重启文件的文件名前缀 | `solverdump_U_`+`U` |
-| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡罗扫描数上限（随 $U$ 缩放）／热化扫描数／每次迭代的实际时间上限（秒） | $1500\,U$、$500$、$600$ |
+| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限（随 $U$ 缩放）／热化扫描数／每次迭代的实际时间上限（秒） | $1500\,U$、$500$、$600$ |
 
 ### 运行模拟
 

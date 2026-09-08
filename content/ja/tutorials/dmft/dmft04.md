@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-04 Mott
+title: DMFT-04 モット転移
 math: true
 toc: true
 ---

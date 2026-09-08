@@ -1,5 +1,5 @@
 ---
-title: Exact Diagonalization
+title: 厳密対角化
 description: "Tutorials for ALPS"
 toc: true
 weight: 2

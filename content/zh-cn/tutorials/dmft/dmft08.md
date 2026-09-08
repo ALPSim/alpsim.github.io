@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-08 Lattices
+title: DMFT-08 晶格
 math: true
 toc: true
 ---
@@ -38,8 +38,8 @@ $$
 | `G0OMEGA_INPUT` | 设为空字符串，强制从非相互作用格林函数计算初始外斯场 | `""` |
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $10$、$0.005$ |
 | `SOLVER` | 杂质求解器 | `"hybridization"`（CT-HYB） |
-| `SC_WRITE_DELTA`, `N_MEAS`, `N_ORDER` | 写出杂化函数／测量之间的蒙特卡罗更新次数／展开阶数直方图的大小 | $1$、$5000$、$50$ |
-| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡罗扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10^4$、$500$、$60$ |
+| `SC_WRITE_DELTA`, `N_MEAS`, `N_ORDER` | 写出杂化函数／测量之间的蒙特卡洛更新次数／展开阶数直方图的大小 | $1$、$5000$、$50$ |
+| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10^4$、$500$、$60$ |
 
 ### 格子
 

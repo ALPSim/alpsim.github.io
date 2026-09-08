@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-01 Intro
+title: DMFT-01 はじめに
 math: true
 toc: true
 ---

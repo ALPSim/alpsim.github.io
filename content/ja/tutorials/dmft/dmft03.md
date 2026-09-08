@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-03 Interaction
+title: DMFT-03 相互作用
 math: true
 toc: true
 ---

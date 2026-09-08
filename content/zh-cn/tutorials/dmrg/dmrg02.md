@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-02 Heisenberg Spin Chains
+title: DMRG-02 海森堡自旋链
 math: true
 toc: true
 ---

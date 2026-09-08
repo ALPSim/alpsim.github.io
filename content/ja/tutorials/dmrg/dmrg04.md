@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-04 Gaps
+title: DMRG-04 エネルギーギャップ
 math: true
 toc: true
 ---

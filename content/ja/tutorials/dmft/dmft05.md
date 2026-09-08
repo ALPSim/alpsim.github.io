@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-05 OSMT
+title: DMFT-05 軌道選択的モット転移
 math: true
 toc: true
 ---

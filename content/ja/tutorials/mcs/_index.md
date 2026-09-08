@@ -1,56 +1,56 @@
 
 ---
-title: Monte Carlo Simulations
-description: "Tutorials for ALPS"
+title: モンテカルロシミュレーション
+description: "ALPSのチュートリアル"
 toc: true
 weight: 1
 ---
 
-The ALPS Monte Carlo tutorials cover both classical and quantum simulations of spin models and bosonic lattice systems.
-Classical Monte Carlo uses local Metropolis or cluster (Wolff) updates for systems described by a classical Boltzmann weight.
-Quantum Monte Carlo (QMC) algorithms — loop, directed-loop SSE, and worm — work on path-integral or operator-series representations and give access to thermodynamic properties of quantum lattice models at finite temperature.
-An extended-ensemble quantum Wang-Landau method computes the full density of states and thermodynamic quantities across all temperatures in a single run.
-The tutorials progress from fundamental diagnostics such as autocorrelation times and equilibration, through specific observables such as susceptibilities and magnetization curves, to the detection of classical and quantum phase transitions.
+ALPS のモンテカルロチュートリアルでは、スピン模型およびボソン格子系の古典シミュレーションと量子シミュレーションの両方を扱います。
+古典モンテカルロは、古典的なボルツマン重みで記述される系に対して、局所的なメトロポリス更新またはクラスター（Wolff）更新を用います。
+量子モンテカルロ（QMC）アルゴリズム——loop、有向ループ SSE、worm——は経路積分表示または演算子級数表示に基づいており、量子格子模型の有限温度における熱力学的性質を得ることができます。
+拡張アンサンブルの量子 Wang-Landau 法は、一度の実行で完全な状態密度と、あらゆる温度における熱力学量を計算します。
+これらのチュートリアルは、自己相関時間や平衡化といった基本的な診断量から始まり、帯磁率や磁化曲線といった具体的な物理量を経て、古典相転移および量子相転移の検出へと進みます。
 
-## Choosing a Code
+## コードの選択
 
-Before starting a simulation it is important to select the algorithm best suited to your model and observable.
-The guide below compares the four QMC representations available in ALPS — `looper`, `dirloop_sse`, `worm`, and `qwl` — and summarises their respective strengths and limitations.
+シミュレーションを始める前に、扱う模型と物理量に最も適したアルゴリズムを選ぶことが重要です。
+以下のガイドでは、ALPS で利用できる 4 つの QMC 表示——`looper`、`dirloop_sse`、`worm`、`qwl`——を比較し、それぞれの長所と限界をまとめています。
 
-- [Which code to choose for your simulation?](com)
+- [シミュレーションに適したコードの選び方](com)
 
-## Classical Monte Carlo (`spinmc`)
+## 古典モンテカルロ（`spinmc`）
 
-The `spinmc` application implements classical Monte Carlo with local Metropolis updates and cluster updates for classical spin models.
-The first two tutorials introduce the most important diagnostics for any MC run — autocorrelation time and equilibration — laying the groundwork for all subsequent work.
-The method is revisited later to study finite-size scaling and the second-order phase transition of the 2D Ising model.
+`spinmc` は、古典スピン模型に対して局所的なメトロポリス更新とクラスター更新を用いた古典モンテカルロ法を実装しています。
+最初の 2 つのチュートリアルでは、あらゆる MC 計算において最も重要な診断量——自己相関時間と平衡化——を紹介し、以降のすべての作業の基礎を築きます。
+この手法は後のチュートリアルでも再び取り上げ、2 次元イジング模型の有限サイズスケーリングと二次相転移を調べます。
 
-- [MC-01(a) Classical Monte Carlo simulations and autocorrelations](mc01a)
-- [MC-01(b) Classical Monte Carlo simulations and equilibration/convergence](mc01b)
-- [MC-07 Phase transition in the Ising model](mc07)
+- [MC-01(a) 古典モンテカルロシミュレーションと自己相関](mc01a)
+- [MC-01(b) 古典モンテカルロシミュレーションと平衡化・収束](mc01b)
+- [MC-07 イジング模型における相転移](mc07)
 
-## Loop and Directed-Loop QMC (`looper`, `dirloop_sse`)
+## Loop および有向ループ QMC（`looper`、`dirloop_sse`）
 
-The `looper` code implements the loop algorithm in an operator-loop representation and is most efficient for isotropic spin models without a magnetic field.
-The `dirloop_sse` code uses directed loops in the stochastic series expansion (SSE) representation; it handles models with anisotropy or an external magnetic field that break the spin-inversion symmetry required by `looper`.
-These tutorials cover susceptibilities of Heisenberg chains and ladders, magnetization curves in a field, and the identification of a quantum phase transition in a dimerised lattice.
+`looper` は演算子ループ表示でループアルゴリズムを実装しており、磁場のない等方的なスピン模型に対して最も効率的です。
+`dirloop_sse` は確率級数展開（SSE）表示で有向ループを用います。これにより、`looper` が必要とするスピン反転対称性を破る異方性や外部磁場を持つ模型も扱えます。
+これらのチュートリアルでは、ハイゼンベルク鎖および梯子の帯磁率、磁場中の磁化曲線、そして二量体化格子における量子相転移の同定を扱います。
 
-- [MC-02 Calculating magnetic susceptibilities by the classical MC and looper QMC codes](mc02)
-- [MC-03 Calculating magnetization curves by the directed loop QMC code](mc03)
-- [MC-08 Quantum phase transition in a quantum spin model](mc08)
-- [MC-09 Quantum Monte Carlo](qmc)
+- [MC-02 古典 MC と looper QMC による帯磁率の計算](mc02)
+- [MC-03 有向ループ QMC による磁化曲線の計算](mc03)
+- [MC-08 量子スピン模型における量子相転移](mc08)
+- [MC-09 量子モンテカルロ](qmc)
 
-## Worm QMC (`worm`)
+## Worm QMC（`worm`）
 
-The `worm` code uses the worm algorithm in the path-integral representation and is the method of choice for Bose-Hubbard models and for spin models in strong magnetic fields.
-The tutorials show how to enable and evaluate correlation functions and Green functions, and demonstrate the superfluid–Mott-insulator quantum phase transition in the Bose-Hubbard model.
+`worm` は経路積分表示で worm アルゴリズムを用いており、ボース・ハバード模型や強磁場中のスピン模型に対する第一選択の手法です。
+これらのチュートリアルでは、相関関数とグリーン関数を有効にして評価する方法を示し、ボース・ハバード模型における超流動—モット絶縁体量子相転移を実演します。
 
-- [MC-04 Custom measurements in the QMC codes](mc04)
-- [MC-05 Simulating the Bose-Hubbard model using the worm QMC code](mc05)
+- [MC-04 QMC コードにおけるカスタム測定](mc04)
+- [MC-05 worm QMC によるボース・ハバード模型のシミュレーション](mc05)
 
-## Quantum Wang-Landau (`qwl`)
+## 量子 Wang-Landau（`qwl`）
 
-The quantum Wang-Landau code stochastically constructs the density of states of a quantum Hamiltonian and derives the full thermodynamics — free energy, entropy, and specific heat — at all temperatures from a single simulation.
-This tutorial applies the method to ferromagnetic and antiferromagnetic Heisenberg spin chains and ladders.
+量子 Wang-Landau コードは、量子ハミルトニアンの状態密度を確率的に構築し、一度のシミュレーションからあらゆる温度における完全な熱力学量——自由エネルギー、エントロピー、比熱——を導出します。
+本チュートリアルでは、この手法を強磁性および反強磁性のハイゼンベルクスピン鎖と梯子に適用します。
 
-- [MC-06 Extended ensemble simulations (Quantum Wang-Landau)](mc06)
+- [MC-06 拡張アンサンブルシミュレーション（量子 Wang-Landau）](mc06)
