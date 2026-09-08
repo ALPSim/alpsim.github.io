@@ -1,28 +1,28 @@
 
 ---
-title: MC-01b Equilibration
+title: MC-01b 平衡化
 math: true
 toc: true
 weight: 3
 ---
 
-Every Monte Carlo simulation starts from some initial configuration — often a random or fully ordered state — that is far from equilibrium.
-During the first phase of the run, the Markov chain relaxes towards the equilibrium distribution, and measurements taken during this *thermalization* period are biased by the choice of starting point.
-They must be discarded before computing averages.
-The number of sweeps needed for the system to lose memory of its initial state is set by the autocorrelation time (see [MC-01a](../mc01a)); close to a phase transition, where correlations are long-ranged, thermalization can require many thousands of sweeps.
+モンテカルロシミュレーションはいずれも、平衡から遠く離れた何らかの初期配位——多くはランダムな状態か完全に秩序化した状態——から出発します。
+実行の最初の段階では、マルコフ連鎖が平衡分布へと緩和していきます。この*熱化*期間中に行われた測定は、出発点の選び方によるバイアスを受けています。
+平均を計算する前に、これらは破棄しなければなりません。
+系が初期状態の記憶を失うのに必要なスイープ数は自己相関時間によって決まります（[MC-01a](../mc01a) を参照）。相関が長距離に及ぶ相転移点の近傍では、熱化に数千回ものスイープが必要になることがあります。
 
-This tutorial covers two related diagnostics:
+このチュートリアルでは、関連する 2 つの診断を扱います。
 
-- **Equilibration**: has the simulation left its initial state and reached the equilibrium distribution?
-- **Convergence**: has the simulation run long enough that the statistical errors in the measured averages are acceptably small?
+- **平衡化**：シミュレーションは初期状態を離れ、平衡分布に達したか。
+- **収束**：測定された平均値の統計誤差が十分小さくなるまで、シミュレーションは長く実行されたか。
 
-Both are checked by inspecting the time series of a measured observable — in this case the magnetization of a 2D Ising model at its critical temperature.
+どちらも、測定した物理量の時系列を調べることで確認します。ここでは臨界温度における 2 次元イジング模型の磁化を用います。
 
-## Equilibration
+## 平衡化
 
-### Preparing and running the simulation on the command line
+### コマンドラインでのシミュレーションの準備と実行
 
-The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/parm1a" data-filename="parm1a" target="_blank" rel="noopener">`parm1a`</a> sets up a single simulation of the Ising model on a $48 \times 48$ square lattice at the critical temperature:
+パラメータファイル <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/parm1a" data-filename="parm1a" target="_blank" rel="noopener">`parm1a`</a> は、臨界温度における $48 \times 48$ の正方格子上のイジング模型のシミュレーションを 1 つ設定します。
 
 ```
 LATTICE="square lattice"
@@ -35,17 +35,17 @@ MODEL="Ising"
 {L=48;}
 ```
 
-Convert the parameter file to XML and run `spinmc`:
+パラメータファイルを XML に変換し、`spinmc` を実行します。
 
 ```
 parameter2xml parm1a
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
-### Preparing and running the simulation in Python
+### Python でのシミュレーションの準備と実行
 
-The full script is available as <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" data-filename="tutorial1a.py" target="_blank" rel="noopener">`tutorial1a.py`</a>.
-It begins by importing the required modules and defining the simulation parameters:
+完全なスクリプトは <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" data-filename="tutorial1a.py" target="_blank" rel="noopener">`tutorial1a.py`</a> として入手できます。
+まず必要なモジュールをインポートし、シミュレーションのパラメータを定義します。
 
 ```Python
 import pyalps
@@ -62,17 +62,17 @@ parms = [{
     }]
 ```
 
-Write the parameters to an XML input file and run `spinmc`:
+パラメータを XML 入力ファイルに書き出し、`spinmc` を実行します。
 
 ```Python
 input_file = pyalps.writeInputFiles('parm1a', parms)
 pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 ```
 
-### Inspecting the time series
+### 時系列の確認
 
-The most direct way to check equilibration is to plot the time series of a measured observable.
-We load the magnetization time series from the output file and plot it:
+平衡化を確認する最も直接的な方法は、測定した物理量の時系列をプロットすることです。
+出力ファイルから磁化の時系列を読み込んでプロットします。
 
 ```Python
 files = pyalps.getResultFiles(prefix='parm1a')
@@ -85,43 +85,46 @@ plt.title('Magnetization time series')
 plt.show()
 ```
 
-Inspect the resulting plot: the observable should settle to a roughly stationary value after an initial transient.
-If the time series is still drifting at the end of the run, or if it shows a clear trend in the early sweeps that extends well into the measurement phase, the thermalization period (`THERMALIZATION`) is too short and must be increased.
+得られた図を確認してください。物理量は初期の過渡的な振る舞いのあと、ほぼ定常な値に落ち着くはずです。
+実行の終わりになっても時系列がまだ漂動している場合、あるいは最初のスイープで明らかな傾向が見られ、それが測定段階まで続いている場合は、熱化期間（`THERMALIZATION`）が短すぎるので長くする必要があります。
+上記のパラメータ（`THERMALIZATION=10000`）では、時系列はすでに安定した平均値のまわりで揺らいでおり、目立った漂動は見られません。熱化が十分であったことを示しています。
 
-### Automated check: `pyalps.checkSteadyState`
+![](/figs/mcs01btimeseries.png)
 
-Rather than judging equilibration by eye, `pyalps.checkSteadyState` applies a statistical test to determine whether a time series has reached a stationary distribution.
-It returns the data annotated with a flag indicating whether each observable has passed the test.
-The default confidence level is 68.27% (one sigma); this can be raised:
+### 自動チェック：`pyalps.checkSteadyState`
+
+平衡化を目視で判断する代わりに、`pyalps.checkSteadyState` は統計的検定を適用して、時系列が定常分布に達したかどうかを判定します。
+各物理量が検定に合格したかどうかを示すフラグを付けたデータを返します。
+既定の信頼水準は 68.27%（1 シグマ）ですが、これを引き上げることもできます。
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# Default: 68.27% confidence interval
+# 既定：68.27% 信頼区間
 data = pyalps.checkSteadyState(data)
 
-# Stricter: 90% confidence interval
+# より厳しく：90% 信頼区間
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
 
-## Convergence
+## 収束
 
-Convergence is a separate question from equilibration: even after the system has fully equilibrated, the statistical errors in the measured averages decrease only as $1/\sqrt{N}$ with the number of independent samples $N$.
-A convergence check verifies that the simulation has accumulated enough measurements for the error estimates to be reliable and stable.
+収束は平衡化とは別の問題です。系が完全に平衡に達したあとでも、測定された平均値の統計誤差は独立な標本数 $N$ に対して $1/\sqrt{N}$ でしか減少しません。
+収束チェックは、誤差評価が信頼でき安定したものになるだけの測定をシミュレーションが蓄積したかどうかを確認します。
 
-`pyalps.checkConvergence` tests whether the errors in the measured averages have stabilized.
-It is used in the same way as `checkSteadyState`:
+`pyalps.checkConvergence` は、測定された平均値の誤差が安定したかどうかを検定します。
+使い方は `checkSteadyState` と同じです。
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 data = pyalps.checkConvergence(data)
 ```
 
-If the check fails, increase `SWEEPS` and rerun the simulation.
+チェックに通らない場合は、`SWEEPS` を増やしてシミュレーションを再実行してください。
 
-## Questions
+## 問題
 
-- Shorten the `THERMALIZATION` period significantly (e.g. to 100 sweeps). Can you see the initial transient in the time series? Does `checkSteadyState` flag it?
-- How does the required thermalization length change as you move away from the critical temperature? Try $T = 1.5$ and $T = 3.5$.
-- Increase and decrease `SWEEPS` by a factor of ten. How do the error bars on the magnetization change? Does this match the expected $1/\sqrt{N}$ scaling?
-- Why is it important to check both equilibration and convergence? Can a simulation pass one check and fail the other?
+- `THERMALIZATION` 期間を大幅に短くしてみてください（たとえば 100 スイープ）。時系列に初期の過渡的な振る舞いが見えますか。`checkSteadyState` はそれを検出しますか。
+- 臨界温度から離れると、必要な熱化の長さはどう変わるでしょうか。$T=1.5$ と $T=3.5$ を試してください。
+- `SWEEPS` を 10 倍に増やし、また 10 分の 1 に減らしてみてください。磁化の誤差棒はどう変わりますか。これは期待される $1/\sqrt{N}$ のスケーリングと一致しますか。
+- 平衡化と収束の両方を確認することがなぜ重要なのでしょうか。一方のチェックに合格し、もう一方に不合格となることはありうるでしょうか。
