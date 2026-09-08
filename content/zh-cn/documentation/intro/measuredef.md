@@ -29,13 +29,13 @@ weight: 6
 
 | 应用程序 | 支持情况 |
 | :---------- | :------ |
-| `loop`（loop / 有向环算法） | 完全支持 |
-| `worm`（[Worm 算法](../../methods/qmc/worm)） | 完全支持 |
+| `loop`（圈 / 有向圈算法） | 完全支持 |
+| `worm`（[蠕虫算法](../../methods/qmc/worm)） | 完全支持 |
 | `sse`、`sse2`、`sse4`（[随机级数展开](../../methods/qmc/sse)） | 完全支持 |
 | `fulldiag`（完全对角化） | 完全支持 |
 | `dmrg`（[传统的单块 DMRG](../../methods/dmrg/dmrg)） | 完全支持 |
 | `sparsediag`（[稀疏 / Lanczos 对角化](../../methods/ed/sparsediag)） | 不支持 —— 只能得到模型本身内置的可观测量（能量、量子数） |
-| `qwl`（量子 Wang-Landau） | 不支持 —— 它有自己专门的 `MEASURE_MAGNETIC_PROPERTIES` 开关 |
+| `qwl`（量子王-朗道） | 不支持 —— 它有自己专门的 `MEASURE_MAGNETIC_PROPERTIES` 开关 |
 | `checksign` | 不支持 |
 | `mps_optim`/`mps_meas`（矩阵乘积态 DMRG） | 有自己独立实现的、更丰富的语法 —— 见下文 |
 
@@ -49,7 +49,7 @@ weight: 6
 
 在 QMC 程序中测量非对角量通常并不容易，也很难以通用的方式实现。如果你常用的 QMC 程序无法完成你想要的测量，你可能需要修改源代码。
 
-不过在某些情况下，可以使用一些技巧。一个常用的技巧是扩大模型的格点基。举例来说：使用 worm 程序在非均匀格子上模拟 Bose-Hubbard 模型，我们希望测量局域粒子数分布的二阶矩 $\langle n_i^2\rangle$。由于 worm 程序并不直接在格点基下工作，它无法直接对这样的算符进行测量。一种可行的解决办法是修改 Bose-Hubbard 哈密顿量所使用的 `boson` 格点基，为其添加一个表示密度平方的算符 `n2`：
+不过在某些情况下，可以使用一些技巧。一个常用的技巧是扩大模型的格点基。举例来说：使用蠕虫程序在非均匀格子上模拟 玻色-哈伯德 模型，我们希望测量局域粒子数分布的二阶矩 $\langle n_i^2\rangle$。由于 蠕虫程序并不直接在格点基下工作，它无法直接对这样的算符进行测量。一种可行的解决办法是修改 玻色-哈伯德 哈密顿量所使用的 `boson` 格点基，为其添加一个表示密度平方的算符 `n2`：
 
     <SITEBASIS name="boson">
     <PARAMETER name="Nmax" default="infinity"/>

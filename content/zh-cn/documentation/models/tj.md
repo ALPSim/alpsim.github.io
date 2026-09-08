@@ -51,7 +51,7 @@ $$
 | **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小系统给出精确结果；无双占据约束是通过构造严格满足的，而非近似满足 | 由于受限希尔伯特空间仍按 $3^N$ 指数增长，仅限于小型团簇 | 小团簇谱；单空穴动力学；用于检验其他方法 |
 | **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维链和准一维梯子高度精确；约束同样被无额外代价地内置于局域希尔伯特空间中 | 对真正的二维系统效率较低 | 一维和准一维 t-J 系统的基态、空穴配对与自旋关联 |
 
-与 [Hubbard 模型](../hubbard)一样，ALPS 中没有针对掺杂 t-J 模型的格点量子蒙特卡罗程序：一旦存在空穴，费米子符号问题只会比 Hubbard 模型更加严重，而 ALPS 也没有包含行列式 QMC 或变分蒙特卡罗（VMC）程序。Gutzwiller 投影变分波函数（检验 Anderson 的 RVB 想法的自然数值手段）以及局限于无符号问题的未掺杂或特殊填充极限的行列式 QMC，是更广泛文献中的标准工具，但在 ALPS 中并未实现。目前没有专门针对 t-J 模型的 ALPS 教程；[格点基](../../intro/modeldef/sitebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其受限的希尔伯特空间，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程，则是在 ALPS 中探索其未受限的母模型的自然起点。
+与 [Hubbard 模型](../hubbard)一样，ALPS 中没有针对掺杂 t-J 模型的格点量子蒙特卡洛程序：一旦存在空穴，费米子符号问题只会比 Hubbard 模型更加严重，而 ALPS 也没有包含行列式 QMC 或变分蒙特卡洛（VMC）程序。Gutzwiller 投影变分波函数（检验 Anderson 的 RVB 想法的自然数值手段）以及局限于无符号问题的未掺杂或特殊填充极限的行列式 QMC，是更广泛文献中的标准工具，但在 ALPS 中并未实现。目前没有专门针对 t-J 模型的 ALPS 教程；[格点基](../../intro/modeldef/sitebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其受限的希尔伯特空间，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程，则是在 ALPS 中探索其未受限的母模型的自然起点。
 
 ---
 

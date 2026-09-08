@@ -73,7 +73,7 @@ weight: 4
     1/2*(Splus(i)+Sminus(i))
     </SITEOPERATOR>
 
-或者用于计数同一格点上玻色子对数目的算符，例如出现在 Bose-Hubbard 哈密顿量的在位相互作用项中：
+或者用于计数同一格点上玻色子对数目的算符，例如出现在 玻色-哈伯德 哈密顿量的在位相互作用项中：
 
     <SITEOPERATOR name="double_occupancy" site="x">
     n(x)*(n(x)-1)/2
