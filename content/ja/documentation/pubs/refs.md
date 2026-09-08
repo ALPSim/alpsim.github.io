@@ -25,6 +25,30 @@ M. Troyer, B. Ammon, and E. Heeb, *Parallel object oriented Monte Carlo Simulati
 
 ---
 
+### Classical Monte Carlo for Spin Models — `spinmc`
+
+*Source: [`applications/mc/spins/`](https://github.com/ALPSim/ALPS/tree/master/applications/mc/spins)*
+
+**Algorithm papers**
+
+R. H. Swendsen and J.-S. Wang, *Nonuniversal critical dynamics in Monte Carlo simulations*, Phys. Rev. Lett. **58**, 86 (1987).
+
+<div class="btn-grid-4">
+{{< cta-button text="Journal" link="https://doi.org/10.1103/PhysRevLett.58.86" icon="article" >}}
+{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1103/PhysRevLett.58.86" icon="manage_search" >}}
+{{< cta-button text="BibTeX" link="/data/swendsen1987.bib" icon="format_quote" >}}
+</div>
+
+U. Wolff, *Collective Monte Carlo updating for spin systems*, Phys. Rev. Lett. **62**, 361 (1989).
+
+<div class="btn-grid-4">
+{{< cta-button text="Journal" link="https://doi.org/10.1103/PhysRevLett.62.361" icon="article" >}}
+{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1103/PhysRevLett.62.361" icon="manage_search" >}}
+{{< cta-button text="BibTeX" link="/data/wolff1989.bib" icon="format_quote" >}}
+</div>
+
+---
+
 ### Loop Algorithm QMC — `looper`
 
 *Source: [`applications/qmc/looper/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/looper)*
