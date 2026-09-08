@@ -87,23 +87,6 @@ F. Alet, S. Wessel, and M. Troyer, *Generalized directed loop method for quantum
 
 **Algorithm papers**
 
-A. W. Sandvik and J. Kurkijärvi, *Quantum Monte Carlo simulation method for spin systems*, Phys. Rev. B **43**, 5950 (1991).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1103/PhysRevB.43.5950" icon="article" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1103/PhysRevB.43.5950" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/sandvik1991.bib" icon="format_quote" >}}
-</div>
-
-N. V. Prokof'ev, B. V. Svistunov, and I. S. Tupitsyn, *Exact, Complete and Universal Continuous-Time Worldline Monte Carlo Approach to the Statistics of Discrete Quantum Systems*, Phys. Lett. A **238**, 253 (1998).
-
-<div class="btn-grid-4">
-{{< cta-button text="Journal" link="https://doi.org/10.1016/S0375-9601(97)00957-2" icon="article" >}}
-{{< cta-button text="arXiv" link="https://arxiv.org/abs/cond-mat/9703200" icon="science" >}}
-{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1016/S0375-9601(97)00957-2" icon="manage_search" >}}
-{{< cta-button text="BibTeX" link="/data/prokofev1998.bib" icon="format_quote" >}}
-</div>
-
 A. W. Sandvik, *Stochastic series expansion method with operator-loop update*, Phys. Rev. B **59**, R14157 (1999).
 
 <div class="btn-grid-4">
@@ -120,6 +103,22 @@ O. F. Syljuåsen and A. W. Sandvik, *Quantum Monte Carlo with directed loops*, P
 {{< cta-button text="arXiv" link="https://arxiv.org/abs/cond-mat/0202316" icon="science" >}}
 {{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1103/PhysRevE.66.046701" icon="manage_search" >}}
 {{< cta-button text="BibTeX" link="/data/syljuasen2002.bib" icon="format_quote" >}}
+</div>
+
+---
+
+### Worm code — `worms`
+
+*Source: [`applications/qmc/worms/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/worms)*
+
+**Algorithm papers**
+
+N. V. Prokof'ev, B. V. Svistunov, and I. S. Tupitsyn, *"Worm" algorithm in quantum Monte Carlo simulations*, Phys. Lett. A **238**, 253 (1998).
+
+<div class="btn-grid-4">
+{{< cta-button text="Journal" link="https://doi.org/10.1016/S0375-9601(97)00957-2" icon="article" >}}
+{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1016/S0375-9601(97)00957-2" icon="manage_search" >}}
+{{< cta-button text="BibTeX" link="/data/prokofev1998worm.bib" icon="format_quote" >}}
 </div>
 
 ---
@@ -186,7 +185,7 @@ E. Gull, A. J. Millis, A. I. Lichtenstein, A. N. Rubtsov, M. Troyer, and P. Wern
 
 ---
 
-### DMRG and Matrix Product State Applications — `dmrg`
+### DMRG — `dmrg`
 
 *Source: [`applications/dmrg/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmrg)*
 
