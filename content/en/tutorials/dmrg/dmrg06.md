@@ -1,15 +1,16 @@
 
 ---
 title: DMRG-06 Correlations
+weight: 6
 math: true
 toc: true
 ---
 
-## Correlation Functions
+## Correlation functions
 
 The most important correlation functions in many-body physics are two-point correlators, i.e. correlators that involve two sites $i$ and $j$, such as $\langle S^+_i S^-_j \rangle$. Short-ranged ones determine energies (in the typical short-ranged Hamiltonians of correlation physics), long-ranged ones determine correlation lengths.
 
-### Another Go At The Energy Per Bond
+### Another go at the energy per bond
 
 As already mentioned in [DMRG-02](../dmrg02), the ground state energy per bond in both spin-1/2 and spin-1 chains are given by:
 
@@ -21,7 +22,7 @@ This gives the energy of each bond individually, but we are interested in the th
 
 For the spin-1/2 chain, bond energies oscillate strongly between odd and even numbered bonds. This is because the open ends are felt very strongly, due to criticality, and because the spin-1/2 chain is on the verge of dimerization, i.e. a spontaneous breaking of translational symmetry of the ground state down to a periodicity of 2. It is therefore more meaningful to extrapolate the average energy of a strong and a weak bond, which gains a great deal of accuracy. This is a further demonstration of the value of inspecting the actual output of DMRG through local, or here almost local, observables.
 
-### Spin-Spin Correlations: Spin-1/2
+### Spin-spin correlations: spin-1/2
 
 #### Lattice and correlations
 
@@ -53,7 +54,7 @@ The result is a power law at short distances, crossing over to a faster, in fact
 | `MODEL` | quantum spin model | `spin` |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
 | `Sz_total` | magnetization sector | 0, 1, 2 (one run each) |
-| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 6 |
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
 | `MAXSTATES` | bond dimension $D$ kept after truncation | 100 |
@@ -148,7 +149,7 @@ and plot them vs. site distance:
     plt.xlabel('distance $l$')
     plt.show()
 
-### Spin-Spin Correlations: Spin-1
+### Spin-spin correlations: spin-1
 
 #### Lattice and correlations
 
@@ -187,7 +188,7 @@ In fact, the calculation of correlation lengths is much harder to converge than 
 | `MODEL` | quantum spin model | `spin` |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
 | `Sz_total` | magnetization sector | 0 |
-| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 6 |
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
 | `MAXSTATES` | bond dimension $D$ kept after truncation | 100 |
@@ -246,7 +247,7 @@ The main difference of the script <a class="alps-download" href="https://raw.git
 
 After running the simulation, correlations can be extracted and plotted in the same way as before.
 
-### Sometimes There Is A Way Out
+### Sometimes there is a way out
 
 In the special case of the spin-1 chain, we have a loophole for the calculation of the correlation length, which is related to the weird observation that the first excitation was not a bulk excitation. It can be shown that a good toy model for a spin-1 chain is given as follows: at each site of a spin-1, you put two spin-1/2, and construct the spin-1 states from the triplet states of the two spin-1/2 at each site. The ground state is then approximated quite well by a state where you link two spin-1/2 on *neighboring* sites by a singlet state.
 

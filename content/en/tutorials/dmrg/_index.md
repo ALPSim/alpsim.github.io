@@ -15,12 +15,12 @@ DMRG was introduced by Steven White in two seminal papers, [Density matrix formu
 
 - [DMRG-01 Introduction](dmrg01) — introduces the `dmrg` executable and the DMRG algorithm (infinite- and finite-system sweeps, truncation error) and its control parameters.
 
-## Model Physics and Ground State Energies
+## Model physics and ground state energies
 
 - [DMRG-02 Heisenberg Spin Chains](dmrg02) — surveys the physics of the two models in depth: the critical, gapless spin-1/2 chain solvable by the Bethe ansatz, and the gapped, non-critical spin-1 (Haldane) chain, with the benchmark values used throughout the rest of the series.
 - [DMRG-03 Ground State Energies](dmrg03) — runs the first `dmrg` calculations, computing ground state energies of the spin-1/2 and spin-1 chains at fixed length and extrapolating to the energy per site (or bond) in the thermodynamic limit.
 
-## Excitations and Correlations
+## Excitations and correlations
 
 - [DMRG-04 Gaps](dmrg04) — computes the singlet-triplet gap of the spin-1/2 chain and the Haldane gap of the spin-1 chain at finite length, and extrapolates both to the thermodynamic limit.
 - [DMRG-05 Local Observables](dmrg05) — uses the local magnetization profile to distinguish boundary from bulk excitations in the spin-1 chain, a subtlety arising from DMRG's preference for open boundary conditions.

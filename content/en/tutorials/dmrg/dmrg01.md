@@ -1,13 +1,14 @@
 
 ---
 title: DMRG-01 Introduction
+weight: 1
 math: true
 toc: true
 ---
 
 In this tutorial series we learn how to use the `dmrg` application, ALPS's implementation of the density-matrix renormalization group (DMRG), to compute ground state energies, excitation gaps, local observables, and correlation functions of one-dimensional quantum spin chains. There is a single executable, `dmrg` (found in the `bin` directory of your ALPS installation), that is used throughout every module of this series; what changes from module to module is which control parameters and measurements you request from it. This first module introduces the algorithm and its control parameters; the following modules put them to work on progressively more demanding measurements.
 
-## Introduction to Renormalization
+## Introduction to renormalization
 
 The advent of the DMRG algorithm was, in many ways, messy, and it took many years for the physics community to understand why the truncation process worked so spectacularly well on a theoretical level. The inspiration for DMRG follows from a notoriously difficult, but powerful, subject in quantum field theory known as the renormalization group (RG). The basic prescription of RG goes as follows: When dealing with a physical system, it is possible to throw out degrees of freedom (DOF) that have little to no effect on the underlying physics of interest. That is, RG compresses the theory.
 
@@ -21,7 +22,7 @@ where $h$ is an external field in the $z$-direction and $L$ is the length of the
 
 The success of this method led Wilson to try out the same sort of procedure in his numerics. The basic procedure was simple: diagonalize a Hamiltonian and drop the high-energy modes. This procedure was later coined Numerical Renormalization Group (NRG), and the approach worked beautifully for models like the Kondo impurity problem, but not so well when a system was highly correlated, like the Heisenberg chain. It took many years of trial and error to realize that certain systems separate nicely into distinct energy manifolds, while others do not. Skipping all the details, it was discovered that performing a truncation based on the reduced density matrix was the superior approach, since this more accurately accounted for other physics, like entanglement. We now describe the algorithm in more detail.
 
-## General Remarks
+## General remarks
 
 Now that we set the stage, let us briefly discuss the inner logic of the DMRG algorithm without discussing it in full detail. Given a one-dimensional quantum system with local state spaces of dimension $d$, where $d=2S+1$ for spins of magnitude $S$, the Hilbert space dimension increases exponentially as $d^L$ with system size $L$. Exact diagonalization achieves exact results in this exponentially large Hilbert space, at the price of small system sizes. Quantum Monte Carlo gives approximate results by stochastically sampling this large space, reaching much larger system sizes. The density-matrix renormalization group (DMRG) tries yet another approach, namely to identify very small subspaces of size $D$ of the exponentially large Hilbert space which are hoped to contain good, very good, even excellent approximations to the states of interest such as the ground state.
 
@@ -40,7 +41,7 @@ In a last remark, let us consider the *truncation error*, which is a good indica
 
 The most important difference to other numerical methods is that DMRG prefers open boundary conditions, such that there are two chain ends at site 1 and $L$, not a closed loop as for example exact diagonalization and most analytical methods would prefer. This will lead to some of the more subtle aspects of DMRG calculations that show up throughout this tutorial series, from the special lattice needed for the spin-1 chain in [DMRG-03](../dmrg03) to the boundary-vs-bulk distinction in the excitations studied in [DMRG-05](../dmrg05).
 
-## The ALPS DMRG Code and Its Control Parameters
+## The ALPS DMRG code and its control parameters
 
 Besides inputs such as the Hamiltonian and lattice geometry, the DMRG simulation requires a set of specific control parameters. Some of these are listed below. We refer the users to the [DMRG reference page](../../../documentation/methods/dmrg/dmrg) for further details.
 

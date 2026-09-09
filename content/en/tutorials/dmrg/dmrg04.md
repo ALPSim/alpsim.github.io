@@ -1,11 +1,12 @@
 
 ---
 title: DMRG-04 Gaps
+weight: 4
 math: true
 toc: true
 ---
 
-## Calculating The Gap
+## Calculating the gap
 
 As already mentioned in [DMRG-02](../dmrg02), the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state:
 
@@ -21,7 +22,7 @@ $$
 
 for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of DMRG's preference for open boundary conditions it is somewhat more complicated than in the more usual case of periodic boundary conditions.
 
-### Getting The Gap For Finite Systems
+### Getting the gap for finite systems
 
 Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
 
@@ -51,7 +52,7 @@ The built-in `open chain lattice`, spin-1/2 on every site; see the [ALPS lattice
 | `L` | chain length | 32 |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
 | `Sz_total` | magnetization sector | 0 |
-| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 4 |
 | `MAXSTATES` | bond dimension $D$ | 100 |
 | `NUMBER_EIGENVALUES` | two states requested, so the gap comes from a single run | 2 |
@@ -144,7 +145,7 @@ The built-in `open chain lattice`, spin-1/2 on every site; see the [ALPS lattice
 | `L` | chain length | 32 |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
 | `Sz_total` | magnetization sector; the gap is taken between sectors rather than within one | 1 |
-| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 4 |
 | `MAXSTATES` | bond dimension $D$ | 40 |
 | `NUMBER_EIGENVALUES` | not set, so only the lowest state in the sector is computed | 1 (default) |
@@ -217,9 +218,9 @@ Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=
 print('Gap:', energies[1]-energies[0])
 ```
 
-### Extrapolating The Gap To The Thermodynamic Limit
+### Extrapolating the gap to the thermodynamic limit
 
-A first attempt fixes $D=50,100,150$ and takes the gap for lengths $L=32,64,96,128$, plotting the gap against $1/L$ at fixed $D$. For small $D$ the results do not lie on a straight line through 0 but curve up from it, and the behaviour improves as $D$ grows.
+A first attempt fixes $D=50,100,150$ and takes the gap for lengths $L=32,64,96,128$, plotting the gap against $1/L$ at fixed $D$. For small $D$ the results do not lie on a straight line through 0 but curve up from it, and the behavior improves as $D$ grows.
 
 In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
 
