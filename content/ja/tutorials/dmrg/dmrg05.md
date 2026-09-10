@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-05 Local Observables
+title: DMRG-05 局所物理量
 math: true
 toc: true
 ---

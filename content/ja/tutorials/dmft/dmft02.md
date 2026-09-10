@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-02 Hybridization
+title: DMFT-02 混成
 math: true
 toc: true
 ---

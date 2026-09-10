@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-06 Paramagnet
+title: DMFT-06 常磁性金属
 math: true
 toc: true
 ---

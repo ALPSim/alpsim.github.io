@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-07 Hirsch-Fye
+title: DMFT-07 Hirsch-Fye 法
 math: true
 toc: true
 ---

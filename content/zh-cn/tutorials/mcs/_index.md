@@ -1,56 +1,56 @@
 
 ---
-title: Monte Carlo Simulations
-description: "Tutorials for ALPS"
+title: 蒙特卡洛模拟
+description: "ALPS 教程"
 toc: true
 weight: 1
 ---
 
-The ALPS Monte Carlo tutorials cover both classical and quantum simulations of spin models and bosonic lattice systems.
-Classical Monte Carlo uses local Metropolis or cluster (Wolff) updates for systems described by a classical Boltzmann weight.
-Quantum Monte Carlo (QMC) algorithms — loop, directed-loop SSE, and worm — work on path-integral or operator-series representations and give access to thermodynamic properties of quantum lattice models at finite temperature.
-An extended-ensemble quantum Wang-Landau method computes the full density of states and thermodynamic quantities across all temperatures in a single run.
-The tutorials progress from fundamental diagnostics such as autocorrelation times and equilibration, through specific observables such as susceptibilities and magnetization curves, to the detection of classical and quantum phase transitions.
+ALPS 蒙特卡洛教程涵盖自旋模型与玻色格点系统的经典模拟和量子模拟。
+经典蒙特卡洛针对由经典玻尔兹曼权重描述的系统，采用局域 Metropolis 更新或团簇（Wolff）更新。
+量子蒙特卡洛（QMC）算法——圈、有向圈随机级数展开以及蠕虫——作用于路径积分表示或算符级数表示，可以给出量子格点模型在有限温度下的热力学性质。
+扩展系综的量子王-朗道方法则只需一次运行，就能计算出完整的态密度以及所有温度下的热力学量。
+这些教程由自关联时间、热化等基本诊断量入手，经过磁化率、磁化曲线等具体可观测量，最终讨论经典相变与量子相变的判定。
 
-## Choosing a Code
+## 选择合适的程序
 
-Before starting a simulation it is important to select the algorithm best suited to your model and observable.
-The guide below compares the four QMC representations available in ALPS — `looper`, `dirloop_sse`, `worm`, and `qwl` — and summarises their respective strengths and limitations.
+在开始模拟之前，选择最适合你的模型和可观测量的算法非常重要。
+下面的指南比较了 ALPS 中可用的四种 QMC 表示——`looper`、`dirloop_sse`、`worm` 和 `qwl`——并总结了它们各自的优势与局限。
 
-- [Which code to choose for your simulation?](com)
+- [如何为你的模拟选择合适的程序？](com)
 
-## Classical Monte Carlo (`spinmc`)
+## 经典蒙特卡洛（`spinmc`）
 
-The `spinmc` application implements classical Monte Carlo with local Metropolis updates and cluster updates for classical spin models.
-The first two tutorials introduce the most important diagnostics for any MC run — autocorrelation time and equilibration — laying the groundwork for all subsequent work.
-The method is revisited later to study finite-size scaling and the second-order phase transition of the 2D Ising model.
+`spinmc` 程序针对经典自旋模型实现了带局域 Metropolis 更新和团簇更新的经典蒙特卡洛方法。
+前两个教程介绍了任何 MC 计算中最重要的两个诊断量——自关联时间和热化——为后续所有工作打下基础。
+在后面的教程中还会再次使用该方法，研究二维伊辛模型的有限尺寸标度和二级相变。
 
-- [MC-01(a) Classical Monte Carlo simulations and autocorrelations](mc01a)
-- [MC-01(b) Classical Monte Carlo simulations and equilibration/convergence](mc01b)
-- [MC-07 Phase transition in the Ising model](mc07)
+- [MC-01(a) 经典蒙特卡洛模拟与自关联](mc01a)
+- [MC-01(b) 经典蒙特卡洛模拟与热化/收敛](mc01b)
+- [MC-07 伊辛模型中的相变](mc07)
 
-## Loop and Directed-Loop QMC (`looper`, `dirloop_sse`)
+## 圈与有向圈量子蒙特卡洛（`looper`、`dirloop_sse`）
 
-The `looper` code implements the loop algorithm in an operator-loop representation and is most efficient for isotropic spin models without a magnetic field.
-The `dirloop_sse` code uses directed loops in the stochastic series expansion (SSE) representation; it handles models with anisotropy or an external magnetic field that break the spin-inversion symmetry required by `looper`.
-These tutorials cover susceptibilities of Heisenberg chains and ladders, magnetization curves in a field, and the identification of a quantum phase transition in a dimerised lattice.
+`looper` 程序在算符圈表示下实现了圈算法，对于无磁场的各向同性自旋模型效率最高。
+`dirloop_sse` 程序在随机级数展开（SSE）表示下使用有向圈；它可以处理具有各向异性或外磁场的模型，而这类模型破坏了 `looper` 所要求的自旋反演对称性。
+这些教程涵盖海森堡链与梯子的磁化率、磁场中的磁化曲线，以及二聚化晶格中量子相变的判定。
 
-- [MC-02 Calculating magnetic susceptibilities by the classical MC and looper QMC codes](mc02)
-- [MC-03 Calculating magnetization curves by the directed loop QMC code](mc03)
-- [MC-08 Quantum phase transition in a quantum spin model](mc08)
-- [MC-09 Quantum Monte Carlo](qmc)
+- [MC-02 用经典 MC 和 looper QMC 程序计算磁化率](mc02)
+- [MC-03 用有向圈量子蒙特卡洛程序计算磁化曲线](mc03)
+- [MC-08 量子自旋模型中的量子相变](mc08)
+- [MC-09 量子蒙特卡洛](qmc)
 
-## Worm QMC (`worm`)
+## 蠕虫量子蒙特卡洛（`worm`）
 
-The `worm` code uses the worm algorithm in the path-integral representation and is the method of choice for Bose-Hubbard models and for spin models in strong magnetic fields.
-The tutorials show how to enable and evaluate correlation functions and Green functions, and demonstrate the superfluid–Mott-insulator quantum phase transition in the Bose-Hubbard model.
+`worm` 程序在路径积分表示下使用蠕虫算法，是模拟玻色-哈伯德模型以及强磁场中自旋模型的首选方法。
+这些教程展示了如何开启并计算关联函数和格林函数，并演示了玻色-哈伯德模型中超流—莫特绝缘体量子相变。
 
-- [MC-04 Custom measurements in the QMC codes](mc04)
-- [MC-05 Simulating the Bose-Hubbard model using the worm QMC code](mc05)
+- [MC-04 QMC 程序中的自定义测量](mc04)
+- [MC-05 用蠕虫量子蒙特卡洛程序模拟玻色-哈伯德模型](mc05)
 
-## Quantum Wang-Landau (`qwl`)
+## 量子王-朗道（`qwl`）
 
-The quantum Wang-Landau code stochastically constructs the density of states of a quantum Hamiltonian and derives the full thermodynamics — free energy, entropy, and specific heat — at all temperatures from a single simulation.
-This tutorial applies the method to ferromagnetic and antiferromagnetic Heisenberg spin chains and ladders.
+量子王-朗道程序以随机方式构建量子哈密顿量的态密度，并由一次模拟导出所有温度下的完整热力学量——自由能、熵和比热。
+本教程将该方法应用于铁磁和反铁磁海森堡自旋链与自旋梯子。
 
-- [MC-06 Extended ensemble simulations (Quantum Wang-Landau)](mc06)
+- [MC-06 扩展系综模拟（量子王-朗道）](mc06)

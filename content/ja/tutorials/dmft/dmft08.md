@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-08 Lattices
+title: DMFT-08 格子
 math: true
 toc: true
 ---

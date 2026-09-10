@@ -1,13 +1,13 @@
 
 ---
-title: DMFT-02 Hybridization
+title: DMFT-02 杂化
 math: true
 toc: true
 ---
 
 ## 杂化展开 CT-HYB
 
-我们首先运行一个连续时间量子蒙特卡罗代码：杂化展开算法 CT-HYB。作为示例，我们重现 [Georges 等人的 DMFT 综述文章，Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。在教程 03 和 07 中，我们将分别用相互作用展开连续时间求解器和离散时间 Hirsch-Fye 量子蒙特卡罗代码重现相同的结果。除少数与求解器相关的参数外，输入参数都是相同的。
+我们首先运行一个连续时间量子蒙特卡洛代码：杂化展开算法 CT-HYB。作为示例，我们重现 [Georges 等人的 DMFT 综述文章，Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。在教程 03 和 07 中，我们将分别用相互作用展开连续时间求解器和离散时间 Hirsch-Fye 量子蒙特卡洛代码重现相同的结果。除少数与求解器相关的参数外，输入参数都是相同的。
 
 ### 运行模拟
 

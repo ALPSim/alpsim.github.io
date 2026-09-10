@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-01 Introduction
+title: DMRG-01 はじめに
 math: true
 toc: true
 ---

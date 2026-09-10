@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-05 Local Observables
+title: DMRG-05 局域可观测量
 math: true
 toc: true
 ---

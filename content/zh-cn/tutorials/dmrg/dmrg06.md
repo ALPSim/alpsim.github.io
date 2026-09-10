@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-06 Correlations
+title: DMRG-06 关联函数
 math: true
 toc: true
 ---

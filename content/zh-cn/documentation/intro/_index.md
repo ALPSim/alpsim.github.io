@@ -26,4 +26,4 @@ ALPS 输入文件中如何指定格子与图：从由顶点和边构成的简单
 
 ## [常用参数](parameters)
 
-大多数 ALPS 应用共有的输入参数一览：如何指定 `LATTICE` 与 `MODEL`（或自定义的 `GRAPH`），如何通过 `T` 或 `BETA` 设置温度，`SEED`、`RNG`、`SWEEPS`、`THERMALIZATION` 等蒙特卡罗控制参数，以及 `CONSERVED_QUANTUMNUMBERS`、`TRANSLATION_SYMMETRY`、`TOTAL_MOMENTUM` 等精确对角化专属的参数。
+大多数 ALPS 应用共有的输入参数一览：如何指定 `LATTICE` 与 `MODEL`（或自定义的 `GRAPH`），如何通过 `T` 或 `BETA` 设置温度，`SEED`、`RNG`、`SWEEPS`、`THERMALIZATION` 等蒙特卡洛控制参数，以及 `CONSERVED_QUANTUMNUMBERS`、`TRANSLATION_SYMMETRY`、`TOTAL_MOMENTUM` 等精确对角化专属的参数。

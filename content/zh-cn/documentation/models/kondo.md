@@ -41,7 +41,7 @@ $$
 | **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小型团簇给出精确结果 | 由于希尔伯特空间同时包含传导电子和局域自由度，仅限于小型团簇 | 小团簇基准测试 |
 | **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维 Kondo 链和梯子高度精确 | 对真正的二维/三维系统效率较低 | 一维 Kondo 晶格链的基态 |
 
-与 [Hubbard 模型](../hubbard)一样，除了特殊的、无符号问题的情形外，ALPS 中没有针对一般 Kondo 晶格模型的格点量子蒙特卡罗程序：它是一个真正意义上的费米型格点问题，DMFT（而非直接的格点 QMC）是 ALPS 中可用的标准大规模方法。目前没有专门针对这一模型的 ALPS 教程，但[格子基](../../intro/modeldef/latticebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其双子格结构，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程则是了解底层 DMFT 机制的自然起点。
+与 [Hubbard 模型](../hubbard)一样，除了特殊的、无符号问题的情形外，ALPS 中没有针对一般 Kondo 晶格模型的格点量子蒙特卡洛程序：它是一个真正意义上的费米型格点问题，DMFT（而非直接的格点 QMC）是 ALPS 中可用的标准大规模方法。目前没有专门针对这一模型的 ALPS 教程，但[格子基](../../intro/modeldef/latticebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其双子格结构，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程则是了解底层 DMFT 机制的自然起点。
 
 ---
 

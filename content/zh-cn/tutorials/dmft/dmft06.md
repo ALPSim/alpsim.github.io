@@ -1,13 +1,13 @@
 
 ---
-title: DMFT-06 Paramagnet
+title: DMFT-06 顺磁金属
 math: true
 toc: true
 ---
 
 ## Paramagnetic metal and extrapolation errors
 
-在本例中，我们使用顺磁自洽方式，模拟贝特格子上相互作用为 $U=3D/\sqrt{2}$、温度为 $\beta =32 \sqrt{2}/D$ 的 Hubbard 模型。我们将计算自能，并将其与 [Georges 等人的 DMFT 综述文章](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)中图 15 的结果进行比较，该图给出了同一体系的 Hirsch-Fye 与精确对角化结果。与 Hirsch-Fye 算法不同，CT-HYB 和 CT-INT 这两种连续时间量子蒙特卡罗算法不存在离散化误差，能够重现精确对角化的结果。
+在本例中，我们使用顺磁自洽方式，模拟贝特格子上相互作用为 $U=3D/\sqrt{2}$、温度为 $\beta =32 \sqrt{2}/D$ 的 Hubbard 模型。我们将计算自能，并将其与 [Georges 等人的 DMFT 综述文章](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)中图 15 的结果进行比较，该图给出了同一体系的 Hirsch-Fye 与精确对角化结果。与 Hirsch-Fye 算法不同，CT-HYB 和 CT-INT 这两种连续时间量子蒙特卡洛算法不存在离散化误差，能够重现精确对角化的结果。
 
 ### 模型
 
@@ -43,9 +43,9 @@ $$
 | :-------- | :------ | :-------------- | :-------------- |
 | `SOLVER` | 杂质求解器 | `"hybridization"` | `"Interaction Expansion"` |
 | `N`, `NMATSUBARA` | $G$、$G_0$ 的虚时间／松原频率离散化数目 | $1000$ | $500$ |
-| `SWEEPS`, `THERMALIZATION` | 蒙特卡罗扫描数上限、热化扫描数 | $2500$、$500$ | $10^8$、$1000$ |
+| `SWEEPS`, `THERMALIZATION` | 蒙特卡洛扫描数上限、热化扫描数 | $2500$、$500$ | $10^8$、$1000$ |
 | `MAX_TIME` | 每次迭代的实际时间上限（秒） | $600$ | $120$ |
-| `N_MEAS` | 测量之间的蒙特卡罗更新次数 | $10000$ | ─ |
+| `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $10000$ | ─ |
 | `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ | ─ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ | ─ |
 | `ALPHA` | CT-INT 辅助伊辛场的偏移量 | ─ | $-0.01$ |
@@ -288,7 +288,7 @@ plt.legend()
 plt.show()
 ```
 
-由于这是随机性的蒙特卡罗模拟，实际得到的数值取决于 `SEED`、`MAX_TIME` 和计算机速度，但 `parm_hyb` 与 `parm_int` 得到的收敛自能应在误差范围内彼此一致，并且都应能重现 [Georges 等人](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)图 15 中 ED/Hirsch-Fye 曲线在低频区域的行为——且无需任何 $\Delta\tau$ 外推。
+由于这是随机性的蒙特卡洛模拟，实际得到的数值取决于 `SEED`、`MAX_TIME` 和计算机速度，但 `parm_hyb` 与 `parm_int` 得到的收敛自能应在误差范围内彼此一致，并且都应能重现 [Georges 等人](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)图 15 中 ED/Hirsch-Fye 曲线在低频区域的行为——且无需任何 $\Delta\tau$ 外推。
 
 ### 小结与展望
 
