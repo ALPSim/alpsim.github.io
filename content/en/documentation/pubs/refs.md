@@ -9,7 +9,7 @@ The following lists the implementation papers for individual ALPS applications a
 
 ---
 
-### ALPS Parallel Monte Carlo Scheduler
+### Parallel Monte Carlo Scheduler
 
 *Source: [`src/alps/scheduler/`](https://github.com/ALPSim/ALPS/tree/master/src/alps/scheduler)*
 
@@ -21,6 +21,33 @@ M. Troyer, B. Ammon, and E. Heeb, *Parallel object oriented Monte Carlo Simulati
 {{< cta-button text="Journal" link="https://doi.org/10.1007/3-540-49372-7_20" icon="article" >}}
 {{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1007/3-540-49372-7_20" icon="manage_search" >}}
 {{< cta-button text="BibTeX" link="/data/troyer1998.bib" icon="format_quote" >}}
+</div>
+
+---
+
+### Exact and full diagonalization — `sparsediag` and `fulldiag`
+
+*Source: [`applications/diag/sparsediag/`](https://github.com/ALPSim/ALPS/tree/master/applications/diag/sparsediag), [`fulldiag/`](https://github.com/ALPSim/ALPS/tree/master/applications/diag/fulldiag)*
+
+**Implementation papers**
+
+B. Bauer, L. D. Carr, H. G. Evertz, A. Feiguin, J. Freire, S. Fuchs, L. Gamper, J. Gukelberger, E. Gull, S. Guertler, A. Hehn, R. Igarashi, S. V. Isakov, D. Koop, P. N. Ma, P. Mates, H. Matsuo, O. Parcollet, G. Pawłowski, J. D. Picon, L. Pollet, E. Santos, V. W. Scarola, U. Schollwöck, C. Silva, B. Surer, S. Todo, S. Trebst, M. Troyer, M. L. Wall, P. Werner, and S. Wessel, *The ALPS project release 2.0: open source software for strongly correlated systems*, J. Stat. Mech. **2011**, P05001 (2011).
+
+<div class="btn-grid-4">
+{{< cta-button text="Journal" link="https://doi.org/10.1088/1742-5468/2011/05/P05001" icon="article" >}}
+{{< cta-button text="arXiv" link="https://arxiv.org/abs/1101.2646" icon="science" >}}
+{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.1088/1742-5468/2011/05/P05001" icon="manage_search" >}}
+{{< cta-button text="BibTeX" link="/data/bauer2011.bib" icon="format_quote" >}}
+</div>
+
+**Algorithm papers**
+
+C. Lanczos, *An iteration method for the solution of the eigenvalue problem of linear differential and integral operators*, J. Res. Natl. Bur. Stand. **45**, 255-282 (1950).
+
+<div class="btn-grid-4">
+{{< cta-button text="Journal" link="https://doi.org/10.6028/jres.045.026" icon="article" >}}
+{{< cta-button text="Scholar" link="https://scholar.google.com/scholar?q=doi:10.6028/jres.045.026" icon="manage_search" >}}
+{{< cta-button text="BibTeX" link="/data/lanczos1950.bib" icon="format_quote" >}}
 </div>
 
 ---
@@ -94,7 +121,7 @@ H. G. Evertz, *The loop algorithm*, Adv. Phys. **52**, 1 (2003).
 
 ---
 
-### The Directed Loop code in SSE representation
+### The Directed Loop code in SSE representation — `dirloop_sse`
 
 *Source: [`applications/qmc/sse/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse), [`sse2/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse2), [`sse4/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse4)*
 
@@ -164,7 +191,7 @@ M. Troyer, S. Wessel, and F. Alet, *Wang-Landau sampling for quantum systems: al
 
 ---
 
-### ALPS-DMFT: CT-QMC Impurity Solvers and Dynamical Mean-Field Theory
+### DMFT: CT-QMC Impurity Solvers and Dynamical Mean-Field Theory — `dmft`, `interaction`, `hybridization`
 
 *Source: [`applications/dmft/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmft)*
 
