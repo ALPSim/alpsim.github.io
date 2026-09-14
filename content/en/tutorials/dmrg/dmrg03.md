@@ -1,6 +1,7 @@
 
 ---
 title: DMRG-03 Ground State Energies
+weight: 3
 math: true
 toc: true
 ---
@@ -11,11 +12,11 @@ $$
 H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
-## Ground State Energies
+## Ground state energies
 
 When studying a model Hamiltonian, the first question we usually ask is what is the ground state $| \psi_0 \rangle$ and its energy $E_0$. For the Heisenberg chain of length $L$, and other similar systems, we might be more interested in the energy per site (or per bond) in the thermodynamic limit. Both of these will be considered below.
 
-### Fixed Length Ground State Energies
+### Fixed length ground state energies
 
 The calculations below use chains of length $L=32,64,96,128$, for both spin-1/2 and spin-1, with numbers of states $D=50,100,150,200,300$. For each length the truncation error and the ground state energy are recorded as a function of $D$. The number of sweeps must be chosen carefully, since a result is only meaningful once it has converged at the given length and number of states.
 
@@ -23,7 +24,7 @@ Plotting the total energy against the truncation error exposes the connection be
 
 The convergence in $D$ deteriorates with system size for both chains, but not equally. Apart from a global factor of order of the length, convergence at large system sizes depends only weakly on length for the spin-1 chain, and much more strongly for the spin-1/2 chain. This is because spin-1 physics is dominated by segments of the order of the correlation length, whereas the spin-1/2 chain has no finite length scale because it is critical.
 
-#### The one dimensional S=1/2 Heisenberg chain
+#### The one-dimensional S=1/2 Heisenberg chain
 
 ##### Parameters
 
@@ -34,7 +35,7 @@ The convergence in $D$ deteriorates with system size for both chains, but not eq
 | `L` | chain length | 32 |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed, used to block-diagonalize $H$ | `N,Sz` |
 | `Sz_total` | magnetization sector targeted | 0 |
-| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 4 |
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
 | `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
@@ -203,7 +204,7 @@ for run in data:
         print(s.props['observable'], ':', s.y[0])
 ```
 
-#### The one dimensional S=1 Heisenberg chain
+#### The one-dimensional S=1 Heisenberg chain
 
 ##### Parameters
 
@@ -216,7 +217,7 @@ for run in data:
 | `local_S1` | spin on the interior sites | 1 |
 | `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed, used to block-diagonalize $H$ | `N,Sz` |
 | `Sz_total` | magnetization sector targeted | 0 |
-| `J` | nearest-neighbour Heisenberg coupling | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
 | `SWEEPS` | number of DMRG finite-size sweeps | 4 |
 | `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
 | `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
@@ -363,7 +364,7 @@ SWEEPS=4
 
 The same runs can be set up with the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_multiple.py" data-filename="spin_one_multiple.py" target="_blank" rel="noopener">`spin_one_multiple.py`</a>, which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
 
-### Ground State Energies Per Site (Bond)
+### Ground state energies per site (bond)
 
 If we look closely at the Hamiltonian, the energy of a chain of length $L$ does not sit on the $L$ sites, but on the $L-1$ bonds. A first (naive) attempt therefore consists of taking the results of the last simulations and calculating:
 
