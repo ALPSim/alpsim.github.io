@@ -1,5 +1,5 @@
 ---
-title: DMRG-11 Boundary Conditions
+title: DMRG-11 Open vs Closed Boundary Conditions
 weight: 5
 math: true
 toc: true
