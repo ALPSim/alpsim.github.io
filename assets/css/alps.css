@@ -258,6 +258,10 @@
   margin: 0;
 }
 
+.btn-grid .btn-span-full {
+  grid-column: 1 / -1;
+}
+
 .btn-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
