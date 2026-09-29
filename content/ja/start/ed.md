@@ -106,6 +106,8 @@ res = pyalps.runApplication('sparsediag', input_file)
 
 `sparsediag` は各パラメータセットに対して Lanczos アルゴリズムを実行します。各 $(L, S_z)$ の組み合わせについて、平移対称性を利用して $S_z$ セクター内でさらにブロック分割し、各格子運動量 $k = 0, \frac{2\pi}{L}, \ldots, \frac{2\pi(L-1)}{L}$ ごとに小さな行列を解きます。結果はプレフィックスで命名された HDF5 ファイルに保存されます。
 
+このステップには単一コアで約 30 分かかり、そのほとんどは $L = 16$ のセクターに費やされます。まず手早く試したい場合は、鎖長のリストから 14 と 16 を外してください。
+
 ## 結果の読み込みとデータ構造の理解
 
 ```python
@@ -158,7 +160,7 @@ gapplot = pyalps.DataSet()
 gapplot.x = 1./np.sort(lengths)
 gapplot.y = [min_energies[(l,1)] - min_energies[(l,0)] for l in np.sort(lengths)]
 gapplot.props['xlabel'] = '$1/L$'
-gapplot.props['ylabel'] = '三重項ギャップ $\Delta/J$'
+gapplot.props['ylabel'] = r'三重項ギャップ $\Delta/J$'
 gapplot.props['label']  = 'S=1'
 gapplot.props['line']   = '.'
 

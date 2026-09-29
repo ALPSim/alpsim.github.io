@@ -37,3 +37,7 @@ ALPSをインストールしたら、以下のクイックスタート例をお�
 - [量子モンテカルロ法](qmc) — ハイブリダイゼーション展開ソルバーによるKondoスクリーニング
 - [密度行列繰り込み群法](dmrg) — Heisenberg鎖の基底状態エネルギー
 - [厳密対角化法](ed) — スピン鎖の三重項ギャップ
+
+{{< callout type="info" >}}
+**ディスプレイのないマシン（SSH、HPC クラスタ）で実行する場合** 各例は `plt.show()` で終わり、ウィンドウを開こうとします。ディスプレイがないと matplotlib は `FigureCanvasAgg is non-interactive, and thus cannot be shown` と表示するだけで、図は現れません。`plt.show()` を `plt.savefig('figure.png')` に置き換えると、図をファイルに保存できます。
+{{< /callout >}}

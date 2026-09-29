@@ -37,3 +37,7 @@ Once ALPS is installed, try one of the quickstart examples:
 - [Quantum Monte Carlo](qmc) — Kondo screening with the hybridization expansion solver
 - [Density Matrix Renormalization Group](dmrg) — ground state energy of a Heisenberg chain
 - [Exact Diagonalization](ed) — triplet gap of a spin chain
+
+{{< callout type="info" >}}
+**Running on a headless machine (SSH, HPC cluster)?** The examples end with `plt.show()`, which opens a window. Without a display, matplotlib only prints `FigureCanvasAgg is non-interactive, and thus cannot be shown` and no figure appears. Replace `plt.show()` with `plt.savefig('figure.png')` to write the plot to a file instead.
+{{< /callout >}}

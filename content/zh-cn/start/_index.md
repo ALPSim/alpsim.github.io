@@ -37,3 +37,7 @@ $ pip install pyalps
 - [量子蒙特卡洛](qmc) — 使用杂化展开求解器模拟 Kondo 屏蔽
 - [密度矩阵重整化群](dmrg) — Heisenberg 链的基态能量
 - [精确对角化](ed) — 自旋链的三重态能隙
+
+{{< callout type="info" >}}
+**在无显示器的机器（SSH、HPC 集群）上运行？** 这些示例以 `plt.show()` 结尾，会尝试打开窗口。没有显示器时，matplotlib 只会打印 `FigureCanvasAgg is non-interactive, and thus cannot be shown`，不会出现图像。将 `plt.show()` 替换为 `plt.savefig('figure.png')` 即可把图保存到文件。
+{{< /callout >}}
