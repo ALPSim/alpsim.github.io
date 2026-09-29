@@ -10,7 +10,7 @@ math: true
 本教程假设 pyalps 已完成安装。如果尚未安装，请参阅[入门指南](../)。
 {{< /callout >}}
 
-本教程演示**连续时间杂化展开**（CT-HYB）量子蒙特卡洛求解器——一种针对量子杂质模型的精确、无偏数值方法，由 Werner 等人最初提出（[Phys. Rev. Lett. 97, 076405, 2006](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.97.076405)）。我们模拟**近藤效应**：随着温度降低，传导电子逐渐屏蔽磁性杂质，有效局域磁矩不断减小。无量纲有效磁矩为 $4T\chi_{dd}$，其中 $\chi_{dd}$ 为局域自旋磁化率。在高温（$T \gg U$ 且 $T \gg$ 半带宽 $D$）下它趋近于无关联电子的值 $1/2$；自由自旋（$S = 1/2$）的值 1 需要 $T_K \ll T \ll U$，即 $U \gg D$。当 $U > 0$ 时，低温下它趋向于零，标志着完全近藤屏蔽的出现。我们使用半椭圆态密度作为杂化函数——这是对应 Bethe 格子的标准选择，在动力学平均场理论（DMFT）计算中十分常见。
+本教程演示**连续时间杂化展开**（CT-HYB）量子蒙特卡洛求解器——一种针对量子杂质模型的精确、无偏数值方法，由 Werner 等人最初提出（[Phys. Rev. Lett. 97, 076405, 2006](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.97.076405)）。我们模拟**近藤效应**：随着温度降低，传导电子逐渐屏蔽磁性杂质，有效局域磁矩不断减小。无量纲有效磁矩为 $4T\chi_{dd}$，其中 $\chi_{dd}$ 为局域自旋磁化率。在高温下其趋近于无关联电子的值 1/2（自由自旋 $S = 1/2$ 才给出 1）；当 Coulomb 相互作用 $U > 0$ 时，低温下它趋向于零，标志着完全近藤屏蔽的出现。我们使用半椭圆态密度作为杂化函数——这是对应 Bethe 格子的标准选择，在动力学平均场理论（DMFT）计算中十分常见。
 
 ## 导入模块
 
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt       # 用于绘制结果
 from numpy import exp, log, sqrt, pi  # 数学工具函数
 ```
 
-`pyalps.cthyb` 是 ALPS 自带的分段（segment）表象杂化展开求解器（源码：`applications/dmft/qmc/hybridization`）。尽管名称相同，它并不是独立的 [ALPSCore CT-HYB](https://github.com/ALPSCore/CT-HYB) 软件包。
+`pyalps.cthyb` 是 ALPS 自带的杂化展开求解器（`applications/dmft/qmc/hybridization`），并不是独立的 [ALPSCore CT-HYB](https://github.com/ALPSCore/CT-HYB) 软件包。
 
 ## 温度网格
 
@@ -179,7 +179,7 @@ plt.legend()
 plt.show()
 ```
 
-图表显示了 $4T\chi_{dd}$ 随温度（对数坐标）的变化。$U = 0$ 时磁矩单调下降，低温下与 $T$ 成正比（Pauli 顺磁性）；$U = 2$ 时，磁矩先增强到高于 $1/2$，随后在低温下趋向零，证明了传导电子对杂质自旋的近藤屏蔽效应。
+图表显示了 $4T\chi_{dd}$ 随温度（对数坐标）的变化。$U = 0$ 时有效磁矩在低温下与 $T$ 成正比地减小（非相互作用极限的 Pauli 顺磁性）；$U = 2$ 时，有效磁矩在低温下趋向零，证明了传导电子对杂质自旋的近藤屏蔽效应。
 
 ![有效局域磁矩随温度变化图，展示近藤屏蔽效应](/figs/Kondo.png)
 

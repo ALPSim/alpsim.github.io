@@ -182,7 +182,7 @@ plt.show()
 
 ## Result
 
-The fitted curve extrapolates to the $y$-intercept at $1/L = 0$, giving $\Delta \approx 0.419\,J$ — a clearly finite gap, confirming the Haldane phase, and about 2% above the best numerical estimate (White & Huse, 1993: $\Delta = 0.41048\,J$). The finite-size gaps are exact; the difference comes from fitting a single exponential at $L \le 16$. Longer chains are needed to do better — see [DMRG-04](../../tutorials/dmrg/dmrg04/#extrapolating-the-gap-to-the-thermodynamic-limit).
+The fitted curve extrapolates to the $y$-intercept at $1/L = 0$, giving $\Delta \approx 0.419\,J$ — close to the best numerical estimates for the Haldane gap (White & Huse, 1993: $\Delta = 0.41048\,J$). This confirms the Haldane phase and validates the ALPS `sparsediag` solver. The remaining 2% difference comes from fitting a single exponential at $L \le 16$; see [DMRG-04](../../tutorials/dmrg/dmrg04/#extrapolating-the-gap-to-the-thermodynamic-limit) for longer chains.
 
 The plot shows the triplet gap decreasing as $L$ grows, with the fitted curve capturing the exponential convergence:
 

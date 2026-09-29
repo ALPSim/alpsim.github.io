@@ -77,7 +77,7 @@ res = pyalps.runApplication('dmrg', input_file, writexml=True)
 
 ## 加载基态可观测量
 
-模拟完成后，`loadEigenstateMeasurements` 提取为最终收敛基态测量的可观测量。使用上面的参数时，只有能量和最终截断误差；局域磁化、关联函数等物理量只有在通过 `MEASURE_*` 参数指定时才会被测量：
+模拟完成后，`loadEigenstateMeasurements` 提取 DMRG 代码测量的所有可观测量——包括能量、磁化强度、关联函数以及 ALPS 为最终收敛基态计算的其他物理量：
 
 ```python
 data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
@@ -86,7 +86,7 @@ for s in data[0]:
     print(s.props['observable'], ' : ', s.y[0])
 ```
 
-`data[0]` 中的每个元素 `s` 对应一个可观测量。`s.props['observable']` 是其名称（这里是 `'Energy'` 和 `'Truncation error'`），`s.y[0]` 是其值。这个 32 格点开放链的基态能量为 $E_0 \approx -13.9973\,J$。
+`data[0]` 中的每个元素 `s` 对应一个可观测量。`s.props['observable']` 是其名称（如 `'Energy'`、`'Truncation error'`），`s.y[0]` 是其值。使用上面的参数时只测量这两个量；磁化强度和关联函数需要 `MEASURE_*` 参数。对于这个 32 格点开放链，基态能量应接近 $E_0 \approx -13.9973\,J$。
 
 {{< callout type="info" >}}
 **为什么不是简单的 $32\,e_0$？** 开放链的两端贡献表面能，此外还有 $1/L$ 的有限尺寸修正：
@@ -95,7 +95,7 @@ $$
 E_0(L) \simeq L\,e_0 + e_s - \frac{\pi^2}{48\,L}, \qquad e_0 = \tfrac14 - \ln 2, \quad e_s = \tfrac{\pi - 1 - 2\ln 2}{4} \approx 0.1888.
 $$
 
-（$e_s$ 取自 [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040)。）对于 $L = 32$，得到 $-13.9983\,J$，与 DMRG 结果相差不到 $10^{-3}$。如何去除边界贡献、从开放链得到每键的体能量，参见 [DMRG-03](../../tutorials/dmrg/dmrg03/#每格点每键基态能量)。
+（$e_s$ 取自 [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040)。）对于 $L = 32$，得到 $-13.9983\,J$，与 DMRG 结果相差不到 $10^{-3}$。如何去除边界贡献参见 [DMRG-03](../../tutorials/dmrg/dmrg03/#每格点每键基态能量)。
 {{< /callout >}}
 
 ## 加载迭代历史
@@ -107,7 +107,7 @@ itr = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half')
                                what=['Iteration Energy', 'Iteration Truncation Error'])
 ```
 
-`itr[0][0]` 包含每次半扫描记录的能量；`itr[0][1]` 包含每步的截断误差。**截断误差**是约化密度矩阵被舍弃本征值之和——即具有 $m$ 个状态的 MPS 无法表示的精确基态权重。收敛良好的计算应使截断误差低于 $10^{-6}$。对于这个系统的 $m = 100$，最终值约为 $10^{-13}$；高达 $10^{-5}$ 的值只出现在计算初期。
+`itr[0][0]` 包含每次半扫描记录的能量；`itr[0][1]` 包含每步的截断误差。**截断误差**是约化密度矩阵被舍弃本征值之和——即具有 $m$ 个状态的 MPS 无法表示的精确基态权重。收敛良好的计算应使截断误差低于 $10^{-6}$；对于这个系统的 $m = 100$，最终值约为 $10^{-13}$。
 
 ## 绘制收敛图
 

@@ -77,7 +77,7 @@ res = pyalps.runApplication('dmrg', input_file, writexml=True)
 
 ## 基底状態の物理量の読み込み
 
-シミュレーション後、`loadEigenstateMeasurements` は最終収束基底状態について測定された物理量を取得します。上記のパラメータでは、エネルギーと最終的な切断誤差の 2 つです。局所磁化や相関関数などは、`MEASURE_*` パラメータで指定した場合にのみ測定されます。
+シミュレーション後、`loadEigenstateMeasurements` は DMRG コードが測定したすべての物理量——エネルギー、磁化、相関関数、その他 ALPS が最終収束基底状態について計算した物理量——を取得します。
 
 ```python
 data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
@@ -86,7 +86,7 @@ for s in data[0]:
     print(s.props['observable'], ' : ', s.y[0])
 ```
 
-`data[0]` の各要素 `s` は 1 つの物理量に対応します。`s.props['observable']` はその名前（ここでは `'Energy'` と `'Truncation error'`）で、`s.y[0]` はその値です。この 32 サイト開放鎖の基底状態エネルギーは $E_0 \approx -13.9973\,J$ です。
+`data[0]` の各要素 `s` は 1 つの物理量に対応します。`s.props['observable']` はその名前（例：`'Energy'`、`'Truncation error'`）で、`s.y[0]` はその値です。上記のパラメータではこの 2 つだけが測定され、磁化や相関関数には `MEASURE_*` パラメータが必要です。この 32 サイト開放鎖では、基底状態エネルギーは $E_0 \approx -13.9973\,J$ に近い値になるはずです。
 
 {{< callout type="info" >}}
 **なぜ単純に $32\,e_0$ ではないのか？** 開放鎖の両端が表面エネルギーを加え、さらに $1/L$ の有限サイズ補正があります：
@@ -95,7 +95,7 @@ $$
 E_0(L) \simeq L\,e_0 + e_s - \frac{\pi^2}{48\,L}, \qquad e_0 = \tfrac14 - \ln 2, \quad e_s = \tfrac{\pi - 1 - 2\ln 2}{4} \approx 0.1888.
 $$
 
-（$e_s$ は [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040) による。）$L = 32$ では $-13.9983\,J$ となり、DMRG の結果と $10^{-3}$ 以内で一致します。境界の寄与を取り除き、開放鎖から結合あたりのバルクエネルギーを求める方法は [DMRG-03](../../tutorials/dmrg/dmrg03/#格子点あたり結合あたりの基底状態エネルギー) で説明しています。
+（$e_s$ は [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040) による。）$L = 32$ では $-13.9983\,J$ となり、DMRG の結果と $10^{-3}$ 以内で一致します。境界の寄与を取り除く方法は [DMRG-03](../../tutorials/dmrg/dmrg03/#格子点あたり結合あたりの基底状態エネルギー) で説明しています。
 {{< /callout >}}
 
 ## 反復履歴の読み込み
@@ -107,7 +107,7 @@ itr = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half')
                                what=['Iteration Energy', 'Iteration Truncation Error'])
 ```
 
-`itr[0][0]` は各ハーフスイープで記録されたエネルギーを、`itr[0][1]` は各ステップの切断誤差を含みます。**切断誤差**は縮約密度行列の棄却固有値の和であり、$m$ 状態の MPS が表現できない厳密基底状態の重みを表します。よく収束した計算では切断誤差が $10^{-6}$ 以下になるべきです。このシステムの $m = 100$ では最終的に $10^{-13}$ 程度になり、$10^{-5}$ 程度の値は計算初期にのみ現れます。
+`itr[0][0]` は各ハーフスイープで記録されたエネルギーを、`itr[0][1]` は各ステップの切断誤差を含みます。**切断誤差**は縮約密度行列の棄却固有値の和であり、$m$ 状態の MPS が表現できない厳密基底状態の重みを表します。よく収束した計算では切断誤差が $10^{-6}$ 以下になるべきです。このシステムの $m = 100$ では、最終的な値は $10^{-13}$ 程度です。
 
 ## 収束のプロット
 
