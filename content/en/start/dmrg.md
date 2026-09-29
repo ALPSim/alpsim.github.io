@@ -89,15 +89,13 @@ for s in data[0]:
 Each element `s` in `data[0]` corresponds to one observable. `s.props['observable']` is its name (here `'Energy'` and `'Truncation error'`) and `s.y[0]` is its value. For this 32-site open chain the ground-state energy is $E_0 \approx -13.9973\,J$.
 
 {{< callout type="info" >}}
-**Why not simply $32\,e_0$?** An open chain pays a *surface energy* at its two ends, and its energy has a $1/L$ finite-size correction. For the open $S=1/2$ Heisenberg chain,
+**Why not simply $32\,e_0$?** The two open ends add a surface energy, and there is a $1/L$ finite-size correction:
 
 $$
-E_0(L) \simeq L\,e_0 + e_s - \frac{\pi^2}{48\,L}, \qquad e_0 = \tfrac14 - \ln 2, \quad e_s = \tfrac{\pi - 1 - 2\ln 2}{4} \approx 0.1888,
+E_0(L) \simeq L\,e_0 + e_s - \frac{\pi^2}{48\,L}, \qquad e_0 = \tfrac14 - \ln 2, \quad e_s = \tfrac{\pi - 1 - 2\ln 2}{4} \approx 0.1888.
 $$
 
-where $e_s$ is the Bethe-ansatz boundary energy ([Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040)) and the last term is the conformal correction for a gapless chain with velocity $v = \pi/2$ and central charge $c = 1$. For $L = 32$ this gives $-14.1807 + 0.1888 - 0.0064 = -13.9983\,J$, within $10^{-3}$ of the DMRG result; the remainder comes from slower (logarithmic) corrections. Because the surface energy is positive, the open chain lies *above* the bulk estimate $L e_0 = -14.18\,J$, not below it.
-
-To extract bulk quantities from open-chain DMRG, the boundary contributions are usually cancelled rather than fitted. Common tricks are energy differences such as $[E_0(L+2) - E_0(L)]/2$, in which the surface energy drops out; measuring the bond energy $\langle \mathbf{S}_i\cdot\mathbf{S}_{i+1}\rangle$ only in the middle of the chain; and smooth boundary conditions that suppress the edge terms.
+($e_s$ from [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040).) For $L = 32$ this gives $-13.9983\,J$, within $10^{-3}$ of the DMRG result. How to remove the boundary contributions and obtain the bulk energy per bond from open chains is shown in [DMRG-03](../../tutorials/dmrg/dmrg03/#ground-state-energies-per-site-bond).
 {{< /callout >}}
 
 ## Loading iteration history
@@ -109,7 +107,7 @@ itr = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half')
                                what=['Iteration Energy', 'Iteration Truncation Error'])
 ```
 
-`itr[0][0]` contains the energy recorded at each half-sweep; `itr[0][1]` contains the truncation error at each step. The **truncation error** is the sum of the discarded eigenvalues of the reduced density matrix — the weight in the exact ground state that the MPS with $m$ states cannot represent. A well-converged calculation should reach a truncation error below $10^{-6}$. For $m = 100$ on this system the truncation error peaks around $10^{-5}$ early in the run, while the MPS is still far from the ground state, and then drops by several orders of magnitude with each sweep, ending near $10^{-13}$ after the fourth sweep.
+`itr[0][0]` contains the energy recorded at each half-sweep; `itr[0][1]` contains the truncation error at each step. The **truncation error** is the sum of the discarded eigenvalues of the reduced density matrix — the weight in the exact ground state that the MPS with $m$ states cannot represent. A well-converged calculation should reach a truncation error below $10^{-6}$. For $m = 100$ on this system it ends near $10^{-13}$; values up to $10^{-5}$ appear only early in the run.
 
 ## Plotting convergence
 
