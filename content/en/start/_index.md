@@ -39,5 +39,5 @@ Once ALPS is installed, try one of the quickstart examples:
 - [Exact Diagonalization](ed) — triplet gap of a spin chain
 
 {{< callout type="info" >}}
-**Running on a headless machine (SSH, HPC cluster)?** The examples end with `plt.show()`, which opens a window. Without a display, matplotlib only prints `FigureCanvasAgg is non-interactive, and thus cannot be shown` and no figure appears. Replace `plt.show()` with `plt.savefig('figure.png')` to write the plot to a file instead.
+**Headless machine (SSH, HPC)?** `plt.show()` cannot open a window there; replace it with `plt.savefig('figure.png')`.
 {{< /callout >}}

@@ -39,5 +39,5 @@ ALPSをインストールしたら、以下のクイックスタート例をお�
 - [厳密対角化法](ed) — スピン鎖の三重項ギャップ
 
 {{< callout type="info" >}}
-**ディスプレイのないマシン（SSH、HPC クラスタ）で実行する場合** 各例は `plt.show()` で終わり、ウィンドウを開こうとします。ディスプレイがないと matplotlib は `FigureCanvasAgg is non-interactive, and thus cannot be shown` と表示するだけで、図は現れません。`plt.show()` を `plt.savefig('figure.png')` に置き換えると、図をファイルに保存できます。
+**ディスプレイのないマシン（SSH、HPC）では** `plt.show()` はウィンドウを開けないので、`plt.savefig('figure.png')` に置き換えてください。
 {{< /callout >}}

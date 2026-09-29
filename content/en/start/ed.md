@@ -107,7 +107,7 @@ res = pyalps.runApplication('sparsediag', input_file)
 
 `sparsediag` runs the Lanczos algorithm on each parameter set. For each combination of $(L, S_z)$, it further block-diagonalizes within the $S_z$ sector using translational symmetry — so it actually solves one smaller matrix per lattice momentum $k = 0, \frac{2\pi}{L}, \ldots, \frac{2\pi(L-1)}{L}$. The output is stored in HDF5 files named after the prefix.
 
-Expect this step to take about half an hour on a single core, almost all of it in the $L = 16$ sectors. For a quick first run, drop 14 and 16 from the list of lengths.
+Expect this step to take about half an hour on a single core, almost all of it in the $L = 16$ sectors.
 
 ## Loading results and understanding the data structure
 
