@@ -18,7 +18,7 @@ ALPSはいくつかの外部ライブラリに依存しています。<br>
 | 依存関係 | 最低バージョン | インストールパッケージ |
 |----------|----------------|------------------------|
 | HDF5     | 1.10.0 | `libhdf5-dev` |
-| CMake | 3.18 | `cmake` |
+| CMake | 3.22 | `cmake` |
 | C++ コンパイラ | GCC 10.5.0 または Clang 13.0.1 | `build-essential` |
 | Boost | 1.76 <br>*(NumPy ≥ 2.0 向けに ALPS Python バインディングをビルドする場合は 1.87 が必要)* | 下記参照 |
 | MPI | OpenMPI 4.0 **または** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
@@ -108,7 +108,7 @@ pip3 install numpy scipy
 
 ```ShellSession
 gcc -v              # 10.5.0以上である必要あり
-cmake --version     # 3.18以上である必要あり
+cmake --version     # 3.22以上である必要あり
 mpirun --version    # OpenMPI 4.0 または MPICH 4
 python3 --version   # 3.9以上である必要あり
 python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"

@@ -18,7 +18,7 @@ ALPS 依赖多个外部库。
 | 依赖项     | 最低版本       | 安装包                  |
 |------------|----------------|-------------------------|
 | HDF5       | 1.10.0         | `libhdf5-dev`           |
-| CMake      | 3.18           | `cmake`                 |
+| CMake      | 3.22           | `cmake`                 |
 | C++ 编译器 | GCC 10.5.0 或 Clang 13.0.1 | `build-essential`      |
 | Boost      | 1.76 <br>*(若 NumPy ≥ 2.0 需 1.87)* | 见下文 |
 | MPI        | OpenMPI 4.0 **或** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
@@ -107,7 +107,7 @@ pip3 install numpy scipy
 
 ```ShellSession
 gcc -v              # 必须 ≥ 10.5.0
-cmake --version     # 必须 ≥ 3.18
+cmake --version     # 必须 ≥ 3.22
 mpirun --version    # 需为 OpenMPI 4.0 或 MPICH 4
 python3 --version   # 必须 ≥ 3.9
 python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
