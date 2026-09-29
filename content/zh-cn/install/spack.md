@@ -111,7 +111,7 @@ export SPACK_PYTHON=/usr/bin/python3
 <details>
 <summary><strong>出现 <code>AttributeError: module 'os' has no attribute 'O_PATH'</code></strong></summary>
 
-`os.O_PATH` 仅在 Linux 上存在。2026 年 5 月的 Spack 开发版本无条件地使用了它，因此在 macOS 上无论使用哪个 Python 解释器都会出错。请将 Spack 更新到 v1.2.0 或更高版本（在 `spack` 目录中运行 `git pull` 或 `git checkout v1.2.2`）。
+Spack 的某些开发版本使用了 `os.O_PATH`，但并非所有 Python 解释器都提供该属性。请更新您的 Spack（在 `spack` 目录中运行 `git pull`），或通过 `SPACK_PYTHON` 让 Spack 使用其他 Python 解释器（见上文）。
 
 </details>
 
