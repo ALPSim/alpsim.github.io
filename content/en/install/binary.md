@@ -8,19 +8,13 @@ cascade:
     type: docs
 ---
 
-The prebuilt binary [`pyALPS`](https://pypi.org/project/pyalps/) can be installed on most Linux and macOS machines. `pyALPS` can be installed using pip Python package manager:
+The prebuilt binary [`pyALPS`](https://pypi.org/project/pyalps/) can be installed on most Linux and MacOS machines. `pyALPS` can be installed using pip Python package manager:
 
     pip install pyalps
 
 Please make sure your version of Python is Python >= 3.9.
 
-We recommend installing into a virtual environment, which needs no system privileges:
-
-    python3 -m venv ~/alps-venv
-    source ~/alps-venv/bin/activate
-    pip install pyalps
-
-On recent Debian/Ubuntu systems the system Python is marked `EXTERNALLY-MANAGED` (PEP 668), so a plain `pip install` outside a virtual environment is refused. If `python3 -m venv` then fails with `ensurepip is not available`, either install the `python3-venv` package (this needs `sudo`), or create the environment with a user-level tool such as [`uv`](https://docs.astral.sh/uv/) (`uv venv ~/alps-venv`, activate it as above, then `uv pip install pyalps`) or conda.
+If `pip install` is refused with `externally-managed-environment` (recent Debian/Ubuntu), install into a virtual environment: `python3 -m venv ~/alps-venv && source ~/alps-venv/bin/activate && pip install pyalps`. If `venv` itself is missing, install `python3-venv` or use [`uv`](https://docs.astral.sh/uv/).
 Note that the binary version of ALPS does not support parallel run of the codes. For a parallel version of ALPS, please use [source](../source) or [spack](../spack) installations.
 
 ## Walkthrough Video
