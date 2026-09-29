@@ -10,7 +10,7 @@ math: true
 This tutorial assumes that pyalps is already installed. If you have not set it up yet, see the [Getting Started](../) guide.
 {{< /callout >}}
 
-This tutorial demonstrates the **continuous-time hybridization-expansion (CT-HYB)** quantum Monte Carlo solver — an exact, numerically unbiased method for quantum impurity models, originally introduced by Werner et al. ([Phys. Rev. Lett. 97, 076405, 2006](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.97.076405)). We simulate the **Kondo effect**: as temperature decreases, conduction electrons screen a magnetic impurity, progressively reducing its effective local moment. The dimensionless effective moment is $4T\chi_{dd}$, where $\chi_{dd}$ is the local spin susceptibility. At high temperature it approaches 1 (free spin, $S = 1/2$); for a non-zero Coulomb interaction $U > 0$, it decreases toward zero at low temperature, signaling complete Kondo screening. We use a semielliptic density of states as the hybridization function — a standard choice corresponding to the Bethe lattice, commonly encountered in dynamical mean-field theory (DMFT) calculations.
+This tutorial demonstrates the **continuous-time hybridization-expansion (CT-HYB)** quantum Monte Carlo solver — an exact, numerically unbiased method for quantum impurity models, originally introduced by Werner et al. ([Phys. Rev. Lett. 97, 076405, 2006](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.97.076405)). We simulate the **Kondo effect**: as temperature decreases, conduction electrons screen a magnetic impurity, progressively reducing its effective local moment. The dimensionless effective moment is $4T\chi_{dd}$, where $\chi_{dd}$ is the local spin susceptibility. A fully formed, free $S = 1/2$ moment would give $4T\chi_{dd} = 1$; an uncorrelated electron, for which empty, singly and doubly occupied states are equally likely, gives $1/2$. At high temperature ($T \gg U$ and $T \gg$ the half-bandwidth $D$) both curves approach $1/2$. A value close to 1 requires $T_K \ll T \ll U$, a window that opens only for $U \gg D$; for the $U = 2$ used here the moment instead rises to a maximum of about $0.6$ near $T \approx 1$. At low temperature it decreases toward zero, signaling complete Kondo screening. We use a semielliptic density of states as the hybridization function — a standard choice corresponding to the Bethe lattice, commonly encountered in dynamical mean-field theory (DMFT) calculations.
 
 ## Imports
 
@@ -20,6 +20,8 @@ import pyalps.cthyb as cthyb          # CT-HYB impurity solver
 import matplotlib.pyplot as plt       # for plotting results
 from numpy import exp, log, sqrt, pi  # math utilities
 ```
+
+`pyalps.cthyb` is the segment-picture hybridization-expansion solver distributed with ALPS (source: `applications/dmft/qmc/hybridization`). Despite the shared name, it is not the separate [ALPSCore CT-HYB](https://github.com/ALPSCore/CT-HYB) package.
 
 ## Temperature grid
 
@@ -177,7 +179,7 @@ plt.legend()
 plt.show()
 ```
 
-The plot shows $4T\chi_{dd}$ versus temperature on a logarithmic scale. For $U = 0$, the effective moment is approximately constant (non-interacting limit). For $U = 2$, it decreases toward zero at low temperature, demonstrating the Kondo screening of the impurity spin by the conduction electrons.
+The plot shows $4T\chi_{dd}$ versus temperature on a logarithmic scale. For $U = 0$, the effective moment falls steadily from $1/2$ and becomes proportional to $T$ at low temperature: $\chi_{dd}$ tends to a constant, the Pauli susceptibility of the non-interacting resonant level. For $U = 2$, the moment is first enhanced above $1/2$ by the interaction and then decreases toward zero at low temperature, demonstrating the Kondo screening of the impurity spin by the conduction electrons.
 
 ![Effective local moment vs temperature showing Kondo screening](/figs/Kondo.png)
 

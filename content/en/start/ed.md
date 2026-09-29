@@ -182,7 +182,13 @@ plt.show()
 
 ## Result
 
-The fitted curve extrapolates to the $y$-intercept at $1/L = 0$, giving $\Delta \approx 0.411\,J$ — in good agreement with the best numerical estimates for the Haldane gap (White & Huse, 1993: $\Delta = 0.41048\,J$). This confirms the Haldane phase and validates the ALPS `sparsediag` solver.
+The fitted curve extrapolates to the $y$-intercept at $1/L = 0$, giving $\Delta \approx 0.419\,J$ (with a fitted $\xi \approx 4.0$). This is a clearly finite gap — confirming the Haldane phase — and within about 2% of the best numerical estimate for the Haldane gap (White & Huse, 1993: $\Delta = 0.41048\,J$).
+
+The remaining difference comes from the extrapolation, not from the eigenvalues: the finite-size gaps themselves are exact. At $L \le 16$ a single exponential also absorbs subleading finite-size corrections, which is why the fitted $\xi \approx 4$ comes out well below the true correlation length $\xi \approx 6$. Pinning down the third digit of $\Delta$ requires longer chains, which is where DMRG takes over from ED.
+
+| $L$ | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
+|---|---|---|---|---|---|---|---|
+| $\Delta(L)/J$ | 1.0000 | 0.7206 | 0.5936 | 0.5248 | 0.4842 | 0.4590 | 0.4428 |
 
 The plot shows the triplet gap decreasing as $L$ grows, with the fitted curve capturing the exponential convergence:
 
