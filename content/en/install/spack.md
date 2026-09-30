@@ -111,7 +111,10 @@ export SPACK_PYTHON=/usr/bin/python3
 <details>
 <summary><strong><code>AttributeError: module 'os' has no attribute 'O_PATH'</code></strong></summary>
 
-Some development versions of Spack use `os.O_PATH`, which is not available with every Python interpreter. Update your Spack checkout (run `git pull` inside the `spack` directory), or run Spack with a different Python interpreter via `SPACK_PYTHON` (see above).
+`os.O_PATH` only exists on Linux. Spack development checkouts from May 2026 used it unconditionally ([spack/spack#52334](https://github.com/spack/spack/pull/52334)); this was fixed in [spack/spack#52447](https://github.com/spack/spack/pull/52447).
+
+- **On macOS:** switching the Python interpreter does not fix this error. Update Spack to v1.2.0 or later (run `git pull`, or `git checkout v1.2.2`, inside the `spack` directory).
+- **On Linux:** update your Spack checkout (run `git pull` inside the `spack` directory), or run Spack with a different Python interpreter via `SPACK_PYTHON` (see above).
 
 </details>
 
