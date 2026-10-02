@@ -274,7 +274,7 @@ dmrg --write-xml spinless_tV_multiple.in.xml
 
 ## 结果评估
 
-下面的 Python 脚本（用 `alpspython` 运行）加载所有运行的收敛本征态测量结果以及两次单次运行的迭代历史，打印能量和截断误差，并绘制收敛曲线：
+下面的 Python 脚本（用 `python` 运行）加载所有运行的收敛本征态测量结果以及两次单次运行的迭代历史，打印能量和截断误差，并绘制收敛曲线：
 
 ```python
 import pyalps

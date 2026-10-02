@@ -5,6 +5,10 @@ toc: true
 weight: 2
 ---
 
+{{< callout type="info" >}}
+**有哪些命令可用？** 通过[源码](../../../../install/source)或 [Spack](../../../../install/spack) 安装的 ALPS 提供本页的全部工具。[pip 包](../../../../install/binary)会安装 `parameter2xml`、`printgraph`、各模拟程序以及 `spinmc_evaluate`、`worm_evaluate`、`fulldiag_evaluate` 和 `qwl_evaluate`，但不包含 `convert2xml`、`dirloop_sse_evaluate` 以及转换和绘图脚本。这些工作请使用 [Python 接口](../usepython)完成。
+{{< /callout >}}
+
 ## 输入的准备
 
 由于日常操作中你可能并不想直接处理作业文件和任务文件的 XML 格式，`parameter2xml` 工具让你可以用纯文本文件来指定模拟参数，然后自动将其转换为 XML 格式。

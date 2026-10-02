@@ -11,11 +11,9 @@ weight: 3
 
 ## Launching Python
 
-Python 只允许某个扩展模块与编译它时所用的**完全相同**版本的 Python 一起使用。如果你从源码构建 ALPS（例如在 Linux 上就是必须的），可以在配置 ALPS 时指定要使用的 Python 解释器。之后 ALPS 会创建一个名为
+启动安装了 `pyalps` 的环境中的 Python 解释器（`python` 或 `python3`）。使用 [pip 包](../../../../install/binary)时无需其他设置。
 
-    alpspython
-
-的脚本，它会设置好查找 ALPS 扩展模块所需的路径，然后调用你指定的 Python 解释器。
+Python 只允许某个扩展模块与编译它时所用的**完全相同**版本的 Python 一起使用。如果你从源码构建 `pyalps`，请用你想使用的 Python 解释器来构建和安装它（参见[源码安装](../../../../install/source)）。ALPS 3.0.0 及更早的版本还会为源码构建创建一个名为 `alpspython` 的包装脚本；新版本不再需要、也不再提供该脚本。
 
 ## Detailed instructions
 

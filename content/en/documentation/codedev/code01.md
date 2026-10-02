@@ -99,7 +99,7 @@ The measurements of our chosen observables are going to be implemented in the me
 
 The values of the energy and magnetization are determined for the given spin configuration and added to the ALPS observable. The implementation is again left to you as an exercise.
 
-Once you have completed the implementation of the observable measurements and Metropolis update you can run the simulation using the `alpspython` python interpreter. In this example we will do a scan over different values of $\beta = 1/k_B T$. The "main" program is given below:
+Once you have completed the implementation of the observable measurements and Metropolis update you can run the simulation using the Python interpreter in which `pyalps` is installed. In this example we will do a scan over different values of $\beta = 1/k_B T$. The "main" program is given below:
 
     L = 4    # Linear lattice size
     N = 5000    # of simulation steps
