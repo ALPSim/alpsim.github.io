@@ -18,7 +18,7 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 | Dependency | Minimum version | Debian / Ubuntu (`apt`) | Rocky / RHEL (`dnf`) |
 |----------|--------------------|---------------------------|---------------------------|
 | HDF5     | 1.10.0 | `libhdf5-dev` | `hdf5-devel` |
-| CMake    | 3.18 | `cmake` | `cmake` |
+| CMake    | 3.22 | `cmake` | `cmake` |
 | C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` | `gcc gcc-c++ make` |
 | Fortran Compiler | *(any; needed for LAPACK detection)* | `gfortran` | `gcc-gfortran` |
 | Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0)* | see below | see below |
@@ -236,7 +236,7 @@ outside a prefix you have approved, so you stay in control of each step.
 
 ```ShellSession
 gcc -v              # must be >= 10.5.0
-cmake --version     # must be >= 3.18
+cmake --version     # must be >= 3.22
 mpirun --version    # OpenMPI 4.0 or MPICH 4
 python3 --version   # must be >= 3.9
 python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"

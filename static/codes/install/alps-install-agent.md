@@ -1,4 +1,4 @@
-# ALPS 2.3.x — assisted source install
+# ALPS — assisted source install
 
 **Audience:** a CLI coding agent (Claude Code or similar) driving an ALPS source install.
 Step 0 asks whether the user has root; everything after that branches on the answer.

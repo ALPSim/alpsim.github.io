@@ -13,6 +13,8 @@ cascade:
 
 PythonのバージョンがPython 3.9以上であることを確認してください。
 
+`pip install` が `externally-managed-environment` で拒否される場合（最近の Debian/Ubuntu）は、仮想環境にインストールしてください：`python3 -m venv ~/alps-venv && source ~/alps-venv/bin/activate && pip install pyalps`。`venv` 自体がない場合は `python3-venv` をインストールするか、[`uv`](https://docs.astral.sh/uv/) を使ってください。
+
 ## インストール手順ビデオ
 
 Windowsコンピュータでは、以下のいずれかの方法でインストール可能です：
