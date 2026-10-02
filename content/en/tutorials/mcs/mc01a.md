@@ -14,7 +14,7 @@ This problem is most severe near a phase transition, where the correlation lengt
 This tutorial demonstrates the issue using the 2D Ising model at its critical temperature and shows how switching from local (Metropolis) updates to cluster updates dramatically reduces autocorrelation times.
 The key diagnostic tool is a *binning analysis*: errors are recomputed after grouping samples into successively larger bins; if the estimated error has not plateaued by the largest bin size, the autocorrelation time is longer than the run and the errors cannot be trusted.
 
-The input files for this tutorial are available in your ALPS distribution in the directory `mc-01-autocorrelations`.
+The input files for this tutorial are in the directory [`tutorials/mc-01-autocorrelations`](https://github.com/ALPSim/ALPS/tree/master/tutorials/mc-01-autocorrelations) of the ALPS repository (and of a source installation); each file can also be downloaded from the links below.
 
 ## Local updates
 
@@ -93,6 +93,10 @@ convert2xml parm1a.task*.out.run1
 ```
 
 which will generate the XML output files `parm1a.task\[1-6\].out.run1.xml`, which can be opened or converted to text just like the output XML files.
+
+{{< callout type="info" >}}
+`convert2text` and `convert2xml` come with a [source](../../../install/source) or [Spack](../../../install/spack) installation of ALPS; the [pip package](../../../install/binary) does not include them. With a pip installation, open the XML files in a browser as shown above, or use the Python version of this tutorial below.
+{{< /callout >}}
 
 Look at all six tasks and, by studying the binning analysis in the files `parm1a.task\[1-6\].out.run1.xml`, observe that for large lattices the errors no longer converge. To create plots, we recommend using the Python tools described below.
 

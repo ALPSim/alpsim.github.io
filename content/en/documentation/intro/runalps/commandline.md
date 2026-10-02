@@ -5,6 +5,10 @@ toc: true
 weight: 2
 ---
 
+{{< callout type="info" >}}
+**Which commands are available?** A [source](../../../../install/source) or [Spack](../../../../install/spack) installation provides all tools on this page. The [pip package](../../../../install/binary) installs `parameter2xml`, `printgraph`, the simulation applications, and `spinmc_evaluate`, `worm_evaluate`, `fulldiag_evaluate` and `qwl_evaluate`, but not `convert2xml`, `dirloop_sse_evaluate` or the conversion and plotting scripts. Use the [Python interface](../usepython) for those tasks.
+{{< /callout >}}
+
 ## Preparing the input
 
 Since the XML format of the job and task files is probably not what you want to deal with on a daily basis, the `parameter2xml` tool lets you specify the simulation parameters in a plain text file, which is then converted to XML for you.

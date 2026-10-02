@@ -5,6 +5,10 @@ toc: true
 weight: 2
 ---
 
+{{< callout type="info" >}}
+**どのコマンドが使えるか：** ALPS を[ソース](../../../../install/source)または [Spack](../../../../install/spack) からインストールした場合は、このページのすべてのツールが使えます。[pip パッケージ](../../../../install/binary)は `parameter2xml`、`printgraph`、シミュレーション用アプリケーション、および `spinmc_evaluate`、`worm_evaluate`、`fulldiag_evaluate`、`qwl_evaluate` をインストールしますが、`convert2xml`、`dirloop_sse_evaluate`、変換・プロット用スクリプトは含みません。それらの作業には [Python インターフェース](../usepython)を使ってください。
+{{< /callout >}}
+
 ## 入力の準備
 
 ジョブファイルやタスクファイルの XML 形式を日常的に直接扱いたくはないでしょうから、`parameter2xml` ツールを使えば、シミュレーションのパラメータをプレーンテキストのファイルで指定でき、それを自動的に XML に変換してくれます。

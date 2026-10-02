@@ -274,7 +274,7 @@ dmrg --write-xml spinless_tV_multiple.in.xml
 
 ## Evaluating the results
 
-The following Python script (run it with `alpspython`) loads the converged eigenstate measurements of all runs and the iteration history of the two single runs, prints the energies and truncation errors, and plots the convergence:
+The following Python script (run it with `python`) loads the converged eigenstate measurements of all runs and the iteration history of the two single runs, prints the energies and truncation errors, and plots the convergence:
 
 ```python
 import pyalps

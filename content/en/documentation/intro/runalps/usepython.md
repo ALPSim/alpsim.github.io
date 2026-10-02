@@ -11,11 +11,9 @@ To demonstrate the use of ALPS from Python, we will look at a simple classical M
 
 ## Launching Python
 
-Python only allows an extension to be used with the **exact** version of Python it was compiled against. If you build ALPS from source — as is required, for example, on Linux — you can specify which Python interpreter to use when configuring ALPS. ALPS will then create a script called
+Start the Python interpreter of the environment in which `pyalps` is installed (`python` or `python3`). With the [pip package](../../../../install/binary) nothing else needs to be set up.
 
-    alpspython
-
-which sets the paths needed to find the ALPS extensions and then calls your Python interpreter.
+Python only allows an extension to be used with the **exact** version of Python it was compiled against. If you build `pyalps` from source, build and install it with the Python interpreter you want to use (see [Source installation](../../../../install/source)). ALPS releases up to 3.0.0 also created a wrapper script called `alpspython` for source builds; newer releases no longer need or provide it.
 
 ## Detailed instructions
 

@@ -14,7 +14,7 @@ weight: 2
 本教程以处于临界温度的二维伊辛模型为例展示这一问题，并说明从局域（Metropolis）更新改为团簇更新如何显著缩短自关联时间。
 关键的诊断工具是*分箱分析*：把样本合并成越来越大的箱子后重新计算误差；如果在最大的箱子尺寸下估计的误差仍未趋于平台，就说明自关联时间比整个模拟还长，误差不可信。
 
-本教程的输入文件可以在你的 ALPS 发行版的 `mc-01-autocorrelations` 目录中找到。
+本教程的输入文件位于 ALPS 仓库（以及源码安装）的 [`tutorials/mc-01-autocorrelations`](https://github.com/ALPSim/ALPS/tree/master/tutorials/mc-01-autocorrelations) 目录中；每个文件也可以通过下方的链接下载。
 
 ## 局域更新
 
@@ -93,6 +93,10 @@ convert2xml parm1a.task*.out.run1
 ```
 
 这会生成 XML 输出文件 `parm1a.task\[1-6\].out.run1.xml`，它们可以像输出 XML 文件一样被打开或转换成文本。
+
+{{< callout type="info" >}}
+`convert2text` 和 `convert2xml` 随[源码](../../../install/source)或 [Spack](../../../install/spack) 安装的 ALPS 提供；[pip 包](../../../install/binary)不包含它们。使用 pip 安装时，请按上文所示在浏览器中打开 XML 文件，或使用下文本教程的 Python 版本。
+{{< /callout >}}
 
 请查看全部六个任务，并通过研究文件 `parm1a.task\[1-6\].out.run1.xml` 中的分箱分析，观察到对于较大的格子，误差不再收敛。若要作图，我们建议使用下面介绍的 Python 工具。
 
