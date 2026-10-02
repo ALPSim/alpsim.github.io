@@ -64,6 +64,62 @@ spack load alps
 
 以下のスーパーコンピュータクラスタでの ALPS のインストールに成功しています。[NCSA Delta (イリノイ州)](https://docs.ncsa.illinois.edu/systems/delta/en/latest/index.html)、[PSC Bridges (ピッツバーグ)](https://www.psc.edu/resources/bridges-2/user-guide/)、[Purdue Anvil](https://www.rcac.purdue.edu/anvil#docs)、[SDSC Expanse (サンディエゴ)](https://www.sdsc.edu/systems/expanse/user_guide.html)、[TACC Stampede3 (テキサス州)](https://docs.tacc.utexas.edu/hpc/stampede3/)。バッチジョブの投入方法については、それぞれのドキュメントを参照してください。
 
+### トラブルシューティング
+
+<details>
+<summary><strong><code>spack: command not found</code> と表示される、または <code>spack</code> ディレクトリ内でしか Spack が動作しない</strong></summary>
+
+新しいターミナルを開くたびに、`spack` ディレクトリへのパスを指定して Spack のシェル設定スクリプトを読み込む必要があります：
+```
+. /path/to/spack/share/spack/setup-env.sh
+```
+これを恒久的に有効にするには、この行をシェルの起動ファイル（例：`~/.zshrc` や `~/.bashrc`）に追加してください。
+
+</details>
+
+<details>
+<summary><strong>Spack が使用する Python インタプリタの指定</strong></summary>
+
+Spack は `PATH` 上で最初に見つかった `python3`（または `python`）を使用します。別のインタプリタを使用するには、環境変数 `SPACK_PYTHON` を設定してください（Spack は `PYTHON` 変数を参照しません）：
+```
+export SPACK_PYTHON=/path/to/python3
+. spack/share/spack/setup-env.sh
+spack python -c "import sys; print(sys.executable)"
+```
+最後のコマンドで、Spack が実際に使用しているインタプリタが表示されます。
+
+</details>
+
+<details>
+<summary><strong>macOS での <code>SSL: CERTIFICATE_VERIFY_FAILED</code></strong></summary>
+
+すべてのダウンロードが次のようなエラーで失敗する場合：
+```
+[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
+```
+Spack が [python.org](https://www.python.org) からインストールした Python（`/Library/Frameworks/Python.framework/` 以下）で動作している可能性が高いです。この Python は macOS のシステム証明書を使用しないため、Python のバージョンごとに一度、証明書バンドルをインストールする必要があります：
+```
+"/Applications/Python 3.x/Install Certificates.command"
+```
+`3.x` はお使いの Python のバージョン（例：`3.14`）に置き換えてください。または、macOS の証明書ストアを使用する Apple のシステム Python を Spack に使用させることもできます：
+```
+export SPACK_PYTHON=/usr/bin/python3
+```
+
+</details>
+
+<details>
+<summary><strong><code>AttributeError: module 'os' has no attribute 'O_PATH'</code> が発生する</strong></summary>
+
+`os.O_PATH` は Linux にのみ存在します。2026 年 5 月の Spack 開発版はこれを無条件に使用していました（[spack/spack#52334](https://github.com/spack/spack/pull/52334)）。この問題は [spack/spack#52447](https://github.com/spack/spack/pull/52447) で修正されています。
+
+- **macOS：** Python インタプリタを切り替えてもこのエラーは解決しません。Spack を v1.2.0 以降に更新してください（`spack` ディレクトリ内で `git pull` または `git checkout v1.2.2` を実行）。
+- **Linux：** Spack を更新する（`spack` ディレクトリ内で `git pull` を実行する）か、`SPACK_PYTHON` を使って別の Python インタプリタで Spack を実行してください（上記参照）。
+
+</details>
+
+ここに記載されていない問題については、[GitHub](https://github.com/ALPSim/ALPS/issues) で検索するか、issue を作成してください。
+
 ## インストール手順ビデオ
 
 ### WSL での Spack による ALPS (v2.3.3) のインストール
