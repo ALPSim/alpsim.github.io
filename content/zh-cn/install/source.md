@@ -23,7 +23,7 @@ ALPS 依赖多个外部库。
 | Boost      | 1.76 <br>*(若 NumPy ≥ 2.0 需 1.87)* | 见下文 |
 | MPI        | OpenMPI 4.0 **或** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
 | BLAS       | 0.3            | `libopenblas-dev`       |
-| Python     | 3.9            | [python.org](https://www.python.org/) |
+| Python     | 3.10           | [python.org](https://www.python.org/) |
 
 <br>
 
@@ -109,7 +109,7 @@ pip3 install numpy scipy
 gcc -v              # 必须 ≥ 10.5.0
 cmake --version     # 必须 ≥ 3.22
 mpirun --version    # 需为 OpenMPI 4.0 或 MPICH 4
-python3 --version   # 必须 ≥ 3.9
+python3 --version   # 必须 ≥ 3.10
 python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
 ```
 
@@ -153,7 +153,7 @@ cmake --build alps-build -t test
 <details>
 
 * **需使用其他 MPI/BLAS？** <br> 将上述包名替换为您集群的模块（如 [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html) 等）。[CMake](https://cmake.org/) 会自动定位这些包并生成编译指令。
-* **Python 错误** <br> 请确保 Python ≥ 3.9 已安装，且 `numpy` 和 `scipy` 安装在 CMake 所选的同一 Python 下。在 macOS 上，CMake 可能选择 Xcode 自带的 Python 而非 Homebrew/MacPorts 的 Python——请检查 CMake 输出中的 `Found Python:` 行，必要时使用 `-DPython3_EXECUTABLE=/path/to/python3` 指定解释器（参见[验证依赖项](#验证依赖项)步骤）。
+* **Python 错误** <br> 请确保 Python ≥ 3.10 已安装，且 `numpy` 和 `scipy` 安装在 CMake 所选的同一 Python 下。在 macOS 上，CMake 可能选择 Xcode 自带的 Python 而非 Homebrew/MacPorts 的 Python——请检查 CMake 输出中的 `Found Python:` 行，必要时使用 `-DPython3_EXECUTABLE=/path/to/python3` 指定解释器（参见[验证依赖项](#验证依赖项)步骤）。
 * **MPI 版本不匹配？** <br> 确保 CMake 使用的 MPI 版本与 `mpirun --version` 一致。
 * **Boost 错误** <br> 针对 NumPy ≥ 2.0 构建 ALPS Python 绑定需要 Boost ≥ 1.87（NumPy 2.0 引入的 API 变更仅 Boost 1.87+ 支持）。Boost 1.76–1.86 仅支持 NumPy < 2.0。已测试的编译器/Boost/Python 组合请参阅编译说明。
 

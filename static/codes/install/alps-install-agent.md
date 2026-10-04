@@ -54,7 +54,7 @@ is fine). The probe reports them under the host survey, not here.
 | Dependency | Requirement | Failure that still passes a naive check |
 |---|---|---|
 | C++ compiler | GCC ≥ 10.5.0 or Clang ≥ 13.0.1 | Rocky 8 ships GCC 8.5; Ubuntu 20.04 ships GCC 9 |
-| Python | ≥ 3.9 **with headers**, + numpy, scipy | System `python3` may be 3.6.8; a *system* 3.11 may still have no `Python.h` on its `sysconfig` include path |
+| Python | ≥ 3.10 **with headers**, + numpy, scipy | System `python3` may be 3.6.8; a *system* 3.11 may still have no `Python.h` on its `sysconfig` include path |
 | HDF5 | **≥ 1.14** (not 1.10) | EPEL/distro HDF5 1.10.5 builds fine, then fails 8 tests on ALPS's teardown check |
 | BLAS/LAPACK | OpenBLAS ≥ 0.3 | — |
 | MPI | OpenMPI ≥ 4.0 or MPICH ≥ 4.0 | On RHEL-family, installed but **not on `PATH`** until `module load mpi/openmpi-x86_64` |

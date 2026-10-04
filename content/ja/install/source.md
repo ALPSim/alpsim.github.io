@@ -23,7 +23,7 @@ ALPSはいくつかの外部ライブラリに依存しています。<br>
 | Boost | 1.76 <br>*(NumPy ≥ 2.0 向けに ALPS Python バインディングをビルドする場合は 1.87 が必要)* | 下記参照 |
 | MPI | OpenMPI 4.0 **または** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
 | BLAS | 0.3 | `libopenblas-dev` |
-| Python | 3.9 | [python.org](https://www.python.org/) |
+| Python | 3.10 | [python.org](https://www.python.org/) |
 
 
 <br>
@@ -110,7 +110,7 @@ pip3 install numpy scipy
 gcc -v              # 10.5.0以上である必要あり
 cmake --version     # 3.22以上である必要あり
 mpirun --version    # OpenMPI 4.0 または MPICH 4
-python3 --version   # 3.9以上である必要あり
+python3 --version   # 3.10以上である必要あり
 python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
 ```
 
@@ -155,7 +155,7 @@ cmake --build alps-build -t test
 <details>
 
 * **別のMPI/BLASが必要ですか？** <br> 上記のパッケージ名をクラスタのモジュール（例: [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), 等）に置き換えてください。[CMake](https://cmake.org/)はこれらのパッケージの位置を自動検出し、Makefileにコンパイル指示を生成します。
-* **Pythonエラー** <br> Python ≥ 3.9がインストールされており、CMakeが選択したPythonと同じものに`numpy`と`scipy`がインストールされていることを確認してください。macOSでは、CMakeがHomebrew/MacPortsのPythonではなくXcodeに同梱されたPythonを選択することがあります。CMake出力の`Found Python:`行を確認し、必要に応じて`-DPython3_EXECUTABLE=/path/to/python3`でインタープリタを指定してください（[依存関係の確認](#依存関係の確認)ステップを参照）。
+* **Pythonエラー** <br> Python ≥ 3.10がインストールされており、CMakeが選択したPythonと同じものに`numpy`と`scipy`がインストールされていることを確認してください。macOSでは、CMakeがHomebrew/MacPortsのPythonではなくXcodeに同梱されたPythonを選択することがあります。CMake出力の`Found Python:`行を確認し、必要に応じて`-DPython3_EXECUTABLE=/path/to/python3`でインタープリタを指定してください（[依存関係の確認](#依存関係の確認)ステップを参照）。
 * **MPIのバージョン不一致？** <br> CMakeが使用するMPIバージョンが`mpirun --version`の結果と一致していることを確認してください。
 * **Boostエラー** <br> NumPy ≥ 2.0に対してALPSのPythonバインディングをビルドする場合はBoost ≥ 1.87が必要です（NumPy 2.0で導入されたAPIの変更はBoost 1.87以降のみが対応しています）。Boost 1.76〜1.86はNumPy < 2.0でのみ動作します。テスト済みの組み合わせについては[ビルド注意事項](#ビルド注意事項)を参照してください。
 
