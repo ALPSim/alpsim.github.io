@@ -18,13 +18,13 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 | Dependency | Minimum version | Debian / Ubuntu (`apt`) | Rocky / RHEL (`dnf`) |
 |----------|--------------------|---------------------------|---------------------------|
 | HDF5     | 1.10.0 | `libhdf5-dev` | `hdf5-devel` |
-| CMake    | 3.18 | `cmake` | `cmake` |
+| CMake    | 3.22 | `cmake` | `cmake` |
 | C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` | `gcc gcc-c++ make` |
 | Fortran Compiler | *(any; needed for LAPACK detection)* | `gfortran` | `gcc-gfortran` |
 | Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0)* | see below | see below |
 | MPI | OpenMPI 4.0 **or** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` | `openmpi-devel` / `mpich-devel` |
 | BLAS | 0.3 | `libopenblas-dev` | `openblas-devel` |
-| Python | 3.9 | [python.org](https://www.python.org/) | [python.org](https://www.python.org/) |
+| Python | 3.10 | [python.org](https://www.python.org/) | [python.org](https://www.python.org/) |
 
 ⚠ **Caution — virtual environments.** Any environment (a Python virtual environment,
 `micromamba`, conda) changes which Python and libraries CMake finds. The `cmake` command in
@@ -236,9 +236,9 @@ outside a prefix you have approved, so you stay in control of each step.
 
 ```ShellSession
 gcc -v              # must be >= 10.5.0
-cmake --version     # must be >= 3.18
+cmake --version     # must be >= 3.22
 mpirun --version    # OpenMPI 4.0 or MPICH 4
-python3 --version   # must be >= 3.9
+python3 --version   # must be >= 3.10
 python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
 ```
 
@@ -343,7 +343,7 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 <summary><strong>Other Error Details</strong></summary>
 
 * **Need a different MPI or BLAS?**  <br> Substitute the package names above with your cluster's module (e.g. [Intel MKL/OneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), [AMD AOCL](https://www.amd.com/en/developer/aocl.html), etc). [CMake](https://cmake.org/) is a build system that will find the locations of the above packages and generate compilation instructions in Makefiles.
-* **Python errors** <br> Ensure Python ≥ 3.9 is installed and that `numpy` and `scipy` are installed for the same Python that CMake selects. On macOS, CMake may pick the Xcode-bundled Python rather than your Homebrew/MacPorts Python — check the `Found Python:` line in the CMake output and pin the interpreter with `-DPython3_EXECUTABLE=/path/to/python3` if needed (see the [Verify Dependencies](#verify-dependencies) step).
+* **Python errors** <br> Ensure Python ≥ 3.10 is installed and that `numpy` and `scipy` are installed for the same Python that CMake selects. On macOS, CMake may pick the Xcode-bundled Python rather than your Homebrew/MacPorts Python — check the `Found Python:` line in the CMake output and pin the interpreter with `-DPython3_EXECUTABLE=/path/to/python3` if needed (see the [Verify Dependencies](#verify-dependencies) step).
 * **MPI mismatch?**   <br> Ensure that CMake is using the same MPI version as `mpirun --version`
 * **Choosing a MacPorts OpenMPI variant** <br> MacPorts ships a separate port for each compiler version, named `openmpi-<compiler><version>` (e.g. `openmpi-clang20`, `openmpi-gcc15`). The `clang20` variant matches the LLVM Clang 20 port and works alongside Apple's Xcode clang. If you use a different compiler, install the matching variant and adjust the `port select` command accordingly. The `port select` step is required: without it, the bare `mpirun`, `mpicc`, and `mpicxx` wrappers that CMake looks for will not exist.
 

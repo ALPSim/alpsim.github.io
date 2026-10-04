@@ -11,7 +11,9 @@ cascade:
 
     pip install pyalps
 
-请确保您的 Python 版本 ≥ 3.9。
+请确保您的 Python 版本 ≥ 3.10。
+
+如果 `pip install` 因 `externally-managed-environment` 被拒绝（较新的 Debian/Ubuntu），请安装到虚拟环境中：`python3 -m venv ~/alps-venv && source ~/alps-venv/bin/activate && pip install pyalps`。如果连 `venv` 都没有，请安装 `python3-venv` 或使用 [`uv`](https://docs.astral.sh/uv/)。
 
 ## 安装视频指南
 
