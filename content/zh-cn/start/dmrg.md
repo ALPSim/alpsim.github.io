@@ -86,7 +86,17 @@ for s in data[0]:
     print(s.props['observable'], ' : ', s.y[0])
 ```
 
-`data[0]` 中的每个元素 `s` 对应一个可观测量。`s.props['observable']` 是其名称（如 `'Energy'`、`'Magnetization'`），`s.y[0]` 是其值。对于这个 32 格点开放链，基态能量应接近 $E_0 \approx -14.3\,J$。
+`data[0]` 中的每个元素 `s` 对应一个可观测量。`s.props['observable']` 是其名称（如 `'Energy'`、`'Truncation error'`），`s.y[0]` 是其值。使用上面的参数时只测量这两个量；磁化强度和关联函数需要 `MEASURE_*` 参数。对于这个 32 格点开放链，基态能量应接近 $E_0 \approx -13.9973\,J$。
+
+{{< callout type="info" >}}
+**为什么不是简单的 $32\,e_0$？** 开放链的两端贡献表面能，此外还有 $1/L$ 的有限尺寸修正：
+
+$$
+E_0(L) \simeq L\,e_0 + e_s - \frac{\pi^2}{48\,L}, \qquad e_0 = \tfrac14 - \ln 2, \quad e_s = \tfrac{\pi - 1 - 2\ln 2}{4} \approx 0.1888.
+$$
+
+（$e_s$ 取自 [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040)。）对于 $L = 32$，得到 $-13.9983\,J$，与 DMRG 结果相差不到 $10^{-3}$。如何去除边界贡献参见 [DMRG-03](../../tutorials/dmrg/dmrg03/#每格点每键基态能量)。
+{{< /callout >}}
 
 ## 加载迭代历史
 
@@ -97,7 +107,7 @@ itr = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half')
                                what=['Iteration Energy', 'Iteration Truncation Error'])
 ```
 
-`itr[0][0]` 包含每次半扫描记录的能量；`itr[0][1]` 包含每步的截断误差。**截断误差**是约化密度矩阵被舍弃本征值之和——即具有 $m$ 个状态的 MPS 无法表示的精确基态权重。收敛良好的计算应使截断误差低于 $10^{-6}$；对于这个系统的 $m = 100$，典型值在 $10^{-8}$–$10^{-7}$ 之间。
+`itr[0][0]` 包含每次半扫描记录的能量；`itr[0][1]` 包含每步的截断误差。**截断误差**是约化密度矩阵被舍弃本征值之和——即具有 $m$ 个状态的 MPS 无法表示的精确基态权重。收敛良好的计算应使截断误差低于 $10^{-6}$；对于这个系统的 $m = 100$，最终值约为 $10^{-13}$。
 
 ## 绘制收敛图
 
