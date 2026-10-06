@@ -37,3 +37,7 @@ Once ALPS is installed, try one of the quickstart examples:
 - [Quantum Monte Carlo](qmc) — Kondo screening with the hybridization expansion solver
 - [Density Matrix Renormalization Group](dmrg) — ground state energy of a Heisenberg chain
 - [Exact Diagonalization](ed) — triplet gap of a spin chain
+
+{{< callout type="info" >}}
+**Headless machine (SSH, HPC)?** `plt.show()` cannot open a window there. Save each completed figure with `plt.savefig('name.png')` before creating the next one, using a distinct filename for each (the DMRG example creates two figures).
+{{< /callout >}}

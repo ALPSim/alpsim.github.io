@@ -37,3 +37,7 @@ $ pip install pyalps
 - [量子蒙特卡洛](qmc) — 使用杂化展开求解器模拟 Kondo 屏蔽
 - [密度矩阵重整化群](dmrg) — Heisenberg 链的基态能量
 - [精确对角化](ed) — 自旋链的三重态能隙
+
+{{< callout type="info" >}}
+**在无显示器的机器（SSH、HPC）上**，`plt.show()` 无法打开窗口，请改用 `plt.savefig('figure.png')`。
+{{< /callout >}}
