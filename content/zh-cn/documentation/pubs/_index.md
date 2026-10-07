@@ -1,18 +1,18 @@
 
 ---
-title: Papers and Citations
-description: "ALPS Papers and Citations"
+title: 论文与引用
+description: "ALPS 论文与引用"
 weight: 10
 ---
 
-ALPS is released under the MIT license and may be freely used in accordance with its terms. We nevertheless ask that users acknowledge ALPS in their publications whenever the library has contributed to their work.
+ALPS 以 MIT 许可证发布，可依据其条款自由使用。尽管如此，我们仍希望用户在 ALPS 库对其工作有所贡献时，在发表的论文中对 ALPS 加以致谢。
 
-Citations to ALPS-based work typically fall into three categories:
+对基于 ALPS 的工作的引用通常分为三类：
 
-1. **The original algorithm.** Many algorithms implemented in ALPS were developed independently of the library. Publications using these algorithms should cite the original research that introduced them.
+1. **原始算法。** ALPS 中实现的许多算法是独立于该库开发的。使用这些算法的论文应当引用最初提出它们的原始研究。
 
-2. **The implementation or application.** ALPS hosts many individual applications contributed by research teams over the years. These are often accompanied by implementation papers — frequently published in *Computer Physics Communications* — which should be cited when the corresponding application is used.
+2. **实现或应用程序。** 多年来，ALPS 收录了由各研究团队贡献的许多独立应用程序。这些应用程序通常附有实现论文——常发表于 *Computer Physics Communications*——在使用相应应用程序时应当引用这些论文。
 
-3. **The ALPS library itself.** This citation recognizes the community infrastructure that ALPS provides: ongoing code maintenance, user support, and the base libraries on which individual applications are built.
+3. **ALPS 库本身。** 这一引用是对 ALPS 所提供的社区基础设施的认可：持续的代码维护、用户支持，以及各个应用程序赖以构建的基础库。
 
-The three ALPS library papers are listed on the [ALPS Release Papers](papers) page; users are asked to cite the most recent one. Implementation papers for individual ALPS applications, along with key references for the underlying algorithms, are collected on the [Implementation and Algorithm Papers](refs) page.
+三篇 ALPS 库论文列于 [ALPS 发布论文](papers)页面；请用户引用其中最新的一篇。各个 ALPS 应用程序的实现论文，以及底层算法的关键参考文献，汇集在[实现论文与算法论文](refs)页面上。

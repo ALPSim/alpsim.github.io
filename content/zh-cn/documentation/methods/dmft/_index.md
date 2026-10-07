@@ -1,7 +1,7 @@
 
 ---
-title: Dynamical Mean Field Theory
-description: "Dynamical Mean Field Theory"
+title: "动力学平均场理论"
+description: "动力学平均场理论"
 weight: 4
 ---
 
@@ -9,7 +9,7 @@ weight: 4
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
     title="DMFT"
-    subtitle="Dynamical Mean Field Theory and Impurity Solvers"
+    subtitle="动力学平均场理论与杂质求解器"
     link="dmft"
     icon=""
   >}}

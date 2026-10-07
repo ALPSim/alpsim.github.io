@@ -1,51 +1,52 @@
 ---
-title: Introduction
+title: はじめに
 math: true
 weight: 1
 ---
 
-Classical Monte Carlo (MC) simulations are a powerful and widely used computational technique for studying the statistical mechanics of physical systems. Named after the famous Monte Carlo casino due to its reliance on random sampling, this method is particularly well-suited for investigating systems with a large number of degrees of freedom, where analytical solutions are often intractable. Monte Carlo simulations are based on stochastic processes and probabilistic rules, enabling the exploration of equilibrium properties, phase transitions, and thermodynamic behavior in a Physical system.
+古典モンテカルロ (MC) シミュレーションは、物理系の統計力学を研究するための強力で広く使われている計算手法です。ランダムサンプリングに依拠していることから、有名なモンテカルロのカジノにちなんで名付けられたこの手法は、解析的な解を得ることがしばしば困難な、多数の自由度を持つ系の研究に特に適しています。モンテカルロシミュレーションは確率過程と確率的な規則に基づいており、物理系における平衡状態の性質、相転移、熱力学的な振る舞いを調べることができます。
 
-At the core of classical Monte Carlo simulations is the concept of importance sampling, where configurations of the system are generated according to a probability distribution that is typically the Boltzmann distribution in the canonical ensemble. By sampling configurations in proportion to their statistical weight, Monte Carlo methods allow for the calculation of ensemble averages of physical quantities, such as energy, magnetization, or correlation functions, without explicitly enumerating all possible states of the system — a task that is often computationally infeasible.
+古典モンテカルロシミュレーションの中核にあるのは重点サンプリングの概念です。これは、系の配置を、典型的にはカノニカル集団におけるボルツマン分布である確率分布に従って生成するものです。配置をその統計的重みに比例してサンプリングすることで、モンテカルロ法では、系のとりうるすべての状態を明示的に列挙する（これは計算上しばしば実行不可能です）ことなく、エネルギー、磁化、相関関数などの物理量のアンサンブル平均を計算できます。
 
-## Key Principles of Monte Carlo Simulations
+## モンテカルロシミュレーションの基本原理
 
-### Ergodicity
-A fundamental requirement for Monte Carlo simulations is ergodicity, which ensures that the simulation explores the entire configuration space of the system given sufficient time. In other words, every possible state of the system must be accessible through a sequence of Monte Carlo moves. Without ergodicity, the simulation may become trapped in a subset of configurations, leading to biased results. Ensuring ergodicity often requires careful design of the Monte Carlo moves, especially for systems with complex energy landscapes.
+### エルゴード性
+モンテカルロシミュレーションの基本的な要件はエルゴード性です。これは、十分な時間をかければシミュレーションが系の配置空間全体を探索することを保証するものです。言い換えれば、系のとりうるすべての状態に、モンテカルロの手続きの列を通じて到達できなければなりません。エルゴード性がなければ、シミュレーションは配置の部分集合に閉じ込められ、偏った結果を生む可能性があります。エルゴード性を確保するには、特に複雑なエネルギーランドスケープを持つ系では、モンテカルロの手続きを注意深く設計する必要があることがよくあります。
 
-### Detailed Balance
-Another critical principle in Monte Carlo simulations is detailed balance, which guarantees that the system evolves toward equilibrium and samples states according to the desired probability distribution (e.g., the Boltzmann distribution). Detailed balance is a condition that ensures the transition probabilities between states satisfy:
+### 詳細つり合い
+モンテカルロシミュレーションにおけるもう一つの重要な原理は詳細つり合いです。これは、系が平衡に向かって時間発展し、望みの確率分布（例えばボルツマン分布）に従って状態をサンプリングすることを保証します。詳細つり合いとは、状態間の遷移確率が次を満たすことを保証する条件です。
 $$
 P_i \cdot P_{i \to j} = P_j \cdot P_{j \to i},
 $$
-where $P_i$ and $P_j$ are the equilibrium probabilities of states $i$ and $j$, and $P_{i \to j}$ is the transition probability from state $i$ to state $j$. 
+ここで $P_i$ と $P_j$ は状態 $i$ と $j$ の平衡確率、$P_{i \to j}$ は状態 $i$ から状態 $j$ への遷移確率です。
 
-## Metropolis-Hastings Algorithm
-The Metropolis-Hastings algorithm, one of the most commonly used Monte Carlo techniques, enforces detailed balance by accepting or rejecting proposed moves based on a probabilistic criterion that depends on the change in energy and the temperature of the system. It employs a Markov chain process to generate a sequence of configurations, ensuring that the system evolves toward equilibrium. The algorithm involves the following steps:
-1. Propose a random change to the system (e.g., particle displacements or spin flips).
-2. Calculate the change in energy $\Delta E$ associated with the proposed move.
-3. Accept or reject the move based on the acceptance probability:
+## メトロポリス・ヘイスティングス法
+メトロポリス・ヘイスティングス法は最もよく使われるモンテカルロ手法の一つであり、エネルギー変化と系の温度に依存する確率的な判定基準に基づいて提案された手続きを採択または棄却することで、詳細つり合いを満たします。この手法はマルコフ連鎖過程を用いて配置の列を生成し、系が平衡に向かって時間発展することを保証します。アルゴリズムは次の手順からなります。
+1. 系にランダムな変化（例えば粒子の変位やスピンの反転）を提案します。
+2. 提案された変化に伴うエネルギー変化 $\Delta E$ を計算します。
+3. 次の採択確率に基づいて、その変化を採択または棄却します。
 $$
 P_{i \to j} = \min\left(1, e^{-\beta \Delta E}\right),
 $$
-where $\beta = 1/(k_B T)$ is the inverse temperature. This acceptance rule ensures detailed balance and drives the system toward equilibrium.
+ここで $\beta = 1/(k_B T)$ は逆温度です。この採択規則により詳細つり合いが保証され、系は平衡に向かいます。
 
-## Heat-Bath Algorithm
-For the heat-bath algorithm, the transition probabilities are explicitly designed to satisfy this condition. The equilibrium probability of a state is given by the Boltzmann distribution:
+## 熱浴法
+熱浴法では、遷移確率がこの条件を満たすように明示的に設計されています。状態の平衡確率はボルツマン分布で与えられます。
 $$
 P_i \propto e^{-\beta E_i},
 $$
-where $E_i$ is the total energy of the system in state $i$. Let the transition probability from state $i$ to state $j$ be 
+ここで $E_i$ は状態 $i$ における系の全エネルギーです。状態 $i$ から状態 $j$ への遷移確率を
 $$
 P_{i \to j} = \frac{e^{-\beta E_j}}{e^{-\beta E_i} + e^{-\beta E_j}},
 $$
-and correspondingly the transition probability from state $j$ to state $i$ be 
+とし、それに対応して状態 $j$ から状態 $i$ への遷移確率を
 $$
 P_{j \to i} = \frac{e^{-\beta E_i}}{e^{-\beta E_i} + e^{-\beta E_j}}.
 $$
+とします。
 
-Substituting the transition probabilities into the detailed balance condition, we have:
+これらの遷移確率を詳細つり合いの条件に代入すると、次が得られます。
 $$
 P_i \cdot P_{i \to j} = e^{-\beta E_i} \cdot \frac{e^{-\beta E_j}}{e^{-\beta E_i} + e^{-\beta E_j}} = e^{-\beta E_j} \cdot \frac{e^{-\beta E_i}}{e^{-\beta E_i} + e^{-\beta E_j}} = P_j \cdot P_{j \to i}.
 $$
-Thus, the heat-bath algorithm inherently satisfies detailed balance.
+したがって、熱浴法は本質的に詳細つり合いを満たしています。

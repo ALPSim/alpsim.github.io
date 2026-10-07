@@ -6,18 +6,18 @@ toc: true
 weight: 2
 ---
 
-## Getting started with ALPS using Python
+## Python で ALPS を使い始める
 
-In this tutorial we will show how a simulation can be written in a few lines of code using python-ALPS. We will look at the "hello world"-example in the world of physics simulations and perform a Monte Carlo simulation of the classical 2D Ising model with local updates. A skeleton code outlining the typical structure of a Monte Carlo simulation is provided in the file `ising-skeleton.py` and will be discussed step by step below:
+このチュートリアルでは、python-ALPS を使うと、わずか数行のコードでシミュレーションを書けることを示します。物理シミュレーションの世界における「hello world」の例として、局所更新を用いた古典 2 次元イジングモデルのモンテカルロシミュレーションを行います。モンテカルロシミュレーションの典型的な構造を示すスケルトンコードがファイル `ising-skeleton.py` に用意されており、以下で順を追って説明します。
 
-First we import the required python modules
+まず、必要な Python モジュールをインポートします。
 
     import math
     import pyalps
     import pyalps.alea as alpsalea
     import pyalps.pytools as alpstools
 
-We will start by implementing a Simulation class, which will contain the methods for initializing a simulation, running it and storing the measurements into a HDF5 file.
+はじめに Simulation クラスを実装します。このクラスには、シミュレーションの初期化、実行、そして測定結果の HDF5 ファイルへの保存を行うメソッドが含まれます。
 
     class Simulation:
     # Seed random number generator: self.rng() will give a random float from the interval [0,1)
@@ -40,7 +40,7 @@ We will start by implementing a Simulation class, which will contain the methods
        self.magnetization = alpsalea.RealObservable('m')
        self.abs_magnetization = alpsalea.RealObservable('|m|')
 
-The `__init__` method defines how an object of this Simulation class will be instantiated. As arguments the lattice size $L$ and the inverse temperature \beta will be passed. Based on these parameters we deduce the possible Boltzmann weights and initialize a square lattice of Ising spins in a random configuration. Furthermore we also initialize the observables we are going to measure. Here we make use of the python-ALPS framework in order to let the ALPS alea library handle the evaluation of observables for us. Within the class we have also initialized and seeded a random number generator. As an engine we are using the Mersenne Twister MT19937, whose long period and statistical properties make it a good choice for Monte Carlo simulations.
+`__init__` メソッドは、この Simulation クラスのオブジェクトがどのように生成されるかを定義します。引数として格子サイズ $L$ と逆温度 \beta が渡されます。これらのパラメータをもとに、取りうるボルツマン重みを求め、イジングスピンの正方格子をランダムな配置で初期化します。さらに、測定する観測量も初期化します。ここでは python-ALPS フレームワークを利用し、観測量の評価を ALPS の alea ライブラリに任せています。クラス内では乱数生成器の初期化とシードの設定も行っています。エンジンとしてはメルセンヌ・ツイスタ MT19937 を使用しています。その長い周期と統計的性質から、モンテカルロシミュレーションに適した選択です。
 
     def save(self, filename):
        pyalps.save_parameters(filename, {'L':self.L, 'BETA':self.beta, 'SWEEPS':self.n, 'THERMALIZATION':self.ntherm})
@@ -48,7 +48,7 @@ The `__init__` method defines how an object of this Simulation class will be ins
        self.energy.save(filename)
        self.magnetization.save(filename)
        
-The save method stores the simulation parameters and results in a HDF5-file.
+save メソッドは、シミュレーションのパラメータと結果を HDF5 ファイルに保存します。
 
     def run(self,ntherm,n):
        # Thermalize for ntherm steps
@@ -67,7 +67,7 @@ The save method stores the simulation parameters and results in a HDF5-file.
        print 'E:\t', self.energy.mean, '+-', self.energy.error, ',\t tau =', self.energy.tau
        print 'm:\t', self.magnetization.mean, '+-', self.magnetization.error, ',\t tau =', self.magnetization.tau
 
-The `run` method manages the Monte Carlo updates defined in the step routine and the measurement of the observables in the measure function. While the system is thermalizing we do not perform any measurements. Once all steps are done we print mean, error and autocorrelation time of the observables.
+`run` メソッドは、step ルーチンで定義されたモンテカルロ更新と、measure 関数による観測量の測定を管理します。系が熱化している間は測定を行いません。すべてのステップが終わると、観測量の平均値、誤差、自己相関時間を出力します。
 
     def step(self):
         for s in range(self.L*self.L):
@@ -78,12 +78,12 @@ The `run` method manages the Monte Carlo updates defined in the step routine and
             # Flip s_k with probability exp(2 beta e)
             ...
 
-The Monte Carlo sweeps are done in the `step` method. In the Metropolis algorithm a spin is a randomly picked and flipped with probability $p_{accept} = min(1,e^{-\beta \Delta E})$, $\Delta E$ being the energy difference of the initial and proposed configuration. This procedure is repeated $L^2$ times. The implementation of the Metropolis algorithm is left to you as an exercise. You can make use of the `randint` function defined below:
+モンテカルロスイープは `step` メソッドで行われます。メトロポリス法では、スピンをランダムに 1 つ選び、確率 $p_{accept} = min(1,e^{-\beta \Delta E})$ で反転させます。ここで $\Delta E$ は、元の配置と提案された配置とのエネルギー差です。この手続きを $L^2$ 回繰り返します。メトロポリス法の実装は演習として残しておきます。以下で定義する `randint` 関数を利用できます。
 
     def randint(self,max):
        return int(max*self.rng())
 
-The measurements of our chosen observables are going to be implemented in the method `measure`:
+選んだ観測量の測定は、メソッド `measure` に実装します。
 
     def measure(self):
         E = 0.    # energy
@@ -97,9 +97,9 @@ The measurements of our chosen observables are going to be implemented in the me
         self.magnetization << M/(self.L*self.L)
         self.abs_magnetization << abs(M)/(self.L*self.L)
 
-The values of the energy and magnetization are determined for the given spin configuration and added to the ALPS observable. The implementation is again left to you as an exercise.
+与えられたスピン配置に対してエネルギーと磁化の値を求め、ALPS の観測量に追加します。この実装も演習として残しておきます。
 
-Once you have completed the implementation of the observable measurements and Metropolis update you can run the simulation using the `alpspython` python interpreter. In this example we will do a scan over different values of $\beta = 1/k_B T$. The "main" program is given below:
+観測量の測定とメトロポリス更新の実装が完成したら、Python インタプリタ `alpspython` を使ってシミュレーションを実行できます。この例では、$\beta = 1/k_B T$ のさまざまな値についてスキャンを行います。「main」プログラムを以下に示します。
 
     L = 4    # Linear lattice size
     N = 5000    # of simulation steps
@@ -112,15 +112,15 @@ Once you have completed the implementation of the observable measurements and Me
         sim.run(N/2,N)
         sim.save('ising.'+str(beta)+'.h5')
 
-A nice thing about python-ALPS is that if you evaluate composite observables, e.g. of the form $U = \langle A \rangle/\langle B\rangle$, a jackknife analysis will be performed and you will automatically obtain correctly evaluated values for the mean and error. As an example we are going to extend our Ising simulation and add measurements of $m^2$ and $m^4$, from which we determine the Binder cumulant $U_4=\langle m^4\rangle /\langle m^2\rangle^2$. Since the Binder cumulant is usually used to determine the critical temperature using finite size scaling, we are also going to simulate $L=6,8$ in addition.
+python-ALPS の便利な点は、例えば $U = \langle A \rangle/\langle B\rangle$ のような形の複合観測量を評価すると、ジャックナイフ解析が行われ、平均値と誤差が自動的に正しく評価されることです。例として、イジングシミュレーションを拡張して $m^2$ と $m^4$ の測定を追加し、そこからビンダーキュムラント $U_4=\langle m^4\rangle /\langle m^2\rangle^2$ を求めます。ビンダーキュムラントは通常、有限サイズスケーリングによって臨界温度を決定するために使われるので、$L=6,8$ についてもシミュレーションを行います。
 
-Assuming that you have succesfully implemented these two additional observables and run the simulation we will first load the data and store for each system size $L$ the two observables $m^2$ and $m^4$ as a function of inverse temperature  $\beta$ :
+これら 2 つの観測量を追加で実装し、シミュレーションを実行できたものとして、まずデータを読み込み、各系のサイズ $L$ について 2 つの観測量 $m^2$ と $m^4$ を逆温度 $\beta$ の関数として格納します。
 
     data = pyalps.loadMeasurements(pyalps.getResultFiles(pattern='ising.L*'),['m^2', 'm^4'])
     m2=pyalps.collectXY(data,x='BETA',y='m^2',foreach=['L'])
     m4=pyalps.collectXY(data,x='BETA',y='m^4',foreach=['L'])
 
-Now we can calculate the Binder cumulant, which we will store in a list of datasets:
+これでビンダーキュムラントを計算できます。結果はデータセットのリストに格納します。
 
     u=[]
     for i in range(len(m2)):
@@ -131,7 +131,7 @@ Now we can calculate the Binder cumulant, which we will store in a list of datas
         d.y = m4[i].y/m2[i].y/m2[i].y
         u.append(d)
 
-You can plot the Binder cumulant using the commands:
+ビンダーキュムラントは次のコマンドでプロットできます。
 
     import pyalps.plot as plt 
     plt.figure()
@@ -142,5 +142,5 @@ You can plot the Binder cumulant using the commands:
     plt.legend()
     plt.show()
 
-What do you observe? If you want to learn more about phase transitions and finite size scaling methods, check out the tutorial [MC-07 Phase transition in the Ising model](../../../tutorials/mcs/mc07).
+何が観察できるでしょうか？ 相転移や有限サイズスケーリングの手法についてさらに学びたい場合は、チュートリアル [MC-07 イジングモデルの相転移](../../../tutorials/mcs/mc07) を参照してください。
 

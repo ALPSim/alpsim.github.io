@@ -1,7 +1,7 @@
 
 ---
-title: Reference
-description: "ALPS Model Library"
+title: "参考手册"
+description: "ALPS Model 库"
 weight: 1
 ---
 

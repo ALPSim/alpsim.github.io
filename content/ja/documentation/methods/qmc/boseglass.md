@@ -1,13 +1,13 @@
 
 ---
-title: Bose Glass 
+title: ボースグラス
 math: true
 weight: 8
 ---
 
-## The Bose glass model
+## ボースグラスモデル
 
-The following parameter file sets up a Monte Carlo simulation of the quantum Bose Hubbard model with a random site dependent chemical potential on a square lattice using the worm code. The chemical potential is drawn from an uniform distribution in the range [-5,+5].
+次のパラメータファイルは、worm コードを用いて、正方格子上でサイトに依存するランダムな化学ポテンシャルを持つ量子ボース・ハバードモデルのモンテカルロシミュレーションを設定します。化学ポテンシャルは区間 [-5,+5] の一様分布から抽出されます。
 
     LATTICE="inhomogeneous square lattice";
     L=4;
@@ -26,7 +26,7 @@ The following parameter file sets up a Monte Carlo simulation of the quantum Bos
     { DISORDERSEED = 49802; mu=delta*2*(random()-0.5); }
     { DISORDERSEED = 82529; mu=delta*2*(random()-0.5); }
 
-In order to use periodic boundary conditions you have to adjust the boundary type of the inhomogeneous square lattice in the `lattice.xml` file:
+周期境界条件を使うには、`lattice.xml` ファイル内の inhomogeneous square lattice の境界タイプを調整する必要があります。
 
     <LATTICEGRAPH name = "inhomogeneous square lattice">
     <FINITELATTICE>
@@ -40,6 +40,6 @@ In order to use periodic boundary conditions you have to adjust the boundary typ
     <INHOMOGENEOUS><VERTEX/></INHOMOGENEOUS>
     </LATTICEGRAPH>
 
-You can run the simulation by using the same sequence of commands as in the worm algorithm tutorial.
+シミュレーションは、ワームアルゴリズムのチュートリアルと同じ一連のコマンドを使って実行できます。
 
 

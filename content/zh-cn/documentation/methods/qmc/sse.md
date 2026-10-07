@@ -1,116 +1,115 @@
-
 ---
-title: Stochastic Series Expansion (SSE)
+title: 随机级数展开（SSE）
 math: true
 weight: 4
 ---
 
-The Stochastic Series Expansion (SSE) method is a finite-temperature QMC technique that expands the partition function $Z$ of the quantum system in a power series of the Hamiltonian. It was originally applied to the Heisenberg model [^Sandvik99], but can be easily extended to other quantum models, such as Bose-Hubbard model.
+随机级数展开（SSE）方法是一种有限温度 QMC 技术，它将量子系统的配分函数 $Z$ 展开为哈密顿量的幂级数。它最初被应用于海森堡模型 [^Sandvik99]，但可以很容易地推广到其他量子模型，例如玻色-Hubbard 模型。
 
-The partition function of a quantum model is given by:
+量子模型的配分函数为：
 
 $$
 Z = \text{Tr}(e^{-\beta \mathcal{H}}),
 $$
 
-where $\beta = 1/(k_B T)$ is the inverse temperature and $\mathcal{H}$ is the Hamiltonian. The key idea of SSE is to express the exponential operator $e^{-\beta \mathcal{H}}$ as a Taylor series:
+其中 $\beta = 1/(k_B T)$ 为逆温度，$\mathcal{H}$ 为哈密顿量。SSE 的核心思想是将指数算符 $e^{-\beta \mathcal{H}}$ 表示为泰勒级数：
 
 $$
 e^{-\beta \mathcal{H}} = \sum_{n=0}^\infty \frac{(-\beta)^n}{n!} \mathcal{H}^n.
 $$
 
-By inserting a complete set of basis states $\{|\alpha\rangle\}$, the partition function can be rewritten as:
+插入一组完备基矢 $\{|\alpha\rangle\}$ 后，配分函数可以改写为：
 
 $$
 Z = \sum_{\alpha} \sum_{n=0}^\infty \frac{(-\beta)^n}{n!} \langle \alpha | \mathcal{H}^n | \alpha \rangle.
 $$
 
-Depending on the temperatures, the SSE expansion order in the simulation will never exceed a finite order $N$. The SSE method then truncates this expansion series at order $N$ and samples the terms stochastically. The Hamiltonian $\mathcal{H}$ is typically decomposed into a sum of elementary interaction terms $H_{i,j}$, such as bond operators for the Heisenberg model:
+取决于温度，模拟中的 SSE 展开阶数永远不会超过某个有限阶数 $N$。于是 SSE 方法在 $N$ 阶处截断该展开级数，并对其中各项进行随机采样。哈密顿量 $\mathcal{H}$ 通常被分解为一系列基本相互作用项 $H_{i,j}$ 之和，例如海森堡模型中的键算符：
 
 $$
 \mathcal{H} = -\sum_{i,j} H_{i,j}.
 $$
 
-Each term $H_{i,j}$ acts on a pair of sites and can be represented in a suitable basis. The SSE algorithm then samples configurations consisting of a sequence of these operators.
+每一项 $H_{i,j}$ 作用在一对格点上，并可以在合适的基下表示。SSE 算法随后对由这些算符组成的序列构成的构型进行采样。
 
-For the Heisenberg model, the bond operator $H_{i,j}$ can be expressed as:
+对于海森堡模型，键算符 $H_{i,j}$ 可以表示为：
 
 $$
 H_{i,j} = J \left( S_i^z S_j^z + \frac{1}{2} (S_i^+ S_j^- + S_i^- S_j^+) \right),
 $$
 
-where $S_i^z$ is the $z$-component of the spin operator, and $S_i^+$ and $S_i^-$ are the spin raising and lowering operators, respectively. The first term, $S_i^z S_j^z$, represents the **diagonal part** of the interaction, while the second term, $\frac{1}{2} (S_i^+ S_j^- + S_i^- S_j^+)$, represents the **off-diagonal part**.
+其中 $S_i^z$ 是自旋算符的 $z$ 分量，$S_i^+$ 和 $S_i^-$ 分别是自旋升算符和降算符。第一项 $S_i^z S_j^z$ 表示相互作用的**对角部分**，第二项 $\frac{1}{2} (S_i^+ S_j^- + S_i^- S_j^+)$ 表示**非对角部分**。
 
-### Diagonal and Off-Diagonal Matrix Elements
+### 对角与非对角矩阵元
 
-#### Heisenberg Model
-In the SSE framework, the Heisenberg Hamiltonian is expressed in terms of diagonal and off-diagonal operators. For a given basis state $|\alpha\rangle$, the matrix elements of the bond operator $H_{i,j}$ are:
+#### 海森堡模型
+在 SSE 框架中，海森堡哈密顿量用对角算符和非对角算符来表示。对于给定的基矢 $|\alpha\rangle$，键算符 $H_{i,j}$ 的矩阵元为：
 
-1. **Diagonal Matrix Elements**:
-   These correspond to the $S_i^z S_j^z$ term and are given by:
+1. **对角矩阵元**：
+   它们对应于 $S_i^z S_j^z$ 项，由下式给出：
    $$
    \langle \alpha | S_i^z S_j^z | \alpha \rangle = S_i^z S_j^z,
    $$
-   where $S_i^z$ and $S_j^z$ are the $z$-components of the spins in the state $|\alpha\rangle$.
+   其中 $S_i^z$ 和 $S_j^z$ 是态 $|\alpha\rangle$ 中自旋的 $z$ 分量。
 
-2. **Off-Diagonal Matrix Elements**:
-   These correspond to the spin-flip terms $S_i^+ S_j^-$ and $S_i^- S_j^+$. For a state $|\alpha\rangle$, the off-diagonal matrix elements are:
+2. **非对角矩阵元**：
+   它们对应于自旋翻转项 $S_i^+ S_j^-$ 和 $S_i^- S_j^+$。对于态 $|\alpha\rangle$，非对角矩阵元为：
    $$
    \langle \alpha | S_i^+ S_j^- | \alpha^{\prime} \rangle = \frac{1}{2} \delta_{\alpha, \alpha^{\prime} \text{ with } S_i^+ S_j^-},
    $$
-   and
+   以及
    $$
    \langle \alpha | S_i^- S_j^+ | \alpha^{\prime} \rangle = \frac{1}{2} \delta_{\alpha, \alpha' \text{ with } S_i^- S_j^+},
    $$
-   where $\alpha$ and $\alpha^{\prime}$ is the state obtained by flipping the spins at sites $i$ and $j$.
+   其中 $\alpha$ 和 $\alpha^{\prime}$ 是通过翻转格点 $i$ 和 $j$ 上的自旋得到的态。
    
-#### Bose-Hubbard Model
-The Bose-Hubbard model describes bosons on a lattice with on-site interactions and nearest-neighbor hopping. The Hamiltonian is given by:
+#### 玻色-Hubbard 模型
+玻色-Hubbard 模型描述晶格上具有在位相互作用和最近邻跃迁的玻色子。其哈密顿量为：
 
 $$
 H = -t \sum_{\langle i,j \rangle} (b_i^\dagger b_j + \text{h.c.}) + \frac{U}{2} \sum_i n_i (n_i - 1) - \mu \sum_i n_i,
 $$
 
-where:
-- $t$ is the hopping amplitude,
-- $U$ is the on-site interaction strength,
-- $\mu$ is the chemical potential,
-- $b_i^\dagger$ and $b_i$ are the bosonic creation and annihilation operators at site $i$,
-- $n_i = b_i^\dagger b_i$ is the number operator,
-- $\langle i,j \rangle$ denotes nearest-neighbor pairs.
+其中：
+- $t$ 为跃迁幅度，
+- $U$ 为在位相互作用强度，
+- $\mu$ 为化学势，
+- $b_i^\dagger$ 和 $b_i$ 为格点 $i$ 上的玻色产生算符和湮灭算符，
+- $n_i = b_i^\dagger b_i$ 为粒子数算符，
+- $\langle i,j \rangle$ 表示最近邻对。
 
-The Bose-Hubbard Hamiltonian $\mathcal{H}$ is decomposed into a set of bond operators $H_{i,j}$ (for hopping) and $H_i$ (for on-site interactions):
+玻色-Hubbard 哈密顿量 $\mathcal{H}$ 被分解为一组键算符 $H_{i,j}$（对应跃迁）和 $H_i$（对应在位相互作用）：
 $$
 H = -\sum_b H_b,
 $$
-where $b$ labels the bonds or sites. For the Bose-Hubbard model:
-- Hopping terms: $H_{i,j} = t (b_i^\dagger b_j + b_j^\dagger b_i)$,
-- On-site terms: $H_i = \frac{U}{2} n_i (n_i - 1) - \mu n_i$.
+其中 $b$ 标记键或格点。对于玻色-Hubbard 模型：
+- 跃迁项：$H_{i,j} = t (b_i^\dagger b_j + b_j^\dagger b_i)$，
+- 在位项：$H_i = \frac{U}{2} n_i (n_i - 1) - \mu n_i$。
 
-### Insertion of Basis States
+### 基矢的插入
 
-In the SSE method, the partition function is expanded in terms of basis states $|\alpha\rangle$ and operator sequences. A typical configuration in the SSE expansion consists of:
+在 SSE 方法中，配分函数以基矢 $|\alpha\rangle$ 和算符序列的形式展开。SSE 展开中的一个典型构型包括：
 
-1. A basis state $|\alpha_0\rangle$ (the initial state).
-2. A sequence of operators $H_{i,j}$ acting on the state.
+1. 一个基矢 $|\alpha_0\rangle$（初始态）。
+2. 作用在该态上的一个算符序列 $H_{i,j}$。
 
-The partition function can then be written as:
+于是配分函数可以写为：
 
 $$
 Z = \sum_{\alpha_0} \sum_{n=0}^N \frac{(-\beta)^n}{n!} \sum_{\{H_{i,j}\}} \langle \alpha_0 | H_{i_1,j_1} H_{i_2,j_2} \cdots H_{i_n,j_n} | \alpha_0 \rangle,
 $$
 
-where $N$ is the cutoff of the expansion order and $\{H_{i,j}\}$ represents a sequence of $n$ operators. The matrix elements of the operators are evaluated in the basis states, and the sequence of operators must satisfy the condition that the final state matches the initial state $|\alpha_0\rangle$.
+其中 $N$ 是展开阶数的截断，$\{H_{i,j}\}$ 表示由 $n$ 个算符组成的序列。算符的矩阵元在基矢中计算，并且算符序列必须满足末态与初态 $|\alpha_0\rangle$ 相同的条件。
 
-### Steps in the SSE Algorithm
+### SSE 算法的步骤
 
-1. **Initialization**: Start with an initial state $|\alpha\rangle$ and an empty operator sequence.
-2. **Operator Insertion**: Propose to insert or remove diagonal operators $H_{i,j}$ into the sequence, updating the state $|\alpha\rangle$ accordingly.
-3. **Diagonal Updates**: Ensure that the sequence of operators is consistent with the Hamiltonian and the basis states.
-4. **Loop Updates**: Perform non-local updates to improve sampling efficiency, often using cluster or loop algorithms tailored to the spin or other bosonic models [^Syljuasen02] [^pollet04] [^Alet05].
-5. **Measurement**: Compute physical quantities, such as energy, magnetization, and correlation functions, by averaging over the sampled configurations.
+1. **初始化**：从一个初始态 $|\alpha\rangle$ 和一个空的算符序列开始。
+2. **算符插入**：提议在序列中插入或移除对角算符 $H_{i,j}$，并相应地更新态 $|\alpha\rangle$。
+3. **对角更新**：确保算符序列与哈密顿量及基矢相容。
+4. **环更新**：执行非局域更新以提高采样效率，通常采用针对自旋或其他玻色模型量身定制的团簇或环算法 [^Syljuasen02] [^pollet04] [^Alet05]。
+5. **测量**：通过对采样构型求平均，计算能量、磁化强度和关联函数等物理量。
 
-The SSE method is particularly advantageous for the Heisenberg model because it avoids the sign problem for certain geometries (e.g., bipartite lattices) and provides efficient sampling of both low-temperature and high-temperature regimes. It has been successfully applied to study a wide range of phenomena, including quantum phase transitions, spin dynamics, and Bosonic systems.
+SSE 方法对海森堡模型特别有利，因为它在某些几何结构（例如二分晶格）上不存在符号问题，并且在低温区和高温区都能高效采样。它已被成功应用于研究广泛的现象，包括量子相变、自旋动力学以及玻色系统。
 
 
 [^Sandvik99]: Sandvik, A. W., "Stochastic Series Expansion Method with Operator-Loop Update", *Physical Review B*, 59, R14157-R14160 (1999).

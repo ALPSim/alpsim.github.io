@@ -1,7 +1,7 @@
 
 ---
-title: Comparable Graph
-description: "BGL Extension Graph"
+title: "可比较图"
+description: "BGL 扩展：图"
 weight: 1
 ---
 

@@ -1,76 +1,76 @@
 
 ---
-title: Bosons in an Optical Lattice
+title: 光格子中のボソン
 math: true
 ---
 
-## Bandstructure of an homogeneous optical lattice
+## 一様な光格子のバンド構造
 
-### Theory
+### 理論
 
-At this first moment, we shall look at the simplest case, i.e. a single particle of mass $m$ which experiences a periodic potential $V(\vec{r})$, where
+まずは最も単純な場合、すなわち周期ポテンシャル $V(\vec{r})$ を感じる質量 $m$ の単一粒子を考えます。ここで
 
 $$
 V(\vec{r}) = \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)
 $$
 
-in the units of recoil energy $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ and lattice spacing $\frac{\lambda_\alpha}{2}$.
+であり、反跳エネルギー $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ と格子間隔 $\frac{\lambda_\alpha}{2}$ を単位とします。
 
-The quantum mechanical behaviour of the single particle follows
+単一粒子の量子力学的な振る舞いは次の式に従います。
 
 $$
 \left[\frac{1}{\pi^2} \left( -i \nabla + 2\pi \vec{k} \right)^2 + \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)\right]  u_k (\vec{r}) = \epsilon_k u_k(\vec{r})
 $$
 
-which is clearly separable to say the $x$-component:
+これは明らかに変数分離でき、例えば $x$ 成分については
 
 $$
 \left[\frac{1}{\pi^2} \left( -i \partial_x + 2\pi k_x \right)^2 + V_0^{x} \sin^2 (\pi x)\right]  u_{k_x} (x) = \epsilon_{k_x} u_{k_x}(x),
 $$
 
-where $k_x = 0, \frac{1}{L_x} ,\cdots \frac{L_x-1}{L_x}$.
+となります。ここで $k_x = 0, \frac{1}{L_x} ,\cdots \frac{L_x-1}{L_x}$ です。
 
-In the plane wave basis,
+平面波基底
 
 $$
 u_{k_x} (x) = \frac{1}{\sqrt{L_x}} \sum_{m \in \mathbf{Z}}  c_m^{(k_x)} e^{i2m\pi x} 
 $$
 
-We arrive at a tridiagonal diagonalization problem:
+を用いると、三重対角行列の対角化問題に帰着します。
 
 $$
 \left[  4(m + k_x)^2 + \frac{V_0^x}{2} \right] c_m^{(k_x)} - \frac{V_0^x}{4} c_{m-1}^{(k_x)} - \frac{V_0^x}{4} c_{m+1}^{(k_x)}  = \epsilon_{k_x}  c_m^{(k_x)}.
 $$
 
-The wannier function is defined as:
+ワニエ関数は次のように定義されます。
 
 $$
 w(x) = \frac{1}{\sqrt{L_x}} \sum_{k_x} u_{k_x} (x) e^{i 2\pi k_x x} = \frac{1}{L_x} \sum_{k_x} \sum_{m \in \mathbf{Z}} c_m^{(k_x)} e^{i 2\pi (m+k_x) x}, 
 $$
 
-and from there, one can calculate the onsite interaction:
+そこから、オンサイト相互作用を計算できます。
 
 $$
 U = g \int | w(x) |^4 dx = \frac{4 \pi a_s \hbar^2}{m}  \int | w(x) |^4 dx.
 $$
 
-After a little bit of algebra, we arrive at the hopping strength:
+少し計算すると、ホッピングの強さが得られます。
 
 $$
 t = -\frac{1}{L_x} \sum_{k_x} \epsilon_{k_x} e^{-i2\pi k_x}.
 $$
 
-Finally, the Fourier transform of the wannier function is:
+最後に、ワニエ関数のフーリエ変換は次のようになります。
 
 $$
 \tilde{w}(q_x) = \frac{1}{\sqrt{L_x}} \int w(x) e^{-i2\pi q_x x} dx  = \frac{1}{\sqrt{L_x}} \sum_{k_x} \sum_{m \in \mathbf{Z}} c_m^{(k_x)} \delta_{q_x, k_x+m}.
 $$
 
-### Implementation in Python
+### Python による実装
 
-#### An example
+#### 例
 
-For instance:
+例えば次のようにします。
 
     import numpy;
     import pyalps.dwa;
@@ -83,7 +83,7 @@ For instance:
 
     band = pyalps.dwa.bandstructure(V0, wlen, a, m, L);
 
-A first glance of the band structure:
+バンド構造をざっと見てみます。
 
     >>> band
 
@@ -104,7 +104,7 @@ A first glance of the band structure:
     wk2[0 ,0 ,0 ] : 5.81884e-08
     wk2[pi,pi,pi] : 1.39558e-08
 
-Well, the values of $t(nK)$, $U(nK)$, and $U/t$ can be obtained via:
+$t(nK)$、$U(nK)$、$U/t$ の値は次のようにして取得できます。
 
     >>> numpy.array(band.t())
     array([ 4.77050984,  4.77050984,  4.77050984])
@@ -115,7 +115,7 @@ Well, the values of $t(nK)$, $U(nK)$, and $U/t$ can be obtained via:
     >>> numpy.array(band.Ut())
     array([ 8.11272192,  8.11272192,  8.11272192])
 
-In momentum ($\vec{q}$) space, the (squared) wannier function  $|\tilde{w}(\vec{q})|^2$  can be obtained in the $x$-direction from:
+運動量（$\vec{q}$）空間において、ワニエ関数の（2 乗の）値 $|\tilde{w}(\vec{q})|^2$ は、$x$ 方向については次のようにして得られます。
 
     >>> numpy.array(band.q(0))
     array([-5.   , -4.995, -4.99 , ...,  5.985,  5.99 ,  5.995])
@@ -124,47 +124,46 @@ In momentum ($\vec{q}$) space, the (squared) wannier function  $|\tilde{w}(\vec{
     array([  7.57249518e-15,   7.88189086e-15,   8.20434507e-15, ...,
          1.62988573e-18,   1.56057426e-18,   1.49429285e-18])
          
-and the $y$- or $z$- direction by replacing the index 0 to 1 and 2 respectively.
+$y$ 方向や $z$ 方向については、インデックス 0 をそれぞれ 1 と 2 に置き換えます。
 
 
-## Bosons in an optical lattice trap
+## 光格子トラップ中のボソン
 
-### Boson Hubbard model
+### ボース・ハバードモデル
 
-#### Hamiltonian
+#### ハミルトニアン
 
-Bosons in an optical lattice trap can be effectively described by the single band boson Hubbard model
+光格子トラップ中のボソンは、単一バンドのボース・ハバードモデル
 
 $$
 \hat{H} = -t \sum_{\langle i,j \rangle} \hat{b}_i^+ \hat{b}_j + \frac{U}{2} \sum_i \hat{n}_i (\hat{n}_i - 1) - \sum_i ( \mu - V_T ( \vec{r}_i) ) \hat{n}_i
 $$
 
-with hopping strength $t$, onsite interaction strength $U$, and chemical potential $\mu$ at finite temperature $T$ via Quantum Monte Carlo implemented in the directed worm algorithm. Here, $\hat{b}$ ($\hat{b}^+$) is the annihilation (creation) operator, and $\hat{n}_i$ being the number operator at site $i$. Bosons in an optical lattice are confined, say in a 3D parabolic trapping potential, i.e.
+によって実効的に記述できます。ここで、ホッピングの強さ $t$、オンサイト相互作用の強さ $U$、化学ポテンシャル $\mu$ を持つ系を、有限温度 $T$ において、有向ワームアルゴリズムとして実装された量子モンテカルロ法で扱います。$\hat{b}$（$\hat{b}^+$）は消滅（生成）演算子、$\hat{n}_i$ はサイト $i$ における数演算子です。光格子中のボソンは、ガウシアンビームのウエストやその他のトラップ源によって、例えば 3 次元の放物型トラップポテンシャル
 
 $$
 V_T (\vec{r}_i) = K_x x_i^2 + K_y y_i^2 + K_z z_i^2,
 $$
 
-due to the gaussian beam waists as well as other sources of trapping.
+に閉じ込められています。
 
-#### Finite temperature
+#### 有限温度
 
-At finite temperature $T$, the physics is essentially captured by the partition function
+有限温度 $T$ では、物理は本質的に分配関数
 
 $$
 Z = \mathrm{Tr} \, \exp \left(-\beta \hat{H} \right)
 $$
 
-and physical quantities such as the local density
+と、局所密度
 
 $$
 \langle n_i \rangle = \frac{1}{Z} \mathrm{Tr} \hat{n}_i \exp \left(-\beta \hat{H} \right)  = \frac{1}{Z} \sum_{\mathcal{C}} n_i (\mathcal{C}) Z(\mathcal{C})
 $$
 
-for some configuration $\mathcal{C}$ in the complete configuration space, with inverse temperature $\beta = 1/T$ . Here, the units will be cleverly normalized later on.
+のような物理量によって捉えられます。ここで $\mathcal{C}$ は全配置空間中のある配置、$\beta = 1/T$ は逆温度です。単位については後ほど巧妙に規格化します。
 
-## Contributors
+## 貢献者
 
 - Ping Nang Ma
 - Matthias Troyer
-

@@ -1,7 +1,7 @@
 
 ---
-title: Reference
-description: "ALPS Model Library"
+title: "リファレンス"
+description: "ALPS Model ライブラリ"
 weight: 1
 ---
 

@@ -1,68 +1,66 @@
-
 ---
-title: Worm Algorithm 
+title: 蠕虫算法 
 math: true
 weight: 5
 ---
 
-## Introduction
+## 简介
 
-The worm code provides a full generic implementation for Quantum Monte Carlo (QMC) simulations based on the worm algorithms which was invented by N. Prokof'ev and collaborators. Technically, it provides a continuous-time QMC code based on a path integral representation of the partition function.
+worm 程序提供了基于蠕虫算法的量子蒙特卡洛（QMC）模拟的完整通用实现，蠕虫算法由 N. Prokof'ev 及其合作者发明。从技术上讲，它是一个基于配分函数路径积分表示的连续时间 QMC 程序。
 
-The current implementation allows to simulate the following models on arbitrary lattices:
+当前实现允许在任意晶格上模拟以下模型：
 
-- Quantum spin (unfrustrated) models with arbitrary spin size, magnetic field and anisotropy
-- (Softcore) bosonic models without a sign problem
+- 具有任意自旋大小、磁场和各向异性的量子自旋（无阻挫）模型
+- 不存在符号问题的（软核）玻色模型
 
-Support for simulations with a sign problem could be added if desired.
+如有需要，可以添加对存在符号问题的模拟的支持。
 
-## Running a simulation
+## 运行模拟
 
-An example simulation is discussed in the tutorial.
+教程中讨论了一个模拟示例。
 
-## Input parameters
+## 输入参数
 
-The worm code uses the common input parameters discussed here.
+worm 程序使用此处讨论的通用输入参数。
 
-## Parameters for experts
+## 专家参数
 
-In addition, specific simulations parameters can be assigned (use only if you see what it means!):
+此外，还可以指定特定的模拟参数（只有在你明白其含义时才使用！）：
 
-| **Parameter** | **Default** | **Meaning** |
+| **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| SKIP | 1 | the number of Monte Carlo sweeps between each measurement |
-| RESTRICT_MEASUREMENTS[N] | | if defined this restricts measurements to configurations where the quantum number N (particle number) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the chemical potential needs to be tuned to the right range, to actually sample configurations with the desired particle number. |
-| RESTRICT_MEASUREMENTS[Sz] | | if defined this restricts measurements to configurations where the quantum number Sz (magnetization) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the magnetic field needs to be tuned to the right range, to actually sample configurations with the desiredmagnetization. |
-| WORMS_PER_KINK | 1 | determines how often a worm should visit a kink on average per sweep. |
-| MEASURE_GREEN | false | flag that indicates whether the Green's function should be measured. Don't use - this is untested! |
+| SKIP | 1 | 两次测量之间的蒙特卡洛扫描次数 |
+| RESTRICT_MEASUREMENTS[N] | | 若定义此参数，则只在量子数 N（粒子数）取该参数所给值的构型上进行测量。注意，模拟仍然在巨正则系综中进行，需要将化学势调到合适的范围，才能真正采样到具有所需粒子数的构型。 |
+| RESTRICT_MEASUREMENTS[Sz] | | 若定义此参数，则只在量子数 Sz（磁化强度）取该参数所给值的构型上进行测量。注意，模拟仍然在巨正则系综中进行，需要将磁场调到合适的范围，才能真正采样到具有所需磁化强度的构型。 |
+| WORMS_PER_KINK | 1 | 决定每次扫描中蠕虫平均访问一个扭结的频率。 |
+| MEASURE_GREEN | false | 标志，指示是否测量格林函数。请勿使用——该功能未经测试！ |
 
-## Compile time parameters
+## 编译时参数
 
-Furthermore, at compile time you can define the following variables in the file `WRun.h`
+此外，在编译时可以在文件 `WRun.h` 中定义以下变量
 
-| **Parameter** | **Meaning** |
+| **参数** | **含义** |
 | :------------ | :---------- |
-| NONLOCAL | undefine to speed up the code for local interactions. |
-| USE_VECTOR | define to use a `std::vector` instead of a `std::list` as data structure. |
-| USE_SET | define to use a `std::set` instead of a `std::list` as data structure. |
+| NONLOCAL | 取消定义可加速仅含局域相互作用时的程序。 |
+| USE_VECTOR | 定义后使用 `std::vector` 而非 `std::list` 作为数据结构。 |
+| USE_SET | 定义后使用 `std::set` 而非 `std::list` 作为数据结构。 |
 
-## Measurements
+## 测量
 
-The following observables are measured by the worm code application:
+worm 应用程序会测量以下观测量：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Energy | total energy of the system |
-| Energy Density | energy per site |
-| Density | particle number (for bosonic models) |
-| Density^2 | square of the particle number (for bosonic models) |
-| Stiffness | stiffness of the system (for bosonic models) |
-| Green's function | Green's function (works only for local interactions) |
+| Energy | 系统的总能量 |
+| Energy Density | 每格点能量 |
+| Density | 粒子数（对玻色模型） |
+| Density^2 | 粒子数的平方（对玻色模型） |
+| Stiffness | 系统的刚度（对玻色模型） |
+| Green's function | 格林函数（仅适用于局域相互作用） |
 
-## Contributors
+## 贡献者
 
-The following persons have contributed to the worm application:
+以下人员为 worm 应用程序做出了贡献：
 
 - Simon Trebst
-- Matthias Troyer 
-
+- Matthias Troyer

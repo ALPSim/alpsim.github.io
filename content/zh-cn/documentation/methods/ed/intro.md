@@ -1,107 +1,107 @@
 
 ---
-title: Introduction
+title: 简介
 math: true
 weight: 1
 ---
-Exact diagonalization (ED) is a numerical technique used to solve quantum many-body problems by directly diagonalizing the Hamiltonian matrix of a system. This method provides exact eigenstates and eigenvalues, making it a powerful tool for studying small to moderately sized quantum systems. A classic example of its application is the Heisenberg model, which describes interacting spins on a lattice and is widely used to understand magnetic phenomena in condensed matter physics.
+精确对角化（ED）是一种求解量子多体问题的数值方法，它通过直接对角化体系的哈密顿量矩阵来获得结果。该方法给出精确的本征态和本征值，是研究小到中等尺寸量子体系的有力工具。它的一个经典应用实例是海森堡模型：该模型描述晶格上相互作用的自旋，被广泛用于理解凝聚态物理中的磁性现象。
 
-## The Heisenberg Model as a Case Study
+## 以海森堡模型为例
 
-The Heisenberg model is defined by the Hamiltonian:
+海森堡模型由如下哈密顿量定义：
 
 $$
 \mathcal{H} = J \sum_{\langle i,j \rangle} \mathbf{S}_i \cdot \mathbf{S}_j,
 $$
 
-where $\mathbf{S}_i$ is the spin-1/2 operator at site $i$, $J$ is the exchange interaction (ferromagnetic for $J \lt 0$ and antiferromagnetic for $J \gt 0$), and the sum runs over nearest-neighbor pairs $\langle i,j \rangle$. For simplicity, we consider a 1D chain with periodic boundary conditions.
+其中 $\mathbf{S}_i$ 是格点 $i$ 上的自旋 1/2 算符，$J$ 是交换相互作用（$J \lt 0$ 时为铁磁，$J \gt 0$ 时为反铁磁），求和遍历所有最近邻对 $\langle i,j \rangle$。为简单起见，我们考虑具有周期性边界条件的一维链。
 
-### Example: 4-Site 1D Heisenberg Chain
+### 示例：4 格点一维海森堡链
 
-Let’s study a 4-site 1D Heisenberg chain with periodic boundary conditions. The Hamiltonian for this system is:
+我们来研究一条具有周期性边界条件的 4 格点一维海森堡链。该体系的哈密顿量为：
 
 $$
 \mathcal{H} = J \left( \mathbf{S}_1 \cdot \mathbf{S}_2 + \mathbf{S}_2 \cdot \mathbf{S}_3 + \mathbf{S}_3 \cdot \mathbf{S}_4 + \mathbf{S}_4 \cdot \mathbf{S}_1 \right).
 $$
 
-The spin-1/2 operators $\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ can be expressed in terms of Pauli matrices $\boldsymbol{\sigma}_i$ as $\mathbf{S}_i = \frac{1}{2} \boldsymbol{\sigma}_i$. The dot product $\mathbf{S}_i \cdot \mathbf{S}_j$ can be written as:
+自旋 1/2 算符 $\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ 可以用泡利矩阵 $\boldsymbol{\sigma}_i$ 表示为 $\mathbf{S}_i = \frac{1}{2} \boldsymbol{\sigma}_i$。点积 $\mathbf{S}_i \cdot \mathbf{S}_j$ 可以写成：
 
 $$
 \mathbf{S}_i \cdot \mathbf{S}_j = S_i^x S_j^x + S_i^y S_j^y + S_i^z S_j^z.
 $$
 
-### Basis States
+### 基矢态
 
-For a 4-site system with spin-1/2 particles, the Hilbert space has $2^4 = 16$ basis states. These states are product states of individual spin configurations, denoted as $| \sigma_1 \sigma_2 \sigma_3 \sigma_4 \rangle$, where $\sigma_i = \uparrow$ or $\downarrow$. For example, one basis state is $| \uparrow \uparrow \downarrow \downarrow \rangle$.
+对于由自旋 1/2 粒子组成的 4 格点体系，希尔伯特空间共有 $2^4 = 16$ 个基矢态。这些态是各个自旋构型的直积态，记为 $| \sigma_1 \sigma_2 \sigma_3 \sigma_4 \rangle$，其中 $\sigma_i = \uparrow$ 或 $\downarrow$。例如，$| \uparrow \uparrow \downarrow \downarrow \rangle$ 就是其中一个基矢态。
 
-The basis states are eigen states of $S_i^z$ operators. When it is applied to the $i$'th site, it gives
+这些基矢态是 $S_i^z$ 算符的本征态。将其作用在第 $i$ 个格点上，可得
 $$
 S_i^z|\uparrow\rangle = \frac{1}{2}|\uparrow\rangle,
 $$
-and
+以及
 $$
 S_i^z|\downarrow\rangle = -\frac{1}{2}|\downarrow\rangle.
 $$
-To see the result of applying Hamiltonian to the basis states, we need to express the off-diagonal operators, i.e., $S_i^x$ and $S_i^y$ in terms of raising $S^{\dagger}$ and lowering $S^{-}$ operators:
+为了得到哈密顿量作用在基矢态上的结果，需要把非对角算符 $S_i^x$ 和 $S_i^y$ 用升算符 $S^{\dagger}$ 和降算符 $S^{-}$ 表示：
 $$
 S_i^x=\frac{1}{2}(S_i^{\dagger}+S_i^{-}),
 $$
 $$
 S_i^y=\frac{1}{2i}(S_i^{\dagger}-S_i^{-}),
 $$
-which act on the basis states in the following way:
+它们以如下方式作用在基矢态上：
 $$
 S_i^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle,
 $$
 $$
 S_i^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle,
 $$
-where $S=1/2$ and $s=-1/2, 1/2$.
-With the above transformation, the Hamiltonian element becomes
+其中 $S=1/2$，$s=-1/2, 1/2$。
+经过上述变换，哈密顿量中的各项变为
 $$
 \mathbf{S}_i \cdot \mathbf{S}_j = \frac{1}{2}(S_i^{\dagger}S_j^{-}+S_i^{-}S_j^{\dagger})+S_i^zS_j^z.
 $$
 
-### Hamiltonian Matrix
+### 哈密顿量矩阵
 
-To construct the Hamiltonian matrix, we evaluate the action of $\mathcal{H}$ on each basis state. For instance, consider the term $\mathbf{S}_1 \cdot \mathbf{S}_2$:
+为了构造哈密顿量矩阵，我们计算 $\mathcal{H}$ 作用在每个基矢态上的结果。例如，考虑 $\mathbf{S}_1 \cdot \mathbf{S}_2$ 这一项：
 
 $$
 \mathbf{S}_1 \cdot \mathbf{S}_2 = \frac{1}{2}(S_1^{\dagger}S_2^{-}+S_1^{-}S_2^{\dagger})+S_1^zS_2^z.
 $$
 
-This term flips spins at sites 1 and 2 if they are antiparallel and contributes a factor of $\frac{1}{4}$ if they are parallel. For example:
+如果格点 1 和 2 上的自旋反平行，该项会将它们翻转；如果自旋平行，则贡献一个因子 $\frac{1}{4}$。例如：
 
 $$
 \mathbf{S}_1 \cdot \mathbf{S}_2 | \uparrow \downarrow \uparrow \uparrow \rangle = \frac{1}{4} \left( | \downarrow \uparrow \uparrow \uparrow \rangle - | \uparrow \downarrow \uparrow \uparrow \rangle \right).
 $$
 
-Repeating this process for all terms in $\mathcal{H}$ and all basis states, we construct the $16 \times 16$ Hamiltonian matrix. For brevity, we do not write the full matrix here, but it can be systematically built using the above rules.
+对 $\mathcal{H}$ 中的所有项和所有基矢态重复这一过程，就可以构造出 $16 \times 16$ 的哈密顿量矩阵。为简洁起见，这里不写出完整矩阵，但可以利用上述规则系统地构造它。
 
-## Diagonalization
+## 对角化
 
-Once the Hamiltonian matrix is constructed, it is diagonalized numerically to obtain the eigenstates and eigenvalues. These results provide insights into the ground state energy, low-lying excitations, and magnetic properties of the system. For example, for the antiferromagnetic Heisenberg chain ($J > 0$), ED reveals a singlet ground state with no long-range order, consistent with the Bethe ansatz solution for larger systems.
+构造出哈密顿量矩阵之后，对其进行数值对角化即可得到本征态和本征值。这些结果揭示了体系的基态能量、低能激发以及磁性质。例如，对于反铁磁海森堡链（$J > 0$），ED 给出一个没有长程序的单态基态，这与较大体系的 Bethe ansatz 解一致。
 
-### Scaling with Lattice Size
+### 随晶格尺寸的标度
 
-For the 1D Heisenberg model, the size of the Hamiltonian matrix grows exponentially with the number of lattice sites, making ED computationally challenging for large systems. Understanding how the matrix size scales with lattice size is crucial for assessing the feasibility of numerical methods like sparse and full diagonalization.
+对于一维海森堡模型，哈密顿量矩阵的尺寸随格点数呈指数增长，这使得 ED 在处理大体系时面临计算上的挑战。理解矩阵尺寸如何随晶格尺寸变化，对于评估稀疏对角化和完全对角化等数值方法的可行性至关重要。
 
-For a system with $N$ sites, each site can be in one of two states: spin-up ($\uparrow$) or spin-down ($\downarrow$). The Hilbert space dimension, which determines the size of the Hamiltonian matrix, is given by:
+对于有 $N$ 个格点的体系，每个格点可以处于两种状态之一：自旋向上（$\uparrow$）或自旋向下（$\downarrow$）。决定哈密顿量矩阵尺寸的希尔伯特空间维数为：
 
 $$
 \text{Dimension of Hilbert space} = 2^N.
 $$
 
-For example:
-- For $N = 4$, the Hilbert space has $2^4 = 16$ states.
-- For $N = 10$, the Hilbert space has $2^{10} = 1024$ states.
-- For $N = 20$, the Hilbert space has $2^{20} = 1,048,576$ states.
+例如：
+- 当 $N = 4$ 时，希尔伯特空间有 $2^4 = 16$ 个态。
+- 当 $N = 10$ 时，希尔伯特空间有 $2^{10} = 1024$ 个态。
+- 当 $N = 20$ 时，希尔伯特空间有 $2^{20} = 1,048,576$ 个态。
 
-This exponential growth means that the Hamiltonian matrix size quickly becomes unmanageable as $N$ increases. For instance, a 20-site system requires diagonalizing a $1,048,576 \times 1,048,576$ matrix, which is computationally intensive.
+这种指数增长意味着，随着 $N$ 增大，哈密顿量矩阵的尺寸很快就会变得难以处理。例如，一个 20 格点的体系需要对角化一个 $1,048,576 \times 1,048,576$ 的矩阵，计算量非常大。
 
-### Sparse vs. Full Diagonalization
+### 稀疏对角化与完全对角化
 
-The Hamiltonian matrix of the 1D Heisenberg model is typically sparse, meaning most of its elements are zero. This sparsity arises because the Hamiltonian only connects states that differ by a single spin flip (nearest-neighbor interactions). For example, in a 4-site system, the Hamiltonian matrix might look like this (simplified):
+一维海森堡模型的哈密顿量矩阵通常是稀疏的，即其中绝大多数矩阵元为零。这种稀疏性源于哈密顿量只连接相差一次自旋翻转的态（最近邻相互作用）。例如，在 4 格点体系中，哈密顿量矩阵可能具有如下形式（简化后）：
 
 $$
 \mathcal{H} = \begin{pmatrix}
@@ -112,13 +112,13 @@ J/2 & E_2 & J/2 & \cdots \\\
 \end{pmatrix},
 $$
 
-where $E_i$ are diagonal elements (energies of basis states), and $J/2$ represents off-diagonal elements due to spin-flip terms.
+其中 $E_i$ 是对角元（基矢态的能量），$J/2$ 表示由自旋翻转项产生的非对角元。
 
-#### Full Diagonalization
-Full diagonalization involves computing all eigenvalues and eigenvectors of the Hamiltonian matrix. While this provides complete information about the system, it is computationally expensive for large matrices due to the $O(M^3)$ scaling, where $M$ is the matrix size. For example, full diagonalization of a $10^6 \times 10^6$ matrix is impractical on most computers.
+#### 完全对角化
+完全对角化需要计算哈密顿量矩阵的全部本征值和本征矢。虽然这能提供体系的完整信息，但由于其计算量按 $O(M^3)$ 标度（$M$ 为矩阵尺寸），对大矩阵而言代价高昂。例如，在大多数计算机上，对 $10^6 \times 10^6$ 的矩阵做完全对角化是不现实的。
 
-#### Sparse Diagonalization
-Sparse diagonalization exploits the sparsity of the Hamiltonian matrix to compute only a subset of eigenvalues and eigenvectors, typically the lowest few eigenstates (e.g., the ground state and low-lying excitations). Algorithms like the Lanczos method or Arnoldi iteration are commonly used for sparse diagonalization. These methods scale much better with system size, often requiring only $O(M)$ memory and $O(M^2)$ time for a few eigenstates, making them suitable for larger systems.
+#### 稀疏对角化
+稀疏对角化利用哈密顿量矩阵的稀疏性，只计算一部分本征值和本征矢，通常是能量最低的少数几个本征态（例如基态和低能激发）。Lanczos 方法或 Arnoldi 迭代等算法常用于稀疏对角化。这些方法随体系尺寸的标度要好得多，求少数几个本征态时通常只需要 $O(M)$ 的内存和 $O(M^2)$ 的时间，因此适用于更大的体系。
 
-#### Comparisons
-The size of the Hamiltonian matrix in the 1D Heisenberg model grows exponentially with the number of lattice sites, posing a significant computational challenge. While full diagonalization provides complete information about the system, it is limited to small lattices due to its high computational cost. Sparse diagonalization, on the other hand, leverages the sparsity of the Hamiltonian to study larger systems by focusing on the most relevant eigenstates. This trade-off between full and sparse diagonalization highlights the importance of choosing the right numerical approach based on the system size and the desired physical insights.
+#### 比较
+一维海森堡模型的哈密顿量矩阵尺寸随格点数呈指数增长，带来了巨大的计算挑战。完全对角化虽然能提供体系的完整信息，但由于计算代价高，只能用于小晶格。而稀疏对角化则利用哈密顿量的稀疏性，聚焦于最相关的本征态，从而能够研究更大的体系。完全对角化与稀疏对角化之间的这种取舍表明，根据体系尺寸和所希望获得的物理信息选择合适的数值方法十分重要。

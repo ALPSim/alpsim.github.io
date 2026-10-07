@@ -1,7 +1,7 @@
 
 ---
-title: Introduction
-description: "Introduction to ALPS General Library"
+title: "简介"
+description: "ALPS General 库简介"
 weight: 1
 ---
 

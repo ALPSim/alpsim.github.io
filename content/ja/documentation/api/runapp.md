@@ -1,6 +1,6 @@
 
 ---
-title: Run Applications
+title: アプリケーションの実行
 math: true
 toc: true
 weight: 1
@@ -9,86 +9,86 @@ weight: 1
 
 `pyalps.writeParameterFile(fname, parms)`
 
-- This function writes a text input file for simple ALPS applications like DMFT
+- この関数は、DMFT のような単純な ALPS アプリケーション用のテキスト入力ファイルを書き出します
 
-- The arguments are:
+- 引数は次のとおりです。
 
-  - filename: the name of the parameter file to be written 
-  - parms: the parameter dict
+  - filename: 書き出すパラメータファイルの名前
+  - parms: パラメータの辞書
 
 `pyalps.writeInputFiles(fname, parms, baseseed=None)`
 
- - This function writes the XML input files for ALPS
+ - この関数は、ALPS 用の XML 入力ファイルを書き出します
 
- - Parameters are: 
-     - fname: the base file name of the XML files that will be written 
-     - parms: a list of dicts containing the simulation parameters 
-     - baseseed: optional parameter giving a random number seed from which seeds for the individual simulations will be calculated. The default value is taken from the current time.
+ - パラメータは次のとおりです。
+     - fname: 書き出される XML ファイルのベースとなるファイル名
+     - parms: シミュレーションパラメータを含む辞書のリスト
+     - baseseed: 乱数の種を与える省略可能なパラメータ。個々のシミュレーションの種はこの値から計算されます。デフォルト値は現在時刻から取られます。
 
- - The function returns the name of the main XML input file
+ - この関数は、メインの XML 入力ファイルの名前を返します
 
 
 `pyalps.runApplication(appname, parmfiles, T=None, Tmin=None, Tmax=None, writexml=False, MPI=None, mpirun='mpirun')`
-  run an ALPS application
+  ALPS アプリケーションを実行します
 
-- This function runs an ALPS application. 
-- The parameers are:
+- この関数は ALPS アプリケーションを実行します。
+- パラメータは次のとおりです。
 
-    - appname: the name of the application parmfile: the name of the main XML input file writexml: optional parameter, to be set to True if all results should be written to the XML files in addition to the HDF5 files 
-    - T: time limit of MC simulation 
-    - Tmin: optional parameter specifying the minimum time between checks whether a MC simulatio is finished 
-    - Tmax: optional parameter specifying the maximum time between checks whether a MC simulatio is finished 
-    - MPI: optional parameter specifying the number of processes to be used in an MPI simulation. MPI is not used if this parameter is left at ots default value None. 
-    - mpirun: optional parameter giving the name of the executable used to laucnh MPI applications. The default is ‘mpirun’
+    - appname: アプリケーションの名前　parmfile: メインの XML 入力ファイルの名前　writexml: 省略可能なパラメータ。HDF5 ファイルに加えて、すべての結果を XML ファイルにも書き出す場合に True に設定します
+    - T: MC シミュレーションの制限時間
+    - Tmin: MC シミュレーションが終了したかどうかを確認する間隔の最小時間を指定する、省略可能なパラメータ
+    - Tmax: MC シミュレーションが終了したかどうかを確認する間隔の最大時間を指定する、省略可能なパラメータ
+    - MPI: MPI シミュレーションで使用するプロセス数を指定する、省略可能なパラメータ。このパラメータをデフォルト値 None のままにすると、MPI は使用されません。
+    - mpirun: MPI アプリケーションの起動に使う実行ファイルの名前を与える、省略可能なパラメータ。デフォルトは ‘mpirun’ です
 
 `pyalps.runDMFT(infiles, apppath='')`
-  run the ALPS DMFT application
+  ALPS の DMFT アプリケーションを実行します
 
-- The ALPS DMFT application does not (yet) use the standard ALPS input files and scheduler. Thus there is a separate function to call it. This function takes one mandatory parameter: a single input file or a list of input files. Optional parameter apppath allows setting the path to the binary.
+- ALPS の DMFT アプリケーションは、（まだ）標準的な ALPS の入力ファイルとスケジューラを使っていません。そのため、これを呼び出すための別の関数が用意されています。この関数は必須のパラメータを 1 つ取ります。単一の入力ファイル、または入力ファイルのリストです。省略可能なパラメータ apppath で、バイナリへのパスを設定できます。
 
 `pyalps.evaluateLoop(infiles, appname='loop', write_xml=False)`
-evaluate results of the looper QMC application
+looper QMC アプリケーションの結果を評価します
 
-- this function calls the evaluate tool of the looper application. Additionally evaluated results are written back into the files. Besides a list of result files it takes one optional argument:
+- この関数は、looper アプリケーションの評価ツールを呼び出します。さらに、評価された結果はファイルに書き戻されます。結果ファイルのリストに加えて、省略可能な引数を 1 つ取ります。
 
-    - write_xml: if this optional argument is set to True, the results will also bw written to the XML files
+    - write_xml: この省略可能な引数を True に設定すると、結果が XML ファイルにも書き出されます
 
 `pyalps.evaluateSpinMC(infiles, appname='spinmc_evaluate', write_xml=False)`
-evaluate results of the `spinmc` application
+`spinmc` アプリケーションの結果を評価します
 
-- this function calls the evaluate tool of the spinmc application. Additionally evaluated results are written back into the files. Besides a list of result files it takes one optional argument:
+- この関数は、spinmc アプリケーションの評価ツールを呼び出します。さらに、評価された結果はファイルに書き戻されます。結果ファイルのリストに加えて、省略可能な引数を 1 つ取ります。
 
-    - write_xml: if this optional argument is set to True, the results will also bw written to the XML files
+    - write_xml: この省略可能な引数を True に設定すると、結果が XML ファイルにも書き出されます
 
 `pyalps.evaluateQWL(infiles, appname='qwl_evaluate', DELTA_T=None, T_MIN=None, T_MAX=None)`
-evaluate results of the quantum Wang-Landau application
+量子 Wang-Landau アプリケーションの結果を評価します
 
-- this function calls the evaluate tool of the quantum Wang-Landau application. Besides a list of result files it takes the following arguments: 
-   - T_MIN: the lower end of the temperature range for which quantities are evaluated 
-   - T_MAX: the upper end of the temperature range for which quantities are evaluated 
-   - DELTA_T: the temperature steps to be used between T_MIN and T_MAX
+- この関数は、量子 Wang-Landau アプリケーションの評価ツールを呼び出します。結果ファイルのリストに加えて、次の引数を取ります。
+   - T_MIN: 物理量を評価する温度範囲の下端
+   - T_MAX: 物理量を評価する温度範囲の上端
+   - DELTA_T: T_MIN と T_MAX の間で使用する温度の刻み幅
 
-- This function returns a list of lists of DataSet objects, for the various properties evaluated for each of the input files.
+- この関数は、各入力ファイルについて評価されたさまざまなプロパティに対する、DataSet オブジェクトのリストのリストを返します。
 
 `pyalps.evaluateFulldiagVersusT(infiles, appname='fulldiag_evaluate', DELTA_T=None, T_MIN=None, T_MAX=None, H=None)`
-evaluate results of the `fulldiag` application as a function of temperature
+`fulldiag` アプリケーションの結果を温度の関数として評価します
 
-- this function calls the evaluate tool of the `fulldiag` application and evaluates several quantities as a function of temperature. Besides a list of result files it takes the following arguments: 
-   - T_MIN: the lower end of the temperature range for which quantities are evaluated 
-   - T_MAX: the upper end of the temperature range for which quantities are evaluated 
-   - DELTA_T: the temperature steps to be used between T_MIN and T_MAX 
-   - H: (optional) the magnetic field at which all data should be evaluated
+- この関数は、`fulldiag` アプリケーションの評価ツールを呼び出し、いくつかの物理量を温度の関数として評価します。結果ファイルのリストに加えて、次の引数を取ります。
+   - T_MIN: 物理量を評価する温度範囲の下端
+   - T_MAX: 物理量を評価する温度範囲の上端
+   - DELTA_T: T_MIN と T_MAX の間で使用する温度の刻み幅
+   - H: （省略可能）すべてのデータを評価する磁場
 
-- This function returns a list of lists of DataSet objects, for the various properties evaluated for each of the input files.
+- この関数は、各入力ファイルについて評価されたさまざまなプロパティに対する、DataSet オブジェクトのリストのリストを返します。
 
 `pyalps.evaluateFulldiagVersusH(infiles, appname='fulldiag_evaluate', DELTA_H=None, H_MIN=None, H_MAX=None, T=None)`
-evaluate results of the `fulldiag` application as a function of magnetic field h
+`fulldiag` アプリケーションの結果を磁場 h の関数として評価します
 
-- this function calls the evaluate tool of the fulldiag application and evaluates several quantities as a function of magnetic field. Besides a list of result files it takes the following arguments: 
-   - H_MIN: the lower end of the field range for which quantities are evaluated 
-   - H_MAX: the upper end of the temperature range for which quantities are evaluated 
-   - DELTA_H: the field steps to be used between H_MIN and H_MAX 
-   - T: the temperature field at which all data should be evaluated
+- この関数は、fulldiag アプリケーションの評価ツールを呼び出し、いくつかの物理量を磁場の関数として評価します。結果ファイルのリストに加えて、次の引数を取ります。
+   - H_MIN: 物理量を評価する磁場範囲の下端
+   - H_MAX: 物理量を評価する温度範囲の上端
+   - DELTA_H: H_MIN と H_MAX の間で使用する磁場の刻み幅
+   - T: すべてのデータを評価する温度
 
-- This function returns a list of lists of DataSet objects, for the various properties evaluated for each of the input files.
+- この関数は、各入力ファイルについて評価されたさまざまなプロパティに対する、DataSet オブジェクトのリストのリストを返します。
 

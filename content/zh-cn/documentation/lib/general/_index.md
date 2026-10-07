@@ -1,7 +1,7 @@
 
 ---
-title: Alps/General Library
-description: "ALPS General Library"
+title: "ALPS/General 库"
+description: "ALPS General 库"
 weight: 2
 ---
 

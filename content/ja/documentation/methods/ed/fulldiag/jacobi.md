@@ -1,32 +1,31 @@
-
 ---
-title: Jacobi Rotation
-description: "Jacobi Rotation Method"
+title: Jacobi 回転
+description: "Jacobi 回転法"
 math: true
 weight: 1
 ---
 
-The **Jacobi rotation method** is a classical iterative algorithm used to diagonalize symmetric matrices. It is particularly well-suited for small to medium-sized matrices and is known for its simplicity and robustness. The method works by systematically eliminating off-diagonal elements through a series of orthogonal transformations (rotations), eventually converging to a diagonal matrix whose elements are the eigenvalues of the original matrix.
+**Jacobi 回転法**は、対称行列を対角化するための古典的な反復アルゴリズムです。小規模から中規模の行列に特に適しており、その単純さと頑健さで知られています。この方法は、一連の直交変換（回転）によって非対角要素を系統的に消去していき、最終的に元の行列の固有値を要素とする対角行列に収束させるものです。
 
-The Jacobi method targets the largest off-diagonal element of the matrix and applies a rotation to zero it out. This process is repeated iteratively until all off-diagonal elements are sufficiently small, resulting in a diagonal matrix. The eigenvalues of the original matrix are then found on the diagonal, and the eigenvectors are obtained from the product of all the rotation matrices applied during the process.
+Jacobi 法は、行列の最大の非対角要素を対象とし、それをゼロにする回転を適用します。この過程を、すべての非対角要素が十分小さくなるまで反復的に繰り返すと、対角行列が得られます。元の行列の固有値はその対角成分として得られ、固有ベクトルは過程中に適用したすべての回転行列の積から得られます。
 
 
-## Principles
+## 原理
 
-For a symmetric matrix $A$, the goal is to find an orthogonal matrix $P$ such that:
+対称行列 $A$ に対して、次を満たす直交行列 $P$ を求めることが目標です。
 
 $$
 D = P^T A P
 $$
 
-where $D$ is a diagonal matrix containing the eigenvalues of $A$, and the columns of $P$ are the corresponding eigenvectors.
+ここで $D$ は $A$ の固有値を含む対角行列であり、$P$ の各列は対応する固有ベクトルです。
 
-The Jacobi method achieves this by applying a sequence of orthogonal transformations (rotations) to $A$. Each rotation targets a specific off-diagonal element $A_{ij}$ and zeroes it out.
+Jacobi 法は、$A$ に一連の直交変換（回転）を適用することでこれを実現します。各回転は特定の非対角要素 $A_{ij}$ を対象とし、それをゼロにします。
 
 
-## Rotation Matrix
+## 回転行列
 
-A Jacobi rotation matrix $R$ is an orthogonal matrix that differs from the identity matrix only in four elements:
+Jacobi 回転行列 $R$ は、単位行列と 4 つの要素だけが異なる直交行列です。
 
 $$
 R = \begin{pmatrix}
@@ -40,46 +39,46 @@ R = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-Here, $\cos \theta$ and $\sin \theta$ are placed at the intersections of the $i$-th and $j$-th rows and columns. The angle $\theta$ is chosen such that the off-diagonal element $A_{ij}$ is zeroed out.
+ここで、$\cos \theta$ と $\sin \theta$ は第 $i$ 行・第 $j$ 行と第 $i$ 列・第 $j$ 列の交点に配置されます。角度 $\theta$ は、非対角要素 $A_{ij}$ がゼロになるように選ばれます。
 
 
-## Algorithm
+## アルゴリズム
 
-1. **Identify the Largest Off-Diagonal Element**:
-   - Find the largest off-diagonal element $A_{ij}$ (in absolute value) in the matrix $A$.
+1. **最大の非対角要素を特定する**：
+   - 行列 $A$ の中で（絶対値が）最大の非対角要素 $A_{ij}$ を見つけます。
 
-2. **Compute the Rotation Angle $\theta$**:
-   - The angle $\theta$ is chosen to satisfy:
+2. **回転角 $\theta$ を計算する**：
+   - 角度 $\theta$ は次を満たすように選びます。
      $$
      \tan(2\theta) = \frac{2A_{ij}}{A_{ii} - A_{jj}}
      $$
-   - From this, compute $\cos \theta$ and $\sin \theta$.
+   - これから $\cos \theta$ と $\sin \theta$ を計算します。
 
-3. **Construct the Rotation Matrix $R$**:
-   - Build the rotation matrix $R$ using $\cos \theta$ and $\sin \theta$.
+3. **回転行列 $R$ を構築する**：
+   - $\cos \theta$ と $\sin \theta$ を用いて回転行列 $R$ を構築します。
 
-4. **Apply the Rotation**:
-   - Update the matrix $A$ as:
+4. **回転を適用する**：
+   - 行列 $A$ を次のように更新します。
      $$
      A^{\prime} = R^T A R
      $$
-   - This transformation zeroes out $A_{ij}$ and $A_{ji}$.
+   - この変換により $A_{ij}$ と $A_{ji}$ がゼロになります。
 
-5. **Accumulate the Transformations**:
-   - Update the eigenvector matrix $P$ as:
+5. **変換を累積する**：
+   - 固有ベクトル行列 $P$ を次のように更新します。
      $$
      P^{\prime} = P R
      $$
-   - This accumulates the rotations to form the final eigenvector matrix.
+   - これにより回転が累積され、最終的な固有ベクトル行列が得られます。
 
-6. **Repeat Until Convergence**:
-   - Repeat the process until all off-diagonal elements are smaller than a specified tolerance $ \epsilon$.
+6. **収束するまで繰り返す**：
+   - すべての非対角要素が指定した許容誤差 $ \epsilon$ より小さくなるまで、この過程を繰り返します。
 
 ---
 
-## An Example
+## 例
 
-Consider a symmetric matrix $A$:
+対称行列 $A$ を考えます。
 
 $$
 A = \begin{pmatrix}
@@ -89,8 +88,8 @@ A = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-### Step 1: Initialize
-Start with the matrix $A$ and an identity matrix $P$ to accumulate the rotations:
+### ステップ 1：初期化
+行列 $A$ と、回転を累積するための単位行列 $P$ から始めます。
 $$
 A = \begin{pmatrix}
 4.000000 & 1.000000 & 2.000000 \\\
@@ -104,31 +103,31 @@ P = \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 2: Find the Largest Off-Diagonal Element
-The largest off-diagonal element in $A$ is $A_{13} = 2.000000$.
+### ステップ 2：最大の非対角要素を見つける
+$A$ の最大の非対角要素は $A_{13} = 2.000000$ です。
 
-### Step 3: Compute the Rotation Parameters
-For the rotation in the $(1, 3)$ plane:
-- Compute the angle $\theta$:
+### ステップ 3：回転パラメータを計算する
+$(1, 3)$ 平面内の回転について、
+- 角度 $\theta$ を計算します。
   $$
   \theta = \frac{1}{2} \arctan\left(\frac{2A_{13}}{A_{11} - A_{33}}\right).
   $$
-  Substituting the values:
+  値を代入すると、
   $$
   \theta = \frac{1}{2} \arctan\left(\frac{2 \cdot 2.000000}{4.000000 - 5.000000}\right) = \frac{1}{2} \arctan(-4.000000).
   $$
-  Using single-precision arithmetic:
+  単精度演算を用いると、
   $$
   \theta \approx -0.674741 \, \text{radians}.
   $$
 
-- Compute $c = \cos(\theta)$ and $s = \sin(\theta)$:
+- $c = \cos(\theta)$ と $s = \sin(\theta)$ を計算します。
   $$
   c \approx 0.780869, \quad s \approx -0.624695.
   $$
 
-### Step 4: Apply the Rotation
-Construct the rotation matrix $J$:
+### ステップ 4：回転を適用する
+回転行列 $J$ を構築します。
 $$
 J = \begin{pmatrix}
 c & 0 & s \\\
@@ -141,12 +140,12 @@ c & 0 & s \\\
 \end{pmatrix}.
 $$
 
-Update $A$ and $P$:
+$A$ と $P$ を更新します。
 $$
 A = J^T A J, \quad P = P J.
 $$
 
-After the rotation:
+回転後は次のようになります。
 $$
 A \approx \begin{pmatrix}
 5.561553 & 0.780869 & 0.000000 \\\
@@ -162,11 +161,11 @@ P \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 5: Repeat for Other Off-Diagonal Elements
-Repeat the process for the next largest off-diagonal element until all off-diagonal elements are sufficiently small (e.g., below a tolerance of $10^{-6}$).
+### ステップ 5：他の非対角要素について繰り返す
+すべての非対角要素が十分小さく（例えば許容誤差 $10^{-6}$ 未満に）なるまで、次に大きい非対角要素についてこの過程を繰り返します。
 
-### Step 6: Final Diagonalized Matrix
-After convergence, the diagonalized matrix $A$ will be:
+### ステップ 6：最終的な対角化行列
+収束後、対角化された行列 $A$ は次のようになります。
 $$
 A \approx \begin{pmatrix}
 6.000000 & 0.000000 & 0.000000 \\\
@@ -175,7 +174,7 @@ A \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-The corresponding eigenvector matrix $P$ will be:
+対応する固有ベクトル行列 $P$ は次のようになります。
 $$
 P \approx \begin{pmatrix}
 0.707107 & 0.000000 & -0.707107 \\\
@@ -184,15 +183,15 @@ P \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-## Advantages
+## 利点
 
-- **Simplicity**: The algorithm is straightforward to implement.
-- **Robustness**: It is guaranteed to converge for symmetric matrices.
-- **Accuracy**: Provides highly accurate eigenvalues and eigenvectors.
+- **単純さ**：アルゴリズムの実装が簡単です。
+- **頑健さ**：対称行列に対しては収束が保証されています。
+- **精度**：非常に高精度な固有値と固有ベクトルが得られます。
 
 
-## Limitations
+## 制限
 
-- **Slow Convergence**: The method requires many iterations for large matrices.
-- **Inefficiency for Large Matrices**: Not suitable for very large or sparse matrices.
-- **Computational Cost**: Each rotation involves updating the entire matrix, which can be costly for large systems.
+- **収束の遅さ**：大きな行列では多くの反復が必要です。
+- **大きな行列に対する非効率性**：非常に大きな行列やスパース行列には適していません。
+- **計算コスト**：各回転で行列全体を更新する必要があり、大きな系ではコストが高くなることがあります。

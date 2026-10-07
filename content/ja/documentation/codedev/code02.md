@@ -6,15 +6,15 @@ toc: true
 weight: 3
 ---
 
-This tutorial shows how to write a Monte Carlo simulation in C++ using the ALPS alea library for the evaluation of observables. In a second step we will write the measurements into a standard HDF5 file format which allows us to use tools from the ALPS suite for further data analysis and plotting.
+このチュートリアルでは、観測量の評価に ALPS の alea ライブラリを用いて、C++ でモンテカルロシミュレーションを書く方法を示します。第 2 段階として、測定結果を標準的な HDF5 ファイル形式で書き出します。これにより、その後のデータ解析やプロットに ALPS スイートのツールを使えるようになります。
 
-As a simple example, we will write a simulation of the classical 2D Ising model with local updates. The file `ising-skeleton.cpp` contains a skeleton code which already has all the infrastructure we will need: First it includes all needed headers, then it initializes a random number generator and three `alps::RealObservable` objects. Then it sets up a square lattice of Ising spins. It also provides a table of probabilities that can be used for Metropolis updates. The interface is the same as in the python script you implemented in the previous [tutorial](../../codedev/code01).
+簡単な例として、局所更新を用いた古典 2 次元イジングモデルのシミュレーションを書きます。ファイル `ising-skeleton.cpp` には、必要なインフラがすべて揃ったスケルトンコードが含まれています。まず必要なヘッダをすべてインクルードし、次に乱数生成器と 3 つの `alps::RealObservable` オブジェクトを初期化します。続いて、イジングスピンの正方格子を用意します。また、メトロポリス更新に使える確率の表も用意されています。インターフェースは、前回の[チュートリアル](../../codedev/code01)で実装した Python スクリプトと同じです。
 
-Your job is again to complete the methods `step()` and `measure()`: `step()` should choose a random spin from the lattice and flip it with the Metropolis probability $p_{accept} = min(1,e^{-\beta \Delta E})$ where $\Delta E$ is the energy change the spin flip would cause. `measure()` determines the energy and magnetization of a spin configuration and adds this sample to the observable objects.
+今回も、メソッド `step()` と `measure()` を完成させるのが課題です。`step()` は格子からランダムにスピンを 1 つ選び、メトロポリス確率 $p_{accept} = min(1,e^{-\beta \Delta E})$ でそれを反転させます。ここで $\Delta E$ はスピン反転によって生じるエネルギー変化です。`measure()` はスピン配置のエネルギーと磁化を求め、このサンプルを観測量オブジェクトに追加します。
 
-After replacing all ellipses with code, you can compile the simulation with this `Makefile`: Save the `Makefile` to the same directory as the `.cpp` file, edit the second line to point to your ALPS installation (if you haven't already set the environment variable ALPS_ROOT) and type `make`. This will produce an executable `ising`. Run it and you will see a scan over different values of $\beta = 1/k_B T$.
+省略記号をすべてコードに置き換えたら、この `Makefile` でシミュレーションをコンパイルできます。`Makefile` を `.cpp` ファイルと同じディレクトリに保存し、（環境変数 ALPS_ROOT をまだ設定していない場合は）2 行目を ALPS のインストール先を指すように編集してから、`make` と入力します。これにより実行ファイル `ising` が生成されます。これを実行すると、$\beta = 1/k_B T$ のさまざまな値についてのスキャンが行われます。
 
-You can reuse your Binder cumulant python script from the previous tutorial in exactly the same way:
+前回のチュートリアルで作成したビンダーキュムラントの Python スクリプトは、まったく同じように再利用できます。
 
     data = pyalps.loadMeasurements(pyalps.getResultFiles(pattern='ising.L*'),['m^2', 'm^4'])
     m2=pyalps.collectXY(data,x='BETA',y='m^2',foreach=['L'])
@@ -29,7 +29,7 @@ You can reuse your Binder cumulant python script from the previous tutorial in e
         d.y = m4[i].y/m2[i].y/m2[i].y
         u.append(d)
 
-and plot the Binder cumulant using the commands:
+そして、次のコマンドでビンダーキュムラントをプロットします。
 
     plt.figure()
     pyalps.pyplot.plot(u)

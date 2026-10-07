@@ -1,6 +1,6 @@
 
 ---
-title: Simple Graphs
+title: "简单图"
 toc: true
 weight: 2
 ---
@@ -11,7 +11,7 @@ weight: 2
 
 我们的第一个例子是下面这个具有五个顶点和五条边的简单图：
 
-![The first simple graph.](../figs/tutoriallatticehowtograph1.gif)
+![第一个简单图。](../figs/tutoriallatticehowtograph1.gif)
 
 这个图用 XML 表示如下，其中 `<GRAPH>` 元素的 edges 属性是可选的，因为边的数目可以通过统计 `<EDGE>` 元素的个数得到：
 
@@ -29,7 +29,7 @@ weight: 2
 
 带颜色边和顶点的图也可以表示出来：
 
-![A graph with colored edges and vertices.](../figs/tutoriallatticehowtograph2.jpg)
+![带有着色边和顶点的图。](../figs/tutoriallatticehowtograph2.jpg)
 
 我们通过引入额外的 `<VERTEX>` 元素来描述顶点，并用 type 属性来指定顶点和边的类型（颜色），从而用 XML 表示这个图。在这个例子中，顶点类型 0、1、2 分别对应红色、绿色、蓝色的顶点，边类型 0 和 1 分别对应实线和虚线：
 
@@ -79,8 +79,8 @@ weight: 2
     <EDGE source="4" target="5"/>
     </GRAPH>
 
-在许多物理模拟中，体系所处的图对应于一个带有晶胞的规则格子。在 ALPS 框架中，可以不必像上面那样手动列出每一个顶点和边，而是通过底层的格子与晶胞来定义这样的图。具体方法将在下一篇 HOWTO——[格子与晶胞](../unitcell)——中介绍。
+在许多物理模拟中，体系所处的图对应于一个带有晶胞的规则晶格。在 ALPS 框架中，可以不必像上面那样手动列出每一个顶点和边，而是通过底层的晶格与晶胞来定义这样的图。具体方法将在下一篇 HOWTO——[晶格与晶胞](../unitcell)——中介绍。
 
 ---
 
-关于本节其余内容的概览，请参见[格子的定义](..)。关于在模拟中选择图所用的 `LATTICE`／`GRAPH` 输入参数，请参见[常用参数](../../parameters)。关于其他 ALPS 文档章节，请参见[简介](../..)。
+关于本节其余内容的概览，请参见[晶格的定义](..)。关于在模拟中选择图所用的 `LATTICE`／`GRAPH` 输入参数，请参见[常用参数](../../parameters)。关于其他 ALPS 文档章节，请参见[简介](../..)。

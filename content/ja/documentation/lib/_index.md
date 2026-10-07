@@ -1,7 +1,7 @@
 
 ---
-title: The ALPS Libraries
-description: "ALPS Libraries"
+title: "ALPS ライブラリ"
+description: "ALPS ライブラリ"
 weight: 7
 ---
 

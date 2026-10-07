@@ -1,6 +1,6 @@
 
 ---
-title: Loading Data
+title: データの読み込み
 math: true
 toc: true
 weight: 2
@@ -8,97 +8,97 @@ weight: 2
 
 
 `pyalps.getResultFiles(dirname='.', pattern=None, prefix=None, format=None)`
-get all result files matching the given pattern or prefix
+指定したパターンまたはプレフィックスに一致するすべての結果ファイルを取得します
 
-- This function returns a list of all ALPS result files matching a given pattern, starting recursively from a given directory. The pattern can be either specificed by giving a prefix for the files, which is then augmented with the default ALPS file name suffixes. ALternatively a fiull custom regular expression pattern can be specified.
+- この関数は、指定したディレクトリから再帰的に探索し、指定したパターンに一致するすべての ALPS 結果ファイルのリストを返します。パターンはファイルのプレフィックスで指定することができ、その場合はプレフィックスに ALPS のデフォルトのファイル名サフィックスが付け加えられます。あるいは、完全にカスタムの正規表現パターンを指定することもできます。
 
-- The paramters are:
+- パラメータは次のとおりです。
 
-   - dirname: The directory from which to start the recursive search, defaulting to the current working directory. 
-   - pattern: a regular expression pattern resricting the files to be matches 
-   - prefix: a pattern which the start of the file names has to match. This will be augmented by the standard ALPS file name endings ‘.task.out.xml’ or ‘\*.h5’ to form the full pattern.
+   - dirname: 再帰的な探索を開始するディレクトリ。デフォルトは現在の作業ディレクトリです。
+   - pattern: 一致させるファイルを制限する正規表現パターン
+   - prefix: ファイル名の先頭が一致すべきパターン。これに ALPS の標準的なファイル名の末尾 ‘.task.out.xml’ または ‘\*.h5’ が付け加えられ、完全なパターンが作られます。
 
-- The function returns a list of filenames
+- この関数はファイル名のリストを返します
 
 
 `pyalps.loadMeasurements(files, what=None, verbose=False, respath='/simulation/results')`
-loads ALPS measurements from ALPS HDF5 result files
+ALPS の HDF5 結果ファイルから ALPS の測定結果を読み込みます
 
-- this function loads results of ALPS simulations ALPS HDF5 result files
+- この関数は、ALPS シミュレーションの結果を ALPS の HDF5 結果ファイルから読み込みます
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - what (list) – optional argument that is either a string or list of strings, specifying the names of the observables which should be loaded
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
-- Returns:    
-  a list of list of DataSet objects – loaded measurements. The elements of the outer list each correspond to the file names specified as input. The elements of the inner list are each for a different observable. The y-values of the DataSet objects are the measurements and the x-values optionally the labels (indices) of array-valued measurements
+- パラメータ：
+   - files (list) – ALPS の結果ファイル。XML ファイルと HDF5 ファイルのどちらでもかまいません。XML のファイル名は、対応する HDF5 のファイル名に変更されます。
+   - what (list) – 読み込む観測量の名前を指定する、文字列または文字列のリストからなる省略可能な引数
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数
+- 戻り値：
+  DataSet オブジェクトのリストのリスト – 読み込まれた測定結果。外側のリストの各要素は、入力として指定した各ファイル名に対応します。内側のリストの各要素は、それぞれ異なる観測量に対応します。DataSet オブジェクトの y 値は測定値であり、x 値は（省略可能ですが）配列値の測定のラベル（インデックス）です
 
 `pyalps.loadBinningAnalysis(files, what=None, verbose=False)`
-loads MC binning analysis from ALPS HDF5 result files
+ALPS の HDF5 結果ファイルから MC のビニング解析を読み込みます
 
-- this function loads results of a MC binning analysis from ALPS HDF5 result files
+- この関数は、MC のビニング解析の結果を ALPS の HDF5 結果ファイルから読み込みます
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - what (list) – optional argument that is either a string or list of strings, specifying the names of the observables for which the binning analysis should be loaded
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
+- パラメータ：
+   - files (list) – ALPS の結果ファイル。XML ファイルと HDF5 ファイルのどちらでもかまいません。XML のファイル名は、対応する HDF5 のファイル名に変更されます。
+   - what (list) – ビニング解析を読み込む観測量の名前を指定する、文字列または文字列のリストからなる省略可能な引数
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数
    
-- Returns:    
-  a list of list of DataSet objects – loaded binning analysis. The elements of the outer list each correspond to the file names specified as input. The elements of the inner list are each for a different observable. The x-values of the DataSet objects are the logarithmic binning level and the y-values the error estimates at that binning level.
+- 戻り値：
+  DataSet オブジェクトのリストのリスト – 読み込まれたビニング解析。外側のリストの各要素は、入力として指定した各ファイル名に対応します。内側のリストの各要素は、それぞれ異なる観測量に対応します。DataSet オブジェクトの x 値は対数的なビニングレベルであり、y 値はそのビニングレベルでの誤差の推定値です。
 
 `pyalps.loadEigenstateMeasurements(files, what=None, verbose=False)`
-loads ALPS eigenstate measurements from ALPS HDF5 result files
+ALPS の HDF5 結果ファイルから ALPS の固有状態の測定結果を読み込みます
 
-- this function loads results of ALPS diagonalization or DMRG simulations from an HDF5 file
+- この関数は、ALPS の対角化シミュレーションまたは DMRG シミュレーションの結果を HDF5 ファイルから読み込みます
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - what (list) – an optional argument that is either a string or list of strings, specifying the names of the observables which should be loaded
-   - verbose (bool) – an optional argument that if set to True causes more output to be printed as the data is loaded
+- パラメータ：
+   - files (list) – ALPS の結果ファイル。XML ファイルと HDF5 ファイルのどちらでもかまいません。XML のファイル名は、対応する HDF5 のファイル名に変更されます。
+   - what (list) – 読み込む観測量の名前を指定する、文字列または文字列のリストからなる省略可能な引数
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数
 
-- Returns:    
-   list of list of (lists of) DataSet objects – loaded measurements. The elements of the outer list each correspond to the file names specified as input The elements of the next level are different quantum number sectors, if any exists The elements of the inner-most list are each for a different observable The y-values of the DataSet objects is an array of the measurements in all eigenstates calculated in this sector, and the x-values optionally the labels (indices) of array-valued measurements
+- 戻り値：
+   DataSet オブジェクトの（リストの）リストのリスト – 読み込まれた測定結果。外側のリストの各要素は、入力として指定した各ファイル名に対応します。次の階層の要素は、量子数セクターが存在する場合には、それぞれ異なる量子数セクターに対応します。最も内側のリストの各要素は、それぞれ異なる観測量に対応します。DataSet オブジェクトの y 値は、このセクターで計算されたすべての固有状態における測定値の配列であり、x 値は（省略可能ですが）配列値の測定のラベル（インデックス）です
 
 `pyalps.loadSpectra(files, verbose=False)`
-loads ALPS spectra from ALPS HDF5 result files
+ALPS の HDF5 結果ファイルから ALPS のスペクトルを読み込みます
 
-- This function loads the spectra calculated in ALPS diagonalization or DMRG simulations from an HDF5 file.
+- この関数は、ALPS の対角化シミュレーションまたは DMRG シミュレーションで計算されたスペクトルを HDF5 ファイルから読み込みます。
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded.
-- Returns:    
-   list of (lists of) DataSet objects – Loaded spectra. The elements of the outer list each correspond to the file names specified as input. The elements of the next level are different quantum number sectors, if any exists. The y-values of the DataSet objects are the energies in that quantum number sector.
+- パラメータ：
+   - files (list) – ALPS の結果ファイル。XML ファイルと HDF5 ファイルのどちらでもかまいません。XML のファイル名は、対応する HDF5 のファイル名に変更されます。
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数。
+- 戻り値：
+   DataSet オブジェクトの（リストの）リスト – 読み込まれたスペクトル。外側のリストの各要素は、入力として指定した各ファイル名に対応します。次の階層の要素は、量子数セクターが存在する場合には、それぞれ異なる量子数セクターに対応します。DataSet オブジェクトの y 値は、その量子数セクターにおけるエネルギーです。
 
 `pyalps.loadDMFTIterations(files, observable='G_tau', measurements='0', verbose=False)`
-loads ALPS measurements from ALPS HDF5 result files
+ALPS の HDF5 結果ファイルから ALPS の測定結果を読み込みます
 
-- this function loads results of ALPS simulations ALPS HDF5 result files
+- この関数は、ALPS シミュレーションの結果を ALPS の HDF5 結果ファイルから読み込みます
 
-- Parameters:    
-   - files (list) – ALPS HDF5 result files.
-   - observable (str) – optional argument specifying the name of the observables which should be loaded
-   - measurements (list) – optional argument that is either a string or list of strings, specifying the names of the measurements which should be loaded
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
-- Returns:    
-   list of list of list of DataSet objects – loaded iteration measurements. The elements of the outer list each correspond to the file names specified as input. The elements of the next level are different iterations. The elements of the inner list contains a DataSet for each measurement. The y-values of the DataSet objects are the measurements and the x-values optionally the labels (indices) of array-valued measurements
+- パラメータ：
+   - files (list) – ALPS の HDF5 結果ファイル。
+   - observable (str) – 読み込む観測量の名前を指定する省略可能な引数
+   - measurements (list) – 読み込む測定の名前を指定する、文字列または文字列のリストからなる省略可能な引数
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数
+- 戻り値：
+   DataSet オブジェクトのリストのリストのリスト – 読み込まれた反復ごとの測定結果。外側のリストの各要素は、入力として指定した各ファイル名に対応します。次の階層の要素は、それぞれ異なる反復に対応します。内側のリストの要素には、各測定に対する DataSet が含まれます。DataSet オブジェクトの y 値は測定値であり、x 値は（省略可能ですが）配列値の測定のラベル（インデックス）です
 
 `pyalps.loadProperties(files, proppath='/parameters', respath='/simulation/results', verbose=False)`
- loads properties (parameters) of simulations from ALPS HDF5 result files
+ ALPS の HDF5 結果ファイルからシミュレーションのプロパティ（パラメータ）を読み込みます
 
-- this function loads the properties (parameters) of ALPS simulations ALPS HDF5 result files
+- この関数は、ALPS シミュレーションのプロパティ（パラメータ）を ALPS の HDF5 結果ファイルから読み込みます
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
-- Returns:    
-   list of dicts – properties contained in each file.
+- パラメータ：
+   - files (list) – ALPS の結果ファイル。XML ファイルと HDF5 ファイルのどちらでもかまいません。XML のファイル名は、対応する HDF5 のファイル名に変更されます。
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数
+- 戻り値：
+   辞書のリスト – 各ファイルに含まれるプロパティ。
 
 `pyalps.loadObservableList(files, proppath='/parameters', respath='/simulation/results', verbose=False)`
-loads lists of existing measurements from ALPS HDF5 result files
+ALPS の HDF5 結果ファイルから、存在する測定のリストを読み込みます
 
-- The function returns a list of lists, containing the names of measurements that are stored in the result files
+- この関数は、結果ファイルに格納されている測定の名前を含む、リストのリストを返します
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
+- パラメータ：
+   - files (list) – ALPS の結果ファイル。XML ファイルと HDF5 ファイルのどちらでもかまいません。XML のファイル名は、対応する HDF5 のファイル名に変更されます。
+   - verbose (bool) – True に設定すると、データの読み込み中により多くの出力を表示する省略可能な引数

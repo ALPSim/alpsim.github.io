@@ -1,7 +1,7 @@
 
 ---
-title: Sub Graph Embedding
-description: "BGL Extension Graph"
+title: "子图嵌入"
+description: "BGL 扩展：图"
 weight: 2
 ---
 

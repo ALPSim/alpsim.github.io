@@ -1,6 +1,6 @@
 ---
-title: ALPS/Parser Library
-description: "ALPS Parser Library"
+title: "ALPS/Parser ライブラリ"
+description: "ALPS Parser ライブラリ"
 weight: 5
 ---
 

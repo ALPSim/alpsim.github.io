@@ -1,12 +1,12 @@
-
 ---
-title: Full Diagonalization 
+title: 完全対角化
 math: true
 weight: 4
 ---
 
-Full diagonalization of matrices is a powerful numerical method for understanding small quantum systems, especially when the excited states of a quantum system is required. The last step of the Lanczos algorithm also requires a full diagonalization of a small matrix formed at the end of the iterative process. 
+行列の完全対角化は、小さな量子系を理解するための強力な数値手法であり、特に量子系の励起状態が必要な場合に有用です。Lanczos アルゴリズムの最後のステップでも、反復過程の終わりに形成される小さな行列の完全対角化が必要になります。
 
-We will focus on the dicussion of two numerical methods [Jacobi rotation](jacobi) and [QR factorization](qrfactor). However, [actual calculations in ALPS](implem) are carried out with the [LAPACK software package](https://www.netlib.org/lapack/), which is specialized for linear algebra.
+ここでは、[Jacobi 回転](jacobi)と [QR 分解](qrfactor)という 2 つの数値手法を中心に説明します。ただし、[ALPS における実際の計算](implem)は、線形代数に特化した [LAPACK ソフトウェアパッケージ](https://www.netlib.org/lapack/)を用いて行われます。
+
 
 
