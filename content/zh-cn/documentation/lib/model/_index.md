@@ -1,7 +1,7 @@
 
 ---
-title: ALPS/Model Library
-description: "ALPS Model Library"
+title: "ALPS/Model 库"
+description: "ALPS Model 库"
 weight: 8
 ---
 

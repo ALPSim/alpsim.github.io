@@ -1,6 +1,6 @@
 
 ---
-title: Lattice Definitions
+title: "格子の定義"
 toc: true
 weight: 2
 ---

@@ -1,68 +1,67 @@
 
 ---
-title: Worm Algorithm 
+title: ワームアルゴリズム
 math: true
 weight: 5
 ---
 
-## Introduction
+## はじめに
 
-The worm code provides a full generic implementation for Quantum Monte Carlo (QMC) simulations based on the worm algorithms which was invented by N. Prokof'ev and collaborators. Technically, it provides a continuous-time QMC code based on a path integral representation of the partition function.
+worm コードは、N. Prokof'ev らによって考案されたワームアルゴリズムに基づく量子モンテカルロ (QMC) シミュレーションの、完全で汎用的な実装を提供します。技術的には、分配関数の経路積分表示に基づく連続時間 QMC コードです。
 
-The current implementation allows to simulate the following models on arbitrary lattices:
+現在の実装では、任意の格子上で次のモデルをシミュレートできます。
 
-- Quantum spin (unfrustrated) models with arbitrary spin size, magnetic field and anisotropy
-- (Softcore) bosonic models without a sign problem
+- 任意のスピンの大きさ、磁場、異方性を持つ（フラストレーションのない）量子スピンモデル
+- 符号問題のない（ソフトコア）ボソンモデル
 
-Support for simulations with a sign problem could be added if desired.
+必要であれば、符号問題のあるシミュレーションへの対応を追加することもできます。
 
-## Running a simulation
+## シミュレーションの実行
 
-An example simulation is discussed in the tutorial.
+シミュレーションの例はチュートリアルで説明しています。
 
-## Input parameters
+## 入力パラメータ
 
-The worm code uses the common input parameters discussed here.
+worm コードは、ここで説明した共通の入力パラメータを使います。
 
-## Parameters for experts
+## 上級者向けパラメータ
 
-In addition, specific simulations parameters can be assigned (use only if you see what it means!):
+さらに、シミュレーション固有のパラメータを指定することもできます（意味が分かる場合にのみ使用してください！）。
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| SKIP | 1 | the number of Monte Carlo sweeps between each measurement |
-| RESTRICT_MEASUREMENTS[N] | | if defined this restricts measurements to configurations where the quantum number N (particle number) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the chemical potential needs to be tuned to the right range, to actually sample configurations with the desired particle number. |
-| RESTRICT_MEASUREMENTS[Sz] | | if defined this restricts measurements to configurations where the quantum number Sz (magnetization) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the magnetic field needs to be tuned to the right range, to actually sample configurations with the desiredmagnetization. |
-| WORMS_PER_KINK | 1 | determines how often a worm should visit a kink on average per sweep. |
-| MEASURE_GREEN | false | flag that indicates whether the Green's function should be measured. Don't use - this is untested! |
+| SKIP | 1 | 各測定の間に行うモンテカルロスイープの回数 |
+| RESTRICT_MEASUREMENTS[N] | | 定義されている場合、量子数 N（粒子数）がこのパラメータで与えた値を持つ配置に測定を制限します。シミュレーション自体は依然として大正準集団で行われるため、目的の粒子数を持つ配置を実際にサンプリングするには、化学ポテンシャルを適切な範囲に調整する必要があることに注意してください。 |
+| RESTRICT_MEASUREMENTS[Sz] | | 定義されている場合、量子数 Sz（磁化）がこのパラメータで与えた値を持つ配置に測定を制限します。シミュレーション自体は依然として大正準集団で行われるため、目的の磁化を持つ配置を実際にサンプリングするには、磁場を適切な範囲に調整する必要があることに注意してください。 |
+| WORMS_PER_KINK | 1 | 1 スイープあたり、ワームが 1 つのキンクを平均して何回訪れるべきかを決めます。 |
+| MEASURE_GREEN | false | グリーン関数を測定するかどうかを示すフラグ。テストされていないので使用しないでください！ |
 
-## Compile time parameters
+## コンパイル時パラメータ
 
-Furthermore, at compile time you can define the following variables in the file `WRun.h`
+さらに、コンパイル時にファイル `WRun.h` で次の変数を定義できます。
 
-| **Parameter** | **Meaning** |
+| **パラメータ** | **意味** |
 | :------------ | :---------- |
-| NONLOCAL | undefine to speed up the code for local interactions. |
-| USE_VECTOR | define to use a `std::vector` instead of a `std::list` as data structure. |
-| USE_SET | define to use a `std::set` instead of a `std::list` as data structure. |
+| NONLOCAL | 未定義にすると、局所的な相互作用に対してコードが高速化されます。 |
+| USE_VECTOR | 定義すると、データ構造として `std::list` の代わりに `std::vector` を使います。 |
+| USE_SET | 定義すると、データ構造として `std::list` の代わりに `std::set` を使います。 |
 
-## Measurements
+## 測定
 
-The following observables are measured by the worm code application:
+worm コードのアプリケーションは次の観測量を測定します。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Energy | total energy of the system |
-| Energy Density | energy per site |
-| Density | particle number (for bosonic models) |
-| Density^2 | square of the particle number (for bosonic models) |
-| Stiffness | stiffness of the system (for bosonic models) |
-| Green's function | Green's function (works only for local interactions) |
+| Energy | 系の全エネルギー |
+| Energy Density | サイトあたりのエネルギー |
+| Density | 粒子数（ボソンモデルの場合） |
+| Density^2 | 粒子数の 2 乗（ボソンモデルの場合） |
+| Stiffness | 系のスティフネス（ボソンモデルの場合） |
+| Green's function | グリーン関数（局所的な相互作用の場合のみ動作） |
 
-## Contributors
+## 貢献者
 
-The following persons have contributed to the worm application:
+次の人々が worm アプリケーションに貢献しました。
 
 - Simon Trebst
-- Matthias Troyer 
-
+- Matthias Troyer

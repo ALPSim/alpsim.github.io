@@ -1,77 +1,76 @@
 
 ---
-title: Implementation
+title: 実装
 math: true
 weight: 5
 ---
 
-The `spinmc` package is one of the applications of the ALPS project. It provides a a generic implementation of local and cluster updates for classical spin systems.
-The applications supports the following models on arbitrary lattices:
+`spinmc` パッケージは ALPS プロジェクトのアプリケーションの一つです。古典スピン系に対する局所更新とクラスター更新の汎用的な実装を提供します。
+このアプリケーションは、任意の格子上で次のモデルをサポートしています。
 
-- [Ising models](../../../models/ising)
-- XY models
-- Heisenberg models
-- 3-, 4- and 10-state Potts models
+- [イジングモデル](../../../models/ising)
+- XY モデル
+- ハイゼンベルクモデル
+- 3 状態、4 状態、10 状態のポッツモデル
 
-The application can easily be extended to additional q states Potts models and $O(N)$ models by editing the file mc/spins/spinmc_factory.C in a straightforward manner.
+ファイル mc/spins/spinmc_factory.C を簡単に編集するだけで、このアプリケーションを他の q 状態ポッツモデルや $O(N)$ モデルへ容易に拡張できます。
 
-## Running a simulation
+## シミュレーションの実行
 
-is discussed in the tutorial.
+についてはチュートリアルで説明しています。
 
-## Input parameters
+## 入力パラメータ
 
-In addition to the general input parameters of the ALPS scheduler library the spinmc application takes the following input parameters:
+ALPS スケジューラライブラリの一般的な入力パラメータに加えて、spinmc アプリケーションは次の入力パラメータを受け取ります。
 
-| **Name**  | **Default** | **Description** |
+| **名前**  | **デフォルト値** | **説明** |
 | :---- | :----   | :----       |
-| LATTICE_LIBRARY | lattices.xml | path to a file containing lattice descriptions |
-| LATTICE | | name of the lattice |
-| MODEL | | either Ising, XY, Heisenberg or Potts |
-| q | | the number of different states in a Potts model |
-| UPDATE | | the update type, either local or cluster |
-| ERROR_VARIABLE | | the name of an observable whose error you would like ALPS to monitor (must be used with ERROR_LIMIT) |
-| ERROR_LIMIT | | once ERROR_VARIABLE's absolute error is less than this amount, ALPS will stop the task (must be used with ERROR_VARIABLE) |
-| T | | the temperature |
-| J | | the default coupling constant |
-| J# | J | the coupling constant on a bond with type # (#=0,1,...). |
-| D | | onsite single-ion anisotropy coupling constants (one for each spin component in a list, e.g. D="0.0 0.0 10.0") |
-| CONVENTION | classical | specifies whether the classical or quantum conventions are used (see below) |
-| S |  1 if CONVENTION=classical  1/2 if CONVENTION=quantum | the default spin size |
-| S# | S | the spin size on a site with type # (#=0,1,...). |
-| $g$ | 1 | the Landee $g$-factor, used for suscpetibility measurements |
-| h | 0 | external magnetic field (only with local update) |
+| LATTICE_LIBRARY | lattices.xml | 格子の記述を含むファイルへのパス |
+| LATTICE | | 格子の名前 |
+| MODEL | | Ising、XY、Heisenberg、Potts のいずれか |
+| q | | ポッツモデルにおける異なる状態の数 |
+| UPDATE | | 更新の種類。local または cluster のいずれか |
+| ERROR_VARIABLE | | ALPS に誤差を監視させたい観測量の名前（ERROR_LIMIT と併用する必要があります） |
+| ERROR_LIMIT | | ERROR_VARIABLE の絶対誤差がこの値より小さくなると、ALPS はタスクを停止します（ERROR_VARIABLE と併用する必要があります） |
+| T | | 温度 |
+| J | | デフォルトの結合定数 |
+| J# | J | タイプ # (#=0,1,...) のボンド上の結合定数 |
+| D | | オンサイトの単一イオン異方性の結合定数（スピンの各成分に 1 つずつ、リストで指定。例：D="0.0 0.0 10.0"） |
+| CONVENTION | classical | 古典的な規約と量子的な規約のどちらを使うかを指定します（下記参照） |
+| S |  CONVENTION=classical の場合は 1、CONVENTION=quantum の場合は 1/2 | デフォルトのスピンの大きさ |
+| S# | S | タイプ # (#=0,1,...) のサイト上のスピンの大きさ |
+| $g$ | 1 | 磁化率の測定に使われる Landé の $g$ 因子 |
+| h | 0 | 外部磁場（局所更新の場合のみ） |
 
-In addition, the lattice description can require further parameters (e.g. L or W) as specified in the lattice description file.
-Note: while the classical Monte carlo program uses XML lattice description it does not use XML model descriptions. The model is instead specifiec by the parameters in the table above.
+さらに、格子の記述ファイルで指定されているとおり、格子の記述には他のパラメータ（例えば L や W）が必要になることがあります。
+注意：古典モンテカルロプログラムは XML による格子の記述を使いますが、XML によるモデルの記述は使いません。代わりに、モデルは上の表のパラメータによって指定されます。
 
-## Local versus cluster updates
+## 局所更新とクラスター更新
 
-Cluster updates should be used as long as there is no magnetic field applied and the spin system is not frustrated. Otherwise local updates are preferred.
+磁場がかかっておらず、スピン系にフラストレーションがない限りは、クラスター更新を使うべきです。そうでない場合は局所更新が望ましいです。
 
-## Quantum versus classical conventions
+## 量子的な規約と古典的な規約
 
-Quantum and classical spin models often use different conventions for the coupling constants, and the CONVENTION parameter allows to choose between the two.
-- **classical** convention is to have positive signs denote ferromagnetic coupling. The coupling strengths are multiplied by $S^2$ if a parameter S is specified.
-- **quantum** convention is to have positive signs denote anti-ferromagnetic coupling. The coupling strengths are multiplied by S(S+1) where S defaults to 1/2. 
+量子スピンモデルと古典スピンモデルでは、結合定数について異なる規約がよく使われます。CONVENTION パラメータを使うと、そのどちらかを選択できます。
+- **classical** 規約では、正の符号が強磁性的な結合を表します。パラメータ S が指定されている場合、結合の強さには $S^2$ が掛けられます。
+- **quantum** 規約では、正の符号が反強磁性的な結合を表します。結合の強さには S(S+1) が掛けられます。S のデフォルト値は 1/2 です。
 
-## Measurements
+## 測定
 
-The following observables are measured by the spinmc application:
+spinmc アプリケーションは次の観測量を測定します。
 
-| **Name**  | **Description** |
+| **名前**  | **説明** |
 | :---- | :---------- |
-| Energy | the total energy of the system |
-| Energy Density | the energy density (energy per site) of the system |
-| Specific Heat | the specific heat per site of the system |
-| Magnetization | the z-component of the magnetization |
-| \|Magnetization\| | absolute value of the z-component of the magnetization |
-| Magnetization^2 | square of the z-component of the magnetization |
-| Magnetization along Field | the component of the magnetization along the external magnetic field |
-| Staggered Magnetization | the z-component of the staggered magnetization (only on bipartite lattices) |
-| Staggered Magnetization^2 | square of the z-component of the staggered magnetization (only on bipartite lattices) |
-| Susceptibility | the uniform susceptibility, includes a factor of $g^2$ |
-| Cluster size | the mean cluster size as a fraction of the lattice volume (only for cluster updates) |
+| Energy | 系の全エネルギー |
+| Energy Density | 系のエネルギー密度（サイトあたりのエネルギー） |
+| Specific Heat | 系のサイトあたりの比熱 |
+| Magnetization | 磁化の z 成分 |
+| \|Magnetization\| | 磁化の z 成分の絶対値 |
+| Magnetization^2 | 磁化の z 成分の 2 乗 |
+| Magnetization along Field | 外部磁場の方向に沿った磁化の成分 |
+| Staggered Magnetization | 交替（スタガード）磁化の z 成分（二部格子の場合のみ） |
+| Staggered Magnetization^2 | 交替磁化の z 成分の 2 乗（二部格子の場合のみ） |
+| Susceptibility | 一様磁化率。因子 $g^2$ を含みます |
+| Cluster size | 格子の体積に対する割合で表した平均クラスターサイズ（クラスター更新の場合のみ） |
 
-Note: To evaluate the specific heat the evaluation program spinmc_evaluate has to be run on the task files (\*task\*.xml).
-
+注意：比熱を評価するには、タスクファイル (\*task\*.xml) に対して評価プログラム spinmc_evaluate を実行する必要があります。

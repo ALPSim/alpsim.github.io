@@ -1,12 +1,12 @@
-
 ---
-title: Sparse Diagonalization
+title: スパース対角化
 math: true
 weight: 3
 ---
 
-The Hamiltonian matrix in quantum mechanics for systems with local interactions are sparse, meaning most of their entries are zero. Storing and manipulating dense matrices of size $N \times N$ requires $O(N^2)$ memory and $O(N^3)$ computational time for diagonalization. For large $N$, this becomes infeasible. The Lanczos method is designed to take advantage of this sparsity, requiring only matrix-vector products rather than explicit matrix storage or manipulation.
+局所的な相互作用を持つ系の量子力学におけるハミルトニアン行列はスパース（疎）であり、要素の大部分がゼロです。サイズ $N \times N$ の密行列を保存・操作するには $O(N^2)$ のメモリが必要であり、対角化には $O(N^3)$ の計算時間がかかります。$N$ が大きい場合、これは実行不可能になります。Lanczos 法はこのスパース性を活用するように設計されており、行列を明示的に保存・操作する必要がなく、行列ベクトル積だけで済みます。
 
-The [Lanczos method](lanczos) is a powerful algorithm for finding a few extremal eigenvalues and their corresponding eigenvectors of large, sparse matrices. It is particularly useful for quantum lattices, where systems are often described by high-dimensional matrices that are too large to handle with dense matrix techniques. The Lanczos method exploits the sparsity of these matrices to efficiently compute the desired eigenvalues and eigenvectors.
+[Lanczos 法](lanczos)は、大規模なスパース行列について、少数の端の固有値とそれに対応する固有ベクトルを求めるための強力なアルゴリズムです。特に量子格子系に有用です。量子格子系は多くの場合、密行列の手法では扱えないほど大きな高次元の行列で記述されるためです。Lanczos 法はこれらの行列のスパース性を利用して、求めたい固有値と固有ベクトルを効率よく計算します。
 
-The [implementation of the sparse diagonalization in ALPS](implem) is also discussed. 
+[ALPS におけるスパース対角化の実装](implem)についても説明します。 
+

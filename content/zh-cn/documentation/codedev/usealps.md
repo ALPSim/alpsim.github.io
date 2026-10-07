@@ -1,14 +1,14 @@
 
 ---
-title: Code-00 Using ALPS in your projects
+title: Code-00 在你的项目中使用 ALPS
 math: true
 toc: true
 weight: 1
 ---
 
-## Using CMake
+## 使用 CMake
 
-The ALPS libraries also provide an ALPS configuration file for CMake in `/opt/alps/share/alps/ALPSConfig.cmake`. Including that file will set all the configuration variables used when building ALPS. Additionally including the file `/opt/alps/share/alps/UseALPS.cmake` into your CMake file will automatically set the compiler and linker options to use ALPS. Here is an example `CMakeLists.txt`:
+ALPS 库还在 `/opt/alps/share/alps/ALPSConfig.cmake` 中为 CMake 提供了一个 ALPS 配置文件。包含该文件将设置构建 ALPS 时所用的全部配置变量。此外，在你的 CMake 文件中包含文件 `/opt/alps/share/alps/UseALPS.cmake`，将自动设置使用 ALPS 所需的编译器和链接器选项。下面是一个示例 `CMakeLists.txt`：
  
     cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
     project(alpsize NONE)
@@ -26,16 +26,16 @@ The ALPS libraries also provide an ALPS configuration file for CMake in `/opt/al
     target_link_libraries(hello ${ALPS_LIBRARIES})
     add_alps_test(hello)
 
-Note that NO_SYSTEM_ENVIRONMENT_PATH option in find_package is essential. Otherwise, the variables (compilers, etc) will be overwritten by the system default ones.
-When running cmake, please specify the path where ALPS may be found:
+注意，find_package 中的 NO_SYSTEM_ENVIRONMENT_PATH 选项是必不可少的。否则，这些变量（编译器等）将被系统默认值覆盖。
+运行 cmake 时，请指定可以找到 ALPS 的路径：
 
     cmake -DALPS_ROOT_DIR=/opt/alps /somewhere/to/your/source/code
     
-Or, one can tell the place of ALPS to cmake by using environmental variable $ALPS_HOME:
+或者，也可以通过环境变量 $ALPS_HOME 告诉 cmake ALPS 所在的位置：
 
     export ALPS_HOME=/opt/alps
     cmake /somewhere/to/your/source/code
 
-## Using make
+## 使用 make
 
-If you can, please use cmake instead of make. The ALPS libraries come with a an include file for your Makefile that sets all the required include paths, link paths, and libraries to be linked to use ALPS. This include file is located at /opt/alps/share/alps/include.mk - or a similar location if you have installed ALPS at a different path than /opt/alps. An example Makefile using this include file is provided here in the C++ Ising model tutorial.
+如果可以的话，请使用 cmake 而不是 make。ALPS 库附带了一个供你的 Makefile 使用的包含文件，它设置了使用 ALPS 所需的全部包含路径、链接路径以及需要链接的库。该包含文件位于 /opt/alps/share/alps/include.mk——如果你将 ALPS 安装在 /opt/alps 以外的路径，则位于类似的位置。C++ 伊辛模型教程中提供了一个使用该包含文件的示例 Makefile。

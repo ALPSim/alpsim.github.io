@@ -1,21 +1,21 @@
 
 ---
-title: Density Matrix Renormalization Group
-description: "Density Matrix Renormalization Group"
+title: "密度行列繰り込み群"
+description: "密度行列繰り込み群"
 weight: 5
 ---
 
 <br>
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
-    title="Non-interacting DMRG"
-    subtitle="Particle in a box"
+    title="相互作用のない系の DMRG"
+    subtitle="箱の中の粒子"
     link="nonintdmrg"
     icon=""
   >}}
   {{< hextra/feature-card
     title="DMRG"
-    subtitle="Density Matrix Renormalization Group"
+    subtitle="密度行列繰り込み群"
     link="dmrg"
     icon=""
   >}}

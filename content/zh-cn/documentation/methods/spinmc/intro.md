@@ -1,51 +1,51 @@
 ---
-title: Introduction
+title: 简介
 math: true
 weight: 1
 ---
 
-Classical Monte Carlo (MC) simulations are a powerful and widely used computational technique for studying the statistical mechanics of physical systems. Named after the famous Monte Carlo casino due to its reliance on random sampling, this method is particularly well-suited for investigating systems with a large number of degrees of freedom, where analytical solutions are often intractable. Monte Carlo simulations are based on stochastic processes and probabilistic rules, enabling the exploration of equilibrium properties, phase transitions, and thermodynamic behavior in a Physical system.
+经典蒙特卡洛（MC）模拟是一种强大且被广泛使用的计算技术，用于研究物理系统的统计力学。由于依赖随机采样，该方法以著名的蒙特卡洛赌场命名，特别适合研究具有大量自由度、往往难以得到解析解的系统。蒙特卡洛模拟基于随机过程和概率规则，可以用来探索物理系统的平衡性质、相变和热力学行为。
 
-At the core of classical Monte Carlo simulations is the concept of importance sampling, where configurations of the system are generated according to a probability distribution that is typically the Boltzmann distribution in the canonical ensemble. By sampling configurations in proportion to their statistical weight, Monte Carlo methods allow for the calculation of ensemble averages of physical quantities, such as energy, magnetization, or correlation functions, without explicitly enumerating all possible states of the system — a task that is often computationally infeasible.
+经典蒙特卡洛模拟的核心是重要性采样的概念：按照某个概率分布生成系统的构型，在正则系综中该分布通常是玻尔兹曼分布。通过按照构型的统计权重成比例地进行采样，蒙特卡洛方法能够计算能量、磁化强度或关联函数等物理量的系综平均，而无需显式地枚举系统所有可能的状态——这一任务在计算上往往是不可行的。
 
-## Key Principles of Monte Carlo Simulations
+## 蒙特卡洛模拟的关键原理
 
-### Ergodicity
-A fundamental requirement for Monte Carlo simulations is ergodicity, which ensures that the simulation explores the entire configuration space of the system given sufficient time. In other words, every possible state of the system must be accessible through a sequence of Monte Carlo moves. Without ergodicity, the simulation may become trapped in a subset of configurations, leading to biased results. Ensuring ergodicity often requires careful design of the Monte Carlo moves, especially for systems with complex energy landscapes.
+### 各态历经性
+蒙特卡洛模拟的一个基本要求是各态历经性，它保证在足够长的时间内，模拟能够探索系统的整个构型空间。换言之，系统的每一个可能状态都必须能够通过一系列蒙特卡洛移动到达。如果不满足各态历经性，模拟可能会被困在构型的某个子集中，从而导致有偏差的结果。保证各态历经性往往需要仔细设计蒙特卡洛移动，尤其是对于具有复杂能量景观的系统。
 
-### Detailed Balance
-Another critical principle in Monte Carlo simulations is detailed balance, which guarantees that the system evolves toward equilibrium and samples states according to the desired probability distribution (e.g., the Boltzmann distribution). Detailed balance is a condition that ensures the transition probabilities between states satisfy:
+### 细致平衡
+蒙特卡洛模拟的另一个关键原理是细致平衡，它保证系统向平衡态演化，并按照所需的概率分布（例如玻尔兹曼分布）对状态进行采样。细致平衡这一条件要求状态之间的跃迁概率满足：
 $$
 P_i \cdot P_{i \to j} = P_j \cdot P_{j \to i},
 $$
-where $P_i$ and $P_j$ are the equilibrium probabilities of states $i$ and $j$, and $P_{i \to j}$ is the transition probability from state $i$ to state $j$. 
+其中 $P_i$ 和 $P_j$ 是状态 $i$ 和 $j$ 的平衡概率，$P_{i \to j}$ 是从状态 $i$ 到状态 $j$ 的跃迁概率。
 
-## Metropolis-Hastings Algorithm
-The Metropolis-Hastings algorithm, one of the most commonly used Monte Carlo techniques, enforces detailed balance by accepting or rejecting proposed moves based on a probabilistic criterion that depends on the change in energy and the temperature of the system. It employs a Markov chain process to generate a sequence of configurations, ensuring that the system evolves toward equilibrium. The algorithm involves the following steps:
-1. Propose a random change to the system (e.g., particle displacements or spin flips).
-2. Calculate the change in energy $\Delta E$ associated with the proposed move.
-3. Accept or reject the move based on the acceptance probability:
+## Metropolis-Hastings 算法
+Metropolis-Hastings 算法是最常用的蒙特卡洛技术之一，它根据一个依赖于能量变化和系统温度的概率判据来接受或拒绝所提议的移动，从而满足细致平衡。它利用马尔可夫链过程生成一系列构型，保证系统向平衡态演化。该算法包括以下步骤：
+1. 对系统提议一个随机改变（例如粒子位移或自旋翻转）。
+2. 计算与所提议移动相关的能量变化 $\Delta E$。
+3. 根据接受概率接受或拒绝该移动：
 $$
 P_{i \to j} = \min\left(1, e^{-\beta \Delta E}\right),
 $$
-where $\beta = 1/(k_B T)$ is the inverse temperature. This acceptance rule ensures detailed balance and drives the system toward equilibrium.
+其中 $\beta = 1/(k_B T)$ 为逆温度。这一接受规则保证了细致平衡，并驱动系统趋向平衡态。
 
-## Heat-Bath Algorithm
-For the heat-bath algorithm, the transition probabilities are explicitly designed to satisfy this condition. The equilibrium probability of a state is given by the Boltzmann distribution:
+## 热浴算法
+对于热浴算法，跃迁概率被显式地设计为满足这一条件。一个状态的平衡概率由玻尔兹曼分布给出：
 $$
 P_i \propto e^{-\beta E_i},
 $$
-where $E_i$ is the total energy of the system in state $i$. Let the transition probability from state $i$ to state $j$ be 
+其中 $E_i$ 是系统处于状态 $i$ 时的总能量。令从状态 $i$ 到状态 $j$ 的跃迁概率为
 $$
 P_{i \to j} = \frac{e^{-\beta E_j}}{e^{-\beta E_i} + e^{-\beta E_j}},
 $$
-and correspondingly the transition probability from state $j$ to state $i$ be 
+相应地，从状态 $j$ 到状态 $i$ 的跃迁概率为
 $$
 P_{j \to i} = \frac{e^{-\beta E_i}}{e^{-\beta E_i} + e^{-\beta E_j}}.
 $$
 
-Substituting the transition probabilities into the detailed balance condition, we have:
+将跃迁概率代入细致平衡条件，得到：
 $$
 P_i \cdot P_{i \to j} = e^{-\beta E_i} \cdot \frac{e^{-\beta E_j}}{e^{-\beta E_i} + e^{-\beta E_j}} = e^{-\beta E_j} \cdot \frac{e^{-\beta E_i}}{e^{-\beta E_i} + e^{-\beta E_j}} = P_j \cdot P_{j \to i}.
 $$
-Thus, the heat-bath algorithm inherently satisfies detailed balance.
+因此，热浴算法天然满足细致平衡。

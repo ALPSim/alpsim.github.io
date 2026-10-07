@@ -1,15 +1,15 @@
 
 ---
-title: ALPS using Python
+title: "通过 Python 使用 ALPS"
 toc: true
 weight: 3
 ---
 
-## Running ALPS programs using Python
+## 用 Python 运行 ALPS 程序
 
-为了演示如何从 Python 使用 ALPS，我们来看一个简单的经典蒙特卡洛模拟：用 `spinmc` 应用求解正方格子上的二维铁磁 Ising 模型。在接近临界温度时，局域自旋翻转更新会遭遇临界慢化——自关联时间发散，导致相继的组态在统计上远非独立——因此我们改用团簇算法（`'UPDATE': "cluster"`），一次性翻转整个由取向一致的自旋组成的团簇。我们将计算磁化强度 $|m|$ 随温度的变化，以及它的 Binder cumulant——这是精确定位临界温度的标准有限尺寸分析工具（关于这一分析的完整讨论，参见 [MC-07 Phase Transition](../../../../tutorials/mcs/mc07)）。
+为了演示如何从 Python 使用 ALPS，我们来看一个简单的经典蒙特卡洛模拟：用 `spinmc` 应用求解正方晶格上的二维铁磁 Ising 模型。在接近临界温度时，局域自旋翻转更新会遭遇临界慢化——自关联时间发散，导致相继的组态在统计上远非独立——因此我们改用团簇算法（`'UPDATE': "cluster"`），一次性翻转整个由取向一致的自旋组成的团簇。我们将计算磁化强度 $|m|$ 随温度的变化，以及它的 Binder cumulant——这是精确定位临界温度的标准有限尺寸分析工具（关于这一分析的完整讨论，参见 [MC-07 Phase Transition](../../../../tutorials/mcs/mc07)）。
 
-## Launching Python
+## 启动 Python
 
 Python 只允许某个扩展模块与编译它时所用的**完全相同**版本的 Python 一起使用。如果你从源码构建 ALPS（例如在 Linux 上就是必须的），可以在配置 ALPS 时指定要使用的 Python 解释器。之后 ALPS 会创建一个名为
 
@@ -17,9 +17,9 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 
 的脚本，它会设置好查找 ALPS 扩展模块所需的路径，然后调用你指定的 Python 解释器。
 
-## Detailed instructions
+## 详细说明
 
-### Importing the ALPS modules
+### 导入 ALPS 模块
 
 启动 Python 后，导入我们需要的模块：
 
@@ -29,7 +29,7 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 
 完整的 Python 脚本位于教程目录下的 [`tutorials/intro-01-basics/tutorial-full.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-full.py)。
 
-### Preparing the input
+### 准备输入
 
 为了准备输入，我们创建一个包含模拟参数的 Python 字典列表：
 
@@ -54,9 +54,9 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 
 参数 `'parm1'` 告诉该函数使用 `parm1` 作为所有模拟文件的前缀。该函数返回主模拟文件的名称（此处为 `parm1.in.xml`）。
 
-### Running the simulation
+### 运行模拟
 
-#### Running the simulation on a serial machine
+#### 在串行机器上运行模拟
 
 要运行模拟，只需调用 `runApplication` 函数：
 
@@ -64,7 +64,7 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 
 参数 `writexml=True` 会告诉 ALPS 同时把所有结果也写入 XML 文件。这会拖慢 I/O 速度，但很方便，因为你只需在浏览器中打开输出的 XML 文件就能查看结果。不过，如果你测量的物理量很多，文件会变得非常大，写入也会耗时过长。
 
-#### Running the simulation on a parallel machine
+#### 在并行机器上运行模拟
 
 要在并行机器上使用 MPI 运行模拟，改为调用以下命令：
 
@@ -72,16 +72,16 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 
 其中 `MPI` 参数指定要启动的进程数。
 
-### Loading the simulation results
+### 加载模拟结果
 
-#### Getting the result files
+#### 获取结果文件
 
 在加载结果之前，我们需要先获取结果文件的列表。这里只关注我们刚刚创建的文件（即以前缀 `parm1` 开头的文件），从而得到文件列表：
 
     result_files = pyalps.getResultFiles(prefix='parm1')
     print(result_files)
 
-#### Loading the results
+#### 加载结果
 
 接下来，我们可能想知道都测量了哪些物理量。为此可以加载观测量列表：
 
@@ -94,13 +94,13 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 
 打印出的内容中，加载的数值保存在 `y` 中，所有模拟参数则保存在名为 `props` 的字典中。
 
-### Plotting the results 
+### 绘制结果
 
 例如，要绘制 |Magnetization| 随温度变化的图像，我们通过调用 `collectXY`，把 |Magnetization| 的值收集到 `y`，把温度 `T` 收集到 `x`：
 
     plotdata = pyalps.collectXY(data,'T','|Magnetization|')
 
-#### Plotting in Python using `matplotlib`
+#### 在 Python 中用 `matplotlib` 绘图
 
 然后我们使用 `matplotlib` 和 `pyalps.plot` 模块来绘图：
 
@@ -111,7 +111,7 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
     plt.title('Ising model')
     plt.show()
 
-#### Converting to other formats
+#### 转换为其他格式
 
 我们也可以调用相应函数，把数据集转换为其他绘图格式，例如纯文本、Grace 或 Gnuplot：
 
@@ -119,7 +119,7 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
     print(pyalps.plot.makeGracePlot(plotdata))
     print(pyalps.plot.makeGnuplotPlot(plotdata))
 
-### Evaluating data
+### 评估数据
 
 我们可以很容易地对结果求值来计算一些函数，例如计算 Binder cumulant 比值 $\langle m^2 \rangle / \langle |m|\rangle ^2$。我们创建一个新的 `DataSet` 并填入数据：
 
@@ -139,24 +139,24 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
     plt.ylabel('Binder cumulant')
     plt.show()
 
-## Complete example scripts
+## 完整示例脚本
 
 完整的脚本位于文件 [`tutorials/intro-01-basics/tutorial-full.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-full.py)。
 
 下面给出针对各种任务的一些更小的脚本：
 
-### Running and plotting
+### 运行与绘图
 
 - 使用 matplotlib 绘制磁化图：[`tutorials/intro-01-basics/tutorial-magnetization.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-magnetization.py)
 - 使用 Grace 绘制磁化图：[`tutorials/intro-01-basics/tutorial-graceplot.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-graceplot.py)
 - 使用 Gnuplot 绘制磁化图：[`tutorials/intro-01-basics/tutorial-gnuplot.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-gnuplot.py)
 - 以纯文本形式输出磁化：[`tutorials/intro-01-basics/tutorial-text.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-text.py)
 
-### More complex evaluation
+### 更复杂的评估
 
 - Binder cumulant 的计算见文件 [`tutorials/intro-01-basics/tutorial-binder.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-binder.py)。
 
-### Splitting into subtasks
+### 拆分为子任务
 
 准备、运行、评估这几项任务也可以拆分成子任务：
 
@@ -164,7 +164,7 @@ Python 只允许某个扩展模块与编译它时所用的**完全相同**版本
 - 运行模拟：[`tutorials/intro-01-basics/tutorial-runsimulation.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-runsimulation.py)
 - 评估结果：[`tutorials/intro-01-basics/tutorial-evaluate.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-evaluate.py)
 
-## More examples
+## 更多示例
 
 关于各函数用法的更多示例，以及更高级的应用，可以在教程中找到。此外，别忘了可以通过函数的 `__doc__` 属性查看其文档，例如：
 

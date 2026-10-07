@@ -1,7 +1,7 @@
 
 ---
-title: Introduction
-description: "Introduction to ALPS General Library"
+title: "はじめに"
+description: "ALPS General ライブラリの紹介"
 weight: 1
 ---
 

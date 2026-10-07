@@ -1,7 +1,7 @@
 
 ---
-title: Examples
-description: "Examples of Using hdf5 Library"
+title: "使用例"
+description: "hdf5 ライブラリの使用例"
 weight: 2
 ---
 

@@ -1,95 +1,94 @@
-
 ---
-title: Directed Loop Algorithm with SSE 
+title: 基于 SSE 的有向环算法 
 math: true
 weight: 4
 ---
 
-## Introduction
+## 简介
 
-The `dirloop_sse` package provides a full generic implementation of the Quantum Monte Carlo (QMC) method called directed loop algorithm in the Stochastic Series Expansion representation. The `dirloop_SSE` method was invented and developped by Anders Sandvik and coworkers. It is a powerful and elegant QMC method to study quantum spin or bosonic lattice models.
+`dirloop_sse` 程序包提供了在随机级数展开表示下的量子蒙特卡洛（QMC）方法——有向环算法——的完整通用实现。`dirloop_SSE` 方法由 Anders Sandvik 及其合作者发明和发展。它是研究量子自旋或玻色晶格模型的一种强大而优雅的 QMC 方法。
 
-The current implementation we present here uses the most recent developments of this method published in:
+我们这里介绍的当前实现采用了该方法最新的发展成果，发表于：
 - A. W. Sandvik, Phys. Rev. B 59, 14157 (1999).
 - F. Alet, S. Wessel, and M. Troyer Phys. Rev. E 71, 036706 (2005).
 - L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, Phys. Rev. E 70, 056705 (2005).
 
-This version allows to simulate on arbitrary lattices:
-- Quantum spin (even frustrated - see remark below) models with arbitrary spin size, magnetic field and anisotropy
-- (Softcore) bosonic models
+该版本允许在任意晶格上模拟：
+- 具有任意自旋大小、磁场和各向异性的量子自旋模型（甚至是阻挫模型——见下面的说明）
+- （软核）玻色模型
 
-This release allows to simulate systems with a sign problem (e.g. frustrated spin systems). However, this case was moderately tested so please be careful if your model has a sign problem ...
+本版本允许模拟存在符号问题的系统（例如阻挫自旋系统）。不过，这种情况只经过了有限的测试，因此如果你的模型存在符号问题，请务必小心……
 
-**Please note** that for frustrated models, some values of the parameter Epsilon might render the algorithm non ergodic (for example, when you have a "pure loop" algorithm). One needs to check this carefully.
+**请注意**，对于阻挫模型，参数 Epsilon 的某些取值可能使算法失去各态历经性（例如，当你得到的是一个"纯环"算法时）。需要仔细检查这一点。
 
-## Running a simulation
+## 运行模拟
 
-is discussed in the tutorial.
+详见教程。
 
-## Input parameters
+## 输入参数
 
-In addition to the common input parameters of the ALPS applications the `dirloop_sse` application takes the following input parameters for experts (use only if you see what it means!):
+除了 ALPS 应用程序的通用输入参数之外，`dirloop_sse` 应用程序还接受以下专家参数（只有在你明白其含义时才使用！）：
 
-| **Parameter** | **Default** | **Meaning** |
+| **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| SKIP | 1 | the number of Monte Carlo sweeps between each measurement |
-| RESTRICT_MEASUREMENTS[N] |  | if defined this restricts measurements to configurations where the quantum number N (particle number) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the chemical potential needs to be tuned to the right range, to actually sample configurations with the desired particle number.|
-| RESTRICT_MEASUREMENTS[Sz] | | if defined this restricts measurements to configurations where the quantum number Sz (magnetization) has the value given as this parameter. Note that the simulation will still performed in the grand canonical ensemble and the magnetic field needs to be tuned to the right range, to actually sample configurations with the desiredmagnetization.|
-| NUMBER_OF_WORMS_PER_SWEEP | Calculated self consistently | number of worms done during the loop update. By default, this number is calculated self-consistently during the thermalization part. Nevertheless, you can force its value during the whole simulation |
-| EPSILON | 0 | supplementary diagonal energy shift for all interactions. The value of EPSILON affects the performances of the algorithm with the following tradeoff : the higher it is, the longer the simulation time but the lowest are bounce probabilities. Current wisdom indicates that one should use non-zero values for Epsilon, but not too high (for example S/2 for spin S models). Please note that for frustrated models, some values of Epsilon might render the algorithm non-ergodic. You have to check carefully. |
-| WHICH_LOOP_TYPE | "minbounce" | string to indicate which type of updates should be used for the scattering at the vertices : ( "heatbath" ) heatbath, see A. W. Sandvik, Phys. Rev. B 59, 14157 (1999). ( "minbounce" ) minimum bounces, see F. Alet, S. Wessel, and M. Troyer Phys. Rev. E 71, 036706 (2005). ( "locopt" ) locally optimal, see L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, Phys. Rev. E 70, 056705 (2005). By default the algorithm uses the "minbounce" updates. |
-| NO_WORMWEIGHT | 0 | boolean to indicate whether the worm matrixelement should be set to unity (NO_WORMWEIGHT = true) or to its real value depending on the spin/density configuration (NO_WORMWEIGHT=false). By default, NO_WORMWEIGHT is false. |
+| SKIP | 1 | 两次测量之间的蒙特卡洛扫描次数 |
+| RESTRICT_MEASUREMENTS[N] |  | 若定义此参数，则只在量子数 N（粒子数）取该参数所给值的构型上进行测量。注意，模拟仍然在巨正则系综中进行，需要将化学势调到合适的范围，才能真正采样到具有所需粒子数的构型。|
+| RESTRICT_MEASUREMENTS[Sz] | | 若定义此参数，则只在量子数 Sz（磁化强度）取该参数所给值的构型上进行测量。注意，模拟仍然在巨正则系综中进行，需要将磁场调到合适的范围，才能真正采样到具有所需磁化强度的构型。|
+| NUMBER_OF_WORMS_PER_SWEEP | 自洽计算 | 环更新过程中执行的蠕虫数目。默认情况下，该数目在热化阶段自洽地计算得到。不过，你也可以在整个模拟过程中强制指定其值 |
+| EPSILON | 0 | 对所有相互作用附加的对角能量平移。EPSILON 的取值会影响算法的性能，存在如下权衡：取值越大，模拟时间越长，但反弹概率越低。目前的经验表明，应当对 Epsilon 使用非零值，但不宜过大（例如对自旋 S 模型取 S/2）。请注意，对于阻挫模型，Epsilon 的某些取值可能使算法失去各态历经性。你必须仔细检查。 |
+| WHICH_LOOP_TYPE | "minbounce" | 字符串，指定在顶点处的散射采用哪种类型的更新：（"heatbath"）热浴，参见 A. W. Sandvik, Phys. Rev. B 59, 14157 (1999)。（"minbounce"）最小反弹，参见 F. Alet, S. Wessel, and M. Troyer Phys. Rev. E 71, 036706 (2005)。（"locopt"）局域最优，参见 L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, Phys. Rev. E 70, 056705 (2005)。默认情况下，算法使用 "minbounce" 更新。 |
+| NO_WORMWEIGHT | 0 | 布尔值，指定蠕虫矩阵元是设为 1（NO_WORMWEIGHT = true），还是取决于自旋/密度构型的真实值（NO_WORMWEIGHT=false）。默认情况下，NO_WORMWEIGHT 为 false。 |
 
-## Measurements
+## 测量
 
-The following observables are measured by the `dirloop_sse` for any model application:
+对于任何模型，`dirloop_sse` 都会测量以下观测量：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Energy | total energy of the system |
-| Energy Density | energy per site |
+| Energy | 系统的总能量 |
+| Energy Density | 每格点能量 |
 
-The following observables are measured by the dirloop_sse for spin models, i.e. models that have an Sz quantumnumber defined:
+对于自旋模型，即定义了 Sz 量子数的模型，dirloop_sse 会测量以下观测量：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Magnetization | the z-component of the total magnetization |
-| Magnetization Density | the z-component of the total magnetization per site |
-| \|Magnetization\| | absolute value of the z-component of the magnetization |
-| \|Magnetization Density\| | absolute value of the z-component of the magnetization per site |
-| Magnetization^2 | square of the z-component of the total magnetization |
-| Magnetization Density^2 | square of the z-component of the total magnetization per site |
-| Magnetization^4 | fourth power of the z-component of the total magnetization |
-| Magnetization Density^4 | fourth power of the z-component of the total magnetization per site |
-| Susceptibility | the uniform susceptibility (spin models) |
+| Magnetization | 总磁化强度的 z 分量 |
+| Magnetization Density | 每格点总磁化强度的 z 分量 |
+| \|Magnetization\| | 磁化强度 z 分量的绝对值 |
+| \|Magnetization Density\| | 每格点磁化强度 z 分量的绝对值 |
+| Magnetization^2 | 总磁化强度 z 分量的平方 |
+| Magnetization Density^2 | 每格点总磁化强度 z 分量的平方 |
+| Magnetization^4 | 总磁化强度 z 分量的四次方 |
+| Magnetization Density^4 | 每格点总磁化强度 z 分量的四次方 |
+| Susceptibility | 均匀磁化率（自旋模型） |
 
-Spin models on bipartite lattices also have a staggered magnetization:
+二分晶格上的自旋模型还具有交错磁化强度：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Staggered Magnetization | the z-component of the staggered magnetization |
-| Staggered Magnetization Density | the z-component of the staggered magnetization per site |
-| Staggered Magnetization^2 | square of the z-component of the staggered magnetization |
-| Staggered Magnetization Density^2 | square of the z-component of the staggered magnetization per site |
+| Staggered Magnetization | 交错磁化强度的 z 分量 |
+| Staggered Magnetization Density | 每格点交错磁化强度的 z 分量 |
+| Staggered Magnetization^2 | 交错磁化强度 z 分量的平方 |
+| Staggered Magnetization Density^2 | 每格点交错磁化强度 z 分量的平方 |
 
-The following observables are measured by the `dirloop_sse` for particle models, i.e. models that have an N quantumnumber defined:
+对于粒子模型，即定义了 N 量子数的模型，`dirloop_sse` 会测量以下观测量：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Density | particle density |
-| Density^2 | square of the particle density |
+| Density | 粒子密度 |
+| Density^2 | 粒子密度的平方 |
 
-And for all models
+以及对于所有模型：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Stiffness | stiffness of the system (both for spin and bosonic models)|
+| Stiffness | 系统的刚度（对自旋模型和玻色模型均适用）|
 
-Other observables might also be available depending on the exact version of the application.
+根据应用程序的具体版本，还可能提供其他观测量。
 
-## Contributors
+## 贡献者
 
-The following persons have contributed to the `dirloop_sse` application:
+以下人员为 `dirloop_sse` 应用程序做出了贡献：
 
 - Fabien Alet
 - Matthias Troyer 

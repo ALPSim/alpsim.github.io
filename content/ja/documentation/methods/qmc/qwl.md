@@ -1,90 +1,89 @@
 
 ---
-title: Quantum Wang-Landau Algorithm 
+title: 量子 Wang-Landau アルゴリズム
 math: true
 weight: 7
 ---
 
-## Introduction
+## はじめに
 
-The `qwl` code provides a multi-cluster implementation of the quantum Wang-Landau (QWL) method based on the stochastic series expansion (SSE) quantum Monte Carlo scheme. The QWL methods was developed by members of the ALPS collabortaion, M. Troyer, S. Wessel, and F. Alet, as an extension of the classical Wang-Landau algorithm to the quantum case. The underlying SSE method was invented by A. Sandvik and coworkers. Using the QWL approach, one can extract thermodynamic quantities, such as the energy or entropy, from a single simulation in an extended ensemble, based on a high temperature series expansion of the partition function, the coefficients of which are calculated to high order in the course of the simulation.
+`qwl` コードは、確率級数展開 (SSE) 量子モンテカルロ法に基づく量子 Wang-Landau (QWL) 法のマルチクラスター実装を提供します。QWL 法は、ALPS コラボレーションのメンバーである M. Troyer、S. Wessel、F. Alet によって、古典 Wang-Landau アルゴリズムを量子系へ拡張したものとして開発されました。その基礎となる SSE 法は A. Sandvik らによって考案されました。QWL の手法を用いると、分配関数の高温級数展開に基づく拡張アンサンブルでの 1 回のシミュレーションから、エネルギーやエントロピーなどの熱力学量を求めることができます。展開係数はシミュレーションの過程で高次まで計算されます。
 
-The current implementation of the QWL method is based on an extension of the original scheme, as proposed in the classical case by C. Zhou and R. N. Bhatt. The algorithm first performes a number of Wang-Landau refinement steps, using the Zhou-Bhatt criterion instead of the histogram flatness. After obtaining the final ensemble weights, additional simulations are performed in the resulting ensemble, including measurements of observables.
+現在の QWL 法の実装は、古典系の場合に C. Zhou と R. N. Bhatt によって提案された、元の手法の拡張に基づいています。このアルゴリズムでは、まずヒストグラムの平坦性の代わりに Zhou-Bhatt の判定条件を用いて、Wang-Landau の精密化ステップを何回か実行します。最終的なアンサンブルの重みが得られた後、その結果得られたアンサンブルで、観測量の測定を含む追加のシミュレーションを行います。
 
-**Note:** This first version allows the simulation of isotropic Heisenberg spin-1/2 ferro- and antiferromagnetic models on arbitrary non-frustrated lattices at zero magnetic field. In the future, we plan to relax this constraint, and also provide an implementation of the QWL perturbation expansion.
+**注意：** この最初のバージョンでは、ゼロ磁場における、任意のフラストレーションのない格子上の等方的なスピン 1/2 ハイゼンベルク強磁性・反強磁性モデルのシミュレーションが可能です。今後、この制約を緩和するとともに、QWL 摂動展開の実装も提供する予定です。
 
-## Running a simulation
+## シミュレーションの実行
 
-is discussed in the tutorial. After running a simulation using the `qwl` program, the script `qwl_evaluate` program produces XML plot files of the thermodynamic as well as (when measured) magnetic properties, specified below.
+についてはチュートリアルで説明しています。`qwl` プログラムを使ってシミュレーションを実行した後、`qwl_evaluate` プログラムのスクリプトにより、以下に示す熱力学的性質および（測定した場合は）磁気的性質の XML プロットファイルが生成されます。
 
-## Input parameters
+## 入力パラメータ
 
-In addition to the common input parameters discussed here the `qwl` application takes the following input parameters:
+ここで説明した共通の入力パラメータに加えて、`qwl` アプリケーションは次の入力パラメータを受け取ります。
 
-| **Name** | **Default** | **Description** |
+| **名前** | **デフォルト値** | **説明** |
 | :------- | :---------- | :-------------- |
-| CUTOFF | 500 | maximum expansion order kept during the simulation |
-| T_MIN | 0.1 | lowest temperature for which obervables are calculated by `qwl_evaluate` (overwritten by its commandline option \[-T_MIN ...\]) |
-| T_MAX | 10 | highest temperature for which obervables are calculated by `qwl_evaluate` (overwritten by its commandline option \[-T_MAX ...\]) |
-| DELTA_T | 0.1 | temperature step width used by `qwl_evaluate` (overwritten by its commandline option \[-DELTA_T ...\]) |
-| MEASURE_MAGNETIC_PROPERTIES | 1 | turns on (1) or off (0) the measurement of uniform and, if LATTICE is bipartite, staggered magnetic properties (listed below) |
+| CUTOFF | 500 | シミュレーション中に保持される最大の展開次数 |
+| T_MIN | 0.1 | `qwl_evaluate` で観測量を計算する最低温度（コマンドラインオプション \[-T_MIN ...\] で上書きされます） |
+| T_MAX | 10 | `qwl_evaluate` で観測量を計算する最高温度（コマンドラインオプション \[-T_MAX ...\] で上書きされます） |
+| DELTA_T | 0.1 | `qwl_evaluate` で使われる温度の刻み幅（コマンドラインオプション \[-DELTA_T ...\] で上書きされます） |
+| MEASURE_MAGNETIC_PROPERTIES | 1 | 一様な磁気的性質、および LATTICE が二部格子の場合には交替（スタガード）磁気的性質（以下に列挙）の測定を有効 (1) または無効 (0) にします |
 
-### Parameters for experts
+### 上級者向けパラメータ
 
-In addition, the following parameters can be assigned to the algorithm, in particular to allow for simulations using the original QWL refinement scheme.
+さらに、特に元の QWL 精密化スキームを用いたシミュレーションを行えるように、次のパラメータをアルゴリズムに指定できます。
 
-| **Name** | **Default** | **Description** |
+| **名前** | **デフォルト値** | **説明** |
 | :------- | :---------- | :-------------- |
-| NUMBER_OF_WANG_LANDAU_STEPS | 16 | number of the Wang-Landau refinement steps |
-| SWEEPS | determined during Wang-Landau refinement | number of Monte Carlo steps in final fixed-weights simulation |
-| USE_ZHOU_BHATT_METHOD | 1 | turns on (1) or off (0) the usage of the Zhou-Bhatt method (if turned off (0), FLATNESS_TRESHOLD and BLOCK_SWEEPS apply) |
-| FLATNESS_TRESHOLD | N/A if USE_ZHOU_BHATT_METHOD=1 0.2, if USE_ZHOU_BHATT_METHOD=0 | maximum deviation of the histogram maximum/minimum from the average value to be reached before reduction of the increase factor (pplies only, if USE_ZHOU_BHATT_METHOD=0) |
-| BLOCK_SWEEPS | N/A, if USE_ZHOU_BHATT_METHOD=1  10000, if USE_ZHOU_BHATT_METHOD=0 | number of sweeps within a Wang-Landau step before checking for flatness (applies only, if USE_ZHOU_BHATT_METHOD=0) |
-| INITIAL_MODIFICATION_FACTOR | e, if USE_ZHOU_BHATT_METHOD=1  determined from other parameters, if USE_ZHOU_BHATT_METHOD=0 | initial value of the increase factor of the expansion coefficients during the first Wang-Landau refinement step (in sucessive steps, the factor is decreased by taking its squareroot) |
-| EXPANSION_ORDER_MINIMUM | 0 | minimum expansion order of determined coefficients |
-| EXPANSION_ORDER_MAXIMUM | CUTOFF | maximum expansion order of determined coefficients, must not exceed CUTOFF |
-| START_STORING | NUMBER_OF_WANG_LANDAU_STEPS | number of Wang-Landau steps, where storing of expansion coefficients starts |
+| NUMBER_OF_WANG_LANDAU_STEPS | 16 | Wang-Landau 精密化ステップの回数 |
+| SWEEPS | Wang-Landau 精密化中に決定 | 重みを固定した最終シミュレーションにおけるモンテカルロステップ数 |
+| USE_ZHOU_BHATT_METHOD | 1 | Zhou-Bhatt 法の使用を有効 (1) または無効 (0) にします（無効 (0) の場合、FLATNESS_TRESHOLD と BLOCK_SWEEPS が適用されます） |
+| FLATNESS_TRESHOLD | USE_ZHOU_BHATT_METHOD=1 の場合は N/A、USE_ZHOU_BHATT_METHOD=0 の場合は 0.2 | 増加因子を減少させる前に到達すべき、ヒストグラムの最大値・最小値の平均値からの最大偏差（USE_ZHOU_BHATT_METHOD=0 の場合のみ適用） |
+| BLOCK_SWEEPS | USE_ZHOU_BHATT_METHOD=1 の場合は N/A、USE_ZHOU_BHATT_METHOD=0 の場合は 10000 | 平坦性を確認するまでに 1 つの Wang-Landau ステップ内で行うスイープ数（USE_ZHOU_BHATT_METHOD=0 の場合のみ適用） |
+| INITIAL_MODIFICATION_FACTOR | USE_ZHOU_BHATT_METHOD=1 の場合は e、USE_ZHOU_BHATT_METHOD=0 の場合は他のパラメータから決定 | 最初の Wang-Landau 精密化ステップにおける展開係数の増加因子の初期値（後続のステップでは、この因子はその平方根をとることで減少させます） |
+| EXPANSION_ORDER_MINIMUM | 0 | 決定する係数の最小展開次数 |
+| EXPANSION_ORDER_MAXIMUM | CUTOFF | 決定する係数の最大展開次数。CUTOFF を超えてはいけません |
+| START_STORING | NUMBER_OF_WANG_LANDAU_STEPS | 展開係数の保存を開始する Wang-Landau ステップの番号 |
 
-## Measurements 
+## 測定
 
-The `qwl_evaluate` program takes an XML output file of a qwl simulation,
+`qwl_evaluate` プログラムは qwl シミュレーションの XML 出力ファイルを受け取り、
 
     qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
 
-and produces XML plot files (`prefix.plot.energy.xml` etc.) for the following quantities vs. temperature:
+次の量の温度依存性を表す XML プロットファイル（`prefix.plot.energy.xml` など）を生成します。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Energy Density | energy per site |
-| Free Energy Density | free energy per site |
-| Entropy Density | entropy per site |
-| Specific Heat per Site | specific heat per site |
-| Uniform Structure Factor per Site | longitudinal uniform structure factor (if MEASURE_MAGNETIC_PROPERTIES=1) |
-| Uniform Susceptibility per Site | uniform susceptibility (if MEASURE_MAGNETIC_PROPERTIES=1) |
-| Staggered Structure Factor per Site | longitudinal staggered structure factor (if MEASURE_MAGNETIC_PROPERTIES=1 and for bipartite lattices only) |
+| Energy Density | サイトあたりのエネルギー |
+| Free Energy Density | サイトあたりの自由エネルギー |
+| Entropy Density | サイトあたりのエントロピー |
+| Specific Heat per Site | サイトあたりの比熱 |
+| Uniform Structure Factor per Site | 縦方向の一様構造因子（MEASURE_MAGNETIC_PROPERTIES=1 の場合） |
+| Uniform Susceptibility per Site | 一様磁化率（MEASURE_MAGNETIC_PROPERTIES=1 の場合） |
+| Staggered Structure Factor per Site | 縦方向の交替構造因子（MEASURE_MAGNETIC_PROPERTIES=1 かつ二部格子の場合のみ） |
 
-The following quantities are directly measured by the `qwl` application, and are of relevance mainly from an algorithmic perspective.
+次の量は `qwl` アプリケーションによって直接測定されるもので、主にアルゴリズム上の観点から重要です。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Coefficients | estimate of the logarithms $\ln[g(n)]$ of the coefficients $g(n)$ of the high temperature series expansion of the partition function, $Z= \sum_n g(n)\beta_n$, after SWEEPS fixed-weights sweeps, taking into account the final histogram (this usually constitutes the best estimate)|
-| Coefficients # | estimate of $\ln[g(n)]$, after the #-th Wang-Landau refinement step (# ≥ START_STORING) |
-| Histogram | normalized histogram of visited expansion orders during the fixed-weights sweeps |
-| Fraction | fraction of up-walkers for the visited expansion orders during the fixed-weights sweeps |
-| Time Up | time to tunnel from lowest to highest expansion coefficent during the fixed-weights sweeps |
-| Time Down | time to tunnel from highest to lowest expansion coefficent during the fixed-weights sweeps |
-| Time Total | time to tunnel from lowest to highest and back to lowest expansion coefficent during the fixed-weights sweeps |
-| Total Sweeps | number of sweeps used for the total simulation, including Wang-Landau refinement |
-| Total Sweeps # | number of sweeps used for the #-th Wang-Landau refinement step (# ≥ START_STORING) |
-| Uniform Structure Factor Coefficients | expansion coefficients of the uniform structure factor (if MEASURE_MAGNETIC_PROPERTIES=1) |
-| Staggered Structure Factor Coefficients | expansion coefficients of the staggered structure factor(if MEASURE_MAGNETIC_PROPERTIES=1 and for bipartite lattices only) |
+| Coefficients | 分配関数の高温級数展開 $Z= \sum_n g(n)\beta_n$ の係数 $g(n)$ の対数 $\ln[g(n)]$ の推定値。SWEEPS 回の重み固定スイープの後に、最終ヒストグラムを考慮して求めたもの（通常これが最良の推定値になります）|
+| Coefficients # | #番目の Wang-Landau 精密化ステップ後の $\ln[g(n)]$ の推定値（# ≥ START_STORING） |
+| Histogram | 重み固定スイープ中に訪れた展開次数の規格化されたヒストグラム |
+| Fraction | 重み固定スイープ中に訪れた展開次数ごとの、上向きウォーカーの割合 |
+| Time Up | 重み固定スイープ中に、最低の展開係数から最高の展開係数までトンネルするのにかかる時間 |
+| Time Down | 重み固定スイープ中に、最高の展開係数から最低の展開係数までトンネルするのにかかる時間 |
+| Time Total | 重み固定スイープ中に、最低の展開係数から最高の展開係数へトンネルし、再び最低の展開係数に戻るまでにかかる時間 |
+| Total Sweeps | Wang-Landau 精密化を含む、シミュレーション全体で使われたスイープ数 |
+| Total Sweeps # | #番目の Wang-Landau 精密化ステップで使われたスイープ数（# ≥ START_STORING） |
+| Uniform Structure Factor Coefficients | 一様構造因子の展開係数（MEASURE_MAGNETIC_PROPERTIES=1 の場合） |
+| Staggered Structure Factor Coefficients | 交替構造因子の展開係数（MEASURE_MAGNETIC_PROPERTIES=1 かつ二部格子の場合のみ） |
 
-Other quantities might also be available depending on the exact version of the qwl application.
+qwl アプリケーションの正確なバージョンによっては、他の量も利用できる場合があります。
 
-## References
+## 参考文献
 
 - M. Troyer, S. Wessel and F. Alet, Phys. Rev. Lett. 90, 120201 (2003)
 - S. Wessel, N. Stoop, E. Gull, S. Trebst, and M. Troyer, J. Stat. Mech. P12005 (2007)
 - S. Trebst, D. A. Huse, and M. Troyer, Phys. Rev. E 70, 046701 (2004)
-- C. Zhou and R.N. Bhatt, Phys. Rev. E 72, 025701(R) (2005) 
-
+- C. Zhou and R.N. Bhatt, Phys. Rev. E 72, 025701(R) (2005)

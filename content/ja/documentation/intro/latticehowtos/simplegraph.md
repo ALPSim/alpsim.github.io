@@ -1,6 +1,6 @@
 
 ---
-title: Simple Graphs
+title: "単純グラフ"
 toc: true
 weight: 2
 ---
@@ -11,7 +11,7 @@ weight: 2
 
 最初の例として、次の5個の頂点と5本の辺から成る単純なグラフを考えます。
 
-![The first simple graph.](../figs/tutoriallatticehowtograph1.gif)
+![最初の単純グラフ。](../figs/tutoriallatticehowtograph1.gif)
 
 このグラフは次のように XML で指定します。`<GRAPH>` 要素の edges 属性は、`<EDGE>` 要素の数を数えることで辺の数がわかるため省略可能です。
 
@@ -29,7 +29,7 @@ weight: 2
 
 辺や頂点に色を付けたグラフも表現できます。
 
-![A graph with colored edges and vertices.](../figs/tutoriallatticehowtograph2.jpg)
+![辺と頂点に色を付けたグラフ。](../figs/tutoriallatticehowtograph2.jpg)
 
 このグラフを XML で表現するには、頂点を記述するための `<VERTEX>` 要素を追加し、頂点と辺の種類（色）を指定するための type 属性を用います。この例では、頂点タイプ 0、1、2 はそれぞれ赤・緑・青の頂点を表し、辺タイプ 0 と 1 はそれぞれ実線・破線を表します。
 

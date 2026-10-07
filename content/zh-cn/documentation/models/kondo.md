@@ -15,7 +15,7 @@ $$
 H = \sum_{k,\sigma} \varepsilon_k c_{k\sigma}^\dagger c_{k\sigma} + J \sum_i \mathbf{S}_i \cdot \mathbf{s}_i,
 $$
 
-其中 $c_{k\sigma}^\dagger, c_{k\sigma}$ 产生和湮灭动量为 $k$、自旋为 $\sigma$、色散关系为 $\varepsilon_k$ 的传导电子，$\mathbf{S}_i$ 是格点 $i$ 处的局域自旋，$\mathbf{s}_i$ 是同一格点处传导电子的自旋密度，$J$（通常为反铁磁性，$J>0$）是二者之间的交换耦合。正如单杂质 Kondo 模型通过 Schrieffer-Wolff 变换从 Anderson 杂质模型中导出一样，Kondo 晶格模型也以完全相同的方式，从**周期 Anderson 模型**——即格子上*每个*格点都有一个 Anderson 杂质——出发，在把每个格点的电荷涨落积掉之后得到。这一模型所需的双子格基（一种传导电子格点类型，一种局域自旋格点类型）的具体示例，已经在 ALPS 的[格子基](../../intro/modeldef/latticebasis)页面中给出。
+其中 $c_{k\sigma}^\dagger, c_{k\sigma}$ 产生和湮灭动量为 $k$、自旋为 $\sigma$、色散关系为 $\varepsilon_k$ 的传导电子，$\mathbf{S}_i$ 是格点 $i$ 处的局域自旋，$\mathbf{s}_i$ 是同一格点处传导电子的自旋密度，$J$（通常为反铁磁性，$J>0$）是二者之间的交换耦合。正如单杂质 Kondo 模型通过 Schrieffer-Wolff 变换从 Anderson 杂质模型中导出一样，Kondo 晶格模型也以完全相同的方式，从**周期 Anderson 模型**——即晶格上*每个*格点都有一个 Anderson 杂质——出发，在把每个格点的电荷涨落积掉之后得到。这一模型所需的双子格基（一种传导电子格点类型，一种局域自旋格点类型）的具体示例，已经在 ALPS 的[晶格基](../../intro/modeldef/latticebasis)页面中给出。
 
 ## 模型的物理
 
@@ -41,7 +41,7 @@ $$
 | **ED** —— 参见 [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | 对小型团簇给出精确结果 | 由于希尔伯特空间同时包含传导电子和局域自由度，仅限于小型团簇 | 小团簇基准测试 |
 | **DMRG** —— 参见[密度矩阵重整化群](../../methods/dmrg/dmrg) | 对一维 Kondo 链和梯子高度精确 | 对真正的二维/三维系统效率较低 | 一维 Kondo 晶格链的基态 |
 
-与 [Hubbard 模型](../hubbard)一样，除了特殊的、无符号问题的情形外，ALPS 中没有针对一般 Kondo 晶格模型的格点量子蒙特卡洛程序：它是一个真正意义上的费米型格点问题，DMFT（而非直接的格点 QMC）是 ALPS 中可用的标准大规模方法。目前没有专门针对这一模型的 ALPS 教程，但[格子基](../../intro/modeldef/latticebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其双子格结构，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程则是了解底层 DMFT 机制的自然起点。
+与 [Hubbard 模型](../hubbard)一样，除了特殊的、无符号问题的情形外，ALPS 中没有针对一般 Kondo 晶格模型的格点量子蒙特卡洛程序：它是一个真正意义上的费米型格点问题，DMFT（而非直接的格点 QMC）是 ALPS 中可用的标准大规模方法。目前没有专门针对这一模型的 ALPS 教程，但[晶格基](../../intro/modeldef/latticebasis)页面展示了如何在 ALPS 模型 XML 格式中定义其双子格结构，而 [Hubbard 模型](../hubbard)页面中的 DMFT 教程则是了解底层 DMFT 机制的自然起点。
 
 ---
 

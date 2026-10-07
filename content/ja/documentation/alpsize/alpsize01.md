@@ -1,6 +1,6 @@
 
 ---
-title: Integration-01 CMake
+title: "統合 01：CMake"
 math: true
 toc: true
 weight: 2

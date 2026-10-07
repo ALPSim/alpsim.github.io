@@ -1,7 +1,7 @@
 
 ---
-title: Exact Diagonalization
-description: "Exact Diagonalization"
+title: "精确对角化"
+description: "精确对角化"
 weight: 1
 cascade:
     type: docs
@@ -10,26 +10,26 @@ cascade:
 <br>
 {{< hextra/feature-grid maxcolumns="2" >}}
  {{< hextra/feature-card
-    title="Introduction"
-    subtitle="Hamiltonian Matrix"
+    title="简介"
+    subtitle="哈密顿矩阵"
     link="intro"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Symmetry"
-    subtitle="Lattice and Hamiltonian Symmetries"
+    title="对称性"
+    subtitle="晶格与哈密顿量的对称性"
     link="symmetry"
     icon=""
   >}}
  {{< hextra/feature-card
     title="sparsediag"
-    subtitle="Sparse Diagonalization (Lanczos)"
+    subtitle="稀疏对角化（Lanczos）"
     link="sparsediag"
     icon=""
   >}}
   {{< hextra/feature-card
     title="fulldiag"
-    subtitle="Full Diagonalization"
+    subtitle="完全对角化"
     link="fulldiag"
     icon=""
   >}}

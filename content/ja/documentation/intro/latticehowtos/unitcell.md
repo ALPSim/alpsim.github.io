@@ -1,6 +1,6 @@
 
 ---
-title: Lattice and Unit Cells
+title: "格子と単位胞"
 toc: true
 weight: 3
 ---
@@ -11,7 +11,7 @@ weight: 3
 
 格子は、単位胞を格子の基底ベクトルの整数倍だけ並進させて複製することで作られます。2次元の場合を以下に示します。
 
-![Infinite lattice with unit cell.](../figs/tutoriallatticehowtolattice1.gif)
+![単位胞をもつ無限格子。](../figs/tutoriallatticehowtolattice1.gif)
 
 このような格子は、（任意の）名前と次元数によって記述されます。さらに、格子の基底ベクトルの直交座標（Cartesian coordinates）を指定することもできます。上の格子の場合は次のようになります。
 
@@ -61,7 +61,7 @@ dimension 属性を省略した場合、その広がりはすべての次元に�
 
 すべての次元が有限である必要はなく、幅2の無限に長いストリップは次のように指定できます。
 
-![A mixed lattice with finite and infinite dimensions](../figs/tutoriallatticehowtolattice3.gif)
+![有限次元と無限次元をあわせもつ混合格子](../figs/tutoriallatticehowtolattice3.gif)
 
     <FINITELATTICE name="strip">
     <LATTICE name="2D" dimension="2"/>

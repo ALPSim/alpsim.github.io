@@ -1,6 +1,6 @@
 
 ---
-title: Running Simulations
+title: "シミュレーションの実行"
 toc: true
 weight: 1
 ---
