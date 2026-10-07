@@ -72,7 +72,7 @@ The script [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https
 
 ```python
 import numpy as np
-from bandstructure import hubbard_parameters
+import bandstructure
 
 V0   = np.array([8., 8., 8.])        # lattice depth in recoil energies
 wlen = np.array([843., 843., 843.])  # laser wavelength in nanometer
@@ -80,7 +80,7 @@ a    = 114.8                         # s-wave scattering length in bohr radius
 m    = 86.99                         # mass in atomic mass unit
 L    = 200                           # lattice size (along 1 direction)
 
-t, U = hubbard_parameters(V0, wlen, a, m, L)
+t, U = bandstructure.hubbard_parameters(V0, wlen, a, m, L)
 
 print(t)        # t in nK:  [4.77051684 4.77051684 4.77051684]
 print(U)        # U in nK:  38.70187649673881
