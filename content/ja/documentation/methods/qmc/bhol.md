@@ -68,63 +68,31 @@ $$
 
 ### Implementation in Python
 
+The script [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-01-bandstructure/bandstructure.py) evaluates these formulas with NumPy. For each direction it diagonalizes the tridiagonal problem above for all $k_x$, obtains $t$ from the band energies $\epsilon_{k_x}$, builds the Wannier function $w(x)$, and integrates $|w(x)|^4$ with the trapezoidal rule to obtain $U$.
+
 #### An example
 
-For instance:
+The lattice and the atoms are set at the top of the script:
 
-    import numpy;
-    import pyalps.dwa;
+    V0   = np.array([8., 8., 8.])        # lattice depth in recoil energies
+    wlen = np.array([843., 843., 843.])  # laser wavelength in nanometer
+    a    = 114.8                         # s-wave scattering length in bohr radius
+    m    = 86.99                         # mass in atomic mass unit
+    L    = 200                           # lattice size (along 1 direction)
 
-    V0   = numpy.array([8. , 8. , 8.]);      # in recoil energies
-    wlen = numpy.array([843., 843., 843.]);  # in nanometer
-    a    = 114.8;                            # s-wave scattering length in bohr radius
-    m    = 86.99;                            # mass in atomic mass unit
-    L    = 200;                              # lattice size (along 1 direction)
+Running it
 
-    band = pyalps.dwa.bandstructure(V0, wlen, a, m, L);
+    $ python bandstructure.py
 
-A first glance of the band structure:
+prints the recoil energy in nK, the hopping $t$ in each direction, the onsite interaction $U$, and $U/t$:
 
-    >>> band
+    Er2nK  = [154.89065024 154.89065024 154.89065024]
+    t [nK] = [4.77051684 4.77051684 4.77051684]
+    U [nK] = 38.7019
+    U/t    = [8.11272191 8.11272191 8.11272191]
+    norm of w (should be 1) = [1. 1. 1.]
 
-    Optical lattice: 
-    ================
-    V0    [Er] = 8    8    8    
-    lamda [nm] = 843    843    843    
-    Er2nK      = 154.89    154.89    154.89    
-    L          = 200 
-    g          = 5.68473
-
-    Band structure:
-    ===============
-    t [nK] : 4.77051    4.77051    4.77051    
-    U [nK] : 38.7018
-    U/t    : 8.11272    8.11272    8.11272    
-    
-    wk2[0 ,0 ,0 ] : 5.81884e-08
-    wk2[pi,pi,pi] : 1.39558e-08
-
-Well, the values of $t(nK)$, $U(nK)$, and $U/t$ can be obtained via:
-
-    >>> numpy.array(band.t())
-    array([ 4.77050984,  4.77050984,  4.77050984])
-    >>>
-    >>> numpy.array(band.U())
-    array(38.7018197381118)
-    >>>
-    >>> numpy.array(band.Ut())
-    array([ 8.11272192,  8.11272192,  8.11272192])
-
-In momentum ($\vec{q}$) space, the (squared) wannier function  $|\tilde{w}(\vec{q})|^2$  can be obtained in the $x$-direction from:
-
-    >>> numpy.array(band.q(0))
-    array([-5.   , -4.995, -4.99 , ...,  5.985,  5.99 ,  5.995])
-    >>> 
-    >>> numpy.array(band.wk2(0))
-    array([  7.57249518e-15,   7.88189086e-15,   8.20434507e-15, ...,
-         1.62988573e-18,   1.56057426e-18,   1.49429285e-18])
-         
-and the $y$- or $z$- direction by replacing the index 0 to 1 and 2 respectively.
+The last line checks that the Wannier function in each direction is normalized.
 
 
 ## Bosons in an optical lattice trap
