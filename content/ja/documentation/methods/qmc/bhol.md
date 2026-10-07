@@ -68,31 +68,24 @@ $$
 
 ### Implementation in Python
 
-The script [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-01-bandstructure/bandstructure.py) evaluates these formulas with NumPy. For each direction it diagonalizes the tridiagonal problem above for all $k_x$, obtains $t$ from the band energies $\epsilon_{k_x}$, builds the Wannier function $w(x)$, and integrates $|w(x)|^4$ with the trapezoidal rule to obtain $U$.
+The script [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-01-bandstructure/bandstructure.py) evaluates these formulas: for each direction it diagonalizes the tridiagonal problem above for all $k_x$, obtains $t$ from the band energies $\epsilon_{k_x}$, and integrates $|w(x)|^4$ to obtain $U$. Run the following from that directory:
 
-#### An example
+```python
+import numpy as np
+from bandstructure import hubbard_parameters
 
-The lattice and the atoms are set at the top of the script:
+V0   = np.array([8., 8., 8.])        # lattice depth in recoil energies
+wlen = np.array([843., 843., 843.])  # laser wavelength in nanometer
+a    = 114.8                         # s-wave scattering length in bohr radius
+m    = 86.99                         # mass in atomic mass unit
+L    = 200                           # lattice size (along 1 direction)
 
-    V0   = np.array([8., 8., 8.])        # lattice depth in recoil energies
-    wlen = np.array([843., 843., 843.])  # laser wavelength in nanometer
-    a    = 114.8                         # s-wave scattering length in bohr radius
-    m    = 86.99                         # mass in atomic mass unit
-    L    = 200                           # lattice size (along 1 direction)
+t, U = hubbard_parameters(V0, wlen, a, m, L)
 
-Running it
-
-    $ python bandstructure.py
-
-prints the recoil energy in nK, the hopping $t$ in each direction, the onsite interaction $U$, and $U/t$:
-
-    Er2nK  = [154.89065024 154.89065024 154.89065024]
-    t [nK] = [4.77051684 4.77051684 4.77051684]
-    U [nK] = 38.7019
-    U/t    = [8.11272191 8.11272191 8.11272191]
-    norm of w (should be 1) = [1. 1. 1.]
-
-The last line checks that the Wannier function in each direction is normalized.
+print(t)        # t in nK:  [4.77051684 4.77051684 4.77051684]
+print(U)        # U in nK:  38.70187649673881
+print(U / t)    # U/t:      [8.11272191 8.11272191 8.11272191]
+```
 
 
 ## Bosons in an optical lattice trap
