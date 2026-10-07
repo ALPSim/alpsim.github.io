@@ -54,6 +54,9 @@ spack info alps
 ```
 spack install alps
 ```
+{{< callout type="info" >}}
+目前 Spack 内置配方安装的是 ALPS 2.3.4-beta.2。在 [spack/spack-packages#6489](https://github.com/spack/spack-packages/pull/6489) 合并之后，即可通过 Spack 安装 ALPS 3.0.0；在此之前，如需 3.0.0，请使用[二进制](../binary)或[源码](../source)安装。
+{{< /callout >}}
 要使用 ALPS，我们需要加载ALPS包：
 ```
 spack load alps

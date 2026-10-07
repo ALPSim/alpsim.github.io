@@ -54,6 +54,9 @@ Finally, let us install ALPS!
 ```
 spack install alps
 ```
+{{< callout type="info" >}}
+The builtin Spack recipe currently installs ALPS 2.3.4-beta.2. ALPS 3.0.0 will be available through Spack once [spack/spack-packages#6489](https://github.com/spack/spack-packages/pull/6489) is merged; until then, use the [binary](../binary) or [source](../source) installation for 3.0.0.
+{{< /callout >}}
 To use ALPS, we need to load the package:
 ```
 spack load alps
