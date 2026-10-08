@@ -100,7 +100,7 @@ $$
 \hat{H} = -t \sum_{\langle i,j \rangle} \hat{b}_i^+ \hat{b}_j + \frac{U}{2} \sum_i \hat{n}_i (\hat{n}_i - 1) - \sum_i ( \mu - V_T ( \vec{r}_i) ) \hat{n}_i
 $$
 
-with hopping strength $t$, onsite interaction strength $U$, and chemical potential $\mu$ at finite temperature $T$ via Quantum Monte Carlo implemented in the directed worm algorithm. Here, $\hat{b}$ ($\hat{b}^+$) is the annihilation (creation) operator, and $\hat{n}_i$ being the number operator at site $i$. Bosons in an optical lattice are confined, say in a 3D parabolic trapping potential, i.e.
+with hopping strength $t$, onsite interaction strength $U$, and chemical potential $\mu$ at finite temperature $T$ via the directed-loop stochastic series expansion (SSE) quantum Monte Carlo code `dirloop_sse`. Here, $\hat{b}$ ($\hat{b}^+$) is the annihilation (creation) operator, and $\hat{n}_i$ being the number operator at site $i$. Bosons in an optical lattice are confined, say in a 3D parabolic trapping potential, i.e.
 
 $$
 V_T (\vec{r}_i) = K_x x_i^2 + K_y y_i^2 + K_z z_i^2,
@@ -123,6 +123,43 @@ $$
 $$
 
 for some configuration $\mathcal{C}$ in the complete configuration space, with inverse temperature $\beta = 1/T$ . Here, the units will be cleverly normalized later on.
+
+### Implementation in Python
+
+The script [`tutorials/optical-lattice-02-density-profile/density_profile.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-02-density-profile/density_profile.py) simulates this model on an $11^3$ lattice with `dirloop_sse` and plots the local density $\langle n_i \rangle$. It uses $U/t = 8.11$ from the band-structure example above, temperature $T = t$, and an isotropic trap $K_x = K_y = K_z = 0.2\,t$ centered on the lattice. The trap enters through a site-dependent chemical potential on the `inhomogeneous simple cubic lattice`:
+
+```python
+import numpy as np
+import pyalps
+
+L = 11
+K = 0.2                                         # trap curvature V_T = K r^2, in units of t
+c = (L - 1) / 2.
+
+parms = [{
+    'LATTICE' : 'inhomogeneous simple cubic lattice',
+    'L'       : L,
+    'MODEL'   : 'boson Hubbard',
+    'Nmax'    : 5,
+    't'       : 1.,
+    'U'       : 8.11,
+    'mu'      : '4.05 - %g*((x-%g)*(x-%g) + (y-%g)*(y-%g) + (z-%g)*(z-%g))' % ((K,) + (c,) * 6),
+    'T'       : 1.,
+    'THERMALIZATION' : 2000,
+    'SWEEPS'         : 20000,
+    'MEASURE_LOCAL[Local Density]' : 'n',
+}]
+
+input_file = pyalps.writeInputFiles('parm_trap', parms)
+pyalps.runApplication('dirloop_sse', input_file)
+
+data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_trap'), 'Local Density')[0][0]
+n = np.asarray(data.y.mean).reshape(L, L, L)
+print('Total number of bosons: %.2f' % n.sum())
+print('Density at the trap center: %.3f' % n[L // 2, L // 2, L // 2])
+```
+
+The full script also plots a cut through the trap center and the density in the center layer.
 
 ## Contributors
 
