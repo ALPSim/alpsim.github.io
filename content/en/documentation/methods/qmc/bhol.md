@@ -126,27 +126,27 @@ for some configuration $\mathcal{C}$ in the complete configuration space, with i
 
 ### Implementation in Python
 
-The script [`tutorials/optical-lattice-02-density-profile/density_profile.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-02-density-profile/density_profile.py) simulates this model on an $11^3$ lattice with `dirloop_sse` and plots the local density $\langle n_i \rangle$. It uses $U/t = 8.11$ from the band-structure example above, temperature $T = t$, and an isotropic trap $K_x = K_y = K_z = 0.2\,t$ centered on the lattice. The trap enters through a site-dependent chemical potential on the `inhomogeneous simple cubic lattice`:
+The script [`tutorials/optical-lattice-02-density-profile/density_profile.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-02-density-profile/density_profile.py) simulates this model on a $9^3$ lattice with `dirloop_sse` and plots the local density $\langle n_i \rangle$. It uses $U/t = 8.11$ from the band-structure example above, temperature $T = t$, and an isotropic trap $K_x = K_y = K_z = 0.65\,t$ centered on the lattice. The trap enters through a site-dependent chemical potential on the `inhomogeneous simple cubic lattice`:
 
 ```python
 import numpy as np
 import pyalps
 
-L = 11
-K = 0.2                                         # trap curvature V_T = K r^2, in units of t
+L = 9
+K = 0.65                                        # trap curvature V_T = K r^2, in units of t
 c = (L - 1) / 2.
 
 parms = [{
     'LATTICE' : 'inhomogeneous simple cubic lattice',
     'L'       : L,
     'MODEL'   : 'boson Hubbard',
-    'Nmax'    : 5,
+    'Nmax'    : 4,
     't'       : 1.,
     'U'       : 8.11,
     'mu'      : '4.05 - %g*((x-%g)*(x-%g) + (y-%g)*(y-%g) + (z-%g)*(z-%g))' % ((K,) + (c,) * 6),
     'T'       : 1.,
-    'THERMALIZATION' : 2000,
-    'SWEEPS'         : 20000,
+    'THERMALIZATION' : 1000,
+    'SWEEPS'         : 5000,
     'MEASURE_LOCAL[Local Density]' : 'n',
 }]
 
@@ -159,7 +159,11 @@ print('Total number of bosons: %.2f' % n.sum())
 print('Density at the trap center: %.3f' % n[L // 2, L // 2, L // 2])
 ```
 
-The full script also plots a cut through the trap center and the density in the center layer.
+The full script also plots a cut through the trap center and the density in the center layer:
+
+![Local density of trapped bosons on a 9^3 lattice](/figs/opticallattice_density_profile.png)
+
+The lattice is kept small so the example runs in a few minutes, which means it still sits inside the cloud: the density falls off toward the edges but does not quite vanish there. A bigger lattice lets the density drop closer to zero at the edges.
 
 ## Contributors
 
