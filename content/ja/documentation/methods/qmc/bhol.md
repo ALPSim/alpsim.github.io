@@ -14,7 +14,7 @@ $$
 V(\vec{r}) = \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha),
 $$
 
-where $V_0^{x_\alpha}$ is a multiple of the recoil energy $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ and lengths are in units of the lattice spacing $\frac{\lambda_\alpha}{2}$.
+where $V_0^{x_\alpha}$ is the lattice depth in units of the recoil energy $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ and lengths are in units of the lattice spacing $\frac{\lambda_\alpha}{2}$.
 
 The quantum mechanical behaviour of the single particle follows:
 
