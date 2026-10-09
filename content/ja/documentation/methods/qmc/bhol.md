@@ -100,7 +100,7 @@ $$
 \hat{H} = -t \sum_{\langle i,j \rangle} \hat{b}_i^+ \hat{b}_j + \frac{U}{2} \sum_i \hat{n}_i (\hat{n}_i - 1) - \sum_i ( \mu - V_T ( \vec{r}_i) ) \hat{n}_i,
 $$
 
-with hopping strength $t$, onsite interaction strength $U$, and chemical potential $\mu$ at finite temperature $T$ via the directed-loop stochastic series expansion (SSE) quantum Monte Carlo code `dirloop_sse`. Here, $\hat{b}$ ($\hat{b}^+$) is the annihilation (creation) operator, and $\hat{n}_i$ being the number operator at site $i$. Bosons in an optical lattice are confined, say in a 3D parabolic trapping potential, i.e.:
+with hopping strength $t$, onsite interaction strength $U$, and chemical potential $\mu$ at finite temperature $T$ via the directed-loop stochastic series expansion (SSE) quantum Monte Carlo code `dirloop_sse`. Here, $\hat{b}$ ($\hat{b}^+$) is the annihilation (creation) operator, and $\hat{n}_i$ being the number operator at site $i$. Bosons in an optical lattice are confined in a 3D parabolic trapping potential:
 
 $$
 V_T (\vec{r}_i) = K_x x_i^2 + K_y y_i^2 + K_z z_i^2,
