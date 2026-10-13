@@ -32,7 +32,7 @@ You can reuse your Binder cumulant python script from the previous tutorial in e
 and plot the Binder cumulant using the commands:
 
     plt.figure()
-    pyalps.pyplot.plot(u)
+    pyalps.plot.plot(u)
     plt.xlabel('Inverse Temperature $\beta$')
     plt.ylabel('Binder Cumulant U4 $g$')
     plt.title('2D Ising model')
