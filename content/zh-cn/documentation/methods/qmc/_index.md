@@ -31,4 +31,10 @@ weight: 3
     link="boseglass"
     icon=""
   >}}
+  {{< hextra/feature-card
+    title="Bosons"
+    subtitle="Bosons in an Optical Lattice"
+    link="bhol"
+    icon=""
+  >}}
 {{< /hextra/feature-grid >}}

@@ -55,7 +55,7 @@ Unlike the fermionic models elsewhere in this section, repulsive bosons have no 
 | **ED** — see [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | Exact results for small systems, after truncating the per-site occupation at a maximum `Nmax` | Limited to small clusters and modest `Nmax` | Small-system benchmarks |
 | **DMRG** — see [Density Matrix Renormalization Group](../../methods/dmrg/dmrg) | Highly accurate for 1D chains | Less efficient for genuinely 2D/3D systems | Ground states of 1D Bose-Hubbard chains |
 
-Disordered systems can be studied with the same worm code — see [Bose Glass](../../methods/qmc/boseglass) for a worked parameter file.
+Disordered systems can be studied with the same worm code — see [Bose Glass](../../methods/qmc/boseglass) for a worked parameter file — and the underlying single-particle band structure of an optical lattice is discussed in [Bosons in an Optical Lattice](../../methods/qmc/bhol).
 
 - [MC-05: Simulating the Bose-Hubbard model using the worm QMC code](../../../tutorials/mcs/mc05) — locates the superfluid-Mott transition on a 2D square lattice at unit filling
 
