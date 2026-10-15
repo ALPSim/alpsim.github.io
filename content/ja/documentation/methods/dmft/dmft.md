@@ -1,157 +1,156 @@
-
 ---
-title: Dynamical Mean Field Theory and Impurity Solvers
+title: 動的平均場理論 (DMFT) と不純物ソルバー
 math: true
 weight: 9
 ---
 
-## List of Parameters
+## パラメータ一覧
 
-### Physical parameters
+### 物理パラメータ
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| U | the Hubbard interaction U |
-| BETA | the inverse temperature |
-| MU | the chemical potential |
-| H | the magnetic field in the quantization axis (conventionally $z$) direction (BUT: the solvers do ignore the variable!) |
-| SITES | number of impurity sites (for DMFT: 1) |
-| FLAVORS | number of flavors/orbitals of the impurity (commonly 2: spin up/down) |
-| t | in case of Bethe lattice it does provide the hopping (the bandwidth is then $W=4t$, the half-bandwidth is $D=2t$); if the option TWODBS is switched on then it does set the nearest-neighbor hopping on the square or hexagonal lattice |
-| t0, t1, ... | (available currently only for selfconsistency loop in imaginary time) sets the hopping for the Bethe lattice in multiband case (flavors 2i and 2i+1 share the same parameter ti) |
-| J | coupling for the multiband problems |
-| U' | (by default U-2J) |
-| tprime | applies only if the option TWODBS is switched on and only for the square lattice, then it does set the next-nearest-neighbor hopping |
-| TWODBS | (by default sets the square lattice) you may choose either square or hexagonal lattice |
+| U | ハバード相互作用 U |
+| BETA | 逆温度 |
+| MU | 化学ポテンシャル |
+| H | 量子化軸（慣例的に $z$）方向の磁場（ただし：ソルバーはこの変数を無視します！） |
+| SITES | 不純物サイトの数（DMFT の場合：1） |
+| FLAVORS | 不純物のフレーバー／軌道の数（通常は 2：スピン上向き／下向き） |
+| t | ベーテ格子の場合はホッピングを与えます（このときバンド幅は $W=4t$、半バンド幅は $D=2t$ です）。オプション TWODBS がオンの場合は、正方格子または六角格子上の最近接ホッピングを設定します |
+| t0, t1, ... | （現在は虚時間での自己無撞着ループでのみ利用可能）多バンドの場合のベーテ格子のホッピングを設定します（フレーバー 2i と 2i+1 は同じパラメータ ti を共有します） |
+| J | 多バンド問題における結合 |
+| U' | （デフォルトは U-2J） |
+| tprime | オプション TWODBS がオンで、かつ正方格子の場合にのみ適用され、次近接ホッピングを設定します |
+| TWODBS | （デフォルトでは正方格子に設定）正方格子または六角格子のいずれかを選択できます |
 
-### Parameters for the self-consistency loop 
+### 自己無撞着ループのパラメータ 
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| OMEGA_LOOP | set it 1 unless you want to work with semicircular density of states (corresponding to the Bethe lattice in infinitely many dimensions) |
-| ANTIFERROMAGNET | if 1 then the antiferromagnetic self-consistency loop will be employed (formula 97 in review '96 of A.Georges et al) |
-|SYMMETRIZATION | if 1 then paramagnetic solution is enforced (in versions before 2.1: there has been a misspelling SYMMATRIZATION at several places and a usage of both, SYMMETRIZATION and set to the same value was required) |
-| MAX_IT | maximum number of iteration in self-consistency loop (usually 10-20 will be enough) |
-| CONVERGED | criterium for stopping the self-consistency loop before reaching MAX_IT - if the maximum change in Green's function in Matsubara representation is less than CONVERGED, the loop will stop |
-| TOLERANCE | (only for hirschfyesim) as above |
-| RELAX_RATE | (by default 1; currently implemented only for selfconsistency loop with OMEGA_LOOP switched on) the new Green's function are in general computed as RELAX_RATE \* $G_{new}(i\omega_n)$ + (1-RELAX_RATE) \* $G_{old}(i\omega_n)$, which may help if oscillations occur |
+| OMEGA_LOOP | 半円状態密度（無限次元のベーテ格子に対応）を扱いたい場合を除き、1 に設定してください |
+| ANTIFERROMAGNET | 1 の場合、反強磁性の自己無撞着ループが用いられます（A.Georges et al による 1996 年のレビューの式 97） |
+|SYMMETRIZATION | 1 の場合、常磁性解が強制されます（バージョン 2.1 より前では、いくつかの箇所で SYMMATRIZATION という綴り誤りがあり、両方の変数 SYMMETRIZATION を使用して同じ値に設定する必要がありました） |
+| MAX_IT | 自己無撞着ループの最大反復回数（通常は 10-20 で十分です） |
+| CONVERGED | MAX_IT に達する前に自己無撞着ループを停止するための基準。松原表示におけるグリーン関数の最大変化量が CONVERGED より小さくなると、ループは停止します |
+| TOLERANCE | （hirschfyesim のみ）上と同じ |
+| RELAX_RATE | （デフォルトは 1。現在は OMEGA_LOOP がオンの自己無撞着ループでのみ実装）新しいグリーン関数は一般に RELAX_RATE \* $G_{new}(i\omega_n)$ + (1-RELAX_RATE) \* $G_{old}(i\omega_n)$ として計算されます。振動が生じる場合に役立つことがあります |
 
-### General parameters
+### 一般的なパラメータ
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| GENERAL_FOURIER_TRANFORMER | set it on if you have OMEGA_LOOP and other than the Bethe lattice |
-| EPS_i (i=0,1,...,FLAVORS-1) | potential shift for the flavor i (necessary for GENERAL_FOURIER_TRANSFORMER) |
-| EPSSQ_i (i=0,1,...,FLAVORS-1) | the second moment of the bandstructure for the flavor i (necessary for GENERAL_FOURIER_TRANSFORMER) |
-| DOSFILE | sets the name for the file containing the density of states (expected 2 columns with energy value and corresponding density of states at that energy; equidistant energies required; odd number of rows required due to Simpson integration) |
-| TWODBS | switches on the Hilbert transformation for 2-dimensional systems, currently supported square lattice (with nearest and next-nearest neighbor hoppings) and hexagonal lattice (with nearest neighbor hoppings) \[Note: a different 2-dimensional lattice may be easily added\] |
-| L | optional parameter available in case of TWODBS is on; defines the half of the linear discretization in the integration in the self-consistency (default: 200) |
-| SOLVER | specifies the impurity solver ("Hybridization" or "Interaction Expansion"; the solver "Hirsch-Fye" does suffer from discretization errors and is thus not recommended) |
+| GENERAL_FOURIER_TRANFORMER | OMEGA_LOOP を用い、ベーテ格子以外を扱う場合にオンにしてください |
+| EPS_i (i=0,1,...,FLAVORS-1) | フレーバー i のポテンシャルシフト（GENERAL_FOURIER_TRANSFORMER に必要） |
+| EPSSQ_i (i=0,1,...,FLAVORS-1) | フレーバー i のバンド構造の 2 次モーメント（GENERAL_FOURIER_TRANSFORMER に必要） |
+| DOSFILE | 状態密度を含むファイルの名前を設定します（エネルギー値とそのエネルギーにおける状態密度の 2 列を想定。エネルギーは等間隔である必要があり、シンプソン積分のため行数は奇数である必要があります） |
+| TWODBS | 2 次元系に対するヒルベルト変換をオンにします。現在サポートされているのは正方格子（最近接および次近接ホッピング）と六角格子（最近接ホッピング）です \[注：別の 2 次元格子を追加するのは簡単です\] |
+| L | TWODBS がオンの場合に利用可能なオプションのパラメータ。自己無撞着計算の積分における線形離散化の半分を定義します（デフォルト：200） |
+| SOLVER | 不純物ソルバーを指定します（"Hybridization" または "Interaction Expansion"。ソルバー "Hirsch-Fye" は離散化誤差の影響を受けるため推奨されません） |
 
-### Parameters for the initial/final Weiss field
+### 初期／最終ワイス場のパラメータ
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| H_INIT | magnetic field in the quantization axis (conventionally $z$) direction, which is used in computation of the non-interacting initial G0 (if it is not loaded) |
-| G0OMEGA_INPUT | name for the text file specifying the Weiss field in Matsubara frequencies $i\omega_n$ (expected 1+FLAVORS columns, and total NMATSUBARA rows, use only with OMEGA_LOOP) |
-| G0TAU_INPUT | name for the text file specifying the Weiss field in imaginary time representation (expected 1+FLAVORS columns, and total $N+1$ rows, only with OMEGA_LOOP switched off) |
-| GOMEGA_input | specifies the name for the text file where the initial G0 in Matsubara representation will be written (by default it is not written, as it is identical with G0_omega_1) |
-| G0TAU_input | name for the text file for the output of the initial G0 in imaginary time (by default it is not written, as it is identical with G0_tau_1) |
-| G0OMEGA_output | name for the output file containing the final Weiss field in Matsubara frequencies (by default G0omega_output)(with OMEGA_LOOP) |
-| G0TAU_output | name for the output file containing the final Weiss field in Matsubara frequencies (by default G0tau_output) (with OMEGA_LOOP off) |
-| INSULATING | if you have specified this option, then the initial G0 will be set up in the insulating limit |
+| H_INIT | 量子化軸（慣例的に $z$）方向の磁場。相互作用のない初期 G0 の計算に用いられます（G0 を読み込まない場合） |
+| G0OMEGA_INPUT | 松原振動数 $i\omega_n$ におけるワイス場を指定するテキストファイルの名前（1+FLAVORS 列、合計 NMATSUBARA 行を想定。OMEGA_LOOP の場合のみ使用） |
+| G0TAU_INPUT | 虚時間表示におけるワイス場を指定するテキストファイルの名前（1+FLAVORS 列、合計 $N+1$ 行を想定。OMEGA_LOOP がオフの場合のみ） |
+| GOMEGA_input | 松原表示における初期 G0 を書き出すテキストファイルの名前を指定します（G0_omega_1 と同一であるため、デフォルトでは書き出されません） |
+| G0TAU_input | 虚時間における初期 G0 を出力するテキストファイルの名前（G0_tau_1 と同一であるため、デフォルトでは書き出されません） |
+| G0OMEGA_output | 松原振動数における最終的なワイス場を含む出力ファイルの名前（デフォルトは G0omega_output）（OMEGA_LOOP の場合） |
+| G0TAU_output | 松原振動数における最終的なワイス場を含む出力ファイルの名前（デフォルトは G0tau_output）（OMEGA_LOOP がオフの場合） |
+| INSULATING | このオプションを指定した場合、初期 G0 は絶縁体極限で設定されます |
 
-### Parameters setting the precision of representation of the Green's function and the Weiss field
+### グリーン関数とワイス場の表現精度を設定するパラメータ
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| NMATSUBARA | number of Matsubara frequencies used to represent the Green's function and the Weiss field (usually equals N) |
-| N | number of bins for the Green's function and the Weiss field in imaginary time (represented in total by N+1 values) (recommended: roughly 1000 for the continuous-time solvers) |
+| NMATSUBARA | グリーン関数とワイス場の表現に用いる松原振動数の数（通常は N と等しくします） |
+| N | 虚時間におけるグリーン関数とワイス場のビン数（全体で N+1 個の値で表現されます）（推奨：連続時間ソルバーではおよそ 1000） |
 
-### Hybridization expansion impurity solver parameters
+### ハイブリダイゼーション展開不純物ソルバーのパラメータ
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| MAX_TIME | sets the maximum time given in seconds spent on the impurity problem solving (basically this sets the duration of a single iteration) |
-| SWEEPS | number of desired sweeps performed during the calculation (recommendation: set it very high, e.g. $10^9$ and the solver will stop on the time limit given by MAX_TIME) |
-| THERMALIZATION | number of sweeps before the Monte Carlo measurements in order to reach configuration close to equilibrium (of the order of 1000) |
-| EPSSQAV | the second moment of the bandstructure (necessary if you have specified your own DOSFILE) |
-| N_ORDER | setting histogram size (if the hybridization order is larger then it will be not stored in the histogram) (value of the order of 100 might be reasonable) |
-| N_MEAS | number of Monte Carlo steps between measurements (of the order of 10000) |
-| N_SHIFT | number of shifts of segments in a single Monte Carlo step (apparently unused, so 0) |
-| MEASURE_FOURPOINT | if switched on then the four-point correlators are being measured |
-| N4point | (only used if MEASURE_FOURPOINT is on) description missing so far |
-| CHECKPOINT | filename prefix for checkpointing files and for the final h5 and xml output |
+| MAX_TIME | 不純物問題を解くのに費やす最大時間を秒単位で設定します（基本的に 1 回の反復の所要時間を設定します） |
+| SWEEPS | 計算中に行うスイープの目標数（推奨：例えば $10^9$ のように非常に大きく設定すると、ソルバーは MAX_TIME で与えた制限時間で停止します） |
+| THERMALIZATION | 平衡に近い配置に到達するために、モンテカルロ測定の前に行うスイープ数（1000 程度） |
+| EPSSQAV | バンド構造の 2 次モーメント（独自の DOSFILE を指定した場合に必要） |
+| N_ORDER | ヒストグラムのサイズを設定します（ハイブリダイゼーションの次数がこれより大きい場合はヒストグラムに保存されません）（100 程度の値が妥当でしょう） |
+| N_MEAS | 測定間のモンテカルロステップ数（10000 程度） |
+| N_SHIFT | 1 回のモンテカルロステップにおけるセグメントのシフト回数（実際には使われていないようなので 0） |
+| MEASURE_FOURPOINT | オンにすると、4 点相関関数が測定されます |
+| N4point | （MEASURE_FOURPOINT がオンの場合のみ使用）説明は現在のところありません |
+| CHECKPOINT | チェックポイントファイルおよび最終的な h5 と xml 出力のファイル名接頭辞 |
 
-### Interaction expansion1 impurity solver parameters 
+### 相互作用展開1 不純物ソルバーのパラメータ 
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| MAX_TIME | sets the maximum time given in seconds spent on the impurity problem solving |
-| SWEEPS | number of desired sweeps performed during the calculation (recommendation: set it very high, e.g. $10^9$ and the solver will stop on the time limit given by MAX_TIME) |
-| THERMALIZATION | number of sweeps before the Monte Carlo measurements in order to reach configuration close to equilibrium (of the order of 1000) |
-| SWEEP_MULTIPLICATOR | (default: 1) |
-| NRUNS | (default: 1) |
+| MAX_TIME | 不純物問題を解くのに費やす最大時間を秒単位で設定します |
+| SWEEPS | 計算中に行うスイープの目標数（推奨：例えば $10^9$ のように非常に大きく設定すると、ソルバーは MAX_TIME で与えた制限時間で停止します） |
+| THERMALIZATION | 平衡に近い配置に到達するために、モンテカルロ測定の前に行うスイープ数（1000 程度） |
+| SWEEP_MULTIPLICATOR | （デフォルト：1） |
+| NRUNS | （デフォルト：1） |
 | ALPHA | |
-| RECALC_PERIOD | (default: 5000) |
-| MEASUREMENT_PERIOD | (default: 200) |
-| CONVERGENCE_CHECK_PERIOD | (default provided) |
-| ALMOSTZERO | (default: $10^{-16}$) |
-| NSELF | (default: 10N) |
-| NMATSUBARA_MEASUREMENTS | (default: NMATSUBARA) |
-| HISTOGRAM_MEASUREMENT | (default: false) |
+| RECALC_PERIOD | （デフォルト：5000） |
+| MEASUREMENT_PERIOD | （デフォルト：200） |
+| CONVERGENCE_CHECK_PERIOD | （デフォルト値あり） |
+| ALMOSTZERO | （デフォルト：$10^{-16}$） |
+| NSELF | （デフォルト：10N） |
+| NMATSUBARA_MEASUREMENTS | （デフォルト：NMATSUBARA） |
+| HISTOGRAM_MEASUREMENT | （デフォルト：false） |
 | GET_COMPACTED_MEASUREMENTS | |
 | ATOMIC | |
 | TAU_DISCRETIZATION_FOR_EXP | |
-| CHECKPOINT | filename prefix for the checkpointing files and for the final h5 and xml output |
+| CHECKPOINT | チェックポイントファイルおよび最終的な h5 と xml 出力のファイル名接頭辞 |
 
-### Additional parameters 
+### その他のパラメータ 
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| SEED | random seed for the pseudorandom generator |
-| RNG | pseudorandom generator used (default is "mt19937"), might be switched to "lagged_fibonacci607" |
+| SEED | 擬似乱数生成器の乱数シード |
+| RNG | 使用する擬似乱数生成器（デフォルトは "mt19937"）。"lagged_fibonacci607" に切り替えることもできます |
 
-## Usage notes
+## 使用上の注意
 
-- Remark on bipartite lattices: the ANTIFERROMAGNET option does assume a Neel-like ordering and requires thus a bipartite lattice. Note that on a bipartite lattice the density of states is symmetric (unless you apply a global potential shift).
-- Since revision 6217, if you provide the DOSFILE or if you use TWODBS and if none of the parameters EPS_i, EPSSQ_i, EPSSQAV is set, then the EPS_i will be set to the first moment of the normalized DOS (in case of TWODBS: 0) and the EPSSQ_i and EPSSQAV will be set to the second moment of the normalized DOS using the provided density of states (in case of TWODBS: using the hard-coded values).
-- Since revision 6217 you may use TWODBS="hexagonal" to simulate the 2-dimensional hexagonal lattice (nearest-neighbor hoppings only). If you use TWODBS with other value, square lattice is assumed.
+- 二部格子に関する注意：ANTIFERROMAGNET オプションはネール的な秩序を仮定しているため、二部格子が必要です。二部格子上では（全体的なポテンシャルシフトを加えない限り）状態密度は対称であることに注意してください。
+- リビジョン 6217 以降では、DOSFILE を与えるか TWODBS を使用し、かつパラメータ EPS_i、EPSSQ_i、EPSSQAV のいずれも設定されていない場合、EPS_i は規格化された DOS の 1 次モーメント（TWODBS の場合は 0）に設定され、EPSSQ_i と EPSSQAV は与えられた状態密度を用いて（TWODBS の場合はハードコードされた値を用いて）規格化された DOS の 2 次モーメントに設定されます。
+- リビジョン 6217 以降では、TWODBS="hexagonal" を用いて 2 次元の六角格子（最近接ホッピングのみ）をシミュレートできます。TWODBS に他の値を用いた場合は、正方格子が仮定されます。
 
-## Input/output files 
+## 入出力ファイル 
 
-### The files with prefix BASENAME: (where BASENAME is the name of the parameter input file)
+### 接頭辞 BASENAME を持つファイル（BASENAME はパラメータ入力ファイルの名前）
 
-- BASENAME: it is the input file to be loaded by the application `dmft`
-- BASENAME.h5: contains the iteration resolved impurity Green's function $G(\tau)$ and the Weiss field $G^0(\tau)$ in the imaginary time representation; if the selfconsistency loop has been performed in Matsubara representation (= if OMEGA_LOOP has been on) then there will be stored the $G(i\omega_n)$ and $G^0(i\omega_n)$ as well. The selfenergy is there not stored directly, but may be obtained via Dyson equation easily (look into DMFT-01 An introduction to DMFT)
+- BASENAME：アプリケーション `dmft` が読み込む入力ファイルです
+- BASENAME.h5：虚時間表示における各反復ごとの不純物グリーン関数 $G(\tau)$ とワイス場 $G^0(\tau)$ を含みます。自己無撞着ループを松原表示で行った場合（= OMEGA_LOOP がオンの場合）は、$G(i\omega_n)$ と $G^0(i\omega_n)$ も保存されます。自己エネルギーは直接には保存されていませんが、ダイソン方程式を用いて簡単に求めることができます（DMFT-01 An introduction to DMFT を参照してください）
 
-### The output/input files in Matsubara representation: (text file which consists of NMATSUBARA rows, each for one Matsubara frequency) 
+### 松原表示の出力／入力ファイル（NMATSUBARA 行からなるテキストファイルで、各行が 1 つの松原振動数に対応します） 
 
-- G_omega_i (G0_omega_i): contains the imaginary part of the Green's function (Weiss field) given in Matsubara frequencies after the i-th iteration; rows contain the $\omega_n$ followed by the imaginary part of the Green's function (Weiss field) for each flavor; thus there are 1+FLAVORS columns in the file
-- G_omegareal_i (G0_omegareal_i): the same as above for the real part
-- selfenergy_i: contains the selfenergy after the i-th iteration; each row consists of $\omega_n$ followed by the real and imaginary part of the selfenergy for each flavor; thus there are 1+2FLAVORS columns in the file
-- G0omega_output (unless not specified differently by the variable G0OMEGA_output): contains the n (corresponding to $\omega_n=\frac{(2n+1)\pi}{\beta})$ followed by the complex Weiss field for each flavor; thus there is one integer column followed by FLAVORS columns of complex numbers defined by the real and imaginary part in brackets
-- G0OMEGA_INPUT: variable specifying the input file with the initial Weiss field in Matsubara representation; does expect the same format as the above output file; thus you may copy it and start a simulation from it
+- G_omega_i (G0_omega_i)：i 回目の反復後の、松原振動数で与えたグリーン関数（ワイス場）の虚部を含みます。各行には $\omega_n$ と、それに続く各フレーバーのグリーン関数（ワイス場）の虚部が含まれます。したがって、ファイルは 1+FLAVORS 列からなります
+- G_omegareal_i (G0_omegareal_i)：上と同様で、実部を含みます
+- selfenergy_i：i 回目の反復後の自己エネルギーを含みます。各行は $\omega_n$ と、それに続く各フレーバーの自己エネルギーの実部と虚部からなります。したがって、ファイルは 1+2FLAVORS 列からなります
+- G0omega_output（変数 G0OMEGA_output で別途指定しない場合）：n（$\omega_n=\frac{(2n+1)\pi}{\beta})$ に対応）と、それに続く各フレーバーの複素ワイス場を含みます。したがって、1 列の整数に続いて、括弧内の実部と虚部で定義される複素数の FLAVORS 列が並びます
+- G0OMEGA_INPUT：松原表示における初期ワイス場を含む入力ファイルを指定する変数です。上の出力ファイルと同じ形式を想定しているため、出力ファイルをコピーしてそこからシミュレーションを開始できます
 
-### The output/input files in imaginary time representation: (text file which consists of $N+1$ rows, each for one imaginary time $\in\langle 0,\beta\rangle$)
+### 虚時間表示の出力／入力ファイル（$N+1$ 行からなるテキストファイルで、各行が 1 つの虚時間 $\in\langle 0,\beta\rangle$ に対応します）
 
-- G_tau_i (G0_tau_i): contains the (real) Green's function (Weiss field) after the i-th iteration; rows contain the $\tau_n$ followed by the Green's function (Weiss field) for each flavor; thus there are 1+FLAVORS columns in the file 
-- G0tau_output (unless not specified differently by the variable G0TAU_output): contains the n (corresponding to $\tau_n=\frac{n}{N}\beta$) followed by the complex Weiss field for each flavor; thus there is one integer column followed by FLAVORS columns of complex numbers defined by the real and imaginary part in brackets; in total $N+1$ rows
-- G0OMEGA_INPUT: variable specifying the input file with the initial Weiss field in imaginary time representation; does expect the same format as the above output file; thus you may copy it and start a simulation from it
+- G_tau_i (G0_tau_i)：i 回目の反復後の（実数の）グリーン関数（ワイス場）を含みます。各行には $\tau_n$ と、それに続く各フレーバーのグリーン関数（ワイス場）が含まれます。したがって、ファイルは 1+FLAVORS 列からなります 
+- G0tau_output（変数 G0TAU_output で別途指定しない場合）：n（$\tau_n=\frac{n}{N}\beta$ に対応）と、それに続く各フレーバーの複素ワイス場を含みます。したがって、1 列の整数に続いて、括弧内の実部と虚部で定義される複素数の FLAVORS 列が並びます。全部で $N+1$ 行です
+- G0OMEGA_INPUT：虚時間表示における初期ワイス場を含む入力ファイルを指定する変数です。上の出力ファイルと同じ形式を想定しているため、出力ファイルをコピーしてそこからシミュレーションを開始できます
 
-### The output files with prefix given by the optional variable CHECKPOINT:
+### オプションの変数 CHECKPOINT で与えられる接頭辞を持つ出力ファイル
 
-- CHECKPOINT.h5: contains the measurements for each iteration
-- CHECKPOINT.xml: contains the input parameters and run information
-- CHECKPOINT.run\*: contains information to rerun the simulation (these are the true checkpoints); for each process
+- CHECKPOINT.h5：各反復の測定結果を含みます
+- CHECKPOINT.xml：入力パラメータと実行情報を含みます
+- CHECKPOINT.run\*：シミュレーションを再実行するための情報を含みます（これらが本来のチェックポイントです）。プロセスごとに作成されます
 
-### The output files for the hybridization expansion impurity solver: (text files) 
+### ハイブリダイゼーション展開不純物ソルバーの出力ファイル（テキストファイル） 
 
-- overlap: i-th row contains the $\langle n_\downarrow n_\uparrow\rangle$ in the i-th iteration 
+- overlap：i 行目には i 回目の反復における $\langle n_\downarrow n_\uparrow\rangle$ が含まれます 
 - matrix_size:
 
 
-## Literature
+## 文献
 
-- A review on DMFT: A. Georges, G. Kotliar, W. Krauth, and M. J. Rozenberg, Dynamical mean-field theory of strongly correlated fermion systems and the limit of infinite dimensions, Rev. Mod. Phys. 68, 13 (1996).
-- On the hybridization expansion impurity solver: P. Werner and A. J. Millis, Hybridization expansion impurity solver: General formulation and application to Kondo lattice and two-orbital models, Phys. Rev. B 74, 155107 (2006).
+- DMFT のレビュー：A. Georges, G. Kotliar, W. Krauth, and M. J. Rozenberg, Dynamical mean-field theory of strongly correlated fermion systems and the limit of infinite dimensions, Rev. Mod. Phys. 68, 13 (1996).
+- ハイブリダイゼーション展開不純物ソルバーについて：P. Werner and A. J. Millis, Hybridization expansion impurity solver: General formulation and application to Kondo lattice and two-orbital models, Phys. Rev. B 74, 155107 (2006).

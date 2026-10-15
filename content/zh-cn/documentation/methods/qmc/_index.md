@@ -1,7 +1,7 @@
 
 ---
-title: Quantum Monte Carlo Simulations
-description: "Quantum Monte Carlo Simulations"
+title: "量子蒙特卡洛模拟"
+description: "量子蒙特卡洛模拟"
 weight: 3
 ---
 
@@ -9,31 +9,31 @@ weight: 3
 {{< hextra/feature-grid maxcolumns="2" >}}
   {{< hextra/feature-card
     title="SSE"
-    subtitle="Directed Loop Algorithm with SSE"
+    subtitle="基于 SSE 的有向环算法"
     link="sse"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Worm"
-    subtitle="Worm Algorithm for QMC Simulations"
+    title="蠕虫算法"
+    subtitle="用于 QMC 模拟的蠕虫算法"
     link="worm"
     icon=""
   >}}
   {{< hextra/feature-card
     title="qwl"
-    subtitle="Quantum Wang-Landau Algorithm"
+    subtitle="量子 Wang-Landau 算法"
     link="qwl"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Bose Glass"
-    subtitle="Disordered models"
+    title="玻色玻璃"
+    subtitle="无序模型"
     link="boseglass"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Bosons"
-    subtitle="Bosons in an Optical Lattice"
+    title="玻色子"
+    subtitle="光晶格中的玻色子"
     link="bhol"
     icon=""
   >}}

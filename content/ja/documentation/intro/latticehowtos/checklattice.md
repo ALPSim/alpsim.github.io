@@ -1,6 +1,6 @@
 
 ---
-title: Check Lattice Graph
+title: "格子グラフの確認"
 toc: true
 weight: 6
 ---

@@ -1,6 +1,6 @@
 
 ---
-title: A Library of Lattices and Graphs
+title: "格子とグラフのライブラリ"
 toc: true
 weight: 5
 ---

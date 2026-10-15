@@ -1,28 +1,27 @@
-
 ---
-title: Lanczos Algorithm
+title: Lanczos アルゴリズム
 math: true
 weight: 1
 ---
 
-The Lanczos method is an iterative algorithm that reduces a symmetric matrix $A$ of size $N \times N$ to a tridiagonal matrix $T$ of size $m \times m$, where $m \ll N$. The eigenvalues of $T$ approximate the extremal eigenvalues of $A$, and the corresponding eigenvectors can be reconstructed.
+Lanczos 法は、サイズ $N \times N$ の対称行列 $A$ を、サイズ $m \times m$（$m \ll N$）の三重対角行列 $T$ に縮約する反復アルゴリズムです。$T$ の固有値は $A$ の端の固有値を近似し、対応する固有ベクトルも再構成できます。
 
-### Key Steps of the Lanczos Method
+### Lanczos 法の主なステップ
 
-1. **Initialization**:
-   - Choose a random starting vector $v_1$ with unit norm.
-   - Set $\beta_0 = 0$ and $v_0 = 0$.
+1. **初期化**：
+   - ノルムが 1 のランダムな初期ベクトル $v_1$ を選びます。
+   - $\beta_0 = 0$、$v_0 = 0$ とおきます。
 
-2. **Iteration**:
-   For $j = 1, 2, \dots, m$:
-   - Compute $w = A v_j - \beta_{j-1} v_{j-1}$.
-   - Compute $\alpha_j = v_j^\top w$.
-   - Compute $w = w - \alpha_j v_j$.
-   - Compute $\beta_j = \|w\|$.
-   - If $\beta_j = 0$, stop; otherwise, set $v_{j+1} = w / \beta_j$.
+2. **反復**：
+   $j = 1, 2, \dots, m$ について、
+   - $w = A v_j - \beta_{j-1} v_{j-1}$ を計算します。
+   - $\alpha_j = v_j^\top w$ を計算します。
+   - $w = w - \alpha_j v_j$ を計算します。
+   - $\beta_j = \|w\|$ を計算します。
+   - $\beta_j = 0$ ならば停止し、そうでなければ $v_{j+1} = w / \beta_j$ とおきます。
 
-3. **Tridiagonal Matrix**:
-   After $m$ iterations, the matrix $T$ is constructed as:
+3. **三重対角行列**：
+   $m$ 回の反復の後、行列 $T$ は次のように構築されます。
    $$
    T = \begin{pmatrix}
    \alpha_1 & \beta_1 & 0 & \dots & 0 \\\
@@ -33,31 +32,31 @@ The Lanczos method is an iterative algorithm that reduces a symmetric matrix $A$
    \end{pmatrix}
    $$
 
-4. **Diagonalization of $T$**:
-   - Diagonalize $T$ using standard dense matrix techniques (e.g., QR algorithm).
-   - The eigenvalues of $T$ approximate the extremal eigenvalues of $A$.
-   - The corresponding eigenvectors of $A$ can be reconstructed from the Lanczos vectors $v_j$.
+4. **$T$ の対角化**：
+   - 標準的な密行列の手法（例えば QR アルゴリズム）を用いて $T$ を対角化します。
+   - $T$ の固有値は $A$ の端の固有値を近似します。
+   - $A$ の対応する固有ベクトルは、Lanczos ベクトル $v_j$ から再構成できます。
 
-### Advantages of the Lanczos Method
+### Lanczos 法の利点
 
-1. **Efficiency**:
-   - Only matrix-vector products are required, making it suitable for sparse matrices.
-   - Memory usage is $O(N \cdot m)$ instead of $O(N^2)$.
+1. **効率性**：
+   - 行列ベクトル積だけが必要なため、スパース行列に適しています。
+   - メモリ使用量は $O(N^2)$ ではなく $O(N \cdot m)$ です。
 
-2. **Scalability**:
-   - Works well for very large matrices where dense methods are infeasible.
+2. **スケーラビリティ**：
+   - 密行列の手法では実行不可能な非常に大きな行列に対しても、うまく機能します。
 
-3. **Focus on Extremal Eigenvalues**:
-   - The Lanczos method is particularly effective at finding the largest or smallest eigenvalues and their eigenvectors.
+3. **端の固有値への特化**：
+   - Lanczos 法は、最大または最小の固有値とその固有ベクトルを求めるのに特に効果的です。
 
-### Challenges and Considerations
+### 課題と注意点
 
-1. **Loss of Orthogonality**:
-   - In finite-precision arithmetic, the Lanczos vectors $v_j$ can lose orthogonality, leading to spurious eigenvalues.
-   - Remedies include reorthogonalization or using more advanced variants like the **Implicitly Restarted Lanczos Method**.
+1. **直交性の喪失**：
+   - 有限精度の演算では、Lanczos ベクトル $v_j$ の直交性が失われることがあり、偽の固有値が現れる原因となります。
+   - 対策としては、再直交化や、**陰的再始動 Lanczos 法**（Implicitly Restarted Lanczos Method）のようなより高度な変種の使用があります。
 
-2. **Choice of $m$**:
-   - The number of iterations $m$ must be chosen carefully to balance accuracy and computational cost.
+2. **$m$ の選択**：
+   - 反復回数 $m$ は、精度と計算コストのバランスを取るよう慎重に選ぶ必要があります。
 
-3. **Convergence**:
-   - Convergence to the extremal eigenvalues is typically fast, but interior eigenvalues may require many iterations.
+3. **収束**：
+   - 端の固有値への収束は一般に速いですが、内部の固有値には多くの反復が必要になることがあります。

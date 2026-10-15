@@ -1,7 +1,7 @@
 
 ---
-title: The Random Library
-description: "ALPS Random Library"
+title: "乱数ライブラリ"
+description: "ALPS 乱数ライブラリ"
 weight: 1
 ---
 

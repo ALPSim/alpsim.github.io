@@ -1,18 +1,18 @@
 
 ---
-title: Papers and Citations
-description: "ALPS Papers and Citations"
+title: 論文と引用
+description: "ALPS の論文と引用"
 weight: 10
 ---
 
-ALPS is released under the MIT license and may be freely used in accordance with its terms. We nevertheless ask that users acknowledge ALPS in their publications whenever the library has contributed to their work.
+ALPS は MIT ライセンスの下で公開されており、その条項に従って自由に使用することができます。それでもなお、ALPS ライブラリが研究に貢献した場合には、出版物の中で ALPS について言及していただくようお願いしています。
 
-Citations to ALPS-based work typically fall into three categories:
+ALPS を用いた研究における引用は、通常、次の 3 つのカテゴリーに分けられます。
 
-1. **The original algorithm.** Many algorithms implemented in ALPS were developed independently of the library. Publications using these algorithms should cite the original research that introduced them.
+1. **元のアルゴリズム。** ALPS に実装されている多くのアルゴリズムは、ライブラリとは独立に開発されたものです。これらのアルゴリズムを用いた出版物では、それらを導入した元の研究を引用してください。
 
-2. **The implementation or application.** ALPS hosts many individual applications contributed by research teams over the years. These are often accompanied by implementation papers — frequently published in *Computer Physics Communications* — which should be cited when the corresponding application is used.
+2. **実装またはアプリケーション。** ALPS には、長年にわたってさまざまな研究チームから提供された多数のアプリケーションが含まれています。これらには多くの場合、実装論文――しばしば *Computer Physics Communications* に掲載されたもの――があり、対応するアプリケーションを使用した際にはそれを引用してください。
 
-3. **The ALPS library itself.** This citation recognizes the community infrastructure that ALPS provides: ongoing code maintenance, user support, and the base libraries on which individual applications are built.
+3. **ALPS ライブラリそのもの。** この引用は、ALPS が提供するコミュニティ基盤――継続的なコードの保守、ユーザーサポート、そして個々のアプリケーションの土台となる基本ライブラリ――に対する謝意を表すものです。
 
-The three ALPS library papers are listed on the [ALPS Release Papers](papers) page; users are asked to cite the most recent one. Implementation papers for individual ALPS applications, along with key references for the underlying algorithms, are collected on the [Implementation and Algorithm Papers](refs) page.
+ALPS ライブラリに関する 3 本の論文は [ALPS リリース論文](papers)のページに掲載されています。最新のものを引用してください。個々の ALPS アプリケーションの実装論文と、その基礎となるアルゴリズムの主要な文献は、[実装論文とアルゴリズム論文](refs)のページにまとめられています。

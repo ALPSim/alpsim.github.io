@@ -1,6 +1,6 @@
 
 ---
-title: Lattices and Graphs
+title: "格子とグラフ"
 toc: true
 weight: 4
 ---
@@ -11,15 +11,15 @@ weight: 4
 
 多くの物理シミュレーションにおけるグラフは不規則なものではなく、格子のように規則的に組み立てられています。
 
-![The first simple graph.](../figs/tutoriallatticehowtolatticegraph1.gif)
+![最初の単純グラフ。](../figs/tutoriallatticehowtolatticegraph1.gif)
 
 このグラフの規則性は、格子の上に配置することで捉えることができます。
 
-![The graph on a lattice.](../figs/tutoriallatticehowtolatticegraph2.gif)
+![格子上のグラフ。](../figs/tutoriallatticehowtolatticegraph2.gif)
 
 この格子は単位胞によって記述でき、単位胞の各コピーを同じ「単位胞グラフ」で装飾することで、グラフ全体が組み立てられます。
 
-![Unit cell graph.](../figs/tutoriallatticehowtolatticegraph3.gif)
+![単位胞グラフ。](../figs/tutoriallatticehowtolatticegraph3.gif)
 
 ここでの単位胞グラフは単一の頂点から成り、隣のセルにある同じ頂点への辺を持ちます。このような格子上のグラフは、`<LATTICE>` あるいは `<FINITELATTICE>` と、単位胞上のグラフを記述する `<UNITCELL>` 要素を組み合わせることで、XML で記述できます。この単位胞から全体のグラフが作られます。
 
@@ -46,11 +46,11 @@ weight: 4
 
 色付きの辺や頂点を記述したり、頂点に座標のような他の属性を追加したりすることも、これまでと同様に可能です。また、`<LATTICEGRAPH>` の格子部分では、[格子と単位胞](../unitcell) で説明した仕組み――有限の広がり、境界条件、既に定義済みの格子の参照など――をすべて利用できます。ここでは、L × W の長方形格子上の複雑な周期的グラフの例を示します。
 
-![A complex periodic graph on a lattice.](../figs/tutoriallatticehowtolatticegraph4.jpg)
+![格子上の複雑な周期グラフ。](../figs/tutoriallatticehowtolatticegraph4.jpg)
 
 この格子上のグラフは、長方形格子を装飾する次のような複雑な単位胞グラフから作ることができます。
 
-![A complex graph in a unit cell.](../figs/tutoriallatticehowtolatticegraph5.jpg)
+![単位胞内の複雑なグラフ。](../figs/tutoriallatticehowtolatticegraph5.jpg)
 
 XML による記述は次の通りです。
 

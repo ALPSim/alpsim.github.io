@@ -1,7 +1,7 @@
 
 ---
-title: Sub Graph Embedding
-description: "BGL Extension Graph"
+title: "部分グラフの埋め込み"
+description: "BGL 拡張：グラフ"
 weight: 2
 ---
 

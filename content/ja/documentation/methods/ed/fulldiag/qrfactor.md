@@ -1,72 +1,72 @@
 
 ---
-title: QR Factorization
-description: "QR Factorization Method"
+title: QR 分解
+description: "QR 分解法"
 math: true
 weight: 2
 ---
 
-**QR factorization** is one of the most efficient and widely used methods for diagonalizing general matrices, including symmetric and non-symmetric matrices. The QR algorithm works by iteratively decomposing a matrix $A$ into the product of an orthogonal matrix $Q$ and an upper triangular matrix $R$. By repeatedly applying this decomposition and reconstructing the matrix as $A^{\prime} = RQ$, the matrix converges to a diagonal or triangular form, from which the eigenvalues can be extracted. The eigenvectors are obtained from the accumulated product of the $Q$ matrices.
+**QR 分解**は、対称行列と非対称行列を含む一般の行列を対角化するための、最も効率的で広く使われている方法の一つです。QR アルゴリズムは、行列 $A$ を直交行列 $Q$ と上三角行列 $R$ の積に反復的に分解することで機能します。この分解を繰り返し適用し、行列を $A^{\prime} = RQ$ として再構成することで、行列は対角形または三角形に収束し、そこから固有値を取り出すことができます。固有ベクトルは $Q$ 行列の累積積から得られます。
 
-## Mathematical Foundation
+## 数学的基礎
 
-For a matrix $A$, the QR factorization is given by:
+行列 $A$ に対して、QR 分解は次で与えられます。
 
 $$
 A = QR
 $$
 
-where:
-- $Q$ is an orthogonal matrix ($Q^T Q = I$),
-- $R$ is an upper triangular matrix.
+ここで、
+- $Q$ は直交行列（$Q^T Q = I$）、
+- $R$ は上三角行列です。
 
-The QR algorithm iteratively applies this factorization to converge $A$ to a diagonal or triangular form:
+QR アルゴリズムは、この分解を反復的に適用して $A$ を対角形または三角形に収束させます。
 
-1. Start with $A_0 = A$.
-2. For each iteration $k$:
-   - Compute the QR factorization: $A_k = Q_k R_k$.
-   - Reconstruct the matrix: $A_{k+1} = R_k Q_k$.
-3. Repeat until $A_k$ converges to a diagonal or triangular matrix.
+1. $A_0 = A$ から始めます。
+2. 各反復 $k$ について、
+   - QR 分解を計算します：$A_k = Q_k R_k$。
+   - 行列を再構成します：$A_{k+1} = R_k Q_k$。
+3. $A_k$ が対角行列または三角行列に収束するまで繰り返します。
 
-The eigenvalues of $A$ are found on the diagonal of the final matrix $A_k$, and the eigenvectors are obtained from the product of all $Q_k$ matrices.
+$A$ の固有値は最終的な行列 $A_k$ の対角成分として得られ、固有ベクトルはすべての $Q_k$ 行列の積から得られます。
 
-## Algorithm
+## アルゴリズム
 
-1. **Initialization**:
-   - Start with the matrix $A_0 = A$.
+1. **初期化**：
+   - 行列 $A_0 = A$ から始めます。
 
-2. **QR Factorization**:
-   - Decompose $A_k$ into $Q_k$ and $R_k$:
+2. **QR 分解**：
+   - $A_k$ を $Q_k$ と $R_k$ に分解します。
      $$
      A_k = Q_k R_k
      $$
 
-3. **Reconstruction**:
-   - Reconstruct the matrix $A_{k+1}$ as:
+3. **再構成**：
+   - 行列 $A_{k+1}$ を次のように再構成します。
      $$
      A_{k+1} = R_k Q_k
      $$
 
-4. **Accumulate Transformations**:
-   - Update the eigenvector matrix $P$ as:
+4. **変換の累積**：
+   - 固有ベクトル行列 $P$ を次のように更新します。
      $$
      P_{k+1} = P_k Q_k
      $$
-   - Initialize $P_0 = I$ (identity matrix).
+   - $P_0 = I$（単位行列）と初期化します。
 
-5. **Check for Convergence**:
-   - Repeat the process until $A_k$ is sufficiently diagonal or triangular (i.e., the off-diagonal elements are below a specified tolerance).
+5. **収束の確認**：
+   - $A_k$ が十分に対角形または三角形になる（すなわち、非対角要素が指定した許容誤差を下回る）まで、この過程を繰り返します。
 
-6. **Extract Eigenvalues and Eigenvectors**:
-   - The eigenvalues are the diagonal elements of the final $A_k$.
-   - The eigenvectors are the columns of the final $P_k$.
+6. **固有値と固有ベクトルの抽出**：
+   - 固有値は最終的な $A_k$ の対角要素です。
+   - 固有ベクトルは最終的な $P_k$ の各列です。
 
-## An Example
+## 例
 
-As an example we perform QR factorization of a real symmetrix matrix using single-precision arithmetic.
+例として、単精度演算を用いて実対称行列の QR 分解を行います。
 
-### Step 1: Initialize
-Start with the matrix $A$:
+### ステップ 1：初期化
+行列 $A$ から始めます。
 $$
 A = \begin{pmatrix}
 4.000000 & -1.000000 & 3.000000 \\\
@@ -75,46 +75,46 @@ A = \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 2: First QR Iteration
+### ステップ 2：1 回目の QR 反復
 
-#### Step 2.1: Compute $Q$ and $R$
-Perform QR factorization on $A$ using the Gram-Schmidt process.
+#### ステップ 2.1：$Q$ と $R$ の計算
+グラム・シュミットの直交化法を用いて $A$ の QR 分解を行います。
 
-- **First column of $Q$**:
-  Normalize the first column of $A$:
+- **$Q$ の第 1 列**：
+  $A$ の第 1 列を規格化します。
   $$
   \mathbf{a}_1 = \begin{pmatrix} 4.000000 \\\ -1.000000 \\\ 3.000000 \end{pmatrix}, \quad
   \|\mathbf{a}_1\| = \sqrt{4^2 + (-1)^2 + 3^2} = \sqrt{26} \approx 5.099020.
   $$
-  Thus:
+  したがって、
   $$
   \mathbf{q}_1 = \frac{1}{5.099020} \begin{pmatrix} 4.000000 \\\ -1.000000 \\\ 3.000000 \end{pmatrix} \approx \begin{pmatrix} 0.784465 \\\ -0.196116 \\\ 0.588349 \end{pmatrix}.
   $$
 
-- **Second column of $Q$**:
-  Orthogonalize the second column of $A$ with respect to $\mathbf{q}_1$:
+- **$Q$ の第 2 列**：
+  $A$ の第 2 列を $\mathbf{q}_1$ に対して直交化します。
   $$
   \mathbf{a}_2 = \begin{pmatrix} -1.000000 \\\ 3.000000 \\\ -1.000000 \end{pmatrix}, \quad
   \mathbf{a}_2 \cdot \mathbf{q}_1 \approx -1.960784.
   $$
-  Compute $\mathbf{v}_2$:
+  $\mathbf{v}_2$ を計算します。
   $$
   \mathbf{v}_2 = \mathbf{a}_2 - (\mathbf{a}_2 \cdot \mathbf{q}_1) \mathbf{q}_1 \approx \begin{pmatrix} -1.000000 \\\ 3.000000 \\\ -1.000000 \end{pmatrix} - (-1.960784) \begin{pmatrix} 0.784465 \\\ -0.196116 \\\ 0.588349 \end{pmatrix}.
   $$
   $$
   \mathbf{v}_2 \approx \begin{pmatrix} -1.000000 + 1.538462 \\\ 3.000000 - 0.384615 \\\ -1.000000 + 1.153846 \end{pmatrix} = \begin{pmatrix} 0.538462 \\\ 2.615385 \\\ 0.153846 \end{pmatrix}.
   $$
-  Normalize $\mathbf{v}_2$:
+  $\mathbf{v}_2$ を規格化します。
   $$
   \|\mathbf{v}_2\| = \sqrt{0.538462^2 + 2.615385^2 + 0.153846^2} \approx 2.672612.
   $$
-  Thus:
+  したがって、
   $$
   \mathbf{q}_2 \approx \begin{pmatrix} 0.201456 \\ 0.978593 \\ 0.057553 \end{pmatrix}.
   $$
 
-- **Third column of $Q$**:
-  Orthogonalize the third column of $A$ with respect to $\mathbf{q}_1$ and $\mathbf{q}_2$:
+- **$Q$ の第 3 列**：
+  $A$ の第 3 列を $\mathbf{q}_1$ と $\mathbf{q}_2$ に対して直交化します。
   $$
   \mathbf{a}_3 = \begin{pmatrix} 3.000000 \\\ -1.000000 \\\ 5.000000 \end{pmatrix}, \quad
   \mathbf{a}_3 \cdot \mathbf{q}_1 \approx 5.882353,
@@ -122,7 +122,7 @@ Perform QR factorization on $A$ using the Gram-Schmidt process.
   $$
   \mathbf{a}_3 \cdot \mathbf{q}_2 \approx 0.000000.
   $$
-  Compute $\mathbf{v}_3$:
+  $\mathbf{v}_3$ を計算します。
   $$
   \mathbf{v}_3 = \mathbf{a}_3 - (\mathbf{a}_3 \cdot \mathbf{q}_1) \mathbf{q}_1 - (\mathbf{a}_3 \cdot \mathbf{q}_2) \mathbf{q}_2.
   $$
@@ -132,16 +132,16 @@ Perform QR factorization on $A$ using the Gram-Schmidt process.
   $$
   \mathbf{v}_3 \approx \begin{pmatrix} 3.000000 - 4.615385 \\\ -1.000000 + 1.153846 \\\ 5.000000 - 3.461538 \end{pmatrix} = \begin{pmatrix} -1.615385 \\\ 0.153846 \\\ 1.538462 \end{pmatrix}.
   $$
-  Normalize $\mathbf{v}_3$:
+  $\mathbf{v}_3$ を規格化します。
   $$
   \|\mathbf{v}_3\| = \sqrt{(-1.615385)^2 + 0.153846^2 + 1.538462^2} \approx 2.236068.
   $$
-  Thus:
+  したがって、
   $$
   \mathbf{q}_3 \approx \begin{pmatrix} -0.722222 \\\ 0.068783 \\\ 0.688889 \end{pmatrix}.
   $$
 
-- **Construct $Q$ and $R$**:
+- **$Q$ と $R$ の構築**：
   $$
   Q = \begin{pmatrix}
   0.784465 & 0.201456 & -0.722222 \\\
@@ -157,8 +157,8 @@ Perform QR factorization on $A$ using the Gram-Schmidt process.
   \end{pmatrix}.
   $$
 
-#### Step 2.2: Update $A$
-Compute $A = RQ$:
+#### ステップ 2.2：$A$ の更新
+$A = RQ$ を計算します。
 $$
 A = RQ \approx \begin{pmatrix}
 6.561553 & -0.759257 & 0.000000 \\\
@@ -167,52 +167,52 @@ A = RQ \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 3: Second QR Iteration
+### ステップ 3：2 回目の QR 反復
 
-#### Step 3.1: Compute $Q$ and $R$
-Perform QR factorization on the updated $A$.
+#### ステップ 3.1：$Q$ と $R$ の計算
+更新された $A$ の QR 分解を行います。
 
-- **First column of $Q$**:
-  Normalize the first column of $A$:
+- **$Q$ の第 1 列**：
+  $A$ の第 1 列を規格化します。
   $$
   \mathbf{a}_1 = \begin{pmatrix} 6.561553 \\\ -0.759257 \\\ 0.000000 \end{pmatrix}, \quad
   \|\mathbf{a}_1\| \approx 6.617647.
   $$
-  Thus:
+  したがって、
   $$
   \mathbf{q}_1 \approx \begin{pmatrix} 0.990000 \\\ -0.114706 \\\ 0.000000 \end{pmatrix}.
   $$
 
-- **Second column of $Q$**:
-  Orthogonalize the second column of $A$ with respect to $\mathbf{q}_1$:
+- **$Q$ の第 2 列**：
+  $A$ の第 2 列を $\mathbf{q}_1$ に対して直交化します。
   $$
   \mathbf{a}_2 = \begin{pmatrix} -0.759257 \\\ 3.000000 \\\ -0.650791 \end{pmatrix}, \quad
   \mathbf{a}_2 \cdot \mathbf{q}_1 \approx -1.139000.
   $$
-  Compute $\mathbf{v}_2$:
+  $\mathbf{v}_2$ を計算します。
   $$
   \mathbf{v}_2 = \mathbf{a}_2 - (\mathbf{a}_2 \cdot \mathbf{q}_1) \mathbf{q}_1 \approx \begin{pmatrix} -0.759257 \\\ 3.000000 \\\ -0.650791 \end{pmatrix} - (-1.139000) \begin{pmatrix} 0.990000 \\\ -0.114706 \\\ 0.000000 \end{pmatrix}.
   $$
   $$
   \mathbf{v}_2 \approx \begin{pmatrix} -0.759257 + 1.127610 \\\ 3.000000 - 0.130000 \\\ -0.650791 + 0.000000 \end{pmatrix} = \begin{pmatrix} 0.368353 \\\ 2.870000 \\\ -0.650791 \end{pmatrix}.
   $$
-  Normalize $\mathbf{v}_2$:
+  $\mathbf{v}_2$ を規格化します。
   $$
   \|\mathbf{v}_2\| \approx 2.939000.
   $$
-  Thus:
+  したがって、
   $$
   \mathbf{q}_2 \approx \begin{pmatrix} 0.125000 \\\ 0.974000 \\\ -0.221000 \end{pmatrix}.
   $$
 
-- **Third column of $Q$**:
-  Orthogonalize the third column of $A$ with respect to $\mathbf{q}_1$ and $\mathbf{q}_2$:
+- **$Q$ の第 3 列**：
+  $A$ の第 3 列を $\mathbf{q}_1$ と $\mathbf{q}_2$ に対して直交化します。
   $$
   \mathbf{a}_3 = \begin{pmatrix} 0.000000 \\\ -0.650791 \\\ 2.438447 \end{pmatrix}, \quad
   \mathbf{a}_3 \cdot \mathbf{q}_1 \approx 0.000000, \quad
   \mathbf{a}_3 \cdot \mathbf{q}_2 \approx -0.624695.
   $$
-  Compute $\mathbf{v}_3$:
+  $\mathbf{v}_3$ を計算します。
   $$
   \mathbf{v}_3 = \mathbf{a}_3 - (\mathbf{a}_3 \cdot \mathbf{q}_1) \mathbf{q}_1 - (\mathbf{a}_3 \cdot \mathbf{q}_2) \mathbf{q}_2.
   $$
@@ -222,16 +222,16 @@ Perform QR factorization on the updated $A$.
   $$
   \mathbf{v}_3 \approx \begin{pmatrix} 0.000000 + 0.078087 \\\ -0.650791 - 0.608000 \\\ 2.438447 + 0.138000 \end{pmatrix} = \begin{pmatrix} 0.078087 \\\ -1.258791 \\\ 2.576447 \end{pmatrix}.
   $$
-  Normalize $\mathbf{v}_3$:
+  $\mathbf{v}_3$ を規格化します。
   $$
   \|\mathbf{v}_3\| \approx 2.828427.
   $$
-  Thus:
+  したがって、
   $$
   \mathbf{q}_3 \approx \begin{pmatrix} 0.027600 \\\ -0.445000 \\\ 0.911000 \end{pmatrix}.
   $$
 
-- **Construct $Q$ and $R$**:
+- **$Q$ と $R$ の構築**：
   $$
   Q = \begin{pmatrix}
   0.990000 & 0.125000 & 0.027600 \\\
@@ -247,8 +247,8 @@ Perform QR factorization on the updated $A$.
   \end{pmatrix}.
   $$
 
-### Step 3.2: Update $A$
-Compute $A = RQ$:
+### ステップ 3.2：$A$ の更新
+$A = RQ$ を計算します。
 $$
 A = RQ \approx \begin{pmatrix}
 6.617647 & 0.000000 & 0.000000 \\\
@@ -257,10 +257,10 @@ A = RQ \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 4: Check Convergence
-Check if all off-diagonal elements are below the tolerance $10^{-6}$. In this case, the off-diagonal elements are already zero, so the matrix $A$ is diagonalized.
+### ステップ 4：収束の確認
+すべての非対角要素が許容誤差 $10^{-6}$ を下回っているかを確認します。この場合、非対角要素はすでにゼロなので、行列 $A$ は対角化されています。
 
-After convergence, the diagonalized matrix $A$ will be:
+収束後、対角化された行列 $A$ は次のようになります。
 $$
 A \approx \begin{pmatrix}
 6.617647 & 0.000000 & 0.000000 \\\
@@ -269,23 +269,23 @@ A \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Final Result
-The eigenvalues of $A$ computed using QR factorization with single precision are:
+### 最終結果
+単精度の QR 分解を用いて計算した $A$ の固有値は次のとおりです。
 $$
 \lambda_1 \approx 6.617647, \quad \lambda_2 \approx 2.939000, \quad \lambda_3 \approx 2.828427.
 $$
 
-### Key Takeaway
-The QR factorization method with single precision produces eigenvalues that are close to the true values but may differ slightly due to rounding errors. For higher accuracy, **double-precision arithmetic** or more iterations with stricter convergence criteria are recommended.
+### 要点
+単精度の QR 分解法で得られる固有値は真の値に近いものの、丸め誤差のためにわずかに異なることがあります。より高い精度を得るには、**倍精度演算**を用いるか、より厳しい収束条件のもとで反復回数を増やすことをお勧めします。
 
-## Advantages
+## 利点
 
-- **Efficiency**: The QR algorithm is highly efficient for large matrices.
-- **Versatility**: It works for both symmetric and non-symmetric matrices.
-- **Stability**: The algorithm is numerically stable and robust.
+- **効率性**：QR アルゴリズムは大きな行列に対して非常に効率的です。
+- **汎用性**：対称行列と非対称行列の両方に使えます。
+- **安定性**：このアルゴリズムは数値的に安定で頑健です。
 
-## Limitations 
+## 制限 
 
-- **Computational Cost**: The QR factorization step can be computationally expensive for very large matrices.
-- **Slow Convergence for Non-Symmetric Matrices**: The algorithm may require many iterations for non-symmetric matrices.
+- **計算コスト**：非常に大きな行列では、QR 分解のステップの計算コストが高くなることがあります。
+- **非対称行列に対する収束の遅さ**：非対称行列では、多くの反復が必要になることがあります。
 

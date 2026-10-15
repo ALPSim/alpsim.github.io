@@ -1,7 +1,7 @@
 
 ---
-title: The Random Library
-description: "ALPS Random Library"
+title: "随机数库"
+description: "ALPS 随机数库"
 weight: 1
 ---
 

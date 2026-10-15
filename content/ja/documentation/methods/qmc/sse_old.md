@@ -1,98 +1,96 @@
 
 ---
-title: Directed Loop Algorithm with SSE 
+title: SSE による有向ループアルゴリズム
 math: true
 weight: 4
 ---
 
-## Introduction
+## はじめに
 
-The `dirloop_sse` package provides a full generic implementation of the Quantum Monte Carlo (QMC) method called directed loop algorithm in the Stochastic Series Expansion representation. The `dirloop_SSE` method was invented and developped by Anders Sandvik and coworkers. It is a powerful and elegant QMC method to study quantum spin or bosonic lattice models.
+`dirloop_sse` パッケージは、確率級数展開表示における有向ループアルゴリズムと呼ばれる量子モンテカルロ (QMC) 法の、完全で汎用的な実装を提供します。`dirloop_SSE` 法は Anders Sandvik らによって考案・開発されました。これは量子スピンやボソンの格子モデルを研究するための、強力でエレガントな QMC 法です。
 
-The current implementation we present here uses the most recent developments of this method published in:
+ここで紹介する現在の実装は、この手法の最新の発展を取り入れたもので、それらは以下で発表されています。
 - A. W. Sandvik, Phys. Rev. B 59, 14157 (1999).
 - F. Alet, S. Wessel, and M. Troyer Phys. Rev. E 71, 036706 (2005).
 - L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, Phys. Rev. E 70, 056705 (2005).
 
-This version allows to simulate on arbitrary lattices:
-- Quantum spin (even frustrated - see remark below) models with arbitrary spin size, magnetic field and anisotropy
-- (Softcore) bosonic models
+このバージョンでは、任意の格子上で次のモデルをシミュレートできます。
+- 任意のスピンの大きさ、磁場、異方性を持つ量子スピンモデル（フラストレートしたものも可。下記の注意を参照）
+- （ソフトコア）ボソンモデル
 
-This release allows to simulate systems with a sign problem (e.g. frustrated spin systems). However, this case was moderately tested so please be careful if your model has a sign problem ...
+このリリースでは、符号問題のある系（例えばフラストレートしたスピン系）もシミュレートできます。ただし、この場合のテストは十分ではないので、モデルに符号問題がある場合は注意してください……
 
-**Please note** that for frustrated models, some values of the parameter Epsilon might render the algorithm non ergodic (for example, when you have a "pure loop" algorithm). One needs to check this carefully.
+**注意：** フラストレートしたモデルでは、パラメータ Epsilon の値によってはアルゴリズムがエルゴード的でなくなることがあります（例えば「純粋なループ」アルゴリズムになる場合）。これは慎重に確認する必要があります。
 
-## Running a simulation
+## シミュレーションの実行
 
-is discussed in the tutorial.
+についてはチュートリアルで説明しています。
 
-## Input parameters
+## 入力パラメータ
 
-In addition to the common input parameters of the ALPS applications the `dirloop_sse` application takes the following input parameters for experts (use only if you see what it means!):
+ALPS アプリケーションに共通の入力パラメータに加えて、`dirloop_sse` アプリケーションは次の上級者向け入力パラメータを受け取ります（意味が分かる場合にのみ使用してください！）。
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| SKIP | 1 | the number of Monte Carlo sweeps between each measurement |
-| RESTRICT_MEASUREMENTS[N] |  | if defined this restricts measurements to configurations where the quantum number N (particle number) has the value given as this parameter. Note that the simulation will still be performed in the grand canonical ensemble and the chemical potential needs to be tuned to the right range, to actually sample configurations with the desired particle number.|
-| RESTRICT_MEASUREMENTS[Sz] | | if defined this restricts measurements to configurations where the quantum number Sz (magnetization) has the value given as this parameter. Note that the simulation will still performed in the grand canonical ensemble and the magnetic field needs to be tuned to the right range, to actually sample configurations with the desiredmagnetization.|
-| NUMBER_OF_WORMS_PER_SWEEP | Calculated self consistently | number of worms done during the loop update. By default, this number is calculated self-consistently during the thermalization part. Nevertheless, you can force its value during the whole simulation |
-| EPSILON | 0 | supplementary diagonal energy shift for all interactions. The value of EPSILON affects the performances of the algorithm with the following tradeoff : the higher it is, the longer the simulation time but the lowest are bounce probabilities. Current wisdom indicates that one should use non-zero values for Epsilon, but not too high (for example S/2 for spin S models). Please note that for frustrated models, some values of Epsilon might render the algorithm non-ergodic. You have to check carefully. |
-| WHICH_LOOP_TYPE | "minbounce" | string to indicate which type of updates should be used for the scattering at the vertices : ( "heatbath" ) heatbath, see A. W. Sandvik, Phys. Rev. B 59, 14157 (1999). ( "minbounce" ) minimum bounces, see F. Alet, S. Wessel, and M. Troyer Phys. Rev. E 71, 036706 (2005). ( "locopt" ) locally optimal, see L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, Phys. Rev. E 70, 056705 (2005). By default the algorithm uses the "minbounce" updates. |
-| NO_WORMWEIGHT | 0 | boolean to indicate whether the worm matrixelement should be set to unity (NO_WORMWEIGHT = true) or to its real value depending on the spin/density configuration (NO_WORMWEIGHT=false). By default, NO_WORMWEIGHT is false. |
+| SKIP | 1 | 各測定の間に行うモンテカルロスイープの回数 |
+| RESTRICT_MEASUREMENTS[N] |  | 定義されている場合、量子数 N（粒子数）がこのパラメータで与えた値を持つ配置に測定を制限します。シミュレーション自体は依然として大正準集団で行われるため、目的の粒子数を持つ配置を実際にサンプリングするには、化学ポテンシャルを適切な範囲に調整する必要があることに注意してください。|
+| RESTRICT_MEASUREMENTS[Sz] | | 定義されている場合、量子数 Sz（磁化）がこのパラメータで与えた値を持つ配置に測定を制限します。シミュレーション自体は依然として大正準集団で行われるため、目的の磁化を持つ配置を実際にサンプリングするには、磁場を適切な範囲に調整する必要があることに注意してください。|
+| NUMBER_OF_WORMS_PER_SWEEP | 自己無撞着に計算 | ループ更新中に行うワームの数。デフォルトでは、この数は熱化の段階で自己無撞着に計算されます。ただし、シミュレーション全体を通してこの値を強制的に指定することもできます |
+| EPSILON | 0 | すべての相互作用に対する追加の対角エネルギーシフト。EPSILON の値はアルゴリズムの性能に次のようなトレードオフで影響します：値が大きいほどシミュレーション時間は長くなりますが、バウンス確率は低くなります。現在の知見では、Epsilon には 0 でない値を使うべきですが、大きすぎてもいけません（例えばスピン S のモデルでは S/2）。フラストレートしたモデルでは、Epsilon の値によってはアルゴリズムがエルゴード的でなくなることがあるので注意してください。慎重に確認する必要があります。 |
+| WHICH_LOOP_TYPE | "minbounce" | バーテックスでの散乱にどの種類の更新を用いるかを指定する文字列：( "heatbath" ) 熱浴法、A. W. Sandvik, Phys. Rev. B 59, 14157 (1999) を参照。( "minbounce" ) 最小バウンス、F. Alet, S. Wessel, and M. Troyer Phys. Rev. E 71, 036706 (2005) を参照。( "locopt" ) 局所最適、L. Pollet, S. M. A. Rombouts, K. Van Houcke, and K. Heyde, Phys. Rev. E 70, 056705 (2005) を参照。デフォルトでは、アルゴリズムは "minbounce" 更新を使います。 |
+| NO_WORMWEIGHT | 0 | ワームの行列要素を 1 に設定する (NO_WORMWEIGHT = true) か、スピン／密度の配置に依存する実際の値に設定する (NO_WORMWEIGHT=false) かを示すブール値。デフォルトでは NO_WORMWEIGHT は false です。 |
 
-## Measurements
+## 測定
 
-The following observables are measured by the `dirloop_sse` for any model application:
+`dirloop_sse` は、あらゆるモデルに対して次の観測量を測定します。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Energy | total energy of the system |
-| Energy Density | energy per site |
+| Energy | 系の全エネルギー |
+| Energy Density | サイトあたりのエネルギー |
 
-The following observables are measured by the dirloop_sse for spin models, i.e. models that have an Sz quantumnumber defined:
+dirloop_sse は、スピンモデル、すなわち量子数 Sz が定義されているモデルに対して次の観測量を測定します。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Magnetization | the z-component of the total magnetization |
-| Magnetization Density | the z-component of the total magnetization per site |
-| \|Magnetization\| | absolute value of the z-component of the magnetization |
-| \|Magnetization Density\| | absolute value of the z-component of the magnetization per site |
-| Magnetization^2 | square of the z-component of the total magnetization |
-| Magnetization Density^2 | square of the z-component of the total magnetization per site |
-| Magnetization^4 | fourth power of the z-component of the total magnetization |
-| Magnetization Density^4 | fourth power of the z-component of the total magnetization per site |
-| Susceptibility | the uniform susceptibility (spin models) |
+| Magnetization | 全磁化の z 成分 |
+| Magnetization Density | サイトあたりの全磁化の z 成分 |
+| \|Magnetization\| | 磁化の z 成分の絶対値 |
+| \|Magnetization Density\| | サイトあたりの磁化の z 成分の絶対値 |
+| Magnetization^2 | 全磁化の z 成分の 2 乗 |
+| Magnetization Density^2 | サイトあたりの全磁化の z 成分の 2 乗 |
+| Magnetization^4 | 全磁化の z 成分の 4 乗 |
+| Magnetization Density^4 | サイトあたりの全磁化の z 成分の 4 乗 |
+| Susceptibility | 一様磁化率（スピンモデル） |
 
-Spin models on bipartite lattices also have a staggered magnetization:
+二部格子上のスピンモデルでは、交替（スタガード）磁化も測定されます。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Staggered Magnetization | the z-component of the staggered magnetization |
-| Staggered Magnetization Density | the z-component of the staggered magnetization per site |
-| Staggered Magnetization^2 | square of the z-component of the staggered magnetization |
-| Staggered Magnetization Density^2 | square of the z-component of the staggered magnetization per site |
+| Staggered Magnetization | 交替磁化の z 成分 |
+| Staggered Magnetization Density | サイトあたりの交替磁化の z 成分 |
+| Staggered Magnetization^2 | 交替磁化の z 成分の 2 乗 |
+| Staggered Magnetization Density^2 | サイトあたりの交替磁化の z 成分の 2 乗 |
 
-The following observables are measured by the `dirloop_sse` for particle models, i.e. models that have an N quantumnumber defined:
+`dirloop_sse` は、粒子モデル、すなわち量子数 N が定義されているモデルに対して次の観測量を測定します。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Density | particle density |
-| Density^2 | square of the particle density |
+| Density | 粒子密度 |
+| Density^2 | 粒子密度の 2 乗 |
 
-And for all models
+そして、すべてのモデルに対して次を測定します。
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| Stiffness | stiffness of the system (both for spin and bosonic models)|
+| Stiffness | 系のスティフネス（スピンモデルとボソンモデルの両方）|
 
-Other observables might also be available depending on the exact version of the application.
+アプリケーションの正確なバージョンによっては、他の観測量も利用できる場合があります。
 
-## Contributors
+## 貢献者
 
-The following persons have contributed to the `dirloop_sse` application:
+次の人々が `dirloop_sse` アプリケーションに貢献しました。
 
 - Fabien Alet
 - Matthias Troyer 
 - Lode Pollet
-
-

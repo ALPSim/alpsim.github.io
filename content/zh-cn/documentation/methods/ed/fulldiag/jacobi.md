@@ -1,32 +1,32 @@
 
 ---
-title: Jacobi Rotation
-description: "Jacobi Rotation Method"
+title: Jacobi 旋转
+description: "Jacobi 旋转方法"
 math: true
 weight: 1
 ---
 
-The **Jacobi rotation method** is a classical iterative algorithm used to diagonalize symmetric matrices. It is particularly well-suited for small to medium-sized matrices and is known for its simplicity and robustness. The method works by systematically eliminating off-diagonal elements through a series of orthogonal transformations (rotations), eventually converging to a diagonal matrix whose elements are the eigenvalues of the original matrix.
+**Jacobi 旋转方法**是一种用于对角化对称矩阵的经典迭代算法。它特别适合中小尺寸的矩阵，并以简单、稳健著称。该方法通过一系列正交变换（旋转）系统地消去非对角元，最终收敛到一个对角矩阵，其对角元即为原矩阵的本征值。
 
-The Jacobi method targets the largest off-diagonal element of the matrix and applies a rotation to zero it out. This process is repeated iteratively until all off-diagonal elements are sufficiently small, resulting in a diagonal matrix. The eigenvalues of the original matrix are then found on the diagonal, and the eigenvectors are obtained from the product of all the rotation matrices applied during the process.
+Jacobi 方法每次针对矩阵中最大的非对角元，施加一次旋转将其消为零。这一过程反复迭代，直到所有非对角元都足够小，从而得到一个对角矩阵。原矩阵的本征值就位于对角线上，而本征矢则由过程中施加的所有旋转矩阵的乘积给出。
 
 
-## Principles
+## 原理
 
-For a symmetric matrix $A$, the goal is to find an orthogonal matrix $P$ such that:
+对于对称矩阵 $A$，目标是找到一个正交矩阵 $P$，使得：
 
 $$
 D = P^T A P
 $$
 
-where $D$ is a diagonal matrix containing the eigenvalues of $A$, and the columns of $P$ are the corresponding eigenvectors.
+其中 $D$ 是由 $A$ 的本征值构成的对角矩阵，$P$ 的各列是相应的本征矢。
 
-The Jacobi method achieves this by applying a sequence of orthogonal transformations (rotations) to $A$. Each rotation targets a specific off-diagonal element $A_{ij}$ and zeroes it out.
+Jacobi 方法通过对 $A$ 施加一系列正交变换（旋转）来实现这一目标。每次旋转针对一个特定的非对角元 $A_{ij}$，并将其消为零。
 
 
-## Rotation Matrix
+## 旋转矩阵
 
-A Jacobi rotation matrix $R$ is an orthogonal matrix that differs from the identity matrix only in four elements:
+Jacobi 旋转矩阵 $R$ 是一个正交矩阵，它与单位矩阵只有四个矩阵元不同：
 
 $$
 R = \begin{pmatrix}
@@ -40,46 +40,46 @@ R = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-Here, $\cos \theta$ and $\sin \theta$ are placed at the intersections of the $i$-th and $j$-th rows and columns. The angle $\theta$ is chosen such that the off-diagonal element $A_{ij}$ is zeroed out.
+其中，$\cos \theta$ 和 $\sin \theta$ 位于第 $i$、$j$ 行与第 $i$、$j$ 列的交点处。选取角度 $\theta$ 使非对角元 $A_{ij}$ 被消为零。
 
 
-## Algorithm
+## 算法
 
-1. **Identify the Largest Off-Diagonal Element**:
-   - Find the largest off-diagonal element $A_{ij}$ (in absolute value) in the matrix $A$.
+1. **找出最大的非对角元**：
+   - 在矩阵 $A$ 中找出（绝对值）最大的非对角元 $A_{ij}$。
 
-2. **Compute the Rotation Angle $\theta$**:
-   - The angle $\theta$ is chosen to satisfy:
+2. **计算旋转角 $\theta$**：
+   - 选取角度 $\theta$ 使其满足：
      $$
      \tan(2\theta) = \frac{2A_{ij}}{A_{ii} - A_{jj}}
      $$
-   - From this, compute $\cos \theta$ and $\sin \theta$.
+   - 由此计算 $\cos \theta$ 和 $\sin \theta$。
 
-3. **Construct the Rotation Matrix $R$**:
-   - Build the rotation matrix $R$ using $\cos \theta$ and $\sin \theta$.
+3. **构造旋转矩阵 $R$**：
+   - 用 $\cos \theta$ 和 $\sin \theta$ 构造旋转矩阵 $R$。
 
-4. **Apply the Rotation**:
-   - Update the matrix $A$ as:
+4. **施加旋转**：
+   - 按如下方式更新矩阵 $A$：
      $$
      A^{\prime} = R^T A R
      $$
-   - This transformation zeroes out $A_{ij}$ and $A_{ji}$.
+   - 该变换将 $A_{ij}$ 和 $A_{ji}$ 消为零。
 
-5. **Accumulate the Transformations**:
-   - Update the eigenvector matrix $P$ as:
+5. **累积变换**：
+   - 按如下方式更新本征矢矩阵 $P$：
      $$
      P^{\prime} = P R
      $$
-   - This accumulates the rotations to form the final eigenvector matrix.
+   - 这样累积各次旋转，形成最终的本征矢矩阵。
 
-6. **Repeat Until Convergence**:
-   - Repeat the process until all off-diagonal elements are smaller than a specified tolerance $ \epsilon$.
+6. **重复直至收敛**：
+   - 重复上述过程，直到所有非对角元都小于指定的容差 $ \epsilon$。
 
 ---
 
-## An Example
+## 示例
 
-Consider a symmetric matrix $A$:
+考虑对称矩阵 $A$：
 
 $$
 A = \begin{pmatrix}
@@ -89,8 +89,8 @@ A = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-### Step 1: Initialize
-Start with the matrix $A$ and an identity matrix $P$ to accumulate the rotations:
+### 第 1 步：初始化
+从矩阵 $A$ 和一个用于累积旋转的单位矩阵 $P$ 开始：
 $$
 A = \begin{pmatrix}
 4.000000 & 1.000000 & 2.000000 \\\
@@ -104,31 +104,31 @@ P = \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 2: Find the Largest Off-Diagonal Element
-The largest off-diagonal element in $A$ is $A_{13} = 2.000000$.
+### 第 2 步：找出最大的非对角元
+$A$ 中最大的非对角元是 $A_{13} = 2.000000$。
 
-### Step 3: Compute the Rotation Parameters
-For the rotation in the $(1, 3)$ plane:
-- Compute the angle $\theta$:
+### 第 3 步：计算旋转参数
+对于 $(1, 3)$ 平面内的旋转：
+- 计算角度 $\theta$：
   $$
   \theta = \frac{1}{2} \arctan\left(\frac{2A_{13}}{A_{11} - A_{33}}\right).
   $$
-  Substituting the values:
+  代入数值：
   $$
   \theta = \frac{1}{2} \arctan\left(\frac{2 \cdot 2.000000}{4.000000 - 5.000000}\right) = \frac{1}{2} \arctan(-4.000000).
   $$
-  Using single-precision arithmetic:
+  使用单精度运算：
   $$
   \theta \approx -0.674741 \, \text{radians}.
   $$
 
-- Compute $c = \cos(\theta)$ and $s = \sin(\theta)$:
+- 计算 $c = \cos(\theta)$ 和 $s = \sin(\theta)$：
   $$
   c \approx 0.780869, \quad s \approx -0.624695.
   $$
 
-### Step 4: Apply the Rotation
-Construct the rotation matrix $J$:
+### 第 4 步：施加旋转
+构造旋转矩阵 $J$：
 $$
 J = \begin{pmatrix}
 c & 0 & s \\\
@@ -141,12 +141,12 @@ c & 0 & s \\\
 \end{pmatrix}.
 $$
 
-Update $A$ and $P$:
+更新 $A$ 和 $P$：
 $$
 A = J^T A J, \quad P = P J.
 $$
 
-After the rotation:
+旋转之后：
 $$
 A \approx \begin{pmatrix}
 5.561553 & 0.780869 & 0.000000 \\\
@@ -162,11 +162,11 @@ P \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-### Step 5: Repeat for Other Off-Diagonal Elements
-Repeat the process for the next largest off-diagonal element until all off-diagonal elements are sufficiently small (e.g., below a tolerance of $10^{-6}$).
+### 第 5 步：对其他非对角元重复上述过程
+对下一个最大的非对角元重复这一过程，直到所有非对角元都足够小（例如低于容差 $10^{-6}$）。
 
-### Step 6: Final Diagonalized Matrix
-After convergence, the diagonalized matrix $A$ will be:
+### 第 6 步：最终的对角化矩阵
+收敛后，对角化后的矩阵 $A$ 为：
 $$
 A \approx \begin{pmatrix}
 6.000000 & 0.000000 & 0.000000 \\\
@@ -175,7 +175,7 @@ A \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-The corresponding eigenvector matrix $P$ will be:
+相应的本征矢矩阵 $P$ 为：
 $$
 P \approx \begin{pmatrix}
 0.707107 & 0.000000 & -0.707107 \\\
@@ -184,15 +184,15 @@ P \approx \begin{pmatrix}
 \end{pmatrix}.
 $$
 
-## Advantages
+## 优点
 
-- **Simplicity**: The algorithm is straightforward to implement.
-- **Robustness**: It is guaranteed to converge for symmetric matrices.
-- **Accuracy**: Provides highly accurate eigenvalues and eigenvectors.
+- **简单**：算法易于实现。
+- **稳健**：对于对称矩阵保证收敛。
+- **精确**：能给出高精度的本征值和本征矢。
 
 
-## Limitations
+## 局限性
 
-- **Slow Convergence**: The method requires many iterations for large matrices.
-- **Inefficiency for Large Matrices**: Not suitable for very large or sparse matrices.
-- **Computational Cost**: Each rotation involves updating the entire matrix, which can be costly for large systems.
+- **收敛慢**：对于大矩阵，该方法需要很多次迭代。
+- **大矩阵效率低**：不适用于非常大的矩阵或稀疏矩阵。
+- **计算代价**：每次旋转都需要更新整个矩阵，对于大体系代价可能很高。

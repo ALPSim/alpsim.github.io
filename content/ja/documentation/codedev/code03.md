@@ -1,38 +1,38 @@
 
 ---
-title: Code-03 MonteCarloHOWTO
+title: Code-03 モンテカルロ HOWTO
 math: true
 toc: true
 weight: 4
 ---
 
-## Introduction
+## はじめに
 
-While several Monte Carlo (MC) programs are already available in the ALPS applications, the main purpose of ALPS is to help developers to program their own MC program in the easiest and quickest possible way. There are several common tasks performed by all MC algorithms which do not need to be re-programmed each time. The goal of this article is to convince that the ALPS libraries propose a simple framework to do so, and to demonstrate with examples how to use them. This includes both classical Monte Carlo as well as Quantum Monte Carlo algorithms.
-The directory `example/scheduler` in the ALPS sources contains an example simulation code for the Ising model that can be adapted to your needs. In the following we will discuss these examples.
+ALPS のアプリケーションにはすでにいくつかのモンテカルロ（MC）プログラムが用意されていますが、ALPS の主な目的は、開発者が独自の MC プログラムをできるだけ簡単かつ迅速に作成できるよう支援することです。すべての MC アルゴリズムに共通する作業がいくつかあり、それらを毎回プログラムし直す必要はありません。この記事の目的は、ALPS ライブラリがそのための簡単なフレームワークを提供していることを示し、その使い方を例を通して説明することです。これには古典モンテカルロと量子モンテカルロの両方のアルゴリズムが含まれます。
+ALPS のソースのディレクトリ `example/scheduler` には、イジングモデルのシミュレーションコードの例が含まれており、必要に応じて改変して利用できます。以下では、これらの例について説明します。
 
-### What are the advantages of the ALPS libraries over one's own tools for developing a new MC application ?
+### 新しい MC アプリケーションを開発する際に、独自のツールではなく ALPS ライブラリを使う利点は何でしょうか？
 
-- Automatic calculation of error bars and autocorrelation times
-- Automatic parallelization
-- Automatic output of results (in XML) with the corresponding extraction tools
-- Automatic management of the sign (for Quantum Monte Carlo simulations with a sign problem)
-- Easy checkpointing & Easy restarting of simulations
-- Easy management of input parameters
-- Easy way to add new measurements
-- Easy management of random numbers
-- (Optional) Easy management of lattices
-- (Optional) Easy management of quantum Hamiltonians (for Quantum Monte Carlo)
+- 誤差棒と自己相関時間の自動計算
+- 自動並列化
+- 結果の自動出力（XML 形式）と、それに対応するデータ抽出ツール
+- 符号の自動管理（負符号問題のある量子モンテカルロシミュレーションの場合）
+- 簡単なチェックポイント作成とシミュレーションの簡単な再開
+- 入力パラメータの簡単な管理
+- 新しい測定を簡単に追加する手段
+- 乱数の簡単な管理
+- （オプション）格子の簡単な管理
+- （オプション）量子ハミルトニアンの簡単な管理（量子モンテカルロの場合）
 - ...
 
-All this comes with only a small amount of programming/modification that we describe now.
+これらはすべて、これから説明するわずかなプログラミングや修正だけで利用できます。
 
-## Starting your own ALPS MC program
+## 独自の ALPS MC プログラムを始める
 
-**Work in progress ... The tutorial is neither finished nor corrected ...Please send me any comments / suggestions on this page**
+**作業中です……このチュートリアルは未完成で、校正もされていません……このページについてのコメントや提案があればお寄せください**
 
-First of all, using the ALPS libraries implies that you use C++ as the programming language. From now on, let us assume that you want to program a new MC application and that you already know what are going to be your internal data structure and the algorithm you will use for a single Monte Carlo step.
-To use the ALPS libraries, you will need to create your own C++ class, that will be derived from an internal ALPS class. Let's call this class `MyMonteCarlo` and create a `MyMonteCarlo.hpp` header file.
+まず、ALPS ライブラリを使うということは、プログラミング言語として C++ を使うことを意味します。以下では、新しい MC アプリケーションをプログラムしたいと考えており、内部データ構造と、1 モンテカルロステップで用いるアルゴリズムはすでに決まっているものとします。
+ALPS ライブラリを使うには、ALPS の内部クラスから派生した独自の C++ クラスを作成する必要があります。このクラスを `MyMonteCarlo` と呼ぶことにし、ヘッダファイル `MyMonteCarlo.hpp` を作成します。
 
     #ifndef MYMC_HPP
     #define MYMC_HPP
@@ -57,34 +57,34 @@ To use the ALPS libraries, you will need to create your own C++ class, that will
     };
     #endif
 
-We now see what all these lines mean.
-- First of all you need to include a few ALPS headers (some more will go here for other ALPS functionalities).
-- Then we will define our `MyMonteCarlo` class out by deriving it from a ALPS class. The above header file implies that you will use the `MCRun` ALPS class, which is the simplest one. If you want to enjoy the lattice functionalities of ALPS, replace the class definition line by:
+これらの行がそれぞれ何を意味するかを見ていきます。
+- まず、いくつかの ALPS ヘッダをインクルードする必要があります（ALPS の他の機能を使う場合は、ここにさらにヘッダを追加します）。
+- 次に、ALPS のクラスから派生させて `MyMonteCarlo` クラスを定義します。上記のヘッダファイルでは、最も単純な ALPS クラスである `MCRun` を使います。ALPS の格子機能を利用したい場合は、クラス定義の行を次のように置き換えます。
 
     class MyMonteCarlo : public alps::scheduler::LatticeMCRun<>{
 
-and add in the headers
+さらに、ヘッダに次を追加します。
 
     #include <alps/lattice.h>
     
-If you moreover want to use the Model library (useful for lattice quantum models), use instead:
+さらにモデルライブラリ（格子上の量子モデルに便利です）も使いたい場合は、代わりに次を使います。
 
     class MyMonteCarlo : public alps::scheduler::LatticeModelMCRun<>{
 
-- In the public part, `MyMonteCarlo(const alps::ProcessList&,const alps::Parameters&,int)` is the constructor of your class, and will be needed to initialize all parameters.
-- `print_copyright(std::ostream&)` is a simple function to output any useful information that you want to be output at the beginning of each simulation.
-- The save and load functions are very useful functions where you will describe what is needed to save (load) on disk to restart the simulations after each checkpoint
-- The dostep function is your main MC function: this is the function that is going to be executed every MC step.
-- The `is_thermalized` function will tell the ALPS libraries when the thermalization part of your simulation is finished (that is, when can the measurement series start)
-- The `work_done` function will tell the ALPS libraries what is the percentage of the simulations that is already done.
+- public 部の `MyMonteCarlo(const alps::ProcessList&,const alps::Parameters&,int)` はクラスのコンストラクタで、すべてのパラメータを初期化するために必要です。
+- `print_copyright(std::ostream&)` は、各シミュレーションの開始時に出力したい有用な情報を出力するための簡単な関数です。
+- save 関数と load 関数は非常に便利な関数で、各チェックポイントの後にシミュレーションを再開するために、ディスクに保存（ディスクから読み込み）する必要があるものを記述します。
+- dostep 関数はメインの MC 関数で、MC ステップごとに実行される関数です。
+- `is_thermalized` 関数は、シミュレーションの熱化部分がいつ終わったか（すなわち、いつ測定を開始できるか）を ALPS ライブラリに伝えます。
+- `work_done` 関数は、シミュレーションのうちどれだけの割合がすでに完了したかを ALPS ライブラリに伝えます。
 
-The rest of the job is now to correctly interface these functions with your program. This will be done in a file called, say, `MyMonteCarlo.cpp`
+残りの作業は、これらの関数を自分のプログラムと正しく結び付けることです。これは、例えば `MyMonteCarlo.cpp` という名前のファイルで行います。
 
-## Building your own ALPS MC program
+## 独自の ALPS MC プログラムを構築する
 
-### The copyright function
+### copyright 関数
 
-We start with the easiest function `print_copyright()` in the file `MyMonteCarlo.cpp`
+まず、ファイル `MyMonteCarlo.cpp` の中で最も簡単な関数 `print_copyright()` から始めます。
 
     #include "MyMonteCarlo.hpp";
     /************************************ ALPS functions **********************************************/
@@ -96,9 +96,9 @@ We start with the easiest function `print_copyright()` in the file `MyMonteCarlo
             << "  available from the author on request\n\n";
     }
 
-### Management of Monte Carlo steps
+### モンテカルロステップの管理
 
-Let us now concentrate on the management of MC steps. A typical situation is the following: one would like to perform a fixed number of steps for thermalization, then a fixed number of steps for the measurement part. Very often, one would like also to perform a certain amount of Monte Carlo steps between each measurement. Therefore it could be useful to define in your internal data structure the following variables (in `MyMonteCarlo.hpp`):
+次に、MC ステップの管理に注目します。典型的な状況は次のようなものです。まず熱化のために決まった数のステップを行い、その後、測定部分のために決まった数のステップを行います。また多くの場合、各測定の間に一定数のモンテカルロステップを行いたいこともあります。そこで、内部データ構造に次の変数を（`MyMonteCarlo.hpp` の中で）定義しておくと便利です。
 
     private :
         // your own internal data here ...
@@ -112,18 +112,18 @@ Let us now concentrate on the management of MC steps. A typical situation is the
         // the rest of your own internal data here ...
     };
     
-Here `Nb_Thermalisation_Steps` will be the number of thermalization steps that you ask for and `Nb_Steps` the number of steps after thermalization that you ask for. `Each_Measurement` will be the number of steps between each measurement. These three numbers will be initialized later in the constructor. `Steps_Done_Total` will store the current number of MC finished steps (including those of thermalization). Finally `Measurements_Done` will store the intermediate number of steps done between each measurement. The `do_update()` and `do_measurements()` function (that you will have to define yourself) will perform respectively one single MC step and one series of measurement.
-All these definitions lead to the following simple definitions of your class member functions in `MyMonteCarlo.cpp`
+ここで `Nb_Thermalisation_Steps` は指定する熱化ステップ数、`Nb_Steps` は熱化後に指定するステップ数です。`Each_Measurement` は各測定の間のステップ数です。これら 3 つの数は、後でコンストラクタの中で初期化します。`Steps_Done_Total` には、（熱化のステップも含めて）現在までに完了した MC ステップ数を格納します。最後に、`Measurements_Done` には、各測定の間に行われた途中のステップ数を格納します。`do_update()` 関数と `do_measurements()` 関数（これらは自分で定義する必要があります）は、それぞれ 1 回の MC ステップと一連の測定を行います。
+これらの定義から、`MyMonteCarlo.cpp` におけるクラスのメンバ関数は次のように簡単に定義できます。
 
     bool MyMonteCarlo::is_thermalized() const
     {  return (Steps_Done_Total >= Nb_Thermalisation_Steps); }
 
-This function will indeed return 1 if the current number of MC steps is superior to the total number of thermalization steps asked for, 0 otherwise. The second function
+この関数は、現在の MC ステップ数が指定した熱化ステップの総数以上であれば 1 を、そうでなければ 0 を返します。2 つ目の関数
 
     double MyMonteCarlo::work_done() const
     { return (is_thermalized() ? (Steps_Done_Total-Nb_Thermalisation_Steps)/double(Nb_Steps) :0.); }
 
-will return 0 if the simulation is not thermalized, and a number between 0 and 1 corresponding to the percentage of asked measurement steps already performed. Finally the `dostep()` function will look like this
+は、シミュレーションが熱化していなければ 0 を返し、熱化していれば、指定した測定ステップのうちすでに実行された割合に対応する 0 から 1 の間の数を返します。最後に、`dostep()` 関数は次のようになります。
 
     void MyMonteCarlo::dostep()
     { do_update(); // you'll have to define what this function does later
@@ -136,11 +136,11 @@ will return 0 if the simulation is not thermalized, and a number between 0 and 1
         }
     }
     
-At some point you have of course to define what your program really does during one MC step, and this will be done in the `do_update()` function. I can't help you with that one! The measurements have been grouped in our example in the `do_measurements()` function that will be described below.
+もちろん、どこかの時点で、1 回の MC ステップの間にプログラムが実際に何を行うかを定義する必要があり、それは `do_update()` 関数で行います。これについてはお手伝いできません！ この例では、測定は以下で説明する `do_measurements()` 関数にまとめてあります。
 
-### The save and load functions
+### save 関数と load 関数
 
-ALPS allows an easy treatment of the internal data to be checkpointed to disk. Let us imagine that in your internal data structure you need to checkpoint a few integers and an array of double to be able to restart your simulations
+ALPS では、チェックポイントとしてディスクに保存する内部データを簡単に扱えます。シミュレーションを再開できるようにするために、内部データ構造のうち、いくつかの整数と double の配列をチェックポイントとして保存する必要があるとしましょう。
 
     private :
         // the rest of your own internal data here ...
@@ -150,25 +150,25 @@ ALPS allows an easy treatment of the internal data to be checkpointed to disk. L
         ...
     };
     
-This can be accomplished very easily by writing
+これは、次のように書くだけで非常に簡単に実現できます。
 
     void MyMonteCarlo::save(alps::ODump& dump) const
         { dump <<  Number_of_Spins << MyOwnVariable << SpinArray;}
 
-and the load function is easily guessed to be
+load 関数は、容易に想像できるように次のようになります。
 
     void MyMonteCarlo::load(alps::IDump& dump) const
         { dump >>  Number_of_Spins >> MyOwnVariable >> SpinArray;}
         
-Note that you can dump this way most of the usual types (int,double,bool etc) and most standard containers are also available (such as vector or set).
-Now imagine that you have made your own little internal structure,
+この方法で通常の型（int、double、bool など）のほとんどをダンプでき、また標準コンテナの多く（vector や set など）も利用できることに注意してください。
+次に、独自の小さな内部構造体を作ったとしましょう。
 
     struct Vertex
         { int vertex_type;
         std::vector<double> coordinates;
         int SomeOtherVariable; }
         
-and you want to save an instantiation thereof in your Monte Carlo class.
+そして、そのインスタンスをモンテカルロクラスの中で保存したいとします。
 
     private :
         // the rest of your own internal data here ...
@@ -176,7 +176,7 @@ and you want to save an instantiation thereof in your Monte Carlo class.
         ...
     };
     
-Well, you just have to teach ALPS what to save and load in your structure
+その場合は、構造体の中で何を保存・読み込みするかを ALPS に教えるだけです。
 
     alps::ODump& operator<<(alps::ODump& dump, const Vertex& v)
     { return dump << v.vertex_type << v.coordinates; }
@@ -184,20 +184,20 @@ Well, you just have to teach ALPS what to save and load in your structure
     alps::IDump& operator>>(alps::IDump& dump, Vertex& v)
     { return dump >> v.vertex_type >> v.coordinates;}
     
-and then you'll easily be able to add MyVertex in the main ALPS save and load functions:
+そうすれば、ALPS のメインの save 関数と load 関数に MyVertex を簡単に追加できます。
 
     void MyMonteCarlo::save(alps::ODump& dump) const
     { dump <<  Number_of_Spins << MyOwnVariable << SpinArray << MyVertex;}
 
-If you have used the management of Monte Carlo steps described above, you also want to add this in your save/load functions:
+上で説明したモンテカルロステップの管理を使っている場合は、これも save/load 関数に追加しておくとよいでしょう。
 
     void MyMonteCarlo::save(alps::ODump& dump) const
     { dump <<  Number_of_Spins << MyOwnVariable << SpinArray << MyVertex;
         dump <<  Nb_Steps << Measurements_Done; }
 
-### The `do_measurements()` function
+### `do_measurements()` 関数
 
-In this function you will perform your measurements, and give them to ALPS to be treated. This is pretty simple.
+この関数では測定を行い、その結果を処理のために ALPS に渡します。これはとても簡単です。
 
     void MyMonteCarlo::do_measurements()
     { double Energy; std::valarray<double> Correl(L);
@@ -208,17 +208,17 @@ In this function you will perform your measurements, and give them to ALPS to be
      measurements["Spin Correlations"] << Correl;
    }
    
-and that's it? Now you might wonder: how does ALPS know what "Energy" or "Spin Correlations" is ? How does it distinguish between scalar measurements (such as Energy here) and vector ones (such as Correl) ? These two questions will be addressed below, in the Constructor of your class.
-Another question might be: why did you use a `std::valarray` and not a `std::vector` for the vector observable ? This is for internal ALPS reasons, but just remember that for vector observables, ALPS need the vectors to **always** be of the same size for each different measurements (in this example, measurements["Spin Correlations"] will fail if the Correl object has not always the same size -L here-).
+これだけでしょうか？ ここで疑問に思うかもしれません。ALPS は "Energy" や "Spin Correlations" が何であるかをどうやって知るのでしょうか？ スカラーの測定（ここでの Energy など）とベクトルの測定（Correl など）をどうやって区別するのでしょうか？ これら 2 つの疑問には、以下のクラスのコンストラクタのところで答えます。
+もう 1 つの疑問は、なぜベクトル観測量に `std::vector` ではなく `std::valarray` を使ったのか、ということかもしれません。これは ALPS の内部的な理由によるものですが、ベクトル観測量については、異なる測定ごとにベクトルのサイズが**常に**同じでなければならないことだけは覚えておいてください（この例では、Correl オブジェクトのサイズが常に同じ（ここでは L）でないと、measurements["Spin Correlations"] は失敗します）。
 
-### The Constructor
+### コンストラクタ
 
-There are basically three things which you have to do in your constructor:
-- Initialize the parameters for your simulation by reading them from the given parameters
-- Initialize other internal variables, e.g. spin configuration
-- Define observables that are used in the do_measurements() function above
+コンストラクタで行うべきことは、基本的に次の 3 つです。
+- 与えられたパラメータから読み込んで、シミュレーションのパラメータを初期化する
+- スピン配置など、その他の内部変数を初期化する
+- 上の do_measurements() 関数で使う観測量を定義する
 
-The constructor looks like
+コンストラクタは次のようになります。
 
     MyMonteCarlo::MyMonteCarlo(const alps::ProcessList& where,const alps::Parameters& params,int node) : alps::scheduler::MCRun(where,params,node),
     Nb_Steps(params.value_or_default("SWEEPS",1000)),
@@ -241,23 +241,23 @@ The constructor looks like
     measurements << alps::RealVectorObservable("Spin Correlations",correlationlabels);
     }
 
-As you see, there are several ways to read the parameters from the `params` object. Defining the observables is done by simply providing its type and its label.
-Note, that by including `alps/scheduler/montecarlo.h` you can also use the random number functions
+このように、`params` オブジェクトからパラメータを読み込む方法はいくつかあります。観測量の定義は、その型とラベルを与えるだけで行えます。
+なお、`alps/scheduler/montecarlo.h` をインクルードすることで、ALPS が提供する次の乱数関数も使えるようになります。
 
     random_int(int a, int b);         //from [a,b]
     random_int(int n);                //from [0,n)
     random_real(double a, double b);  //from (a,b)
     random_real();                    //from (0,1)
 
-provided by ALPS.
+（これらは ALPS によって提供されています。）
 
-## Running your ALPS code
+## ALPS コードの実行
 
-In order to run your code it is useful to add the following typedef in your `MyMonteCarlo.h`:
+コードを実行するには、`MyMonteCarlo.h` に次の typedef を追加しておくと便利です。
 
     typedef alps::scheduler::SimpleMCFactory<MyMonteCarlo> MyMonteCarloFactory;
 
-In a simple `main.C` as for example `.../alps/example/scheduler/main.C` you can now call
+これで、例えば `.../alps/example/scheduler/main.C` のような簡単な `main.C` の中で、次のように呼び出せます。
 
     int main(int argc, char** argv)
     {
@@ -266,45 +266,45 @@ In a simple `main.C` as for example `.../alps/example/scheduler/main.C` you can 
         // ...
     }
     
-After compiling and linking you start your simulation using `./MyMonteCarlo parm.in.xml` and that's it.
+コンパイルとリンクの後、`./MyMonteCarlo parm.in.xml` でシミュレーションを開始すれば、それで完了です。
 
-## Using the lattice functionalities of ALPS
+## ALPS の格子機能を使う
 
-If you want ALPS not only to do the scheduling and the measurement handling for you but also to take care of the lattice operations, you can use the `LatticeMCRun` class. Define your Monte Carlo Code as follows:
+スケジューリングと測定の処理だけでなく、格子の操作も ALPS に任せたい場合は、`LatticeMCRun` クラスを使えます。モンテカルロコードを次のように定義します。
 
     typedef alps::scheduler::LatticeMCRun<>::graph_type graph_type;
     class MyLatticeMonteCarlo : public alps::scheduler::LatticeMCRun<graph_type> { ... }
     
-At the execution of your simulation you will have to tell your class via your parameter file, what kind of lattice you want to use, e.g.
+シミュレーションの実行時には、どのような格子を使いたいかを、パラメータファイルを通じてクラスに伝える必要があります。例えば
 
     LATTICE = "square lattice"
     
-or
+または
 
     LATTICE = "honeycomb lattice"
     
-There are a lot of predefined lattices, which you can find in your `/alps/2.x.x/lib/xml/lattices.xml`. How to define your own lattice is explained [here](../../intro/latticehowtos/intro).
+あらかじめ定義された格子が多数あり、`/alps/2.x.x/lib/xml/lattices.xml` で確認できます。独自の格子を定義する方法は[こちら](../../intro/latticehowtos/intro)で説明しています。
 
-### Introduction
+### はじめに
 
-Basically, ALPS creates an object of a `boost::graph` which represents the lattice. This powerful data structure allows easy and efficient movement through the vertices and edges of a graph. Note, that in the ALPS language we talk of sites, bonds, neighbors instead of the Boost's vertices, edges, adjacent_vertices. To access a particular site, the data structure works with the data type site_descriptor. Unless you define anything else, the site_descriptor of your lattice will be of an int type (more precisely, the `alps::uint32_t` type). This enables you to use the site_descriptor as the index of your (private) storage array (or vector,...) of your system's configuration. In other words, you have to take care of the content of the data in your lattice (spin values, occupation number, etc.) yourself! The lattice functionalities of ALPS do the work of easily providing the site_descriptor of neighbors or bond_descriptor of outgoing bonds of a site.
-Moreover, they allow to iterate over sites, bonds and neighbors with the so_called site_iterator. A site_iterator is simply a list element which has a pointer to a site_descriptor and a pointer to the next site_iterator. A bond_iterator works the same way. Thus, the totality of all sites can be represented as a `std::pair<site_iterator, site_iterator>` constituing of the pointer to the first and the last element in a list of all sites. This is precisely what `sites()` returns.
+基本的に、ALPS は格子を表す `boost::graph` のオブジェクトを生成します。この強力なデータ構造により、グラフの頂点と辺を簡単かつ効率的にたどることができます。なお、ALPS の用語では、Boost の vertices、edges、adjacent_vertices の代わりに、sites（サイト）、bonds（ボンド）、neighbors（隣接サイト）という言葉を使います。特定のサイトにアクセスするために、このデータ構造は site_descriptor というデータ型を使います。特に何も定義しなければ、格子の site_descriptor は int 型（より正確には `alps::uint32_t` 型）になります。これにより、site_descriptor を、系の配置を格納する（private な）配列（あるいは vector など）のインデックスとして使うことができます。言い換えると、格子上のデータの内容（スピンの値や占有数など）は自分で管理する必要があります！ ALPS の格子機能は、あるサイトの隣接サイトの site_descriptor や、そのサイトから出るボンドの bond_descriptor を簡単に提供する役割を担います。
+さらに、いわゆる site_iterator を用いて、サイト、ボンド、隣接サイトについて反復処理を行うことができます。site_iterator は、site_descriptor へのポインタと次の site_iterator へのポインタを持つ、単なるリストの要素です。bond_iterator も同じように動作します。したがって、すべてのサイトの全体は、全サイトのリストの最初と最後の要素へのポインタから成る `std::pair<site_iterator, site_iterator>` として表すことができます。これがまさに `sites()` が返すものです。
 
-### An all-in-one example
+### すべてを含んだ例
 
-This section gives a code example which should include most of the important features. It will be a double implementation of the energy measurement of an Ising spin system, respectively as
-iteration over all bonds
-iteration over all sites followed by an iteration over the neighbors of the site
-iteration over all sites followed by an iteration over the outgoing edges of the site
-In your constructor an initialization of your spins vector could look like
+この節では、重要な機能のほとんどを含むコード例を示します。イジングスピン系のエネルギー測定を、次のそれぞれの方法で重ねて実装します。
+すべてのボンドについての反復
+すべてのサイトについての反復と、それに続くそのサイトの隣接サイトについての反復
+すべてのサイトについての反復と、それに続くそのサイトから出る辺についての反復
+コンストラクタでのスピンベクトルの初期化は、例えば次のようになります。
  `std::vector<int> spins(num_sites())`;
  
     site_iterator s_iter;
     for (s_iter = sites().first; s_iter!=sites().second; ++s_iter)
         spins[*s_iter]=random_int(0,1);
 
-So you can see the two functions of the `LatticeMCRun` class `num_sites()` (returns the number of sites) and `sites()` (returns a `std::pair` of site_iterators). We can use the site_descriptor where iter points as the index for our spin-vector.
-The measurement of the energy as a part of the `do_step()` function could look like
+ここでは、`LatticeMCRun` クラスの 2 つの関数 `num_sites()`（サイト数を返す）と `sites()`（site_iterator の `std::pair` を返す）が使われています。iter が指す site_descriptor を、スピンベクトルのインデックスとして使うことができます。
+`do_step()` 関数の一部としてのエネルギーの測定は、例えば次のようになります。
 
     double E = 0.0;
     int index1, index2;
@@ -316,9 +316,9 @@ The measurement of the energy as a part of the `do_step()` function could look l
     //...
     measurements["Energy"] << E/num_sites();
     
-In this version, we iterate over all bonds, analogous to the iteration over sites and can access the two sites at the ends of the bond via source(bond_descriptor b) and target(bond_descriptor b) which return a site_descriptor.
+この版では、サイトについての反復と同様にすべてのボンドについて反復し、site_descriptor を返す source(bond_descriptor b) と target(bond_descriptor b) によって、ボンドの両端にある 2 つのサイトにアクセスできます。
 
-The alternative, including neighbor handling, is:
+隣接サイトの扱いを含む別の方法は次のとおりです。
 
     double E = 0.0;
     for (site_iterator s_iter=sites().first; s_iter!=sites().second; ++s_iter) {
@@ -328,7 +328,7 @@ The alternative, including neighbor handling, is:
         }
     }
 
-The third possibility runs through the outgoing bonds of a site:
+3 つ目の方法では、あるサイトから出るボンドをたどります。
 
     double E = 0.0;
     for (site_iterator s_iter=sites().first; s_iter!=sites().second; ++s_iter) {
@@ -338,7 +338,7 @@ The third possibility runs through the outgoing bonds of a site:
         }
     }
     
-Finally, if you want to access a random site or a random bond you can take site(int site_no) and bond(int bond_no):
+最後に、ランダムなサイトやランダムなボンドにアクセスしたい場合は、site(int site_no) と bond(int bond_no) を使えます。
 
     site_descriptor randomsite = site(random_int(num_sites() ) );
     bond_descriptor randombond = bond(random_int(num_bonds() ) );

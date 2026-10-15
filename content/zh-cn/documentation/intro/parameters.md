@@ -8,17 +8,17 @@ weight: 7
 
 以下输入参数是大多数 ALPS 应用程序共有的。
 
-## 格子定义
+## 晶格定义
 
-在格子上运行的 ALPS 应用程序通过以下三个参数来指定格子（关于格子库本身如何构建，参见[格子定义](../latticehowtos)）：
+在晶格上运行的 ALPS 应用程序通过以下三个参数来指定晶格（关于晶格库本身如何构建，参见[晶格定义](../latticehowtos)）：
 
 | **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
-| LATTICE_LIBRARY | lattices.xml | 包含格子描述的文件路径 |
-| LATTICE | | 格子的名称，由维数、大小和晶胞指定 |
-| GRAPH | | 作为 LATTICE 的替代，也可以直接引用格子库中定义的某个具体的任意图 |
+| LATTICE_LIBRARY | lattices.xml | 包含晶格描述的文件路径 |
+| LATTICE | | 晶格的名称，由维数、大小和晶胞指定 |
+| GRAPH | | 作为 LATTICE 的替代，也可以直接引用晶格库中定义的某个具体的任意图 |
 
-此外，格子描述可能还需要格子描述文件中指定的其他参数（例如 L 或 W）。
+此外，晶格描述可能还需要晶格描述文件中指定的其他参数（例如 L 或 W）。
 
 ## 模型定义
 
@@ -57,14 +57,14 @@ ALPS 量子格点模型可以通过以下参数指定（关于模型库本身如
 | **参数** | **默认值** | **含义** |
 | :------------ | :---------- | :---------- |
 | CONSERVED_QUANTUMNUMBERS | | 指定守恒的全局量子数，用于将计算拆分为针对不同扇区的更小规模计算。如果有多个量子数守恒，则将这些量子数用双引号括起来并以逗号分隔，如 CONSERVED_QUANTUMNUMBERS="N,Sz" |
-| N_total、Sz_total 等 | | 只要模型中为相应量子数定义了 `<CONSTRAINT>`（参见[格子基](../modeldef/latticebasis)），就可以用这些参数将其固定为某个具体值。只有当该参数被赋值，且相应量子数也出现在 CONSERVED_QUANTUMNUMBERS 中时，这一约束才会生效。 |
+| N_total、Sz_total 等 | | 只要模型中为相应量子数定义了 `<CONSTRAINT>`（参见[晶格基](../modeldef/latticebasis)），就可以用这些参数将其固定为某个具体值。只有当该参数被赋值，且相应量子数也出现在 CONSERVED_QUANTUMNUMBERS 中时，这一约束才会生效。 |
 | TRANSLATION_SYMMETRY | true | fulldiag 和 sparsediag 会利用平移对称性，并在可能的情况下按动量量子数对本征态进行分类。可以通过 TRANSLATION_SYMMETRY=false 关闭这种对称性约化。 |
 | TOTAL_MOMENTUM | | 固定总动量的取值。更多说明见下文。 |
 | MEASURE_ENERGY | false | 如果没有显式指定任何测量，fulldiag 和 sparsediag 默认不会存储关于本征态的任何信息；不过任何本征态的能量总是可以计算的——如果希望在未指定其他测量的情况下仍将能量包含在输出中，可以设置 MEASURE_ENERGY=true。 |
 
 **注意：** 除了 true 和 false，你也可以分别用 1 和 0 来表示。
 
-如果格子支持平移对称性，你可以指定总动量量子数，但在这样做时应当十分小心。
+如果晶格支持平移对称性，你可以指定总动量量子数，但在这样做时应当十分小心。
 TOTAL_MOMENTUM 以矢量的形式给出动量量子数，即用空格分隔的一组数字。通常，每个动量量子数 $k_i$ 具有如下形式
 
 $k_i = 2\pi n_i/L_i$,
@@ -75,4 +75,4 @@ $k_i = 2\pi n_i/L_i$,
 
 ---
 
-关于 LATTICE/LATTICE_LIBRARY 参数与格子库的关系，参见[格子定义](../latticehowtos)。关于 MODEL/MODEL_LIBRARY 参数与模型库的关系，参见 [ALPS 模型定义](../modeldef)。关于 ALPS 文档的其他章节，参见[总体介绍](..)。
+关于 LATTICE/LATTICE_LIBRARY 参数与晶格库的关系，参见[晶格定义](../latticehowtos)。关于 MODEL/MODEL_LIBRARY 参数与模型库的关系，参见 [ALPS 模型定义](../modeldef)。关于 ALPS 文档的其他章节，参见[总体介绍](..)。

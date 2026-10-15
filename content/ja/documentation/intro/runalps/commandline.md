@@ -1,6 +1,6 @@
 
 ---
-title: ALPS using the command line
+title: "コマンドラインでの ALPS の使用"
 toc: true
 weight: 2
 ---

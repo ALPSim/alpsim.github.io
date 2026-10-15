@@ -1,63 +1,62 @@
 ---
-title: Local Updates
+title: 局域更新
 math: true
 weight: 2
 ---
 
-In a Monte Carlo simulation, system states are usually sampled through local updates, where individual site configuration is updated one at a time based on its local environment. We will use Ising model to illustrate how the sampling of states is achieved. 
+在蒙特卡洛模拟中，系统状态通常通过局域更新进行采样，即根据单个格点的局域环境，每次更新一个格点的构型。我们将以伊辛模型为例，说明如何实现状态的采样。
 
-The Hamiltonian of the Ising model is given by the Hamiltonian:
+伊辛模型的哈密顿量为：
 $$
 \mathcal{H} = -J \sum_{\langle i,j \rangle} s_i^z s_j^z - h \sum_i s_i^z,
 $$
-where:
-- $J$ is the interaction strength between neighboring spins,
-- $\langle i,j \rangle$ denotes a sum over nearest-neighbor pairs,
-- $s_i^z=\pm 1$ is the spin at site $i$,
-- $h$ is an external magnetic field.
+其中：
+- $J$ 是相邻自旋之间的相互作用强度，
+- $\langle i,j \rangle$ 表示对最近邻对求和，
+- $s_i^z=\pm 1$ 是格点 $i$ 上的自旋，
+- $h$ 是外磁场。
 
-## Steps of a Monte Carlo Simulation
+## 蒙特卡洛模拟的步骤
 
-### 1. Initialize the System
-- Start with a lattice of spins (e.g., a 2D square lattice of size $L \times L$).
-- Initialize the spins randomly (e.g., $s_i^z = \pm 1$ with equal probability) or in a specific configuration (e.g., all spins up).
+### 1. 初始化系统
+- 从一个自旋晶格开始（例如尺寸为 $L \times L$ 的二维正方晶格）。
+- 随机初始化自旋（例如以相等概率取 $s_i^z = \pm 1$），或初始化为某个特定构型（例如所有自旋向上）。
 
-### 2. Perform Local Updates
-Local updates are performed using either the Metropolis-Hastings algorithm or the heat-bath algorithm.
+### 2. 执行局域更新
+局域更新可以采用 Metropolis-Hastings 算法或热浴算法。
 
-#### Metropolis-Hastings Local Update
-For each spin $s_i^z$:
-1. **Propose a flip**: Flip the spin $s_i^z$ to its opposite value, $s_i^z \to -s_i^z$.
-2. **Calculate the energy change**: Compute the change in energy $\Delta E$ due to the proposed flip. For the Ising model, the energy change depends only on the spin $s_i^z$ and its nearest neighbors:
+#### Metropolis-Hastings 局域更新
+对每个自旋 $s_i^z$：
+1. **提议翻转**：将自旋 $s_i^z$ 翻转为相反的值，$s_i^z \to -s_i^z$。
+2. **计算能量变化**：计算所提议的翻转引起的能量变化 $\Delta E$。对于伊辛模型，能量变化只依赖于自旋 $s_i^z$ 及其最近邻：
    $$
    \Delta E = 2 J s_i^z \sum_{j \in \text{neighbors}(i)} s_j^z + 2 h s_i^z.
    $$
-   Here, the sum is over the nearest neighbors of spin $s_i^z$.
-3. **Accept or reject the flip**:
+   这里的求和遍历自旋 $s_i^z$ 的最近邻。
+3. **接受或拒绝翻转**：
      $$
      P_{\text{accept}} = \text{min}(1, e^{-\beta \Delta E}),
      $$
-     where $\beta = 1/(k_B T)$ is the inverse temperature. This means
-   - If $\Delta E \leq 0$, always accept the flip.
-   - If $\Delta E > 0$, accept the flip with probability: $e^{-\beta \Delta E}$.
-   - If the flip is rejected, leave the spin unchanged.
+     其中 $\beta = 1/(k_B T)$ 为逆温度。这意味着
+   - 若 $\Delta E \leq 0$，总是接受该翻转。
+   - 若 $\Delta E > 0$，以概率 $e^{-\beta \Delta E}$ 接受该翻转。
+   - 若翻转被拒绝，则保持自旋不变。
 
-#### Heat-Bath Local Update
-Alternatively, the heat-bath algorithm can be used for local updates. For each spin $s_i^z$:
-1. **Compute the local field**: The local field acting on spin $s_i^z$ is given by:
+#### 热浴局域更新
+另外，也可以使用热浴算法进行局域更新。对每个自旋 $s_i^z$：
+1. **计算局域场**：作用在自旋 $s_i^z$ 上的局域场为：
    $$
    h_i = -J \sum_{j \in \text{neighbors}(i)} s_j^z - h.
    $$
-2. **Sample the new spin state**: The spin $s_i^z$ is updated to $+1$ or $-1$ with probabilities:
+2. **采样新的自旋状态**：自旋 $s_i^z$ 以如下概率更新为 $+1$ 或 $-1$：
    $$
    P_{ -1 \to +1} = \frac{e^{-\beta h_i}}{e^{-\beta h_i} + e^{\beta h_i}},
    $$
    $$
    P_{ +1 \to -1} = \frac{e^{\beta h_i}}{e^{-\beta h_i} + e^{\beta h_i}}.
    $$
-   These probabilities ensure that the spin is sampled from its equilibrium distribution given its local environment.
+   这些概率保证了在给定局域环境下，自旋是从其平衡分布中采样得到的。
 
-### 3. Repeat for Many Sweeps
-- A sweep consists of attempting to update every spin in the lattice once.
-- Repeat the local update process for many sweeps to allow the system to reach equilibrium and to collect statistics.
-
+### 3. 重复多次扫描
+- 一次扫描指对晶格中的每个自旋都尝试更新一次。
+- 将局域更新过程重复多次扫描，使系统达到平衡并收集统计数据。

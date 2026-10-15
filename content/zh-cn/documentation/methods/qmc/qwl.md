@@ -1,90 +1,88 @@
-
 ---
-title: Quantum Wang-Landau Algorithm 
+title: 量子 Wang-Landau 算法 
 math: true
 weight: 7
 ---
 
-## Introduction
+## 简介
 
-The `qwl` code provides a multi-cluster implementation of the quantum Wang-Landau (QWL) method based on the stochastic series expansion (SSE) quantum Monte Carlo scheme. The QWL methods was developed by members of the ALPS collabortaion, M. Troyer, S. Wessel, and F. Alet, as an extension of the classical Wang-Landau algorithm to the quantum case. The underlying SSE method was invented by A. Sandvik and coworkers. Using the QWL approach, one can extract thermodynamic quantities, such as the energy or entropy, from a single simulation in an extended ensemble, based on a high temperature series expansion of the partition function, the coefficients of which are calculated to high order in the course of the simulation.
+`qwl` 程序提供了基于随机级数展开（SSE）量子蒙特卡洛方案的量子 Wang-Landau（QWL）方法的多团簇实现。QWL 方法由 ALPS 合作组成员 M. Troyer、S. Wessel 和 F. Alet 提出，是经典 Wang-Landau 算法在量子情形下的推广。其底层的 SSE 方法由 A. Sandvik 及其合作者发明。利用 QWL 方法，可以基于配分函数的高温级数展开，从扩展系综中的单次模拟中提取能量或熵等热力学量，展开系数在模拟过程中被计算到很高的阶数。
 
-The current implementation of the QWL method is based on an extension of the original scheme, as proposed in the classical case by C. Zhou and R. N. Bhatt. The algorithm first performes a number of Wang-Landau refinement steps, using the Zhou-Bhatt criterion instead of the histogram flatness. After obtaining the final ensemble weights, additional simulations are performed in the resulting ensemble, including measurements of observables.
+QWL 方法的当前实现基于对原始方案的一种扩展，即 C. Zhou 和 R. N. Bhatt 在经典情形下提出的方案。该算法首先执行若干步 Wang-Landau 精化步骤，使用 Zhou-Bhatt 判据代替直方图平坦度判据。得到最终的系综权重后，再在所得系综中进行额外的模拟，其中包括对观测量的测量。
 
-**Note:** This first version allows the simulation of isotropic Heisenberg spin-1/2 ferro- and antiferromagnetic models on arbitrary non-frustrated lattices at zero magnetic field. In the future, we plan to relax this constraint, and also provide an implementation of the QWL perturbation expansion.
+**注意：** 该第一版仅支持在零磁场下、任意无阻挫晶格上模拟各向同性的自旋 1/2 海森堡铁磁和反铁磁模型。今后我们计划放宽这一限制，并提供 QWL 微扰展开的实现。
 
-## Running a simulation
+## 运行模拟
 
-is discussed in the tutorial. After running a simulation using the `qwl` program, the script `qwl_evaluate` program produces XML plot files of the thermodynamic as well as (when measured) magnetic properties, specified below.
+详见教程。使用 `qwl` 程序运行模拟后，脚本 `qwl_evaluate` 程序会生成热力学性质以及（在测量了的情况下）磁性性质的 XML 绘图文件，具体如下。
 
-## Input parameters
+## 输入参数
 
-In addition to the common input parameters discussed here the `qwl` application takes the following input parameters:
+除了此处讨论的通用输入参数之外，`qwl` 应用程序还接受以下输入参数：
 
-| **Name** | **Default** | **Description** |
+| **名称** | **默认值** | **描述** |
 | :------- | :---------- | :-------------- |
-| CUTOFF | 500 | maximum expansion order kept during the simulation |
-| T_MIN | 0.1 | lowest temperature for which obervables are calculated by `qwl_evaluate` (overwritten by its commandline option \[-T_MIN ...\]) |
-| T_MAX | 10 | highest temperature for which obervables are calculated by `qwl_evaluate` (overwritten by its commandline option \[-T_MAX ...\]) |
-| DELTA_T | 0.1 | temperature step width used by `qwl_evaluate` (overwritten by its commandline option \[-DELTA_T ...\]) |
-| MEASURE_MAGNETIC_PROPERTIES | 1 | turns on (1) or off (0) the measurement of uniform and, if LATTICE is bipartite, staggered magnetic properties (listed below) |
+| CUTOFF | 500 | 模拟过程中保留的最大展开阶数 |
+| T_MIN | 0.1 | `qwl_evaluate` 计算观测量的最低温度（会被其命令行选项 \[-T_MIN ...\] 覆盖） |
+| T_MAX | 10 | `qwl_evaluate` 计算观测量的最高温度（会被其命令行选项 \[-T_MAX ...\] 覆盖） |
+| DELTA_T | 0.1 | `qwl_evaluate` 使用的温度步长（会被其命令行选项 \[-DELTA_T ...\] 覆盖） |
+| MEASURE_MAGNETIC_PROPERTIES | 1 | 开启（1）或关闭（0）对均匀磁性性质以及（若 LATTICE 为二分晶格）交错磁性性质（见下文）的测量 |
 
-### Parameters for experts
+### 专家参数
 
-In addition, the following parameters can be assigned to the algorithm, in particular to allow for simulations using the original QWL refinement scheme.
+此外，还可以为算法指定以下参数，特别是用于采用原始 QWL 精化方案进行模拟。
 
-| **Name** | **Default** | **Description** |
+| **名称** | **默认值** | **描述** |
 | :------- | :---------- | :-------------- |
-| NUMBER_OF_WANG_LANDAU_STEPS | 16 | number of the Wang-Landau refinement steps |
-| SWEEPS | determined during Wang-Landau refinement | number of Monte Carlo steps in final fixed-weights simulation |
-| USE_ZHOU_BHATT_METHOD | 1 | turns on (1) or off (0) the usage of the Zhou-Bhatt method (if turned off (0), FLATNESS_TRESHOLD and BLOCK_SWEEPS apply) |
-| FLATNESS_TRESHOLD | N/A if USE_ZHOU_BHATT_METHOD=1 0.2, if USE_ZHOU_BHATT_METHOD=0 | maximum deviation of the histogram maximum/minimum from the average value to be reached before reduction of the increase factor (pplies only, if USE_ZHOU_BHATT_METHOD=0) |
-| BLOCK_SWEEPS | N/A, if USE_ZHOU_BHATT_METHOD=1  10000, if USE_ZHOU_BHATT_METHOD=0 | number of sweeps within a Wang-Landau step before checking for flatness (applies only, if USE_ZHOU_BHATT_METHOD=0) |
-| INITIAL_MODIFICATION_FACTOR | e, if USE_ZHOU_BHATT_METHOD=1  determined from other parameters, if USE_ZHOU_BHATT_METHOD=0 | initial value of the increase factor of the expansion coefficients during the first Wang-Landau refinement step (in sucessive steps, the factor is decreased by taking its squareroot) |
-| EXPANSION_ORDER_MINIMUM | 0 | minimum expansion order of determined coefficients |
-| EXPANSION_ORDER_MAXIMUM | CUTOFF | maximum expansion order of determined coefficients, must not exceed CUTOFF |
-| START_STORING | NUMBER_OF_WANG_LANDAU_STEPS | number of Wang-Landau steps, where storing of expansion coefficients starts |
+| NUMBER_OF_WANG_LANDAU_STEPS | 16 | Wang-Landau 精化步骤的数目 |
+| SWEEPS | 在 Wang-Landau 精化过程中确定 | 最终固定权重模拟中的蒙特卡洛步数 |
+| USE_ZHOU_BHATT_METHOD | 1 | 开启（1）或关闭（0）Zhou-Bhatt 方法（若关闭（0），则 FLATNESS_TRESHOLD 和 BLOCK_SWEEPS 生效） |
+| FLATNESS_TRESHOLD | 若 USE_ZHOU_BHATT_METHOD=1 则不适用；若 USE_ZHOU_BHATT_METHOD=0 则为 0.2 | 在减小增长因子之前，直方图最大值/最小值相对于平均值所需达到的最大偏差（仅当 USE_ZHOU_BHATT_METHOD=0 时适用） |
+| BLOCK_SWEEPS | 若 USE_ZHOU_BHATT_METHOD=1 则不适用；若 USE_ZHOU_BHATT_METHOD=0 则为 10000 | 在一个 Wang-Landau 步骤内检查平坦度之前的扫描次数（仅当 USE_ZHOU_BHATT_METHOD=0 时适用） |
+| INITIAL_MODIFICATION_FACTOR | 若 USE_ZHOU_BHATT_METHOD=1 则为 e；若 USE_ZHOU_BHATT_METHOD=0 则由其他参数确定 | 第一个 Wang-Landau 精化步骤中展开系数增长因子的初始值（在后续步骤中，通过取平方根来减小该因子） |
+| EXPANSION_ORDER_MINIMUM | 0 | 所确定系数的最小展开阶数 |
+| EXPANSION_ORDER_MAXIMUM | CUTOFF | 所确定系数的最大展开阶数，不得超过 CUTOFF |
+| START_STORING | NUMBER_OF_WANG_LANDAU_STEPS | 开始存储展开系数时所处的 Wang-Landau 步骤数 |
 
-## Measurements 
+## 测量 
 
-The `qwl_evaluate` program takes an XML output file of a qwl simulation,
+`qwl_evaluate` 程序读取一次 qwl 模拟的 XML 输出文件，
 
     qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
 
-and produces XML plot files (`prefix.plot.energy.xml` etc.) for the following quantities vs. temperature:
+并为以下物理量随温度的变化生成 XML 绘图文件（`prefix.plot.energy.xml` 等）：
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Energy Density | energy per site |
-| Free Energy Density | free energy per site |
-| Entropy Density | entropy per site |
-| Specific Heat per Site | specific heat per site |
-| Uniform Structure Factor per Site | longitudinal uniform structure factor (if MEASURE_MAGNETIC_PROPERTIES=1) |
-| Uniform Susceptibility per Site | uniform susceptibility (if MEASURE_MAGNETIC_PROPERTIES=1) |
-| Staggered Structure Factor per Site | longitudinal staggered structure factor (if MEASURE_MAGNETIC_PROPERTIES=1 and for bipartite lattices only) |
+| Energy Density | 每格点能量 |
+| Free Energy Density | 每格点自由能 |
+| Entropy Density | 每格点熵 |
+| Specific Heat per Site | 每格点比热 |
+| Uniform Structure Factor per Site | 纵向均匀结构因子（若 MEASURE_MAGNETIC_PROPERTIES=1） |
+| Uniform Susceptibility per Site | 均匀磁化率（若 MEASURE_MAGNETIC_PROPERTIES=1） |
+| Staggered Structure Factor per Site | 纵向交错结构因子（若 MEASURE_MAGNETIC_PROPERTIES=1，且仅适用于二分晶格） |
 
-The following quantities are directly measured by the `qwl` application, and are of relevance mainly from an algorithmic perspective.
+以下物理量由 `qwl` 应用程序直接测量，主要从算法角度来看具有意义。
 
-| **Name** | **Description** |
+| **名称** | **描述** |
 | :------- | :-------------- |
-| Coefficients | estimate of the logarithms $\ln[g(n)]$ of the coefficients $g(n)$ of the high temperature series expansion of the partition function, $Z= \sum_n g(n)\beta_n$, after SWEEPS fixed-weights sweeps, taking into account the final histogram (this usually constitutes the best estimate)|
-| Coefficients # | estimate of $\ln[g(n)]$, after the #-th Wang-Landau refinement step (# ≥ START_STORING) |
-| Histogram | normalized histogram of visited expansion orders during the fixed-weights sweeps |
-| Fraction | fraction of up-walkers for the visited expansion orders during the fixed-weights sweeps |
-| Time Up | time to tunnel from lowest to highest expansion coefficent during the fixed-weights sweeps |
-| Time Down | time to tunnel from highest to lowest expansion coefficent during the fixed-weights sweeps |
-| Time Total | time to tunnel from lowest to highest and back to lowest expansion coefficent during the fixed-weights sweeps |
-| Total Sweeps | number of sweeps used for the total simulation, including Wang-Landau refinement |
-| Total Sweeps # | number of sweeps used for the #-th Wang-Landau refinement step (# ≥ START_STORING) |
-| Uniform Structure Factor Coefficients | expansion coefficients of the uniform structure factor (if MEASURE_MAGNETIC_PROPERTIES=1) |
-| Staggered Structure Factor Coefficients | expansion coefficients of the staggered structure factor(if MEASURE_MAGNETIC_PROPERTIES=1 and for bipartite lattices only) |
+| Coefficients | 配分函数高温级数展开 $Z= \sum_n g(n)\beta_n$ 中系数 $g(n)$ 的对数 $\ln[g(n)]$ 的估计值，在 SWEEPS 次固定权重扫描之后得到，并考虑了最终直方图（这通常是最佳估计）|
+| Coefficients # | 第 # 个 Wang-Landau 精化步骤之后 $\ln[g(n)]$ 的估计值（# ≥ START_STORING） |
+| Histogram | 固定权重扫描期间所访问展开阶数的归一化直方图 |
+| Fraction | 固定权重扫描期间，所访问展开阶数上向上行走者所占的比例 |
+| Time Up | 固定权重扫描期间，从最低展开系数隧穿到最高展开系数所需的时间 |
+| Time Down | 固定权重扫描期间，从最高展开系数隧穿到最低展开系数所需的时间 |
+| Time Total | 固定权重扫描期间，从最低展开系数隧穿到最高展开系数再返回最低展开系数所需的时间 |
+| Total Sweeps | 整个模拟（包括 Wang-Landau 精化）所用的扫描次数 |
+| Total Sweeps # | 第 # 个 Wang-Landau 精化步骤所用的扫描次数（# ≥ START_STORING） |
+| Uniform Structure Factor Coefficients | 均匀结构因子的展开系数（若 MEASURE_MAGNETIC_PROPERTIES=1） |
+| Staggered Structure Factor Coefficients | 交错结构因子的展开系数（若 MEASURE_MAGNETIC_PROPERTIES=1，且仅适用于二分晶格） |
 
-Other quantities might also be available depending on the exact version of the qwl application.
+根据 qwl 应用程序的具体版本，还可能提供其他物理量。
 
-## References
+## 参考文献
 
 - M. Troyer, S. Wessel and F. Alet, Phys. Rev. Lett. 90, 120201 (2003)
 - S. Wessel, N. Stoop, E. Gull, S. Trebst, and M. Troyer, J. Stat. Mech. P12005 (2007)
 - S. Trebst, D. A. Huse, and M. Troyer, Phys. Rev. E 70, 046701 (2004)
-- C. Zhou and R.N. Bhatt, Phys. Rev. E 72, 025701(R) (2005) 
-
+- C. Zhou and R.N. Bhatt, Phys. Rev. E 72, 025701(R) (2005)

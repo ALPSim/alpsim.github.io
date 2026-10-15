@@ -1,139 +1,139 @@
 
 ---
-title: Bosons in an Optical Lattice
+title: 光格子中のボソン
 math: true
 ---
 
-## Bandstructure of an homogeneous optical lattice
+## 一様な光格子のバンド構造
 
-### Theory
+### 理論
 
-At this first moment, we shall look at the simplest case, i.e. a single particle of mass $m$ which experiences a periodic potential:
+まずは最も単純な場合、すなわち周期ポテンシャルを感じる質量 $m$ の単一粒子を考えます。
 
 $$
 V(\vec{r}) = \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha),
 $$
 
-where $V_0^{x_\alpha}$ is the lattice depth in units of the recoil energy $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ and lengths are in units of the lattice spacing $\frac{\lambda_\alpha}{2}$.
+ここで $V_0^{x_\alpha}$ は反跳エネルギー $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ を単位とした格子の深さであり、長さは格子間隔 $\frac{\lambda_\alpha}{2}$ を単位とします。
 
-The quantum mechanical behaviour of the single particle follows:
+単一粒子の量子力学的な振る舞いは次の式に従います。
 
 $$
 \left[\frac{1}{\pi^2} \left( -i \nabla + 2\pi \vec{k} \right)^2 + \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)\right]  u_k (\vec{r}) = \epsilon_k u_k(\vec{r}),
 $$
 
-which is clearly separable to say the $x$-component:
+これは明らかに変数分離でき、例えば $x$ 成分については
 
 $$
 \left[\frac{1}{\pi^2} \left( -i \partial_x + 2\pi k_x \right)^2 + V_0^{x} \sin^2 (\pi x)\right]  u_{k_x} (x) = \epsilon_{k_x} u_{k_x}(x),
 $$
 
-where $k_x = 0, \frac{1}{L_x} ,\cdots \frac{L_x-1}{L_x}$.
+となります。ここで $k_x = 0, \frac{1}{L_x} ,\cdots \frac{L_x-1}{L_x}$ です。
 
-In the plane wave basis:
+平面波基底は次のとおりです。
 
 $$
 u_{k_x} (x) = \frac{1}{\sqrt{L_x}} \sum_{m \in \mathbf{Z}}  c_m^{(k_x)} e^{i2m\pi x}.
 $$
 
-We arrive at a tridiagonal diagonalization problem:
+これを用いると、三重対角行列の対角化問題に帰着します。
 
 $$
 \left[  4(m + k_x)^2 + \frac{V_0^x}{2} \right] c_m^{(k_x)} - \frac{V_0^x}{4} c_{m-1}^{(k_x)} - \frac{V_0^x}{4} c_{m+1}^{(k_x)}  = \epsilon_{k_x}  c_m^{(k_x)}.
 $$
 
-The wannier function is defined as:
+ワニエ関数は次のように定義されます。
 
 $$
 w(x) = \frac{1}{\sqrt{L_x}} \sum_{k_x} u_{k_x} (x) e^{i 2\pi k_x x} = \frac{1}{L_x} \sum_{k_x} \sum_{m \in \mathbf{Z}} c_m^{(k_x)} e^{i 2\pi (m+k_x) x},
 $$
 
-and from there, one can calculate the onsite interaction:
+そこから、オンサイト相互作用を計算できます。
 
 $$
 U = g \int | w(x) |^4 dx = \frac{4 \pi a_s \hbar^2}{m}  \int | w(x) |^4 dx.
 $$
 
-After a little bit of algebra, we arrive at the hopping strength:
+少し計算すると、ホッピングの強さが得られます。
 
 $$
 t = -\frac{1}{L_x} \sum_{k_x} \epsilon_{k_x} e^{-i2\pi k_x}.
 $$
 
-Finally, the Fourier transform of the wannier function is:
+最後に、ワニエ関数のフーリエ変換は次のようになります。
 
 $$
 \tilde{w}(q_x) = \frac{1}{\sqrt{L_x}} \int w(x) e^{-i2\pi q_x x} dx  = \frac{1}{\sqrt{L_x}} \sum_{k_x} \sum_{m \in \mathbf{Z}} c_m^{(k_x)} \delta_{q_x, k_x+m}.
 $$
 
-### Implementation in Python
+### Python による実装
 
-The script [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-01-bandstructure/bandstructure.py) evaluates these formulas: for each direction it diagonalizes the tridiagonal problem above for all $k_x$, obtains $t$ from the band energies $\epsilon_{k_x}$, and integrates $|w(x)|^4$ to obtain $U$. Run the following from that directory:
+スクリプト [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-01-bandstructure/bandstructure.py) はこれらの式を評価します。各方向について、すべての $k_x$ に対して上の三重対角問題を対角化し、バンドエネルギー $\epsilon_{k_x}$ から $t$ を求め、$|w(x)|^4$ を積分して $U$ を求めます。そのディレクトリで次を実行してください。
 
 ```python
 import numpy as np
 import bandstructure
 
-V0   = np.array([8., 8., 8.])        # lattice depth in recoil energies
-wlen = np.array([843., 843., 843.])  # laser wavelength in nanometer
-a    = 114.8                         # s-wave scattering length in bohr radius
-m    = 86.99                         # mass in atomic mass unit
-L    = 200                           # lattice size (along 1 direction)
+V0   = np.array([8., 8., 8.])        # 格子の深さ（反跳エネルギー単位）
+wlen = np.array([843., 843., 843.])  # レーザー波長（nm 単位）
+a    = 114.8                         # s 波散乱長（ボーア半径単位）
+m    = 86.99                         # 質量（原子質量単位）
+L    = 200                           # 格子サイズ（1 方向あたり）
 
 t, U = bandstructure.hubbard_parameters(V0, wlen, a, m, L)
 
-print(t)        # t in nK:  [4.77051684 4.77051684 4.77051684]
-print(U)        # U in nK:  38.70187649673881
-print(U / t)    # U/t:      [8.11272191 8.11272191 8.11272191]
+print(t)        # t（nK 単位）: [4.77051684 4.77051684 4.77051684]
+print(U)        # U（nK 単位）: 38.70187649673881
+print(U / t)    # U/t: [8.11272191 8.11272191 8.11272191]
 ```
 
 
-## Bosons in an optical lattice trap
+## 光格子トラップ中のボソン
 
-### Boson Hubbard model
+### ボース・ハバードモデル
 
-#### Hamiltonian
+#### ハミルトニアン
 
-Bosons in an optical lattice trap can be effectively described by the single band boson Hubbard model:
+光格子トラップ中のボソンは、単一バンドのボース・ハバードモデルによって実効的に記述できます。
 
 $$
 \hat{H} = -t \sum_{\langle i,j \rangle} \hat{b}_i^+ \hat{b}_j + \frac{U}{2} \sum_i \hat{n}_i (\hat{n}_i - 1) - \sum_i ( \mu - V_T ( \vec{r}_i) ) \hat{n}_i,
 $$
 
-with hopping strength $t$, onsite interaction strength $U$, and chemical potential $\mu$ at finite temperature $T$ via the directed-loop stochastic series expansion (SSE) quantum Monte Carlo code `dirloop_sse`. Here, $\hat{b}$ ($\hat{b}^+$) is the annihilation (creation) operator, and $\hat{n}_i$ being the number operator at site $i$. Bosons in an optical lattice are confined in a 3D parabolic trapping potential:
+ここで、ホッピングの強さ $t$、オンサイト相互作用の強さ $U$、化学ポテンシャル $\mu$ を持つ系を、有限温度 $T$ において、ディレクテッドループ確率級数展開（SSE）量子モンテカルロコード `dirloop_sse` で扱います。$\hat{b}$（$\hat{b}^+$）は消滅（生成）演算子、$\hat{n}_i$ はサイト $i$ における数演算子です。光格子中のボソンは、3 次元の放物型トラップポテンシャルに閉じ込められています。
 
 $$
 V_T (\vec{r}_i) = K_x x_i^2 + K_y y_i^2 + K_z z_i^2,
 $$
 
-due to the gaussian beam waists as well as other sources of trapping.
+このトラップは、ガウシアンビームのウエストやその他のトラップ源によるものです。
 
-#### Finite temperature
+#### 有限温度
 
-At finite temperature $T$, the physics is essentially captured by the partition function:
+有限温度 $T$ では、物理は本質的に次の分配関数によって捉えられます。
 
 $$
 Z = \mathrm{Tr} \, \exp \left(-\beta \hat{H} \right),
 $$
 
-and physical quantities such as the local density:
+局所密度のような物理量は次のように与えられます。
 
 $$
 \langle n_i \rangle = \frac{1}{Z} \mathrm{Tr} \hat{n}_i \exp \left(-\beta \hat{H} \right)  = \frac{1}{Z} \sum_{\mathcal{C}} n_i (\mathcal{C}) Z(\mathcal{C}),
 $$
 
-for some configuration $\mathcal{C}$ in the complete configuration space, with inverse temperature $\beta = 1/T$ . Here, the units will be cleverly normalized later on.
+ここで $\mathcal{C}$ は全配置空間中のある配置、$\beta = 1/T$ は逆温度です。単位については後ほど巧妙に規格化します。
 
-### Implementation in Python
+### Python による実装
 
-The script [`tutorials/optical-lattice-02-density-profile/density_profile.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-02-density-profile/density_profile.py) simulates this model on a $9^3$ lattice with `dirloop_sse` and plots the local density $\langle n_i \rangle$. It uses $U/t = 8.11$ from the band-structure example above, temperature $T = t$, and an isotropic trap $K_x = K_y = K_z = 0.65\,t$ centered on the lattice. The trap enters through a site-dependent chemical potential on the `inhomogeneous simple cubic lattice`:
+スクリプト [`tutorials/optical-lattice-02-density-profile/density_profile.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-02-density-profile/density_profile.py) は、このモデルを $9^3$ の格子上で `dirloop_sse` によりシミュレーションし、局所密度 $\langle n_i \rangle$ をプロットします。上のバンド構造の例から得た $U/t = 8.11$、温度 $T = t$、格子の中心に置いた等方的なトラップ $K_x = K_y = K_z = 0.65\,t$ を用います。トラップは `inhomogeneous simple cubic lattice` 上のサイトに依存する化学ポテンシャルとして取り込まれます。
 
 ```python
 import numpy as np
 import pyalps
 
 L = 9
-K = 0.65                                        # trap curvature V_T = K r^2, in units of t
+K = 0.65                                        # トラップの曲率 V_T = K r^2（t 単位）
 c = (L - 1) / 2.
 
 parms = [{
@@ -159,13 +159,13 @@ print('Total number of bosons: %.2f' % n.sum())
 print('Density at the trap center: %.3f' % n[L // 2, L // 2, L // 2])
 ```
 
-The full script also plots a cut through the trap center and the density in the center layer:
+完全なスクリプトでは、トラップ中心を通る断面と、中心層の密度もプロットします。
 
-![Local density of trapped bosons on a 9^3 lattice](/figs/opticallattice_density_profile.png)
+![9^3 格子上のトラップされたボソンの局所密度](/figs/opticallattice_density_profile.png)
 
-The lattice is kept small so the example runs in a few minutes, which means it still sits inside the cloud: the density falls off toward the edges but does not quite vanish there. A bigger lattice lets the density drop closer to zero at the edges.
+例が数分で実行できるように格子を小さくしているため、格子はまだ原子雲の内側に収まっています。密度は端に向かって減少しますが、端で完全には消えません。より大きな格子を用いると、端での密度はゼロにより近づきます。
 
-## Contributors
+## 貢献者
 
 - Ping Nang Ma
 - Matthias Troyer

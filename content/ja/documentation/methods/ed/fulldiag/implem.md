@@ -1,77 +1,77 @@
-
 ---
-title: Implementation 
+title: 実装
 math: true
 weight: 3
 ---
 
-## Introduction
+## はじめに
 
-The `fulldiag` package uses LAPACK library for a complete diagonalization of the Hamiltonian. Hence, it can be used for computing thermodynamic properties of any model that can be defined using the ALPS libraries. The main limitation is one of size, i.e., memory and CPU time may become unacceptable at sizes where other, more specialized applications still work well.
+`fulldiag` パッケージは、LAPACK ライブラリを用いてハミルトニアンの完全対角化を行います。そのため、ALPS ライブラリを用いて定義できるあらゆるモデルの熱力学的性質の計算に使用できます。主な制約はサイズです。すなわち、他のより特化したアプリケーションがまだ問題なく動作するサイズでも、メモリや CPU 時間が許容できないほど大きくなることがあります。
 
-Release 1.3 allows the computation of magnetic or charge properties properties for models with a coupling to a conserved quantity of the form $-hS_z$ or $-\mu N$, i.e., a SITETERM $-h S_z(i)$ or $-\mu n(i)$. In fact, adaptation to other situations with a coupling to a conserved quantity should be relatively straightforward by changing a few lines in the source file fulldiag.h (this is just not supported at the moment, since it requires the modification of at least 5 strings by the user). If the conserved quantity is not present, two quantities less will be evaluated (see below).
+リリース 1.3 では、$-hS_z$ または $-\mu N$ の形の保存量への結合、すなわち SITETERM $-h S_z(i)$ または $-\mu n(i)$ を持つモデルについて、磁気的性質または電荷的性質を計算できるようになりました。実際、保存量への結合を持つ他の状況への適用も、ソースファイル fulldiag.h の数行を変更することで比較的簡単に行えるはずです（ただし、ユーザーが少なくとも 5 つの文字列を変更する必要があるため、現時点ではサポートしていません）。保存量が存在しない場合は、評価される量が 2 つ少なくなります（下記参照）。
 
-**Warning:** Incorrect results may be obtained if the supposed conserved quantity does actually not commute with the Hamiltonian. Incorrect results will also in general be obtained if the coefficients are not of the above form, and the magnetic field $h$ or chemical potential $\mu$ are changed by `fulldiag_evaluate`.
+**警告：** 保存量とされる量が実際にはハミルトニアンと交換しない場合、誤った結果が得られることがあります。また、係数が上記の形でない場合や、磁場 $h$ または化学ポテンシャル $\mu$ を `fulldiag_evaluate` で変更した場合にも、一般に誤った結果が得られます。
 
 
-## Running a computation
+## 計算の実行
 
-is discussed in the `fulldiag` tutorial. After obtaining the full spectrum using the `fulldiag` program, the evaluation program `fulldiag_evaluate` can be used to efficiently produce XML plot files of the thermodynamic as well as magnetic properties, specified below.
+については `fulldiag` のチュートリアルで説明しています。`fulldiag` プログラムで全スペクトルを得た後、評価プログラム `fulldiag_evaluate` を用いて、以下に示す熱力学的性質および磁気的性質の XML プロットファイルを効率よく作成できます。
 
-### Input parameters
+### 入力パラメータ
 
-The parameters for the `fulldiag` application are all described among the common input parameters (note in particular the additional parameters for exact diagonalization).
-The following further parameters are used only by `fulldiag_evaluate`:
+`fulldiag` アプリケーションのパラメータは、すべて共通入力パラメータの中で説明されています（特に厳密対角化のための追加パラメータに注意してください）。
+以下のパラメータは `fulldiag_evaluate` でのみ使用されます。
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| T_MIN |  | lowest temperature for which obervables are calculated |
-| T_MAX |  | highest temperature for which obervables are calculated |
-| DELTA_T | | temperature step width |
-| couple | | couple mu changes the coupling from the default $-h S_z$ to $-\ mu N$. It also changes the meaning of a few other parameters and quantities (see below). |
-| H_MIN (MU_MIN) | | lowest magnetic field (chemical potential if --couple mu is specified) for which obervables are calculated |
-| H_MAX (MU_MAX) | | highest magnetic field (chemical potential if --couple mu is specified) for which obervables are calculated |
-| DELTA_H (DELTA_MU) | | magnetic field step width (chemical potential step width if --couple mu is specified) |
-| versus | | versus h (versus mu if --couple mu is specified) puts the magnetic field (chemical potential) on the $x$-axis rather than temperature |
-| MEASURE_MAGNETIC_PROPERTIES (MEASURE_CHARGE_PROPERTIES) | 1 | turns on (1) or off (0) the evaluation of magnetic (or charge) properties (see below). Recall that with the current version of `fulldiag`, such measurements are possible only for models with a conserved total $S_z$ or $N$. A corresponding CONSERVED_QUANTUMNUMBERS=... must also be specified in the parameters of `fulldiag`. |
-| DENSITIES | 1 | specify whether to normalize quantities per site (1) or for the total system (0) |
+| T_MIN |  | 観測量を計算する最低温度 |
+| T_MAX |  | 観測量を計算する最高温度 |
+| DELTA_T | | 温度の刻み幅 |
+| couple | | couple mu により、結合をデフォルトの $-h S_z$ から $-\ mu N$ に変更します。これにより、他のいくつかのパラメータや量の意味も変わります（下記参照）。 |
+| H_MIN (MU_MIN) | | 観測量を計算する最小の磁場（--couple mu が指定された場合は化学ポテンシャル） |
+| H_MAX (MU_MAX) | | 観測量を計算する最大の磁場（--couple mu が指定された場合は化学ポテンシャル） |
+| DELTA_H (DELTA_MU) | | 磁場の刻み幅（--couple mu が指定された場合は化学ポテンシャルの刻み幅） |
+| versus | | versus h（--couple mu が指定された場合は versus mu）により、温度の代わりに磁場（化学ポテンシャル）を $x$ 軸にとります |
+| MEASURE_MAGNETIC_PROPERTIES (MEASURE_CHARGE_PROPERTIES) | 1 | 磁気的（または電荷的）性質の評価をオン (1) またはオフ (0) にします（下記参照）。現在のバージョンの `fulldiag` では、このような測定は全 $S_z$ または $N$ が保存されるモデルでのみ可能であることに注意してください。`fulldiag` のパラメータにも、対応する CONSERVED_QUANTUMNUMBERS=... を指定する必要があります。 |
+| DENSITIES | 1 | 量をサイトあたりで規格化する (1) か、系全体の値とする (0) かを指定します |
 
-All these parameters can be overwritten by the command line argument with the same name.
+これらのパラメータはすべて、同じ名前のコマンドライン引数で上書きできます。
 
-## Evaluation of thermodynamic properties
+## 熱力学的性質の評価
 
-The `fulldiag_evaluate` program takes an XML output file of `fulldiag`, 
+`fulldiag_evaluate` プログラムは、`fulldiag` の XML 出力ファイルを受け取ります。
 
     fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
         [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
         [--DENSITIES ...] inputfile [outputfileprefix]</tt>
 
-or 
+または
 
     fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
         [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
         [--DENSITIES ...] inputfile [outputfileprefix]</tt>
 
-Two optional ranges for temperature (T_MIN, T_MAX, DELTA_T) and magnetic field (H_MIN, H_MAX, DELTA_H) or chemical potential (MU_MIN, MU_MAX, DELTA_MU) can be specified. `fulldiag_evaluate` produces XML plot files (`outputfileprefix.plot.energy.xml` etc., where outputfileprefix is derived from the name of the inputfile if not specified) for the following quantities versus temperature:
+温度（T_MIN, T_MAX, DELTA_T）と、磁場（H_MIN, H_MAX, DELTA_H）または化学ポテンシャル（MU_MIN, MU_MAX, DELTA_MU）について、2 つの範囲をオプションで指定できます。`fulldiag_evaluate` は、以下の量の温度依存性について XML プロットファイル（`outputfileprefix.plot.energy.xml` など。outputfileprefix が指定されていない場合は inputfile の名前から決まります）を出力します。
 
-- Energy [Density]
-- Free Energy [Density]
-- Entropy [Density]
-- Specific Heat [Density]
-- Magnetization [Density] (if MEASURE_MAGNETIC_PROPERTIES=1, and without couple mu)
-- Uniform Susceptibility [Density] (if MEASURE_MAGNETIC_PROPERTIES=1, and without couple mu)
-- Particle number [Density] (if MEASURE_CHARGE_PROPERTIES=1, and with couple mu)
-- Compressibility [Density] (if MEASURE_CHARGE_PROPERTIES=1, and with couple mu)
+- エネルギー（Energy）[密度]
+- 自由エネルギー（Free Energy）[密度]
+- エントロピー（Entropy）[密度]
+- 比熱（Specific Heat）[密度]
+- 磁化（Magnetization）[密度]（MEASURE_MAGNETIC_PROPERTIES=1 で、couple mu を指定しない場合）
+- 一様磁化率（Uniform Susceptibility）[密度]（MEASURE_MAGNETIC_PROPERTIES=1 で、couple mu を指定しない場合）
+- 粒子数（Particle number）[密度]（MEASURE_CHARGE_PROPERTIES=1 で、couple mu を指定した場合）
+- 圧縮率（Compressibility）[密度]（MEASURE_CHARGE_PROPERTIES=1 で、couple mu を指定した場合）
 
-Note that quantities are output as densities, i.e., normalized to the number of sites if the parameter DENSITIES=1, while output is for the total system if DENSITIES=0. By default, plots are produced with temperature on the $x$-axis. Use the argument --versus h (--versus mu) in order to obtain plots with magnetic field (chemical potential) on the $x$-axis
+パラメータ DENSITIES=1 の場合、量は密度として、すなわちサイト数で規格化されて出力され、DENSITIES=0 の場合は系全体の値が出力されることに注意してください。デフォルトでは、温度を $x$ 軸にとったプロットが作成されます。磁場（化学ポテンシャル）を $x$ 軸にとったプロットを得るには、引数 --versus h（--versus mu）を使用してください。
 
-`fulldiag` stores information including eigenvalues and a result for the accessible physical quantities (measured for the total system). These are of interest mainly to specialists and, as we hope, self-explanatory if needed.
+`fulldiag` は、固有値や、計算可能な物理量の結果（系全体について測定したもの）などの情報を保存します。これらは主に専門家向けのものであり、必要な場合には説明なしでも理解できるものと期待しています。
 
-## Contributors
+## 貢献者
 
-The following persons have contributed to the `fulldiag` application:
+以下の方々が `fulldiag` アプリケーションに貢献しました。
 
 - Matthias Troyer
 - Andreas Honecker 
+
 
 

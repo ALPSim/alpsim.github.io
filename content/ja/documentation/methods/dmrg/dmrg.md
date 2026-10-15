@@ -1,35 +1,34 @@
-
 ---
-title: The Density Matrix Renormalization Group 
+title: 密度行列繰り込み群 (DMRG)
 math: true
 weight: 11
 ---
 
-## Introduction
+## はじめに
 
-The Density Matrix Renormalization Group (DMRG) method is a widely-utilized sophisticated algorithm to obtain low-lying eigenvalues and eigenvectors of very large matrices such as those found in quantum many-body problems. DMRG possesses features that make it extremely powerful: it can treat systems with hundreds of quantum spins or electrons, provide extremely accurate ground-state energies, and compute gaps in low-dimensional systems. Together with quantum Monte Carlo methods, it dominates most of the numerical research in the field of strongly correlated electron systems.
-The DMRG is particularly suitable for one-dimensional systems, where it is definitely the method of choice if one is only interested in ground state properties and low-lying eigenstates. The algorithm is much more efficient in systems with open boundary conditions, and quasi-2d systems (ladders) with cylindrical boundary conditions, where convergence is achieved with a relatively small number of states.
+密度行列繰り込み群 (DMRG) 法は、量子多体問題に現れるような非常に大きな行列の低エネルギー固有値と固有ベクトルを求めるために広く用いられている高度なアルゴリズムです。DMRG は非常に強力な特徴を備えています。数百個の量子スピンや電子からなる系を扱うことができ、極めて高精度な基底状態エネルギーを与え、低次元系のギャップを計算することができます。量子モンテカルロ法とともに、強相関電子系の分野における数値的研究の大部分を占めています。
+DMRG は特に 1 次元系に適しており、基底状態の性質や低エネルギー固有状態のみに関心がある場合には、間違いなく第一選択となる手法です。このアルゴリズムは、開放境界条件を持つ系や、円筒境界条件を持つ準 2 次元系（はしご系）において、はるかに効率的であり、比較的少ない状態数で収束が得られます。
 
-## DMRG-specific parameters
+## DMRG 固有のパラメータ
 
-| **Name** | **Description** |
+| **名前** | **説明** |
 | :------- | :-------------- |
-| NUMBER_EIGENVALUES | Number of eigenstates and energies to calculate. Default is 1, should be set to 2 to calculate gaps. |
-| SWEEPS | Number of DMRG sweeps. Each sweep involves a left-to-right half-sweep, and a right-to-left half-sweep. |
-| NUM_WARMUP_STATES | Number of initial states to grow the DMRG blocks. If not specified, the algorithm will use default value used of 20. |
-| STATES | Number of DMRG states kept on each half sweep. The user should specify either 2\*SWEEPS different values of STATES or one MAXSTATES or NUMSTATES value. |
-| MAXSTATES | Maximum number of DMRG states kept. The user should choose to specify either STATES values for each half-sweep, or a MAXSTATES or NUMSTATES that the program will use to grow the basis. The program will automatically determine how many states to use for each sweep, growing in steps of STATES/(2\*SWEEPS) until reaching MAXSTATES. |
-| NUMSTATES | Constant number of DMRG states kept for all sweeps. |
-| TRUNCATION_ERROR | The user can choose to set the tolerance for the simulation, instead of the number of states. The program will automagically determine how many states to keep in order to satisfy this tolerance. Care must be taken, since this could lead to an uncontrollable growth in the basis size, and a crash as a consequence. It is therefore advisable to also specify the maximum number of states as a constraint, using either MAXSTATES or NUMSTATES, as explained before. |
-| LANCZOS_TOLERANCE | Tolerance for the exact diagonalization (Davidson/Lanczos) piece of the simulation. The default value is 10^-7. |
-| CONSERVED_QUANTUMNUMBERS | Quantum numbers conserved by the model of interest. They will be used in the code in order to reduce matrices in block form. If no value is specified for a particular quantum number, the program will work in the grand canonical. For instance in spin chains if you don't specify Sz_total, the program will run using a Hilbert space with dim=2^N states. Running in the "canonical" (by setting Sz_total=0, for instance) will improve performance considerably by working in a subspace with a reduced dimension. For an example of how to do this, take a look at the parms file included with the dmrg code. |
-| VERBOSE | If set to an integer > 0, it will print extra output information, such as density-matrix eigenvalues. There are different verbose levels up to a maximum of 3, for debugging purposes, although the user shouldn't need a level larger than 1. |
-| START_SWEEP | (Available after v1.3b6) Starting sweep for resuming a simulation that was interrupted, or extending it with a new set of states. |
-| START_DIR | Starting direction for the resumed simulation. Can assume the values 0 or 1, for "left-to-right" or "right-to-left", respectively. It has effect only in the presence of START_SWEEP. Its default value is 0. |
-| START_ITER | Starting iteration for the resumed simulation. It has effect only in the presence of START_SWEEP. Its default value is 1. |
-| TEMP_DIRECTORY | The DMRG program stores information in temporary files that reside in your local folder. There could be a large number of them, and this could overwhelm your file system, especially if you are using NFS. The address for storing these files could be changed by setting the variable TEMP_DIRECTORY in the parameter file. Another way to do this is by setting the system environment variable TMPDIR. |
+| NUMBER_EIGENVALUES | 計算する固有状態とエネルギーの数。デフォルトは 1 で、ギャップを計算するには 2 に設定する必要があります。 |
+| SWEEPS | DMRG スイープの回数。各スイープは、左から右への半スイープと、右から左への半スイープからなります。 |
+| NUM_WARMUP_STATES | DMRG ブロックを成長させるための初期状態数。指定しない場合、アルゴリズムはデフォルト値の 20 を使用します。 |
+| STATES | 各半スイープで保持する DMRG 状態の数。ユーザーは、2\*SWEEPS 個の異なる STATES の値を指定するか、MAXSTATES または NUMSTATES の値を 1 つ指定する必要があります。 |
+| MAXSTATES | 保持する DMRG 状態の最大数。ユーザーは、各半スイープについて STATES の値を指定するか、プログラムが基底を成長させるために用いる MAXSTATES または NUMSTATES を指定するかを選ぶ必要があります。プログラムは各スイープで用いる状態数を自動的に決定し、MAXSTATES に達するまで STATES/(2\*SWEEPS) ずつ増やしていきます。 |
+| NUMSTATES | すべてのスイープで保持する DMRG 状態の一定数。 |
+| TRUNCATION_ERROR | 状態数の代わりに、シミュレーションの許容誤差を設定することもできます。プログラムは、この許容誤差を満たすために保持すべき状態数を自動的に決定します。ただし、これにより基底のサイズが制御不能なほど大きくなり、その結果クラッシュする可能性があるため、注意が必要です。したがって、前述のように MAXSTATES または NUMSTATES を用いて、最大状態数も制約として指定しておくことをお勧めします。 |
+| LANCZOS_TOLERANCE | シミュレーションの厳密対角化（Davidson/Lanczos）部分の許容誤差。デフォルト値は 10^-7 です。 |
+| CONSERVED_QUANTUMNUMBERS | 対象とするモデルで保存される量子数。コード内で行列をブロック形式に縮約するために用いられます。ある量子数について値が指定されていない場合、プログラムは大正準で動作します。例えばスピン鎖で Sz_total を指定しない場合、プログラムは dim=2^N 個の状態を持つヒルベルト空間を用いて実行されます。「正準」で実行する（例えば Sz_total=0 と設定する）と、次元の小さい部分空間で計算するため、性能が大幅に向上します。設定方法の例については、dmrg コードに含まれている parms ファイルを参照してください。 |
+| VERBOSE | 0 より大きい整数に設定すると、密度行列の固有値などの追加の出力情報を表示します。デバッグ用に最大 3 までの異なる詳細レベルがありますが、通常のユーザーが 1 より大きいレベルを必要とすることはないはずです。 |
+| START_SWEEP | （v1.3b6 以降で利用可能）中断したシミュレーションを再開する場合や、新しい状態数の設定でシミュレーションを延長する場合の開始スイープ。 |
+| START_DIR | 再開するシミュレーションの開始方向。0 または 1 の値を取り、それぞれ「左から右」と「右から左」を表します。START_SWEEP が指定されている場合にのみ有効です。デフォルト値は 0 です。 |
+| START_ITER | 再開するシミュレーションの開始反復。START_SWEEP が指定されている場合にのみ有効です。デフォルト値は 1 です。 |
+| TEMP_DIRECTORY | DMRG プログラムは、ローカルフォルダにある一時ファイルに情報を保存します。一時ファイルは大量になることがあり、特に NFS を使用している場合にはファイルシステムを圧迫する可能性があります。これらのファイルの保存場所は、パラメータファイルで変数 TEMP_DIRECTORY を設定することで変更できます。システムの環境変数 TMPDIR を設定する方法もあります。 |
 
-## References
+## 参考文献
 
 - S. R. White, Density matrix formulation for quantum renormalization groups, Phys. Rev. Lett. 69, 2863 (1992).
 - S. R. White, Density-matrix algorithms for quantum renormalization groups, Phys. Rev. B 48, 10345 (1993).

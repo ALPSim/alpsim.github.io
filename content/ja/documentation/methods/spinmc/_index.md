@@ -1,6 +1,6 @@
 
 ---
-title: Classical Monte Carlo Simulations
+title: "古典モンテカルロシミュレーション"
 math: true
 weight: 2
 ---
@@ -8,32 +8,32 @@ weight: 2
 <br>
 {{< hextra/feature-grid maxcolumns="2" >}}
  {{< hextra/feature-card
-    title="Introduction"
-    subtitle="Monte Carlo Simulations"
+    title="はじめに"
+    subtitle="モンテカルロシミュレーション"
     link="intro"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Local Updates"
-    subtitle="Away From Critical Temperatures"
+    title="局所更新"
+    subtitle="臨界温度から離れた領域"
     link="local"
     icon=""
   >}}
  {{< hextra/feature-card
-    title="Cluster Updates"
-    subtitle="Near Critical Temperatures"
+    title="クラスター更新"
+    subtitle="臨界温度近傍"
     link="cluster"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Measurements"
-    subtitle="Physical Quantities"
+    title="測定"
+    subtitle="物理量"
     link="measure"
     icon=""
   >}}
   {{< hextra/feature-card
-    title="Implementation"
-    subtitle="Codes and APIs in ALPS"
+    title="実装"
+    subtitle="ALPS のコードと API"
     link="implem"
     icon=""
   >}}

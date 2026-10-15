@@ -1,18 +1,18 @@
-
 ---
-title: Implementation
+title: 実装
 math: true
 weight: 3
 ---
 
-The `sparsediag` is an exact diagonalization program in ALPS, using the Lanczos algorithm of the IETL library to compute low-lying eigestates of the Hamiltonian. Hence, it can be used for computing ground-state properties of any model that can be defined using the ALPS libraries. The main limitation is the size of the quantum system, i.e., memory and CPU time may become unacceptable at sizes where other, more specialized applications still work well.
+`sparsediag` は ALPS の厳密対角化プログラムであり、IETL ライブラリの Lanczos アルゴリズムを用いてハミルトニアンの低エネルギー固有状態を計算します。そのため、ALPS ライブラリを用いて定義できるあらゆるモデルの基底状態の性質の計算に使用できます。主な制約は量子系のサイズです。すなわち、他のより特化したアプリケーションがまだ問題なく動作するサイズでも、メモリや CPU 時間が許容できないほど大きくなることがあります。
 
-## Input Parameters in ALPS
+## ALPS における入力パラメータ
 
-The `sparsediag` code takes the following parameters:
+`sparsediag` コードは次のパラメータを受け取ります。
 
-| **Parameter** | **Default** | **Meaning** |
+| **パラメータ** | **デフォルト値** | **意味** |
 | :------------ | :---------- | :---------- |
-| NUMBER_EIGENVALUES | 1 | the number of low-lying eigenstates to be calculated |
+| NUMBER_EIGENVALUES | 1 | 計算する低エネルギー固有状態の数 |
+
 
 

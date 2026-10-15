@@ -1,19 +1,19 @@
 
 ---
-title: Implementation and Algorithm Papers
-description: "ALPS Implementation and Algorithm Papers"
+title: 实现论文与算法论文
+description: "ALPS 实现论文与算法论文"
 weight: 2
 ---
 
-The following lists the implementation papers for individual ALPS applications and the original algorithm papers on which they are based.
+下面列出了各个 ALPS 应用程序的实现论文，以及它们所依据的原始算法论文。
 
 ---
 
-### Parallel Monte Carlo Scheduler
+### 并行蒙特卡洛调度程序
 
-*Source: [`src/alps/scheduler/`](https://github.com/ALPSim/ALPS/tree/master/src/alps/scheduler)*
+*源代码：[`src/alps/scheduler/`](https://github.com/ALPSim/ALPS/tree/master/src/alps/scheduler)*
 
-**Implementation papers**
+**实现论文**
 
 M. Troyer, B. Ammon, and E. Heeb, *Parallel object oriented Monte Carlo Simulations*, Lect. Notes Comput. Sci. **1505**, 191 (1998).
 
@@ -25,11 +25,11 @@ M. Troyer, B. Ammon, and E. Heeb, *Parallel object oriented Monte Carlo Simulati
 
 ---
 
-### Exact and full diagonalization — `sparsediag` and `fulldiag`
+### 精确对角化与完全对角化 — `sparsediag` 与 `fulldiag`
 
-*Source: [`applications/diag/sparsediag/`](https://github.com/ALPSim/ALPS/tree/master/applications/diag/sparsediag), [`fulldiag/`](https://github.com/ALPSim/ALPS/tree/master/applications/diag/fulldiag)*
+*源代码：[`applications/diag/sparsediag/`](https://github.com/ALPSim/ALPS/tree/master/applications/diag/sparsediag), [`fulldiag/`](https://github.com/ALPSim/ALPS/tree/master/applications/diag/fulldiag)*
 
-**Implementation papers**
+**实现论文**
 
 B. Bauer, L. D. Carr, H. G. Evertz, A. Feiguin, J. Freire, S. Fuchs, L. Gamper, J. Gukelberger, E. Gull, S. Guertler, A. Hehn, R. Igarashi, S. V. Isakov, D. Koop, P. N. Ma, P. Mates, H. Matsuo, O. Parcollet, G. Pawłowski, J. D. Picon, L. Pollet, E. Santos, V. W. Scarola, U. Schollwöck, C. Silva, B. Surer, S. Todo, S. Trebst, M. Troyer, M. L. Wall, P. Werner, and S. Wessel, *The ALPS project release 2.0: open source software for strongly correlated systems*, J. Stat. Mech. **2011**, P05001 (2011).
 
@@ -40,7 +40,7 @@ B. Bauer, L. D. Carr, H. G. Evertz, A. Feiguin, J. Freire, S. Fuchs, L. Gamper, 
 {{< cta-button text="BibTeX" link="/data/bauer2011.bib" icon="format_quote" >}}
 </div>
 
-**Algorithm papers**
+**算法论文**
 
 C. Lanczos, *An iteration method for the solution of the eigenvalue problem of linear differential and integral operators*, J. Res. Natl. Bur. Stand. **45**, 255-282 (1950).
 
@@ -52,11 +52,11 @@ C. Lanczos, *An iteration method for the solution of the eigenvalue problem of l
 
 ---
 
-### Classical Monte Carlo for Spin Models — `spinmc`
+### 自旋模型的经典蒙特卡洛 — `spinmc`
 
-*Source: [`applications/mc/spins/`](https://github.com/ALPSim/ALPS/tree/master/applications/mc/spins)*
+*源代码：[`applications/mc/spins/`](https://github.com/ALPSim/ALPS/tree/master/applications/mc/spins)*
 
-**Algorithm papers**
+**算法论文**
 
 R. H. Swendsen and J.-S. Wang, *Nonuniversal critical dynamics in Monte Carlo simulations*, Phys. Rev. Lett. **58**, 86 (1987).
 
@@ -76,11 +76,11 @@ U. Wolff, *Collective Monte Carlo updating for spin systems*, Phys. Rev. Lett. *
 
 ---
 
-### Loop Algorithm QMC — `looper`
+### 圈算法 QMC — `looper`
 
-*Source: [`applications/qmc/looper/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/looper)*
+*源代码：[`applications/qmc/looper/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/looper)*
 
-**Implementation papers**
+**实现论文**
 
 S. Todo and K. Kato, *Cluster Algorithms for General-S Quantum Spin Systems*, Phys. Rev. Lett. **87**, 047203 (2001).
 
@@ -91,7 +91,7 @@ S. Todo and K. Kato, *Cluster Algorithms for General-S Quantum Spin Systems*, Ph
 {{< cta-button text="BibTeX" link="/data/todo2001.bib" icon="format_quote" >}}
 </div>
 
-**Algorithm papers**
+**算法论文**
 
 H. G. Evertz, G. Lana, and M. Marcu, *Cluster algorithm for vertex models*, Phys. Rev. Lett. **70**, 875 (1993).
 
@@ -121,11 +121,11 @@ H. G. Evertz, *The loop algorithm*, Adv. Phys. **52**, 1 (2003).
 
 ---
 
-### The Directed Loop code in SSE representation — `dirloop_sse`
+### SSE 表示下的有向圈代码 — `dirloop_sse`
 
-*Source: [`applications/qmc/sse/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse), [`sse2/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse2), [`sse4/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse4)*
+*源代码：[`applications/qmc/sse/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse), [`sse2/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse2), [`sse4/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/sse4)*
 
-**Implementation papers**
+**实现论文**
 
 F. Alet, S. Wessel, and M. Troyer, *Generalized directed loop method for quantum Monte Carlo simulations*, Phys. Rev. E **71**, 036706 (2005).
 
@@ -136,7 +136,7 @@ F. Alet, S. Wessel, and M. Troyer, *Generalized directed loop method for quantum
 {{< cta-button text="BibTeX" link="/data/alet2005pre.bib" icon="format_quote" >}}
 </div>
 
-**Algorithm papers**
+**算法论文**
 
 A. W. Sandvik, *Stochastic series expansion method with operator-loop update*, Phys. Rev. B **59**, R14157 (1999).
 
@@ -158,11 +158,11 @@ O. F. Syljuåsen and A. W. Sandvik, *Quantum Monte Carlo with directed loops*, P
 
 ---
 
-### Worm code — `worms`
+### 蠕虫算法代码 — `worms`
 
-*Source: [`applications/qmc/worms/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/worms)*
+*源代码：[`applications/qmc/worms/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/worms)*
 
-**Algorithm papers**
+**算法论文**
 
 N. V. Prokof'ev, B. V. Svistunov, and I. S. Tupitsyn, *"Worm" algorithm in quantum Monte Carlo simulations*, Phys. Lett. A **238**, 253 (1998).
 
@@ -174,11 +174,11 @@ N. V. Prokof'ev, B. V. Svistunov, and I. S. Tupitsyn, *"Worm" algorithm in quant
 
 ---
 
-### Quantum Wang-Landau Flat-Histogram QMC — `qwl`
+### 量子 Wang-Landau平直直方图 QMC — `qwl`
 
-*Source: [`applications/qmc/qwl/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/qwl)*
+*源代码：[`applications/qmc/qwl/`](https://github.com/ALPSim/ALPS/tree/master/applications/qmc/qwl)*
 
-**Implementation papers**
+**实现论文**
 
 M. Troyer, S. Wessel, and F. Alet, *Wang-Landau sampling for quantum systems: algorithms to overcome tunneling problems and calculate the free energy*, Phys. Rev. Lett. **90**, 120201 (2003).
 
@@ -191,11 +191,11 @@ M. Troyer, S. Wessel, and F. Alet, *Wang-Landau sampling for quantum systems: al
 
 ---
 
-### DMFT: CT-QMC Impurity Solvers and Dynamical Mean-Field Theory — `dmft`, `interaction`, `hybridization`
+### DMFT：CT-QMC 杂质求解器与动力学平均场理论 — `dmft`、`interaction`、`hybridization`
 
-*Source: [`applications/dmft/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmft)*
+*源代码：[`applications/dmft/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmft)*
 
-**Implementation papers**
+**实现论文**
 
 E. Gull, P. Werner, S. Fuchs, B. Surer, T. Pruschke, and M. Troyer, *Continuous-Time Quantum Monte Carlo Impurity Solvers*, Comput. Phys. Commun. **182**, 1078 (2011).
 
@@ -205,7 +205,7 @@ E. Gull, P. Werner, S. Fuchs, B. Surer, T. Pruschke, and M. Troyer, *Continuous-
 {{< cta-button text="BibTeX" link="/data/gull2011cpc.bib" icon="format_quote" >}}
 </div>
 
-**Algorithm papers**
+**算法论文**
 
 A. N. Rubtsov, V. V. Savkin, and A. I. Lichtenstein, *Continuous-time quantum Monte Carlo method for fermions*, Phys. Rev. B **72**, 035122 (2005).
 
@@ -238,9 +238,9 @@ E. Gull, A. J. Millis, A. I. Lichtenstein, A. N. Rubtsov, M. Troyer, and P. Wern
 
 ### DMRG — `dmrg`
 
-*Source: [`applications/dmrg/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmrg)*
+*源代码：[`applications/dmrg/`](https://github.com/ALPSim/ALPS/tree/master/applications/dmrg)*
 
-**Implementation papers**
+**实现论文**
 
 A. E. Feiguin, *The Density Matrix Renormalization Group*. In: A. Avella and F. Mancini (eds.), *Strongly Correlated Systems*, Springer Series in Solid-State Sciences **176**, 31–65 (2013).
 
@@ -250,7 +250,7 @@ A. E. Feiguin, *The Density Matrix Renormalization Group*. In: A. Avella and F. 
 {{< cta-button text="BibTeX" link="/data/feiguin2013.bib" icon="format_quote" >}}
 </div>
 
-**Algorithm papers**
+**算法论文**
 
 S. R. White, *Density matrix formulation for quantum renormalization groups*, Phys. Rev. Lett. **69**, 2863 (1992).
 

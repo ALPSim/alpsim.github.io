@@ -1,6 +1,6 @@
 
 ---
-title: Loading Data
+title: 加载数据
 math: true
 toc: true
 weight: 2
@@ -8,97 +8,97 @@ weight: 2
 
 
 `pyalps.getResultFiles(dirname='.', pattern=None, prefix=None, format=None)`
-get all result files matching the given pattern or prefix
+获取所有与给定模式或前缀匹配的结果文件
 
-- This function returns a list of all ALPS result files matching a given pattern, starting recursively from a given directory. The pattern can be either specificed by giving a prefix for the files, which is then augmented with the default ALPS file name suffixes. ALternatively a fiull custom regular expression pattern can be specified.
+- 该函数从给定目录开始递归查找，返回所有与给定模式匹配的 ALPS 结果文件列表。可以通过给出文件的前缀来指定模式，此时会自动在其后加上 ALPS 默认的文件名后缀。或者，也可以指定一个完整的自定义正则表达式模式。
 
-- The paramters are:
+- 参数为：
 
-   - dirname: The directory from which to start the recursive search, defaulting to the current working directory. 
-   - pattern: a regular expression pattern resricting the files to be matches 
-   - prefix: a pattern which the start of the file names has to match. This will be augmented by the standard ALPS file name endings ‘.task.out.xml’ or ‘\*.h5’ to form the full pattern.
+   - dirname：开始递归搜索的目录，默认为当前工作目录。
+   - pattern：限定待匹配文件的正则表达式模式
+   - prefix：文件名开头必须匹配的模式。它会加上标准的 ALPS 文件名结尾 ‘.task.out.xml’ 或 ‘\*.h5’ 以构成完整的模式。
 
-- The function returns a list of filenames
+- 该函数返回一个文件名列表
 
 
 `pyalps.loadMeasurements(files, what=None, verbose=False, respath='/simulation/results')`
-loads ALPS measurements from ALPS HDF5 result files
+从 ALPS HDF5 结果文件中加载 ALPS 测量结果
 
-- this function loads results of ALPS simulations ALPS HDF5 result files
+- 该函数从 ALPS HDF5 结果文件中加载 ALPS 模拟的结果
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - what (list) – optional argument that is either a string or list of strings, specifying the names of the observables which should be loaded
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
-- Returns:    
-  a list of list of DataSet objects – loaded measurements. The elements of the outer list each correspond to the file names specified as input. The elements of the inner list are each for a different observable. The y-values of the DataSet objects are the measurements and the x-values optionally the labels (indices) of array-valued measurements
+- 参数：
+   - files (list) – ALPS 结果文件，可以是 XML 文件或 HDF5 文件。XML 文件名会被替换为对应的 HDF5 文件名。
+   - what (list) – 可选参数，为一个字符串或字符串列表，指定需要加载的观测量的名称
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息
+- 返回值：
+  DataSet 对象的列表的列表 – 加载的测量结果。外层列表的每个元素分别对应输入中指定的各个文件名。内层列表的每个元素分别对应不同的观测量。DataSet 对象的 y 值为测量值，x 值（可选）为数组型测量的标签（索引）
 
 `pyalps.loadBinningAnalysis(files, what=None, verbose=False)`
-loads MC binning analysis from ALPS HDF5 result files
+从 ALPS HDF5 结果文件中加载 MC 分箱分析结果
 
-- this function loads results of a MC binning analysis from ALPS HDF5 result files
+- 该函数从 ALPS HDF5 结果文件中加载 MC 分箱分析的结果
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - what (list) – optional argument that is either a string or list of strings, specifying the names of the observables for which the binning analysis should be loaded
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
+- 参数：
+   - files (list) – ALPS 结果文件，可以是 XML 文件或 HDF5 文件。XML 文件名会被替换为对应的 HDF5 文件名。
+   - what (list) – 可选参数，为一个字符串或字符串列表，指定需要加载其分箱分析结果的观测量的名称
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息
    
-- Returns:    
-  a list of list of DataSet objects – loaded binning analysis. The elements of the outer list each correspond to the file names specified as input. The elements of the inner list are each for a different observable. The x-values of the DataSet objects are the logarithmic binning level and the y-values the error estimates at that binning level.
+- 返回值：
+  DataSet 对象的列表的列表 – 加载的分箱分析结果。外层列表的每个元素分别对应输入中指定的各个文件名。内层列表的每个元素分别对应不同的观测量。DataSet 对象的 x 值为对数分箱层级，y 值为该分箱层级下的误差估计。
 
 `pyalps.loadEigenstateMeasurements(files, what=None, verbose=False)`
-loads ALPS eigenstate measurements from ALPS HDF5 result files
+从 ALPS HDF5 结果文件中加载 ALPS 本征态测量结果
 
-- this function loads results of ALPS diagonalization or DMRG simulations from an HDF5 file
+- 该函数从 HDF5 文件中加载 ALPS 对角化或 DMRG 模拟的结果
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - what (list) – an optional argument that is either a string or list of strings, specifying the names of the observables which should be loaded
-   - verbose (bool) – an optional argument that if set to True causes more output to be printed as the data is loaded
+- 参数：
+   - files (list) – ALPS 结果文件，可以是 XML 文件或 HDF5 文件。XML 文件名会被替换为对应的 HDF5 文件名。
+   - what (list) – 可选参数，为一个字符串或字符串列表，指定需要加载的观测量的名称
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息
 
-- Returns:    
-   list of list of (lists of) DataSet objects – loaded measurements. The elements of the outer list each correspond to the file names specified as input The elements of the next level are different quantum number sectors, if any exists The elements of the inner-most list are each for a different observable The y-values of the DataSet objects is an array of the measurements in all eigenstates calculated in this sector, and the x-values optionally the labels (indices) of array-valued measurements
+- 返回值：
+   DataSet 对象的列表的列表（的列表） – 加载的测量结果。外层列表的每个元素分别对应输入中指定的各个文件名。下一层列表的元素对应不同的量子数扇区（如果存在的话）。最内层列表的每个元素分别对应不同的观测量。DataSet 对象的 y 值是在该扇区中计算的所有本征态的测量值组成的数组，x 值（可选）为数组型测量的标签（索引）
 
 `pyalps.loadSpectra(files, verbose=False)`
-loads ALPS spectra from ALPS HDF5 result files
+从 ALPS HDF5 结果文件中加载 ALPS 能谱
 
-- This function loads the spectra calculated in ALPS diagonalization or DMRG simulations from an HDF5 file.
+- 该函数从 HDF5 文件中加载 ALPS 对角化或 DMRG 模拟中计算得到的能谱。
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded.
-- Returns:    
-   list of (lists of) DataSet objects – Loaded spectra. The elements of the outer list each correspond to the file names specified as input. The elements of the next level are different quantum number sectors, if any exists. The y-values of the DataSet objects are the energies in that quantum number sector.
+- 参数：
+   - files (list) – ALPS 结果文件，可以是 XML 文件或 HDF5 文件。XML 文件名会被替换为对应的 HDF5 文件名。
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息。
+- 返回值：
+   DataSet 对象的列表（的列表） – 加载的能谱。外层列表的每个元素分别对应输入中指定的各个文件名。下一层列表的元素对应不同的量子数扇区（如果存在的话）。DataSet 对象的 y 值为该量子数扇区中的能量。
 
 `pyalps.loadDMFTIterations(files, observable='G_tau', measurements='0', verbose=False)`
-loads ALPS measurements from ALPS HDF5 result files
+从 ALPS HDF5 结果文件中加载 ALPS 测量结果
 
-- this function loads results of ALPS simulations ALPS HDF5 result files
+- 该函数从 ALPS HDF5 结果文件中加载 ALPS 模拟的结果
 
-- Parameters:    
-   - files (list) – ALPS HDF5 result files.
-   - observable (str) – optional argument specifying the name of the observables which should be loaded
-   - measurements (list) – optional argument that is either a string or list of strings, specifying the names of the measurements which should be loaded
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
-- Returns:    
-   list of list of list of DataSet objects – loaded iteration measurements. The elements of the outer list each correspond to the file names specified as input. The elements of the next level are different iterations. The elements of the inner list contains a DataSet for each measurement. The y-values of the DataSet objects are the measurements and the x-values optionally the labels (indices) of array-valued measurements
+- 参数：
+   - files (list) – ALPS HDF5 结果文件。
+   - observable (str) – 可选参数，指定需要加载的观测量的名称
+   - measurements (list) – 可选参数，为一个字符串或字符串列表，指定需要加载的测量的名称
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息
+- 返回值：
+   DataSet 对象的列表的列表的列表 – 加载的各次迭代的测量结果。外层列表的每个元素分别对应输入中指定的各个文件名。下一层列表的元素对应不同的迭代。内层列表对每个测量各包含一个 DataSet。DataSet 对象的 y 值为测量值，x 值（可选）为数组型测量的标签（索引）
 
 `pyalps.loadProperties(files, proppath='/parameters', respath='/simulation/results', verbose=False)`
- loads properties (parameters) of simulations from ALPS HDF5 result files
+ 从 ALPS HDF5 结果文件中加载模拟的属性（参数）
 
-- this function loads the properties (parameters) of ALPS simulations ALPS HDF5 result files
+- 该函数从 ALPS HDF5 结果文件中加载 ALPS 模拟的属性（参数）
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
-- Returns:    
-   list of dicts – properties contained in each file.
+- 参数：
+   - files (list) – ALPS 结果文件，可以是 XML 文件或 HDF5 文件。XML 文件名会被替换为对应的 HDF5 文件名。
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息
+- 返回值：
+   字典列表 – 每个文件中包含的属性。
 
 `pyalps.loadObservableList(files, proppath='/parameters', respath='/simulation/results', verbose=False)`
-loads lists of existing measurements from ALPS HDF5 result files
+从 ALPS HDF5 结果文件中加载已有测量的列表
 
-- The function returns a list of lists, containing the names of measurements that are stored in the result files
+- 该函数返回一个列表的列表，其中包含存储在结果文件中的测量的名称
 
-- Parameters:    
-   - files (list) – ALPS result files which can be either XML or HDF5 files. XML file names will be changed to the corresponding HDF5 names.
-   - verbose (bool) – optional argument that if set to True causes more output to be printed as the data is loaded
+- 参数：
+   - files (list) – ALPS 结果文件，可以是 XML 文件或 HDF5 文件。XML 文件名会被替换为对应的 HDF5 文件名。
+   - verbose (bool) – 可选参数，若设为 True，则在加载数据时输出更多信息

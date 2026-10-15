@@ -1,102 +1,102 @@
 ---
-title: Measurements
+title: 测量
 math: true
 weight: 4
 ---
 
-After the system reaches equilibrium, we can measure physical quantities, such as, energy, magnetization, and various susceptibilities. However, measuring physical quantities accurately requires careful consideration of autocorrelation and the generation of independent samples. Autocorrelation refers to the correlation between measurements taken at different Monte Carlo steps, which can lead to biased estimates and underestimated errors. Generating independent samples ensures that the measurements are statistically meaningful.
+系统达到平衡之后，我们就可以测量能量、磁化强度以及各种磁化率等物理量。然而，要准确测量物理量，需要仔细考虑自相关以及独立样本的生成。自相关是指在不同蒙特卡洛步上进行的测量之间的关联，它会导致有偏的估计以及被低估的误差。生成独立样本可以保证测量结果在统计上是有意义的。
 
-## Autocorrelation of Physical Quantities
+## 物理量的自相关
 
-### 1. **Autocorrelation Function**
-The autocorrelation function $C_A(t)$ measures the correlation between measurements of a quantity $A$ separated by a time interval $t$ (in Monte Carlo steps):
+### 1. **自相关函数**
+自相关函数 $C_A(t)$ 度量物理量 $A$ 相隔时间间隔 $t$（以蒙特卡洛步计）的两次测量之间的关联：
 $$
 C_A(t) = \frac{\langle A_k A_{k+t} \rangle - \langle A_k \rangle^2}{\langle A_k^2 \rangle - \langle A_k \rangle^2},
 $$
-where $\langle A_k A_{k+t} \rangle$ is the average of the product of measurements separated by $t$ steps.
+其中 $\langle A_k A_{k+t} \rangle$ 是相隔 $t$ 步的两次测量之积的平均值。
 
-### 2. **Autocorrelation Time**
-The autocorrelation time $\tau_A$ characterizes how quickly the autocorrelation function decays. It is defined as:
+### 2. **自相关时间**
+自相关时间 $\tau_A$ 刻画了自相关函数衰减的快慢。其定义为：
 $$
 \tau_A = \sum_{t=1}^{\infty} C_A(t).
 $$
-In practice, $\tau_A$ is estimated by fitting $C_A(t)$ to an exponential decay:
+在实际中，$\tau_A$ 通过将 $C_A(t)$ 拟合为指数衰减来估计：
 $$
 C_A(t) \sim e^{-t / \tau_A}.
 $$
 
-### 3. **Effect of Autocorrelation**
-Autocorrelation reduces the effective number of independent samples, leading to underestimated statistical errors. To account for this, the error in the measured quantity $A$ is corrected by:
+### 3. **自相关的影响**
+自相关会减少独立样本的有效数目，导致统计误差被低估。为此，测量量 $A$ 的误差修正为：
 $$
 \sigma_A = \sqrt{\frac{\text{Var}(A)}{N_{\text{eff}}}},
 $$
-where $\text{Var}(A)$ is the variance of $A$, and $N_{\text{eff}}$ is the effective number of independent samples:
-- $\text{Var}(A)$ is the **variance** of $A$, defined as:
+其中 $\text{Var}(A)$ 是 $A$ 的方差，$N_{\text{eff}}$ 是独立样本的有效数目：
+- $\text{Var}(A)$ 是 $A$ 的**方差**，定义为：
   $$
   \text{Var}(A) = \langle A^2 \rangle - \langle A \rangle^2,
   $$
-  where $\langle A^2 \rangle$ is the average of the squared measurements, and $\langle A \rangle$ is the average of the measurements.
-- $N_{\text{eff}}$ is the effective number of independent samples:
+  其中 $\langle A^2 \rangle$ 是测量值平方的平均值，$\langle A \rangle$ 是测量值的平均值。
+- $N_{\text{eff}}$ 是独立样本的有效数目：
   $$
   N_{\text{eff}} = \frac{N_{\text{meas}}}{1 + 2 \tau_A}.
   $$
   
-## Generating Independent Samples
+## 生成独立样本
 
-### 1. Spacing Measurements
-To reduce autocorrelation, measurements should be spaced by at least the autocorrelation time $\tau_A$. This ensures that consecutive measurements are approximately independent. For example, if $\tau_A = 10$, measurements should be taken every 10 Monte Carlo steps.
+### 1. 间隔测量
+为了减小自相关，测量之间的间隔应至少为自相关时间 $\tau_A$。这样可以保证相继的测量近似独立。例如，若 $\tau_A = 10$，则应每隔 10 个蒙特卡洛步进行一次测量。
 
-### 2. Blocking Method
-The blocking method is a technique to generate independent samples by grouping measurements into blocks. Each block should be larger than the autocorrelation time. The average of each block is treated as an independent sample, and the variance of these block averages is used to estimate the error.
+### 2. 分块方法
+分块方法是一种通过将测量分组为若干块来生成独立样本的技术。每一块都应大于自相关时间。每一块的平均值被视为一个独立样本，并用这些块平均值的方差来估计误差。
 
-### 3. Parallel Tempering
-For systems with slow dynamics, parallel tempering can be used to generate independent samples. This involves running multiple simulations at different temperatures and periodically swapping configurations between them. The swaps help the system explore configuration space more efficiently.
+### 3. 并行回火
+对于动力学缓慢的系统，可以使用并行回火来生成独立样本。其做法是在不同温度下同时运行多个模拟，并周期性地在它们之间交换构型。这种交换有助于系统更高效地探索构型空间。
 
-## Physical Quantities
+## 物理量
 
-Some example physical quantities are shown below for Ising model. For different models, different quantities would need to be considered. 
+下面给出伊辛模型的一些物理量示例。对于不同的模型，需要考虑不同的物理量。
 
-### Magnetization:
+### 磁化强度：
   $$
   M = \frac{1}{N} \sum_i s_i^z,
   $$
-  where $N$ is the total number of spins.
+  其中 $N$ 是自旋的总数。
   
-### Energy:
+### 能量：
   $$
   E = -J \sum_{\langle i,j \rangle} s_i^z s_j^z - h \sum_i s_i^z.
   $$
   
-### Magnetic susceptibility: 
+### 磁化率：
 
-The magnetic susceptibility $\chi$ measures the response of the system's magnetization to an external magnetic field. It is defined as:
+磁化率 $\chi$ 度量系统磁化强度对外磁场的响应。其定义为：
 $$
 \chi = \frac{\partial \langle M \rangle}{\partial h},
 $$
-where $\langle M \rangle$ is the average magnetization, and $h$ is the external magnetic field. In Monte Carlo simulations, $\chi$ is computed from the fluctuations in the magnetization $M$ using the formula:
+其中 $\langle M \rangle$ 是平均磁化强度，$h$ 是外磁场。在蒙特卡洛模拟中，$\chi$ 由磁化强度 $M$ 的涨落通过以下公式计算：
 $$
 \chi = \frac{\beta}{N} \left( \langle M^2 \rangle - \langle M \rangle^2 \right),
 $$
-where:
-- $\beta = 1/(k_B T)$ is the inverse temperature,
-- $N$ is the total number of spins,
-- $\langle M \rangle$ is the average magnetization,
-- $\langle M^2 \rangle$ is the average of the squared magnetization.
+其中：
+- $\beta = 1/(k_B T)$ 为逆温度，
+- $N$ 是自旋的总数，
+- $\langle M \rangle$ 是平均磁化强度，
+- $\langle M^2 \rangle$ 是磁化强度平方的平均值。
 
-### Specific Heat:
+### 比热：
 
-The specific heat $C$ measures the system's heat capacity, or how much energy is required to change its temperature. It is defined as:
+比热 $C$ 度量系统的热容，即改变系统温度所需的能量。其定义为：
 $$
 C = \frac{\partial \langle E \rangle}{\partial T},
 $$
-where $\langle E \rangle$ is the average energy of the system.
+其中 $\langle E \rangle$ 是系统的平均能量。
 
-In Monte Carlo simulations, $C$ is computed from the fluctuations in the energy $E$ using the formula:
+在蒙特卡洛模拟中，$C$ 由能量 $E$ 的涨落通过以下公式计算：
 $$
 C = \frac{\beta^2}{N} \left( \langle E^2 \rangle - \langle E \rangle^2 \right),
 $$
-where:
-- $\beta = 1/(k_B T)$ is the inverse temperature,
-- $N$ is the total number of spins,
-- $\langle E \rangle$ is the average energy,
-- $\langle E^2 \rangle$ is the average of the squared energy.
+其中：
+- $\beta = 1/(k_B T)$ 为逆温度，
+- $N$ 是自旋的总数，
+- $\langle E \rangle$ 是平均能量，
+- $\langle E^2 \rangle$ 是能量平方的平均值。

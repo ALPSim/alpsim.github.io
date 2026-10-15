@@ -1,7 +1,7 @@
 
 ---
-title: ALPS/Model Library
-description: "ALPS Model Library"
+title: "ALPS/Model ライブラリ"
+description: "ALPS Model ライブラリ"
 weight: 8
 ---
 

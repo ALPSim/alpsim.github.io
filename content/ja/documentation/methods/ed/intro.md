@@ -1,107 +1,106 @@
-
 ---
-title: Introduction
+title: はじめに
 math: true
 weight: 1
 ---
-Exact diagonalization (ED) is a numerical technique used to solve quantum many-body problems by directly diagonalizing the Hamiltonian matrix of a system. This method provides exact eigenstates and eigenvalues, making it a powerful tool for studying small to moderately sized quantum systems. A classic example of its application is the Heisenberg model, which describes interacting spins on a lattice and is widely used to understand magnetic phenomena in condensed matter physics.
+厳密対角化（ED）は、系のハミルトニアン行列を直接対角化することによって量子多体問題を解く数値手法です。この方法は厳密な固有状態と固有値を与えるため、小規模から中規模の量子系を調べるための強力な道具となります。その応用の典型例がハイゼンベルクモデルです。これは格子上で相互作用するスピンを記述するモデルであり、物性物理における磁気現象を理解するために広く用いられています。
 
-## The Heisenberg Model as a Case Study
+## 例題としてのハイゼンベルクモデル
 
-The Heisenberg model is defined by the Hamiltonian:
+ハイゼンベルクモデルは次のハミルトニアンで定義されます。
 
 $$
 \mathcal{H} = J \sum_{\langle i,j \rangle} \mathbf{S}_i \cdot \mathbf{S}_j,
 $$
 
-where $\mathbf{S}_i$ is the spin-1/2 operator at site $i$, $J$ is the exchange interaction (ferromagnetic for $J \lt 0$ and antiferromagnetic for $J \gt 0$), and the sum runs over nearest-neighbor pairs $\langle i,j \rangle$. For simplicity, we consider a 1D chain with periodic boundary conditions.
+ここで $\mathbf{S}_i$ はサイト $i$ におけるスピン 1/2 演算子、$J$ は交換相互作用（$J \lt 0$ で強磁性、$J \gt 0$ で反強磁性）であり、和は最近接対 $\langle i,j \rangle$ にわたって取られます。簡単のため、周期境界条件を課した 1 次元鎖を考えます。
 
-### Example: 4-Site 1D Heisenberg Chain
+### 例：4 サイトの 1 次元ハイゼンベルク鎖
 
-Let’s study a 4-site 1D Heisenberg chain with periodic boundary conditions. The Hamiltonian for this system is:
+周期境界条件を課した 4 サイトの 1 次元ハイゼンベルク鎖を調べてみましょう。この系のハミルトニアンは次のとおりです。
 
 $$
 \mathcal{H} = J \left( \mathbf{S}_1 \cdot \mathbf{S}_2 + \mathbf{S}_2 \cdot \mathbf{S}_3 + \mathbf{S}_3 \cdot \mathbf{S}_4 + \mathbf{S}_4 \cdot \mathbf{S}_1 \right).
 $$
 
-The spin-1/2 operators $\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ can be expressed in terms of Pauli matrices $\boldsymbol{\sigma}_i$ as $\mathbf{S}_i = \frac{1}{2} \boldsymbol{\sigma}_i$. The dot product $\mathbf{S}_i \cdot \mathbf{S}_j$ can be written as:
+スピン 1/2 演算子 $\mathbf{S}_i = (S_i^x, S_i^y, S_i^z)$ は、パウリ行列 $\boldsymbol{\sigma}_i$ を用いて $\mathbf{S}_i = \frac{1}{2} \boldsymbol{\sigma}_i$ と表せます。内積 $\mathbf{S}_i \cdot \mathbf{S}_j$ は次のように書けます。
 
 $$
 \mathbf{S}_i \cdot \mathbf{S}_j = S_i^x S_j^x + S_i^y S_j^y + S_i^z S_j^z.
 $$
 
-### Basis States
+### 基底
 
-For a 4-site system with spin-1/2 particles, the Hilbert space has $2^4 = 16$ basis states. These states are product states of individual spin configurations, denoted as $| \sigma_1 \sigma_2 \sigma_3 \sigma_4 \rangle$, where $\sigma_i = \uparrow$ or $\downarrow$. For example, one basis state is $| \uparrow \uparrow \downarrow \downarrow \rangle$.
+スピン 1/2 粒子からなる 4 サイト系では、ヒルベルト空間は $2^4 = 16$ 個の基底ベクトルを持ちます。これらの状態は個々のスピン配置の直積状態であり、$| \sigma_1 \sigma_2 \sigma_3 \sigma_4 \rangle$（$\sigma_i = \uparrow$ または $\downarrow$）と表されます。例えば、基底ベクトルの 1 つは $| \uparrow \uparrow \downarrow \downarrow \rangle$ です。
 
-The basis states are eigen states of $S_i^z$ operators. When it is applied to the $i$'th site, it gives
+基底ベクトルは $S_i^z$ 演算子の固有状態です。$i$ 番目のサイトに作用させると、次のようになります。
 $$
 S_i^z|\uparrow\rangle = \frac{1}{2}|\uparrow\rangle,
 $$
-and
+および
 $$
 S_i^z|\downarrow\rangle = -\frac{1}{2}|\downarrow\rangle.
 $$
-To see the result of applying Hamiltonian to the basis states, we need to express the off-diagonal operators, i.e., $S_i^x$ and $S_i^y$ in terms of raising $S^{\dagger}$ and lowering $S^{-}$ operators:
+ハミルトニアンを基底ベクトルに作用させた結果を見るには、非対角演算子、すなわち $S_i^x$ と $S_i^y$ を、上昇演算子 $S^{\dagger}$ と下降演算子 $S^{-}$ で表す必要があります。
 $$
 S_i^x=\frac{1}{2}(S_i^{\dagger}+S_i^{-}),
 $$
 $$
 S_i^y=\frac{1}{2i}(S_i^{\dagger}-S_i^{-}),
 $$
-which act on the basis states in the following way:
+これらは基底ベクトルに次のように作用します。
 $$
 S_i^{\dagger}|s\rangle = \sqrt{S(S+1)-s(s+1)}|s+1\rangle,
 $$
 $$
 S_i^{-}|s\rangle = \sqrt{S(S+1)-s(s-1)}|s-1\rangle,
 $$
-where $S=1/2$ and $s=-1/2, 1/2$.
-With the above transformation, the Hamiltonian element becomes
+ここで $S=1/2$、$s=-1/2, 1/2$ です。
+上の変換により、ハミルトニアンの各項は次のようになります。
 $$
 \mathbf{S}_i \cdot \mathbf{S}_j = \frac{1}{2}(S_i^{\dagger}S_j^{-}+S_i^{-}S_j^{\dagger})+S_i^zS_j^z.
 $$
 
-### Hamiltonian Matrix
+### ハミルトニアン行列
 
-To construct the Hamiltonian matrix, we evaluate the action of $\mathcal{H}$ on each basis state. For instance, consider the term $\mathbf{S}_1 \cdot \mathbf{S}_2$:
+ハミルトニアン行列を構築するには、各基底ベクトルに対する $\mathcal{H}$ の作用を評価します。例えば、項 $\mathbf{S}_1 \cdot \mathbf{S}_2$ を考えます。
 
 $$
 \mathbf{S}_1 \cdot \mathbf{S}_2 = \frac{1}{2}(S_1^{\dagger}S_2^{-}+S_1^{-}S_2^{\dagger})+S_1^zS_2^z.
 $$
 
-This term flips spins at sites 1 and 2 if they are antiparallel and contributes a factor of $\frac{1}{4}$ if they are parallel. For example:
+この項は、サイト 1 と 2 のスピンが反平行であればそれらを反転させ、平行であれば $\frac{1}{4}$ の因子を与えます。例えば次のようになります。
 
 $$
 \mathbf{S}_1 \cdot \mathbf{S}_2 | \uparrow \downarrow \uparrow \uparrow \rangle = \frac{1}{4} \left( | \downarrow \uparrow \uparrow \uparrow \rangle - | \uparrow \downarrow \uparrow \uparrow \rangle \right).
 $$
 
-Repeating this process for all terms in $\mathcal{H}$ and all basis states, we construct the $16 \times 16$ Hamiltonian matrix. For brevity, we do not write the full matrix here, but it can be systematically built using the above rules.
+この手続きを $\mathcal{H}$ のすべての項とすべての基底ベクトルについて繰り返すことで、$16 \times 16$ のハミルトニアン行列が構築されます。簡潔さのためここでは行列全体を書きませんが、上の規則を用いて系統的に構築できます。
 
-## Diagonalization
+## 対角化
 
-Once the Hamiltonian matrix is constructed, it is diagonalized numerically to obtain the eigenstates and eigenvalues. These results provide insights into the ground state energy, low-lying excitations, and magnetic properties of the system. For example, for the antiferromagnetic Heisenberg chain ($J > 0$), ED reveals a singlet ground state with no long-range order, consistent with the Bethe ansatz solution for larger systems.
+ハミルトニアン行列を構築したら、それを数値的に対角化して固有状態と固有値を求めます。これらの結果から、基底状態エネルギー、低エネルギー励起、系の磁気的性質についての知見が得られます。例えば、反強磁性ハイゼンベルク鎖（$J > 0$）では、ED により長距離秩序を持たない一重項の基底状態が得られ、これはより大きな系に対するベーテ仮説の解と整合しています。
 
-### Scaling with Lattice Size
+### 格子サイズに対するスケーリング
 
-For the 1D Heisenberg model, the size of the Hamiltonian matrix grows exponentially with the number of lattice sites, making ED computationally challenging for large systems. Understanding how the matrix size scales with lattice size is crucial for assessing the feasibility of numerical methods like sparse and full diagonalization.
+1 次元ハイゼンベルクモデルでは、ハミルトニアン行列のサイズが格子サイト数とともに指数関数的に増大するため、大きな系に対する ED は計算上困難になります。行列サイズが格子サイズとともにどのようにスケールするかを理解することは、スパース対角化や完全対角化といった数値手法の実行可能性を評価する上で非常に重要です。
 
-For a system with $N$ sites, each site can be in one of two states: spin-up ($\uparrow$) or spin-down ($\downarrow$). The Hilbert space dimension, which determines the size of the Hamiltonian matrix, is given by:
+$N$ サイトの系では、各サイトはスピン上向き（$\uparrow$）とスピン下向き（$\downarrow$）の 2 つの状態のいずれかを取ります。ハミルトニアン行列のサイズを決めるヒルベルト空間の次元は次で与えられます。
 
 $$
 \text{Dimension of Hilbert space} = 2^N.
 $$
 
-For example:
-- For $N = 4$, the Hilbert space has $2^4 = 16$ states.
-- For $N = 10$, the Hilbert space has $2^{10} = 1024$ states.
-- For $N = 20$, the Hilbert space has $2^{20} = 1,048,576$ states.
+例えば次のとおりです。
+- $N = 4$ のとき、ヒルベルト空間は $2^4 = 16$ 個の状態を持ちます。
+- $N = 10$ のとき、ヒルベルト空間は $2^{10} = 1024$ 個の状態を持ちます。
+- $N = 20$ のとき、ヒルベルト空間は $2^{20} = 1,048,576$ 個の状態を持ちます。
 
-This exponential growth means that the Hamiltonian matrix size quickly becomes unmanageable as $N$ increases. For instance, a 20-site system requires diagonalizing a $1,048,576 \times 1,048,576$ matrix, which is computationally intensive.
+この指数関数的な増大により、$N$ が大きくなるにつれてハミルトニアン行列のサイズはすぐに手に負えなくなります。例えば、20 サイトの系では $1,048,576 \times 1,048,576$ の行列を対角化する必要があり、これは計算量的に非常に重い処理です。
 
-### Sparse vs. Full Diagonalization
+### スパース対角化と完全対角化
 
-The Hamiltonian matrix of the 1D Heisenberg model is typically sparse, meaning most of its elements are zero. This sparsity arises because the Hamiltonian only connects states that differ by a single spin flip (nearest-neighbor interactions). For example, in a 4-site system, the Hamiltonian matrix might look like this (simplified):
+1 次元ハイゼンベルクモデルのハミルトニアン行列は一般にスパース（疎）であり、要素の大部分がゼロです。このスパース性は、ハミルトニアンが 1 つのスピン反転だけ異なる状態どうししか結合しない（最近接相互作用）ことに由来します。例えば 4 サイト系では、ハミルトニアン行列は（簡略化すると）次のような形になります。
 
 $$
 \mathcal{H} = \begin{pmatrix}
@@ -112,13 +111,13 @@ J/2 & E_2 & J/2 & \cdots \\\
 \end{pmatrix},
 $$
 
-where $E_i$ are diagonal elements (energies of basis states), and $J/2$ represents off-diagonal elements due to spin-flip terms.
+ここで $E_i$ は対角要素（基底ベクトルのエネルギー）、$J/2$ はスピン反転項による非対角要素を表します。
 
-#### Full Diagonalization
-Full diagonalization involves computing all eigenvalues and eigenvectors of the Hamiltonian matrix. While this provides complete information about the system, it is computationally expensive for large matrices due to the $O(M^3)$ scaling, where $M$ is the matrix size. For example, full diagonalization of a $10^6 \times 10^6$ matrix is impractical on most computers.
+#### 完全対角化
+完全対角化では、ハミルトニアン行列のすべての固有値と固有ベクトルを計算します。これにより系に関する完全な情報が得られますが、$O(M^3)$ のスケーリング（$M$ は行列サイズ）のため、大きな行列に対しては計算コストが高くなります。例えば、$10^6 \times 10^6$ の行列の完全対角化は、ほとんどのコンピュータでは現実的ではありません。
 
-#### Sparse Diagonalization
-Sparse diagonalization exploits the sparsity of the Hamiltonian matrix to compute only a subset of eigenvalues and eigenvectors, typically the lowest few eigenstates (e.g., the ground state and low-lying excitations). Algorithms like the Lanczos method or Arnoldi iteration are commonly used for sparse diagonalization. These methods scale much better with system size, often requiring only $O(M)$ memory and $O(M^2)$ time for a few eigenstates, making them suitable for larger systems.
+#### スパース対角化
+スパース対角化は、ハミルトニアン行列のスパース性を利用して、固有値と固有ベクトルの一部、典型的には最低エネルギーのいくつかの固有状態（例えば基底状態と低エネルギー励起）のみを計算します。スパース対角化には Lanczos 法や Arnoldi 反復法などのアルゴリズムがよく用いられます。これらの方法は系のサイズに対するスケーリングがはるかに良く、少数の固有状態に対しては $O(M)$ のメモリと $O(M^2)$ の計算時間しか必要としないことが多いため、より大きな系に適しています。
 
-#### Comparisons
-The size of the Hamiltonian matrix in the 1D Heisenberg model grows exponentially with the number of lattice sites, posing a significant computational challenge. While full diagonalization provides complete information about the system, it is limited to small lattices due to its high computational cost. Sparse diagonalization, on the other hand, leverages the sparsity of the Hamiltonian to study larger systems by focusing on the most relevant eigenstates. This trade-off between full and sparse diagonalization highlights the importance of choosing the right numerical approach based on the system size and the desired physical insights.
+#### 比較
+1 次元ハイゼンベルクモデルのハミルトニアン行列のサイズは格子サイト数とともに指数関数的に増大し、大きな計算上の課題となります。完全対角化は系に関する完全な情報を与えますが、計算コストが高いため小さな格子に限られます。一方、スパース対角化はハミルトニアンのスパース性を活用し、最も重要な固有状態に焦点を絞ることで、より大きな系を調べることができます。完全対角化とスパース対角化の間のこのトレードオフは、系のサイズと求める物理的知見に応じて適切な数値手法を選ぶことの重要性を示しています。

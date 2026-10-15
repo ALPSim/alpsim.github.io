@@ -1,43 +1,43 @@
 
 ---
-title: Code-04 AleaHOWTO
+title: Code-04 Alea 使用指南
 math: true
 toc: true
 weight: 5
 ---
 
-## ALEA Library
+## ALEA 库
 
-The Alea library allows to
-- do Monte Carlo measurements
-- calculate errors and autocorrelation times with binning analysis (Jackknife analysis)
-- calculate mean values and errors of functions of measurements
+Alea 库可以用于
+- 进行蒙特卡洛测量
+- 通过分箱分析（Jackknife 分析）计算误差和自相关时间
+- 计算测量量的函数的平均值和误差
 
-### Monte Carlo measurements
+### 蒙特卡洛测量
 
-We include the ALEA library in a C++ code with
+在 C++ 代码中通过以下方式包含 ALEA 库
 
     #include <alps/alea.h>
     
-First we have to create an observable
+首先需要创建一个观测量
 
     alps::RealObservable obs_a("observable a");
     
-where the argument in the constructor stands for the name of the observable. Measurements can easily added to the observable by using the "<<" operator. For example
+其中构造函数的参数表示观测量的名称。使用 "<<" 运算符即可方便地向观测量中添加测量值。例如
 
     obs_a << 1.2;
     
-adds the number 1.2 to the observable `obs_a`.
+会将数值 1.2 添加到观测量 `obs_a` 中。
 
-Every Monte Carlo simulation needs thermalization. After a certain number of thermalization steps the observable has to be reset by
+每个蒙特卡洛模拟都需要热化。在一定数量的热化步之后，需要通过以下方式重置观测量
 
     obs_a.reset(true);
     
-Printing an observable is simply done by
+输出一个观测量也很简单
 
     std::cout << obs_a;
     
-Here is a complete example program:
+下面是一个完整的示例程序：
 
     #include <iostream>
     #include <alps/alea.h>
@@ -71,9 +71,9 @@ Here is a complete example program:
         std::cout << obs_a;       
     }
 
-### Functions of Obervables
+### 观测量的函数
 
-It is possible to evaluate functions of observables. We first have to create observable evaluators from the observables containing the measurements. For example, assume we have added measurements to `obs_a` and `obs_b` and we want to calculate `obs_c = obs_a/obs_b`. This can be done by
+可以对观测量的函数进行求值。首先需要从包含测量值的观测量创建观测量求值器（observable evaluator）。例如，假设我们已经向 `obs_a` 和 `obs_b` 添加了测量值，并想计算 `obs_c = obs_a/obs_b`。这可以通过以下方式实现
 
     alps::RealObsevaluator obseval_a(obs_a);
     alps::RealObsevaluator obseval_b(obs_b);
@@ -81,4 +81,4 @@ It is possible to evaluate functions of observables. We first have to create obs
     obseval_c = obseval_b / obseval_a;
     std::cout << obseval_c;
 
-Simple example programs can also be found in the ALPS source directory in "test/alea".
+简单的示例程序也可以在 ALPS 源代码目录的 "test/alea" 中找到。

@@ -1,15 +1,15 @@
 
 ---
-title: ALPS using Python
+title: "Python での ALPS の使用"
 toc: true
 weight: 3
 ---
 
-## Running ALPS programs using Python
+## Python で ALPS プログラムを実行する
 
 Python から ALPS を利用する方法を示すために、ここでは単純な古典モンテカルロシミュレーションを例にします：`spinmc` アプリケーションで解く、正方格子上の2次元強磁性 Ising 模型です。臨界温度に近づくと、局所的なスピン反転更新は臨界減速（critical slowing down）の影響を受けます――自己相関時間が発散し、連続する配置が統計的にほとんど独立でなくなります――そのため、代わりにクラスターアルゴリズム（`'UPDATE': "cluster"`）を用いて、揃ったスピンのクラスター全体を一度に反転させます。ここでは磁化 $|m|$ の温度依存性と、その Binder cumulant（臨界温度を精密に決定するための標準的な有限サイズ解析の道具）を計算します（この解析の詳細については [MC-07 Phase Transition](../../../../tutorials/mcs/mc07) を参照してください）。
 
-## Launching Python
+## Python の起動
 
 Python は、拡張モジュールをコンパイルしたときと**まったく同じ**バージョンの Python でしか使用できないという制約があります。ALPS をソースからビルドする場合（例えば Linux では必須です）、ALPS の設定時にどの Python インタプリタを使うかを指定できます。すると ALPS は
 
@@ -17,9 +17,9 @@ Python は、拡張モジュールをコンパイルしたときと**まった�
 
 という名前のスクリプトを作成します。このスクリプトは、ALPS の拡張モジュールを見つけるために必要なパスを設定した上で、指定した Python インタプリタを呼び出します。
 
-## Detailed instructions
+## 詳しい手順
 
-### Importing the ALPS modules
+### ALPS モジュールのインポート
 
 Python を起動したら、必要なモジュールをインポートします。
 
@@ -29,7 +29,7 @@ Python を起動したら、必要なモジュールをインポートします�
 
 完全な Python スクリプトは、チュートリアルディレクトリの [`tutorials/intro-01-basics/tutorial-full.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-full.py) にあります。
 
-### Preparing the input
+### 入力の準備
 
 入力を準備するために、シミュレーションのパラメータを含む Python の辞書のリストを作成します。
 
@@ -54,9 +54,9 @@ Python を起動したら、必要なモジュールをインポートします�
 
 引数 `'parm1'` は、この関数にすべてのシミュレーションファイルの接頭辞として `parm1` を使うよう指示します。この関数はメインのシミュレーションファイルの名前（ここでは `parm1.in.xml`）を返します。
 
-### Running the simulation
+### シミュレーションの実行
 
-#### Running the simulation on a serial machine
+#### シリアルマシンでのシミュレーションの実行
 
 シミュレーションを実行するには、`runApplication` 関数を呼び出すだけです。
 
@@ -64,7 +64,7 @@ Python を起動したら、必要なモジュールをインポートします�
 
 パラメータ `writexml=True` は、すべての結果を XML ファイルにも書き出すよう ALPS に指示します。これにより I/O は遅くなりますが、出力 XML ファイルをウェブブラウザで開くだけで結果を確認できるため便利です。ただし、測定する物理量が多い場合、ファイルは非常に大きくなり、書き込みに時間がかかりすぎることがあります。
 
-#### Running the simulation on a parallel machine
+#### 並列マシンでのシミュレーションの実行
 
 MPI を用いて並列マシン上でシミュレーションを実行するには、代わりに次のコマンドを呼び出します。
 
@@ -72,16 +72,16 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
 
 ここで `MPI` 引数は、起動するプロセス数を指定します。
 
-### Loading the simulation results
+### シミュレーション結果の読み込み
 
-#### Getting the result files
+#### 結果ファイルの取得
 
 結果を読み込む前に、結果ファイルの一覧を取得する必要があります。ちょうど今作成したファイル（接頭辞 `parm1` で始まるもの）だけに注目すると、次のようにファイル一覧が得られます。
 
     result_files = pyalps.getResultFiles(prefix='parm1')
     print(result_files)
 
-#### Loading the results
+#### 結果の読み込み
 
 次に、何が測定されたかを知りたくなるかもしれません。そのためには、観測量のリストを読み込みます。
 
@@ -94,13 +94,13 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
 
 出力される内容には、読み込まれた値が `y` に、そしてすべてのシミュレーションパラメータが `props` という辞書に含まれています。
 
-### Plotting the results 
+### 結果のプロット
 
 例えば |Magnetization| の温度依存性をプロットするために、`collectXY` を呼び出して |Magnetization| の値を `y` に、温度 `T` を `x` にまとめます。
 
     plotdata = pyalps.collectXY(data,'T','|Magnetization|')
 
-#### Plotting in Python using `matplotlib`
+#### Python で `matplotlib` を使ったプロット
 
 続いて、`matplotlib` と `pyalps.plot` モジュールを使ってプロットします。
 
@@ -111,7 +111,7 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
     plt.title('Ising model')
     plt.show()
 
-#### Converting to other formats
+#### 他の形式への変換
 
 データセットを、プレーンテキストや Grace、Gnuplot といった他のプロット形式に変換する関数も用意されています。
 
@@ -119,7 +119,7 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
     print(pyalps.plot.makeGracePlot(plotdata))
     print(pyalps.plot.makeGnuplotPlot(plotdata))
 
-### Evaluating data
+### データの評価
 
 結果に対する関数、例えば Binder cumulant 比 $\langle m^2 \rangle / \langle |m|\rangle ^2$ を簡単に評価できます。新しい `DataSet` を作成し、値を入れていきます。
 
@@ -139,24 +139,24 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
     plt.ylabel('Binder cumulant')
     plt.show()
 
-## Complete example scripts
+## 完全なサンプルスクリプト
 
 完全なスクリプトはファイル [`tutorials/intro-01-basics/tutorial-full.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-full.py) にあります。
 
 以下では、さまざまな作業のためのより小さなスクリプトを紹介します。
 
-### Running and plotting
+### 実行とプロット
 
 - matplotlib で磁化のプロットを準備する：[`tutorials/intro-01-basics/tutorial-magnetization.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-magnetization.py)
 - Grace で磁化のプロットを準備する：[`tutorials/intro-01-basics/tutorial-graceplot.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-graceplot.py)
 - Gnuplot で磁化のプロットを準備する：[`tutorials/intro-01-basics/tutorial-gnuplot.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-gnuplot.py)
 - 磁化をプレーンテキストで出力する：[`tutorials/intro-01-basics/tutorial-text.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-text.py)
 
-### More complex evaluation
+### より複雑な評価
 
 - Binder cumulant の計算はファイル [`tutorials/intro-01-basics/tutorial-binder.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-binder.py) にあります。
 
-### Splitting into subtasks
+### サブタスクへの分割
 
 準備・実行・評価の各作業は、サブタスクに分割することもできます。
 
@@ -164,7 +164,7 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
 - シミュレーションの実行：[`tutorials/intro-01-basics/tutorial-runsimulation.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-runsimulation.py)
 - 結果の評価：[`tutorials/intro-01-basics/tutorial-evaluate.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-evaluate.py)
 
-## More examples
+## その他の例
 
 各種関数の使用例や、より高度なアプリケーションについては、チュートリアルを参照してください。また、各関数の `__doc__` 属性を使ってドキュメントを参照することも忘れないでください。例えば次のようにします。
 

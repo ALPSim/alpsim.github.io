@@ -1,20 +1,19 @@
-
 ---
-title: Particle in a box 
+title: 箱の中の粒子
 math: true
 weight: 10
 ---
 
-## ALPS application: noninteracting DMRG
+## ALPS アプリケーション：相互作用のない DMRG
 
-The noninteracting DMRG package is one of the applications of the ALPS project. It provides a generic implementation of a simplified DMRG program for noninteracting quantum systems, basing on the example program presented in [^Preschel].
-The application supports the simulation of tight-binding systems and extended tight-binding systems (e.g. with next-nearest neighbour hopping, external local potentials, ...) on arbitrary lattices. It calculates the ground state energy and the ground state wavefunction of the system. Note that it is not possible to handle interaction terms using this program.
-This program is not really intended to be a serious calculation tool - instead its main purpose is to illustrate how the DMRG method works via a simple non-interacting problem. To this end, the comments in the source code itself should be helpful.
+相互作用のない DMRG パッケージは、ALPS プロジェクトのアプリケーションの一つです。[^Preschel] で示されたサンプルプログラムに基づき、相互作用のない量子系に対する簡略化された DMRG プログラムの汎用的な実装を提供します。
+このアプリケーションは、任意の格子上の強束縛系および拡張された強束縛系（例えば次近接ホッピングや外部局所ポテンシャルなどを含むもの）のシミュレーションをサポートしています。系の基底状態エネルギーと基底状態の波動関数を計算します。このプログラムでは相互作用項を扱うことはできないことに注意してください。
+このプログラムは本格的な計算ツールとして意図されたものではありません。むしろ、単純な相互作用のない問題を通じて DMRG 法がどのように機能するかを示すことが主な目的です。そのためには、ソースコード自体のコメントが役に立つはずです。
 
 
-## Running a simulation
+## シミュレーションの実行
 
-In order to run a simulation, one needs to create a parameter file, e.g.
+シミュレーションを実行するには、例えば次のようなパラメータファイルを作成する必要があります。
 
     LATTICE_LIBRARY = "lattices.xml"
     LATTICE = "chain lattice"
@@ -25,36 +24,36 @@ In order to run a simulation, one needs to create a parameter file, e.g.
     t = 1.2
     V = 0
 
-These parameters describe a calculation for a single particle tight-binding model using the "chain lattice" defined in the `lattices.xml` file. The "chain lattice" defines a 1D periodic lattice of length given by the parameter L (specified in this example as L=20). The hopping parameter t acts between the bonds of the lattice, thus the lattice effectively specifies the boundary condition (for the "chain lattice", this is periodic). As is typical for DMRG, open boundary conditions are more efficient and converge in far fewer sweeps than periodic boundaries. This simulation will carry out 100 complete DMRG sweeps. The variable OUTPUT_LEVEL specifies the amount of debug information produced during the sweeps, a higher number for more information. To start the calculation, make sure that the lattice library `lattices.xml` is in the current directory and simply execute `simple_dmrg <  parameters`. The resultant wavefunction is written to standard output as well as to the output file specified by  `WAVEFUNCTION_FILE`.
+これらのパラメータは、`lattices.xml` ファイルで定義された "chain lattice" を用いた、1 粒子の強束縛モデルの計算を記述しています。"chain lattice" は、パラメータ L（この例では L=20 と指定）で与えられる長さの 1 次元周期格子を定義します。ホッピングパラメータ t は格子のボンド間に作用するため、格子が実質的に境界条件を指定することになります（"chain lattice" の場合は周期境界条件です）。DMRG ではよくあることですが、開放境界条件の方が周期境界条件よりも効率的で、はるかに少ないスイープ数で収束します。このシミュレーションでは、100 回の完全な DMRG スイープを実行します。変数 OUTPUT_LEVEL はスイープ中に出力されるデバッグ情報の量を指定し、数値が大きいほど多くの情報が出力されます。計算を開始するには、格子ライブラリ `lattices.xml` がカレントディレクトリにあることを確認し、単に `simple_dmrg <  parameters` を実行します。得られた波動関数は、標準出力と、`WAVEFUNCTION_FILE` で指定された出力ファイルに書き出されます。
 
-## Input parameters
+## 入力パラメータ
 
-The simulation is controlled by the following input parameters that can be specified in the parameter file:
+シミュレーションは、パラメータファイルで指定できる以下の入力パラメータによって制御されます。
 
-| **Name** | **Default** | **Description** |
+| **名前** | **デフォルト値** | **説明** |
 | :------- | :---------- | :-------------- |
-| LATTICE_LIBRARY | lattices.xml | path to a file containing lattice descriptions |
-| LATTICE | | name of the lattice |
-| t | 1 | strength of nearest-neighbour hopping term |
-| t# | 0 | hopping parameter on a bond with type # (#=0,1,...) |
-| V | 0 | local potential applied to all sites |
-| V# | 0 | local potential on a site with type # (#=1,2,...) |
-| SWEEPS | | number of finite-system-sweeps |
-| OUTPUT_LEVEL | 1 | amount of output information during the sweeps |
-| WAVEFUNCTION_FILE | | output file |
-| PRECISION | 10 | precision for the output stream |
+| LATTICE_LIBRARY | lattices.xml | 格子の記述を含むファイルへのパス |
+| LATTICE | | 格子の名前 |
+| t | 1 | 最近接ホッピング項の強さ |
+| t# | 0 | タイプ # (#=0,1,...) のボンド上のホッピングパラメータ |
+| V | 0 | すべてのサイトに加える局所ポテンシャル |
+| V# | 0 | タイプ # (#=1,2,...) のサイト上の局所ポテンシャル |
+| SWEEPS | | 有限系スイープの回数 |
+| OUTPUT_LEVEL | 1 | スイープ中の出力情報の量 |
+| WAVEFUNCTION_FILE | | 出力ファイル |
+| PRECISION | 10 | 出力ストリームの精度 |
 
-### System properties: boundary conditions and extension
+### 系の性質：境界条件と広がり
 
-The boundary conditions and the extension (in one or higher dimensions) are described in the lattice library.
+境界条件と（1 次元または高次元での）系の広がりは、格子ライブラリで記述されます。
 
-### Next-nearest-neighbour hopping terms
+### 次近接ホッピング項
 
-Hopping terms to other than the nearest neighbour sites can be specified by using a different unit cell when specifying the lattice. The different hopping terms should correspond to different bond types with the hopping parameter controlled by t# in the parameter file. t0 defaults to t, all other t# default to 0.
+最近接サイト以外へのホッピング項は、格子を指定する際に別の単位胞を用いることで指定できます。異なるホッピング項は異なるボンドタイプに対応させ、そのホッピングパラメータはパラメータファイル中の t# で制御します。t0 のデフォルトは t であり、それ以外の t# のデフォルトはすべて 0 です。
 
-### Local potential
+### 局所ポテンシャル
 
-The parameter V specifies a function that is used for an external potential. A uniform additional potential is specified by a single number describing its strength, but a more interesting case is to have a spatially varying potential whereby V as a function of the coordinates of the lattice sites. The following parameter file e.g. simulates a particle in a one-dimensional harmonic potential:
+パラメータ V は、外部ポテンシャルとして用いられる関数を指定します。一様な追加ポテンシャルはその強さを表す 1 つの数値で指定しますが、より興味深いのは、V を格子サイトの座標の関数とすることで空間的に変化するポテンシャルを与える場合です。例えば、次のパラメータファイルは 1 次元調和ポテンシャル中の粒子をシミュレートします。
 
     LATTICE_LIBRARY = "lattices.xml"
     LATTICE = "chain lattice"
@@ -62,27 +61,27 @@ The parameter V specifies a function that is used for an external potential. A u
     SWEEPS = 20
     V = 4 * (x/L - 0.5) * (x/L - 0.5)
 
-A periodic potential can be specified by its fourier series expansion. For example, a triangular potential with width N/L is specified approximately as by
+周期ポテンシャルは、そのフーリエ級数展開によって指定できます。例えば、幅 N/L の三角波ポテンシャルは近似的に次のように指定されます。
 
     K = 2*3.1415927*N/L
     V = cos(K*x) + cos(3*K*x) / 9 + cos(5*K*x) / 25 + cos(7*K*x) / 36
 
-Note that V specifies the external potential which is applied to every site of the lattice. It is also possible to assing a potential only to certain site types, which is done by specifing a function V# (with # being site type specified in the lattice description). If a V# potential is defined, it is added to the global potential V for the relevant sites.
-Again, for periodic systems or complex potentials, the convergence can be quite slow; for the triangular potential, 100 sweeps is enough to get good convergence for 40 sites with N=4, but compare this with 100 sites and N=10. This is partly due to the simplistic way the wavefunction is constructed prior to the first proper DMRG sweep.
+V は格子のすべてのサイトに加えられる外部ポテンシャルを指定することに注意してください。特定のサイトタイプにのみポテンシャルを割り当てることも可能で、これは関数 V#（# は格子の記述で指定されたサイトタイプ）を指定することで行います。V# ポテンシャルが定義されている場合、該当するサイトでは全体のポテンシャル V に加算されます。
+繰り返しになりますが、周期系や複雑なポテンシャルの場合、収束はかなり遅くなることがあります。三角波ポテンシャルの場合、N=4 で 40 サイトなら 100 回のスイープで十分に良い収束が得られますが、100 サイトで N=10 の場合と比較してみてください。これは、最初の本来の DMRG スイープの前に波動関数を構築する方法が単純すぎることが一因です。
 
-### Output
+### 出力
 
-The output is controlled by the parameters OUTPUT_LEVEL, WAVEFUNCTION_FILE, and PRECISION.
-The OUTPUT_LEVEL parameter can range from 0 to 4. The higher the value, the higher the amount of information produced during the finite system sweeps. The default is 1, which shows the energy at the end of every sweep. Level 4 produces a large amount of output and is useful only for debugging or following the details of the calculation very closely.
-The output file is specified by WAVEFUNCTION_FILE, and the parameter PRECISION sets the precision of the printed results. The WAVEFUNCTION_FILE is formatted in a way that it can be directly plotted using xmgrace, e.g. "xmgrace psi.dat".
+出力は、パラメータ OUTPUT_LEVEL、WAVEFUNCTION_FILE、PRECISION によって制御されます。
+OUTPUT_LEVEL パラメータは 0 から 4 までの値を取ります。値が大きいほど、有限系スイープ中に出力される情報量が多くなります。デフォルトは 1 で、各スイープの終わりにエネルギーを表示します。レベル 4 では大量の出力が生成され、デバッグや計算の詳細を非常に細かく追う場合にのみ役立ちます。
+出力ファイルは WAVEFUNCTION_FILE で指定し、パラメータ PRECISION で出力結果の精度を設定します。WAVEFUNCTION_FILE は、xmgrace で直接プロットできる形式になっています（例えば "xmgrace psi.dat"）。
 
-## Measurements
+## 測定
 
-Within this simple dmrg application, only the ground state energy and ground state wavefunction are calculated. Observables can be calculated afterwards basing on the output wavefunction.
+このシンプルな dmrg アプリケーションでは、基底状態エネルギーと基底状態の波動関数のみが計算されます。観測量は、出力された波動関数に基づいて後から計算できます。
 
-## Contributors
+## 貢献者
 
-The following persons have contributed to the noninteracting dmrg application:
+以下の方々が相互作用のない dmrg アプリケーションに貢献しました。
 
 - Salvatore Manmana
 - Ian McCulloch

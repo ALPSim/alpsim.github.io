@@ -1,7 +1,7 @@
 
 ---
-title: ALPS Random
-description: "ALPS Random Number Generator"
+title: "ALPS 随机数"
+description: "ALPS 随机数生成器"
 weight: 3
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: General Introduction
+title: "概要"
 math: true
 weight: 3
 cascade:            
