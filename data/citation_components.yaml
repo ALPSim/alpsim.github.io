@@ -1,0 +1,33 @@
+# Presentation details for the refs page that are not part of the ALPS
+# citation files: display order and source directories. Papers, names and
+# rules come from CITATION.cff and CITATIONS.yaml in the ALPS repository
+# (see params.citations.source in hugo.yaml). Components that appear in
+# CITATIONS.yaml but not here are still shown, after the listed ones.
+order:
+  - scheduler
+  - sparsediag
+  - fulldiag
+  - spinmc
+  - looper
+  - dirloop_sse
+  - worm
+  - qwl
+  - dmrg
+  - dmft
+  - interaction
+  - hybridization
+  - hirschfye
+sources:
+  scheduler: [src/alps/scheduler]
+  sparsediag: [src/apps/diag/sparsediag]
+  fulldiag: [src/apps/diag/fulldiag]
+  spinmc: [src/apps/mc/spins]
+  looper: [src/apps/qmc/looper]
+  dirloop_sse: [src/apps/qmc/sse, src/apps/qmc/sse2, src/apps/qmc/sse4]
+  worm: [src/apps/qmc/worms]
+  qwl: [src/apps/qmc/qwl]
+  dmrg: [src/apps/dmrg/dmrg]
+  dmft: [src/apps/dmft]
+  interaction: [src/apps/dmft/qmc/interaction_expansion, src/apps/dmft/qmc/interaction_expansion2]
+  hybridization: [src/apps/dmft/qmc/hybridization]
+  hirschfye: [src/apps/dmft/qmc/hirschfyesim.C]

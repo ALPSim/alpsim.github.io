@@ -23,3 +23,25 @@
 - id: backToTop
   translation: "Back to top"
 
+
+# Refs page generated from the ALPS citation files
+- id: citeRuleAlgorithm
+  translation: "Algorithms"
+- id: citeRuleImplementation
+  translation: "Implementations"
+- id: citeRuleFramework
+  translation: "Framework"
+- id: citeFrameworkHeading
+  translation: "ALPS framework"
+- id: citeFrameworkPaper
+  translation: "Framework paper"
+- id: citeImplementationPapers
+  translation: "Implementation papers"
+- id: citeAlgorithmPapers
+  translation: "Algorithm papers"
+- id: citeSource
+  translation: "Source"
+- id: citeAlsoCite
+  translation: "Also cite"
+- id: citeNote
+  translation: "Note"

@@ -281,3 +281,14 @@ params:
     displayCopyright: true
   i18n:
     enable: true
+  # The refs page reads CITATION.cff and CITATIONS.yaml from this location at
+  # build time. Point it at a tag or commit to pin the citation data.
+  citations:
+    source: "https://raw.githubusercontent.com/ALPSim/ALPS/master"
+
+# Re-fetch remote resources (the ALPS citation files) at most hourly during
+# local development; CI builds start with an empty cache.
+caches:
+  getresource:
+    dir: :cacheDir/:project
+    maxAge: 1h

@@ -1,0 +1,118 @@
+{{- /*
+  Implementation and algorithm papers, generated at build time from the ALPS
+  citation files:
+    CITATION.cff    bibliographic records (preferred-citation = framework paper)
+    CITATIONS.yaml  citation policy and the papers to cite for each component
+  The files are fetched from site.Params.citations.source. Use as a markdown
+  shortcode, {{% alps-citations %}}, so the headings appear in the page TOC.
+*/ -}}
+{{- $base := strings.TrimSuffix "/" site.Params.citations.source -}}
+{{- $files := dict -}}
+{{- range $name := slice "CITATION.cff" "CITATIONS.yaml" -}}
+  {{- $url := printf "%s/%s" $base $name -}}
+  {{- with try (resources.GetRemote $url) -}}
+    {{- with .Err -}}
+      {{- errorf "alps-citations: cannot fetch %s: %s" $url . -}}
+    {{- else with .Value -}}
+      {{- /* Name the content .yaml so transform.Unmarshal parses it as YAML. */ -}}
+      {{- $yaml := resources.FromString (printf "citations/%s.yaml" (lower $name)) .Content -}}
+      {{- $files = merge $files (dict (lower $name) (transform.Unmarshal $yaml)) -}}
+    {{- else -}}
+      {{- errorf "alps-citations: %s returned no content" $url -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $cff := index $files "citation.cff" -}}
+{{- $policy := index $files "citations.yaml" -}}
+
+{{- /* Index all records by their ALPS reference key (lowercase). */ -}}
+{{- $refs := dict -}}
+{{- $records := slice -}}
+{{- with index $cff "preferred-citation" -}}{{- $records = $records | append . -}}{{- end -}}
+{{- with $cff.references -}}{{- $records = $records | append . -}}{{- end -}}
+{{- range $records -}}
+  {{- $record := . -}}
+  {{- range .identifiers -}}
+    {{- if eq .description "ALPS reference key" -}}
+      {{- $refs = merge $refs (dict (lower .value) (dict "key" .value "ref" $record)) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $en := eq site.Language.Lang "en" -}}
+{{- $text := dict
+  "request" (cond $en $policy.policy.request (i18n "citePolicyRequest" | default $policy.policy.request))
+  "license" (cond $en $policy.policy.license_note (i18n "citePolicyLicenseNote" | default $policy.policy.license_note))
+  "algorithm" (cond $en $policy.policy.algorithm (i18n "citePolicyAlgorithm" | default $policy.policy.algorithm))
+  "implementation" (cond $en $policy.policy.implementation (i18n "citePolicyImplementation" | default $policy.policy.implementation))
+  "framework" (cond $en $policy.policy.framework (i18n "citePolicyFramework" | default $policy.policy.framework))
+-}}
+
+{{- /* Policy */ -}}
+{{ index $text "request" }} {{ index $text "license" }}
+
+- **{{ i18n "citeRuleAlgorithm" }}:** {{ index $text "algorithm" }}
+- **{{ i18n "citeRuleImplementation" }}:** {{ index $text "implementation" }}
+- **{{ i18n "citeRuleFramework" }}:** {{ index $text "framework" }}
+
+---
+
+### {{ i18n "citeFrameworkHeading" }} {#framework}
+
+**{{ i18n "citeFrameworkPaper" }}**
+
+{{ with index $cff "preferred-citation" -}}
+{{- $key := "" -}}{{- range .identifiers -}}{{- if eq .description "ALPS reference key" -}}{{- $key = .value -}}{{- end -}}{{- end -}}
+{{ partial "citations/reference.html" (dict "ref" . "key" ($key | default "alps")) }}
+{{- end }}
+
+{{- /* Components in the site's display order, then any others. */ -}}
+{{- $order := hugo.Data.citation_components.order | default slice -}}
+{{- $keys := slice -}}
+{{- range $order -}}{{- if index $policy.components . -}}{{- $keys = $keys | append . -}}{{- end -}}{{- end -}}
+{{- range $k, $_ := $policy.components -}}{{- if and (ne $k "framework") (not (in $keys $k)) -}}{{- $keys = $keys | append $k -}}{{- end -}}{{- end -}}
+
+{{- range $k := $keys -}}
+{{- $c := index $policy.components $k -}}
+{{- $name := i18n (printf "citeComponent_%s" $k) | default $c.name -}}
+{{- $note := "" -}}{{- with $c.note -}}{{- $note = i18n (printf "citeComponentNote_%s" $k) | default . -}}{{- end }}
+
+---
+
+### {{ $name }} — `{{ $k }}` {#{{ $k }}}
+{{ with index hugo.Data.citation_components.sources $k }}
+{{- $links := slice -}}
+{{- range . -}}
+{{- $kind := cond (findRE `\.[A-Za-z]+$` . 1) "blob" "tree" -}}
+{{- $links = $links | append (printf "[`%s`](https://github.com/ALPSim/ALPS/%s/master/%s)" . $kind .) -}}
+{{- end }}
+*{{ i18n "citeSource" }}: {{ delimit $links ", " }}*
+{{ end }}
+{{- range $section := slice "implementation" "algorithm" -}}
+{{- $list := index $c $section -}}
+{{- if $list }}
+
+**{{ i18n (cond (eq $section "implementation") "citeImplementationPapers" "citeAlgorithmPapers") }}**
+{{ range $list -}}
+{{- $entry := index $refs (lower .) -}}
+{{- if not $entry -}}{{- errorf "alps-citations: component %s cites unknown reference %s" $k . -}}{{- end }}
+
+{{ partial "citations/reference.html" $entry }}
+{{ end -}}
+{{- end -}}
+{{- end -}}
+{{- with $c.uses }}
+
+{{- $uses := slice -}}
+{{- range . -}}
+{{- $u := index $policy.components . -}}
+{{- $uses = $uses | append (printf "[%s](#%s)" (i18n (printf "citeComponent_%s" .) | default $u.name) .) -}}
+{{- end }}
+
+**{{ i18n "citeAlsoCite" }}:** {{ delimit $uses ", " }}
+{{- end -}}
+{{- with $note }}
+
+> **{{ i18n "citeNote" }}:** {{ . }}
+{{- end }}
+{{ end -}}
