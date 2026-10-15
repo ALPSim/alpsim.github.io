@@ -8,18 +8,18 @@ math: true
 
 ### 理論
 
-まずは最も単純な場合、すなわち周期ポテンシャル $V(\vec{r})$ を感じる質量 $m$ の単一粒子を考えます。ここで
+まずは最も単純な場合、すなわち周期ポテンシャルを感じる質量 $m$ の単一粒子を考えます。
 
 $$
-V(\vec{r}) = \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)
+V(\vec{r}) = \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha),
 $$
 
-であり、反跳エネルギー $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ と格子間隔 $\frac{\lambda_\alpha}{2}$ を単位とします。
+ここで $V_0^{x_\alpha}$ は反跳エネルギー $E_r^\alpha = \frac{\hbar^2}{2m} \left( \frac{2\pi}{\lambda_\alpha} \right)^2$ を単位とした格子の深さであり、長さは格子間隔 $\frac{\lambda_\alpha}{2}$ を単位とします。
 
 単一粒子の量子力学的な振る舞いは次の式に従います。
 
 $$
-\left[\frac{1}{\pi^2} \left( -i \nabla + 2\pi \vec{k} \right)^2 + \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)\right]  u_k (\vec{r}) = \epsilon_k u_k(\vec{r})
+\left[\frac{1}{\pi^2} \left( -i \nabla + 2\pi \vec{k} \right)^2 + \sum_{x_\alpha = x,y,z} V_0^{x_\alpha} \sin^2 (\pi x_\alpha)\right]  u_k (\vec{r}) = \epsilon_k u_k(\vec{r}),
 $$
 
 これは明らかに変数分離でき、例えば $x$ 成分については
@@ -30,13 +30,13 @@ $$
 
 となります。ここで $k_x = 0, \frac{1}{L_x} ,\cdots \frac{L_x-1}{L_x}$ です。
 
-平面波基底
+平面波基底は次のとおりです。
 
 $$
-u_{k_x} (x) = \frac{1}{\sqrt{L_x}} \sum_{m \in \mathbf{Z}}  c_m^{(k_x)} e^{i2m\pi x} 
+u_{k_x} (x) = \frac{1}{\sqrt{L_x}} \sum_{m \in \mathbf{Z}}  c_m^{(k_x)} e^{i2m\pi x}.
 $$
 
-を用いると、三重対角行列の対角化問題に帰着します。
+これを用いると、三重対角行列の対角化問題に帰着します。
 
 $$
 \left[  4(m + k_x)^2 + \frac{V_0^x}{2} \right] c_m^{(k_x)} - \frac{V_0^x}{4} c_{m-1}^{(k_x)} - \frac{V_0^x}{4} c_{m+1}^{(k_x)}  = \epsilon_{k_x}  c_m^{(k_x)}.
@@ -45,7 +45,7 @@ $$
 ワニエ関数は次のように定義されます。
 
 $$
-w(x) = \frac{1}{\sqrt{L_x}} \sum_{k_x} u_{k_x} (x) e^{i 2\pi k_x x} = \frac{1}{L_x} \sum_{k_x} \sum_{m \in \mathbf{Z}} c_m^{(k_x)} e^{i 2\pi (m+k_x) x}, 
+w(x) = \frac{1}{\sqrt{L_x}} \sum_{k_x} u_{k_x} (x) e^{i 2\pi k_x x} = \frac{1}{L_x} \sum_{k_x} \sum_{m \in \mathbf{Z}} c_m^{(k_x)} e^{i 2\pi (m+k_x) x},
 $$
 
 そこから、オンサイト相互作用を計算できます。
@@ -68,63 +68,24 @@ $$
 
 ### Python による実装
 
-#### 例
+スクリプト [`tutorials/optical-lattice-01-bandstructure/bandstructure.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-01-bandstructure/bandstructure.py) はこれらの式を評価します。各方向について、すべての $k_x$ に対して上の三重対角問題を対角化し、バンドエネルギー $\epsilon_{k_x}$ から $t$ を求め、$|w(x)|^4$ を積分して $U$ を求めます。そのディレクトリで次を実行してください。
 
-例えば次のようにします。
+```python
+import numpy as np
+import bandstructure
 
-    import numpy;
-    import pyalps.dwa;
+V0   = np.array([8., 8., 8.])        # 格子の深さ（反跳エネルギー単位）
+wlen = np.array([843., 843., 843.])  # レーザー波長（nm 単位）
+a    = 114.8                         # s 波散乱長（ボーア半径単位）
+m    = 86.99                         # 質量（原子質量単位）
+L    = 200                           # 格子サイズ（1 方向あたり）
 
-    V0   = numpy.array([8. , 8. , 8.]);      # in recoil energies
-    wlen = numpy.array([843., 843., 843.]);  # in nanometer
-    a    = 114.8;                            # s-wave scattering length in bohr radius
-    m    = 86.99;                            # mass in atomic mass unit
-    L    = 200;                              # lattice size (along 1 direction)
+t, U = bandstructure.hubbard_parameters(V0, wlen, a, m, L)
 
-    band = pyalps.dwa.bandstructure(V0, wlen, a, m, L);
-
-バンド構造をざっと見てみます。
-
-    >>> band
-
-    Optical lattice: 
-    ================
-    V0    [Er] = 8    8    8    
-    lamda [nm] = 843    843    843    
-    Er2nK      = 154.89    154.89    154.89    
-    L          = 200 
-    g          = 5.68473
-
-    Band structure:
-    ===============
-    t [nK] : 4.77051    4.77051    4.77051    
-    U [nK] : 38.7018
-    U/t    : 8.11272    8.11272    8.11272    
-    
-    wk2[0 ,0 ,0 ] : 5.81884e-08
-    wk2[pi,pi,pi] : 1.39558e-08
-
-$t(nK)$、$U(nK)$、$U/t$ の値は次のようにして取得できます。
-
-    >>> numpy.array(band.t())
-    array([ 4.77050984,  4.77050984,  4.77050984])
-    >>>
-    >>> numpy.array(band.U())
-    array(38.7018197381118)
-    >>>
-    >>> numpy.array(band.Ut())
-    array([ 8.11272192,  8.11272192,  8.11272192])
-
-運動量（$\vec{q}$）空間において、ワニエ関数の（2 乗の）値 $|\tilde{w}(\vec{q})|^2$ は、$x$ 方向については次のようにして得られます。
-
-    >>> numpy.array(band.q(0))
-    array([-5.   , -4.995, -4.99 , ...,  5.985,  5.99 ,  5.995])
-    >>> 
-    >>> numpy.array(band.wk2(0))
-    array([  7.57249518e-15,   7.88189086e-15,   8.20434507e-15, ...,
-         1.62988573e-18,   1.56057426e-18,   1.49429285e-18])
-         
-$y$ 方向や $z$ 方向については、インデックス 0 をそれぞれ 1 と 2 に置き換えます。
+print(t)        # t（nK 単位）: [4.77051684 4.77051684 4.77051684]
+print(U)        # U（nK 単位）: 38.70187649673881
+print(U / t)    # U/t: [8.11272191 8.11272191 8.11272191]
+```
 
 
 ## 光格子トラップ中のボソン
@@ -133,37 +94,79 @@ $y$ 方向や $z$ 方向については、インデックス 0 をそれぞれ 1
 
 #### ハミルトニアン
 
-光格子トラップ中のボソンは、単一バンドのボース・ハバードモデル
+光格子トラップ中のボソンは、単一バンドのボース・ハバードモデルによって実効的に記述できます。
 
 $$
-\hat{H} = -t \sum_{\langle i,j \rangle} \hat{b}_i^+ \hat{b}_j + \frac{U}{2} \sum_i \hat{n}_i (\hat{n}_i - 1) - \sum_i ( \mu - V_T ( \vec{r}_i) ) \hat{n}_i
+\hat{H} = -t \sum_{\langle i,j \rangle} \hat{b}_i^+ \hat{b}_j + \frac{U}{2} \sum_i \hat{n}_i (\hat{n}_i - 1) - \sum_i ( \mu - V_T ( \vec{r}_i) ) \hat{n}_i,
 $$
 
-によって実効的に記述できます。ここで、ホッピングの強さ $t$、オンサイト相互作用の強さ $U$、化学ポテンシャル $\mu$ を持つ系を、有限温度 $T$ において、有向ワームアルゴリズムとして実装された量子モンテカルロ法で扱います。$\hat{b}$（$\hat{b}^+$）は消滅（生成）演算子、$\hat{n}_i$ はサイト $i$ における数演算子です。光格子中のボソンは、ガウシアンビームのウエストやその他のトラップ源によって、例えば 3 次元の放物型トラップポテンシャル
+ここで、ホッピングの強さ $t$、オンサイト相互作用の強さ $U$、化学ポテンシャル $\mu$ を持つ系を、有限温度 $T$ において、ディレクテッドループ確率級数展開（SSE）量子モンテカルロコード `dirloop_sse` で扱います。$\hat{b}$（$\hat{b}^+$）は消滅（生成）演算子、$\hat{n}_i$ はサイト $i$ における数演算子です。光格子中のボソンは、3 次元の放物型トラップポテンシャルに閉じ込められています。
 
 $$
 V_T (\vec{r}_i) = K_x x_i^2 + K_y y_i^2 + K_z z_i^2,
 $$
 
-に閉じ込められています。
+このトラップは、ガウシアンビームのウエストやその他のトラップ源によるものです。
 
 #### 有限温度
 
-有限温度 $T$ では、物理は本質的に分配関数
+有限温度 $T$ では、物理は本質的に次の分配関数によって捉えられます。
 
 $$
-Z = \mathrm{Tr} \, \exp \left(-\beta \hat{H} \right)
+Z = \mathrm{Tr} \, \exp \left(-\beta \hat{H} \right),
 $$
 
-と、局所密度
+局所密度のような物理量は次のように与えられます。
 
 $$
-\langle n_i \rangle = \frac{1}{Z} \mathrm{Tr} \hat{n}_i \exp \left(-\beta \hat{H} \right)  = \frac{1}{Z} \sum_{\mathcal{C}} n_i (\mathcal{C}) Z(\mathcal{C})
+\langle n_i \rangle = \frac{1}{Z} \mathrm{Tr} \hat{n}_i \exp \left(-\beta \hat{H} \right)  = \frac{1}{Z} \sum_{\mathcal{C}} n_i (\mathcal{C}) Z(\mathcal{C}),
 $$
 
-のような物理量によって捉えられます。ここで $\mathcal{C}$ は全配置空間中のある配置、$\beta = 1/T$ は逆温度です。単位については後ほど巧妙に規格化します。
+ここで $\mathcal{C}$ は全配置空間中のある配置、$\beta = 1/T$ は逆温度です。単位については後ほど巧妙に規格化します。
+
+### Python による実装
+
+スクリプト [`tutorials/optical-lattice-02-density-profile/density_profile.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/optical-lattice-02-density-profile/density_profile.py) は、このモデルを $9^3$ の格子上で `dirloop_sse` によりシミュレーションし、局所密度 $\langle n_i \rangle$ をプロットします。上のバンド構造の例から得た $U/t = 8.11$、温度 $T = t$、格子の中心に置いた等方的なトラップ $K_x = K_y = K_z = 0.65\,t$ を用います。トラップは `inhomogeneous simple cubic lattice` 上のサイトに依存する化学ポテンシャルとして取り込まれます。
+
+```python
+import numpy as np
+import pyalps
+
+L = 9
+K = 0.65                                        # トラップの曲率 V_T = K r^2（t 単位）
+c = (L - 1) / 2.
+
+parms = [{
+    'LATTICE' : 'inhomogeneous simple cubic lattice',
+    'L'       : L,
+    'MODEL'   : 'boson Hubbard',
+    'Nmax'    : 4,
+    't'       : 1.,
+    'U'       : 8.11,
+    'mu'      : '4.05 - %g*((x-%g)*(x-%g) + (y-%g)*(y-%g) + (z-%g)*(z-%g))' % ((K,) + (c,) * 6),
+    'T'       : 1.,
+    'THERMALIZATION' : 1000,
+    'SWEEPS'         : 5000,
+    'MEASURE_LOCAL[Local Density]' : 'n',
+}]
+
+input_file = pyalps.writeInputFiles('parm_trap', parms)
+pyalps.runApplication('dirloop_sse', input_file)
+
+data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_trap'), 'Local Density')[0][0]
+n = np.asarray(data.y.mean).reshape(L, L, L)
+print('Total number of bosons: %.2f' % n.sum())
+print('Density at the trap center: %.3f' % n[L // 2, L // 2, L // 2])
+```
+
+完全なスクリプトでは、トラップ中心を通る断面と、中心層の密度もプロットします。
+
+![9^3 格子上のトラップされたボソンの局所密度](/figs/opticallattice_density_profile.png)
+
+例が数分で実行できるように格子を小さくしているため、格子はまだ原子雲の内側に収まっています。密度は端に向かって減少しますが、端で完全には消えません。より大きな格子を用いると、端での密度はゼロにより近づきます。
 
 ## 貢献者
 
 - Ping Nang Ma
 - Matthias Troyer
+

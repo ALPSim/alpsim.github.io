@@ -54,6 +54,9 @@ spack info alps
 ```
 spack install alps
 ```
+{{< callout type="info" >}}
+現在、Spack の組み込みレシピでインストールされるのは ALPS 2.3.4-beta.2 です。ALPS 3.0.0 は [spack/spack-packages#6489](https://github.com/spack/spack-packages/pull/6489) がマージされた後に Spack から利用可能になります。それまでは、3.0.0 には[バイナリ](../binary)または[ソース](../source)からのインストールを使用してください。
+{{< /callout >}}
 ALPS を使用するには、パッケージをロードする必要があります。
 ```
 spack load alps

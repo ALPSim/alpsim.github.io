@@ -32,7 +32,7 @@ weight: 3
 并使用以下命令绘制 Binder 累积量：
 
     plt.figure()
-    pyalps.pyplot.plot(u)
+    pyalps.plot.plot(u)
     plt.xlabel('Inverse Temperature $\beta$')
     plt.ylabel('Binder Cumulant U4 $g$')
     plt.title('2D Ising model')

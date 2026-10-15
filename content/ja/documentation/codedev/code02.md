@@ -32,7 +32,7 @@ weight: 3
 そして、次のコマンドでビンダーキュムラントをプロットします。
 
     plt.figure()
-    pyalps.pyplot.plot(u)
+    pyalps.plot.plot(u)
     plt.xlabel('Inverse Temperature $\beta$')
     plt.ylabel('Binder Cumulant U4 $g$')
     plt.title('2D Ising model')
