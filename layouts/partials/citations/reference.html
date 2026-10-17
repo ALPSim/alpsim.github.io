@@ -1,0 +1,127 @@
+{{- /*
+  One bibliographic record from the ALPS CITATION.cff, rendered as a citation
+  line, link buttons and a generated BibTeX file.
+  Context: dict "ref" (the CFF record) "key" (its ALPS reference key).
+*/ -}}
+{{- $r := .ref -}}
+{{- $key := .key -}}
+{{- $journals := dict
+  "Physical Review Letters" "Phys. Rev. Lett."
+  "Physical Review B" "Phys. Rev. B"
+  "Physical Review E" "Phys. Rev. E"
+  "Physics Letters A" "Phys. Lett. A"
+  "Reviews of Modern Physics" "Rev. Mod. Phys."
+  "Advances in Physics" "Adv. Phys."
+  "Computer Physics Communications" "Comput. Phys. Commun."
+  "Journal of Experimental and Theoretical Physics" "J. Exp. Theor. Phys."
+  "Journal of Research of the National Bureau of Standards" "J. Res. Natl. Bur. Stand."
+-}}
+
+{{- /* Authors: "A", "A and B", "A, B, and C" */ -}}
+{{- $names := slice -}}
+{{- $bibnames := slice -}}
+{{- range $r.authors -}}
+  {{- with .name -}}
+    {{- $names = $names | append . -}}
+    {{- $bibnames = $bibnames | append (printf "{%s}" .) -}}
+  {{- else -}}
+    {{- $given := index . "given-names" | default "" -}}
+    {{- $family := index . "family-names" | default "" -}}
+    {{- $names = $names | append (trim (printf "%s %s" $given $family) " ") -}}
+    {{- $bibnames = $bibnames | append (cond (eq $given "") $family (printf "%s, %s" $family $given)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $authors := "" -}}
+{{- if eq (len $names) 1 -}}{{- $authors = index $names 0 -}}
+{{- else if eq (len $names) 2 -}}{{- $authors = delimit $names " and " -}}
+{{- else if gt (len $names) 2 -}}{{- $authors = delimit $names ", " ", and " -}}
+{{- end -}}
+
+{{- $editors := slice -}}
+{{- $bibeditors := slice -}}
+{{- range index $r "editors" -}}
+  {{- $editors = $editors | append (trim (printf "%s %s" (index . "given-names" | default "") (index . "family-names" | default "")) " ") -}}
+  {{- $bibeditors = $bibeditors | append (printf "%s, %s" (index . "family-names" | default "") (index . "given-names" | default "")) -}}
+{{- end -}}
+
+{{- /* LaTeX quotes in titles become typographic quotes */ -}}
+{{- $title := $r.title | replaceRE "``" "“" | replaceRE "''" "”" -}}
+{{- $doi := $r.doi | default "" -}}
+{{- $year := $r.year | default "" -}}
+{{- $volume := $r.volume | default "" -}}
+{{- $start := $r.start | default "" -}}
+{{- $end := $r.end | default "" -}}
+{{- $pages := cond (and $start $end) (printf "%v–%v" $start $end) (printf "%v" $start) -}}
+{{- $publisher := "" -}}{{- with $r.publisher -}}{{- $publisher = .name -}}{{- end -}}
+{{- $series := trim ($r.notes | default "") ". " -}}
+
+{{- /* arXiv: an arXiv DOI, or an identifier described as arXiv */ -}}
+{{- $arxiv := "" -}}
+{{- if hasPrefix (lower $doi) "10.48550/arxiv." -}}{{- $arxiv = substr $doi 15 -}}{{- end -}}
+{{- range $r.identifiers -}}
+  {{- if eq (lower (.description | default "")) "arxiv" -}}
+    {{- $arxiv = replaceRE `^https?://arxiv\.org/abs/` "" (printf "%v" .value) -}}
+  {{- end -}}
+{{- end -}}
+{{- $isPreprint := and $arxiv (or (eq $r.status "preprint") (hasPrefix (lower $doi) "10.48550/arxiv.")) -}}
+
+{{- /* Venue text (HTML) */ -}}
+{{- $venue := "" -}}
+{{- $type := $r.type | default "article" -}}
+{{- if $isPreprint -}}
+  {{- $venue = printf "arXiv:%s (%v)" $arxiv $year -}}
+{{- else if $r.journal -}}
+  {{- $j := index $journals $r.journal | default $r.journal -}}
+  {{- $venue = printf "%s <strong>%v</strong>, %v (%v)" (htmlEscape $j) $volume $start $year -}}
+{{- else if index $r "collection-title" -}}
+  {{- $parts := slice (printf "in <em>%s</em>" (htmlEscape (index $r "collection-title"))) -}}
+  {{- with $editors -}}{{- $parts = $parts | append (printf "edited by %s" (delimit . " and ")) -}}{{- end -}}
+  {{- with $series -}}{{- $parts = $parts | append (printf "%s <strong>%v</strong>" (htmlEscape .) $volume) -}}{{- end -}}
+  {{- with $pages -}}{{- $parts = $parts | append . -}}{{- end -}}
+  {{- $venue = printf "%s (%s)" (delimit $parts ", ") (cond (ne $publisher "") (printf "%s, %v" $publisher $year) (printf "%v" $year)) -}}
+{{- else -}}
+  {{- $venue = printf "(%v)" $year -}}
+{{- end -}}
+
+{{- /* BibTeX, published as /data/cite/<key>.bib */ -}}
+{{- $fields := slice (printf "  author = {%s}" (delimit $bibnames " and ")) (printf "  title = {{%s}}" $title) -}}
+{{- $entry := "article" -}}
+{{- if $isPreprint -}}
+  {{- $entry = "misc" -}}
+  {{- $fields = $fields | append (printf "  eprint = {%s}" $arxiv) "  archivePrefix = {arXiv}" -}}
+{{- else if $r.journal -}}
+  {{- $fields = $fields | append (printf "  journal = {%s}" $r.journal) -}}
+{{- else if index $r "collection-title" -}}
+  {{- $entry = cond (eq $type "conference-paper") "inproceedings" "incollection" -}}
+  {{- $fields = $fields | append (printf "  booktitle = {%s}" (index $r "collection-title")) -}}
+  {{- with $bibeditors -}}{{- $fields = $fields | append (printf "  editor = {%s}" (delimit . " and ")) -}}{{- end -}}
+  {{- with $series -}}{{- $fields = $fields | append (printf "  series = {%s}" .) -}}{{- end -}}
+  {{- with $publisher -}}{{- $fields = $fields | append (printf "  publisher = {%s}" .) -}}{{- end -}}
+{{- end -}}
+{{- with $volume -}}{{- $fields = $fields | append (printf "  volume = {%v}" .) -}}{{- end -}}
+{{- with $r.issue -}}{{- $fields = $fields | append (printf "  number = {%v}" .) -}}{{- end -}}
+{{- with $start -}}{{- $fields = $fields | append (printf "  pages = {%v%s}" . (cond (ne (printf "%v" $end) "") (printf "--%v" $end) "")) -}}{{- end -}}
+{{- with $year -}}{{- $fields = $fields | append (printf "  year = {%v}" .) -}}{{- end -}}
+{{- with $doi -}}{{- $fields = $fields | append (printf "  doi = {%s}" .) -}}{{- end -}}
+{{- $bib := printf "@%s{%s,\n%s\n}\n" $entry $key (delimit $fields ",\n") -}}
+{{- $bibfile := resources.FromString (printf "data/cite/%s.bib" $key) $bib -}}
+
+{{- /* Buttons, styled like the cta-button shortcode */ -}}
+{{- $buttons := slice -}}
+{{- if and $doi (not $isPreprint) -}}
+  {{- $buttons = $buttons | append (dict "text" "Journal" "icon" "article" "link" (printf "https://doi.org/%s" $doi)) -}}
+{{- end -}}
+{{- with $arxiv -}}
+  {{- $buttons = $buttons | append (dict "text" "arXiv" "icon" "science" "link" (printf "https://arxiv.org/abs/%s" .)) -}}
+{{- end -}}
+{{- $scholar := cond (ne $doi "") (printf "doi:%s" $doi) (printf "\"%s\"" $title) -}}
+{{- $buttons = $buttons | append (dict "text" "Scholar" "icon" "manage_search" "link" (printf "https://scholar.google.com/scholar?q=%s" (urlquery $scholar))) -}}
+{{- $buttons = $buttons | append (dict "text" "BibTeX" "icon" "format_quote" "link" $bibfile.RelPermalink) -}}
+
+<p class="alps-citation" id="ref-{{ $key | anchorize }}">{{ $authors }}, <em>{{ $title }}</em>, {{ $venue | safeHTML }}.</p>
+<div class="btn-grid-4">
+{{- range $buttons }}
+{{- $external := hasPrefix .link "http" }}
+<a href="{{ .link }}" class="btn btn-outlined-primary"{{ if $external }} target="_blank" rel="noreferrer"{{ end }}><span class="material-icons">{{ .icon }}</span> {{ .text }}</a>
+{{- end }}
+</div>
