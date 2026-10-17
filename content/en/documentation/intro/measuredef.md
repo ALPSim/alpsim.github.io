@@ -9,17 +9,23 @@ weight: 6
 
 If the default measurements performed by your ALPS application do not cover what you need, you can define custom measurements directly in the parameter file. The general syntax is as follows:
 
-    MEASURE_LOCAL[Name]=Op
-    MEASURE_AVERAGE[Name]=Op
+```
+MEASURE_LOCAL[Name]=Op
+MEASURE_AVERAGE[Name]=Op
+```
 
 Here `Name` is the name under which the measurement appears in the XML output, and `Op` is a site or bond operator, which must already be defined for the model — either a built-in operator from the model library or one you defined yourself (see [Quantum Operators](../modeldef/operators)). `MEASURE_AVERAGE` measures the quantum-mechanical, and (for finite-temperature simulations) thermodynamic, expectation value of `Op`. `MEASURE_LOCAL` measures the expectation value of `Op` at each site of the lattice; `Op` must therefore be local, i.e. it can only have site terms, not bond terms.
 
-    MEASURE_CORRELATIONS[Name]="Op1:Op2"
-    MEASURE_CORRELATIONS[Name]=Op
+```
+MEASURE_CORRELATIONS[Name]="Op1:Op2"
+MEASURE_CORRELATIONS[Name]=Op
+```
 
 `MEASURE_CORRELATIONS` measures the correlations of the operators `Op1` and `Op2` for all inequivalent pairs of sites of the lattice. The second form above, `MEASURE_CORRELATIONS[Name]=Op`, is equivalent to `MEASURE_CORRELATIONS[Name]="Op:Op"`. At present, only two-site correlation functions can be computed, so both `Op1` and `Op2` must be site operators.
 
-    MEASURE_STRUCTURE_FACTOR[Name]=Op
+```
+MEASURE_STRUCTURE_FACTOR[Name]=Op
+```
 
 This measures the structure factor for the operator `Op`, i.e. the lattice Fourier transform of the corresponding correlation function, evaluated at the momentum eigenstates of the simulation lattice.
 
@@ -51,23 +57,27 @@ Measuring off-diagonal quantities in QMC codes is in general non-trivial and is 
 
 In certain cases, however, several tricks can be used. One useful trick is to enlarge the site basis of your model. Consider the following example: using the worm code to simulate the Bose-Hubbard model on an inhomogeneous lattice, we want to measure the second moment of the local density distribution $\langle n_i^2\rangle$. Since the worm code does not work in the site basis, it will not perform measurements for such an operator directly. One possible solution is to patch the `boson` site basis used by the Bose-Hubbard Hamiltonian, adding an `n2` operator for the squared density:
 
-    <SITEBASIS name="boson">
-    <PARAMETER name="Nmax" default="infinity"/>
-    <QUANTUMNUMBER name="N" min="0" max="Nmax"/>
-    <OPERATOR name="bdag" matrixelement="sqrt(N+1)">
-        <CHANGE quantumnumber="N" change="1"/>
-    </OPERATOR>
-    <OPERATOR name="b" matrixelement="sqrt(N)">
-        <CHANGE quantumnumber="N" change="-1"/>
-    </OPERATOR>
-    <OPERATOR name="n" matrixelement="N"/>
-    <OPERATOR name="n2" matrixelement="N*N"/>   <!-- added -->
-    </SITEBASIS>
+```xml
+<SITEBASIS name="boson">
+<PARAMETER name="Nmax" default="infinity"/>
+<QUANTUMNUMBER name="N" min="0" max="Nmax"/>
+<OPERATOR name="bdag" matrixelement="sqrt(N+1)">
+    <CHANGE quantumnumber="N" change="1"/>
+</OPERATOR>
+<OPERATOR name="b" matrixelement="sqrt(N)">
+    <CHANGE quantumnumber="N" change="-1"/>
+</OPERATOR>
+<OPERATOR name="n" matrixelement="N"/>
+<OPERATOR name="n2" matrixelement="N*N"/>   <!-- added -->
+</SITEBASIS>
+```
 
 With this patch, one can define the corresponding measurements in the usual fashion, e.g.
 
-    MEASURE_LOCAL[Local density squared]="n2"
-    MEASURE_CORRELATIONS[Density squared, correlations]="n2:n2"
+```
+MEASURE_LOCAL[Local density squared]="n2"
+MEASURE_CORRELATIONS[Density squared, correlations]="n2:n2"
+```
 
 ---
 

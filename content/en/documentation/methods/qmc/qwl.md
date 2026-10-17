@@ -49,7 +49,9 @@ In addition, the following parameters can be assigned to the algorithm, in parti
 
 The `qwl_evaluate` program takes an XML output file of a qwl simulation,
 
-    qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
+```bash
+qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
+```
 
 and produces XML plot files (`prefix.plot.energy.xml` etc.) for the following quantities vs. temperature:
 

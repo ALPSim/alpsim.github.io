@@ -33,88 +33,96 @@ $$
 
 以下参数文件 [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half) 将为我们设置此次运行（同样，为便于说明，我们使用比上面实际数字更小的系统和态数目）。在本例中，我们考虑长度 $L=32$ 的链，设置具有不同态数目 $D$ 的多次运行。使用 6 次扫描。确保关联函数看起来是对称的：
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    L=32
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+```
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+SWEEPS=6
+J=1
+NUMBER_EIGENVALUES=1
+MEASURE_AVERAGE[Magnetization]=Sz
+MEASURE_AVERAGE[Exchange]=exchange
+MEASURE_LOCAL[Local magnetization]=Sz
+MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
+MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
+L=32
+{ MAXSTATES=20 }
+{ MAXSTATES=40 }
+{ MAXSTATES=60 }
 
-    parameter2xml spin_one_half
-    dmrg --write-xml spin_one_half.in.xml
+parameter2xml spin_one_half
+dmrg --write-xml spin_one_half.in.xml
+```
 
 #### 使用 Python
 
 脚本 [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one_half.py) 设置了三次具有不同态数目 $D$ 的运行并加载结果：
 
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = []
-    for D in [20,40,60]:
-        parms.append( { 
-            'LATTICE'                               : 'open chain lattice', 
-            'MODEL'                                 : 'spin',
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 6,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'L'                                     : 32,
-            'MAXSTATES'                             : D,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-            } )
-            
-    input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
-    
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
+parms = []
+for D in [20,40,60]:
+    parms.append( { 
+        'LATTICE'                               : 'open chain lattice', 
+        'MODEL'                                 : 'spin',
+        'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
+        'Sz_total'                              : 0,
+        'J'                                     : 1,
+        'SWEEPS'                                : 6,
+        'NUMBER_EIGENVALUES'                    : 1,
+        'L'                                     : 32,
+        'MAXSTATES'                             : D,
+        'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
+        'MEASURE_AVERAGE[Exchange]'             : 'exchange',
+        'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
+        'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
+        'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
+        } )
+        
+input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```
 
 现在我们可以提取例如 $\langle S^z_iS^z_j\rangle$ 关联：
 
-    curves = []
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Diagonal spin correlations':
-                d = pyalps.DataSet()
-                d.props['observable'] = 'Sz correlations'
-                d.props['label'] = 'D = '+str(s.props['MAXSTATES'])
-                L = int(s.props['L'])
-                d.x = np.arange(L)
-           
-                # sites with increasing distance l symmetric to the chain center
-                site1 = np.array([int(-(l+1)/2.0) for l in range(0,L)]) + L/2
-                site2 = np.array([int(  l   /2.0) for l in range(0,L)]) + L/2
-                indices = L*site1 + site2
-                d.y = abs(s.y[0][indices])
-           
-                curves.append(d)
+```python
+curves = []
+for run in data:
+    for s in run:
+        if s.props['observable'] == 'Diagonal spin correlations':
+            d = pyalps.DataSet()
+            d.props['observable'] = 'Sz correlations'
+            d.props['label'] = 'D = '+str(s.props['MAXSTATES'])
+            L = int(s.props['L'])
+            d.x = np.arange(L)
+       
+            # sites with increasing distance l symmetric to the chain center
+            site1 = np.array([int(-(l+1)/2.0) for l in range(0,L)]) + L/2
+            site2 = np.array([int(  l   /2.0) for l in range(0,L)]) + L/2
+            indices = L*site1 + site2
+            d.y = abs(s.y[0][indices])
+       
+            curves.append(d)
+```
 并绘制其关于格点距离的图：
 
-    plt.figure()
-    pyalps.plot.plot(curves)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.legend()
-    plt.title('Spin correlations in antiferromagnetic Heisenberg chain (S=1/2)')
-    plt.ylabel('correlations $| \\langle S^z_{L/2-l/2} S^z_{L/2+l/2} \\rangle |$')
-    plt.xlabel('distance $l$')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(curves)
+plt.xscale('log')
+plt.yscale('log')
+plt.legend()
+plt.title('Spin correlations in antiferromagnetic Heisenberg chain (S=1/2)')
+plt.ylabel('correlations $| \\langle S^z_{L/2-l/2} S^z_{L/2+l/2} \\rangle |$')
+plt.xlabel('distance $l$')
+plt.show()
+```
 
 ### 自旋-自旋关联：自旋-1
 
@@ -130,53 +138,57 @@ $$
 
 参数文件 [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one) 与前一个例子的参数文件很相似，只是将格点和模型替换如下：
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    { MAXSTATES=20 }
-    { MAXSTATES=40 }
-    { MAXSTATES=60 }
+```
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 32"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+SWEEPS=6
+J=1
+NUMBER_EIGENVALUES=1
+MEASURE_AVERAGE[Magnetization]=Sz
+MEASURE_AVERAGE[Exchange]=exchange
+MEASURE_LOCAL[Local magnetization]=Sz
+MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
+MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
+{ MAXSTATES=20 }
+{ MAXSTATES=40 }
+{ MAXSTATES=60 }
 
-    parameter2xml spin_one
-    dmrg --write-xml spin_one.in.xml
+parameter2xml spin_one
+dmrg --write-xml spin_one.in.xml
+```
 
 #### 使用 Python
 
 脚本 [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-04-correlations/spin_one.py) 与前一个的主要区别在于格点和模型的定义：
 
-    parms = []
-    L = 32
-    for D in [20,40,60]:
-        parms.append( { 
-            'LATTICE_LIBRARY'                       : 'my_lattices.xml',
-            'LATTICE'                               : 'open chain lattice with special edges '+str(L),
-            'MODEL'                                 : 'spin',
-            'local_S0'                              : 0.5,
-            'local_S1'                              : 1,
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 4,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'MAXSTATES'                             : D,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-        } )
+```python
+parms = []
+L = 32
+for D in [20,40,60]:
+    parms.append( { 
+        'LATTICE_LIBRARY'                       : 'my_lattices.xml',
+        'LATTICE'                               : 'open chain lattice with special edges '+str(L),
+        'MODEL'                                 : 'spin',
+        'local_S0'                              : 0.5,
+        'local_S1'                              : 1,
+        'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
+        'Sz_total'                              : 0,
+        'J'                                     : 1,
+        'SWEEPS'                                : 4,
+        'NUMBER_EIGENVALUES'                    : 1,
+        'MAXSTATES'                             : D,
+        'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
+        'MEASURE_AVERAGE[Exchange]'             : 'exchange',
+        'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
+        'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
+        'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
+    } )
+```
 
 运行模拟后，关联函数可以用与之前相同的方式提取和绘图。
 

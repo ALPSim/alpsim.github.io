@@ -50,11 +50,13 @@ weight: 1
 
 模型库文件的典型结构如下：
 
-    <MODEL>
-    <SITEBASIS name="..."> ... </SITEBASIS>
-    <BASIS name="..."> ... </BASIS>
-    <HAMILTONIAN name="..."> ... </HAMILTONIAN>
-    </MODEL>
+```xml
+<MODEL>
+<SITEBASIS name="..."> ... </SITEBASIS>
+<BASIS name="..."> ... </BASIS>
+<HAMILTONIAN name="..."> ... </HAMILTONIAN>
+</MODEL>
+```
 
 `<SITEBASIS>` 用于定义单个格点的希尔伯特空间（基），`<BASIS>` 用于定义整个晶格的希尔伯特空间，`<HAMILTONIAN>` 用于定义哈密顿量。
 

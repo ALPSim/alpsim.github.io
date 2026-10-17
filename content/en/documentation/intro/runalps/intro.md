@@ -9,32 +9,36 @@ weight: 1
 
 ALPS simulations are built on the scheduler library, which lets you specify the parameters for a simulation, including multiple parameter sets at once (for example, if you want to simulate a physical system at several different temperatures). The scheduler library then starts a job for each parameter set, on either a serial or a parallel machine, and writes periodic checkpoints — snapshots of the run's current state — so that no data is lost if a run is interrupted or exceeds the machine's walltime limit; a restarted run picks up from its most recent checkpoint instead of starting over. It reads its input from a job file, which lists one task file per parameter set for which a simulation is to be run. Job and task files are both given in XML format: the scheduler reads the task files for their input parameters and writes the measured observables back into them. An example job file could look like this:
 
-    <JOB>
-    <OUTPUT file="parm.xml"/>
-    <TASK status="new">
-    <INPUT file="parm.task1.in.xml"/>
-    <OUTPUT file="parm.task1.xml"/>
-    </TASK>
-    <TASK status="new">
-    <INPUT file="parm.task2.in.xml"/>
-    <OUTPUT file="parm.task2.xml"/>
-    </TASK>
-    <TASK status="new">
-    <INPUT file="parm.task3.in.xml"/>
-    <OUTPUT file="parm.task3.xml"/>
-    </TASK> 
-    </JOB>
+```xml
+<JOB>
+<OUTPUT file="parm.xml"/>
+<TASK status="new">
+<INPUT file="parm.task1.in.xml"/>
+<OUTPUT file="parm.task1.xml"/>
+</TASK>
+<TASK status="new">
+<INPUT file="parm.task2.in.xml"/>
+<OUTPUT file="parm.task2.xml"/>
+</TASK>
+<TASK status="new">
+<INPUT file="parm.task3.in.xml"/>
+<OUTPUT file="parm.task3.xml"/>
+</TASK> 
+</JOB>
+```
 
 The `<OUTPUT>` element on the `<JOB>` itself names the job-level summary file, which the scheduler keeps up to date at every checkpoint as tasks progress and finish. Each `<TASK>` is one parameter set: its `status` attribute tracks progress (`new` for a task that has not started yet, `running` once the scheduler has picked it up, and `finished` once it completes), its `<INPUT>` names the task file holding that task's parameters, and its `<OUTPUT>` names the file the results will be written to. An example task file — here, `parm.task1.in.xml` — could look like this:
 
-    <SIMULATION>
-    <PARAMETERS>
-    <PARAMETER name="L">100</PARAMETER>
-    <PARAMETER name="SWEEPS">10000</PARAMETER>
-    <PARAMETER name="T">0.5</PARAMETER>
-    <PARAMETER name="THERMALIZATION">100</PARAMETER>
-    </PARAMETERS> 
-    </SIMULATION>
+```xml
+<SIMULATION>
+<PARAMETERS>
+<PARAMETER name="L">100</PARAMETER>
+<PARAMETER name="SWEEPS">10000</PARAMETER>
+<PARAMETER name="T">0.5</PARAMETER>
+<PARAMETER name="THERMALIZATION">100</PARAMETER>
+</PARAMETERS> 
+</SIMULATION>
+```
 
 Each `<PARAMETER>` entry is one `name`/value pair, identical to the parameters you would set in a plain-text parameter file or a Python parameter dictionary — only the syntax differs. In practice you will rarely write job and task XML by hand: both workflows below generate it for you, either with the `parameter2xml` command-line tool or with `pyalps.writeInputFiles`/`pyalps.writeParameterFile` in Python. The XML format is shown here mainly so that the structure is recognizable if you ever need to inspect or debug it directly.
 

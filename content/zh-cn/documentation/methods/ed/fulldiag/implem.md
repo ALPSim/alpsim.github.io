@@ -42,15 +42,19 @@ weight: 3
 
 `fulldiag_evaluate` 程序读取 `fulldiag` 的 XML 输出文件，
 
-    fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
-        [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
-        [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```bash
+fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
+    [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
+    [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```
 
 或者
 
-    fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
-        [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
-        [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```bash
+fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
+    [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
+    [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```
 
 可以指定两个可选范围：温度范围（T_MIN, T_MAX, DELTA_T），以及磁场范围（H_MIN, H_MAX, DELTA_H）或化学势范围（MU_MIN, MU_MAX, DELTA_MU）。`fulldiag_evaluate` 会为以下各量生成随温度变化的 XML 绘图文件（`outputfileprefix.plot.energy.xml` 等，若未指定 outputfileprefix，则由 inputfile 的文件名导出）：
 

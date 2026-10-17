@@ -13,7 +13,9 @@ To demonstrate the use of ALPS from Python, we will look at a simple classical M
 
 Python only allows an extension to be used with the **exact** version of Python it was compiled against. If you build ALPS from source — as is required, for example, on Linux — you can specify which Python interpreter to use when configuring ALPS. ALPS will then create a script called
 
-    alpspython
+```bash
+alpspython
+```
 
 which sets the paths needed to find the ALPS extensions and then calls your Python interpreter.
 
@@ -23,9 +25,11 @@ which sets the paths needed to find the ALPS extensions and then calls your Pyth
 
 After launching Python, import the modules we will need:
 
-    import pyalps
-    import matplotlib.pyplot as plt
-    import pyalps.plot
+```python
+import pyalps
+import matplotlib.pyplot as plt
+import pyalps.plot
+```
 
 The full Python script is in the tutorials directory at [`tutorials/intro-01-basics/tutorial-full.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-full.py).
 
@@ -33,24 +37,28 @@ The full Python script is in the tutorials directory at [`tutorials/intro-01-bas
 
 To prepare the input, we create a Python list of dicts containing the simulation parameters:
 
-    parms = []
-    for t in [1.5,2,2.5]:
-        parms.append(
-            { 
-                'LATTICE'        : "square lattice", 
-                'T'              : t,
-                'J'              : 1,
-                'THERMALIZATION' : 1000,
-                'SWEEPS'         : 100000,
-                'UPDATE'         : "cluster",
-                'MODEL'          : "Ising",
-                'L'              : 8
-            }
-        )
+```python
+parms = []
+for t in [1.5,2,2.5]:
+    parms.append(
+        { 
+            'LATTICE'        : "square lattice", 
+            'T'              : t,
+            'J'              : 1,
+            'THERMALIZATION' : 1000,
+            'SWEEPS'         : 100000,
+            'UPDATE'         : "cluster",
+            'MODEL'          : "Ising",
+            'L'              : 8
+        }
+    )
+```
 
 We next write the input files for the ALPS simulation:
 
-    input_file = pyalps.writeInputFiles('parm1',parms)
+```python
+input_file = pyalps.writeInputFiles('parm1',parms)
+```
 
 The argument `'parm1'` tells the function to use `parm1` as the prefix for all simulation files. The function returns the name of the main simulation file (here `parm1.in.xml`).
 
@@ -60,7 +68,9 @@ The argument `'parm1'` tells the function to use `parm1` as the prefix for all s
 
 To run the simulation, we just call the `runApplication` function:
 
-    pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
+```python
+pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
+```
 
 The parameter `writexml=True` tells ALPS to also write all results to the XML files. This slows down the I/O but is convenient, since it allows you to look at the results simply by opening the output XML files in your web browser. However, if you measure many quantities, the files will become huge, and writing will take too long.
 
@@ -68,7 +78,9 @@ The parameter `writexml=True` tells ALPS to also write all results to the XML fi
 
 To run the simulation on a parallel machine using MPI, call the following command instead:
 
-    pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True,MPI=4)
+```python
+pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True,MPI=4)
+```
 
 where the `MPI` argument specifies how many processes to start.
 
@@ -78,19 +90,25 @@ where the `MPI` argument specifies how many processes to start.
 
 Before loading the results, we need to get the list of result files. Looking only at files that we created just now (those starting with the prefix `parm1`), we get the file list:
 
-    result_files = pyalps.getResultFiles(prefix='parm1')
-    print(result_files)
+```python
+result_files = pyalps.getResultFiles(prefix='parm1')
+print(result_files)
+```
 
 #### Loading the results
 
 Next we might want to know what has been measured. For that we can load the list of observables:
 
-    print(pyalps.loadObservableList(result_files))
+```python
+print(pyalps.loadObservableList(result_files))
+```
 
 We decide to load the absolute value and square of the magnetization, and print what we loaded:
 
-    data = pyalps.loadMeasurements(result_files,['|Magnetization|','Magnetization^2'])
-    print(data)
+```python
+data = pyalps.loadMeasurements(result_files,['|Magnetization|','Magnetization^2'])
+print(data)
+```
 
 The printed output contains the loaded values in `y`, and all the simulation parameters in the dict called `props`.
 
@@ -98,46 +116,56 @@ The printed output contains the loaded values in `y`, and all the simulation par
 
 To make a plot of, e.g., |Magnetization| versus temperature, we now collect the values of |Magnetization| into `y` and the temperature `T` into `x` using a call to `collectXY`:
 
-    plotdata = pyalps.collectXY(data,'T','|Magnetization|')
+```python
+plotdata = pyalps.collectXY(data,'T','|Magnetization|')
+```
 
 #### Plotting in Python using `matplotlib`
 
 We then plot it using `matplotlib`, via the `pyalps.plot` module:
 
-    plt.figure()
-    pyalps.plot.plot(plotdata)
-    plt.xlim(0,3)
-    plt.ylim(0,1)
-    plt.title('Ising model')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(plotdata)
+plt.xlim(0,3)
+plt.ylim(0,1)
+plt.title('Ising model')
+plt.show()
+```
 
 #### Converting to other formats
 
 We can also call functions to convert the dataset to other plot formats, such as plain text, Grace, or Gnuplot:
 
-    print(pyalps.plot.convertToText(plotdata))
-    print(pyalps.plot.makeGracePlot(plotdata))
-    print(pyalps.plot.makeGnuplotPlot(plotdata))
+```python
+print(pyalps.plot.convertToText(plotdata))
+print(pyalps.plot.makeGracePlot(plotdata))
+print(pyalps.plot.makeGnuplotPlot(plotdata))
+```
 
 ### Evaluating data
 
 We can easily evaluate functions of the results, e.g. to calculate the Binder cumulant ratio $\langle m^2 \rangle / \langle |m|\rangle ^2$. We create a new `DataSet` and fill it in:
 
-    binder = pyalps.DataSet()
-    binder.props = pyalps.dict_intersect([d[0].props for d in data])
-    binder.x = [d[0].props['T'] for d in data]
-    binder.y = [d[1].y[0]/(d[0].y[0]*d[0].y[0]) for d in data]
-    print(binder)
+```python
+binder = pyalps.DataSet()
+binder.props = pyalps.dict_intersect([d[0].props for d in data])
+binder.x = [d[0].props['T'] for d in data]
+binder.y = [d[1].y[0]/(d[0].y[0]*d[0].y[0]) for d in data]
+print(binder)
+```
 
 The expression `d[1].y[0]/(d[0].y[0]*d[0].y[0])` uses jackknife analysis to calculate correct Monte Carlo error bars for the correlated quantities.
 
 Finally, we make another plot:
 
-    plt.figure()
-    pyalps.plot.plot(binder)
-    plt.xlabel('T')
-    plt.ylabel('Binder cumulant')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(binder)
+plt.xlabel('T')
+plt.ylabel('Binder cumulant')
+plt.show()
+```
 
 ## Complete example scripts
 
@@ -168,7 +196,9 @@ The preparation, simulation, and evaluation tasks can also be split into subtask
 
 More examples of how to use these functions, as well as more advanced applications, can be found in the tutorials. Also, don't forget to look at the documentation of the various functions using their `__doc__` attribute, as in:
 
-    print(pyalps.plot.plot.__doc__)
+```python
+print(pyalps.plot.plot.__doc__)
+```
 
 For the input parameters common to most ALPS applications, see [Common Parameters](../../parameters). For the command-line workflow that produces the same output files as the Python approach shown here, see [Using the command line](../commandline). For an overview of the rest of this section, see [Running Simulations](../..).
 

@@ -9,17 +9,23 @@ weight: 6
 
 お使いの ALPS アプリケーションが標準で行う測定だけでは不十分な場合、パラメータファイル内で独自の測定を直接定義できます。一般的な構文は次のとおりです。
 
-    MEASURE_LOCAL[Name]=Op
-    MEASURE_AVERAGE[Name]=Op
+```
+MEASURE_LOCAL[Name]=Op
+MEASURE_AVERAGE[Name]=Op
+```
 
 ここで `Name` は、その測定が XML 出力中に現れる際の名前であり、`Op` はサイト演算子またはボンド演算子で、あらかじめモデル側で定義されている必要があります —— モデルライブラリに組み込まれている演算子でも、自分で定義した演算子でも構いません（[量子演算子](../modeldef/operators) を参照）。`MEASURE_AVERAGE` は `Op` の量子力学的期待値（有限温度シミュレーションの場合は熱力学的期待値も含む）を測定します。`MEASURE_LOCAL` は格子の各サイトにおける `Op` の期待値を測定します。したがって `Op` は局所的な演算子、すなわちサイト項のみを持ちボンド項を持たない演算子でなければなりません。
 
-    MEASURE_CORRELATIONS[Name]="Op1:Op2"
-    MEASURE_CORRELATIONS[Name]=Op
+```
+MEASURE_CORRELATIONS[Name]="Op1:Op2"
+MEASURE_CORRELATIONS[Name]=Op
+```
 
 `MEASURE_CORRELATIONS` は、格子上のすべての非等価なサイト対について、演算子 `Op1` と `Op2` の相関を測定します。上の 2 番目の形式 `MEASURE_CORRELATIONS[Name]=Op` は `MEASURE_CORRELATIONS[Name]="Op:Op"` と等価です。現時点では 2 点相関関数のみ計算できるため、`Op1` と `Op2` はどちらもサイト演算子でなければなりません。
 
-    MEASURE_STRUCTURE_FACTOR[Name]=Op
+```
+MEASURE_STRUCTURE_FACTOR[Name]=Op
+```
 
 これは演算子 `Op` の構造因子、すなわち対応する相関関数を、シミュレーション格子の運動量固有状態において評価した格子フーリエ変換を測定します。
 
@@ -51,23 +57,27 @@ QMC コードで非対角量を測定することは一般に自明ではなく�
 
 しかし、場合によってはいくつかのテクニックを使うことができます。よく使われるテクニックの一つは、モデルのサイト基底を拡張することです。例を挙げましょう。不均一格子上で Bose-Hubbard モデルを worm コードでシミュレートしており、局所密度分布の 2 次モーメント $\langle n_i^2\rangle$ を測定したいとします。worm コードはサイト基底上で直接動作しないため、このような演算子に対する測定をそのままでは行えません。一つの解決策は、Bose-Hubbard ハミルトニアンが用いる `boson` サイト基底にパッチを当て、密度の二乗を表す演算子 `n2` を追加することです。
 
-    <SITEBASIS name="boson">
-    <PARAMETER name="Nmax" default="infinity"/>
-    <QUANTUMNUMBER name="N" min="0" max="Nmax"/>
-    <OPERATOR name="bdag" matrixelement="sqrt(N+1)">
-        <CHANGE quantumnumber="N" change="1"/>
-    </OPERATOR>
-    <OPERATOR name="b" matrixelement="sqrt(N)">
-        <CHANGE quantumnumber="N" change="-1"/>
-    </OPERATOR>
-    <OPERATOR name="n" matrixelement="N"/>
-    <OPERATOR name="n2" matrixelement="N*N"/>   <!-- added -->
-    </SITEBASIS>
+```xml
+<SITEBASIS name="boson">
+<PARAMETER name="Nmax" default="infinity"/>
+<QUANTUMNUMBER name="N" min="0" max="Nmax"/>
+<OPERATOR name="bdag" matrixelement="sqrt(N+1)">
+    <CHANGE quantumnumber="N" change="1"/>
+</OPERATOR>
+<OPERATOR name="b" matrixelement="sqrt(N)">
+    <CHANGE quantumnumber="N" change="-1"/>
+</OPERATOR>
+<OPERATOR name="n" matrixelement="N"/>
+<OPERATOR name="n2" matrixelement="N*N"/>   <!-- added -->
+</SITEBASIS>
+```
 
 このパッチを適用すれば、通常どおり対応する測定を定義できます。例えば:
 
-    MEASURE_LOCAL[Local density squared]="n2"
-    MEASURE_CORRELATIONS[Density squared, correlations]="n2:n2"
+```
+MEASURE_LOCAL[Local density squared]="n2"
+MEASURE_CORRELATIONS[Density squared, correlations]="n2:n2"
+```
 
 ---
 

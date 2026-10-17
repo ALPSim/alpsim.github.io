@@ -48,7 +48,9 @@ QWL 方法的当前实现基于对原始方案的一种扩展，即 C. Zhou 和 
 
 `qwl_evaluate` 程序读取一次 qwl 模拟的 XML 输出文件，
 
-    qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
+```bash
+qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
+```
 
 并为以下物理量随温度的变化生成 XML 绘图文件（`prefix.plot.energy.xml` 等）：
 

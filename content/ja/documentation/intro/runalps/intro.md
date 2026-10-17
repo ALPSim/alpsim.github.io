@@ -9,32 +9,36 @@ weight: 1
 
 ALPS のシミュレーションはスケジューラライブラリの上に構築されています。これにより、シミュレーションのパラメータを指定でき、また一度に複数のパラメータの組を指定することもできます（例えば、ある物理系をいくつもの異なる温度でシミュレーションしたい場合など）。スケジューラライブラリは、パラメータの組ごとに1つのジョブを、シリアルマシンあるいは並列マシン上で開始し、定期的にチェックポイント――実行中の状態のスナップショット――を書き出すことで、実行がマシンの実行時間制限を超えたり中断されたりした場合にもデータが失われないようにします。再開されたジョブは最初からではなく、直近のチェックポイントから再開されます。スケジューラはジョブファイルから入力を読み込みます。ジョブファイルには、実行すべきシミュレーションのパラメータの組ごとに1つのタスクファイルが列挙されています。ジョブファイルとタスクファイルはどちらも XML 形式で与えられます：スケジューラはタスクファイルから入力パラメータを読み込み、測定された物理量をそのタスクファイルに書き戻します。ジョブファイルの例は次のようになります。
 
-    <JOB>
-    <OUTPUT file="parm.xml"/>
-    <TASK status="new">
-    <INPUT file="parm.task1.in.xml"/>
-    <OUTPUT file="parm.task1.xml"/>
-    </TASK>
-    <TASK status="new">
-    <INPUT file="parm.task2.in.xml"/>
-    <OUTPUT file="parm.task2.xml"/>
-    </TASK>
-    <TASK status="new">
-    <INPUT file="parm.task3.in.xml"/>
-    <OUTPUT file="parm.task3.xml"/>
-    </TASK> 
-    </JOB>
+```xml
+<JOB>
+<OUTPUT file="parm.xml"/>
+<TASK status="new">
+<INPUT file="parm.task1.in.xml"/>
+<OUTPUT file="parm.task1.xml"/>
+</TASK>
+<TASK status="new">
+<INPUT file="parm.task2.in.xml"/>
+<OUTPUT file="parm.task2.xml"/>
+</TASK>
+<TASK status="new">
+<INPUT file="parm.task3.in.xml"/>
+<OUTPUT file="parm.task3.xml"/>
+</TASK> 
+</JOB>
+```
 
 `<JOB>` 自体が持つ `<OUTPUT>` 要素は、ジョブ全体の要約ファイルの名前を指定しており、このファイルはタスクが進行・完了するたびにチェックポイントの際に更新されます。各 `<TASK>` は1つのパラメータの組に対応します：`status` 属性は進行状況を示し（`new` はまだ開始されていないタスク、`running` はスケジューラが着手したタスク、`finished` は完了したタスクを表します）、`<INPUT>` はそのタスクのパラメータを保持するタスクファイルの名前、`<OUTPUT>` は結果が書き出されるファイルの名前を示します。タスクファイル（ここでは `parm.task1.in.xml`）の例は次のようになります。
 
-    <SIMULATION>
-    <PARAMETERS>
-    <PARAMETER name="L">100</PARAMETER>
-    <PARAMETER name="SWEEPS">10000</PARAMETER>
-    <PARAMETER name="T">0.5</PARAMETER>
-    <PARAMETER name="THERMALIZATION">100</PARAMETER>
-    </PARAMETERS> 
-    </SIMULATION>
+```xml
+<SIMULATION>
+<PARAMETERS>
+<PARAMETER name="L">100</PARAMETER>
+<PARAMETER name="SWEEPS">10000</PARAMETER>
+<PARAMETER name="T">0.5</PARAMETER>
+<PARAMETER name="THERMALIZATION">100</PARAMETER>
+</PARAMETERS> 
+</SIMULATION>
+```
 
 各 `<PARAMETER>` エントリは1つの `name`／値のペアであり、プレーンテキストのパラメータファイルや Python のパラメータ辞書で指定するパラメータと本質的に同じものです――違うのは構文だけです。実際には、ジョブファイルやタスクファイルの XML を手で書くことはほとんどありません：以下の2つのワークフローはどちらも、コマンドラインツールの `parameter2xml`、あるいは Python の `pyalps.writeInputFiles`／`pyalps.writeParameterFile` によって、これらを自動的に生成します。ここで XML 形式を示したのは主に、直接調べたりデバッグしたりする必要が生じたときに、その構造を見て分かるようにするためです。
 
