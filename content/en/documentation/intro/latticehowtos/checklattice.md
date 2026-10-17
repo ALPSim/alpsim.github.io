@@ -9,31 +9,37 @@ After writing a new lattice definition, you will want to check that it is correc
 
 To run it, type:
 
-    printgraph parameter_file
+```bash
+printgraph parameter_file
+```
 
 `parameter_file` is a plain ALPS parameter file — the same format used as input to `parameter2xml` — so no conversion step is needed first. If no file name is given, `printgraph` reads the parameter file from standard input instead; if the file name ends in `.xml`, it is read as an XML parameter file.
 
 For example, the parameter file
 
-    LATTICE = "square lattice"
-    L = 2
+```
+LATTICE = "square lattice"
+L = 2
+```
 
 selects the built-in `square lattice` (see [A Library of Lattices and Graphs](../library)) with a 2 x 2 periodic extent. Running `printgraph` on it produces:
 
-    <GRAPH dimension="2" vertices="4" edges="8">
-      <VERTEX id="1" type="0"><COORDINATE>0 0</COORDINATE></VERTEX>
-      <VERTEX id="2" type="0"><COORDINATE>0 1</COORDINATE></VERTEX>
-      <VERTEX id="3" type="0"><COORDINATE>1 0</COORDINATE></VERTEX>
-      <VERTEX id="4" type="0"><COORDINATE>1 1</COORDINATE></VERTEX>
-      <EDGE source="1" target="2" id="1" type="0" vector="0 1"/>
-      <EDGE source="1" target="3" id="2" type="0" vector="1 0"/>
-      <EDGE source="2" target="1" id="3" type="0" vector="0 1"/>
-      <EDGE source="2" target="4" id="4" type="0" vector="1 0"/>
-      <EDGE source="3" target="4" id="5" type="0" vector="0 1"/>
-      <EDGE source="3" target="1" id="6" type="0" vector="1 0"/>
-      <EDGE source="4" target="3" id="7" type="0" vector="0 1"/>
-      <EDGE source="4" target="2" id="8" type="0" vector="1 0"/>
-    </GRAPH>
+```xml
+<GRAPH dimension="2" vertices="4" edges="8">
+  <VERTEX id="1" type="0"><COORDINATE>0 0</COORDINATE></VERTEX>
+  <VERTEX id="2" type="0"><COORDINATE>0 1</COORDINATE></VERTEX>
+  <VERTEX id="3" type="0"><COORDINATE>1 0</COORDINATE></VERTEX>
+  <VERTEX id="4" type="0"><COORDINATE>1 1</COORDINATE></VERTEX>
+  <EDGE source="1" target="2" id="1" type="0" vector="0 1"/>
+  <EDGE source="1" target="3" id="2" type="0" vector="1 0"/>
+  <EDGE source="2" target="1" id="3" type="0" vector="0 1"/>
+  <EDGE source="2" target="4" id="4" type="0" vector="1 0"/>
+  <EDGE source="3" target="4" id="5" type="0" vector="0 1"/>
+  <EDGE source="3" target="1" id="6" type="0" vector="1 0"/>
+  <EDGE source="4" target="3" id="7" type="0" vector="0 1"/>
+  <EDGE source="4" target="2" id="8" type="0" vector="1 0"/>
+</GRAPH>
+```
 
 Each of the 4 sites appears once as a `<VERTEX>`, with its Cartesian coordinates; each of the 8 bonds appears once as an `<EDGE>`, with periodic boundary conditions producing the wrap-around bonds (e.g. `source="2" target="1"`) alongside the "straight" ones. For a larger or unfamiliar lattice, redirecting the output to a file (`printgraph parameter_file > graph.xml`) makes it easier to inspect.
 

@@ -50,11 +50,13 @@ ALPS プロジェクトの一部として、量子格子モデルを、それが
 
 モデルライブラリの典型的な構造は次のとおりです。
 
-    <MODEL>
-    <SITEBASIS name="..."> ... </SITEBASIS>
-    <BASIS name="..."> ... </BASIS>
-    <HAMILTONIAN name="..."> ... </HAMILTONIAN>
-    </MODEL>
+```xml
+<MODEL>
+<SITEBASIS name="..."> ... </SITEBASIS>
+<BASIS name="..."> ... </BASIS>
+<HAMILTONIAN name="..."> ... </HAMILTONIAN>
+</MODEL>
+```
 
 `<SITEBASIS>` は単一サイトのヒルベルト空間（基底）を、`<BASIS>` は格子全体のヒルベルト空間を、`<HAMILTONIAN>` はハミルトニアンを定義します。
 

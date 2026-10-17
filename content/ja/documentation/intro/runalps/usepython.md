@@ -13,7 +13,9 @@ Python から ALPS を利用する方法を示すために、ここでは単純�
 
 Python は、拡張モジュールをコンパイルしたときと**まったく同じ**バージョンの Python でしか使用できないという制約があります。ALPS をソースからビルドする場合（例えば Linux では必須です）、ALPS の設定時にどの Python インタプリタを使うかを指定できます。すると ALPS は
 
-    alpspython
+```bash
+alpspython
+```
 
 という名前のスクリプトを作成します。このスクリプトは、ALPS の拡張モジュールを見つけるために必要なパスを設定した上で、指定した Python インタプリタを呼び出します。
 
@@ -23,9 +25,11 @@ Python は、拡張モジュールをコンパイルしたときと**まった�
 
 Python を起動したら、必要なモジュールをインポートします。
 
-    import pyalps
-    import matplotlib.pyplot as plt
-    import pyalps.plot
+```python
+import pyalps
+import matplotlib.pyplot as plt
+import pyalps.plot
+```
 
 完全な Python スクリプトは、チュートリアルディレクトリの [`tutorials/intro-01-basics/tutorial-full.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/intro-01-basics/tutorial-full.py) にあります。
 
@@ -33,24 +37,28 @@ Python を起動したら、必要なモジュールをインポートします�
 
 入力を準備するために、シミュレーションのパラメータを含む Python の辞書のリストを作成します。
 
-    parms = []
-    for t in [1.5,2,2.5]:
-        parms.append(
-            { 
-                'LATTICE'        : "square lattice", 
-                'T'              : t,
-                'J'              : 1,
-                'THERMALIZATION' : 1000,
-                'SWEEPS'         : 100000,
-                'UPDATE'         : "cluster",
-                'MODEL'          : "Ising",
-                'L'              : 8
-            }
-        )
+```python
+parms = []
+for t in [1.5,2,2.5]:
+    parms.append(
+        { 
+            'LATTICE'        : "square lattice", 
+            'T'              : t,
+            'J'              : 1,
+            'THERMALIZATION' : 1000,
+            'SWEEPS'         : 100000,
+            'UPDATE'         : "cluster",
+            'MODEL'          : "Ising",
+            'L'              : 8
+        }
+    )
+```
 
 次に、ALPS シミュレーション用の入力ファイルを書き出します。
 
-    input_file = pyalps.writeInputFiles('parm1',parms)
+```python
+input_file = pyalps.writeInputFiles('parm1',parms)
+```
 
 引数 `'parm1'` は、この関数にすべてのシミュレーションファイルの接頭辞として `parm1` を使うよう指示します。この関数はメインのシミュレーションファイルの名前（ここでは `parm1.in.xml`）を返します。
 
@@ -60,7 +68,9 @@ Python を起動したら、必要なモジュールをインポートします�
 
 シミュレーションを実行するには、`runApplication` 関数を呼び出すだけです。
 
-    pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
+```python
+pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True)
+```
 
 パラメータ `writexml=True` は、すべての結果を XML ファイルにも書き出すよう ALPS に指示します。これにより I/O は遅くなりますが、出力 XML ファイルをウェブブラウザで開くだけで結果を確認できるため便利です。ただし、測定する物理量が多い場合、ファイルは非常に大きくなり、書き込みに時間がかかりすぎることがあります。
 
@@ -68,7 +78,9 @@ Python を起動したら、必要なモジュールをインポートします�
 
 MPI を用いて並列マシン上でシミュレーションを実行するには、代わりに次のコマンドを呼び出します。
 
-    pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True,MPI=4)
+```python
+pyalps.runApplication('spinmc',input_file,Tmin=5,writexml=True,MPI=4)
+```
 
 ここで `MPI` 引数は、起動するプロセス数を指定します。
 
@@ -78,19 +90,25 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
 
 結果を読み込む前に、結果ファイルの一覧を取得する必要があります。ちょうど今作成したファイル（接頭辞 `parm1` で始まるもの）だけに注目すると、次のようにファイル一覧が得られます。
 
-    result_files = pyalps.getResultFiles(prefix='parm1')
-    print(result_files)
+```python
+result_files = pyalps.getResultFiles(prefix='parm1')
+print(result_files)
+```
 
 #### 結果の読み込み
 
 次に、何が測定されたかを知りたくなるかもしれません。そのためには、観測量のリストを読み込みます。
 
-    print(pyalps.loadObservableList(result_files))
+```python
+print(pyalps.loadObservableList(result_files))
+```
 
 ここでは磁化の絶対値とその二乗を読み込むことにし、読み込んだ内容を表示します。
 
-    data = pyalps.loadMeasurements(result_files,['|Magnetization|','Magnetization^2'])
-    print(data)
+```python
+data = pyalps.loadMeasurements(result_files,['|Magnetization|','Magnetization^2'])
+print(data)
+```
 
 出力される内容には、読み込まれた値が `y` に、そしてすべてのシミュレーションパラメータが `props` という辞書に含まれています。
 
@@ -98,46 +116,56 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
 
 例えば |Magnetization| の温度依存性をプロットするために、`collectXY` を呼び出して |Magnetization| の値を `y` に、温度 `T` を `x` にまとめます。
 
-    plotdata = pyalps.collectXY(data,'T','|Magnetization|')
+```python
+plotdata = pyalps.collectXY(data,'T','|Magnetization|')
+```
 
 #### Python で `matplotlib` を使ったプロット
 
 続いて、`matplotlib` と `pyalps.plot` モジュールを使ってプロットします。
 
-    plt.figure()
-    pyalps.plot.plot(plotdata)
-    plt.xlim(0,3)
-    plt.ylim(0,1)
-    plt.title('Ising model')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(plotdata)
+plt.xlim(0,3)
+plt.ylim(0,1)
+plt.title('Ising model')
+plt.show()
+```
 
 #### 他の形式への変換
 
 データセットを、プレーンテキストや Grace、Gnuplot といった他のプロット形式に変換する関数も用意されています。
 
-    print(pyalps.plot.convertToText(plotdata))
-    print(pyalps.plot.makeGracePlot(plotdata))
-    print(pyalps.plot.makeGnuplotPlot(plotdata))
+```python
+print(pyalps.plot.convertToText(plotdata))
+print(pyalps.plot.makeGracePlot(plotdata))
+print(pyalps.plot.makeGnuplotPlot(plotdata))
+```
 
 ### データの評価
 
 結果に対する関数、例えば Binder cumulant 比 $\langle m^2 \rangle / \langle |m|\rangle ^2$ を簡単に評価できます。新しい `DataSet` を作成し、値を入れていきます。
 
-    binder = pyalps.DataSet()
-    binder.props = pyalps.dict_intersect([d[0].props for d in data])
-    binder.x = [d[0].props['T'] for d in data]
-    binder.y = [d[1].y[0]/(d[0].y[0]*d[0].y[0]) for d in data]
-    print(binder)
+```python
+binder = pyalps.DataSet()
+binder.props = pyalps.dict_intersect([d[0].props for d in data])
+binder.x = [d[0].props['T'] for d in data]
+binder.y = [d[1].y[0]/(d[0].y[0]*d[0].y[0]) for d in data]
+print(binder)
+```
 
 式 `d[1].y[0]/(d[0].y[0]*d[0].y[0])` では、相関のある物理量に対して正しいモンテカルロ誤差を計算するために jackknife 解析が使われています。
 
 最後に、もう1つプロットを作成します。
 
-    plt.figure()
-    pyalps.plot.plot(binder)
-    plt.xlabel('T')
-    plt.ylabel('Binder cumulant')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(binder)
+plt.xlabel('T')
+plt.ylabel('Binder cumulant')
+plt.show()
+```
 
 ## 完全なサンプルスクリプト
 
@@ -168,6 +196,8 @@ MPI を用いて並列マシン上でシミュレーションを実行するに�
 
 各種関数の使用例や、より高度なアプリケーションについては、チュートリアルを参照してください。また、各関数の `__doc__` 属性を使ってドキュメントを参照することも忘れないでください。例えば次のようにします。
 
-    print(pyalps.plot.plot.__doc__)
+```python
+print(pyalps.plot.plot.__doc__)
+```
 
 ほとんどの ALPS アプリケーションに共通する入力パラメータについては、[共通パラメータ](../../parameters) を参照してください。ここで示した Python の方法と同じ出力ファイルを生成するコマンドラインでの手順については、[コマンドラインの使用](../commandline) を参照してください。このセクションの他の内容の概要については、[シミュレーションの実行](../..) を参照してください。

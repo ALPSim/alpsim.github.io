@@ -66,88 +66,96 @@ The result is a power law at short distances, crossing over to a faster, in fact
 
 The following parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one_half" data-filename="spin_one_half" target="_blank" rel="noopener">`spin_one_half`</a> will setup this run for us (once again, for illustration we shall use a smaller system and number of states than the more realistic numbers stated above). The example uses a chain of length $L=64$ at $D=100$, with one run in each of the three lowest magnetization sectors, and 6 sweeps. The correlations should come out symmetric:
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    L=64
-    MAXSTATES=100
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+```
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+SWEEPS=6
+J=1
+NUMBER_EIGENVALUES=1
+MEASURE_AVERAGE[Magnetization]=Sz
+MEASURE_AVERAGE[Exchange]=exchange
+MEASURE_LOCAL[Local magnetization]=Sz
+MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
+MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
+L=64
+MAXSTATES=100
+{ Sz_total=0 }
+{ Sz_total=1 }
+{ Sz_total=2 }
 
-    parameter2xml spin_one_half
-    dmrg --write-xml spin_one_half.in.xml
+parameter2xml spin_one_half
+dmrg --write-xml spin_one_half.in.xml
+```
 
 #### Using Python
 
 The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one_half.py" data-filename="spin_one_half.py" target="_blank" rel="noopener">`spin_one_half.py`</a> sets up one run per magnetization sector and loads the results:
 
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = []
-    for sz in [0,1,2]:
-        parms.append( { 
-            'LATTICE'                               : 'open chain lattice', 
-            'MODEL'                                 : 'spin',
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : sz,
-            'J'                                     : 1,
-            'SWEEPS'                                : 6,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'L'                                     : 64,
-            'MAXSTATES'                             : 100,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-            } )
-            
-    input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
-    
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
+parms = []
+for sz in [0,1,2]:
+    parms.append( { 
+        'LATTICE'                               : 'open chain lattice', 
+        'MODEL'                                 : 'spin',
+        'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
+        'Sz_total'                              : sz,
+        'J'                                     : 1,
+        'SWEEPS'                                : 6,
+        'NUMBER_EIGENVALUES'                    : 1,
+        'L'                                     : 64,
+        'MAXSTATES'                             : 100,
+        'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
+        'MEASURE_AVERAGE[Exchange]'             : 'exchange',
+        'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
+        'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
+        'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
+        } )
+        
+input_file = pyalps.writeInputFiles('parm_spin_one_half',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half'))
+```
 
 Now we can extract e.g. $\langle S^z_iS^z_j\rangle$ correlations:
 
-    curves = []
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Diagonal spin correlations':
-                d = pyalps.DataSet()
-                d.props['observable'] = 'Sz correlations'
-                d.props['label'] = '$S_z^{tot}$ = '+str(s.props['Sz_total'])
-                L = int(s.props['L'])
-                d.x = np.arange(L)
-           
-                # sites with increasing distance l symmetric to the chain center
-                site1 = np.array([int(-(l+1)/2.0) for l in range(0,L)]) + L/2
-                site2 = np.array([int(  l   /2.0) for l in range(0,L)]) + L/2
-                indices = L*site1 + site2
-                d.y = abs(s.y[0][indices])
-           
-                curves.append(d)
+```python
+curves = []
+for run in data:
+    for s in run:
+        if s.props['observable'] == 'Diagonal spin correlations':
+            d = pyalps.DataSet()
+            d.props['observable'] = 'Sz correlations'
+            d.props['label'] = '$S_z^{tot}$ = '+str(s.props['Sz_total'])
+            L = int(s.props['L'])
+            d.x = np.arange(L)
+       
+            # sites with increasing distance l symmetric to the chain center
+            site1 = np.array([int(-(l+1)/2.0) for l in range(0,L)]) + L/2
+            site2 = np.array([int(  l   /2.0) for l in range(0,L)]) + L/2
+            indices = L*site1 + site2
+            d.y = abs(s.y[0][indices])
+       
+            curves.append(d)
+```
 and plot them vs. site distance:
 
-    plt.figure()
-    pyalps.plot.plot(curves)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.legend()
-    plt.title('Spin correlations in antiferromagnetic Heisenberg chain (S=1/2)')
-    plt.ylabel('correlations $| \\langle S^z_{L/2-l/2} S^z_{L/2+l/2} \\rangle |$')
-    plt.xlabel('distance $l$')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(curves)
+plt.xscale('log')
+plt.yscale('log')
+plt.legend()
+plt.title('Spin correlations in antiferromagnetic Heisenberg chain (S=1/2)')
+plt.ylabel('correlations $| \\langle S^z_{L/2-l/2} S^z_{L/2+l/2} \\rangle |$')
+plt.xlabel('distance $l$')
+plt.show()
+```
 
 ### Spin-spin correlations: spin-1
 
@@ -200,50 +208,54 @@ In fact, the calculation of correlation lengths is much harder to converge than 
 
 The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one" data-filename="spin_one" target="_blank" rel="noopener">`spin_one`</a> looks much like the one for the previous example, but replacing the lattice and the model as follows. As above, the run shown here uses a smaller system than the more realistic $L=192$ quoted earlier: the 64-site capped chain from the lattice library, at $D=100$.
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 64"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    Sz_total=0
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_AVERAGE[Magnetization]=Sz
-    MEASURE_AVERAGE[Exchange]=exchange
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
-    MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
-    MAXSTATES=100
+```
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 64"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+Sz_total=0
+SWEEPS=6
+J=1
+NUMBER_EIGENVALUES=1
+MEASURE_AVERAGE[Magnetization]=Sz
+MEASURE_AVERAGE[Exchange]=exchange
+MEASURE_LOCAL[Local magnetization]=Sz
+MEASURE_CORRELATIONS[Diagonal spin correlations]=Sz
+MEASURE_CORRELATIONS[Offdiagonal spin correlations]="Splus:Sminus"
+MAXSTATES=100
 
-    parameter2xml spin_one
-    dmrg --write-xml spin_one.in.xml
+parameter2xml spin_one
+dmrg --write-xml spin_one.in.xml
+```
 
 #### Using Python
 
 The main difference of the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-06-correlations/spin_one.py" data-filename="spin_one.py" target="_blank" rel="noopener">`spin_one.py`</a> with respect to the previous one is the definition of lattice and model:
 
-    parms = []
-    L = 64
-    parms.append( { 
-            'LATTICE_LIBRARY'                       : 'my_lattices.xml',
-            'LATTICE'                               : 'open chain lattice with special edges '+str(L),
-            'MODEL'                                 : 'spin',
-            'local_S0'                              : 0.5,
-            'local_S1'                              : 1,
-            'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
-            'Sz_total'                              : 0,
-            'J'                                     : 1,
-            'SWEEPS'                                : 6,
-            'NUMBER_EIGENVALUES'                    : 1,
-            'MAXSTATES'                             : 100,
-            'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
-            'MEASURE_AVERAGE[Exchange]'             : 'exchange',
-            'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
-            'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
-            'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
-        } )
+```python
+parms = []
+L = 64
+parms.append( { 
+        'LATTICE_LIBRARY'                       : 'my_lattices.xml',
+        'LATTICE'                               : 'open chain lattice with special edges '+str(L),
+        'MODEL'                                 : 'spin',
+        'local_S0'                              : 0.5,
+        'local_S1'                              : 1,
+        'CONSERVED_QUANTUMNUMBERS'              : 'N,Sz',
+        'Sz_total'                              : 0,
+        'J'                                     : 1,
+        'SWEEPS'                                : 6,
+        'NUMBER_EIGENVALUES'                    : 1,
+        'MAXSTATES'                             : 100,
+        'MEASURE_AVERAGE[Magnetization]'        : 'Sz',
+        'MEASURE_AVERAGE[Exchange]'             : 'exchange',
+        'MEASURE_LOCAL[Local magnetization]'    : 'Sz',
+        'MEASURE_CORRELATIONS[Diagonal spin correlations]'      : 'Sz',
+        'MEASURE_CORRELATIONS[Offdiagonal spin correlations]'   : 'Splus:Sminus'
+    } )
+```
 
 After running the simulation, correlations can be extracted and plotted in the same way as before.
 

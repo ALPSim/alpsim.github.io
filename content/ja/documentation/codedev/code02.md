@@ -16,24 +16,28 @@ weight: 3
 
 前回のチュートリアルで作成したビンダーキュムラントの Python スクリプトは、まったく同じように再利用できます。
 
-    data = pyalps.loadMeasurements(pyalps.getResultFiles(pattern='ising.L*'),['m^2', 'm^4'])
-    m2=pyalps.collectXY(data,x='BETA',y='m^2',foreach=['L'])
-    m4=pyalps.collectXY(data,x='BETA',y='m^4',foreach=['L'])
+```python
+data = pyalps.loadMeasurements(pyalps.getResultFiles(pattern='ising.L*'),['m^2', 'm^4'])
+m2=pyalps.collectXY(data,x='BETA',y='m^2',foreach=['L'])
+m4=pyalps.collectXY(data,x='BETA',y='m^4',foreach=['L'])
 
-    u=[]
-    for i in range(len(m2)):
-        d = pyalps.DataSet()
-        d.propsylabel='U4'
-        d.props = m2[i].props
-        d.x= m2[i].x
-        d.y = m4[i].y/m2[i].y/m2[i].y
-        u.append(d)
+u=[]
+for i in range(len(m2)):
+    d = pyalps.DataSet()
+    d.propsylabel='U4'
+    d.props = m2[i].props
+    d.x= m2[i].x
+    d.y = m4[i].y/m2[i].y/m2[i].y
+    u.append(d)
+```
 
 そして、次のコマンドでビンダーキュムラントをプロットします。
 
-    plt.figure()
-    pyalps.plot.plot(u)
-    plt.xlabel('Inverse Temperature $\beta$')
-    plt.ylabel('Binder Cumulant U4 $g$')
-    plt.title('2D Ising model')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(u)
+plt.xlabel('Inverse Temperature $\beta$')
+plt.ylabel('Binder Cumulant U4 $g$')
+plt.title('2D Ising model')
+plt.show()
+```
