@@ -274,6 +274,35 @@ You will get curves looking like the ones below. Now the errors have converged a
 - On what system parameters do the autocorrelation times depend? Check by changing parameters in the input file.
 - Can you explain why cluster updates are more efficient than local updates?
 
+## Answers
+
+<details style = "margin-bottom: 1.7rem">
+    <summary> Click to reveal Q1 answer </summary>
+<p>
+    For L = 2 → 32, the errors are converged because we see the error of magnetization level out as the binning level increases, for L = 48, it still hasn’t leveled out.
+</p>
+</details>
 
 
+<details style = "margin-bottom: 1.7rem">
+    <summary> Click to reveal Q2 answer </summary>
+<p>
+    The autocorrelation time is how long the simulation keeps the memory of the original state. This means that longer autocorrelation times will make error convergence slower because it takes longer for the system to transition to a state unaffected by the starting point.
+</P>
+</details>
 
+
+<details style = "margin-bottom: 1.7rem">
+    <summary> Click to reveal Q3 answer </summary>
+<p>
+     Temperature, lattice size, update algorithm
+</p>
+</details>
+
+
+<details style = "margin-bottom: 1.7rem">
+    <summary> Click to reveal Q4 answer </summary>
+<p>
+    Instead of going through each particle and deciding whether or not to flip it, cluster updates take a group of them and flip them. So the computer goes from going from one particle to another, into a group of particles to another group, speeding up the process.
+</p>
+</details>
