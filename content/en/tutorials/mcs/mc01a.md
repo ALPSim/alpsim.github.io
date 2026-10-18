@@ -184,7 +184,9 @@ From the figure below, you can clearly see that the errors do not converge for l
 Near the critical temperature, the correlation length $\xi$ grows large and local updates become highly inefficient: each accepted move flips a single spin, so it takes $O(\xi^2)$ sweeps merely to decorrelate two neighboring spins.
 This *critical slowing down* means the autocorrelation time diverges as
 $$\tau \sim L^z,$$
-where $z \approx 2$ for local updates but $z \approx 0.25$ for cluster algorithms such as Wolff or Swendsen–Wang.
+where $z$ is the *dynamic critical exponent*.
+It measures how quickly the autocorrelation time grows with the correlation length, $\tau \sim \xi^z$; at $T_C$ the correlation length is cut off by the lattice size, $\xi \sim L$, which gives $\tau \sim L^z$.
+Unlike the static critical exponents, $z$ is not a property of the model alone but of the update algorithm used to simulate it: $z \approx 2$ for local updates but $z \approx 0.25$ for cluster algorithms such as Wolff or Swendsen–Wang.
 Cluster updates flip entire correlated regions at once, essentially eliminating critical slowing down for the quantities measured here.
 
 We therefore repeat the simulations with cluster updates, using fewer thermalization sweeps (the system decorrelates much faster) but more measurement sweeps to accumulate good statistics:
@@ -263,46 +265,61 @@ plt.legend()
 plt.show()
 ```
 
-You will get curves looking like the ones below. Now the errors have converged and can be trusted.
+You will get curves looking like the ones below. The errors now level off far sooner than with local updates: for $L \le 32$ they reach a plateau and can be trusted, while for $L=48$ the error is still rising slightly at the largest binning level, so a longer run would be needed to fully converge it.
 
 ![](/figs/mcs01bincluster.png)
 
 ## Questions
 
-- Are the errors converged? (To check this convert the run files as described above.)
-- Why do longer autocorrelation times lead to slower error convergence?
-- On what system parameters do the autocorrelation times depend? Check by changing parameters in the input file.
-- Can you explain why cluster updates are more efficient than local updates?
+Click on a question to show its answer; click again to hide it.
 
-## Answers
+<details style="margin-bottom: 1rem">
+<summary style="font-weight: 600; cursor: pointer">1. Are the errors converged? (To check this convert the run files as described above.)</summary>
+<div style="margin: 0.6rem 0 0 1.2rem; padding-left: 0.9rem; border-left: 3px solid rgba(128,128,128,0.35)">
 
-<details style = "margin-bottom: 1.7rem">
-    <summary> Click to reveal Q1 answer </summary>
-<p>
-    For L = 2 → 32, the errors are converged because we see the error of magnetization level out as the binning level increases, for L = 48, it still hasn’t leveled out.
-</p>
+An error estimate is converged when it reaches a plateau as the binning level increases. The answer depends on the update scheme:
+
+- **Local updates:** only the smallest lattices ($L=2, 4$) are clearly converged, and $L=8$ is roughly flat. For $L=16, 32, 48$ the error is still growing steeply at the largest binning level, so these errors cannot be trusted.
+- **Cluster updates:** the errors plateau for $L \le 32$. For $L=48$ the error is still rising slightly at the largest binning level, so it is close to, but not fully, converged.
+
+</div>
 </details>
 
+<details style="margin-bottom: 1rem">
+<summary style="font-weight: 600; cursor: pointer">2. Why do longer autocorrelation times lead to slower error convergence?</summary>
+<div style="margin: 0.6rem 0 0 1.2rem; padding-left: 0.9rem; border-left: 3px solid rgba(128,128,128,0.35)">
 
-<details style = "margin-bottom: 1.7rem">
-    <summary> Click to reveal Q2 answer </summary>
-<p>
-    The autocorrelation time is how long the simulation keeps the memory of the original state. This means that longer autocorrelation times will make error convergence slower because it takes longer for the system to transition to a state unaffected by the starting point.
-</P>
+Consecutive measurements are correlated, so $N$ measurements contain only about $N/(1+2\tau)$ statistically independent samples. The naive error, which assumes independent samples, is therefore too small by a factor of about $\sqrt{1+2\tau}$.
+
+Binning removes this bias only once the bins are much longer than $\tau$, because only then are neighboring bins effectively independent. A longer autocorrelation time therefore pushes the plateau to a higher binning level. At high binning levels there are few bins left, so the error estimate becomes noisy, and if $\tau$ is comparable to the length of the run, no plateau is reached at all.
+
+(This is different from thermalization, which discards the early part of the run so that results do not depend on the initial configuration.)
+
+</div>
 </details>
 
+<details style="margin-bottom: 1rem">
+<summary style="font-weight: 600; cursor: pointer">3. On what system parameters do the autocorrelation times depend? Check by changing parameters in the input file.</summary>
+<div style="margin: 0.6rem 0 0 1.2rem; padding-left: 0.9rem; border-left: 3px solid rgba(128,128,128,0.35)">
 
-<details style = "margin-bottom: 1.7rem">
-    <summary> Click to reveal Q3 answer </summary>
-<p>
-     Temperature, lattice size, update algorithm
-</p>
+- **Temperature:** the autocorrelation time is largest near the critical temperature $T_C$, where the correlation length $\xi$ diverges. Moving away from $T_C$ (try e.g. $T=2.0$ or $T=3.0$) makes $\xi$ and hence $\tau$ much smaller.
+- **System size:** at $T_C$ the correlation length is limited only by the lattice, so $\tau \sim L^z$ grows with $L$. This is why the larger lattices converge worst in the binning plots.
+- **Update algorithm:** this is not a physical parameter, but it sets the dynamic critical exponent $z$ in $\tau \sim L^z$: about 2 for local updates and about 0.25 for cluster updates.
+
+The autocorrelation time also depends on the observable being measured, so different quantities from the same run can have different $\tau$.
+
+</div>
 </details>
 
+<details style="margin-bottom: 1rem">
+<summary style="font-weight: 600; cursor: pointer">4. Can you explain why cluster updates are more efficient than local updates?</summary>
+<div style="margin: 0.6rem 0 0 1.2rem; padding-left: 0.9rem; border-left: 3px solid rgba(128,128,128,0.35)">
 
-<details style = "margin-bottom: 1.7rem">
-    <summary> Click to reveal Q4 answer </summary>
-<p>
-    Instead of going through each particle and deciding whether or not to flip it, cluster updates take a group of them and flip them. So the computer goes from going from one particle to another, into a group of particles to another group, speeding up the process.
-</p>
+Near $T_C$ the spins form large aligned domains of size about $\xi$. A local update tries to flip a single spin, but flipping a spin inside an aligned domain costs energy and is usually rejected. Domains therefore change only through slow, random motion of their walls, which takes about $\xi^2$ sweeps; this is critical slowing down, with $z \approx 2$.
+
+Cluster algorithms such as Wolff or Swendsen–Wang build clusters by connecting aligned neighboring spins with probability $p = 1 - e^{-2J/T}$. These clusters match the correlated domains, and flipping a whole cluster is always accepted. A single cluster update therefore changes the configuration on the scale of $\xi$, so successive configurations decorrelate after only a few updates ($z \approx 0.25$).
+
+The gain is not that each update is computed faster. Each update produces a far less correlated configuration, so fewer sweeps are needed for the same statistical accuracy.
+
+</div>
 </details>
