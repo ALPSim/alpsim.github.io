@@ -78,57 +78,63 @@ $$E(S^z_{tot}=2) - E(S^z_{tot}=1) = \big[\text{edge} + \text{magnon}\big] - \big
 
 The uniform chain needs no lattice file — `open chain lattice` with `local_S=1` is enough. The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_uniform" data-filename="spin_one_uniform" target="_blank" rel="noopener">`spin_one_uniform`</a> sets up three runs, one per sector:
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    local_S=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    J=1
-    L=64
-    NUMBER_EIGENVALUES=1
-    SWEEPS=6
-    MAXSTATES=100
-    MEASURE_LOCAL[Local magnetization]=Sz
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+```
+LATTICE="open chain lattice"
+MODEL="spin"
+local_S=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+J=1
+L=64
+NUMBER_EIGENVALUES=1
+SWEEPS=6
+MAXSTATES=100
+MEASURE_LOCAL[Local magnetization]=Sz
+{ Sz_total=0 }
+{ Sz_total=1 }
+{ Sz_total=2 }
 
-    parameter2xml spin_one_uniform
-    dmrg --write-xml spin_one_uniform.in.xml
+parameter2xml spin_one_uniform
+dmrg --write-xml spin_one_uniform.in.xml
+```
 
 or equivalently from Python, with <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_uniform.py" data-filename="spin_one_uniform.py" target="_blank" rel="noopener">`spin_one_uniform.py`</a>:
 
-    import pyalps
-    parms = []
-    for sz in [0,1,2]:
-        parms.append( {
-            'LATTICE'                   : 'open chain lattice',
-            'MODEL'                     : 'spin',
-            'local_S'                   : '1',
-            'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-            'Sz_total'                  : sz,
-            'J'                         : 1,
-            'L'                         : 64,
-            'SWEEPS'                    : 6,
-            'NUMBER_EIGENVALUES'        : 1,
-            'MAXSTATES'                 : 100,
-            'MEASURE_LOCAL[Local magnetization]' : 'Sz'
-        } )
-    input_file = pyalps.writeInputFiles('parm_spin_one_uniform',parms)
-    pyalps.runApplication('dmrg',input_file,writexml=True)
+```python
+import pyalps
+parms = []
+for sz in [0,1,2]:
+    parms.append( {
+        'LATTICE'                   : 'open chain lattice',
+        'MODEL'                     : 'spin',
+        'local_S'                   : '1',
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : sz,
+        'J'                         : 1,
+        'L'                         : 64,
+        'SWEEPS'                    : 6,
+        'NUMBER_EIGENVALUES'        : 1,
+        'MAXSTATES'                 : 100,
+        'MEASURE_LOCAL[Local magnetization]' : 'Sz'
+    } )
+input_file = pyalps.writeInputFiles('parm_spin_one_uniform',parms)
+pyalps.runApplication('dmrg',input_file,writexml=True)
+```
 
 Loading the results and plotting $\langle S^z_i \rangle$ against the site index reproduces Figure 1:
 
-    import numpy as np, matplotlib.pyplot as plt
-    data = pyalps.loadEigenstateMeasurements(
-        pyalps.getResultFiles(prefix='parm_spin_one_uniform'))
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Local magnetization':
-                y = np.real(np.asarray(s.y).flatten())
-                plt.plot(np.arange(len(y)), y, marker='o', ms=3,
-                         label='$S_z^{tot} = %g$' % float(s.props['Sz_total']))
-    plt.xlabel('site $i$'); plt.ylabel(r'$\langle S^z_i \rangle$')
-    plt.legend(); plt.show()
+```python
+import numpy as np, matplotlib.pyplot as plt
+data = pyalps.loadEigenstateMeasurements(
+    pyalps.getResultFiles(prefix='parm_spin_one_uniform'))
+for run in data:
+    for s in run:
+        if s.props['observable'] == 'Local magnetization':
+            y = np.real(np.asarray(s.y).flatten())
+            plt.plot(np.arange(len(y)), y, marker='o', ms=3,
+                     label='$S_z^{tot} = %g$' % float(s.props['Sz_total']))
+plt.xlabel('site $i$'); plt.ylabel(r'$\langle S^z_i \rangle$')
+plt.legend(); plt.show()
+```
 
 A useful check on any of these runs is that $\sum_i \langle S^z_i \rangle$ equals $S^z_{tot}$ exactly; if it does not, the run is not converged.
 
@@ -182,50 +188,56 @@ chain whose two end vertices are given a separate type, so they can be assigned
 a different spin; pass it the **total** number of sites, i.e. two more than the
 number of spin-1 sites you want:
 
-    python build_lattice.py 66 > my_lattice.xml
+```bash
+python build_lattice.py 66 > my_lattice.xml
+```
 
 That gives 64 spin-1 sites with a spin-1/2 attached at each end. The parameter
 file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_capped" data-filename="spin_one_capped" target="_blank" rel="noopener">`spin_one_capped`</a> is then the same as before apart from the lattice and the two local spins:
 
-    LATTICE_LIBRARY="my_lattice.xml"
-    LATTICE="open chain lattice with special edges"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    J=1
-    NUMBER_EIGENVALUES=1
-    SWEEPS=6
-    MAXSTATES=100
-    MEASURE_LOCAL[Local magnetization]=Sz
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+```
+LATTICE_LIBRARY="my_lattice.xml"
+LATTICE="open chain lattice with special edges"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+J=1
+NUMBER_EIGENVALUES=1
+SWEEPS=6
+MAXSTATES=100
+MEASURE_LOCAL[Local magnetization]=Sz
+{ Sz_total=0 }
+{ Sz_total=1 }
+{ Sz_total=2 }
 
-    parameter2xml spin_one_capped
-    dmrg --write-xml spin_one_capped.in.xml
+parameter2xml spin_one_capped
+dmrg --write-xml spin_one_capped.in.xml
+```
 
 or from Python, with <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_capped.py" data-filename="spin_one_capped.py" target="_blank" rel="noopener">`spin_one_capped.py`</a>:
 
-    import pyalps
-    parms = []
-    for sz in [0,1,2]:
-        parms.append( {
-            'LATTICE_LIBRARY'           : 'my_lattice.xml',
-            'LATTICE'                   : 'open chain lattice with special edges',
-            'MODEL'                     : 'spin',
-            'local_S0'                  : '0.5',
-            'local_S1'                  : '1',
-            'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-            'Sz_total'                  : sz,
-            'J'                         : 1,
-            'SWEEPS'                    : 6,
-            'NUMBER_EIGENVALUES'        : 1,
-            'MAXSTATES'                 : 100,
-            'MEASURE_LOCAL[Local magnetization]' : 'Sz'
-        } )
-    input_file = pyalps.writeInputFiles('parm_spin_one_capped',parms)
-    pyalps.runApplication('dmrg',input_file,writexml=True)
+```python
+import pyalps
+parms = []
+for sz in [0,1,2]:
+    parms.append( {
+        'LATTICE_LIBRARY'           : 'my_lattice.xml',
+        'LATTICE'                   : 'open chain lattice with special edges',
+        'MODEL'                     : 'spin',
+        'local_S0'                  : '0.5',
+        'local_S1'                  : '1',
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : sz,
+        'J'                         : 1,
+        'SWEEPS'                    : 6,
+        'NUMBER_EIGENVALUES'        : 1,
+        'MAXSTATES'                 : 100,
+        'MEASURE_LOCAL[Local magnetization]' : 'Sz'
+    } )
+input_file = pyalps.writeInputFiles('parm_spin_one_capped',parms)
+pyalps.runApplication('dmrg',input_file,writexml=True)
+```
 
 Reading the results back works exactly as for the uniform chain, and gives
 Figure 2.
@@ -265,21 +277,23 @@ Repeat a similar calculation for the spin-1/2 chain in the lowest magnetization 
 
 The following parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-05-local-observables/spin_one_half" data-filename="spin_one_half" target="_blank" rel="noopener">`spin_one_half`</a> will accomplish this task:
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    SWEEPS=6
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_LOCAL[Local magnetization]=Sz
-    L=64
-    MAXSTATES=100
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+```
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+SWEEPS=6
+J=1
+NUMBER_EIGENVALUES=1
+MEASURE_LOCAL[Local magnetization]=Sz
+L=64
+MAXSTATES=100
+{ Sz_total=0 }
+{ Sz_total=1 }
+{ Sz_total=2 }
 
-    parameter2xml spin_one_half
-    dmrg --write-xml spin_one_half.in.xml
+parameter2xml spin_one_half
+dmrg --write-xml spin_one_half.in.xml
+```
 
 ### Using Python
 

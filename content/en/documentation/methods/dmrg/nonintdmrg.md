@@ -16,14 +16,16 @@ This program is not really intended to be a serious calculation tool - instead i
 
 In order to run a simulation, one needs to create a parameter file, e.g.
 
-    LATTICE_LIBRARY = "lattices.xml"
-    LATTICE = "chain lattice"
-    L = 20
-    SWEEPS = 100
-    OUTPUT_LEVEL = 1
-    WAVEFUNCTION_FILE = "psi.dat"
-    t = 1.2
-    V = 0
+```
+LATTICE_LIBRARY = "lattices.xml"
+LATTICE = "chain lattice"
+L = 20
+SWEEPS = 100
+OUTPUT_LEVEL = 1
+WAVEFUNCTION_FILE = "psi.dat"
+t = 1.2
+V = 0
+```
 
 These parameters describe a calculation for a single particle tight-binding model using the "chain lattice" defined in the `lattices.xml` file. The "chain lattice" defines a 1D periodic lattice of length given by the parameter L (specified in this example as L=20). The hopping parameter t acts between the bonds of the lattice, thus the lattice effectively specifies the boundary condition (for the "chain lattice", this is periodic). As is typical for DMRG, open boundary conditions are more efficient and converge in far fewer sweeps than periodic boundaries. This simulation will carry out 100 complete DMRG sweeps. The variable OUTPUT_LEVEL specifies the amount of debug information produced during the sweeps, a higher number for more information. To start the calculation, make sure that the lattice library `lattices.xml` is in the current directory and simply execute `simple_dmrg <  parameters`. The resultant wavefunction is written to standard output as well as to the output file specified by  `WAVEFUNCTION_FILE`.
 
@@ -56,16 +58,20 @@ Hopping terms to other than the nearest neighbour sites can be specified by usin
 
 The parameter V specifies a function that is used for an external potential. A uniform additional potential is specified by a single number describing its strength, but a more interesting case is to have a spatially varying potential whereby V as a function of the coordinates of the lattice sites. The following parameter file e.g. simulates a particle in a one-dimensional harmonic potential:
 
-    LATTICE_LIBRARY = "lattices.xml"
-    LATTICE = "chain lattice"
-    L = 200
-    SWEEPS = 20
-    V = 4 * (x/L - 0.5) * (x/L - 0.5)
+```
+LATTICE_LIBRARY = "lattices.xml"
+LATTICE = "chain lattice"
+L = 200
+SWEEPS = 20
+V = 4 * (x/L - 0.5) * (x/L - 0.5)
+```
 
 A periodic potential can be specified by its fourier series expansion. For example, a triangular potential with width N/L is specified approximately as by
 
-    K = 2*3.1415927*N/L
-    V = cos(K*x) + cos(3*K*x) / 9 + cos(5*K*x) / 25 + cos(7*K*x) / 36
+```
+K = 2*3.1415927*N/L
+V = cos(K*x) + cos(3*K*x) / 9 + cos(5*K*x) / 25 + cos(7*K*x) / 36
+```
 
 Note that V specifies the external potential which is applied to every site of the lattice. It is also possible to assing a potential only to certain site types, which is done by specifing a function V# (with # being site type specified in the lattice description). If a V# potential is defined, it is added to the global potential V for the relevant sites.
 Again, for periodic systems or complex potentials, the convergence can be quite slow; for the triangular potential, 100 sweeps is enough to get good convergence for 40 sites with N=4, but compare this with 100 sites and N=10. This is partly due to the simplistic way the wavefunction is constructed prior to the first proper DMRG sweep.

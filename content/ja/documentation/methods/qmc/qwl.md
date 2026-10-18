@@ -49,7 +49,9 @@ weight: 7
 
 `qwl_evaluate` プログラムは qwl シミュレーションの XML 出力ファイルを受け取り、
 
-    qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
+```bash
+qwl_evaluate [-T_MIN ...] [-T_MAX ...] [-DELTA_T ...] prefix.out.xml
+```
 
 次の量の温度依存性を表す XML プロットファイル（`prefix.plot.energy.xml` など）を生成します。
 

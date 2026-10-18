@@ -23,20 +23,22 @@ weight: 4
 
 ここでの単位胞グラフは単一の頂点から成り、隣のセルにある同じ頂点への辺を持ちます。このような格子上のグラフは、`<LATTICE>` あるいは `<FINITELATTICE>` と、単位胞上のグラフを記述する `<UNITCELL>` 要素を組み合わせることで、XML で記述できます。この単位胞から全体のグラフが作られます。
 
-    <LATTICEGRAPH>
-        <FINITELATTICE>
-        <LATTICE dimension="1"/>
-            <EXTENT size="6"/>
-            <BOUNDARY type="open"/>
-        </FINITELATTICE>
-        <UNITCELL dimension="1" vertices="1">
-        <VERTEX/>
-        <EDGE>
-            <SOURCE vertex="1"/>
-            <TARGET vertex="1" offset="1"/>
-        </EDGE>
-        </UNITCELL>
-    </LATTICEGRAPH>
+```xml
+<LATTICEGRAPH>
+    <FINITELATTICE>
+    <LATTICE dimension="1"/>
+        <EXTENT size="6"/>
+        <BOUNDARY type="open"/>
+    </FINITELATTICE>
+    <UNITCELL dimension="1" vertices="1">
+    <VERTEX/>
+    <EDGE>
+        <SOURCE vertex="1"/>
+        <TARGET vertex="1" offset="1"/>
+    </EDGE>
+    </UNITCELL>
+</LATTICEGRAPH>
+```
   
 単位胞内の辺は、セル内の頂点1から、右隣のセルの頂点1へと（オフセット +1 で）向かっています。これは `<EDGE>` 要素で記述されています。`<SOURCE>` 要素のオフセット 0 は省略されていますが、これはそれが既定値だからです。
 
@@ -54,56 +56,60 @@ weight: 4
 
 XML による記述は次の通りです。
 
-    <LATTICE name="square" dimension="2">
+```xml
+<LATTICE name="square" dimension="2">
+    <BASIS>
+    <VECTOR> 1 0 </VECTOR>
+    <VECTOR> 0 1 </VECTOR>
+    </BASIS>
+</LATTICE>
+<FINITELATTICE name="rectangular periodic" dimension="2">
+    <LATTICE ref="square"/>
+    <PARAMETER name="L"/>
+    <PARAMETER name="W" default="L"/>
+    <EXTENT dimension="1" size="L"/>
+    <EXTENT dimension="2" size="W"/>
+    <BOUNDARY type="periodic"/>
+</FINITELATTICE>
+<UNITCELL name="complex example" dimension="2" vertices="2">
+    <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
+    <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
+</UNITCELL>
+<LATTICEGRAPH>
+    <FINITELATTICE ref="rectangular periodic"/>
+    <UNITCELL ref="complex example"/>
+</LATTICEGRAPH>
+```
+    
+ここでは、（例えばライブラリの中で）以前に定義しておいた名前付きの格子と単位胞を利用し、それらを `<LATTICEGRAPH>` 要素の中で参照して組み合わせています。あるいは、すべてを `<LATTICEGRAPH>` 要素の中で定義することもできます。
+
+```xml
+<LATTICEGRAPH>
+    <FINITELATTICE dimension="2">
+    <LATTICE dimension="2">
         <BASIS>
         <VECTOR> 1 0 </VECTOR>
         <VECTOR> 0 1 </VECTOR>
         </BASIS>
     </LATTICE>
-    <FINITELATTICE name="rectangular periodic" dimension="2">
-        <LATTICE ref="square"/>
-        <PARAMETER name="L"/>
-        <PARAMETER name="W" default="L"/>
-        <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W"/>
-        <BOUNDARY type="periodic"/>
+    <PARAMETER name="L"/>
+    <PARAMETER name="W" default="L"/>
+    <EXTENT dimension="1" size="L"/>
+    <EXTENT dimension="2" size="W"/>
+    <BOUNDARY type="periodic"/>
     </FINITELATTICE>
-    <UNITCELL name="complex example" dimension="2" vertices="2">
-        <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
-        <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
+    <UNITCELL dimension="2" vertices="2">
+    <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
+    <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
     </UNITCELL>
-    <LATTICEGRAPH>
-        <FINITELATTICE ref="rectangular periodic"/>
-        <UNITCELL ref="complex example"/>
-    </LATTICEGRAPH>
-    
-ここでは、（例えばライブラリの中で）以前に定義しておいた名前付きの格子と単位胞を利用し、それらを `<LATTICEGRAPH>` 要素の中で参照して組み合わせています。あるいは、すべてを `<LATTICEGRAPH>` 要素の中で定義することもできます。
-
-    <LATTICEGRAPH>
-        <FINITELATTICE dimension="2">
-        <LATTICE dimension="2">
-            <BASIS>
-            <VECTOR> 1 0 </VECTOR>
-            <VECTOR> 0 1 </VECTOR>
-            </BASIS>
-        </LATTICE>
-        <PARAMETER name="L"/>
-        <PARAMETER name="W" default="L"/>
-        <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W"/>
-        <BOUNDARY type="periodic"/>
-        </FINITELATTICE>
-        <UNITCELL dimension="2" vertices="2">
-        <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
-        <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
-        </UNITCELL>
-    </LATTICEGRAPH>
+</LATTICEGRAPH>
+```
   
 単位胞内の頂点の座標と、格子の基底ベクトルの両方が与えられているため、すべての頂点の座標を計算することができます。
 

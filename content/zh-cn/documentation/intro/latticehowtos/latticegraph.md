@@ -23,20 +23,22 @@ weight: 4
 
 这里的晶胞图由一个顶点构成，它与相邻晶胞中的同一个顶点之间有一条边。这样一个定义在晶格上的图，可以通过把 `<LATTICE>` 或 `<FINITELATTICE>` 与描述晶胞上图形的 `<UNITCELL>` 元素结合起来，用 XML 表示，整个图就是由这个晶胞构建出来的：
 
-    <LATTICEGRAPH>
-        <FINITELATTICE>
-        <LATTICE dimension="1"/>
-            <EXTENT size="6"/>
-            <BOUNDARY type="open"/>
-        </FINITELATTICE>
-        <UNITCELL dimension="1" vertices="1">
-        <VERTEX/>
-        <EDGE>
-            <SOURCE vertex="1"/>
-            <TARGET vertex="1" offset="1"/>
-        </EDGE>
-        </UNITCELL>
-    </LATTICEGRAPH>
+```xml
+<LATTICEGRAPH>
+    <FINITELATTICE>
+    <LATTICE dimension="1"/>
+        <EXTENT size="6"/>
+        <BOUNDARY type="open"/>
+    </FINITELATTICE>
+    <UNITCELL dimension="1" vertices="1">
+    <VERTEX/>
+    <EDGE>
+        <SOURCE vertex="1"/>
+        <TARGET vertex="1" offset="1"/>
+    </EDGE>
+    </UNITCELL>
+</LATTICEGRAPH>
+```
   
 晶胞中的这条边从本晶胞中的顶点 1，连接到右侧相邻晶胞中的顶点 1（偏移量为 +1），如 `<EDGE>` 元素所描述的那样。`<SOURCE>` 元素中省略了偏移量 0，因为 0 是它的默认值。
 
@@ -54,56 +56,60 @@ weight: 4
 
 对应的 XML 描述如下：
 
-    <LATTICE name="square" dimension="2">
+```xml
+<LATTICE name="square" dimension="2">
+    <BASIS>
+    <VECTOR> 1 0 </VECTOR>
+    <VECTOR> 0 1 </VECTOR>
+    </BASIS>
+</LATTICE>
+<FINITELATTICE name="rectangular periodic" dimension="2">
+    <LATTICE ref="square"/>
+    <PARAMETER name="L"/>
+    <PARAMETER name="W" default="L"/>
+    <EXTENT dimension="1" size="L"/>
+    <EXTENT dimension="2" size="W"/>
+    <BOUNDARY type="periodic"/>
+</FINITELATTICE>
+<UNITCELL name="complex example" dimension="2" vertices="2">
+    <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
+    <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
+</UNITCELL>
+<LATTICEGRAPH>
+    <FINITELATTICE ref="rectangular periodic"/>
+    <UNITCELL ref="complex example"/>
+</LATTICEGRAPH>
+```
+    
+这里我们利用了之前定义好的、带名字的晶格和晶胞（例如来自某个库），然后通过在 `<LATTICEGRAPH>` 元素中引用它们，把它们组合起来。另一种做法是把所有内容都直接定义在 `<LATTICEGRAPH>` 元素中：
+
+```xml
+<LATTICEGRAPH>
+    <FINITELATTICE dimension="2">
+    <LATTICE dimension="2">
         <BASIS>
         <VECTOR> 1 0 </VECTOR>
         <VECTOR> 0 1 </VECTOR>
         </BASIS>
     </LATTICE>
-    <FINITELATTICE name="rectangular periodic" dimension="2">
-        <LATTICE ref="square"/>
-        <PARAMETER name="L"/>
-        <PARAMETER name="W" default="L"/>
-        <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W"/>
-        <BOUNDARY type="periodic"/>
+    <PARAMETER name="L"/>
+    <PARAMETER name="W" default="L"/>
+    <EXTENT dimension="1" size="L"/>
+    <EXTENT dimension="2" size="W"/>
+    <BOUNDARY type="periodic"/>
     </FINITELATTICE>
-    <UNITCELL name="complex example" dimension="2" vertices="2">
-        <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
-        <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
+    <UNITCELL dimension="2" vertices="2">
+    <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
+    <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
+    <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
     </UNITCELL>
-    <LATTICEGRAPH>
-        <FINITELATTICE ref="rectangular periodic"/>
-        <UNITCELL ref="complex example"/>
-    </LATTICEGRAPH>
-    
-这里我们利用了之前定义好的、带名字的晶格和晶胞（例如来自某个库），然后通过在 `<LATTICEGRAPH>` 元素中引用它们，把它们组合起来。另一种做法是把所有内容都直接定义在 `<LATTICEGRAPH>` 元素中：
-
-    <LATTICEGRAPH>
-        <FINITELATTICE dimension="2">
-        <LATTICE dimension="2">
-            <BASIS>
-            <VECTOR> 1 0 </VECTOR>
-            <VECTOR> 0 1 </VECTOR>
-            </BASIS>
-        </LATTICE>
-        <PARAMETER name="L"/>
-        <PARAMETER name="W" default="L"/>
-        <EXTENT dimension="1" size="L"/>
-        <EXTENT dimension="2" size="W"/>
-        <BOUNDARY type="periodic"/>
-        </FINITELATTICE>
-        <UNITCELL dimension="2" vertices="2">
-        <VERTEX id="1" type="0"><COORDINATE> 0.3 0.7 </COORDINATE></VERTEX>
-        <VERTEX id="2" type="1"><COORDINATE> 0.6 0.3 </COORDINATE></VERTEX>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="1 0"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="1" offset="0 1"/></EDGE>
-        <EDGE><SOURCE vertex="1"/><TARGET vertex="2"/></EDGE>
-        </UNITCELL>
-    </LATTICEGRAPH>
+</LATTICEGRAPH>
+```
   
 由于晶胞中顶点的坐标和晶格的基矢量都已经给出，所以可以计算出所有顶点的坐标。
 

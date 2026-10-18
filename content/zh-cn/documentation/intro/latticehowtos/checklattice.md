@@ -9,31 +9,37 @@ weight: 6
 
 要运行它，请输入：
 
-    printgraph parameter_file
+```bash
+printgraph parameter_file
+```
 
 `parameter_file` 是一个普通的 ALPS 参数文件——与 `parameter2xml` 的输入格式相同，因此不需要事先做任何转换。如果不指定文件名，`printgraph` 会改为从标准输入读取参数文件；如果文件名以 `.xml` 结尾，则会作为 XML 参数文件读取。
 
 例如，下面这个参数文件
 
-    LATTICE = "square lattice"
-    L = 2
+```
+LATTICE = "square lattice"
+L = 2
+```
 
 选择了内置的 `square lattice`（参见[晶格与图的库](../library)），延伸范围为 2 x 2，边界条件为周期性。对它运行 `printgraph` 会得到：
 
-    <GRAPH dimension="2" vertices="4" edges="8">
-      <VERTEX id="1" type="0"><COORDINATE>0 0</COORDINATE></VERTEX>
-      <VERTEX id="2" type="0"><COORDINATE>0 1</COORDINATE></VERTEX>
-      <VERTEX id="3" type="0"><COORDINATE>1 0</COORDINATE></VERTEX>
-      <VERTEX id="4" type="0"><COORDINATE>1 1</COORDINATE></VERTEX>
-      <EDGE source="1" target="2" id="1" type="0" vector="0 1"/>
-      <EDGE source="1" target="3" id="2" type="0" vector="1 0"/>
-      <EDGE source="2" target="1" id="3" type="0" vector="0 1"/>
-      <EDGE source="2" target="4" id="4" type="0" vector="1 0"/>
-      <EDGE source="3" target="4" id="5" type="0" vector="0 1"/>
-      <EDGE source="3" target="1" id="6" type="0" vector="1 0"/>
-      <EDGE source="4" target="3" id="7" type="0" vector="0 1"/>
-      <EDGE source="4" target="2" id="8" type="0" vector="1 0"/>
-    </GRAPH>
+```xml
+<GRAPH dimension="2" vertices="4" edges="8">
+  <VERTEX id="1" type="0"><COORDINATE>0 0</COORDINATE></VERTEX>
+  <VERTEX id="2" type="0"><COORDINATE>0 1</COORDINATE></VERTEX>
+  <VERTEX id="3" type="0"><COORDINATE>1 0</COORDINATE></VERTEX>
+  <VERTEX id="4" type="0"><COORDINATE>1 1</COORDINATE></VERTEX>
+  <EDGE source="1" target="2" id="1" type="0" vector="0 1"/>
+  <EDGE source="1" target="3" id="2" type="0" vector="1 0"/>
+  <EDGE source="2" target="1" id="3" type="0" vector="0 1"/>
+  <EDGE source="2" target="4" id="4" type="0" vector="1 0"/>
+  <EDGE source="3" target="4" id="5" type="0" vector="0 1"/>
+  <EDGE source="3" target="1" id="6" type="0" vector="1 0"/>
+  <EDGE source="4" target="3" id="7" type="0" vector="0 1"/>
+  <EDGE source="4" target="2" id="8" type="0" vector="1 0"/>
+</GRAPH>
+```
 
 4 个格点各自作为一个带坐标的 `<VERTEX>` 出现一次，8 条键各自作为一个 `<EDGE>` 出现一次。由于周期边界条件，除了"直连"的键之外，还生成了环绕的键（例如 `source="2" target="1"`）。对于较大或不熟悉的晶格，可以把输出重定向到文件中（`printgraph parameter_file > graph.xml`），这样更便于查看。
 

@@ -42,15 +42,19 @@ All these parameters can be overwritten by the command line argument with the sa
 
 The `fulldiag_evaluate` program takes an XML output file of `fulldiag`, 
 
-    fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
-        [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
-        [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```bash
+fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
+    [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
+    [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```
 
 or 
 
-    fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
-        [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
-        [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```bash
+fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
+    [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
+    [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```
 
 Two optional ranges for temperature (T_MIN, T_MAX, DELTA_T) and magnetic field (H_MIN, H_MAX, DELTA_H) or chemical potential (MU_MIN, MU_MAX, DELTA_MU) can be specified. `fulldiag_evaluate` produces XML plot files (`outputfileprefix.plot.energy.xml` etc., where outputfileprefix is derived from the name of the inputfile if not specified) for the following quantities versus temperature:
 

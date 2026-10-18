@@ -41,15 +41,19 @@ weight: 3
 
 `fulldiag_evaluate` プログラムは、`fulldiag` の XML 出力ファイルを受け取ります。
 
-    fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
-        [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
-        [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```bash
+fulldiag_evaluate [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
+    [--H_MIN ...] [--H_MAX ... ] [--DELTA_H ... ] [--versus h]
+    [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```
 
 または
 
-    fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
-        [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
-        [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```bash
+fulldiag_evaluate --couple mu [--T_MIN ...] [--T_MAX ...] [--DELTA_T ...]
+    [--MU_MIN ...] [--MU_MAX ... ] [--DELTA_MU ...] [--versus mu]
+    [--DENSITIES ...] inputfile [outputfileprefix]</tt>
+```
 
 温度（T_MIN, T_MAX, DELTA_T）と、磁場（H_MIN, H_MAX, DELTA_H）または化学ポテンシャル（MU_MIN, MU_MAX, DELTA_MU）について、2 つの範囲をオプションで指定できます。`fulldiag_evaluate` は、以下の量の温度依存性について XML プロットファイル（`outputfileprefix.plot.energy.xml` など。outputfileprefix が指定されていない場合は inputfile の名前から決まります）を出力します。
 
