@@ -1,17 +1,15 @@
 
 ---
-title: Which code to choose for your calculation
+title: 計算に適したコードの選び方
 math: true
 toc: true
 weight: 1
 ---
 
-There are currently four QMC representations / algorithms: looper, dirloop_sse, worm, and quantum Wang-Landau.
-All four methods (except sometimes Looper) may be used to study (unfrustrated) spin models. Only worm and sometimes dirloop_sse may be used for boson models.
+現在、QMC の表示／アルゴリズムは looper、dirloop_sse、worm、量子 Wang-Landau の 4 種類があります。
+この 4 つの手法はいずれも（Looper が使えない場合を除き）、（フラストレーションのない）スピン模型の研究に利用できます。ボソン模型に使えるのは worm と、場合によっては dirloop_sse だけです。
 
-- Looper: Only usable for models with inversion symmetry in spin space (for Heisenberg models, no magnetic field). `Looper` has the smaller range of applicability, but if applicable, it shows the best performance (shortest autocorrelation time).
-- dirloop_sse: Stochastic Series Expansion representation, using directed loops (essentially worms). Good for spin models with anisotropy that breaks inversion symmetry in spin space e.g., Heisenberg models in a magnetic field. Also good for hard core bosons, with at most one boson per site. Extremely inefficient for soft core boson models where a few bosons on a site give a very large U term in the Hamiltonian. Can measure the Green function.
-- Worm: Path integral representation, using worms. Good for Bose-Hubbard models and for spin models in very strong fields. Can simulate Bose-Hubbard models also with non-small filling (set the parameter N_max). [If you have an action which is non-local in time, the path integral representation in the worm algorithm is a good starting point to write your own code.]
-- quantum Wang-Landau: Good for calculations of free energy and entropy.
-
-
+- Looper：スピン空間で反転対称性を持つ模型（ハイゼンベルク模型の場合は磁場がないとき）にのみ使用できます。`Looper` は適用範囲が狭いものの、適用できる場合には最も高い性能（最短の自己相関時間）を示します。
+- dirloop_sse：確率級数展開表示で、有向ループ（本質的には worm）を用います。異方性によってスピン空間の反転対称性が破れたスピン模型、たとえば磁場中のハイゼンベルク模型に適しています。1 サイトあたり最大 1 個までのハードコアボソンにも適しています。1 つのサイトに複数のボソンが乗るとハミルトニアンの U 項が非常に大きくなるため、ソフトコアボソン模型に対しては極めて非効率です。グリーン関数を測定できます。
+- Worm：経路積分表示で、worm を用います。ボース・ハバード模型や、非常に強い磁場中のスピン模型に適しています。充填率が小さくない場合のボース・ハバード模型もシミュレートできます（パラメータ N_max を設定してください）。[時間について非局所な作用を扱う場合、worm アルゴリズムの経路積分表示は独自のコードを書く際の良い出発点になります。]
+- 量子 Wang-Landau：自由エネルギーとエントロピーの計算に適しています。

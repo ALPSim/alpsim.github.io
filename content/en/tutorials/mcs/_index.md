@@ -8,7 +8,7 @@ weight: 1
 
 The ALPS Monte Carlo tutorials cover both classical and quantum simulations of spin models and bosonic lattice systems.
 Classical Monte Carlo uses local Metropolis or cluster (Wolff) updates for systems described by a classical Boltzmann weight.
-Quantum Monte Carlo (QMC) algorithms — loop, directed-loop SSE, worm, and directed worm — work on path-integral or operator-series representations and give access to thermodynamic properties of quantum lattice models at finite temperature.
+Quantum Monte Carlo (QMC) algorithms — loop, directed-loop SSE, and worm — work on path-integral or operator-series representations and give access to thermodynamic properties of quantum lattice models at finite temperature.
 An extended-ensemble quantum Wang-Landau method computes the full density of states and thermodynamic quantities across all temperatures in a single run.
 The tutorials progress from fundamental diagnostics such as autocorrelation times and equilibration, through specific observables such as susceptibilities and magnetization curves, to the detection of classical and quantum phase transitions.
 
@@ -54,10 +54,3 @@ The quantum Wang-Landau code stochastically constructs the density of states of 
 This tutorial applies the method to ferromagnetic and antiferromagnetic Heisenberg spin chains and ladders.
 
 - [MC-06 Extended ensemble simulations (Quantum Wang-Landau)](mc06)
-
-## Directed Worm Algorithm (`dwa`)
-
-The directed worm algorithm is a highly efficient path-integral QMC method for lattice bosons that combines worm updates with improved estimators.
-The tutorials revisit the Bose-Hubbard physics of MC-05 with the `dwa` code and then study the density profile of a three-dimensional optical lattice in a harmonic trap — a system directly relevant to ultracold-atom experiments.
-
-- [MC-10 Monte Carlo Simulations with Directed Worm](dwa)

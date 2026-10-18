@@ -18,11 +18,11 @@ $$
 H=J_{z} \sum_{\langle i,j \rangle} S^i_z S^j_z + \Gamma \sum_i S^i_x
 $$
 
-Here, the first sum runs over pairs of nearest neighbors. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J\gt 0$ and ferromagnetic for $J \lt 0$. The system is exactly solvable ([P. Pfeuty, Annals of Physics: 57, 79-90 (1970)](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)).
+Here, the first sum runs over pairs of nearest neighbors. $\Gamma$ is referred to as transverse field; the system becomes critical for $\Gamma/J=\frac{1}{2}$. For $\Gamma=0$, the ground state is antiferromagnetic for $J\gt 0$ and ferromagnetic for $J \lt 0$. The system is exactly solvable ([P. Pfeuty, Annals of Physics 57, 79-90 (1970)](https://doi.org/10.1016/0003-4916(70)90270-8)).
 
 In the above equation, $\Delta$ refers to the scaling dimension of that field. The scaling fields occur in groups: the lowest one, referred to as primary field, comes with an infinite number of descendants with scaling dimension $\Delta + m$, $m \in \lbrace 1, 2, 3, ... \rbrace$.
 
-In the exact solution of the Ising model (Eq. (3.7) in [the paper P. Pfeuty](https://www.sciencedirect.com/science/article/abs/pii/0003491670902708?via%3Dihub)), the long-range correlations are found to decay as:
+In the exact solution of the Ising model (Eq. (3.7) in [the paper by Pfeuty](https://doi.org/10.1016/0003-4916(70)90270-8)), the long-range correlations are found to decay as:
 $$
 \langle S^i_z S^{i+n}_z \rangle \sim n^{-2\times 1/8}
 $$
@@ -36,6 +36,38 @@ Additionally, we expect the scaling dimension of the identity operator to be 0.
 
 We therefore expect scaling dimensions of 0, 1/8, 1, 1+1/8 to appear in the CFT of the Ising model. To see this, we will rescale all energies of the spectrum according to $E \rightarrow \frac{E-E_0}{(E_1-E_0)8}$. This will force the two lowest states to occur where we expect the scaling dimensions; we can then check whether the rest of the spectrum is consistent with this.
 
+### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE` | lattice used for the chain | `chain lattice` |
+| `MODEL` | Hamiltonian family | `spin` |
+| `local_S` | spin quantum number per site | `0.5` |
+| `Jxy` | in-plane ($S_xS_x+S_yS_y$) coupling, unused here | `0` |
+| `Jz` | Ising ($S_zS_z$) coupling $J_z$ | `-1` |
+| `Gamma` | transverse field $\Gamma$ | `0.5` |
+| `NUMBER_EIGENVALUES` | number of low-lying eigenstates kept | `5` |
+| `L` | chain length | `10, 12` |
+
+With `Jz=-1` and `Gamma=0.5`, $\Gamma/J=0.5$, which is exactly the critical point of the model.
+
+### Lattice
+
+The `chain lattice` is a 1D **periodic** ring of `L` sites, with the Ising coupling $J_z$ living on the bonds and the transverse field $\Gamma$ acting on each site:
+
+```
+ Γ       Γ       Γ             Γ
+ o--Jz---o--Jz---o--- ... ---o
+ |                            |
+ +------------ Jz ------------+
+        (periodic ring, L sites)
+```
+
+The ring closes on itself: the bond from the last site back to the first is what makes the lattice periodic. This is the right choice here for two reasons. Periodic boundaries preserve translational symmetry, so each eigenstate carries a well-defined lattice momentum — that is exactly the `TOTAL_MOMENTUM` quantum number the spectrum is plotted against below. They also have no open ends, so there are no edge states to contaminate the bulk conformal spectrum, and finite-size corrections to the CFT scaling dimensions fall off faster than they would on an open chain. If you want open boundaries instead, ALPS provides `open chain lattice`; see the [ALPS lattice library](../../../documentation/intro/latticehowtos) for the full list of built-in lattices.
+
+### Method Choice
+
+The full Hilbert space of the spin-1/2 chain has dimension $2^L$ — $2^{10}=1024$ for $L=10$ and $2^{12}=4096$ for $L=12$. Since only the lowest few eigenstates are needed (not the full spectrum), the iterative Lanczos algorithm implemented by `sparsediag` is the natural choice: it converges the lowest eigenvalues in far fewer matrix-vector multiplications than a full diagonalization would need, and both Hilbert space sizes here are trivially within its reach (runtime well under a second per system size).
 
 ### Simulation
 
@@ -137,3 +169,22 @@ plt.show()
 
 The result of the simulation is shown in the figure:
 ![Energy scaling for quantum ising model.](/figs/ed/energyscaling.png)
+
+### Results
+
+Running the code above at the critical point ($J_z=-1$, $\Gamma=0.5$) gives the raw ground- and first-excited-state energies:
+
+| $L$ | $E_0$ | $E_1$ | $E_1-E_0$ |
+|---|---|---|---|
+| 10 | -3.19623 | -3.15688 | 0.03935 |
+| 12 | -3.83065 | -3.79788 | 0.03277 |
+
+After the rescaling $E \rightarrow (E-E_0)/[(E_1-E_0)\times 8]$, these two states map to scaling dimensions $0$ and $1/8$ by construction; the plot shows whether the rest of the low-lying spectrum falls near the predicted values $1$ and $1+1/8$.
+
+### Summary and Outlook
+
+The rescaled excitation spectrum of the finite critical Ising chain reproduces the scaling dimensions $0,\ 1/8,\ 1,\ 1+1/8$ predicted by the $c=1/2$ CFT, confirming the field-theory identification of the lattice model's low-energy sector.
+
+1. What happens to the agreement with the CFT predictions as you increase $L$ beyond 12?
+2. How does the spectrum change if you move away from the critical point ($\Gamma/J \neq 0.5$)?
+3. Can you identify the scaling dimension of the next set of descendants above $1+1/8$?

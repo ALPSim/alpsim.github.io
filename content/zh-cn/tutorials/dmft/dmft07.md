@@ -1,13 +1,13 @@
 
 ---
-title: DMFT-07 Hirsch-Fye
+title: DMFT-07 Hirsch-Fye 算法
 math: true
 toc: true
 ---
 
 ## Hirsch Fye Code
 
-我们首先运行一个离散时间蒙特卡罗代码：[Hirsch-Fye 代码](https://doi.org/10.1103/PhysRevLett.56.2521)。与教程 02、03 一样，我们重现 [Georges 等人的 DMFT 综述文章](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。
+我们首先运行一个离散时间蒙特卡洛代码：[Hirsch-Fye 代码](https://doi.org/10.1103/PhysRevLett.56.2521)。与教程 02、03 一样，我们重现 [Georges 等人的 DMFT 综述文章](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。
 
 Hirsch-Fye 算法及其开源实现见于 [Georges 等人的 DMFT 综述文章 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13)。此后虽然出现了许多改进（例如可参见 Alvarez (2008) 或 [Nukala et al. (2009)](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.80.195111)），但该算法在很多场合已被能够消除下文所述系统性离散化误差的[连续时间算法](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.235123)（CT-HYB、CT-INT，教程 02、03）所取代。
 
@@ -39,11 +39,11 @@ $$
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $10$、$0.005$（简短版）；$18$、$0.003$（完整版） |
 | `SOLVER` | 杂质求解器 | `"hirschfye"` |
 | `TOLERANCE` | Hirsch-Fye 求解器内部使用的收敛容差 | $0.001$ |
-| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡罗扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10^6$、$10^4$、$20$ |
+| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10^6$、$10^4$、$20$ |
 
 ### 运行模拟
 
-Hirsch-Fye 模拟每次迭代大约需要 20 秒。本教程所需的文件可以在目录 `tutorials/dmft-07-hirschfye` 中找到。与教程 02、03 一样，你可以运行简短版脚本 [`tutorial7.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7.py)，它只重现 6 条曲线中的 2 条（运行时间：约 5 分钟）；也可以运行完整版脚本 [`tutorial7_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7_long.py)，它会重现全部 6 条曲线。
+Hirsch-Fye 模拟每次迭代大约需要 20 秒。本教程所需的文件可以在目录 `tutorials/dmft-07-hirschfye` 中找到。与教程 02、03 一样，你可以运行简短版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7.py" data-filename="tutorial7.py" target="_blank" rel="noopener">`tutorial7.py`</a>，它只重现 6 条曲线中的 2 条（运行时间：约 5 分钟）；也可以运行完整版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7_long.py" data-filename="tutorial7_long.py" target="_blank" rel="noopener">`tutorial7_long.py`</a>，它会重现全部 6 条曲线。
 
 ```
 import pyalps
@@ -161,11 +161,11 @@ BETA = 6.0                            // inverse temperature
 
 ### 方法选择
 
-Hirsch-Fye 的工作方式与 CT-HYB、CT-INT 截然不同：它将 $e^{-\beta \hat H}$ 特罗特分解为 $N$ 个宽度为 $\Delta\tau=\beta/N$ 的虚时间片，通过 Hubbard-Stratonovich 变换在每个时间片上引入一个辅助伊辛场，并用 Sherman-Morrison 型快速更新来更新一个 $N\times N$ 的格林函数矩阵。由于每次蒙特卡罗更新的代价为 $O(N^2)$，一次完整扫描的代价为 $O(N^3)$，因此 $N$ 必须保持较小——这里取 $N=16$。这与教程 02、03 中的连续时间求解器形成对比：那里的 `N` 只是一个存储／插值用的分箱数（通常为 $500$–$1000$），与计算代价无关。$N$ 较小的代价是可观测量中出现阶为 $(\Delta\tau)^2$ 的系统性偏差：这正是 [DMFT-06](../dmft06) 中与无偏差的连续时间求解器相对比的离散化误差，也是为什么在将 Hirsch-Fye 的结果与 CT-HYB、CT-INT 或精确对角化做定量比较之前，必须将其外推到 $\Delta\tau\to0$（$N\to\infty$）的原因。
+Hirsch-Fye 的工作方式与 CT-HYB、CT-INT 截然不同：它将 $e^{-\beta \hat H}$ 特罗特分解为 $N$ 个宽度为 $\Delta\tau=\beta/N$ 的虚时间片，通过 Hubbard-Stratonovich 变换在每个时间片上引入一个辅助伊辛场，并用 Sherman-Morrison 型快速更新来更新一个 $N\times N$ 的格林函数矩阵。由于每次蒙特卡洛更新的代价为 $O(N^2)$，一次完整扫描的代价为 $O(N^3)$，因此 $N$ 必须保持较小——这里取 $N=16$。这与教程 02、03 中的连续时间求解器形成对比：那里的 `N` 只是一个存储／插值用的分箱数（通常为 $500$–$1000$），与计算代价无关。$N$ 较小的代价是可观测量中出现阶为 $(\Delta\tau)^2$ 的系统性偏差：这正是 [DMFT-06](../dmft06) 中与无偏差的连续时间求解器相对比的离散化误差，也是为什么在将 Hirsch-Fye 的结果与 CT-HYB、CT-INT 或精确对角化做定量比较之前，必须将其外推到 $\Delta\tau\to0$（$N\to\infty$）的原因。
 
 ### 输出数据与绘图
 
-用于结果分析，你可以借助 [DMFT-02 Hybridization](../dmft02) 中说明的 `tutorial2eval.py`，也可以使用与之结构相同的 [`tutorial7eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-07-hirschfye/tutorial7eval.py)：它会绘制按迭代分辨的 $G(\tau)$、占据数 $n_0=-G_0(\tau=\beta^-)$ 随 $\beta$ 的变化，以及（通过 Dyson 方程得到的）松原频率下的格林函数与自能，针对两个味都会绘制。
+用于结果分析，你可以借助 [DMFT-02 Hybridization](../dmft02) 中说明的 `tutorial2eval.py`，也可以使用与之结构相同的 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-07-hirschfye/tutorial7eval.py" data-filename="tutorial7eval.py" target="_blank" rel="noopener">`tutorial7eval.py`</a>：它会绘制按迭代分辨的 $G(\tau)$、占据数 $n_0=-G_0(\tau=\beta^-)$ 随 $\beta$ 的变化，以及（通过 Dyson 方程得到的）松原频率下的格林函数与自能，针对两个味都会绘制。
 
 ```
 import pyalps
@@ -282,7 +282,7 @@ for sim in grouped_G:
 plt.show()
 ```
 
-由于这是随机性的蒙特卡罗模拟，实际得到的数值取决于 `SEED`、`MAX_TIME` 和计算机速度，但与教程 02、03 一样，运行简短版脚本应能重现图 11 的定性特征：在 $\beta=6$ 时两个味的 $G(\tau)$ 几乎重合（顺磁、金属态），而在 $\beta=12$ 时两者出现分裂（反铁磁序）。由于 $N=16$ 较小，与教程 02、03 中相同 $\beta$ 下的连续时间结果相比，预计会出现可观察到的偏差——这一偏差正是上文所述的 $\Delta\tau$ 离散化误差。
+由于这是随机性的蒙特卡洛模拟，实际得到的数值取决于 `SEED`、`MAX_TIME` 和计算机速度，但与教程 02、03 一样，运行简短版脚本应能重现图 11 的定性特征：在 $\beta=6$ 时两个味的 $G(\tau)$ 几乎重合（顺磁、金属态），而在 $\beta=12$ 时两者出现分裂（反铁磁序）。由于 $N=16$ 较小，与教程 02、03 中相同 $\beta$ 下的连续时间结果相比，预计会出现可观察到的偏差——这一偏差正是上文所述的 $\Delta\tau$ 离散化误差。
 
 ### 小结与展望
 

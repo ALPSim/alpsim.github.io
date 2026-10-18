@@ -1,12 +1,12 @@
 
 ---
-title: Sparse Diagonalization
+title: 稀疏对角化
 math: true
 weight: 3
 ---
 
-The Hamiltonian matrix in quantum mechanics for systems with local interactions are sparse, meaning most of their entries are zero. Storing and manipulating dense matrices of size $N \times N$ requires $O(N^2)$ memory and $O(N^3)$ computational time for diagonalization. For large $N$, this becomes infeasible. The Lanczos method is designed to take advantage of this sparsity, requiring only matrix-vector products rather than explicit matrix storage or manipulation.
+对于具有局域相互作用的体系，量子力学中的哈密顿量矩阵是稀疏的，即其绝大多数矩阵元为零。存储和操作 $N \times N$ 的稠密矩阵需要 $O(N^2)$ 的内存，对角化则需要 $O(N^3)$ 的计算时间。当 $N$ 很大时，这就变得不可行。Lanczos 方法正是为利用这种稀疏性而设计的，它只需要矩阵与矢量的乘积，而不需要显式地存储或操作矩阵。
 
-The [Lanczos method](lanczos) is a powerful algorithm for finding a few extremal eigenvalues and their corresponding eigenvectors of large, sparse matrices. It is particularly useful for quantum lattices, where systems are often described by high-dimensional matrices that are too large to handle with dense matrix techniques. The Lanczos method exploits the sparsity of these matrices to efficiently compute the desired eigenvalues and eigenvectors.
+[Lanczos 方法](lanczos)是一种强大的算法，用于求大型稀疏矩阵的少数几个极端本征值及相应的本征矢。它对量子晶格问题尤其有用，因为这类体系通常由高维矩阵描述，其规模大到无法用稠密矩阵技术处理。Lanczos 方法利用这些矩阵的稀疏性，高效地计算所需的本征值和本征矢。
 
-The [implementation of the sparse diagonalization in ALPS](implem) is also discussed. 
+我们还将讨论 [ALPS 中稀疏对角化的实现](implem)。

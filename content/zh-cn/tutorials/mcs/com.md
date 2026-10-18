@@ -1,17 +1,15 @@
 
 ---
-title: Which code to choose for your calculation
+title: 如何为你的计算选择合适的程序
 math: true
 toc: true
 weight: 1
 ---
 
-There are currently four QMC representations / algorithms: looper, dirloop_sse, worm, and quantum Wang-Landau.
-All four methods (except sometimes Looper) may be used to study (unfrustrated) spin models. Only worm and sometimes dirloop_sse may be used for boson models.
+目前共有四种量子蒙特卡洛表示／算法：looper、dirloop_sse、worm 和量子王-朗道。
+这四种方法（有时 Looper 除外）都可以用来研究（无阻挫的）自旋模型。只有 worm，以及有时 dirloop_sse，可以用于玻色子模型。
 
-- Looper: Only usable for models with inversion symmetry in spin space (for Heisenberg models, no magnetic field). `Looper` has the smaller range of applicability, but if applicable, it shows the best performance (shortest autocorrelation time).
-- dirloop_sse: Stochastic Series Expansion representation, using directed loops (essentially worms). Good for spin models with anisotropy that breaks inversion symmetry in spin space e.g., Heisenberg models in a magnetic field. Also good for hard core bosons, with at most one boson per site. Extremely inefficient for soft core boson models where a few bosons on a site give a very large U term in the Hamiltonian. Can measure the Green function.
-- Worm: Path integral representation, using worms. Good for Bose-Hubbard models and for spin models in very strong fields. Can simulate Bose-Hubbard models also with non-small filling (set the parameter N_max). [If you have an action which is non-local in time, the path integral representation in the worm algorithm is a good starting point to write your own code.]
-- quantum Wang-Landau: Good for calculations of free energy and entropy.
-
-
+- Looper：仅适用于在自旋空间中具有反演对称性的模型（对于海森堡模型，即无磁场的情形）。`Looper` 的适用范围较窄，但只要适用，它的性能最好（自关联时间最短）。
+- dirloop_sse：随机级数展开表示，使用有向圈（本质上就是蠕虫）。适用于具有各向异性、从而破坏自旋空间反演对称性的自旋模型，例如磁场中的海森堡模型。也适用于硬核玻色子，即每个格点上最多只有一个玻色子的情形。对于软核玻色子模型则效率极低，因为同一格点上有若干个玻色子会在哈密顿量中产生非常大的 U 项。可以测量格林函数。
+- Worm：路径积分表示，使用蠕虫。适用于玻色-哈伯德模型以及处于很强磁场中的自旋模型。也可以在填充数不小的情况下模拟玻色-哈伯德模型（需设置参数 N_max）。[如果你的作用量在时间上是非局域的，那么蠕虫算法中的路径积分表示是编写自己程序的一个良好起点。]
+- 量子王-朗道：适用于自由能和熵的计算。

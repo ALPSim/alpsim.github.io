@@ -1,15 +1,15 @@
 
 ---
-title: Papers
-description: "ALPS Papers"
+title: 論文
+description: "ALPS の論文"
 weight: 1
 ---
 
-The following papers describe the ALPS library and its releases. When using ALPS in your research, please cite the 2011 paper (Bauer et al.) as the primary reference, and an updated paper is currently (2026) in the works.
+以下の論文は、ALPS ライブラリとそのリリースについて記述したものです。研究で ALPS を使用する際には、主要な文献として 2011 年の論文（Bauer et al.）を引用してください。なお、現在（2026 年）、更新版の論文を準備中です。
 
 ---
 
-### The ALPS project release 2.0 (2011)
+### ALPS プロジェクト リリース 2.0（2011 年）
 
 **The ALPS project release 2.0: Open source software for strongly correlated systems**
 
@@ -26,7 +26,7 @@ B. Bauer, L. D. Carr, H. G. Evertz, A. Feiguin, J. Freire, S. Fuchs, L. Gamper, 
 
 ---
 
-### The ALPS project release 1.3 (2007)
+### ALPS プロジェクト リリース 1.3（2007 年）
 
 **The ALPS project release 1.3: Open source software for strongly correlated systems**
 
@@ -43,7 +43,7 @@ A. F. Albuquerque, F. Alet, P. Corboz, P. Dayal, A. Feiguin, S. Fuchs, L. Gamper
 
 ---
 
-### The ALPS project release 1.0 (2005)
+### ALPS プロジェクト リリース 1.0（2005 年）
 
 **The ALPS project: Open source software for strongly correlated systems**
 

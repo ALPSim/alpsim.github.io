@@ -1,77 +1,75 @@
-
 ---
-title: Implementation
+title: 实现
 math: true
 weight: 5
 ---
 
-The `spinmc` package is one of the applications of the ALPS project. It provides a a generic implementation of local and cluster updates for classical spin systems.
-The applications supports the following models on arbitrary lattices:
+`spinmc` 程序包是 ALPS 项目的应用程序之一。它为经典自旋系统提供了局域更新和团簇更新的通用实现。
+该应用程序支持在任意晶格上模拟以下模型：
 
-- [Ising models](../../../models/ising)
-- XY models
-- Heisenberg models
-- 3-, 4- and 10-state Potts models
+- [伊辛模型](../../../models/ising)
+- XY 模型
+- 海森堡模型
+- 3、4 和 10 态 Potts 模型
 
-The application can easily be extended to additional q states Potts models and $O(N)$ models by editing the file mc/spins/spinmc_factory.C in a straightforward manner.
+通过以直接的方式编辑文件 mc/spins/spinmc_factory.C，可以很容易地将该应用程序扩展到其他 q 态 Potts 模型和 $O(N)$ 模型。
 
-## Running a simulation
+## 运行模拟
 
-is discussed in the tutorial.
+详见教程。
 
-## Input parameters
+## 输入参数
 
-In addition to the general input parameters of the ALPS scheduler library the spinmc application takes the following input parameters:
+除了 ALPS 调度器库的通用输入参数之外，spinmc 应用程序还接受以下输入参数：
 
-| **Name**  | **Default** | **Description** |
+| **名称**  | **默认值** | **描述** |
 | :---- | :----   | :----       |
-| LATTICE_LIBRARY | lattices.xml | path to a file containing lattice descriptions |
-| LATTICE | | name of the lattice |
-| MODEL | | either Ising, XY, Heisenberg or Potts |
-| q | | the number of different states in a Potts model |
-| UPDATE | | the update type, either local or cluster |
-| ERROR_VARIABLE | | the name of an observable whose error you would like ALPS to monitor (must be used with ERROR_LIMIT) |
-| ERROR_LIMIT | | once ERROR_VARIABLE's absolute error is less than this amount, ALPS will stop the task (must be used with ERROR_VARIABLE) |
-| T | | the temperature |
-| J | | the default coupling constant |
-| J# | J | the coupling constant on a bond with type # (#=0,1,...). |
-| D | | onsite single-ion anisotropy coupling constants (one for each spin component in a list, e.g. D="0.0 0.0 10.0") |
-| CONVENTION | classical | specifies whether the classical or quantum conventions are used (see below) |
-| S |  1 if CONVENTION=classical  1/2 if CONVENTION=quantum | the default spin size |
-| S# | S | the spin size on a site with type # (#=0,1,...). |
-| $g$ | 1 | the Landee $g$-factor, used for suscpetibility measurements |
-| h | 0 | external magnetic field (only with local update) |
+| LATTICE_LIBRARY | lattices.xml | 包含晶格描述的文件路径 |
+| LATTICE | | 晶格的名称 |
+| MODEL | | Ising、XY、Heisenberg 或 Potts 之一 |
+| q | | Potts 模型中不同状态的数目 |
+| UPDATE | | 更新类型，local 或 cluster 之一 |
+| ERROR_VARIABLE | | 希望 ALPS 监控其误差的观测量的名称（必须与 ERROR_LIMIT 一起使用） |
+| ERROR_LIMIT | | 一旦 ERROR_VARIABLE 的绝对误差小于此值，ALPS 将停止该任务（必须与 ERROR_VARIABLE 一起使用） |
+| T | | 温度 |
+| J | | 默认耦合常数 |
+| J# | J | 类型为 #（#=0,1,...）的键上的耦合常数。 |
+| D | | 在位单离子各向异性耦合常数（以列表形式为每个自旋分量各给出一个，例如 D="0.0 0.0 10.0"） |
+| CONVENTION | classical | 指定使用经典约定还是量子约定（见下文） |
+| S |  若 CONVENTION=classical 则为 1；若 CONVENTION=quantum 则为 1/2 | 默认自旋大小 |
+| S# | S | 类型为 #（#=0,1,...）的格点上的自旋大小。 |
+| $g$ | 1 | Landee $g$ 因子，用于磁化率测量 |
+| h | 0 | 外磁场（仅适用于局域更新） |
 
-In addition, the lattice description can require further parameters (e.g. L or W) as specified in the lattice description file.
-Note: while the classical Monte carlo program uses XML lattice description it does not use XML model descriptions. The model is instead specifiec by the parameters in the table above.
+此外，晶格描述可能还需要晶格描述文件中指定的其他参数（例如 L 或 W）。
+注意：经典蒙特卡洛程序虽然使用 XML 晶格描述，但并不使用 XML 模型描述。模型改由上表中的参数指定。
 
-## Local versus cluster updates
+## 局域更新与团簇更新
 
-Cluster updates should be used as long as there is no magnetic field applied and the spin system is not frustrated. Otherwise local updates are preferred.
+只要没有施加磁场且自旋系统没有阻挫，就应使用团簇更新。否则优先使用局域更新。
 
-## Quantum versus classical conventions
+## 量子约定与经典约定
 
-Quantum and classical spin models often use different conventions for the coupling constants, and the CONVENTION parameter allows to choose between the two.
-- **classical** convention is to have positive signs denote ferromagnetic coupling. The coupling strengths are multiplied by $S^2$ if a parameter S is specified.
-- **quantum** convention is to have positive signs denote anti-ferromagnetic coupling. The coupling strengths are multiplied by S(S+1) where S defaults to 1/2. 
+量子自旋模型和经典自旋模型对耦合常数通常采用不同的约定，CONVENTION 参数允许在两者之间进行选择。
+- **classical**（经典）约定以正号表示铁磁耦合。如果指定了参数 S，耦合强度会乘以 $S^2$。
+- **quantum**（量子）约定以正号表示反铁磁耦合。耦合强度会乘以 S(S+1)，其中 S 默认为 1/2。
 
-## Measurements
+## 测量
 
-The following observables are measured by the spinmc application:
+spinmc 应用程序会测量以下观测量：
 
-| **Name**  | **Description** |
+| **名称**  | **描述** |
 | :---- | :---------- |
-| Energy | the total energy of the system |
-| Energy Density | the energy density (energy per site) of the system |
-| Specific Heat | the specific heat per site of the system |
-| Magnetization | the z-component of the magnetization |
-| \|Magnetization\| | absolute value of the z-component of the magnetization |
-| Magnetization^2 | square of the z-component of the magnetization |
-| Magnetization along Field | the component of the magnetization along the external magnetic field |
-| Staggered Magnetization | the z-component of the staggered magnetization (only on bipartite lattices) |
-| Staggered Magnetization^2 | square of the z-component of the staggered magnetization (only on bipartite lattices) |
-| Susceptibility | the uniform susceptibility, includes a factor of $g^2$ |
-| Cluster size | the mean cluster size as a fraction of the lattice volume (only for cluster updates) |
+| Energy | 系统的总能量 |
+| Energy Density | 系统的能量密度（每格点能量） |
+| Specific Heat | 系统的每格点比热 |
+| Magnetization | 磁化强度的 z 分量 |
+| \|Magnetization\| | 磁化强度 z 分量的绝对值 |
+| Magnetization^2 | 磁化强度 z 分量的平方 |
+| Magnetization along Field | 磁化强度沿外磁场方向的分量 |
+| Staggered Magnetization | 交错磁化强度的 z 分量（仅适用于二分晶格） |
+| Staggered Magnetization^2 | 交错磁化强度 z 分量的平方（仅适用于二分晶格） |
+| Susceptibility | 均匀磁化率，包含因子 $g^2$ |
+| Cluster size | 以晶格体积的比例表示的平均团簇大小（仅适用于团簇更新） |
 
-Note: To evaluate the specific heat the evaluation program spinmc_evaluate has to be run on the task files (\*task\*.xml).
-
+注意：要计算比热，必须在任务文件（\*task\*.xml）上运行计算程序 spinmc_evaluate。

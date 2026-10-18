@@ -1,7 +1,7 @@
 
 ---
-title: alps/config.h
-description: "ALPS General Library"
+title: "alps/config.h"
+description: "ALPS General 库"
 weight: 2
 ---
 

@@ -1,11 +1,12 @@
 
 ---
 title: DMRG-04 Gaps
+weight: 4
 math: true
 toc: true
 ---
 
-## Calculating The Gap
+## Calculating the gap
 
 As already mentioned in [DMRG-02](../dmrg02), the energy gap of a quantum system is given by the energy difference between the first excited state and the ground state:
 
@@ -21,7 +22,7 @@ $$
 
 for finite system sizes and (ii) the extrapolation of $\Delta (L)$ to the thermodynamic limit $L= \infty$. The latter is not specific to DMRG, but because of DMRG's preference for open boundary conditions it is somewhat more complicated than in the more usual case of periodic boundary conditions.
 
-### Getting The Gap For Finite Systems
+### Getting the gap for finite systems
 
 Obviously, we have to be able to get access to the first excited state and its energy. DMRG fundamentally knows two ways of doing this, a pedestrian way which always works, but is not as neat, and a smarter way, which is very clean, but does not work under all circumstances.
 
@@ -33,9 +34,32 @@ Let us start by doing these calculation for the spin-1/2 chain.
 
 #### Example: without quantum numbers
 
+##### Parameters and lattice
+
+```
+      J       J       J       J
+  o-------o-------o-------o-------o
+  1       2       3       4       5
+  S=1/2   S=1/2   S=1/2   S=1/2   S=1/2
+```
+
+The built-in `open chain lattice`, spin-1/2 on every site; see the [ALPS lattice library](../../../documentation/intro/latticehowtos) for its definition and the other lattices available.
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE` | built-in open chain | `open chain lattice` |
+| `MODEL` | quantum spin model | `spin` |
+| `L` | chain length | 32 |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
+| `Sz_total` | magnetization sector | 0 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `MAXSTATES` | bond dimension $D$ | 100 |
+| `NUMBER_EIGENVALUES` | two states requested, so the gap comes from a single run | 2 |
+
 ##### Using parameter files
 
-In this example below, we include a line in the parameter file for the spin S=1/2 chain [`spin_one_half_gap`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap) to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
+In this example below, we include a line in the parameter file for the spin S=1/2 chain <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_gap" data-filename="spin_one_half_gap" target="_blank" rel="noopener">`spin_one_half_gap`</a> to tell the code that we also want to calculate the energy for the first excited state. The algorithm will build a density matrix targeting two states: the ground-state, and the first excited state, both in the same subspace with Sz=0. Since the first excited state is a triplet, this will yield the singlet-triplet gap:
 
 ```python
 LATTICE="open chain lattice"
@@ -54,7 +78,7 @@ It is important to notice that the entanglement entropy in this example is total
 
 ##### Using Python
 
-The script [`spin_one_half_gap.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_gap.py) runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_gap.py" data-filename="spin_one_half_gap.py" target="_blank" rel="noopener">`spin_one_half_gap.py`</a> runs the same simulation as the spin-1/2 script from the [DMRG-03](../dmrg03) tutorial, except for changing the requested NUMBER_EIGENVALUES to two, and loads all data for these eigenstates:
 
 ```python
 import pyalps
@@ -103,6 +127,29 @@ print('\nGap:', abs(energies[1]-energies[0]))
 
 #### Example: with quantum numbers
 
+##### Parameters and lattice
+
+```
+      J       J       J       J
+  o-------o-------o-------o-------o
+  1       2       3       4       5
+  S=1/2   S=1/2   S=1/2   S=1/2   S=1/2
+```
+
+The built-in `open chain lattice`, spin-1/2 on every site; see the [ALPS lattice library](../../../documentation/intro/latticehowtos) for its definition and the other lattices available.
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE` | built-in open chain | `open chain lattice` |
+| `MODEL` | quantum spin model | `spin` |
+| `L` | chain length | 32 |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed | `N,Sz` |
+| `Sz_total` | magnetization sector; the gap is taken between sectors rather than within one | 1 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `MAXSTATES` | bond dimension $D$ | 40 |
+| `NUMBER_EIGENVALUES` | not set, so only the lowest state in the sector is computed | 1 (default) |
+
 To calculate the singlet-triplet gap taking advantage of quantum number conservation we need to perform two independent simulations, one with Sz=0, and another one with Sz=1. The difference of the two energies will yield the gap.
 
 ##### Using parameter files
@@ -119,11 +166,11 @@ J=1
 {L=32, MAXSTATES=40}
 ```
 
-You can download this file from here: [`spin_one_half_triplet`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet).
+You can download this file from here: <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_triplet" data-filename="spin_one_half_triplet" target="_blank" rel="noopener">`spin_one_half_triplet`</a>.
 
 ##### Using Python
 
-The script [`spin_one_half_triplet.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-02-gaps/spin_one_half_triplet.py) runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_triplet.py" data-filename="spin_one_half_triplet.py" target="_blank" rel="noopener">`spin_one_half_triplet.py`</a> runs a simulation for both Sz sectors defined by two Python dictionaries with the parameters:
 
 ```python
 import pyalps
@@ -171,9 +218,9 @@ Then, we can calculate the gap as the energy difference between the Sz=1 and Sz=
 print('Gap:', energies[1]-energies[0])
 ```
 
-### Extrapolating The Gap To The Thermodynamic Limit
+### Extrapolating the gap to the thermodynamic limit
 
-In a first attempt, fix $D=50,100,150$ and calculate the gap for lengths $L=32,64,96,128$. For fixed $D$, plot the gap versus $1/L$. What you should see is that for small $D$, the results will not lie on a straight line passing through 0, but they will curve up from it. This behavior gets better when $D$ gets larger (see Questions below).
+A first attempt fixes $D=50,100,150$ and takes the gap for lengths $L=32,64,96,128$, plotting the gap against $1/L$ at fixed $D$. For small $D$ the results do not lie on a straight line through 0 but curve up from it, and the behavior improves as $D$ grows.
 
 In a second, more meaningful attempt, fix the lengths $L=32,64,96,128$ and vary $D=50,100,150,200$ in order to extrapolate the gap for each fixed length in $D$ (or, as explained above, the truncation error), and plot the gap versus $1/L$ using these extrapolated values.
 
@@ -181,12 +228,12 @@ The plot below shows the spin-1/2 singlet-triplet gap versus $1/L$ at fixed $D=1
 
 ![](/figs/dmrg/extrapolationGapSHalf.png)
 
-Modify the file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half_multiple) to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
+Modify the file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-04-gaps/spin_one_half_multiple" data-filename="spin_one_half_multiple" target="_blank" rel="noopener">`spin_one_half_multiple`</a> to setup all the runs for Sz=0 and Sz=1, for different system sizes and different number of states. Use five sweeps, and extrapolate the value of the gap following the procedure outlined in the tutorial.
 
 
-The case of the spin-1/2 chain is a bit frustrating because all you will be able to say, even if you push the computer to its limits, is that the gap seems to be extremely small to the best of your abilities and therefore is likely to vanish. But, who can tell you that you are not looking at a case where the gap is, say, $e^{-50}$? This of course is a sobering reminder of the limits of even a highly accurate numerical method.
+The case of the spin-1/2 chain is a bit frustrating: even pushing the computer to its limits, the most that can be said is that the gap appears extremely small and therefore is likely to vanish. Nothing in the data rules out a gap of, say, $e^{-50}$. This is a sobering reminder of the limits of even a highly accurate numerical method.
 
-Let us therefore turn to a more rewarding question, what is the gap of the spin-1 antiferromagnetic Heisenberg chain?
+We therefore turn to a more rewarding case, the gap of the spin-1 antiferromagnetic Heisenberg chain.
 
 Here, there is a nasty twist, which we will only state and perform at the moment, but explain later: Calculate the gap not between the ground states of the magnetization sectors 0 and 1, but 1 and 2. If you wish, do it also for 0 and 1, for later reference, but the following refers to 1 and 2.
 

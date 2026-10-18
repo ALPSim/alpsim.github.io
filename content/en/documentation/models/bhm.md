@@ -51,7 +51,6 @@ Unlike the fermionic models elsewhere in this section, repulsive bosons have no 
 | Method | Strengths | Limitations | Applications |
 |---|---|---|---|
 | **Worm algorithm** — see [Worm Algorithm](../../methods/qmc/worm) | Sign-problem-free in any dimension; efficient at all fillings, including the grand-canonical ensemble | Limited to models without a sign problem (satisfied here) | The reference method for the superfluid-Mott transition; see [MC-05](../../../tutorials/mcs/mc05) |
-| **Directed worm algorithm** — see [DWA](../../methods/qmc/dwa) | Efficient updates for trapped, inhomogeneous systems (e.g. a harmonic trap) | This implementation is deprecated in current ALPS and restricted to on-site interactions only | Density profiles in trapped optical-lattice systems; see [DWA-01](../../../tutorials/mcs/dwa/dwa01) and [DWA-02](../../../tutorials/mcs/dwa/dwa02) |
 | **Stochastic Series Expansion** — see [SSE](../../methods/qmc/sse) | Sign-problem-free finite-temperature algorithm, originally developed for spin models and extended to bosons | Same restrictions on sign-free models as other QMC methods (not a practical limitation here) | Finite-temperature thermodynamics of the Bose-Hubbard model |
 | **ED** — see [sparsediag](../../methods/ed/sparsediag) / [fulldiag](../../methods/ed/fulldiag) | Exact results for small systems, after truncating the per-site occupation at a maximum `Nmax` | Limited to small clusters and modest `Nmax` | Small-system benchmarks |
 | **DMRG** — see [Density Matrix Renormalization Group](../../methods/dmrg/dmrg) | Highly accurate for 1D chains | Less efficient for genuinely 2D/3D systems | Ground states of 1D Bose-Hubbard chains |
@@ -59,8 +58,6 @@ Unlike the fermionic models elsewhere in this section, repulsive bosons have no 
 Disordered systems can be studied with the same worm code — see [Bose Glass](../../methods/qmc/boseglass) for a worked parameter file — and the underlying single-particle band structure of an optical lattice is discussed in [Bosons in an Optical Lattice](../../methods/qmc/bhol).
 
 - [MC-05: Simulating the Bose-Hubbard model using the worm QMC code](../../../tutorials/mcs/mc05) — locates the superfluid-Mott transition on a 2D square lattice at unit filling
-- [DWA-01: Monte Carlo simulations with directed worm](../../../tutorials/mcs/dwa/dwa01) — revisits the same transition with the directed worm algorithm
-- [DWA-02: Density profile](../../../tutorials/mcs/dwa/dwa02) — the density profile of bosons in a harmonic trap, directly comparable to real optical-lattice experiments
 
 ---
 

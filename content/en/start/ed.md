@@ -107,6 +107,8 @@ res = pyalps.runApplication('sparsediag', input_file)
 
 `sparsediag` runs the Lanczos algorithm on each parameter set. For each combination of $(L, S_z)$, it further block-diagonalizes within the $S_z$ sector using translational symmetry — so it actually solves one smaller matrix per lattice momentum $k = 0, \frac{2\pi}{L}, \ldots, \frac{2\pi(L-1)}{L}$. The output is stored in HDF5 files named after the prefix.
 
+Expect this step to take about half an hour on a single core, almost all of it in the $L = 16$ sectors.
+
 ## Loading results and understanding the data structure
 
 ```python
@@ -159,7 +161,7 @@ gapplot = pyalps.DataSet()
 gapplot.x = 1./np.sort(lengths)
 gapplot.y = [min_energies[(l,1)] - min_energies[(l,0)] for l in np.sort(lengths)]
 gapplot.props['xlabel'] = '$1/L$'
-gapplot.props['ylabel'] = 'Triplet gap $\Delta/J$'
+gapplot.props['ylabel'] = r'Triplet gap $\Delta/J$'
 gapplot.props['label']  = 'S=1'
 gapplot.props['line']   = '.'
 
@@ -182,7 +184,7 @@ plt.show()
 
 ## Result
 
-The fitted curve extrapolates to the $y$-intercept at $1/L = 0$, giving $\Delta \approx 0.411\,J$ — in good agreement with the best numerical estimates for the Haldane gap (White & Huse, 1993: $\Delta = 0.41048\,J$). This confirms the Haldane phase and validates the ALPS `sparsediag` solver.
+The fitted curve extrapolates to the $y$-intercept at $1/L = 0$, giving $\Delta \approx 0.419\,J$ — close to the best numerical estimates for the Haldane gap (White & Huse, 1993: $\Delta = 0.41048\,J$). This confirms the Haldane phase and validates the ALPS `sparsediag` solver. The remaining 2% difference comes from fitting a single exponential at $L \le 16$; see [DMRG-04](../../tutorials/dmrg/dmrg04/#extrapolating-the-gap-to-the-thermodynamic-limit) for longer chains.
 
 The plot shows the triplet gap decreasing as $L$ grows, with the fitted curve capturing the exponential convergence:
 

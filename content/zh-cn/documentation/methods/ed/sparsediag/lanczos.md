@@ -1,28 +1,28 @@
 
 ---
-title: Lanczos Algorithm
+title: Lanczos 算法
 math: true
 weight: 1
 ---
 
-The Lanczos method is an iterative algorithm that reduces a symmetric matrix $A$ of size $N \times N$ to a tridiagonal matrix $T$ of size $m \times m$, where $m \ll N$. The eigenvalues of $T$ approximate the extremal eigenvalues of $A$, and the corresponding eigenvectors can be reconstructed.
+Lanczos 方法是一种迭代算法，它把尺寸为 $N \times N$ 的对称矩阵 $A$ 约化为尺寸为 $m \times m$ 的三对角矩阵 $T$，其中 $m \ll N$。$T$ 的本征值近似于 $A$ 的极端本征值，并且可以重构出相应的本征矢。
 
-### Key Steps of the Lanczos Method
+### Lanczos 方法的关键步骤
 
-1. **Initialization**:
-   - Choose a random starting vector $v_1$ with unit norm.
-   - Set $\beta_0 = 0$ and $v_0 = 0$.
+1. **初始化**：
+   - 选取一个单位模长的随机初始矢量 $v_1$。
+   - 令 $\beta_0 = 0$，$v_0 = 0$。
 
-2. **Iteration**:
-   For $j = 1, 2, \dots, m$:
-   - Compute $w = A v_j - \beta_{j-1} v_{j-1}$.
-   - Compute $\alpha_j = v_j^\top w$.
-   - Compute $w = w - \alpha_j v_j$.
-   - Compute $\beta_j = \|w\|$.
-   - If $\beta_j = 0$, stop; otherwise, set $v_{j+1} = w / \beta_j$.
+2. **迭代**：
+   对于 $j = 1, 2, \dots, m$：
+   - 计算 $w = A v_j - \beta_{j-1} v_{j-1}$。
+   - 计算 $\alpha_j = v_j^\top w$。
+   - 计算 $w = w - \alpha_j v_j$。
+   - 计算 $\beta_j = \|w\|$。
+   - 若 $\beta_j = 0$，则停止；否则令 $v_{j+1} = w / \beta_j$。
 
-3. **Tridiagonal Matrix**:
-   After $m$ iterations, the matrix $T$ is constructed as:
+3. **三对角矩阵**：
+   经过 $m$ 次迭代后，构造矩阵 $T$ 如下：
    $$
    T = \begin{pmatrix}
    \alpha_1 & \beta_1 & 0 & \dots & 0 \\\
@@ -33,31 +33,31 @@ The Lanczos method is an iterative algorithm that reduces a symmetric matrix $A$
    \end{pmatrix}
    $$
 
-4. **Diagonalization of $T$**:
-   - Diagonalize $T$ using standard dense matrix techniques (e.g., QR algorithm).
-   - The eigenvalues of $T$ approximate the extremal eigenvalues of $A$.
-   - The corresponding eigenvectors of $A$ can be reconstructed from the Lanczos vectors $v_j$.
+4. **对角化 $T$**：
+   - 用标准的稠密矩阵技术（例如 QR 算法）对角化 $T$。
+   - $T$ 的本征值近似于 $A$ 的极端本征值。
+   - $A$ 的相应本征矢可以由 Lanczos 矢量 $v_j$ 重构得到。
 
-### Advantages of the Lanczos Method
+### Lanczos 方法的优点
 
-1. **Efficiency**:
-   - Only matrix-vector products are required, making it suitable for sparse matrices.
-   - Memory usage is $O(N \cdot m)$ instead of $O(N^2)$.
+1. **高效**：
+   - 只需要矩阵与矢量的乘积，因此适用于稀疏矩阵。
+   - 内存占用为 $O(N \cdot m)$，而不是 $O(N^2)$。
 
-2. **Scalability**:
-   - Works well for very large matrices where dense methods are infeasible.
+2. **可扩展性**：
+   - 对于稠密方法无法处理的超大矩阵也能很好地工作。
 
-3. **Focus on Extremal Eigenvalues**:
-   - The Lanczos method is particularly effective at finding the largest or smallest eigenvalues and their eigenvectors.
+3. **专注于极端本征值**：
+   - Lanczos 方法在求最大或最小的本征值及其本征矢时尤其有效。
 
-### Challenges and Considerations
+### 挑战与注意事项
 
-1. **Loss of Orthogonality**:
-   - In finite-precision arithmetic, the Lanczos vectors $v_j$ can lose orthogonality, leading to spurious eigenvalues.
-   - Remedies include reorthogonalization or using more advanced variants like the **Implicitly Restarted Lanczos Method**.
+1. **正交性丢失**：
+   - 在有限精度运算中，Lanczos 矢量 $v_j$ 可能失去正交性，从而导致伪本征值。
+   - 补救方法包括重新正交化，或使用更高级的变体，如**隐式重启 Lanczos 方法**。
 
-2. **Choice of $m$**:
-   - The number of iterations $m$ must be chosen carefully to balance accuracy and computational cost.
+2. **$m$ 的选取**：
+   - 迭代次数 $m$ 必须谨慎选取，以平衡精度与计算代价。
 
-3. **Convergence**:
-   - Convergence to the extremal eigenvalues is typically fast, but interior eigenvalues may require many iterations.
+3. **收敛性**：
+   - 收敛到极端本征值通常很快，但内部本征值可能需要很多次迭代。

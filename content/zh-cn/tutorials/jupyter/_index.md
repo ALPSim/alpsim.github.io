@@ -1,39 +1,39 @@
 
 ---
-title: Jupyter Notebooks
-description: "Tutorials for ALPS in Jupyter Notebooks"
+title: Jupyter 笔记本
+description: "ALPS 的 Jupyter 笔记本教程"
 toc: true
 weight: 6
 cascade:
     type: docs
 ---
-Below are a collection of ALPS simulations in Jupyter notebooks. You can learn about the simulations by clicking on the titles or by downloading and running the Jupyter notebook files on your computer.
+以下是使用 Jupyter 笔记本实现的 ALPS 模拟集合。您可以点击标题了解相应的模拟内容，也可以下载并在本地计算机上运行这些 Jupyter 笔记本文件。
 
-## Exact Diagonalizations
+## 精确对角化
 
-- [Transverse Field Quantum Ising Model](ed/isingtransversefield) <a href="/codes/ed/isingTransverseField.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [横场量子伊辛模型](ed/isingtransversefield) <a href="/codes/ed/isingTransverseField.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Energy Gap of a Spin-1 Heisenberg Chain](ed/spingapspinoneheisenbergchain) <a href = "/codes/ed/spinGapSpinOneHeisenbergChain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [自旋-1海森堡链的能隙](ed/spingapspinoneheisenbergchain) <a href = "/codes/ed/spinGapSpinOneHeisenbergChain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Energy Spectra of 1D Systems: Chain, Ladder, and Isomers](ed/spectra1dsystems) <a href = "/codes/ed/spectra1DSystems.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [一维系统的能谱：链、梯子与二聚体](ed/spectra1dsystems) <a href = "/codes/ed/spectra1DSystems.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-## Density Matrix Renormalization Group
+## 密度矩阵重正化群
 
-- [Ground State Energy of a Spin Chain](dmrg/groundstatespinchain) <a href = "/codes/dmrg/groundstatespinchain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [自旋链的基态能量](dmrg/groundstatespinchain) <a href = "/codes/dmrg/groundstatespinchain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Energy Gap of a Spin-1/2 Chain](dmrg/energygapspinhalf) <a href = "/codes/dmrg/energygapspinhalf.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [自旋-1/2链的能隙](dmrg/energygapspinhalf) <a href = "/codes/dmrg/energygapspinhalf.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Extrapolation of Energy Gap of a Spin-1/2 Chain](dmrg/extrapolationenergygapspinhalfchain) <a href = "/codes/dmrg/extrapolationenergygapspinhalfchain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [自旋-1/2链能隙的外推](dmrg/extrapolationenergygapspinhalfchain) <a href = "/codes/dmrg/extrapolationenergygapspinhalfchain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Energy Gap of a Spin-1 Chain](dmrg/energygapspinone) <a href = "/codes/dmrg/energygapspinone.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [自旋-1链的能隙](dmrg/energygapspinone) <a href = "/codes/dmrg/energygapspinone.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-- [Extrapolation of Energy Gap of a Spin-1 Chain](dmrg/extrapolationenergygapspinonechain) <a href = "/codes/dmrg/extrapolationenergygapspinonechain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [自旋-1链能隙的外推](dmrg/extrapolationenergygapspinonechain) <a href = "/codes/dmrg/extrapolationenergygapspinonechain.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-## Dynamical Mean Field Theory
+## 动力学平均场理论
 
-- [DMFT of Hubbard Model on a Bethe Lattice](dmft/dmftbethehubbard) <a href = "/codes/dmft/dmftBetheHubbard.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [贝特晶格上哈伯德模型的 DMFT 计算](dmft/dmftbethehubbard) <a href = "/codes/dmft/dmftBetheHubbard.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 
-## Quantum Computations
+## 量子计算
 
-- [Energy Spectrums of Qbits](qbits/qbitenergy) <a href = "/codes/qbits/qbitenergy.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
+- [量子比特能谱](qbits/qbitenergy) <a href = "/codes/qbits/qbitenergy.ipynb" download><span class="material-icons" style="vertical-align:bottom;padding-left: 1px; padding-right: 5px;">download</span></a>
 

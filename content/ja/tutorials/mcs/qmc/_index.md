@@ -1,6 +1,6 @@
 
 ---
-title: MC-09 Quantum Monte Carlo
+title: MC-09 量子モンテカルロ
 math: true
 toc: true
 weight: 11
@@ -17,97 +17,97 @@ import pyalps
 from pyalps.plot import plot
 ```
 
-## Heisenberg chain
+## ハイゼンベルク鎖
 
-In this first section, we calculate the magnetization curve of the  $S=1/2$  Heisenberg chain:
+この最初の節では、 $S=1/2$  ハイゼンベルク鎖の磁化曲線を計算します。
 $$
 H=\sum_{i}^{L}\vec{S}_i\cdot\vec{S}_{i+1}+h\sum_{i=1}^LS_i^z
 $$
-where we use the periodic boundary conditions, i.e. we identify $\vec{S}_{L+1}=\vec{S}_1$.
-We would like to calculate the magnetization curve in the ground state. However, our choice of method here is a path-integral Quantum Monte Carlo method that operates at finite temperature. We therefore simulate a thermal ensemble and choose a temperature that is sufficiently low compared to the other energy scales of the problem.
+ここでは周期境界条件を用います。すなわち $\vec{S}_{L+1}=\vec{S}_1$ と同一視します。
+本来は基底状態における磁化曲線を計算したいところですが、ここで選ぶ手法は有限温度で動作する経路積分量子モンテカルロ法です。そのため熱的アンサンブルをシミュレートし、問題の他のエネルギースケールに比べて十分に低い温度を選びます。
 
-The thermal expectation value of the magnetization per site is defined as
+1 サイトあたりの磁化の熱期待値は次のように定義されます。
 $$
 m=\frac{1}{L}\sum_i\langle S_i^z\rangle
 $$
-where
+ここで
 $$
 \langle S_i^z\rangle = \frac{1}{Z}\text{Tr}(e^{-H/T}S_i^z).
 $$
-This is one of the standard observables calculated by the Directed Loop SSE implementation in ALPS.
+これは ALPS の有向ループ SSE 実装が計算する標準的な物理量の一つです。
 
-### Parameter setup
+### パラメータの設定
 
-The parameters we need to pass to the Directed Loop SSE code fall into four categories:
+有向ループ SSE コードに渡す必要のあるパラメータは、次の 4 つのカテゴリに分かれます。
 
-- Lattice parameters: We pick the lattice labeled "chain lattice". This corresponds to a simple one-dimensional chain with periodic boundary conditions. For this particular lattice, we also need to specify the length of the chain as the parameter "L".
+- 格子パラメータ：ここでは "chain lattice" というラベルの格子を選びます。これは周期境界条件をもつ単純な一次元鎖に対応します。この特定の格子については、鎖の長さをパラメータ "L" として指定する必要もあります。
 
-- Model parameters: We pick the "spin" model and set  $S=1/2$ , which is achived by setting "local_S" to 1/2. The coupling is "J", and "h" is the magnetic field in the Z direction.
+- モデルパラメータ："spin" モデルを選び、 $S=1/2$  と設定します。これは "local_S" を 1/2 に設定することで実現されます。結合は "J"、"h" は $z$ 方向の磁場です。
 
-- Ensemble parameter: We here pick a temperature of  $T=0.08$ , which turns out to be low enough in this case to see the physical effect we're looking for.
+- アンサンブルパラメータ：ここでは温度を  $T=0.08$  とします。これは目的とする物理的効果を見るのに十分低い値です。
 
-- QMC parameters: For this simple setup, we pass only the number of sweeps in the thermalization part of the simulation ("THERMALIZATION"), and the number of sweeps for which we measure the desired observable ("SWEEPS").
+- QMC パラメータ：この単純な設定では、シミュレーションの熱化部分におけるスイープ数（"THERMALIZATION"）と、目的の物理量を測定するスイープ数（"SWEEPS"）のみを渡します。
 
-**Suggestions:** 
+**提案：** 
 
-- Explore how changing the temperature as well as the number of thermalization and measurement sweeps affects the results plotted below.
+- 温度や熱化・測定スイープ数を変えると、下にプロットされる結果がどのように変化するかを調べてみてください。
 
-- Can you think of a guideline for choosing the temperature low enough to obtain ground-state physics?
+- 基底状態の物理を得るのに十分低い温度を選ぶための指針を考えられますか。
 
 ```
 chain_parms = []
 for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
     chain_parms.append({
-        # lattice parameters
+        # 格子パラメータ
         'LATTICE'        : "chain lattice", 
         'L'              : 20,
 
-        # model parameters
+        # モデルパラメータ
         'MODEL'          : "spin",
         'local_S'        : 0.5,
         'J'              : 1,
         'h'              : h,
 
-        # ensemble parameter
+        # アンサンブルパラメータ
         'T'              : 0.08,
 
-        # QMC parameters
+        # QMC パラメータ
         'THERMALIZATION' : 1000,
         'SWEEPS'         : 5000,
     })
 chain_prefix = 'qmc_chain'
 ```
 
-### Run the simulation
+### シミュレーションの実行
 
-The simulation is performed using the directed loop SSE code, which is best suited to simulate a spin model (with a small number of states per site) in an external magnetic field.
+シミュレーションは有向ループ SSE コードを用いて行います。このコードは外部磁場中のスピンモデル（1 サイトあたりの状態数が少ないもの）のシミュレーションに最も適しています。
 
 ```
-# Write the input files for the ALPS codes.
-# All the filenames will begin with the prefix chain_prefix='qmc_chain'.
+# ALPS コード用の入力ファイルを書き出します。
+# すべてのファイル名は接頭辞 chain_prefix='qmc_chain' で始まります。
 input_file = pyalps.writeInputFiles(chain_prefix, chain_parms)
 
-# The following command runs the applications.
+# 次のコマンドでアプリケーションを実行します。
 res = pyalps.runApplication('dirloop_sse',input_file,Tmin=5)
 ```
 
-The above lines can be saved in a script and run with python command in your terminal. Or the input file can be run with the following command line in your terminal:
+上記の行はスクリプトとして保存し、ターミナルで python コマンドを使って実行できます。あるいは、入力ファイルをターミナルで次のコマンドを使って実行することもできます。
 
 ```
 dirloop_sse qmc_chain.in.xml --Tmin 5
 ```
 
-### Analyze the results
+### 結果の解析
 
-For the data analysis, we rely on the methods available as part of the `pyalps` package, as well as the `matplotlib` library.
+データ解析には、`pyalps` パッケージに含まれるメソッドと `matplotlib` ライブラリを利用します。
 
 ```
-# Load the raw measurement data. We only load the "Magnetization Density" and not all the other
-# quantities measured by the QMC code.
+# 生の測定データを読み込みます。QMC コードが測定した他のすべての物理量ではなく、
+# "Magnetization Density" のみを読み込みます。
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
 
-# The pyalps.collectXY function takes a set of data points and extracts plots
-# of the form "Y vs X".
+# pyalps.collectXY 関数はデータ点の集合を受け取り、"Y vs X" の形式の
+# プロットを抽出します。
 magnetization = pyalps.collectXY(data, x='h', y='Magnetization Density')
 
 plot(magnetization)
@@ -117,47 +117,47 @@ plt.title('Quantum Heisenberg chain')
 plt.show()
 ```
 
-The resulting picutre show look like the following:    
+得られる図は次のようになるはずです。    
 ![](qmcmagchain.png)
 
-## Heisenberg ladder
+## ハイゼンベルク梯子
 
-We now solve the two-leg Heisenberg ladder in much the same way. The Hamiltonian for the ladder can be thought of as coupling two chains together. Denoting the spins in one chain $\vec{S}$  and in the other $\vec{T}$, the Hamiltonian is
+次に、2 レッグのハイゼンベルク梯子をほぼ同じ方法で解きます。梯子のハミルトニアンは、2 本の鎖を互いに結合させたものと考えることができます。一方の鎖のスピンを $\vec{S}$ 、もう一方のスピンを $\vec{T}$ と表すと、ハミルトニアンは次のようになります。
 
 $$
 H=\sum[J_0(\vec{S}_i\cdot\vec{S}_{i+1}+\vec{T}_i\cdot\vec{T}_{i+1})+J_1\vec{S}_i\cdot\vec{T}_i+h(S_i^z+T_i^z)],
 $$
 
-where we again apply periodic boundary conditions with the identification $\vec{S}_{L+1}=\vec{S}_1$ and $\vec{T}_{L+1}=\vec{T}_1$.
+ここでも周期境界条件を適用し、$\vec{S}_{L+1}=\vec{S}_1$ および $\vec{T}_{L+1}=\vec{T}_1$ と同一視します。
 
-Notice the difference in lattice and model parameters:
+格子パラメータとモデルパラメータの違いに注意してください。
 
-- In addition to the length of the system, we now also provide the width.
-- The model now takes two parameters J0 and J1, where J0 is the coupling along the chains and J1 the coupling on the rungs. It is important to specify both parameters, otherwise they default to 0.
+- 系の長さに加えて、ここでは幅も指定します。
+- モデルは 2 つのパラメータ $J_0$ と $J_1$ を取ります。$J_0$ は鎖に沿った結合、$J_1$ はラング上の結合です。両方のパラメータを指定することが重要です。指定しない場合、既定値は 0 になります。
 
-We keep all other parameters the same.
+その他のパラメータはすべて同じままにします。
 
 ```
 ladder_parms = []
 for h in [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.5]:
     ladder_parms.append(
         { 
-            # lattice parameters
+            # 格子パラメータ
             'LATTICE'        : "ladder", 
             'L'              : 20,
             'W'              : 2,
          
-            # model parameters
+            # モデルパラメータ
             'MODEL'          : "spin",
             'local_S'        : 0.5,
             'J0'             : 1,
             'J1'             : 1,
             'h'              : h,
          
-            # ensemble parameter
+            # アンサンブルパラメータ
             'T'              : 0.08,
     
-            # QMC parameters
+            # QMC パラメータ
             'THERMALIZATION' : 1000, # 1000
             'SWEEPS'         : 5000, # 20000
         }
@@ -179,22 +179,22 @@ plt.title('Quantum Heisenberg ladder')
 
 ![](qmcmagladder.png)
 
-## Comparison
+## 比較
 
-We now compare the results for the chain and the ladder. For this, we do not need to run any new simulations, but we simply load both sets of data at the same time and tell pyalps.collectXY to create a separate plot for each value of the LATTICE parameter.
+ここで、鎖と梯子の結果を比較します。そのために新しいシミュレーションを実行する必要はなく、両方のデータセットを同時に読み込み、LATTICE パラメータの値ごとに別々のプロットを作成するよう pyalps.collectXY に指示するだけです。
 
-- What are the significant differences between the two plots, particularly at small values of the field strength  h ?
-- What is the physical interpretation of these differences? What is their origin in the spectrum of the system?
+- 2 つのプロットの間の顕著な違いは何でしょうか。とくに磁場の強さ h が小さい領域ではどうでしょうか。
+- これらの違いの物理的な解釈は何でしょうか。それぞれの系の励起スペクトルはこれをどのように説明するでしょうか。
 
-We will revisit these questions in the DMRG/MPS tutorial.
+これらの問いは DMRG のチュートリアルシリーズで再び取り上げます。
 
 ```
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix=ladder_prefix),'Magnetization Density')
 data += pyalps.loadMeasurements(pyalps.getResultFiles(prefix=chain_prefix),'Magnetization Density')
 
-# We here use the fourth, optional, parameter of the collectXY function, allowing
-# us to pass a list of parameters such that collectXY creates a separate plot for
-# each value of the parameters.
+# ここでは collectXY 関数の 4 番目のオプション引数を使います。これによりパラメータの
+# リストを渡すことができ、collectXY はそれらのパラメータの値ごとに別々のプロットを
+# 作成します。
 magnetization = pyalps.collectXY(data, 'h', 'Magnetization Density', ['LATTICE'])
 
 plot(magnetization)

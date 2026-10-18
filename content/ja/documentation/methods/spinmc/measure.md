@@ -1,102 +1,103 @@
 ---
-title: Measurements
+title: 測定
 math: true
 weight: 4
 ---
 
-After the system reaches equilibrium, we can measure physical quantities, such as, energy, magnetization, and various susceptibilities. However, measuring physical quantities accurately requires careful consideration of autocorrelation and the generation of independent samples. Autocorrelation refers to the correlation between measurements taken at different Monte Carlo steps, which can lead to biased estimates and underestimated errors. Generating independent samples ensures that the measurements are statistically meaningful.
+系が平衡に達した後、エネルギー、磁化、さまざまな感受率などの物理量を測定できます。しかし、物理量を正確に測定するには、自己相関と独立なサンプルの生成について注意深く考慮する必要があります。自己相関とは、異なるモンテカルロステップで行った測定間の相関のことで、推定値の偏りや誤差の過小評価につながる可能性があります。独立なサンプルを生成することで、測定が統計的に意味のあるものになります。
 
-## Autocorrelation of Physical Quantities
+## 物理量の自己相関
 
-### 1. **Autocorrelation Function**
-The autocorrelation function $C_A(t)$ measures the correlation between measurements of a quantity $A$ separated by a time interval $t$ (in Monte Carlo steps):
+### 1. **自己相関関数**
+自己相関関数 $C_A(t)$ は、ある量 $A$ について、時間間隔 $t$（モンテカルロステップ単位）だけ離れた測定値どうしの相関を測ります。
 $$
 C_A(t) = \frac{\langle A_k A_{k+t} \rangle - \langle A_k \rangle^2}{\langle A_k^2 \rangle - \langle A_k \rangle^2},
 $$
-where $\langle A_k A_{k+t} \rangle$ is the average of the product of measurements separated by $t$ steps.
+ここで $\langle A_k A_{k+t} \rangle$ は、$t$ ステップ離れた測定値の積の平均です。
 
-### 2. **Autocorrelation Time**
-The autocorrelation time $\tau_A$ characterizes how quickly the autocorrelation function decays. It is defined as:
+### 2. **自己相関時間**
+自己相関時間 $\tau_A$ は、自己相関関数がどれだけ速く減衰するかを特徴づけます。これは次のように定義されます。
 $$
 \tau_A = \sum_{t=1}^{\infty} C_A(t).
 $$
-In practice, $\tau_A$ is estimated by fitting $C_A(t)$ to an exponential decay:
+実際には、$C_A(t)$ を指数関数的減衰
 $$
 C_A(t) \sim e^{-t / \tau_A}.
 $$
+にフィットすることで $\tau_A$ を推定します。
 
-### 3. **Effect of Autocorrelation**
-Autocorrelation reduces the effective number of independent samples, leading to underestimated statistical errors. To account for this, the error in the measured quantity $A$ is corrected by:
+### 3. **自己相関の影響**
+自己相関は独立なサンプルの実効的な数を減らし、統計誤差の過小評価につながります。これを考慮するために、測定量 $A$ の誤差は次のように補正されます。
 $$
 \sigma_A = \sqrt{\frac{\text{Var}(A)}{N_{\text{eff}}}},
 $$
-where $\text{Var}(A)$ is the variance of $A$, and $N_{\text{eff}}$ is the effective number of independent samples:
-- $\text{Var}(A)$ is the **variance** of $A$, defined as:
+ここで $\text{Var}(A)$ は $A$ の分散、$N_{\text{eff}}$ は独立なサンプルの実効的な数です。
+- $\text{Var}(A)$ は $A$ の**分散**であり、次のように定義されます。
   $$
   \text{Var}(A) = \langle A^2 \rangle - \langle A \rangle^2,
   $$
-  where $\langle A^2 \rangle$ is the average of the squared measurements, and $\langle A \rangle$ is the average of the measurements.
-- $N_{\text{eff}}$ is the effective number of independent samples:
+  ここで $\langle A^2 \rangle$ は測定値の 2 乗の平均、$\langle A \rangle$ は測定値の平均です。
+- $N_{\text{eff}}$ は独立なサンプルの実効的な数です。
   $$
   N_{\text{eff}} = \frac{N_{\text{meas}}}{1 + 2 \tau_A}.
   $$
   
-## Generating Independent Samples
+## 独立なサンプルの生成
 
-### 1. Spacing Measurements
-To reduce autocorrelation, measurements should be spaced by at least the autocorrelation time $\tau_A$. This ensures that consecutive measurements are approximately independent. For example, if $\tau_A = 10$, measurements should be taken every 10 Monte Carlo steps.
+### 1. 測定間隔をあける
+自己相関を減らすには、少なくとも自己相関時間 $\tau_A$ だけ間隔をあけて測定を行うべきです。これにより、連続する測定がほぼ独立になります。例えば $\tau_A = 10$ であれば、10 モンテカルロステップごとに測定を行うべきです。
 
-### 2. Blocking Method
-The blocking method is a technique to generate independent samples by grouping measurements into blocks. Each block should be larger than the autocorrelation time. The average of each block is treated as an independent sample, and the variance of these block averages is used to estimate the error.
+### 2. ブロッキング法
+ブロッキング法は、測定値をブロックにまとめることで独立なサンプルを生成する手法です。各ブロックは自己相関時間よりも大きくする必要があります。各ブロックの平均を独立なサンプルとして扱い、これらのブロック平均の分散を用いて誤差を推定します。
 
-### 3. Parallel Tempering
-For systems with slow dynamics, parallel tempering can be used to generate independent samples. This involves running multiple simulations at different temperatures and periodically swapping configurations between them. The swaps help the system explore configuration space more efficiently.
+### 3. パラレルテンパリング
+ダイナミクスの遅い系では、独立なサンプルを生成するためにパラレルテンパリング（交換モンテカルロ法）を使うことができます。これは、異なる温度で複数のシミュレーションを実行し、それらの間で周期的に配置を交換するものです。この交換により、系は配置空間をより効率的に探索できるようになります。
 
-## Physical Quantities
+## 物理量
 
-Some example physical quantities are shown below for Ising model. For different models, different quantities would need to be considered. 
+以下に、イジングモデルの物理量の例をいくつか示します。モデルが異なれば、考慮すべき量も異なります。
 
-### Magnetization:
+### 磁化：
   $$
   M = \frac{1}{N} \sum_i s_i^z,
   $$
-  where $N$ is the total number of spins.
+  ここで $N$ はスピンの総数です。
   
-### Energy:
+### エネルギー：
   $$
   E = -J \sum_{\langle i,j \rangle} s_i^z s_j^z - h \sum_i s_i^z.
   $$
   
-### Magnetic susceptibility: 
+### 磁化率：
 
-The magnetic susceptibility $\chi$ measures the response of the system's magnetization to an external magnetic field. It is defined as:
+磁化率 $\chi$ は、外部磁場に対する系の磁化の応答を測ります。これは次のように定義されます。
 $$
 \chi = \frac{\partial \langle M \rangle}{\partial h},
 $$
-where $\langle M \rangle$ is the average magnetization, and $h$ is the external magnetic field. In Monte Carlo simulations, $\chi$ is computed from the fluctuations in the magnetization $M$ using the formula:
+ここで $\langle M \rangle$ は平均磁化、$h$ は外部磁場です。モンテカルロシミュレーションでは、$\chi$ は磁化 $M$ のゆらぎから次の式を用いて計算されます。
 $$
 \chi = \frac{\beta}{N} \left( \langle M^2 \rangle - \langle M \rangle^2 \right),
 $$
-where:
-- $\beta = 1/(k_B T)$ is the inverse temperature,
-- $N$ is the total number of spins,
-- $\langle M \rangle$ is the average magnetization,
-- $\langle M^2 \rangle$ is the average of the squared magnetization.
+ここで、
+- $\beta = 1/(k_B T)$ は逆温度、
+- $N$ はスピンの総数、
+- $\langle M \rangle$ は平均磁化、
+- $\langle M^2 \rangle$ は磁化の 2 乗の平均です。
 
-### Specific Heat:
+### 比熱：
 
-The specific heat $C$ measures the system's heat capacity, or how much energy is required to change its temperature. It is defined as:
+比熱 $C$ は系の熱容量、すなわち温度を変化させるのにどれだけのエネルギーが必要かを測ります。これは次のように定義されます。
 $$
 C = \frac{\partial \langle E \rangle}{\partial T},
 $$
-where $\langle E \rangle$ is the average energy of the system.
+ここで $\langle E \rangle$ は系の平均エネルギーです。
 
-In Monte Carlo simulations, $C$ is computed from the fluctuations in the energy $E$ using the formula:
+モンテカルロシミュレーションでは、$C$ はエネルギー $E$ のゆらぎから次の式を用いて計算されます。
 $$
 C = \frac{\beta^2}{N} \left( \langle E^2 \rangle - \langle E \rangle^2 \right),
 $$
-where:
-- $\beta = 1/(k_B T)$ is the inverse temperature,
-- $N$ is the total number of spins,
-- $\langle E \rangle$ is the average energy,
-- $\langle E^2 \rangle$ is the average of the squared energy.
+ここで、
+- $\beta = 1/(k_B T)$ は逆温度、
+- $N$ はスピンの総数、
+- $\langle E \rangle$ は平均エネルギー、
+- $\langle E^2 \rangle$ はエネルギーの 2 乗の平均です。

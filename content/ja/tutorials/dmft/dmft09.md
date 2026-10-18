@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-09 Néel Transition
+title: DMFT-09 ネール転移
 math: true
 toc: true
 ---

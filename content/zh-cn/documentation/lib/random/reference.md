@@ -1,6 +1,6 @@
 ---
-title: Reference
-description: "ALPS Random Library"
+title: "参考手册"
+description: "ALPS 随机数库"
 weight: 2
 ---
 

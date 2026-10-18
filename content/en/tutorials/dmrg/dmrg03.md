@@ -1,6 +1,7 @@
 
 ---
 title: DMRG-03 Ground State Energies
+weight: 3
 math: true
 toc: true
 ---
@@ -11,21 +12,33 @@ $$
 H = J\sum_{i=1}^{L-1} \left[\frac{1}{2} (S^+_i S^-_{i+1} + S^-_i S^+_{i+1}) + S^z_i S^z_{i+1}\right] .
 $$
 
-## Ground State Energies
+## Ground state energies
 
 When studying a model Hamiltonian, the first question we usually ask is what is the ground state $| \psi_0 \rangle$ and its energy $E_0$. For the Heisenberg chain of length $L$, and other similar systems, we might be more interested in the energy per site (or per bond) in the thermodynamic limit. Both of these will be considered below.
 
-### Fixed Length Ground State Energies
+### Fixed length ground state energies
 
-Consider chains of length $L=32,64,96,128$. Both for spin-1/2 and spin-1, set up ground state energy calculations for numbers of states $D=50,100,150,200,300$. For each length, tabulate the truncation error and the ground state energies as a function of $D$. Experiment carefully with the number of sweeps to assure that for a given length and number of states your result is actually converged.
+The calculations below use chains of length $L=32,64,96,128$, for both spin-1/2 and spin-1, with numbers of states $D=50,100,150,200,300$. For each length the truncation error and the ground state energy are recorded as a function of $D$. The number of sweeps must be chosen carefully, since a result is only meaningful once it has converged at the given length and number of states.
 
-1. For each system size and spin magnitude, try to establish the connection between the accuracy of the total energy and the truncation error by plotting total energy vs. truncation error.
+Plotting the total energy against the truncation error exposes the connection between the two, and the ground state energies for each chain length can then be extrapolated to the $D\rightarrow\infty$ limit.
 
-2. Observe how the convergence in $D$ deteriorates with system size for spin-1/2 and spin-1, and compare the convergence behavior in the two cases, apart from a global factor of order of the length. *Hint:* What you should see is, that but for the global factor, the convergence for large system sizes is only weakly dependent of length for the spin-1 chain, but much more strongly dependent for the spin-1/2 chain. This is because the spin-1 chain physics is dominated by segments of length of the correlation length, whereas for the spin-1/2 chain there is no finite length scale because of criticality.
+The convergence in $D$ deteriorates with system size for both chains, but not equally. Apart from a global factor of order of the length, convergence at large system sizes depends only weakly on length for the spin-1 chain, and much more strongly for the spin-1/2 chain. This is because spin-1 physics is dominated by segments of the order of the correlation length, whereas the spin-1/2 chain has no finite length scale because it is critical.
 
-3. Try to extrapolate ground state energies for each chain length to the $D\rightarrow\infty$ limit.
+#### The one-dimensional S=1/2 Heisenberg chain
 
-#### The one dimensional S=1/2 Heisenberg chain
+##### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE` | built-in open chain, no lattice file required (see the [ALPS lattice library](../../../documentation/intro/latticehowtos)) | `open chain lattice` |
+| `MODEL` | quantum spin model (default $S=1/2$) | `spin` |
+| `L` | chain length | 32 |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed, used to block-diagonalize $H$ | `N,Sz` |
+| `Sz_total` | magnetization sector targeted | 0 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
+| `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
 
 ##### Single run
 
@@ -33,7 +46,7 @@ The first example consists of setting up a simulation for a spin-1/2 Heisenberg 
 
 ###### Using parameter files
 
-The parameter file [`spin_one_half`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-01-dmrg/spin_one_half) sets the most important parameters:
+The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half" data-filename="spin_one_half" target="_blank" rel="noopener">`spin_one_half`</a> sets the most important parameters:
 
 ```python
 LATTICE="open chain lattice"
@@ -60,7 +73,7 @@ DMRG will perform four sweeps, (four half-sweps from left to right and four half
 
 ###### Using Python
 
-To set up and run the simulation in Python we use the script [`spin_one_half.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half.py). The first part of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application:
+To set up and run the simulation in Python we use the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half.py" data-filename="spin_one_half.py" target="_blank" rel="noopener">`spin_one_half.py`</a>. The first part of this script imports the required modules, prepares the input files as a list of Python dictionaries, writes the input files and runs the application:
 
 ```python
 import pyalps
@@ -130,15 +143,15 @@ plt.xlabel('iteration')
 plt.show()
 ```
 
-For the single run above (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-13.9973156\cdot J$ within about 50 iterations. Since the ground state energy is extensive, we divide by the 31 bonds to get the intensive per-bond energy $e_0/J = E_0/(31J)\approx-0.4515$, close to the exact thermodynamic-limit value $e_0/J=1/4-\ln2=-0.4431471806$ quoted in [DMRG-02](../dmrg02). The truncation error drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
+For the single run above (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-13.9973156\cdot J$ within about 50 iterations. Since the ground state energy is extensive, we divide by the 31 bonds to get the intensive per-bond energy $e_0/J = E_0/(31J)\approx-0.4515$, close to the exact thermodynamic-limit value $e_0/J=1/4-\ln2=-0.4431471806$ quoted in [DMRG-02](../dmrg02). The truncation error (not shown) drops in a sawtooth pattern that bottoms out near machine precision ($\sim 10^{-16}$) at the end of each half-sweep and rises again as the next half-sweep begins:
 
-![](/figs/dmrg/dmrg_energy_truncation.png)
+![](/figs/dmrg/spin_one_half_energy_iteration.png)
 
 ##### Multiple runs
 
 ###### Using parameter files
 
-We now proceed to illustrate how to setup several runs in a single parameter file [`spin_one_half_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple). We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
+We now proceed to illustrate how to setup several runs in a single parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half_multiple" data-filename="spin_one_half_multiple" target="_blank" rel="noopener">`spin_one_half_multiple`</a>. We shall use the example proposed in the tutorial, and simulate a chain of length L=32, changing the number of DMRG states (we shall use a smaller number of states for illustration purposes):
 
 ```python
 LATTICE="open chain lattice"
@@ -164,7 +177,7 @@ In this case, we will find three output files `spin_one_half_multiple.task#.out.
 
 ###### Using Python
 
-The script [`spin_one_half_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_half_multiple.py) sets up three Python dictionaries of parameters with differing MAXSTATES:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_half_multiple.py" data-filename="spin_one_half_multiple.py" target="_blank" rel="noopener">`spin_one_half_multiple.py`</a> sets up three Python dictionaries of parameters with differing MAXSTATES:
 
 ```python
 parms= []
@@ -191,9 +204,25 @@ for run in data:
         print(s.props['observable'], ':', s.y[0])
 ```
 
-#### The one dimensional S=1 Heisenberg chain
+#### The one-dimensional S=1 Heisenberg chain
 
-The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script [`build_lattice.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/build_lattice.py) that will generate the lattice for us. The only input is the number of sites in the lattice.
+##### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `LATTICE_LIBRARY` | custom lattice file written by `build_lattice.py` | `my_lattice.xml` |
+| `LATTICE` | open chain whose two end vertices carry a separate type | `open chain lattice with special edges` |
+| `MODEL` | quantum spin model | `spin` |
+| `local_S0` | spin on the two end sites, added to absorb the edge states | 0.5 |
+| `local_S1` | spin on the interior sites | 1 |
+| `CONSERVED_QUANTUMNUMBERS` | quantum numbers held fixed, used to block-diagonalize $H$ | `N,Sz` |
+| `Sz_total` | magnetization sector targeted | 0 |
+| `J` | nearest-neighbor Heisenberg coupling | 1 |
+| `SWEEPS` | number of DMRG finite-size sweeps | 4 |
+| `NUMBER_EIGENVALUES` | eigenstates requested | 1 |
+| `MAXSTATES` | bond dimension $D$ kept after truncation | 100 (single run); 20, 40, 60 (multiple runs) |
+
+The S=1 Heisenberg chain requires some special treatment due to the open boundary conditions. As explained in [DMRG-01](../dmrg01), we need to include two sites at both ends of the chain with a spin S=1/2 on each of them. This requires defining a new lattice file for the simulation. As it turns out, there is not a straightforward way to do this, so we will have to do it manually. To simplify the process, we have included a simple Python script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/build_lattice.py" data-filename="build_lattice.py" target="_blank" rel="noopener">`build_lattice.py`</a> that will generate the lattice for us. The only input is the number of sites in the lattice.
 
 ##### Lattice
 
@@ -259,7 +288,7 @@ python build_lattice.py 32 > my_lattice.xml
 
 ##### Using parameter files
 
-Let us see how the final parameter file [`spin_one`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one) should look like:
+Let us see how the final parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one" data-filename="spin_one" target="_blank" rel="noopener">`spin_one`</a> should look like:
 
 ```python
 LATTICE_LIBRARY="my_lattice.xml"
@@ -275,7 +304,7 @@ NUMBER_EIGENVALUES=1
 {MAXSTATES=100}
 ```
 
-Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler approach is to define all the lattices we need in a lattice library. We have included a [`my_lattices.xml`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/my_lattices.xml) file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
+Clearly, it is cumbersome to repeat this process for each system size. One way to simplify it even further is to write a script to do it for us automatically. A simpler approach is to define all the lattices we need in a lattice library. We have included a <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/my_lattices.xml" data-filename="my_lattices.xml" target="_blank" rel="noopener">`my_lattices.xml`</a> file with lattices of sizes $L=32,64,96,128,192$. All we have to do is modify the previous parameter file by replacing the lattice definition as follows:
 
 ```python
 LATTICE_LIBRARY="my_lattices.xml"
@@ -285,7 +314,7 @@ where we have included the lattice size in the name.
 
 ##### Using Python
 
-The script [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one.py) defines the parameters in a Python dictionary:
+The script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one.py" data-filename="spin_one.py" target="_blank" rel="noopener">`spin_one.py`</a> defines the parameters in a Python dictionary:
 
 ```python
 parms = [ { 
@@ -307,13 +336,13 @@ Apart from parameter and file name changes, it is the same as the `spin_one_half
 
 For this S=1 single run (L=32, MAXSTATES=100, J=1), the ground state energy warms up during the infinite-system growth and settles to its converged value $E_0=-42.6513851\cdot J$ within about 30 iterations. Dividing by the 31 bonds gives the intensive per-bond energy $e_0/J = E_0/(31J)\approx-1.3759$, close to the numerical thermodynamic-limit value $e_0/J=-1.401484039$ quoted in [DMRG-02](../dmrg02), as expected for a finite chain — even with the special edges added to suppress boundary effects. The truncation error shows the same sawtooth convergence pattern as the spin-1/2 case above, bottoming out near machine precision at the end of each half-sweep and rising again as the next half-sweep begins:
 
-![](/figs/dmrg/dmrg_energy_truncation_spin_one.png)
+![](/figs/dmrg/spin_one_energy_iteration.png)
 
 ##### Multiple runs
 
 ###### Using parameter files
 
-Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named [`spin_one_multiple`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple) as follows:
+Same as for the spin S=1/2 case, we can now setup multiple runs in a single parameter file named <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_multiple" data-filename="spin_one_multiple" target="_blank" rel="noopener">`spin_one_multiple`</a> as follows:
 
 ```python
 LATTICE_LIBRARY="my_lattices.xml"
@@ -333,9 +362,9 @@ SWEEPS=4
 
 ###### Using Python
 
-The same runs can be set up with the script [`spin_one_multiple.py`](https://github.com/ALPSim/ALPS/blob/master/tutorials/dmrg-01-dmrg/spin_one_multiple.py), which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
+The same runs can be set up with the script <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmrg-03-ground-state-energies/spin_one_multiple.py" data-filename="spin_one_multiple.py" target="_blank" rel="noopener">`spin_one_multiple.py`</a>, which can be obtained from the corresponding spin-1/2 script by replacing the parameters.
 
-### Ground State Energies Per Site (Bond)
+### Ground state energies per site (bond)
 
 If we look closely at the Hamiltonian, the energy of a chain of length $L$ does not sit on the $L$ sites, but on the $L-1$ bonds. A first (naive) attempt therefore consists of taking the results of the last simulations and calculating:
 
@@ -345,7 +374,7 @@ $$
 
 The correct approach is to eliminate the effect of the open boundary conditions by considering the energy of one bond at the center of the chain. There are two ways of doing this.
 
-1. Calculate the ground state energy of two chains of length $L$ and $L+2$, again for the lengths already mentioned above, and calculate $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
+1. Take the ground state energies of two chains of length $L$ and $L+2$, for the lengths already mentioned above, and form $e_0/J = (E_0(L+2) - E_0 (L))/2$ as the energy per bond.
 
 2. The less costly and usual way would be to use correlators (as discussed further in [DMRG-06](../dmrg06)) between neighboring sites:
 $$

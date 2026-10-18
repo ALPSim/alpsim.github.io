@@ -1,78 +1,77 @@
-
 ---
-title: Symmetry
+title: 対称性
 math: true
 weight: 2
 ---
-The size of the Hilbert space of a Hamiltonian grows exponentially with the number of lattice sites, which limits the size of a quantum model that can be studied. It is, however, possible to reduce the full Hamiltonian matrix into several smaller matrices by block diagonalization with lattice and Hamiltonian symmetries. 
+ハミルトニアンのヒルベルト空間のサイズは格子サイト数とともに指数関数的に増大するため、調べることのできる量子モデルのサイズは制限されます。しかし、格子とハミルトニアンの対称性を用いたブロック対角化によって、ハミルトニアン行列全体をいくつかのより小さな行列に分解することができます。
 
-In the following we will use a 4-site spin-$\frac{1}{2}$ chain with periodic boundary to illustrate how to employ these symmetries for block-diagonalizing the full Hamiltonian matrix.
+以下では、周期境界条件を課した 4 サイトのスピン $\frac{1}{2}$ 鎖を用いて、これらの対称性を利用してハミルトニアン行列全体をブロック対角化する方法を説明します。
 
-## Hilbert Space
+## ヒルベルト空間
 
-The Hilbert space for a 4-site spin-$\frac{1}{2}$ chain has dimension $2^4 = 16$. A basis for this space can be written as:
+4 サイトのスピン $\frac{1}{2}$ 鎖のヒルベルト空間の次元は $2^4 = 16$ です。この空間の基底は次のように書けます。
 
 $$
 \{ |s_1, s_2, s_3, s_4\rangle \}, \quad s_i \in \{\uparrow, \downarrow\}
 $$
 
-## Symmetries of the Hamiltonian
+## ハミルトニアンの対称性
 
-The Hamiltonian has several symmetries that can be used to block-diagonalize it, reducing the computational effort:
+ハミルトニアンはいくつかの対称性を持ち、それらを用いてブロック対角化することで計算量を削減できます。
 
-- **Total magnetization $S^z_{\text{total}}$ conservation**:
-   The total $S^z$ operator, $S^z_{\text{total}} = \sum_{i=1}^4 S_i^z$, commutes with $\mathcal{H}$. Thus, the Hamiltonian is block-diagonal in sectors of fixed $S^z_{\text{total}}$.
+- **全磁化 $S^z_{\text{total}}$ の保存**：
+   全 $S^z$ 演算子 $S^z_{\text{total}} = \sum_{i=1}^4 S_i^z$ は $\mathcal{H}$ と交換します。したがって、ハミルトニアンは $S^z_{\text{total}}$ が一定のセクターごとにブロック対角になります。
 
-- **Translational symmetry**:
-   The Hamiltonian is invariant under translations $T$, where $T|s_1, s_2, s_3, s_4\rangle = |s_4, s_1, s_2, s_3\rangle$. This symmetry can be used to further block-diagonalize $\mathcal{H}$.
+- **並進対称性**：
+   ハミルトニアンは並進 $T$ のもとで不変です。ここで $T|s_1, s_2, s_3, s_4\rangle = |s_4, s_1, s_2, s_3\rangle$ です。この対称性を用いて $\mathcal{H}$ をさらにブロック対角化できます。
 
-- **Spin inversion symmetry**:
-   The Hamiltonian is invariant under spin inversion $P$, where $P|s_1, s_2, s_3, s_4\rangle = |-s_1, -s_2, -s_3, -s_4\rangle$. This symmetry can also be exploited.
+- **スピン反転対称性**：
+   ハミルトニアンはスピン反転 $P$ のもとで不変です。ここで $P|s_1, s_2, s_3, s_4\rangle = |-s_1, -s_2, -s_3, -s_4\rangle$ です。この対称性も利用できます。
 
-- **Reflection symmetry**:
-   The Hamiltonian is invariant under reflection $R$, where $R|s_1, s_2, s_3, s_4\rangle = |s_4, s_3, s_2, s_1\rangle$.
+- **鏡映対称性**：
+   ハミルトニアンは鏡映 $R$ のもとで不変です。ここで $R|s_1, s_2, s_3, s_4\rangle = |s_4, s_3, s_2, s_1\rangle$ です。
 
-## Block-Diagonalization
+## ブロック対角化
 
-We will use the total magnetization $S^z_{\text{total}}$ and translational symmetry to reduce the Hilbert space.
+全磁化 $S^z_{\text{total}}$ と並進対称性を用いてヒルベルト空間を縮小します。
 
-### Step 1: Total Magnetization Sectors
+### ステップ 1：全磁化セクター
 
-The possible values of $S^z_{\text{total}}$ are $-2, -1, 0, 1, 2$. We can divide the Hilbert space into these sectors:
+$S^z_{\text{total}}$ の取りうる値は $-2, -1, 0, 1, 2$ です。ヒルベルト空間をこれらのセクターに分割できます。
 
-- $S^z_{\text{total}} = 2$: Only one state, $|\uparrow, \uparrow, \uparrow, \uparrow\rangle$.
-- $S^z_{\text{total}} = 1$: Four states, e.g., $|\downarrow, \uparrow, \uparrow, \uparrow\rangle$, $|\uparrow, \downarrow, \uparrow, \uparrow\rangle$, etc.
-- $S^z_{\text{total}} = 0$: Six states, e.g., $|\uparrow, \uparrow, \downarrow, \downarrow\rangle$, $|\uparrow, \downarrow, \uparrow, \downarrow\rangle$, etc.
-- $S^z_{\text{total}} = -1$: Four states, e.g., $|\downarrow, \downarrow, \downarrow, \uparrow\rangle$, $|\downarrow, \downarrow, \uparrow, \downarrow\rangle$, etc.
-- $S^z_{\text{total}} = -2$: Only one state, $|\downarrow, \downarrow, \downarrow, \downarrow\rangle$.
+- $S^z_{\text{total}} = 2$：状態は $|\uparrow, \uparrow, \uparrow, \uparrow\rangle$ の 1 つのみです。
+- $S^z_{\text{total}} = 1$：4 つの状態。例えば $|\downarrow, \uparrow, \uparrow, \uparrow\rangle$、$|\uparrow, \downarrow, \uparrow, \uparrow\rangle$ など。
+- $S^z_{\text{total}} = 0$：6 つの状態。例えば $|\uparrow, \uparrow, \downarrow, \downarrow\rangle$、$|\uparrow, \downarrow, \uparrow, \downarrow\rangle$ など。
+- $S^z_{\text{total}} = -1$：4 つの状態。例えば $|\downarrow, \downarrow, \downarrow, \uparrow\rangle$、$|\downarrow, \downarrow, \uparrow, \downarrow\rangle$ など。
+- $S^z_{\text{total}} = -2$：状態は $|\downarrow, \downarrow, \downarrow, \downarrow\rangle$ の 1 つのみです。
 
-### Step 2: Translational Symmetry
+### ステップ 2：並進対称性
 
-Within each $S^z_{\text{total}}$ sector, we can further block-diagonalize using translational symmetry. The translation operator $T$ has eigenvalues $e^{ik}$, where $k = 0, \pi/2, \pi, 3\pi/2$ (since $T^4 = 1$).
+各 $S^z_{\text{total}}$ セクターの中で、並進対称性を用いてさらにブロック対角化できます。並進演算子 $T$ の固有値は $e^{ik}$ であり、$k = 0, \pi/2, \pi, 3\pi/2$ です（$T^4 = 1$ であるため）。
 
-For example, in the $S^z_{\text{total}} = 0$ sector, the states can be organized into momentum eigenstates. One of the states with total momentum $k$ is given by
+例えば $S^z_{\text{total}} = 0$ セクターでは、状態を運動量固有状態に組み直すことができます。全運動量 $k$ を持つ状態の 1 つは次で与えられます。
 
 $$
 |\phi\rangle = \frac{1}{\sqrt{M}} \sum_{n=0}^3 e^{ikn} T^n |\psi\rangle,
 $$
 
-where $|\psi\rangle$ is a representative state in real space and $|\phi\rangle$ is a state in momentum space, which is invariant under the application of $T$. The normalization factor $M=4$ unless the cyclic periodicity of the state is less than 4, which will be discussed later.
+ここで $|\psi\rangle$ は実空間における代表状態、$|\phi\rangle$ は運動量空間における状態であり、$T$ の作用のもとで不変です。規格化因子は、状態の巡回周期が 4 より小さい場合を除いて $M=4$ です。この場合については後で説明します。
 
-### Step 3: Constructing the Hamiltonian Blocks
+### ステップ 3：ハミルトニアンのブロックの構築
 
-For each $S^z_{\text{total}}$ and momentum $k$, we construct the Hamiltonian matrix in the reduced basis. The matrix elements are:
+各 $S^z_{\text{total}}$ と運動量 $k$ について、縮小された基底でハミルトニアン行列を構築します。行列要素は次のとおりです。
 
 $$
 \langle \phi^{\prime} | \mathcal{H} | \phi \rangle = J \sum_{i=1}^4 \langle \phi^{\prime} | \mathbf{S}_i \cdot \mathbf{S}_{i+1} | \phi \rangle
 $$
 
-### Step 4: Diagonalization
+### ステップ 4：対角化
 
-Finally, we diagonalize each block of the Hamiltonian to obtain the eigenvalues and eigenstates.
+最後に、ハミルトニアンの各ブロックを対角化して固有値と固有状態を求めます。
 
-### Example: $S^z_{\text{total}} = 0$ Sector
+### 例：$S^z_{\text{total}} = 0$ セクター
 
-The $S^z_{\text{total}} = 0$ sector consists of states with exactly 2 spins up ($\uparrow$) and 2 spins down ($\downarrow$). For a 4-site chain, there are $\binom{4}{2} = 6$ basis states in this sector:
+$S^z_{\text{total}} = 0$ セクターは、ちょうど 2 つの上向きスピン（$\uparrow$）と 2 つの下向きスピン（$\downarrow$）を持つ状態からなります。4 サイト鎖では、このセクターに $\binom{4}{2} = 6$ 個の基底ベクトルがあります。
 
 $$
 |\psi_1\rangle = |\uparrow, \uparrow, \downarrow, \downarrow\rangle, \quad |\psi_2\rangle = |\uparrow, \downarrow, \uparrow, \downarrow\rangle, \quad |\psi_3\rangle = |\uparrow, \downarrow, \downarrow, \uparrow\rangle
@@ -81,7 +80,7 @@ $$
 |\psi_4\rangle = |\downarrow, \uparrow, \uparrow, \downarrow\rangle, \quad |\psi_5\rangle = |\downarrow, \uparrow, \downarrow, \uparrow\rangle, \quad |\psi_6\rangle = |\downarrow, \downarrow, \uparrow, \uparrow\rangle
 $$
 
-The full Hamiltonian matrix for the $S^z_{\text{total}}=0$ sector is given by
+$S^z_{\text{total}}=0$ セクターのハミルトニアン行列全体は次で与えられます。
 $$
 \mathcal{H} = J\begin{pmatrix}
  0 & 0.5 & 0 & 0 & 0.5 & 0 \\
@@ -92,21 +91,21 @@ $$
  0 & 0.5 & 0 & 0 & 0.5 & 0 \\
 \end{pmatrix}.
 $$
-Exact diagonalization of the above matrix gives $E_1=-2J$, $E_2=-J$, $E_3=0$, $E_4=0$, $E_5=0$, and $E_6=J$.
+上の行列を厳密対角化すると、$E_1=-2J$、$E_2=-J$、$E_3=0$、$E_4=0$、$E_5=0$、$E_6=J$ が得られます。
 
-#### Momentum Sectors
-The momentum $k$ is given by $k = 0, \pi/2, \pi, 3\pi/2$, as discussed above. The translation operator $T$ acts on a state $|\psi_i\rangle$ as:
+#### 運動量セクター
+運動量 $k$ は、上で述べたように $k = 0, \pi/2, \pi, 3\pi/2$ で与えられます。並進演算子 $T$ は状態 $|\psi_i\rangle$ に次のように作用します。
 
 $$
 T^n |\psi_i\rangle = e^{ikn} |\psi_j\rangle.
 $$
 
-For $n=1$, each site spin configuration shifts to the right by 1 lattice spacing. When $n=4$, the state $|\psi_j\rangle=|\psi_i\rangle$. It is possible that a state cyclic periodicity is smaller than $4$. For example, $|\psi_2\rangle$ and $|\psi_5\rangle$ both have periodicity 2. The normalization factor $M=2$ in the above transformation equation.
+$n=1$ のとき、各サイトのスピン配置は格子間隔 1 つ分だけ右にずれます。$n=4$ のとき、状態は $|\psi_j\rangle=|\psi_i\rangle$ となります。状態の巡回周期が $4$ より小さいこともあり得ます。例えば、$|\psi_2\rangle$ と $|\psi_5\rangle$ はどちらも周期 2 を持ちます。このとき、上の変換式における規格化因子は $M=2$ です。
 
-In the following, we construct translationally symmetric states for each momentum sector.
+以下では、各運動量セクターについて並進対称な状態を構築します。
 
-#### $S^z_{\text{total}} = 0$ and $k = 0$ Sector
-The momentum $k = 0$ sector consists of translationally symmetric states. For $S^z_{\text{total}} = 0$, there are 2 basis states:
+#### $S^z_{\text{total}} = 0$ かつ $k = 0$ のセクター
+運動量 $k = 0$ のセクターは並進対称な状態からなります。$S^z_{\text{total}} = 0$ では基底ベクトルは 2 つあります。
 
 $$
 |\phi_1\rangle = \frac{1}{2} \left( |\psi_1\rangle + |\psi_4\rangle + |\psi_6\rangle + |\psi_3\rangle \right).
@@ -115,35 +114,35 @@ $$
 $$
 |\phi_2\rangle = \frac{1}{\sqrt{2}}(|\psi_2\rangle + |\psi_5\rangle).
 $$
-In the above construction of basis states in momentum space, two **representative states** $|\psi_1\rangle$ and $|\psi_2\rangle$ have been used with the translational operator $T$ to generate the basis states. No other independent states can be generated. Therefore, the dimension of the $S^z_{\text{total}} = 0$ and $k = 0$ sector is 2.
+上の運動量空間の基底ベクトルの構築では、2 つの**代表状態** $|\psi_1\rangle$ と $|\psi_2\rangle$ に並進演算子 $T$ を作用させて基底ベクトルを生成しています。これ以外に独立な状態は生成できません。したがって、$S^z_{\text{total}} = 0$ かつ $k = 0$ のセクターの次元は 2 です。
 
-The Hamiltonian matrix in this sector is given by:
+このセクターのハミルトニアン行列は次で与えられます。
 $$
 \mathcal{H} = J\begin{pmatrix}
 0 & \sqrt{2} \\
 \sqrt{2} & -1 \\
 \end{pmatrix}.
 $$
-Exact diagonalization of the matrix gives $E_1=-2J$ and $E_2=J$.
+この行列を厳密対角化すると、$E_1=-2J$ と $E_2=J$ が得られます。
 
-#### $S^z_{\text{total}} = 0$ and $k = 1$ Sector
-The momentum $k = 1$ sector corresponds to $k = \frac{\pi}{2}$. For $S^z_{\text{total}} = 0$, there is only 1 basis state:
+#### $S^z_{\text{total}} = 0$ かつ $k = 1$ のセクター
+運動量 $k = 1$ のセクターは $k = \frac{\pi}{2}$ に対応します。$S^z_{\text{total}} = 0$ では基底ベクトルは 1 つだけです。
 
 $$
 |\phi_1\rangle = \frac{1}{2} \left( |\psi_1\rangle + i|\psi_4\rangle - |\psi_6\rangle - i|\psi_3\rangle \right).
 $$
 
-The Hamiltonian matrix in this sector is:
+このセクターのハミルトニアン行列は次のとおりです。
 
 $$
 \mathcal{H} = \begin{pmatrix}
 0
 \end{pmatrix}.
 $$
-Therefore, the eigenvalue of the $S^z_{\text{total}} = 0$ and $k = 1$ Sector is $E_3=0$.
+したがって、$S^z_{\text{total}} = 0$ かつ $k = 1$ のセクターの固有値は $E_3=0$ です。
 
-#### $S^z_{\text{total}} = 0$ and $k = 2$ Sector
-The momentum $k = 2$ sector corresponds to $k = \pi$. For $S_z = 0$, there are 2 basis states:
+#### $S^z_{\text{total}} = 0$ かつ $k = 2$ のセクター
+運動量 $k = 2$ のセクターは $k = \pi$ に対応します。$S_z = 0$ では基底ベクトルは 2 つあります。
 
 $$
 |\phi_1\rangle = \frac{1}{2} \left( |\psi_1\rangle - |\psi_4\rangle + |\psi_6\rangle -|\psi_3\rangle \right),
@@ -152,7 +151,7 @@ $$
 |\phi_2\rangle = \frac{1}{\sqrt{2}} \left( |\psi_2\rangle - |\psi_5\rangle \right),
 $$
 
-The Hamiltonian matrix in this sector is:
+このセクターのハミルトニアン行列は次のとおりです。
 
 $$
 \mathcal{H} = J \begin{pmatrix}
@@ -160,32 +159,32 @@ $$
 0 & -1 \\
 \end{pmatrix},
 $$
-the exact diagonalization of which gives $E_4=-J$ and $E_5=0$.
+これを厳密対角化すると、$E_4=-J$ と $E_5=0$ が得られます。
 
-#### $S^z_{\text{total}} = 0$ and $k = 3$ Sector
-The momentum $k = 3$ sector corresponds to $k = \frac{3\pi}{2}$. For $S_z = 0$, there is only 1 basis state:
+#### $S^z_{\text{total}} = 0$ かつ $k = 3$ のセクター
+運動量 $k = 3$ のセクターは $k = \frac{3\pi}{2}$ に対応します。$S_z = 0$ では基底ベクトルは 1 つだけです。
 
 $$
 |\phi_1\rangle = \frac{1}{2} \left( |\psi_1\rangle - i|\psi_4\rangle - |\psi_6\rangle + i|\psi_3\rangle \right).
 $$
 
-The Hamiltonian matrix in this sector is:
+このセクターのハミルトニアン行列は次のとおりです。
 
 $$
 \mathcal{H} = \begin{pmatrix}
 0
 \end{pmatrix}.
 $$
-The last eigenvalue is then $E_6=0$.
+したがって、最後の固有値は $E_6=0$ です。
 
-#### Summary
-- **$k = 0$**: two state, energies $-2J$ and $J$.
-- **$k = 1$**: one state, energy $0$.
-- **$k = 2$**: two states,energies $-J$ and $0$.
-- **$k = 3$**: one state, energy $0$.
+#### まとめ
+- **$k = 0$**：2 つの状態、エネルギーは $-2J$ と $J$。
+- **$k = 1$**：1 つの状態、エネルギーは $0$。
+- **$k = 2$**：2 つの状態、エネルギーは $-J$ と $0$。
+- **$k = 3$**：1 つの状態、エネルギーは $0$。
 
-These energy levels are in agreement with those from the direct exact diagonalization of the $6\times 6$ Hamiltonian matrix for the $S^z_{\text{total}}=0$ sector without the translational symmetry.
+これらのエネルギー準位は、並進対称性を用いずに $S^z_{\text{total}}=0$ セクターの $6\times 6$ ハミルトニアン行列を直接厳密対角化して得られたものと一致しています。
 
-After diagonalizing all blocks, we obtain the exact eigenvalues and eigenstates of the 4-site Heisenberg chain with periodic boundary conditions. The use of symmetries reduces the size of the matrices by approximately a factor of $1/N$, where $N$ is the number of lattice sites.
+すべてのブロックを対角化すると、周期境界条件を課した 4 サイトのハイゼンベルク鎖の厳密な固有値と固有状態が得られます。対称性を用いることで、行列のサイズはおよそ $1/N$ 倍（$N$ は格子サイト数）に縮小されます。
 
-This approach can be generalized to larger systems, although one needs to think of an efficent way in the exact diagonalization code to index and access all states in the Hilbert space. The computational cost still grows exponentially with system size.
+この方法はより大きな系にも一般化できますが、厳密対角化のコードにおいてヒルベルト空間のすべての状態に番号を付けてアクセスするための効率的な方法を考える必要があります。それでも、計算コストは系のサイズとともに指数関数的に増大します。

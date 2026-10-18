@@ -1,7 +1,7 @@
 
 ---
-title: Data Evaluation
-linkTitle: Evaluation
+title: データの評価
+linkTitle: 評価
 math: true
 toc: true
 weight: 3
@@ -12,37 +12,37 @@ weight: 3
 
 `*class* pyalps.DataSet(x=None, y=None, props=None)`
 
-- The DataSet class stores a set of data, usually in XY format, along with all the properties describing the data, such as input parameters to the simulation etc.
+- DataSet クラスは、通常は XY 形式のデータの集まりを、シミュレーションへの入力パラメータなど、そのデータを記述するすべてのプロパティとともに格納します。
 
-- Members are:
-   - x, y - These contain the data and are expected to come as lists of Numpy arrays by many functions operating on DataSets. However, for user-supplied functions, other ways of representing data may be used.
+- メンバは次のとおりです。
+   - x, y - データを保持します。DataSet を操作する多くの関数では、Numpy 配列のリストとして与えられることが想定されています。ただし、ユーザーが用意する関数では、データを別の形で表現してもかまいません。
 
-   - props - This is a dictionary of properties describing the dataset.
+   - props - データセットを記述するプロパティの辞書です。
 
-### Tools
+### ツール
 
 `pyalps.collectXY(sets, x, y, foreach=, []ignoreProperties=False)`
-  collects specified data from a list of DataSet objects
+  DataSet オブジェクトのリストから指定したデータを収集します
 
-- this function is used to collect data from a list of DataSet objects, to prepare plots or evaluation. 
+- この関数は、プロットや評価の準備のために、DataSet オブジェクトのリストからデータを収集するのに使います。
 
-- The parameters are:
+- パラメータは次のとおりです。
 
-   - sets: the list of datasets 
-   - x: the name of the property or measurement to be used as x-value of the collected results 
-   - y: the name of the property or measurement to be used as y-value of the collected results 
-   - foreach: an optional list of properties used for grouping the results. A separate DataSet object is created for each unique set of values of the specified parameers. 
-   - ignoreProperties: setting ignoreProperties=True prevents collectXY() from collecting properties.
+   - sets: データセットのリスト
+   - x: 収集結果の x 値として使うプロパティまたは測定量の名前
+   - y: 収集結果の y 値として使うプロパティまたは測定量の名前
+   - foreach: 結果をグループ化するために使うプロパティの、省略可能なリスト。指定したパラメータの値の組それぞれに対して、別々の DataSet オブジェクトが作成されます。
+   - ignoreProperties: ignoreProperties=True と設定すると、collectXY() はプロパティを収集しません。
    
-- The function returns a list of DataSet objects.
+- この関数は DataSet オブジェクトのリストを返します。
 
 `pyalps.groupSets(groups, for_each=[])`
-  groups a list of DataSet objects into a list of lists
+  DataSet オブジェクトのリストを、リストのリストにグループ化します
 
-- this function groups a list of DataSet objects into a list of lists, according to the values of the properties given in the for_ech argument. DataSet objects with the same values of the properties given in for_each are grouped together. 
+- この関数は、for_ech 引数で与えたプロパティの値に従って、DataSet オブジェクトのリストをリストのリストにグループ化します。for_each で与えたプロパティの値が同じ DataSet オブジェクトどうしが、1 つのグループにまとめられます。
 
-- The parameters are:
-   - data: the data to be grouped for_each: the properties according to which the data is grouped
+- パラメータは次のとおりです。
+   - data: グループ化するデータ　for_each: データをグループ化する基準となるプロパティ
 
 `pyalps.select(inp, condition)`
 
@@ -53,23 +53,23 @@ weight: 3
 `pyalps.mergeMeasurements(measurements)`
 
 
-### Fit wrapper
+### フィットのラッパー
 
 `pyalps.fit_wrapper.Parameter()`
 
 `pyalps.fit_wrapper.fit(self, function, parameters, y, x=None)`
 
-### Plot
+### プロット
 
 `pyalps.SetLabels(data, proplist)`
 
-- Set labels according to the properties given in ‘proplist’.
+- ‘proplist’ で与えたプロパティに従ってラベルを設定します。
 
 `pyalps.CycleColors(data, foreach, colors=['k', 'b', 'g', 'm', 'c', 'y'])`
 
-- Cyclically assign colors to the lines/markers that will be used to display the DataSets, based on the properties in ‘foreach’. This means that DataSet instances that have the same values for the properties in ‘foreach’ will receive the same color.
+- ‘foreach’ のプロパティに基づいて、DataSet を表示するのに使われる線やマーカーに色を順番に割り当てます。つまり、‘foreach’ のプロパティの値が同じ DataSet インスタンスには同じ色が割り当てられます。
 
 `pyalps.CycleMarkers(data, foreach, markers=['s', 'o', '^', '>', 'v', '<', 'd', 'p', 'h', '+', 'x'])`
 
-- Cyclically assign markers to the lines/markers that will be used to display the DataSets, based on the properties in ‘foreach’. This means that DataSet instances that have the same values for the properties in ‘foreach’ will receive the same marker.
+- ‘foreach’ のプロパティに基づいて、DataSet を表示するのに使われる線やマーカーにマーカーを順番に割り当てます。つまり、‘foreach’ のプロパティの値が同じ DataSet インスタンスには同じマーカーが割り当てられます。
 

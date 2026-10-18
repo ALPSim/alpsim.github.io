@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-03 Ground State Energies
+title: DMRG-03 基底状態エネルギー
 math: true
 toc: true
 ---

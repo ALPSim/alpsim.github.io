@@ -33,6 +33,16 @@ We first use the 4-site mixed graph in the lattice configuration file: `lattices
 The lattice configuration is illustrated in the following diagram:
 ![mixed-4-site configuration](/figs/qbits/mixed4sitesconfig.png)
 
+The same graph, with the Hamiltonian couplings labeled on each bond and the transverse field $\Gamma$ on each site:
+
+```
+Γ   1 ---J1--- 2   Γ
+    |  \     / |
+    J1  J2 J2  J1
+    |  /     \ |
+Γ   4 ---J1--- 3   Γ
+```
+
 In this lattice configuration there are two types of vertices, labeled as "0" for sites 1 and 3 and "1" for sites 2 and 4. For each qbit site there is a transverse magnetic field with strength Gamma. There are also two types of bonds, labeled as "0" for bonds between sites (1,2), (2,3), (3,4), and (4,1), and "1" for bonds between sites (1,3) and (2,4). For bond type "0", we will assign an interaction J1 for bond type "0" and J2 for bond type "1". All these is done in the model configuration file: `models.xml`
 ```
 <HAMILTONIAN name="qbit operation">
@@ -66,6 +76,24 @@ With the above setups, the Hamiltonian for the 4-site qbits is given by
 $$
 H=J_{1} \sum_{type 0} S^i_z S^j_z + J_{2} \sum_{type 1} S^i_z S^j_z - \Gamma \sum_i S^i_x.
 $$
+
+This is a small, pedagogical model (not tied to a specific published qbit device) used here to demonstrate how to define a custom lattice graph and Hamiltonian in ALPS from scratch, rather than using one of the built-in lattices/models.
+
+### Parameters
+
+| Parameter | Meaning | Value |
+|---|---|---|
+| `GRAPH` | custom lattice graph (defined above) | `4-site mixed` |
+| `MODEL` | custom Hamiltonian (defined above) | `qbit operation` |
+| `local_S` | spin quantum number per site | `0.5` |
+| `Gamma` | transverse-field strength $\Gamma$ | `0.5` |
+| `J1` | type-"0" bond coupling (square edges) | `1` (model default) |
+| `J2` | type-"1" bond coupling (diagonal edges) | `0.0` to `1.6`, step `0.2` |
+| `NUMBER_EIGENVALUES` | number of low-lying eigenstates kept | `5` |
+
+### Method Choice
+
+With only 4 sites the Hilbert space is $2^4=16$-dimensional, so any diagonalization method would work instantly; `sparsediag`'s Lanczos algorithm is used here purely for consistency with the other exact-diagonalization tutorials, and to illustrate the custom-lattice/custom-model workflow that scales to larger systems.
 
 ### Simulation
 
@@ -130,4 +158,30 @@ plt.show()
 
 The resulting energy spectrums for the lowest energies for various coupling constants J2 are shown in the following diagram:
 ![Lowest energies vs. J2](/figs/qbits/sites4mixed.png)
+
+### Results
+
+Ground-state energy $E_0$ as a function of $J_2$, from running the code above with $J_1=1$, $\Gamma=0.5$:
+
+| $J_2$ | $E_0$ |
+|---|---|
+| 0.0 | -1.00000 |
+| 0.2 | -1.01245 |
+| 0.4 | -1.04246 |
+| 0.6 | -1.08341 |
+| 0.8 | -1.13192 |
+| 1.0 | -1.18614 |
+| 1.2 | -1.24496 |
+| 1.4 | -1.30764 |
+| 1.6 | -1.37365 |
+
+At $J_2=0$ (only the square-edge bonds active), $E_0=-1$ exactly, matching the isolated 4-site ring with a weak transverse field. As $J_2$ grows, the diagonal bonds add further antiferromagnetic frustration and the ground-state energy decreases monotonically.
+
+### Summary and Outlook
+
+Diagonalizing this custom 4-site mixed-graph Hamiltonian shows the ground-state energy decreasing smoothly and monotonically as the diagonal coupling $J_2$ is turned on, with no sign of a level crossing in this parameter range.
+
+1. What happens to the gap between the ground state and first excited state as $J_2$ is increased — does it close anywhere?
+2. How would you extend the `lattices.xml`/`models.xml` pair here to simulate an 8-site version of the same mixed graph?
+3. What is the ground state energy in the two limits $J_2 \to 0$ and $J_2 = J_1$, and can you explain them from the bond structure alone?
 

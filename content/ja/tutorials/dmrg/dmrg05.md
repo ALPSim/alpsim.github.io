@@ -1,6 +1,6 @@
 
 ---
-title: DMRG-05 Local Observables
+title: DMRG-05 局所物理量
 math: true
 toc: true
 ---
@@ -19,76 +19,86 @@ toc: true
 
 次のパラメータファイル [`spin_one`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one) は三つの個別の実行を設定します。各スピンセクターに一つずつです（前と同様に、説明のため小さいシステムと状態数を使用します）：
 
-    LATTICE_LIBRARY="my_lattices.xml"
-    LATTICE="open chain lattice with special edges 32"
-    MODEL="spin"
-    local_S0=0.5
-    local_S1=1
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    J=1
-    NUMBER_EIGENVALUES=1
-    SWEEPS=4
-    MEASURE_LOCAL[Local magnetization]=Sz
-    MAXSTATES=40
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+```
+LATTICE_LIBRARY="my_lattices.xml"
+LATTICE="open chain lattice with special edges 32"
+MODEL="spin"
+local_S0=0.5
+local_S1=1
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+J=1
+NUMBER_EIGENVALUES=1
+SWEEPS=4
+MEASURE_LOCAL[Local magnetization]=Sz
+MAXSTATES=40
+{ Sz_total=0 }
+{ Sz_total=1 }
+{ Sz_total=2 }
+```
 
 通常のコマンド列を使って変換と実行を行います：
 
-    parameter2xml spin_one
-    dmrg --write-xml spin_one.in.xml
+```bash
+parameter2xml spin_one
+dmrg --write-xml spin_one.in.xml
+```
 
 ### Python を使う場合
 
 スクリプト [`spin_one.py`](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one.py) は三つのスピンセクターそれぞれで一つのシミュレーションを実行します：
 
-    import pyalps
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pyalps.plot
-    parms = []
-    for sz in [0,1,2]:
-        parms.append( { 
-            'LATTICE_LIBRARY'           : 'my_lattices.xml',
-            'LATTICE'                   : 'open chain lattice with special edges 32',
-            'MODEL'                     : "spin",
-            'local_S0'                  : '0.5',
-            'local_S1'                  : '1',
-            'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
-            'Sz_total'                  : sz,
-            'J'                         : 1,
-            'SWEEPS'                    : 4,
-            'NUMBER_EIGENVALUES'        : 1,
-            'MAXSTATES'                 : 40,
-            'MEASURE_LOCAL[Local magnetization]'   : 'Sz'
-    } )
-    
-    input_file = pyalps.writeInputFiles('parm_spin_one',parms)
-    res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```python
+import pyalps
+import numpy as np
+import matplotlib.pyplot as plt
+import pyalps.plot
+parms = []
+for sz in [0,1,2]:
+    parms.append( { 
+        'LATTICE_LIBRARY'           : 'my_lattices.xml',
+        'LATTICE'                   : 'open chain lattice with special edges 32',
+        'MODEL'                     : "spin",
+        'local_S0'                  : '0.5',
+        'local_S1'                  : '1',
+        'CONSERVED_QUANTUMNUMBERS'  : 'N,Sz',
+        'Sz_total'                  : sz,
+        'J'                         : 1,
+        'SWEEPS'                    : 4,
+        'NUMBER_EIGENVALUES'        : 1,
+        'MAXSTATES'                 : 40,
+        'MEASURE_LOCAL[Local magnetization]'   : 'Sz'
+} )
+
+input_file = pyalps.writeInputFiles('parm_spin_one',parms)
+res = pyalps.runApplication('dmrg',input_file,writexml=True)
+```
 
 データファイルを読み込んだ後、局所磁化の結果を抽出できます：
 
-    data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one'))
+```python
+data = pyalps.loadEigenstateMeasurements(pyalps.getResultFiles(prefix='parm_spin_one'))
 
-    curves = []
-    for run in data:
-        for s in run:
-            if s.props['observable'] == 'Local magnetization':
-                sz = s.props['Sz_total']
-                s.props['label'] = '$S_z = ' + str(sz) + '$'
-                s.y = s.y.flatten()
-                curves.append(s)
+curves = []
+for run in data:
+    for s in run:
+        if s.props['observable'] == 'Local magnetization':
+            sz = s.props['Sz_total']
+            s.props['label'] = '$S_z = ' + str(sz) + '$'
+            s.y = s.y.flatten()
+            curves.append(s)
+```
 
 そしてプロットします：
 
-    plt.figure()
-    pyalps.plot.plot(curves)
-    plt.legend()
-    plt.title('Magnetization of antiferromagnetic Heisenberg chain (S=1)')
-    plt.ylabel('local magnetization')
-    plt.xlabel('site')
-    plt.show()
+```python
+plt.figure()
+pyalps.plot.plot(curves)
+plt.legend()
+plt.title('Magnetization of antiferromagnetic Heisenberg chain (S=1)')
+plt.ylabel('local magnetization')
+plt.xlabel('site')
+plt.show()
+```
 
 ## スピン-1/2 鎖における磁化
 
@@ -98,21 +108,23 @@ toc: true
 
 次のパラメータファイルでこのタスクを達成できます。[こちら](https://github.com/ALPSim/ALPS/blob/bd842d1899feacd3d50392217f5239183d11a817/tutorials/dmrg-03-local-observables/spin_one_half)からダウンロードできます：
 
-    LATTICE="open chain lattice"
-    MODEL="spin"
-    CONSERVED_QUANTUMNUMBERS="N,Sz"
-    SWEEPS=4
-    J=1
-    NUMBER_EIGENVALUES=1
-    MEASURE_LOCAL[Local magnetization]=Sz
-    L=32
-    MAXSTATES=40
-    { Sz_total=0 }
-    { Sz_total=1 }
-    { Sz_total=2 }
+```
+LATTICE="open chain lattice"
+MODEL="spin"
+CONSERVED_QUANTUMNUMBERS="N,Sz"
+SWEEPS=4
+J=1
+NUMBER_EIGENVALUES=1
+MEASURE_LOCAL[Local magnetization]=Sz
+L=32
+MAXSTATES=40
+{ Sz_total=0 }
+{ Sz_total=1 }
+{ Sz_total=2 }
 
-    parameter2xml spin_one_half
-    dmrg --write-xml spin_one_half.in.xml
+parameter2xml spin_one_half
+dmrg --write-xml spin_one_half.in.xml
+```
 
 ### Python を使う場合
 

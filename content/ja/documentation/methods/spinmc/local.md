@@ -1,63 +1,63 @@
 ---
-title: Local Updates
+title: 局所更新
 math: true
 weight: 2
 ---
 
-In a Monte Carlo simulation, system states are usually sampled through local updates, where individual site configuration is updated one at a time based on its local environment. We will use Ising model to illustrate how the sampling of states is achieved. 
+モンテカルロシミュレーションでは、系の状態は通常、局所更新によってサンプリングされます。局所更新では、個々のサイトの配置を、その局所的な環境に基づいて 1 つずつ更新します。ここではイジングモデルを使って、状態のサンプリングがどのように行われるかを説明します。
 
-The Hamiltonian of the Ising model is given by the Hamiltonian:
+イジングモデルのハミルトニアンは次で与えられます。
 $$
 \mathcal{H} = -J \sum_{\langle i,j \rangle} s_i^z s_j^z - h \sum_i s_i^z,
 $$
-where:
-- $J$ is the interaction strength between neighboring spins,
-- $\langle i,j \rangle$ denotes a sum over nearest-neighbor pairs,
-- $s_i^z=\pm 1$ is the spin at site $i$,
-- $h$ is an external magnetic field.
+ここで、
+- $J$ は隣接するスピン間の相互作用の強さ、
+- $\langle i,j \rangle$ は最近接対についての和、
+- $s_i^z=\pm 1$ はサイト $i$ のスピン、
+- $h$ は外部磁場です。
 
-## Steps of a Monte Carlo Simulation
+## モンテカルロシミュレーションの手順
 
-### 1. Initialize the System
-- Start with a lattice of spins (e.g., a 2D square lattice of size $L \times L$).
-- Initialize the spins randomly (e.g., $s_i^z = \pm 1$ with equal probability) or in a specific configuration (e.g., all spins up).
+### 1. 系の初期化
+- スピンの格子（例えば大きさ $L \times L$ の 2 次元正方格子）から始めます。
+- スピンをランダムに（例えば等確率で $s_i^z = \pm 1$）、あるいは特定の配置（例えばすべてのスピンが上向き）に初期化します。
 
-### 2. Perform Local Updates
-Local updates are performed using either the Metropolis-Hastings algorithm or the heat-bath algorithm.
+### 2. 局所更新の実行
+局所更新は、メトロポリス・ヘイスティングス法または熱浴法のいずれかを用いて行います。
 
-#### Metropolis-Hastings Local Update
-For each spin $s_i^z$:
-1. **Propose a flip**: Flip the spin $s_i^z$ to its opposite value, $s_i^z \to -s_i^z$.
-2. **Calculate the energy change**: Compute the change in energy $\Delta E$ due to the proposed flip. For the Ising model, the energy change depends only on the spin $s_i^z$ and its nearest neighbors:
+#### メトロポリス・ヘイスティングス法による局所更新
+各スピン $s_i^z$ について：
+1. **反転を提案する**：スピン $s_i^z$ を反対の値 $s_i^z \to -s_i^z$ に反転します。
+2. **エネルギー変化を計算する**：提案された反転によるエネルギー変化 $\Delta E$ を計算します。イジングモデルでは、エネルギー変化はスピン $s_i^z$ とその最近接スピンのみに依存します。
    $$
    \Delta E = 2 J s_i^z \sum_{j \in \text{neighbors}(i)} s_j^z + 2 h s_i^z.
    $$
-   Here, the sum is over the nearest neighbors of spin $s_i^z$.
-3. **Accept or reject the flip**:
+   ここで、和はスピン $s_i^z$ の最近接についてとります。
+3. **反転を採択または棄却する**：
      $$
      P_{\text{accept}} = \text{min}(1, e^{-\beta \Delta E}),
      $$
-     where $\beta = 1/(k_B T)$ is the inverse temperature. This means
-   - If $\Delta E \leq 0$, always accept the flip.
-   - If $\Delta E > 0$, accept the flip with probability: $e^{-\beta \Delta E}$.
-   - If the flip is rejected, leave the spin unchanged.
+     ここで $\beta = 1/(k_B T)$ は逆温度です。これは次のことを意味します。
+   - $\Delta E \leq 0$ なら、反転を常に採択します。
+   - $\Delta E > 0$ なら、確率 $e^{-\beta \Delta E}$ で反転を採択します。
+   - 反転が棄却された場合、スピンは変更しないままにします。
 
-#### Heat-Bath Local Update
-Alternatively, the heat-bath algorithm can be used for local updates. For each spin $s_i^z$:
-1. **Compute the local field**: The local field acting on spin $s_i^z$ is given by:
+#### 熱浴法による局所更新
+局所更新には、代わりに熱浴法を使うこともできます。各スピン $s_i^z$ について：
+1. **局所場を計算する**：スピン $s_i^z$ に作用する局所場は次で与えられます。
    $$
    h_i = -J \sum_{j \in \text{neighbors}(i)} s_j^z - h.
    $$
-2. **Sample the new spin state**: The spin $s_i^z$ is updated to $+1$ or $-1$ with probabilities:
+2. **新しいスピン状態をサンプリングする**：スピン $s_i^z$ を次の確率で $+1$ または $-1$ に更新します。
    $$
    P_{ -1 \to +1} = \frac{e^{-\beta h_i}}{e^{-\beta h_i} + e^{\beta h_i}},
    $$
    $$
    P_{ +1 \to -1} = \frac{e^{\beta h_i}}{e^{-\beta h_i} + e^{\beta h_i}}.
    $$
-   These probabilities ensure that the spin is sampled from its equilibrium distribution given its local environment.
+   これらの確率により、スピンはその局所的な環境のもとでの平衡分布からサンプリングされることが保証されます。
 
-### 3. Repeat for Many Sweeps
-- A sweep consists of attempting to update every spin in the lattice once.
-- Repeat the local update process for many sweeps to allow the system to reach equilibrium and to collect statistics.
+### 3. 多数のスイープの繰り返し
+- 1 スイープとは、格子内のすべてのスピンについて 1 回ずつ更新を試みることです。
+- 系が平衡に達し、統計を集められるように、局所更新の過程を多数のスイープにわたって繰り返します。
 

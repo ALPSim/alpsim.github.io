@@ -1,7 +1,7 @@
 
 ---
-title: The Random Library
-description: "ALPS Random Library"
+title: "乱数ライブラリ"
+description: "ALPS 乱数ライブラリ"
 weight: 1
 ---
 
@@ -42,73 +42,77 @@ Since generators can have different ranges, we additionally provide, for conveni
 
 The first example shows how a buffered generator can be created and used in a simulation.
 
-    #include <alps/random/buffered_generator.hpp>
-    #include <boost/random.hpp>
-    #include <iostream>
+```cpp
+#include <alps/random/buffered_generator.hpp>
+#include <boost/random.hpp>
+#include <iostream>
 
-    // A simple example simulation - usually it will be much more complex
-    double simulate(alps::buffered_generator<double>& gen)
-    {
-        double sum=0;
-        for (int i=0;i<100000;i++)
-            sum += gen();
-        return sum;
-    }
+// A simple example simulation - usually it will be much more complex
+double simulate(alps::buffered_generator<double>& gen)
+{
+    double sum=0;
+    for (int i=0;i<100000;i++)
+        sum += gen();
+    return sum;
+}
 
-    // create a buffered_generator
-    template <class RNG>
-    void simulate_it()
-    {
-        typedef boost::variate_generator<RNG&,boost::normal_distribution<> > gen_type;
-        RNG engine;
-        alps::basic_buffered_generator<gen_type,double> 
-            gen(gen_type(engine,boost::normal_distribution<>()));
-   
-        std::cout << simulate(gen) << std::endl;
-    }
+// create a buffered_generator
+template <class RNG>
+void simulate_it()
+{
+    typedef boost::variate_generator<RNG&,boost::normal_distribution<> > gen_type;
+    RNG engine;
+    alps::basic_buffered_generator<gen_type,double> 
+        gen(gen_type(engine,boost::normal_distribution<>()));
 
-    // call the simulation with two different generators
-    int main()
-    {
-        simulate_it<boost::mt11213b>();
-        simulate_it<boost::mt19937>();
-    }
+    std::cout << simulate(gen) << std::endl;
+}
+
+// call the simulation with two different generators
+int main()
+{
+    simulate_it<boost::mt11213b>();
+    simulate_it<boost::mt19937>();
+}
+```
 
 ### Example 2: a buffered engine
 The next example uses a polymorphic `buffered_uniform_01` generator as a uniform random number generation engine to create variates with different distributions: uniform and normally distributed. Note that the buffered_generator is a model of Generator but not of UniformRandomNumberGenerator and can thus not be used as an engine in a `variate_generator`.
 
-    #include <alps/random/buffered_uniform_01.hpp>
-    #include <boost/random.hpp>
-    #include <iostream>
+```cpp
+#include <alps/random/buffered_uniform_01.hpp>
+#include <boost/random.hpp>
+#include <iostream>
 
-    // A simple example simulation - usually it will be much more complex
-    double simulate(alps::buffered_uniform_01<double>& gen)
-    {
-        double sum=0;
-        for (int i=0;i<100000;i++)
-            sum += gen();
-   
-        typedef boost::variate_generator<alps::buffered_uniform_01<double>&,boost::normal_distribution<> > gen_type;
-        gen_type gauss(gen,boost::normal_distribution<>());
-        for (int i=0;i<100000;i++)
-            sum += gauss();
-        return sum;
-    }
+// A simple example simulation - usually it will be much more complex
+double simulate(alps::buffered_uniform_01<double>& gen)
+{
+    double sum=0;
+    for (int i=0;i<100000;i++)
+        sum += gen();
 
-    // create a buffered_generator
-    template <class RNG>
-    void simulate_it()
-    {
-        alps::basic_buffered_uniform_01<RNG> gen;
-        std::cout << simulate(gen) << std::endl;
-    }
+    typedef boost::variate_generator<alps::buffered_uniform_01<double>&,boost::normal_distribution<> > gen_type;
+    gen_type gauss(gen,boost::normal_distribution<>());
+    for (int i=0;i<100000;i++)
+        sum += gauss();
+    return sum;
+}
 
-    // call the simulation with two different generators
-    int main()
-    {
-        simulate_it<boost::mt11213b>();
-        simulate_it<boost::mt19937>();
-    }
+// create a buffered_generator
+template <class RNG>
+void simulate_it()
+{
+    alps::basic_buffered_uniform_01<RNG> gen;
+    std::cout << simulate(gen) << std::endl;
+}
+
+// call the simulation with two different generators
+int main()
+{
+    simulate_it<boost::mt11213b>();
+    simulate_it<boost::mt19937>();
+}
+```
 
 ## Parallel random number generators
 
@@ -238,10 +242,14 @@ The SPRNG wrappers are a header-only library but executables will need to be lin
 
 The path to the SPRNG library needs to be specified by either a statement
 
-    using sprng : path-to-sprng-library ;
+```
+using sprng : path-to-sprng-library ;
+```
     
 in the `user-config.jam` file or by setting the environment variable `SPRNG_ROOT`. The path can point either to a compiled library or alternatively to the source distribution. In the latter case the SPRNG library is built from source when needed.
 
 The PMLCG generator additionally needs the [GMP](https://gmplib.org/) library. To use this generator the GMP library needs to be installed, and its path specified as the optional second argument to
 
-    using sprng : path-to-sprng-library : path-to-gmp-library ;
+```
+using sprng : path-to-sprng-library : path-to-gmp-library ;
+```

@@ -1,157 +1,157 @@
 
 ---
-title: Dynamical Mean Field Theory and Impurity Solvers
+title: 动力学平均场理论与杂质求解器
 math: true
 weight: 9
 ---
 
-## List of Parameters
+## 参数列表
 
-### Physical parameters
+### 物理参数
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| U | the Hubbard interaction U |
-| BETA | the inverse temperature |
-| MU | the chemical potential |
-| H | the magnetic field in the quantization axis (conventionally $z$) direction (BUT: the solvers do ignore the variable!) |
-| SITES | number of impurity sites (for DMFT: 1) |
-| FLAVORS | number of flavors/orbitals of the impurity (commonly 2: spin up/down) |
-| t | in case of Bethe lattice it does provide the hopping (the bandwidth is then $W=4t$, the half-bandwidth is $D=2t$); if the option TWODBS is switched on then it does set the nearest-neighbor hopping on the square or hexagonal lattice |
-| t0, t1, ... | (available currently only for selfconsistency loop in imaginary time) sets the hopping for the Bethe lattice in multiband case (flavors 2i and 2i+1 share the same parameter ti) |
-| J | coupling for the multiband problems |
-| U' | (by default U-2J) |
-| tprime | applies only if the option TWODBS is switched on and only for the square lattice, then it does set the next-nearest-neighbor hopping |
-| TWODBS | (by default sets the square lattice) you may choose either square or hexagonal lattice |
+| U | Hubbard 相互作用 U |
+| BETA | 逆温度 |
+| MU | 化学势 |
+| H | 沿量子化轴（通常为 $z$）方向的磁场（但是：求解器会忽略该变量！） |
+| SITES | 杂质格点数（对于 DMFT：1） |
+| FLAVORS | 杂质的味/轨道数（通常为 2：自旋向上/向下） |
+| t | 对于 Bethe 晶格，它给出跃迁（此时带宽为 $W=4t$，半带宽为 $D=2t$）；若打开选项 TWODBS，则它设定正方或六角晶格上的最近邻跃迁 |
+| t0, t1, ... | （目前仅适用于虚时间中的自洽循环）设定多带情形下 Bethe 晶格的跃迁（味 2i 和 2i+1 共用同一参数 ti） |
+| J | 多带问题中的耦合 |
+| U' | （默认为 U-2J） |
+| tprime | 仅在打开选项 TWODBS 且为正方晶格时适用，此时它设定次近邻跃迁 |
+| TWODBS | （默认设为正方晶格）可以选择正方晶格或六角晶格 |
 
-### Parameters for the self-consistency loop 
+### 自洽循环参数 
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| OMEGA_LOOP | set it 1 unless you want to work with semicircular density of states (corresponding to the Bethe lattice in infinitely many dimensions) |
-| ANTIFERROMAGNET | if 1 then the antiferromagnetic self-consistency loop will be employed (formula 97 in review '96 of A.Georges et al) |
-|SYMMETRIZATION | if 1 then paramagnetic solution is enforced (in versions before 2.1: there has been a misspelling SYMMATRIZATION at several places and a usage of both, SYMMETRIZATION and set to the same value was required) |
-| MAX_IT | maximum number of iteration in self-consistency loop (usually 10-20 will be enough) |
-| CONVERGED | criterium for stopping the self-consistency loop before reaching MAX_IT - if the maximum change in Green's function in Matsubara representation is less than CONVERGED, the loop will stop |
-| TOLERANCE | (only for hirschfyesim) as above |
-| RELAX_RATE | (by default 1; currently implemented only for selfconsistency loop with OMEGA_LOOP switched on) the new Green's function are in general computed as RELAX_RATE \* $G_{new}(i\omega_n)$ + (1-RELAX_RATE) \* $G_{old}(i\omega_n)$, which may help if oscillations occur |
+| OMEGA_LOOP | 设为 1，除非你想使用半圆形态密度（对应于无穷维的 Bethe 晶格） |
+| ANTIFERROMAGNET | 若为 1，则采用反铁磁自洽循环（A.Georges 等人 1996 年综述中的公式 97） |
+|SYMMETRIZATION | 若为 1，则强制得到顺磁解（在 2.1 之前的版本中：有几处误拼为 SYMMATRIZATION，并且两者都被使用，因此需要把 SYMMETRIZATION 和它设为相同的值） |
+| MAX_IT | 自洽循环的最大迭代次数（通常 10-20 次就足够了） |
+| CONVERGED | 在达到 MAX_IT 之前停止自洽循环的判据——如果松原表示下格林函数的最大变化小于 CONVERGED，循环将停止 |
+| TOLERANCE | （仅用于 hirschfyesim）同上 |
+| RELAX_RATE | （默认为 1；目前仅在打开 OMEGA_LOOP 的自洽循环中实现）新的格林函数一般按 RELAX_RATE \* $G_{new}(i\omega_n)$ + (1-RELAX_RATE) \* $G_{old}(i\omega_n)$ 计算，在出现振荡时可能有帮助 |
 
-### General parameters
+### 通用参数
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| GENERAL_FOURIER_TRANFORMER | set it on if you have OMEGA_LOOP and other than the Bethe lattice |
-| EPS_i (i=0,1,...,FLAVORS-1) | potential shift for the flavor i (necessary for GENERAL_FOURIER_TRANSFORMER) |
-| EPSSQ_i (i=0,1,...,FLAVORS-1) | the second moment of the bandstructure for the flavor i (necessary for GENERAL_FOURIER_TRANSFORMER) |
-| DOSFILE | sets the name for the file containing the density of states (expected 2 columns with energy value and corresponding density of states at that energy; equidistant energies required; odd number of rows required due to Simpson integration) |
-| TWODBS | switches on the Hilbert transformation for 2-dimensional systems, currently supported square lattice (with nearest and next-nearest neighbor hoppings) and hexagonal lattice (with nearest neighbor hoppings) \[Note: a different 2-dimensional lattice may be easily added\] |
-| L | optional parameter available in case of TWODBS is on; defines the half of the linear discretization in the integration in the self-consistency (default: 200) |
-| SOLVER | specifies the impurity solver ("Hybridization" or "Interaction Expansion"; the solver "Hirsch-Fye" does suffer from discretization errors and is thus not recommended) |
+| GENERAL_FOURIER_TRANFORMER | 如果使用 OMEGA_LOOP 且晶格不是 Bethe 晶格，请打开此选项 |
+| EPS_i (i=0,1,...,FLAVORS-1) | 味 i 的势能平移（GENERAL_FOURIER_TRANSFORMER 所必需） |
+| EPSSQ_i (i=0,1,...,FLAVORS-1) | 味 i 的能带结构二阶矩（GENERAL_FOURIER_TRANSFORMER 所必需） |
+| DOSFILE | 设定包含态密度的文件名（应有 2 列，分别为能量值和该能量处对应的态密度；要求能量等间距；由于采用 Simpson 积分，要求行数为奇数） |
+| TWODBS | 打开二维体系的希尔伯特变换，目前支持正方晶格（含最近邻和次近邻跃迁）和六角晶格（含最近邻跃迁）\[注：可以很容易地添加其他二维晶格\] |
+| L | 在 TWODBS 打开时可用的可选参数；定义自洽中积分的线性离散化点数的一半（默认：200） |
+| SOLVER | 指定杂质求解器（"Hybridization" 或 "Interaction Expansion"；求解器 "Hirsch-Fye" 存在离散化误差，因此不推荐使用） |
 
-### Parameters for the initial/final Weiss field
+### 初始/最终 Weiss 场参数
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| H_INIT | magnetic field in the quantization axis (conventionally $z$) direction, which is used in computation of the non-interacting initial G0 (if it is not loaded) |
-| G0OMEGA_INPUT | name for the text file specifying the Weiss field in Matsubara frequencies $i\omega_n$ (expected 1+FLAVORS columns, and total NMATSUBARA rows, use only with OMEGA_LOOP) |
-| G0TAU_INPUT | name for the text file specifying the Weiss field in imaginary time representation (expected 1+FLAVORS columns, and total $N+1$ rows, only with OMEGA_LOOP switched off) |
-| GOMEGA_input | specifies the name for the text file where the initial G0 in Matsubara representation will be written (by default it is not written, as it is identical with G0_omega_1) |
-| G0TAU_input | name for the text file for the output of the initial G0 in imaginary time (by default it is not written, as it is identical with G0_tau_1) |
-| G0OMEGA_output | name for the output file containing the final Weiss field in Matsubara frequencies (by default G0omega_output)(with OMEGA_LOOP) |
-| G0TAU_output | name for the output file containing the final Weiss field in Matsubara frequencies (by default G0tau_output) (with OMEGA_LOOP off) |
-| INSULATING | if you have specified this option, then the initial G0 will be set up in the insulating limit |
+| H_INIT | 沿量子化轴（通常为 $z$）方向的磁场，用于计算无相互作用的初始 G0（若未加载） |
+| G0OMEGA_INPUT | 指定松原频率 $i\omega_n$ 下 Weiss 场的文本文件名（应有 1+FLAVORS 列，共 NMATSUBARA 行，仅与 OMEGA_LOOP 一起使用） |
+| G0TAU_INPUT | 指定虚时间表示下 Weiss 场的文本文件名（应有 1+FLAVORS 列，共 $N+1$ 行，仅在 OMEGA_LOOP 关闭时使用） |
+| GOMEGA_input | 指定写入松原表示下初始 G0 的文本文件名（默认不写出，因为它与 G0_omega_1 相同） |
+| G0TAU_input | 用于输出虚时间下初始 G0 的文本文件名（默认不写出，因为它与 G0_tau_1 相同） |
+| G0OMEGA_output | 包含松原频率下最终 Weiss 场的输出文件名（默认为 G0omega_output）（与 OMEGA_LOOP 一起使用） |
+| G0TAU_output | 包含松原频率下最终 Weiss 场的输出文件名（默认为 G0tau_output）（OMEGA_LOOP 关闭时） |
+| INSULATING | 如果指定了此选项，初始 G0 将按绝缘极限设定 |
 
-### Parameters setting the precision of representation of the Green's function and the Weiss field
+### 设定格林函数和 Weiss 场表示精度的参数
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| NMATSUBARA | number of Matsubara frequencies used to represent the Green's function and the Weiss field (usually equals N) |
-| N | number of bins for the Green's function and the Weiss field in imaginary time (represented in total by N+1 values) (recommended: roughly 1000 for the continuous-time solvers) |
+| NMATSUBARA | 用于表示格林函数和 Weiss 场的松原频率数目（通常等于 N） |
+| N | 虚时间中格林函数和 Weiss 场的分格（bin）数（共用 N+1 个值表示）（推荐：对连续时间求解器取约 1000） |
 
-### Hybridization expansion impurity solver parameters
+### 杂化展开杂质求解器参数
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| MAX_TIME | sets the maximum time given in seconds spent on the impurity problem solving (basically this sets the duration of a single iteration) |
-| SWEEPS | number of desired sweeps performed during the calculation (recommendation: set it very high, e.g. $10^9$ and the solver will stop on the time limit given by MAX_TIME) |
-| THERMALIZATION | number of sweeps before the Monte Carlo measurements in order to reach configuration close to equilibrium (of the order of 1000) |
-| EPSSQAV | the second moment of the bandstructure (necessary if you have specified your own DOSFILE) |
-| N_ORDER | setting histogram size (if the hybridization order is larger then it will be not stored in the histogram) (value of the order of 100 might be reasonable) |
-| N_MEAS | number of Monte Carlo steps between measurements (of the order of 10000) |
-| N_SHIFT | number of shifts of segments in a single Monte Carlo step (apparently unused, so 0) |
-| MEASURE_FOURPOINT | if switched on then the four-point correlators are being measured |
-| N4point | (only used if MEASURE_FOURPOINT is on) description missing so far |
-| CHECKPOINT | filename prefix for checkpointing files and for the final h5 and xml output |
+| MAX_TIME | 设定求解杂质问题所用的最长时间，单位为秒（基本上就是设定单次迭代的时长） |
+| SWEEPS | 计算中希望执行的扫描次数（建议：设得非常大，例如 $10^9$，求解器将在 MAX_TIME 给出的时间限制处停止） |
+| THERMALIZATION | 在蒙特卡洛测量之前、为使构型接近平衡所进行的扫描次数（约为 1000 量级） |
+| EPSSQAV | 能带结构的二阶矩（如果你指定了自己的 DOSFILE，则必须设置） |
+| N_ORDER | 设定直方图大小（若杂化阶数更大，则不会存入直方图）（取 100 量级的值可能比较合理） |
+| N_MEAS | 两次测量之间的蒙特卡洛步数（约为 10000 量级） |
+| N_SHIFT | 单个蒙特卡洛步中链段平移的次数（似乎未被使用，因此设为 0） |
+| MEASURE_FOURPOINT | 若打开，则测量四点关联函数 |
+| N4point | （仅在 MEASURE_FOURPOINT 打开时使用）目前暂无说明 |
+| CHECKPOINT | 检查点文件以及最终 h5 和 xml 输出的文件名前缀 |
 
-### Interaction expansion1 impurity solver parameters 
+### 相互作用展开1杂质求解器参数 
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| MAX_TIME | sets the maximum time given in seconds spent on the impurity problem solving |
-| SWEEPS | number of desired sweeps performed during the calculation (recommendation: set it very high, e.g. $10^9$ and the solver will stop on the time limit given by MAX_TIME) |
-| THERMALIZATION | number of sweeps before the Monte Carlo measurements in order to reach configuration close to equilibrium (of the order of 1000) |
-| SWEEP_MULTIPLICATOR | (default: 1) |
-| NRUNS | (default: 1) |
+| MAX_TIME | 设定求解杂质问题所用的最长时间，单位为秒 |
+| SWEEPS | 计算中希望执行的扫描次数（建议：设得非常大，例如 $10^9$，求解器将在 MAX_TIME 给出的时间限制处停止） |
+| THERMALIZATION | 在蒙特卡洛测量之前、为使构型接近平衡所进行的扫描次数（约为 1000 量级） |
+| SWEEP_MULTIPLICATOR | （默认：1） |
+| NRUNS | （默认：1） |
 | ALPHA | |
-| RECALC_PERIOD | (default: 5000) |
-| MEASUREMENT_PERIOD | (default: 200) |
-| CONVERGENCE_CHECK_PERIOD | (default provided) |
-| ALMOSTZERO | (default: $10^{-16}$) |
-| NSELF | (default: 10N) |
-| NMATSUBARA_MEASUREMENTS | (default: NMATSUBARA) |
-| HISTOGRAM_MEASUREMENT | (default: false) |
+| RECALC_PERIOD | （默认：5000） |
+| MEASUREMENT_PERIOD | （默认：200） |
+| CONVERGENCE_CHECK_PERIOD | （有默认值） |
+| ALMOSTZERO | （默认：$10^{-16}$） |
+| NSELF | （默认：10N） |
+| NMATSUBARA_MEASUREMENTS | （默认：NMATSUBARA） |
+| HISTOGRAM_MEASUREMENT | （默认：false） |
 | GET_COMPACTED_MEASUREMENTS | |
 | ATOMIC | |
 | TAU_DISCRETIZATION_FOR_EXP | |
-| CHECKPOINT | filename prefix for the checkpointing files and for the final h5 and xml output |
+| CHECKPOINT | 检查点文件以及最终 h5 和 xml 输出的文件名前缀 |
 
-### Additional parameters 
+### 其他参数 
 
-| **Name** | **Description** |
+| **名称** | **说明** |
 | :------- | :-------------- |
-| SEED | random seed for the pseudorandom generator |
-| RNG | pseudorandom generator used (default is "mt19937"), might be switched to "lagged_fibonacci607" |
+| SEED | 伪随机数生成器的随机种子 |
+| RNG | 所使用的伪随机数生成器（默认为 "mt19937"），可以切换为 "lagged_fibonacci607" |
 
-## Usage notes
+## 使用说明
 
-- Remark on bipartite lattices: the ANTIFERROMAGNET option does assume a Neel-like ordering and requires thus a bipartite lattice. Note that on a bipartite lattice the density of states is symmetric (unless you apply a global potential shift).
-- Since revision 6217, if you provide the DOSFILE or if you use TWODBS and if none of the parameters EPS_i, EPSSQ_i, EPSSQAV is set, then the EPS_i will be set to the first moment of the normalized DOS (in case of TWODBS: 0) and the EPSSQ_i and EPSSQAV will be set to the second moment of the normalized DOS using the provided density of states (in case of TWODBS: using the hard-coded values).
-- Since revision 6217 you may use TWODBS="hexagonal" to simulate the 2-dimensional hexagonal lattice (nearest-neighbor hoppings only). If you use TWODBS with other value, square lattice is assumed.
+- 关于二分晶格的说明：ANTIFERROMAGNET 选项假定存在类 Neel 序，因此需要二分晶格。注意，在二分晶格上态密度是对称的（除非施加了全局势能平移）。
+- 自修订版 6217 起，如果提供了 DOSFILE 或使用了 TWODBS，并且参数 EPS_i、EPSSQ_i、EPSSQAV 均未设置，那么 EPS_i 将被设为归一化 DOS 的一阶矩（对于 TWODBS：0），EPSSQ_i 和 EPSSQAV 将利用所提供的态密度被设为归一化 DOS 的二阶矩（对于 TWODBS：使用硬编码的值）。
+- 自修订版 6217 起，可以使用 TWODBS="hexagonal" 来模拟二维六角晶格（仅含最近邻跃迁）。如果 TWODBS 取其他值，则假定为正方晶格。
 
-## Input/output files 
+## 输入/输出文件 
 
-### The files with prefix BASENAME: (where BASENAME is the name of the parameter input file)
+### 以 BASENAME 为前缀的文件：（其中 BASENAME 是参数输入文件的名称）
 
-- BASENAME: it is the input file to be loaded by the application `dmft`
-- BASENAME.h5: contains the iteration resolved impurity Green's function $G(\tau)$ and the Weiss field $G^0(\tau)$ in the imaginary time representation; if the selfconsistency loop has been performed in Matsubara representation (= if OMEGA_LOOP has been on) then there will be stored the $G(i\omega_n)$ and $G^0(i\omega_n)$ as well. The selfenergy is there not stored directly, but may be obtained via Dyson equation easily (look into DMFT-01 An introduction to DMFT)
+- BASENAME：由程序 `dmft` 加载的输入文件
+- BASENAME.h5：包含按迭代分辨的杂质格林函数 $G(\tau)$ 和虚时间表示下的 Weiss 场 $G^0(\tau)$；如果自洽循环是在松原表示下进行的（即 OMEGA_LOOP 打开），那么还会存储 $G(i\omega_n)$ 和 $G^0(i\omega_n)$。自能并不直接存储在其中，但可以很容易地通过 Dyson 方程得到（参见 DMFT-01 An introduction to DMFT）
 
-### The output/input files in Matsubara representation: (text file which consists of NMATSUBARA rows, each for one Matsubara frequency) 
+### 松原表示下的输出/输入文件：（由 NMATSUBARA 行组成的文本文件，每行对应一个松原频率） 
 
-- G_omega_i (G0_omega_i): contains the imaginary part of the Green's function (Weiss field) given in Matsubara frequencies after the i-th iteration; rows contain the $\omega_n$ followed by the imaginary part of the Green's function (Weiss field) for each flavor; thus there are 1+FLAVORS columns in the file
-- G_omegareal_i (G0_omegareal_i): the same as above for the real part
-- selfenergy_i: contains the selfenergy after the i-th iteration; each row consists of $\omega_n$ followed by the real and imaginary part of the selfenergy for each flavor; thus there are 1+2FLAVORS columns in the file
-- G0omega_output (unless not specified differently by the variable G0OMEGA_output): contains the n (corresponding to $\omega_n=\frac{(2n+1)\pi}{\beta})$ followed by the complex Weiss field for each flavor; thus there is one integer column followed by FLAVORS columns of complex numbers defined by the real and imaginary part in brackets
-- G0OMEGA_INPUT: variable specifying the input file with the initial Weiss field in Matsubara representation; does expect the same format as the above output file; thus you may copy it and start a simulation from it
+- G_omega_i (G0_omega_i)：包含第 i 次迭代后松原频率下格林函数（Weiss 场）的虚部；每行先是 $\omega_n$，接着是每个味的格林函数（Weiss 场）虚部；因此文件共有 1+FLAVORS 列
+- G_omegareal_i (G0_omegareal_i)：与上面相同，但为实部
+- selfenergy_i：包含第 i 次迭代后的自能；每行先是 $\omega_n$，接着是每个味的自能实部和虚部；因此文件共有 1+2FLAVORS 列
+- G0omega_output（除非通过变量 G0OMEGA_output 另行指定）：包含 n（对应于 $\omega_n=\frac{(2n+1)\pi}{\beta})$，接着是每个味的复数 Weiss 场；因此先是一列整数，接着是 FLAVORS 列复数，每个复数由括号中的实部和虚部给出
+- G0OMEGA_INPUT：指定松原表示下初始 Weiss 场输入文件的变量；要求格式与上述输出文件相同；因此可以复制该输出文件并以此开始一次模拟
 
-### The output/input files in imaginary time representation: (text file which consists of $N+1$ rows, each for one imaginary time $\in\langle 0,\beta\rangle$)
+### 虚时间表示下的输出/输入文件：（由 $N+1$ 行组成的文本文件，每行对应一个虚时间 $\in\langle 0,\beta\rangle$）
 
-- G_tau_i (G0_tau_i): contains the (real) Green's function (Weiss field) after the i-th iteration; rows contain the $\tau_n$ followed by the Green's function (Weiss field) for each flavor; thus there are 1+FLAVORS columns in the file 
-- G0tau_output (unless not specified differently by the variable G0TAU_output): contains the n (corresponding to $\tau_n=\frac{n}{N}\beta$) followed by the complex Weiss field for each flavor; thus there is one integer column followed by FLAVORS columns of complex numbers defined by the real and imaginary part in brackets; in total $N+1$ rows
-- G0OMEGA_INPUT: variable specifying the input file with the initial Weiss field in imaginary time representation; does expect the same format as the above output file; thus you may copy it and start a simulation from it
+- G_tau_i (G0_tau_i)：包含第 i 次迭代后的（实）格林函数（Weiss 场）；每行先是 $\tau_n$，接着是每个味的格林函数（Weiss 场）；因此文件共有 1+FLAVORS 列 
+- G0tau_output（除非通过变量 G0TAU_output 另行指定）：包含 n（对应于 $\tau_n=\frac{n}{N}\beta$），接着是每个味的复数 Weiss 场；因此先是一列整数，接着是 FLAVORS 列复数，每个复数由括号中的实部和虚部给出；共 $N+1$ 行
+- G0OMEGA_INPUT：指定虚时间表示下初始 Weiss 场输入文件的变量；要求格式与上述输出文件相同；因此可以复制该输出文件并以此开始一次模拟
 
-### The output files with prefix given by the optional variable CHECKPOINT:
+### 以可选变量 CHECKPOINT 为前缀的输出文件：
 
-- CHECKPOINT.h5: contains the measurements for each iteration
-- CHECKPOINT.xml: contains the input parameters and run information
-- CHECKPOINT.run\*: contains information to rerun the simulation (these are the true checkpoints); for each process
+- CHECKPOINT.h5：包含每次迭代的测量结果
+- CHECKPOINT.xml：包含输入参数和运行信息
+- CHECKPOINT.run\*：包含重新运行模拟所需的信息（这些才是真正的检查点）；每个进程各一个
 
-### The output files for the hybridization expansion impurity solver: (text files) 
+### 杂化展开杂质求解器的输出文件：（文本文件） 
 
-- overlap: i-th row contains the $\langle n_\downarrow n_\uparrow\rangle$ in the i-th iteration 
-- matrix_size:
+- overlap：第 i 行包含第 i 次迭代中的 $\langle n_\downarrow n_\uparrow\rangle$ 
+- matrix_size：
 
 
-## Literature
+## 参考文献
 
-- A review on DMFT: A. Georges, G. Kotliar, W. Krauth, and M. J. Rozenberg, Dynamical mean-field theory of strongly correlated fermion systems and the limit of infinite dimensions, Rev. Mod. Phys. 68, 13 (1996).
-- On the hybridization expansion impurity solver: P. Werner and A. J. Millis, Hybridization expansion impurity solver: General formulation and application to Kondo lattice and two-orbital models, Phys. Rev. B 74, 155107 (2006).
+- DMFT 综述：A. Georges, G. Kotliar, W. Krauth, and M. J. Rozenberg, Dynamical mean-field theory of strongly correlated fermion systems and the limit of infinite dimensions, Rev. Mod. Phys. 68, 13 (1996).
+- 关于杂化展开杂质求解器：P. Werner and A. J. Millis, Hybridization expansion impurity solver: General formulation and application to Kondo lattice and two-orbital models, Phys. Rev. B 74, 155107 (2006).

@@ -22,7 +22,7 @@ Both are checked by inspecting the time series of a measured observable — in t
 
 ### Preparing and running the simulation on the command line
 
-The parameter file <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01b-equilibration-and-convergence/parm1a" download>`parm1a`</a> sets up a single simulation of the Ising model on a $48 \times 48$ square lattice at the critical temperature:
+The parameter file <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/parm1a" data-filename="parm1a" target="_blank" rel="noopener">`parm1a`</a> sets up a single simulation of the Ising model on a $48 \times 48$ square lattice at the critical temperature:
 
 ```
 LATTICE="square lattice"
@@ -44,7 +44,7 @@ spinmc --Tmin 10 --write-xml parm1a.in.xml
 
 ### Preparing and running the simulation in Python
 
-The full script is available as <a href="https://github.com/ALPSim/ALPS/blob/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" download>`tutorial1a.py`</a>.
+The full script is available as <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" data-filename="tutorial1a.py" target="_blank" rel="noopener">`tutorial1a.py`</a>.
 It begins by importing the required modules and defining the simulation parameters:
 
 ```Python

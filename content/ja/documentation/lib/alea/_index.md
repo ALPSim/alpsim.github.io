@@ -1,6 +1,6 @@
 ---
-title: ALPS/Alea Library
-description: "ALPS Alea Library"
+title: "ALPS/Alea ライブラリ"
+description: "ALPS Alea ライブラリ"
 weight: 6
 ---
 

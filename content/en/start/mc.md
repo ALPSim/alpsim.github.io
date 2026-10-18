@@ -6,13 +6,13 @@ weight: 2
 math: true
 ---
 
-The 2D Ising model is one of the most important models in statistical mechanics. It describes spins on a square lattice that can point either up or down, with ferromagnetic coupling $J > 0$ between nearest neighbors (using `spinmc`'s default classical sign convention, where positive $J$ favors parallel spins). Onsager showed in 1944 that it has an exact solution with a phase transition at $T_c = 2J / \ln(1 + \sqrt{2}) \approx 2.269\, J/k_B$: below $T_c$ the spins order spontaneously, above $T_c$ thermal fluctuations destroy that order.
-
-This tutorial simulates that phase transition using ALPS. It is a good first example because the physics is well understood and the result is easy to check.
-
 {{< callout type="info" >}}
 This tutorial assumes that pyalps is already installed. If you have not set it up yet, see the [Getting Started](../) guide.
 {{< /callout >}}
+
+The 2D Ising model is one of the most important models in statistical mechanics. It describes spins on a square lattice that can point either up or down, with ferromagnetic coupling $J > 0$ between nearest neighbors (using `spinmc`'s default classical sign convention, where positive $J$ favors parallel spins). Onsager showed in 1944 that it has an exact solution with a phase transition at $T_c = 2J / \ln(1 + \sqrt{2}) \approx 2.269\, J/k_B$: below $T_c$ the spins order spontaneously, above $T_c$ thermal fluctuations destroy that order.
+
+This tutorial simulates that phase transition using ALPS. It is a good first example because the physics is well understood and the result is easy to check.
 
 ## Import packages
 
@@ -98,7 +98,6 @@ plt.show()
 The magnetization drops from nearly 1 at low temperature to 0 above $T_c \approx 2.269$. For small systems the transition is rounded by finite-size effects; it sharpens and shifts toward the exact $T_c$ as $L$ increases:
 
 ![Magnetization vs temperature for the 2D Ising model](/figs/Ising_2D_m.png)
-
 
 ## Walkthrough Video
 

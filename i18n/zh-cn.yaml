@@ -23,3 +23,63 @@
 - id: backToTop
   translation: "返回顶部"
 
+
+# Refs page generated from the ALPS citation files
+- id: citeRuleAlgorithm
+  translation: "算法"
+- id: citeRuleImplementation
+  translation: "实现"
+- id: citeRuleFramework
+  translation: "框架"
+- id: citeFrameworkHeading
+  translation: "ALPS 框架"
+- id: citeFrameworkPaper
+  translation: "框架论文"
+- id: citeImplementationPapers
+  translation: "实现论文"
+- id: citeAlgorithmPapers
+  translation: "算法论文"
+- id: citeSource
+  translation: "源代码"
+- id: citeAlsoCite
+  translation: "另请引用"
+- id: citeNote
+  translation: "注"
+- id: citePolicyRequest
+  translation: "如果 ALPS 对您发表的研究有所贡献，请引用下列相关的算法、实现和框架论文。"
+- id: citePolicyLicenseNote
+  translation: "这是对学术贡献的引用请求，与 MIT 许可证条款无关。"
+- id: citePolicyAlgorithm
+  translation: "请引用与计算相关的原始算法。"
+- id: citePolicyImplementation
+  translation: "请引用计算中使用的 ALPS 实现和基础设施。"
+- id: citePolicyFramework
+  translation: "请引用最新的 ALPS 发布论文（即 CITATION.cff 中的 preferred-citation）。"
+- id: citeComponent_scheduler
+  translation: "ALPS 并行蒙特卡洛调度器"
+- id: citeComponent_sparsediag
+  translation: "ALPS 稀疏对角化"
+- id: citeComponent_fulldiag
+  translation: "ALPS 完全对角化"
+- id: citeComponent_spinmc
+  translation: "ALPS 经典蒙特卡洛"
+- id: citeComponent_looper
+  translation: "ALPS 圈算法量子蒙特卡洛"
+- id: citeComponent_dirloop_sse
+  translation: "ALPS 有向圈随机级数展开"
+- id: citeComponent_worm
+  translation: "ALPS 蠕虫算法量子蒙特卡洛"
+- id: citeComponent_qwl
+  translation: "ALPS 量子 Wang-Landau"
+- id: citeComponent_dmrg
+  translation: "ALPS 密度矩阵重整化群"
+- id: citeComponent_dmft
+  translation: "ALPS 动力学平均场框架"
+- id: citeComponent_interaction
+  translation: "ALPS CT-INT 杂质求解器"
+- id: citeComponent_hybridization
+  translation: "ALPS CT-HYB 杂质求解器"
+- id: citeComponent_hirschfye
+  translation: "ALPS Hirsch-Fye 杂质求解器"
+- id: citeComponentNote_dmft
+  translation: "通过 DMFT 驱动程序使用杂质求解器时，也请引用相应求解器的文献。"

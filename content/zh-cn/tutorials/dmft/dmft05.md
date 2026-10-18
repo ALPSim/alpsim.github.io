@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-05 OSMT
+title: DMFT-05 轨道选择性莫特转变
 math: true
 toc: true
 ---
@@ -41,16 +41,16 @@ $$
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $15$、$0.001$ |
 | `SOLVER` | 杂质求解器 | `"hybridization"`（CT-HYB，段表示） |
 | `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ |
-| `N_MEAS` | 测量之间的蒙特卡罗更新次数 | $2000$ |
+| `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $2000$ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ |
 | `CHECKPOINT` | 检查点／重启文件的文件名前缀 | `dump` |
-| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡罗扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10000$、$500$、$600$ |
+| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10000$、$500$、$600$ |
 
 ### 运行模拟
 
 这里我们选取的算例中，两条能带的带宽为 $t_0=0.5$ 和 $t_1=1$，密度-密度型相互作用为 $U'=U/2$、$J=U/4$，$U$ 取值在 $1.8$ 到 $2.8$ 之间：$U=1.8$ 时两条轨道均表现出费米液体行为，$U=2.2$ 时体系为轨道选择性的，而 $U=2.8$ 时两条轨道均为绝缘态。
 
-运行模拟的 python 命令可以在 [`tutorial5a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5a.py) 中找到：
+运行模拟的 python 命令可以在 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5a.py" data-filename="tutorial5a.py" target="_blank" rel="noopener">`tutorial5a.py`</a> 中找到：
 
 ```
 import pyalps
@@ -162,7 +162,7 @@ CHECKPOINT = dump                 // filename prefix for checkpoint/restart file
 
 ### 方法选择
 
-这里我们再次使用段表示下的杂化展开求解器 CT-HYB。段算法对局域迹做解析求值，而这只有在局域相互作用为密度-密度（类 Ising）形式时才可行——这正是上文“模型”一节中所采用的限制。这也是为什么要舍弃完整 Kanamori 相互作用中的自旋翻转项和对跳跃项：若保留这些项，则每次蒙特卡罗更新都需要对完整的（维数为 $2^{\text{FLAVORS}}=16$ 的）局域希尔伯特空间做一般矩阵（非段）形式的 CT-HYB 迹求值，计算代价会大幅增加。在四个味、$\beta=30$ 的设置下，段表示使得即便在两个轨道都接近 Mott 转变时，模拟依然可行。
+这里我们再次使用段表示下的杂化展开求解器 CT-HYB。段算法对局域迹做解析求值，而这只有在局域相互作用为密度-密度（类 Ising）形式时才可行——这正是上文“模型”一节中所采用的限制。这也是为什么要舍弃完整 Kanamori 相互作用中的自旋翻转项和对跳跃项：若保留这些项，则每次蒙特卡洛更新都需要对完整的（维数为 $2^{\text{FLAVORS}}=16$ 的）局域希尔伯特空间做一般矩阵（非段）形式的 CT-HYB 迹求值，计算代价会大幅增加。在四个味、$\beta=30$ 的设置下，段表示使得即便在两个轨道都接近 Mott 转变时，模拟依然可行。
 
 ### 输出数据与绘图
 
@@ -186,11 +186,11 @@ plt.legend()
 plt.show()
 ```
 
-由于这是随机性的蒙特卡罗模拟，实际得到的数值取决于 `SEED`、`MAX_TIME` 和计算机速度，但定性上应能重现上述三种情形：在 $U=1.8$ 时，两个味在对数坐标下都缓慢衰减（两条能带均为金属态）；在 $U=2.2$ 时，窄带对应的味（0）比宽带对应的味（2）衰减快得多——这两个轨道之间的这种不对称性正是轨道选择性 Mott 转变本身；在 $U=2.8$ 时，两个味都快速衰减（两条能带均为绝缘态）。
+由于这是随机性的蒙特卡洛模拟，实际得到的数值取决于 `SEED`、`MAX_TIME` 和计算机速度，但定性上应能重现上述三种情形：在 $U=1.8$ 时，两个味在对数坐标下都缓慢衰减（两条能带均为金属态）；在 $U=2.2$ 时，窄带对应的味（0）比宽带对应的味（2）衰减快得多——这两个轨道之间的这种不对称性正是轨道选择性 Mott 转变本身；在 $U=2.8$ 时，两个味都快速衰减（两条能带均为绝缘态）。
 
 ### 检验收敛性
 
-可以使用 [`tutorial5b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-05-osmt/tutorial5b.py) 检验收敛性，它以对数坐标绘制味 0 和味 2 各自的所有迭代 $G_f^{it}(\tau)$：
+可以使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-05-osmt/tutorial5b.py" data-filename="tutorial5b.py" target="_blank" rel="noopener">`tutorial5b.py`</a> 检验收敛性，它以对数坐标绘制味 0 和味 2 各自的所有迭代 $G_f^{it}(\tau)$：
 
 ```
 import pyalps

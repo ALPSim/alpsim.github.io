@@ -7,6 +7,8 @@ toc: true
 
 ALPS is an open-source project and welcomes contributions at every level — from a bug report or tutorial fix to a new simulation method or library. This page describes how to get involved. The full technical details are in [CONTRIBUTING.md](https://github.com/ALPSim/ALPS/blob/master/CONTRIBUTING.md) in the ALPS repository.
 
+ALPS is released under the [MIT License](https://github.com/ALPSim/ALPS/blob/master/LICENSE.txt), so any contributed code, including new codebases, must be under a compatible license.
+
 ## Ways to contribute
 
 | Level | What this looks like |

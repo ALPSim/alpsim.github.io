@@ -1,6 +1,6 @@
 ---
-title: Reference
-description: "ALPS Random Library"
+title: "リファレンス"
+description: "ALPS 乱数ライブラリ"
 weight: 2
 ---
 

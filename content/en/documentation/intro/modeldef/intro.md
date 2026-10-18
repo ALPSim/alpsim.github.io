@@ -50,11 +50,13 @@ These models were introduced in the following original papers: the Heisenberg ex
 
 The typical structure of a model library is the following:
 
-    <MODEL>
-    <SITEBASIS name="..."> ... </SITEBASIS>
-    <BASIS name="..."> ... </BASIS>
-    <HAMILTONIAN name="..."> ... </HAMILTONIAN>
-    </MODEL>
+```xml
+<MODEL>
+<SITEBASIS name="..."> ... </SITEBASIS>
+<BASIS name="..."> ... </BASIS>
+<HAMILTONIAN name="..."> ... </HAMILTONIAN>
+</MODEL>
+```
 
 The `<SITEBASIS>` command defines the Hilbert space (basis) of a single site, the `<BASIS>` command defines the Hilbert space of the whole lattice, and the `<HAMILTONIAN>` defines the Hamiltonian.
 

@@ -86,7 +86,17 @@ for s in data[0]:
     print(s.props['observable'], ' : ', s.y[0])
 ```
 
-Each element `s` in `data[0]` corresponds to one observable. `s.props['observable']` is its name (e.g., `'Energy'`, `'Magnetization'`) and `s.y[0]` is its value. The ground-state energy should be close to $E_0 \approx -14.3\,J$ for this 32-site open chain.
+Each element `s` in `data[0]` corresponds to one observable. `s.props['observable']` is its name (e.g., `'Energy'`, `'Truncation error'`) and `s.y[0]` is its value. With the parameters above only these two are measured; magnetization and correlation functions require `MEASURE_*` parameters. The ground-state energy should be close to $E_0 \approx -13.9973\,J$ for this 32-site open chain.
+
+{{< callout type="info" >}}
+**Why not simply $32\,e_0$?** The two open ends add a surface energy, and there is a $1/L$ finite-size correction:
+
+$$
+E_0(L) \simeq L\,e_0 + e_s - \frac{\pi^2}{48\,L}, \qquad e_0 = \tfrac14 - \ln 2, \quad e_s = \tfrac{\pi - 1 - 2\ln 2}{4} \approx 0.1888.
+$$
+
+($e_s$ from [Hamer, Quispel & Batchelor, 1987](https://doi.org/10.1088/0305-4470/20/16/040).) For $L = 32$ this gives $-13.9983\,J$, within $10^{-3}$ of the DMRG result. How to remove the boundary contributions is shown in [DMRG-03](../../tutorials/dmrg/dmrg03/#ground-state-energies-per-site-bond).
+{{< /callout >}}
 
 ## Loading iteration history
 
@@ -97,7 +107,7 @@ itr = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm_spin_one_half')
                                what=['Iteration Energy', 'Iteration Truncation Error'])
 ```
 
-`itr[0][0]` contains the energy recorded at each half-sweep; `itr[0][1]` contains the truncation error at each step. The **truncation error** is the sum of the discarded eigenvalues of the reduced density matrix — the weight in the exact ground state that the MPS with $m$ states cannot represent. A well-converged calculation should reach a truncation error below $10^{-6}$; for $m = 100$ on this system, values around $10^{-8}$–$10^{-7}$ are typical.
+`itr[0][0]` contains the energy recorded at each half-sweep; `itr[0][1]` contains the truncation error at each step. The **truncation error** is the sum of the discarded eigenvalues of the reduced density matrix — the weight in the exact ground state that the MPS with $m$ states cannot represent. A well-converged calculation should reach a truncation error below $10^{-6}$; for $m = 100$ on this system, the final value is around $10^{-13}$.
 
 ## Plotting convergence
 

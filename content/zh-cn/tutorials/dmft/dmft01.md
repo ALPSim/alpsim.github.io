@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-01 Intro
+title: DMFT-01 简介
 math: true
 toc: true
 ---

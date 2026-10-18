@@ -1,6 +1,6 @@
 
 ---
-title: DMFT-04 Mott
+title: DMFT-04 莫特转变
 math: true
 toc: true
 ---
@@ -38,14 +38,14 @@ $$
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $20$、$0.001$ |
 | `SOLVER` | 杂质求解器 | `"hybridization"`（CT-HYB） |
 | `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ |
-| `N_MEAS` | 测量之间的蒙特卡罗更新次数 | $1000$ |
+| `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $1000$ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ |
 | `CHECKPOINT` | 检查点／重启文件的文件名前缀 | `solverdump_U_`+`U` |
-| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡罗扫描数上限（随 $U$ 缩放）／热化扫描数／每次迭代的实际时间上限（秒） | $1500\,U$、$500$、$600$ |
+| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限（随 $U$ 缩放）／热化扫描数／每次迭代的实际时间上限（秒） | $1500\,U$、$500$、$600$ |
 
 ### 运行模拟
 
-要用 python 运行模拟，请使用 [`tutorial4a.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4a.py)：
+要用 python 运行模拟，请使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-04-mott/tutorial4a.py" data-filename="tutorial4a.py" target="_blank" rel="noopener">`tutorial4a.py`</a>：
 
 ```    
 import pyalps
@@ -184,7 +184,7 @@ plt.show()
 
 ### 检验收敛性
 
-可以使用 [`tutorial4b.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-04-mott/tutorial4b.py) 来检验收敛性：
+可以使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-04-mott/tutorial4b.py" data-filename="tutorial4b.py" target="_blank" rel="noopener">`tutorial4b.py`</a> 来检验收敛性：
 
 ```
 import pyalps

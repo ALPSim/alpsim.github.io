@@ -1,7 +1,7 @@
 
 ---
-title: Overview
-description: "ALPS Libraries Overview"
+title: "概要"
+description: "ALPS ライブラリの概要"
 weight: 1
 ---
 

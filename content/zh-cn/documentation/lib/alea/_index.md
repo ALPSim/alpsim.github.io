@@ -1,6 +1,6 @@
 ---
-title: ALPS/Alea Library
-description: "ALPS Alea Library"
+title: "ALPS/Alea 库"
+description: "ALPS Alea 库"
 weight: 6
 ---
 

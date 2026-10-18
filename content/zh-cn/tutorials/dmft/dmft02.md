@@ -1,19 +1,19 @@
 
 ---
-title: DMFT-02 Hybridization
+title: DMFT-02 杂化
 math: true
 toc: true
 ---
 
 ## 杂化展开 CT-HYB
 
-我们首先运行一个连续时间量子蒙特卡罗代码：杂化展开算法 CT-HYB。作为示例，我们重现 [Georges 等人的 DMFT 综述文章，Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。在教程 03 和 07 中，我们将分别用相互作用展开连续时间求解器和离散时间 Hirsch-Fye 量子蒙特卡罗代码重现相同的结果。除少数与求解器相关的参数外，输入参数都是相同的。
+我们首先运行一个连续时间量子蒙特卡洛代码：杂化展开算法 CT-HYB。作为示例，我们重现 [Georges 等人的 DMFT 综述文章，Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 中的图 11。这一系列共六条曲线展示了体系——一个相互作用为 $U=3D/\sqrt{2}$、处于半满情形、格子为贝特格子的 Hubbard 模型——在降温过程中如何进入反铁磁相。在教程 03 和 07 中，我们将分别用相互作用展开连续时间求解器和离散时间 Hirsch-Fye 量子蒙特卡洛代码重现相同的结果。除少数与求解器相关的参数外，输入参数都是相同的。
 
 ### 运行模拟
 
 如果你想重现上文图 11 中全部 6 条曲线，CT-HYB 模拟总共大约需要运行 1 小时。本教程所需的文件可以在目录 `tutorials/dmft-02-hybridization` 中找到。
 
-所有 DMFT 教程都可以通过一个 python 脚本启动。该脚本会生成参数文件、运行模拟并绘制结果。你可以运行简短版脚本 [`tutorial2.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2.py)，它只重现 6 条曲线中的 2 条（运行时间：约 20 分钟）；也可以运行完整版脚本 [`tutorial2_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2_long.py)，它会重现图中全部 6 条曲线（运行时间：约 1 小时）。
+所有 DMFT 教程都可以通过一个 python 脚本启动。该脚本会生成参数文件、运行模拟并绘制结果。你可以运行简短版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2.py" data-filename="tutorial2.py" target="_blank" rel="noopener">`tutorial2.py`</a>，它只重现 6 条曲线中的 2 条（运行时间：约 20 分钟）；也可以运行完整版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2_long.py" data-filename="tutorial2_long.py" target="_blank" rel="noopener">`tutorial2_long.py`</a>，它会重现图中全部 6 条曲线（运行时间：约 1 小时）。
 
 python 脚本 `tutorial2.py` 会自动为两个模拟准备输入文件 `parm_beta_6.0` 和 `parm_beta_12.0`，并运行它们（`/path-to-alps-installation/bin/dmft parm_beta_x`）。
 
@@ -127,7 +127,7 @@ plt.show()
 
 ### 检验收敛性
 
-如果你想检查 DMFT 自洽过程的收敛情况，可以使用 [`tutorial2eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-02-hybridization/tutorial2eval.py) 绘制不同迭代步骤的格林函数，其代码如下：
+如果你想检查 DMFT 自洽过程的收敛情况，可以使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-02-hybridization/tutorial2eval.py" data-filename="tutorial2eval.py" target="_blank" rel="noopener">`tutorial2eval.py`</a> 绘制不同迭代步骤的格林函数，其代码如下：
 
 ```
 listobs=['0']   # we look at a single flavor (=0) 

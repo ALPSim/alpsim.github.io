@@ -20,12 +20,6 @@ weight: 3
     icon=""
   >}}
   {{< hextra/feature-card
-    title="dwa"
-    subtitle="Directed Worm Algorithm for QMC Simulations"
-    link="dwa"
-    icon=""
-  >}}
-  {{< hextra/feature-card
     title="qwl"
     subtitle="Quantum Wang-Landau Algorithm"
     link="qwl"

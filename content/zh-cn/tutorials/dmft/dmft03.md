@@ -1,13 +1,13 @@
 
 ---
-title: DMFT-03 Interaction
+title: DMFT-03 相互作用
 math: true
 toc: true
 ---
 
 ## 相互作用展开 CT-INT
 
-我们用另一种连续时间量子蒙特卡罗杂质求解器——相互作用展开算法 CT-INT——重复 [DMFT-02 Hybridization](../dmft02) 中的计算。与 CT-HYB 对杂质-浴杂化做展开不同，CT-INT 对相互作用 $U$ 做幂级数展开，并按照 [Rubtsov, Savkin, Lichtenstein, Phys. Rev. B 72, 035122 (2005)](https://doi.org/10.1103/PhysRevB.72.035122) 的方法，利用辅助伊辛场对由此产生的图形做随机采样。由于是围绕非相互作用极限展开，CT-INT 通常在弱到中等耦合下效率最高，与教程 02 中用于强耦合的 CT-HYB 求解器形成互补。
+我们用另一种连续时间量子蒙特卡洛杂质求解器——相互作用展开算法 CT-INT——重复 [DMFT-02 Hybridization](../dmft02) 中的计算。与 CT-HYB 对杂质-浴杂化做展开不同，CT-INT 对相互作用 $U$ 做幂级数展开，并按照 [Rubtsov, Savkin, Lichtenstein, Phys. Rev. B 72, 035122 (2005)](https://doi.org/10.1103/PhysRevB.72.035122) 的方法，利用辅助伊辛场对由此产生的图形做随机采样。由于是围绕非相互作用极限展开，CT-INT 通常在弱到中等耦合下效率最高，与教程 02 中用于强耦合的 CT-HYB 求解器形成互补。
 
 与教程 02 一样，我们重现 [Georges, Kotliar, Krauth 与 Rozenberg 的 DMFT 综述文章，Rev. Mod. Phys. 68, 13 (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 中的图 11：一系列曲线展示了贝特格子上半满、单带 Hubbard 模型在降温过程中如何进入反铁磁相。
 
@@ -39,11 +39,11 @@ $$
 | `SOLVER` | 杂质求解器 | `"Interaction Expansion"` |
 | `ALPHA` | CT-INT 中用于控制符号问题的辅助伊辛场偏移量，参见 [Rubtsov et al. (2005)](https://doi.org/10.1103/PhysRevB.72.035122) | $-0.01$ |
 | `HISTOGRAM_MEASUREMENT` | 记录展开阶数的直方图 | $1$ |
-| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡罗扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10^8$、$1000$、$10$ |
+| `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10^8$、$1000$、$10$ |
 
 ### 运行模拟
 
-本教程所需的文件可以在目录 `tutorials/dmft-03-interaction` 中找到。与教程 02 一样，你可以运行简短版脚本 [`tutorial3.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3.py)，它只重现 6 条曲线中的 2 条（运行时间：约 10 分钟）；也可以运行完整版脚本 [`tutorial3_long.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3_long.py)，它会重现全部 6 条曲线（运行时间：约 30 分钟）。在这一弱耦合区域中，CT-INT 达到同等统计精度所需时间比 CT-HYB 更短，因此这里的 `MAX_TIME` 被设置为每次迭代 10 秒，远低于教程 02 中的 300 秒。
+本教程所需的文件可以在目录 `tutorials/dmft-03-interaction` 中找到。与教程 02 一样，你可以运行简短版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3.py" data-filename="tutorial3.py" target="_blank" rel="noopener">`tutorial3.py`</a>，它只重现 6 条曲线中的 2 条（运行时间：约 10 分钟）；也可以运行完整版脚本 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3_long.py" data-filename="tutorial3_long.py" target="_blank" rel="noopener">`tutorial3_long.py`</a>，它会重现全部 6 条曲线（运行时间：约 30 分钟）。在这一弱耦合区域中，CT-INT 达到同等统计精度所需时间比 CT-HYB 更短，因此这里的 `MAX_TIME` 被设置为每次迭代 10 秒，远低于教程 02 中的 300 秒。
 
 ```
 import pyalps
@@ -151,7 +151,7 @@ CT-INT 与 CT-HYB 用不同的图形展开求解同一个杂质问题，比较�
 
 ### 输出数据与绘图
 
-结果的分析方式与 [DMFT-02 Hybridization](../dmft02) 完全相同，使用 [`tutorial3eval.py`](https://github.com/ALPSim/ALPS/blob/daa73925b95389c0ec5e0d76ce592b56f3cd6738/tutorials/dmft-03-interaction/tutorial3eval.py)（结构与 `tutorial2eval.py` 相同）。首先是紧接在 `tutorial3.py` 之后、绘制两个味的虚时间格林函数的代码：
+结果的分析方式与 [DMFT-02 Hybridization](../dmft02) 完全相同，使用 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/dmft-03-interaction/tutorial3eval.py" data-filename="tutorial3eval.py" target="_blank" rel="noopener">`tutorial3eval.py`</a>（结构与 `tutorial2eval.py` 相同）。首先是紧接在 `tutorial3.py` 之后、绘制两个味的虚时间格林函数的代码：
 
 ```
 listobs=['0', '1']   # we will plot both flavors 0 and 1
@@ -199,11 +199,11 @@ plt.show()
 
 同一脚本还能重现在 [DMFT-02 Hybridization](../dmft02#检验收敛性) 中详细介绍过的、按迭代分辨的收敛图，以及松原频率下格林函数与自能的图；除了生成底层 `.h5` 文件所用的求解器不同外，代码本身没有变化，因为两种求解器都将结果写入相同的 ALPS 输出格式。
 
-由于这是一个随机性的蒙特卡罗模拟，你实际得到的数值取决于 `SEED`、`MAX_TIME` 以及计算机速度。运行简短版脚本应能重现图 11 的定性特征：在 $\beta=6$ 时两个味的 $G(\tau)$ 几乎重合（顺磁、金属态），而在 $\beta=12$ 时两者明显分离（反铁磁序已经出现），这与教程 02 中 CT-HYB 已经观察到的趋势一致。
+由于这是一个随机性的蒙特卡洛模拟，你实际得到的数值取决于 `SEED`、`MAX_TIME` 以及计算机速度。运行简短版脚本应能重现图 11 的定性特征：在 $\beta=6$ 时两个味的 $G(\tau)$ 几乎重合（顺磁、金属态），而在 $\beta=12$ 时两者明显分离（反铁磁序已经出现），这与教程 02 中 CT-HYB 已经观察到的趋势一致。
 
 ### 小结与展望
 
-用一种独立的杂质求解器——本教程中的 CT-INT——重现了与教程 02 中 CT-HYB 相同的 Néel 转变，这说明该转变是 DMFT 自洽条件与格点模型本身的性质，而不是某一特定蒙特卡罗算法所产生的假象。
+用一种独立的杂质求解器——本教程中的 CT-INT——重现了与教程 02 中 CT-HYB 相同的 Néel 转变，这说明该转变是 DMFT 自洽条件与格点模型本身的性质，而不是某一特定蒙特卡洛算法所产生的假象。
 
 1. 在固定 `MAX_TIME` 的情况下，$\beta=12$ 时 CT-INT 与 CT-HYB 哪一个给出的 $G(\tau)$ 误差棒更小？如果把 $U$ 增大到接近 [DMFT-04 Mott](../dmft04) 中研究的 Mott 转变附近，答案会如何变化？
 2. 画出由 `HISTOGRAM_MEASUREMENT=1` 输出的展开阶数直方图，并检查其平均值随 $\beta$ 和 $U$ 如何变化。
