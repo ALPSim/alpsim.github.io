@@ -10,7 +10,7 @@ weight: 4
 
 ## Overview
 
-The DiagHam-ALPS Developer Workshop brings together developers of the [DiagHam](https://www.nick-ux.org/diagham/) and ALPS projects to coordinate joint development work supported by the DiagHam-ALPS grant.
+The DiagHam-ALPS Developer Workshop brings together developers of the DiagHam and ALPS projects to coordinate joint development work supported by the DiagHam-ALPS grant.
 
 ## Dates
 
