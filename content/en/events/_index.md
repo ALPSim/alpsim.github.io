@@ -20,7 +20,7 @@ We welcome prospective GSoC contributors to work on projects related to ALPS. Yo
 
 ## Upcoming Developer Meetings
 
-- December 7-9, 2026: DiagHam-ALPS Developer Workshop at the University of Kent, Canterbury, UK: [more info](2026/kent)
+- To be scheduled.
 
 ## Past Events
 
