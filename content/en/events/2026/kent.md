@@ -10,7 +10,9 @@ weight: 4
 
 ## Overview
 
-The DiagHam-ALPS Developer Workshop brings together developers of the DiagHam and ALPS projects to coordinate joint development work supported by the DiagHam-ALPS grant.
+The DiagHam-ALPS Developer Workshop brings together developers of the [DiagHam](https://nick-ux.org/diagham/index.php/Main_Page) and ALPS projects to coordinate joint development work supported by the DiagHam-ALPS grant.
+
+If you are interested in attending, please register [here](https://forms.cloud.microsoft/pages/responsepage.aspx?id=VvqpUTI_mkSnIT4_SapemlXHofReHo1MpSbBKh7prRJUNUNFNjhFRkQxWDAzMDBKUTdSVEpaOE5KTS4u&route=shorturl) by 10 November. We hope to keep the event free to attend, with accommodation and travel support subject to available funds. You can also offer areas of software practice that you would like to talk about (with some potential for adding a few scientific contributions).
 
 ## Dates
 
