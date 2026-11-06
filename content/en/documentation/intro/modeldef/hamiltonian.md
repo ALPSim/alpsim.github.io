@@ -70,6 +70,8 @@ Site-type dependent coupling terms can either be specified as in the first examp
 
 We can now specify `h0` and `Gamma0` on sites of type 0 and `J0` on bonds of type 0, `h1`, `Gamma1`, and `J1` for type 1, and so on — this is exactly how, e.g., the `anisotropic2d` unit cell (see [A Library of Lattices and Graphs](../../latticehowtos/library)) lets a model assign different couplings `J0`/`J1` to bonds along each lattice direction. `J`, `h`, and `Gamma` here are the same parameters described in [ALPS Model Definitions](..).
 
+To let a coupling vary from site to site or from bond to bond, rather than by type, for example in a trap or with random disorder, see [Position-Dependent Couplings](../inhomogeneous).
+
 Extensions to more complex terms, such as 3- and 4-site terms, are in preparation and will be included here as soon as the ALPS libraries support such terms.
 
 ---

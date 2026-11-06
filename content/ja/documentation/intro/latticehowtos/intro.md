@@ -35,6 +35,8 @@ weight: 1
 | 8 | `simple cubic lattice` | `L`（長さ）、`W`（幅、既定値 `L`）、`H`（高さ、既定値 `W`） | 周期的、均質 |
 | 9 | `inhomogeneous simple cubic lattice` | `L`（長さ）、`W`（幅、既定値 `L`）、`H`（高さ、既定値 `W`） | 開放、非均質 |
 
+非均質格子（7 と 9）では、`mu` などの結合を各サイトの位置に依存させることができます。[位置に依存する結合](../../modeldef/inhomogeneous)を参照してください。
+
 ![ALPS でよく使われる格子（グラフ）](../figs/commonalpslattices.jpg)
 
 ### 格子（グラフ）のアーカイブ全体

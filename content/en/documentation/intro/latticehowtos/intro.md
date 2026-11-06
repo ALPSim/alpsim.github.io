@@ -35,6 +35,8 @@ The nine most commonly used lattices are already built into the library and can 
 | 8 | `simple cubic lattice` | `L` (length), `W` (width, default `L`), `H` (height, default `W`) | periodic, homogeneous |
 | 9 | `inhomogeneous simple cubic lattice` | `L` (length), `W` (width, default `L`), `H` (height, default `W`) | open, inhomogeneous |
 
+The inhomogeneous lattices (7 and 9) let couplings such as `mu` depend on the position of each site; see [Position-Dependent Couplings](../../modeldef/inhomogeneous).
+
 ![Common lattices (graphs) in ALPS](../figs/commonalpslattices.jpg)
 
 ### Entire archive of lattices (graphs)
