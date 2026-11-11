@@ -26,3 +26,7 @@ How to define the operators the Hamiltonian is built from: simple site operators
 ## [Hamiltonian Descriptions](hamiltonian)
 
 How to assemble a `<HAMILTONIAN>` from `<PARAMETER>` defaults, a `<BASIS>` reference, and `<SITETERM>`/`<BONDTERM>` elements — including type-dependent couplings, either via an explicit `type` attribute or the `#` wildcard.
+
+## [Position-Dependent Couplings](inhomogeneous)
+
+How to make couplings vary from site to site or bond to bond — a trap, a tilt, a field gradient or random disorder — using an inhomogeneous lattice and parameter expressions in the coordinates `x`, `y` and `z`, the functions and random numbers those expressions can use, and how to run `worm` on a small cluster.
