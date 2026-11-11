@@ -1,0 +1,30 @@
+# Checks the ALPS repository's map of which site pages describe which source
+# code (.github/website-pages.json there; scripts/check_source_map.py here).
+# A page renamed or deleted here fails until the map is updated in ALPS; new
+# pages and missing translations are reported as warnings. The daily run
+# catches map changes in ALPS that name pages this site does not have.
+name: Source map
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "41 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Check the ALPS source map against the pages
+        run: python3 scripts/check_source_map.py
