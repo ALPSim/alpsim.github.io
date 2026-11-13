@@ -1,8 +1,8 @@
-# Checks the ALPS repository's map of which site pages describe which source
-# code (.github/website-pages.json there; scripts/check_source_map.py here).
-# A page renamed or deleted here fails until the map is updated in ALPS; new
-# pages and missing translations are reported as warnings. The daily run
-# catches map changes in ALPS that name pages this site does not have.
+# Checks .github/alps-source-map.json, the map of which pages describe which
+# files of ALPSim/ALPS (scripts/check_source_map.py). A page renamed or deleted
+# here fails until the map names the new path; new pages, missing translations
+# and patterns that match no ALPS file are reported as warnings. The daily run
+# catches files moved or removed in ALPS.
 name: Source map
 
 on:
@@ -26,5 +26,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - name: Check the ALPS source map against the pages
-        run: python3 scripts/check_source_map.py
+      - name: Checkout ALPS (file list only)
+        uses: actions/checkout@v6
+        with:
+          repository: ALPSim/ALPS
+          path: alps
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout: .github
+      - name: Check the source map
+        run: python3 scripts/check_source_map.py --alps alps
