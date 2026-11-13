@@ -1,0 +1,735 @@
+{
+  "description": "Which pages of this site describe which files of ALPSim/ALPS. Pages are paths under content/en; the zh-cn and ja pages at the same paths follow them. Sources are glob patterns over the ALPS repository (** spans directories, * does not), pointing at the files that define what a page documents: parameters, command-line options, models and lattices, install steps, public headers. Every ALPS pull request lists the pages whose sources it changes (.github/scripts/website_pages.py there); scripts/check_source_map.py here checks that the pages exist and the patterns still match.",
+  "repository": "ALPSim/ALPS",
+  "watched": [
+    "install/",
+    "start/",
+    "documentation/",
+    "tutorials/"
+  ],
+  "ignored": [
+    "**/tests/**",
+    "**/test/**"
+  ],
+  "entries": [
+    {
+      "name": "installation from wheels",
+      "sources": [
+        "python/pyalps/pyproject.toml",
+        "python/pyalps/src/pyalps_cli/__init__.py"
+      ],
+      "pages": [
+        "install/binary.md"
+      ]
+    },
+    {
+      "name": "installation from source",
+      "sources": [
+        "CMakeLists.txt",
+        "CMakePresets.json",
+        ".github/dependencies.json"
+      ],
+      "pages": [
+        "install/source.md"
+      ]
+    },
+    {
+      "name": "using ALPS from CMake projects",
+      "sources": [
+        "cmake/ALPSConfig.cmake.in",
+        "cmake/config/config.h.in"
+      ],
+      "pages": [
+        "documentation/codedev/usealps.md",
+        "documentation/lib/general/config.md"
+      ]
+    },
+    {
+      "name": "parameter files, command-line options and convert2xml",
+      "sources": [
+        "src/tools/parameters/parameter2xml.C",
+        "src/tools/scheduler/convert2xml.C",
+        "src/alps/scheduler/include/alps/scheduler/options.h",
+        "src/alps/scheduler/src/scheduler/options.C",
+        "src/alps/parapack/include/alps/parapack/option.h",
+        "src/alps/parapack/src/parapack/option.C",
+        "src/alps/cli/include/alps/cli/options.hpp",
+        "src/alps/cli/src/*.cpp"
+      ],
+      "pages": [
+        "documentation/intro/runalps/commandline.md"
+      ]
+    },
+    {
+      "name": "job and task files",
+      "sources": [
+        "src/tools/parameters/parameter2xml.C",
+        "src/alps/scheduler/src/scheduler/task.C",
+        "src/alps/scheduler/src/scheduler/workertask.C"
+      ],
+      "pages": [
+        "documentation/intro/runalps/intro.md"
+      ]
+    },
+    {
+      "name": "pyalps: running and loading",
+      "sources": [
+        "python/pyalps/src/pyalps/tools.py",
+        "python/pyalps/src/pyalps/load.py"
+      ],
+      "pages": [
+        "documentation/intro/runalps/usepython.md",
+        "documentation/api/runapp.md",
+        "documentation/api/loadat.md"
+      ]
+    },
+    {
+      "name": "pyalps: evaluation and plots",
+      "sources": [
+        "python/pyalps/src/pyalps/tools.py",
+        "python/pyalps/src/pyalps/dataset.py",
+        "python/pyalps/src/pyalps/plot.py",
+        "python/pyalps/src/pyalps/plot_core.py",
+        "python/pyalps/src/pyalps/fit_wrapper.py"
+      ],
+      "pages": [
+        "documentation/api/eval.md"
+      ]
+    },
+    {
+      "name": "common parameters",
+      "sources": [
+        "src/alps/lattice/src/lattice/latticelibrary.C",
+        "src/alps/model/src/model/modellibrary.C",
+        "src/alps/scheduler/src/scheduler/task.C",
+        "src/alps/scheduler/src/scheduler/workertask.C",
+        "src/alps/scheduler/src/scheduler/worker.C",
+        "src/alps/parapack/src/parapack/rng_helper.C",
+        "src/alps/parapack/include/alps/parapack/montecarlo.h",
+        "src/apps/diag/diag.h"
+      ],
+      "pages": [
+        "documentation/intro/parameters.md"
+      ]
+    },
+    {
+      "name": "custom measurements",
+      "sources": [
+        "src/alps/scheduler/include/alps/scheduler/measurement_operators.h",
+        "src/alps/scheduler/src/scheduler/measurement_operators.C"
+      ],
+      "pages": [
+        "documentation/intro/measuredef.md"
+      ]
+    },
+    {
+      "name": "lattice definitions",
+      "sources": [
+        "src/alps/resources/lattices.xml",
+        "src/alps/lattice/src/**",
+        "src/tools/lattice/**",
+        "src/alps/lattice/include/alps/lattice/disorder.h",
+        "src/alps/lattice/include/alps/lattice/graph.h",
+        "src/alps/lattice/include/alps/lattice/latticedescriptor.h",
+        "src/alps/lattice/include/alps/lattice/latticegraphdescriptor.h",
+        "src/alps/lattice/include/alps/lattice/latticelibrary.h",
+        "src/alps/lattice/include/alps/lattice/nsite_group.h",
+        "src/alps/lattice/include/alps/lattice/unitcell.h"
+      ],
+      "pages": [
+        "documentation/intro/latticehowtos/checklattice.md",
+        "documentation/intro/latticehowtos/intro.md",
+        "documentation/intro/latticehowtos/latticegraph.md",
+        "documentation/intro/latticehowtos/library.md",
+        "documentation/intro/latticehowtos/simplegraph.md",
+        "documentation/intro/latticehowtos/unitcell.md",
+        "tutorials/lm/lm01.md"
+      ]
+    },
+    {
+      "name": "model definition format",
+      "sources": [
+        "src/alps/model/src/**",
+        "src/alps/model/include/alps/model/basisdescriptor.h",
+        "src/alps/model/include/alps/model/bondoperator.h",
+        "src/alps/model/include/alps/model/bondterm.h",
+        "src/alps/model/include/alps/model/default_term.h",
+        "src/alps/model/include/alps/model/globaloperator.h",
+        "src/alps/model/include/alps/model/hamiltonian.h",
+        "src/alps/model/include/alps/model/modellibrary.h",
+        "src/alps/model/include/alps/model/nsiteoperator.h",
+        "src/alps/model/include/alps/model/operatordescriptor.h",
+        "src/alps/model/include/alps/model/quantumnumber.h",
+        "src/alps/model/include/alps/model/sitebasisdescriptor.h",
+        "src/alps/model/include/alps/model/siteoperator.h",
+        "src/alps/model/include/alps/model/siteterm.h"
+      ],
+      "pages": [
+        "documentation/intro/modeldef/hamiltonian.md",
+        "documentation/intro/modeldef/inhomogeneous.md",
+        "documentation/intro/modeldef/intro.md",
+        "documentation/intro/modeldef/latticebasis.md",
+        "documentation/intro/modeldef/operators.md",
+        "documentation/intro/modeldef/sitebasis.md"
+      ]
+    },
+    {
+      "name": "model library C++ interface",
+      "sources": [
+        "src/alps/model/include/**"
+      ],
+      "pages": [
+        "documentation/lib/model/reference.md"
+      ]
+    },
+    {
+      "name": "models in models.xml",
+      "sources": [
+        "src/alps/resources/models.xml"
+      ],
+      "pages": [
+        "documentation/models/bhm.md",
+        "documentation/models/hardcorebm.md",
+        "documentation/models/heisenberg.md",
+        "documentation/models/hubbard.md",
+        "documentation/models/impurity.md",
+        "documentation/models/ising.md",
+        "documentation/models/kondo.md",
+        "documentation/models/sfm.md",
+        "documentation/models/tj.md",
+        "documentation/models/transising.md",
+        "tutorials/lm/lm02.md"
+      ]
+    },
+    {
+      "name": "fulldiag",
+      "sources": [
+        "src/apps/diag/diag.h",
+        "src/apps/diag/fulldiag/factory.C",
+        "src/apps/diag/fulldiag/fulldiag.h",
+        "src/apps/diag/fulldiag/fulldiag_evaluate.C"
+      ],
+      "pages": [
+        "documentation/methods/ed/fulldiag/_index.md",
+        "documentation/methods/ed/fulldiag/implem.md"
+      ]
+    },
+    {
+      "name": "sparsediag",
+      "sources": [
+        "src/apps/diag/diag.h",
+        "src/apps/diag/sparsediag/factory.C",
+        "src/apps/diag/sparsediag/sparsediag.h"
+      ],
+      "pages": [
+        "documentation/methods/ed/sparsediag/_index.md",
+        "documentation/methods/ed/sparsediag/implem.md",
+        "start/ed.md"
+      ]
+    },
+    {
+      "name": "dmrg",
+      "sources": [
+        "src/apps/dmrg/dmrg/dmrg.h"
+      ],
+      "pages": [
+        "documentation/methods/dmrg/dmrg.md",
+        "documentation/methods/dmrg/nonintdmrg.md",
+        "start/dmrg.md"
+      ]
+    },
+    {
+      "name": "spinmc",
+      "sources": [
+        "src/apps/mc/spins/abstractspinsim.h",
+        "src/apps/mc/spins/spinmc_factory.C",
+        "src/apps/mc/spins/spinmc_evaluate.C",
+        "src/apps/mc/spins/*fitter*",
+        "src/apps/mc/spins/fitting_scheduler.h"
+      ],
+      "pages": [
+        "documentation/methods/spinmc/implem.md",
+        "documentation/methods/spinmc/measure.md",
+        "start/mc.md"
+      ]
+    },
+    {
+      "name": "dirloop_sse",
+      "sources": [
+        "src/apps/qmc/sse/SSE*.cpp",
+        "src/apps/qmc/sse/evaluate.C",
+        "src/apps/qmc/sse2/SSE*.cpp",
+        "src/apps/qmc/sse4/model.h",
+        "src/apps/qmc/sse4/sse.h"
+      ],
+      "pages": [
+        "documentation/methods/qmc/sse.md",
+        "documentation/methods/qmc/sse_old.md",
+        "documentation/methods/qmc/bhol.md",
+        "tutorials/mcs/qmc/_index.md"
+      ]
+    },
+    {
+      "name": "worm",
+      "sources": [
+        "src/apps/qmc/worms/Winit.C",
+        "src/apps/qmc/worms/Wmeas.C",
+        "src/apps/qmc/worms/Wdostep.C",
+        "src/apps/qmc/worms/evaluate.C"
+      ],
+      "pages": [
+        "documentation/methods/qmc/worm.md",
+        "documentation/methods/qmc/boseglass.md"
+      ]
+    },
+    {
+      "name": "qwl",
+      "sources": [
+        "src/apps/qmc/qwl/qwl_sse.h",
+        "src/apps/qmc/qwl/qwl_evaluate.C"
+      ],
+      "pages": [
+        "documentation/methods/qmc/qwl.md"
+      ]
+    },
+    {
+      "name": "dmft and impurity solvers",
+      "sources": [
+        "src/apps/dmft/qmc/*.C",
+        "src/apps/dmft/qmc/*.h",
+        "src/alps/input/ctint.cpp",
+        "src/alps/input/hybridization.cpp",
+        "src/alps/input/include/alps/input/*.hpp"
+      ],
+      "pages": [
+        "documentation/methods/dmft/dmft.md",
+        "start/qmc.md",
+        "tutorials/dmft/dmft01.md"
+      ]
+    },
+    {
+      "name": "Alea library",
+      "sources": [
+        "src/alps/alea/include/**",
+        "src/alps/aleav2/include/**"
+      ],
+      "pages": [
+        "documentation/lib/alea/_index.md",
+        "documentation/codedev/code04.md"
+      ]
+    },
+    {
+      "name": "graph library",
+      "sources": [
+        "src/alps/graph/include/**"
+      ],
+      "pages": [
+        "documentation/lib/bgl/graph.md",
+        "documentation/lib/bgl/subgraph.md"
+      ]
+    },
+    {
+      "name": "HDF5 library",
+      "sources": [
+        "src/alps/hdf5/include/**"
+      ],
+      "pages": [
+        "documentation/lib/hdf5/examples.md"
+      ]
+    },
+    {
+      "name": "XML parser library",
+      "sources": [
+        "src/alps/xml/include/**"
+      ],
+      "pages": [
+        "documentation/lib/parser/_index.md"
+      ]
+    },
+    {
+      "name": "random number library",
+      "sources": [
+        "src/alps/random/include/**"
+      ],
+      "pages": [
+        "documentation/lib/random/random.md",
+        "documentation/lib/random/reference.md"
+      ]
+    },
+    {
+      "name": "Monte Carlo scheduler",
+      "sources": [
+        "src/alps/scheduler/include/**"
+      ],
+      "pages": [
+        "documentation/codedev/code03.md"
+      ]
+    },
+    {
+      "name": "tutorial code-01",
+      "sources": [
+        "tutorials/code-01-python/**"
+      ],
+      "pages": [
+        "documentation/codedev/code01.md"
+      ]
+    },
+    {
+      "name": "tutorial code-02",
+      "sources": [
+        "tutorials/code-02-c++/**"
+      ],
+      "pages": [
+        "documentation/codedev/code02.md"
+      ]
+    },
+    {
+      "name": "tutorial alpsize-00",
+      "sources": [
+        "tutorials/alpsize-00-make/**",
+        "tutorials/alpsize-08-lattice/**",
+        "tutorials/alpsize-09-scheduler/**"
+      ],
+      "pages": [
+        "documentation/alpsize/alpsize00.md"
+      ]
+    },
+    {
+      "name": "tutorial alpsize-01",
+      "sources": [
+        "tutorials/alpsize-01-cmake/**"
+      ],
+      "pages": [
+        "documentation/alpsize/alpsize01.md"
+      ]
+    },
+    {
+      "name": "tutorial alpsize-10",
+      "sources": [
+        "tutorials/alpsize-10-fortran-scheduler/**"
+      ],
+      "pages": [
+        "documentation/alpsize/alpsize02.md"
+      ]
+    },
+    {
+      "name": "tutorial alpsize-11",
+      "sources": [
+        "tutorials/alpsize-11-fortran-ising/**"
+      ],
+      "pages": [
+        "documentation/alpsize/alpsize03.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-02",
+      "sources": [
+        "tutorials/dmft-02-hybridization/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft02.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-03",
+      "sources": [
+        "tutorials/dmft-03-interaction/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft03.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-04",
+      "sources": [
+        "tutorials/dmft-04-mott/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft04.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-05",
+      "sources": [
+        "tutorials/dmft-05-osmt/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft05.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-06",
+      "sources": [
+        "tutorials/dmft-06-paramagnet/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft06.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-07",
+      "sources": [
+        "tutorials/dmft-07-hirschfye/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft07.md",
+        "tutorials/dmft/dmft09.md"
+      ]
+    },
+    {
+      "name": "tutorial dmft-08",
+      "sources": [
+        "tutorials/dmft-08-lattices/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft08.md"
+      ]
+    },
+    {
+      "name": "tutorials dmft-02 and dmft-03 in DMFT-09",
+      "sources": [
+        "tutorials/dmft-02-hybridization/**",
+        "tutorials/dmft-03-interaction/**"
+      ],
+      "pages": [
+        "tutorials/dmft/dmft09.md"
+      ]
+    },
+    {
+      "name": "tutorial dmrg-03",
+      "sources": [
+        "tutorials/dmrg-03-ground-state-energies/**"
+      ],
+      "pages": [
+        "tutorials/dmrg/dmrg03.md"
+      ]
+    },
+    {
+      "name": "tutorial dmrg-04",
+      "sources": [
+        "tutorials/dmrg-04-gaps/**"
+      ],
+      "pages": [
+        "tutorials/dmrg/dmrg04.md"
+      ]
+    },
+    {
+      "name": "tutorial dmrg-05",
+      "sources": [
+        "tutorials/dmrg-05-local-observables/**"
+      ],
+      "pages": [
+        "tutorials/dmrg/dmrg05.md"
+      ]
+    },
+    {
+      "name": "tutorial dmrg-06",
+      "sources": [
+        "tutorials/dmrg-06-correlations/**"
+      ],
+      "pages": [
+        "tutorials/dmrg/dmrg06.md"
+      ]
+    },
+    {
+      "name": "tutorial ed-01",
+      "sources": [
+        "tutorials/ed-01-sparsediag/**"
+      ],
+      "pages": [
+        "tutorials/ed/ed01.md"
+      ]
+    },
+    {
+      "name": "tutorial ed-02",
+      "sources": [
+        "tutorials/ed-02-gaps/**"
+      ],
+      "pages": [
+        "tutorials/ed/ed02.md"
+      ]
+    },
+    {
+      "name": "tutorial ed-03",
+      "sources": [
+        "tutorials/ed-03-1dspectra/**"
+      ],
+      "pages": [
+        "tutorials/ed/ed03.md"
+      ]
+    },
+    {
+      "name": "tutorial ed-04",
+      "sources": [
+        "tutorials/ed-04-criticality/**"
+      ],
+      "pages": [
+        "tutorials/ed/ed04.md"
+      ]
+    },
+    {
+      "name": "tutorial ed-05",
+      "sources": [
+        "tutorials/ed-05-nnn-chain/**"
+      ],
+      "pages": [
+        "tutorials/ed/ed05.md"
+      ]
+    },
+    {
+      "name": "tutorial ed-06",
+      "sources": [
+        "tutorials/ed-06-fulldiag/**"
+      ],
+      "pages": [
+        "tutorials/ed/ed06.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-01a",
+      "sources": [
+        "tutorials/mc-01-autocorrelations/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc01a.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-01b",
+      "sources": [
+        "tutorials/mc-01b-equilibration-and-convergence/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc01b.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-02",
+      "sources": [
+        "tutorials/mc-02-susceptibilities/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc02.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-03",
+      "sources": [
+        "tutorials/mc-03-magnetization/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc03.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-04",
+      "sources": [
+        "tutorials/mc-04-measurements/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc04.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-05",
+      "sources": [
+        "tutorials/mc-05-bosons/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc05.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-06",
+      "sources": [
+        "tutorials/mc-06-qwl/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc06.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-07",
+      "sources": [
+        "tutorials/mc-07-phase-transition/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc07.md"
+      ]
+    },
+    {
+      "name": "tutorial mc-08",
+      "sources": [
+        "tutorials/mc-08-quantum-phase-transition/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc08.md"
+      ]
+    }
+  ],
+  "unmapped": {
+    "documentation/_index.md": "section index",
+    "documentation/alpsize/_index.md": "section index",
+    "documentation/api/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/codedev/_index.md": "section index",
+    "documentation/intro/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/intro/latticehowtos/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/intro/modeldef/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/intro/runalps/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/lib/_index.md": "section index",
+    "documentation/lib/bgl/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/lib/general/_index.md": "section index",
+    "documentation/lib/general/intro.md": "overview, no code details",
+    "documentation/lib/hdf5/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/lib/model/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/lib/overview/_index.md": "overview, no code details",
+    "documentation/lib/random/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/methods/_index.md": "section index",
+    "documentation/methods/dmft/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/methods/dmrg/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/methods/ed/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/methods/ed/fulldiag/jacobi.md": "theory",
+    "documentation/methods/ed/fulldiag/qrfactor.md": "theory",
+    "documentation/methods/ed/intro.md": "theory",
+    "documentation/methods/ed/sparsediag/lanczos.md": "theory",
+    "documentation/methods/ed/symmetry.md": "theory",
+    "documentation/methods/qmc/_index.md": "section index",
+    "documentation/methods/spinmc/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/methods/spinmc/cluster.md": "theory",
+    "documentation/methods/spinmc/intro.md": "theory",
+    "documentation/methods/spinmc/local.md": "theory",
+    "documentation/models/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "documentation/pubs/_index.md": "section index",
+    "documentation/pubs/papers.md": "list of papers",
+    "documentation/pubs/refs.md": "built from CITATION.cff and CITATIONS.yaml when the site is built",
+    "install/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "install/spack.md": "the Spack package lives in the Spack repository",
+    "start/_index.md": "section index",
+    "tutorials/_index.md": "section index",
+    "tutorials/dmft/_index.md": "section index",
+    "tutorials/dmrg/_index.md": "section index",
+    "tutorials/dmrg/dmrg01.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/dmrg/dmrg02.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/dmrg/spinless-fermions/_index.md": "section index: a short overview that links to the mapped pages below it",
+    "tutorials/dmrg/spinless-fermions/dmrg07.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/dmrg/spinless-fermions/dmrg08.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/dmrg/spinless-fermions/dmrg09.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/dmrg/spinless-fermions/dmrg10.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/dmrg/spinless-fermions/dmrg11.md": "has no tutorial directory in ALPS; changes to the program are reported through its method page",
+    "tutorials/ed/_index.md": "section index",
+    "tutorials/jupyter/_index.md": "section index",
+    "tutorials/jupyter/dmft/dmftBetheHubbard.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/dmrg/energygapspinhalf.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/dmrg/energygapspinone.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/dmrg/extrapolationenergygapspinhalfchain.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/dmrg/extrapolationenergygapspinonechain.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/dmrg/groundstatespinchain.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/ed/isingTransverseField.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/ed/spectra1dsystems.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/ed/spinGapSpinOneHeisenbergChain.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/jupyter/qbits/qbitenergy.md": "embeds its own inputs and runs a program through pyalps; changes to the program's parameters are reported through its method page",
+    "tutorials/lm/_index.md": "section index",
+    "tutorials/mcs/_index.md": "section index",
+    "tutorials/mcs/com.md": "choosing a code, no code details"
+  }
+}

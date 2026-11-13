@@ -1,0 +1,38 @@
+# Checks .github/alps-source-map.json, the map of which pages describe which
+# files of ALPSim/ALPS (scripts/check_source_map.py). A page renamed or deleted
+# here fails until the map names the new path; new pages, missing translations
+# and patterns that match no ALPS file are reported as warnings. The daily run
+# catches files moved or removed in ALPS.
+name: Source map
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "41 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Checkout ALPS (file list only)
+        uses: actions/checkout@v6
+        with:
+          repository: ALPSim/ALPS
+          path: alps
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout: .github
+      - name: Check the source map
+        run: python3 scripts/check_source_map.py --alps alps
