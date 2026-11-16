@@ -38,7 +38,7 @@ where
 | `MU` | chemical potential (half filling) | `0` |
 | `FLAVORS` | number of fermion flavors (spin up/down) | `2` |
 | `SITES` | number of impurity sites | `1` |
-| `ANTIFERROMAGNET` | allow symmetry-broken AFM solution | `1` |
+| `ANTIFERROMAGNET` | allow symmetry-broken AFM solution | `true` |
 | `H_INIT` | initial symmetry-breaking field, to seed the AFM state | `0.05` |
 | `N`, `NMATSUBARA` | number of imaginary-time / Matsubara-frequency points | `500` |
 | `SWEEPS`, `THERMALIZATION` | QMC sweeps and thermalization steps | `1e8`, `1000` |
@@ -80,7 +80,7 @@ parms=[]
 for b in [6., 12.]: 
     parms.append(
             {                         
-              'ANTIFERROMAGNET'         : 1,
+              'ANTIFERROMAGNET'         : True,
               'CONVERGED'               : 0.005,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -94,7 +94,7 @@ for b in [6., 12.]:
               'SEED'                    : 0, 
               'SITES'                   : 1,
               'SOLVER'                  : 'Interaction Expansion',
-              'SYMMETRIZATION'          : 0,
+              'SYMMETRIZATION'          : False,
               'U'                       : 3,
               't'                       : 0.707106781186547,
               'SWEEPS'                  : 100000000,

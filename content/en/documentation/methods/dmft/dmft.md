@@ -29,8 +29,8 @@ weight: 9
 | **Name** | **Description** |
 | :------- | :-------------- |
 | OMEGA_LOOP | set it 1 unless you want to work with semicircular density of states (corresponding to the Bethe lattice in infinitely many dimensions) |
-| ANTIFERROMAGNET | if 1 then the antiferromagnetic self-consistency loop will be employed (formula 97 in review '96 of A.Georges et al) |
-|SYMMETRIZATION | if 1 then paramagnetic solution is enforced (in versions before 2.1: there has been a misspelling SYMMATRIZATION at several places and a usage of both, SYMMETRIZATION and set to the same value was required) |
+| ANTIFERROMAGNET | if true, the antiferromagnetic (Néel) self-consistency loop is used (formula 97 in the 1996 review of A. Georges et al.); `H` and `H_INIT` then act as a staggered field. Cannot be combined with `SYMMETRIZATION = true` |
+|SYMMETRIZATION | if true, the paramagnetic solution is enforced by averaging flavors 0 and 1; requires `H = 0` and `H_INIT = 0`, since the averaging removes any field (in versions before 2.1: there has been a misspelling SYMMATRIZATION at several places and a usage of both, SYMMETRIZATION and set to the same value was required) |
 | MAX_IT | maximum number of iteration in self-consistency loop (usually 10-20 will be enough) |
 | CONVERGED | criterium for stopping the self-consistency loop before reaching MAX_IT - if the maximum change in Green's function in Matsubara representation is less than CONVERGED, the loop will stop |
 | TOLERANCE | (only for hirschfyesim) as above |
@@ -40,9 +40,8 @@ weight: 9
 
 | **Name** | **Description** |
 | :------- | :-------------- |
-| GENERAL_FOURIER_TRANFORMER | set it on if you have OMEGA_LOOP and other than the Bethe lattice |
-| EPS_i (i=0,1,...,FLAVORS-1) | potential shift for the flavor i (necessary for GENERAL_FOURIER_TRANSFORMER) |
-| EPSSQ_i (i=0,1,...,FLAVORS-1) | the second moment of the bandstructure for the flavor i (necessary for GENERAL_FOURIER_TRANSFORMER) |
+| EPS_i (i=0,1,...,FLAVORS-1) | potential shift for the flavor i, used for the high-frequency tails of the Fourier transform |
+| EPSSQ_i (i=0,1,...,FLAVORS-1) | the second moment of the bandstructure for the flavor i, used for the high-frequency tails of the Fourier transform |
 | DOSFILE | sets the name for the file containing the density of states (expected 2 columns with energy value and corresponding density of states at that energy; equidistant energies required; odd number of rows required due to Simpson integration) |
 | TWODBS | switches on the Hilbert transformation for 2-dimensional systems, currently supported square lattice (with nearest and next-nearest neighbor hoppings) and hexagonal lattice (with nearest neighbor hoppings) \[Note: a different 2-dimensional lattice may be easily added\] |
 | L | optional parameter available in case of TWODBS is on; defines the half of the linear discretization in the integration in the self-consistency (default: 200) |
@@ -52,14 +51,15 @@ weight: 9
 
 | **Name** | **Description** |
 | :------- | :-------------- |
-| H_INIT | magnetic field in the quantization axis (conventionally $z$) direction, which is used in computation of the non-interacting initial G0 (if it is not loaded) |
+| H | magnetic field along the quantization axis (conventionally $z$): flavor 0 sees $\mu-h$ and flavor 1 sees $\mu+h$. A staggered field with `ANTIFERROMAGNET = true`, a uniform field otherwise. ALPS 3.0.0 applies the uniform field incorrectly in the self-consistency loop, so use a field only with `ANTIFERROMAGNET = true` in that release |
+| H_INIT | magnetic field used instead of `H` for the initial G0 (if it is not loaded) and the first iteration, to break the spin symmetry at the start |
 | G0OMEGA_INPUT | name for the text file specifying the Weiss field in Matsubara frequencies $i\omega_n$ (expected 1+FLAVORS columns, and total NMATSUBARA rows, use only with OMEGA_LOOP) |
 | G0TAU_INPUT | name for the text file specifying the Weiss field in imaginary time representation (expected 1+FLAVORS columns, and total $N+1$ rows, only with OMEGA_LOOP switched off) |
 | GOMEGA_input | specifies the name for the text file where the initial G0 in Matsubara representation will be written (by default it is not written, as it is identical with G0_omega_1) |
 | G0TAU_input | name for the text file for the output of the initial G0 in imaginary time (by default it is not written, as it is identical with G0_tau_1) |
 | G0OMEGA_output | name for the output file containing the final Weiss field in Matsubara frequencies (by default G0omega_output)(with OMEGA_LOOP) |
 | G0TAU_output | name for the output file containing the final Weiss field in Matsubara frequencies (by default G0tau_output) (with OMEGA_LOOP off) |
-| INSULATING | if you have specified this option, then the initial G0 will be set up in the insulating limit |
+| INSULATING | if true, the initial G0 is the atomic limit $1/(i\omega_n+\mu\pm h)$, as a starting point for the insulating solution where a metallic and an insulating solution coexist. Do not combine it with `G0OMEGA_INPUT` or `G0TAU_INPUT`; ALPS 3.0.0 then ignores the input file. ALPS 3.0.0 starts from the atomic limit whenever the parameter is present, even with the value false, so leave it out to disable it |
 
 ### Parameters setting the precision of representation of the Green's function and the Weiss field
 
@@ -76,12 +76,11 @@ weight: 9
 | SWEEPS | number of desired sweeps performed during the calculation (recommendation: set it very high, e.g. $10^9$ and the solver will stop on the time limit given by MAX_TIME) |
 | THERMALIZATION | number of sweeps before the Monte Carlo measurements in order to reach configuration close to equilibrium (of the order of 1000) |
 | EPSSQAV | the second moment of the bandstructure (necessary if you have specified your own DOSFILE) |
-| N_ORDER | setting histogram size (if the hybridization order is larger then it will be not stored in the histogram) (value of the order of 100 might be reasonable) |
+| N_HISTOGRAM_ORDERS | setting histogram size (if the hybridization order is larger then it will be not stored in the histogram) (default 50) |
 | N_MEAS | number of Monte Carlo steps between measurements (of the order of 10000) |
 | N_SHIFT | number of shifts of segments in a single Monte Carlo step (apparently unused, so 0) |
 | MEASURE_FOURPOINT | if switched on then the four-point correlators are being measured |
 | N4point | (only used if MEASURE_FOURPOINT is on) description missing so far |
-| CHECKPOINT | filename prefix for checkpointing files and for the final h5 and xml output |
 
 ### Interaction expansion1 impurity solver parameters 
 
@@ -101,7 +100,7 @@ weight: 9
 | NMATSUBARA_MEASUREMENTS | (default: NMATSUBARA) |
 | HISTOGRAM_MEASUREMENT | (default: false) |
 | GET_COMPACTED_MEASUREMENTS | |
-| ATOMIC | |
+| ATOMIC | do not set it in `dmft`: it replaces the bath by the atomic limit in every iteration, so the self-consistency loop gives wrong results. Use `INSULATING` to start the loop from the atomic limit |
 | TAU_DISCRETIZATION_FOR_EXP | |
 | CHECKPOINT | filename prefix for the checkpointing files and for the final h5 and xml output |
 

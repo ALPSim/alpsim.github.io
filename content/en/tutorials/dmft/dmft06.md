@@ -17,7 +17,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqrt{2}$ (half-bandwidth $D=2t=\sqrt{2}$) and $U=3$, so that $U=3D/\sqrt{2}$ as in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). Unlike Tutorials 02 and 03, here we enforce a *paramagnetic* self-consistency (`ANTIFERROMAGNET=0`, `SYMMETRIZATION=1`) at $\beta=32$, so that the metallic self-energy can be compared directly to the Hirsch-Fye and Exact Diagonalization benchmarks of Fig. 15 in that review, which were likewise computed for the paramagnetic phase.
+on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqrt{2}$ (half-bandwidth $D=2t=\sqrt{2}$) and $U=3$, so that $U=3D/\sqrt{2}$ as in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). Unlike Tutorials 02 and 03, here we enforce a *paramagnetic* self-consistency (`ANTIFERROMAGNET=false`, `SYMMETRIZATION=true`) at $\beta=32$, so that the metallic self-energy can be compared directly to the Hirsch-Fye and Exact Diagonalization benchmarks of Fig. 15 in that review, which were likewise computed for the paramagnetic phase.
 
 ### Parameters
 
@@ -31,8 +31,8 @@ Both solvers are run at the same physical point:
 | `MU` | chemical potential | $0$ (half filling) |
 | `H`, `H_INIT` | quantization-axis field / seed field for the initial Weiss field | $0$ / $0$ |
 | `FLAVORS` | number of spin flavors | $2$ |
-| `ANTIFERROMAGNET` | enable the Néel self-consistency | $0$ (disabled — paramagnetic solution enforced) |
-| `SYMMETRIZATION` | enforce a paramagnetic solution | $1$ |
+| `ANTIFERROMAGNET` | enable the Néel self-consistency | `false` (disabled — paramagnetic solution enforced) |
+| `SYMMETRIZATION` | enforce a paramagnetic solution | `true` |
 | `OMEGA_LOOP` | run the self-consistency in Matsubara frequencies | $1$ |
 | `SITES` | number of impurity sites | $1$ |
 | `MAX_IT`, `CONVERGED` | maximum self-consistency iterations / convergence threshold | $12$, $0.0025$ |
@@ -46,7 +46,7 @@ The two solvers differ in their discretization and solver-specific settings:
 | `SWEEPS`, `THERMALIZATION` | Monte Carlo sweep budget, thermalization sweeps | $2500$, $500$ | $10^8$, $1000$ |
 | `MAX_TIME` | wall-clock cutoff per iteration (seconds) | $600$ | $120$ |
 | `N_MEAS` | Monte Carlo updates between measurements | $10000$ | — |
-| `N_ORDER` | histogram size for the hybridization expansion order | $50$ | — |
+| `N_HISTOGRAM_ORDERS` | histogram size for the hybridization expansion order | $50$ | — |
 | `SC_WRITE_DELTA` | write the hybridization function for the solver | $1$ | — |
 | `ALPHA` | shift of the CT-INT auxiliary Ising field | — | $-0.01$ |
 | `HISTOGRAM_MEASUREMENT` | record a histogram of the CT-INT perturbation order | — | $1$ |
@@ -78,7 +78,7 @@ import pyalps
 parms=[]
 parms.append(
         {
-          'ANTIFERROMAGNET'     : 0,
+          'ANTIFERROMAGNET'     : False,
           'CHECKPOINT'          : 'dump_hyb',
           'CONVERGED'           : 0.0025,
           'FLAVORS'             : 2,
@@ -90,13 +90,13 @@ parms.append(
           'N'                   : 1000,
           'NMATSUBARA'          : 1000,
           'N_MEAS'              : 10000,
-          'N_ORDER'             : 50,
+          'N_HISTOGRAM_ORDERS'  : 50,
           'OMEGA_LOOP'          : 1,
           'SEED'                : 0,
           'SITES'               : 1,
           'SOLVER'              : 'hybridization',
           'SC_WRITE_DELTA'      : 1,
-          'SYMMETRIZATION'      : 1,
+          'SYMMETRIZATION'      : True,
           'U'                   : 3,
           't'                   : 0.707106781186547,
           'SWEEPS'              : 2500,
@@ -122,7 +122,7 @@ import pyalps
 parms=[]
 parms.append(
         { 
-          'ANTIFERROMAGNET'         : 0,
+          'ANTIFERROMAGNET'         : False,
           'CHECKPOINT'              : 'dump_int',
           'CONVERGED'               : 0.0025,
           'CONVERGENCE_CHECK_PERIOD': 500,
@@ -141,7 +141,7 @@ parms.append(
           'SEED'                    : 0, 
           'SITES'                   : 1,
           'SOLVER'                  : 'Interaction Expansion',
-          'SYMMETRIZATION'          : 1,
+          'SYMMETRIZATION'          : True,
           'U'                       : 3,
           't'                       : 0.707106781186547,
           'RECALC_PERIOD'           : 3000,
@@ -175,7 +175,7 @@ Warning: this takes a long time to run on a single workstation; you may shorten 
 The `parm_hyb` file, with comments added:
 
 ```
-ANTIFERROMAGNET = 0        // paramagnetic self-consistency (no Neel order)
+ANTIFERROMAGNET = false    // paramagnetic self-consistency (no Neel order)
 CHECKPOINT = dump_hyb      // filename prefix for checkpoint/restart files
 CONVERGED = 0.0025         // convergence criterion for the self-consistency iteration
 FLAVORS = 2                // flavors 0 and 1 correspond to spin up and down
@@ -187,13 +187,13 @@ MU = 0                     // chemical potential; MU=0 is half filling
 N = 1000                   // discretization of the imaginary-time Green's function
 NMATSUBARA = 1000          // cutoff for Matsubara frequencies
 N_MEAS = 10000             // number of updates between measurements
-N_ORDER = 50               // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50    // histogram size for the hybridization expansion order
 OMEGA_LOOP = 1             // self-consistency runs in Matsubara frequencies
 SEED = 0                   // Monte Carlo random number seed
 SITES = 1                  // one impurity site, as in single-site DMFT
 SOLVER = "hybridization"   // the CT-HYB solver
 SC_WRITE_DELTA = 1         // write out the hybridization function for the solver
-SYMMETRIZATION = 1         // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
+SYMMETRIZATION = true      // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
 U = 3                      // interaction strength
 t = 0.707106781186547      // hopping; for the Bethe lattice considered here $W=2D=4t$
 SWEEPS = 2500               // total sweeps
@@ -204,7 +204,7 @@ BETA = 32                  // inverse temperature
 The `parm_int` file, with comments added:
 
 ```
-ANTIFERROMAGNET = 0                  // paramagnetic self-consistency (no Neel order)
+ANTIFERROMAGNET = false              // paramagnetic self-consistency (no Neel order)
 CHECKPOINT = dump_int                // filename prefix for checkpoint/restart files
 CONVERGED = 0.0025                   // convergence criterion for the self-consistency iteration
 CONVERGENCE_CHECK_PERIOD = 500       // how often (in sweeps) convergence is checked
@@ -223,7 +223,7 @@ OMEGA_LOOP = 1                       // self-consistency runs in Matsubara frequ
 SEED = 0                             // Monte Carlo random number seed
 SITES = 1                            // one impurity site, as in single-site DMFT
 SOLVER = "Interaction Expansion"     // the CT-INT solver
-SYMMETRIZATION = 1                   // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
+SYMMETRIZATION = true                // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
 U = 3                                // interaction strength
 t = 0.707106781186547                // hopping; for the Bethe lattice considered here $W=2D=4t$
 RECALC_PERIOD = 3000                 // sweeps between recomputation of the weight from scratch
@@ -267,7 +267,7 @@ import matplotlib.pyplot as plt
 import pyalps.plot
 from math import pi
 
-listobs=['0']   # SYMMETRIZATION=1, so flavor 0 already represents both spins
+listobs=['0']   # SYMMETRIZATION=true, so flavor 0 already represents both spins
 
 ## load the converged (final) G and G0 in Matsubara representation for both solvers
 data_G = pyalps.loadMeasurements(pyalps.getResultFiles(pattern='parm_*.h5'), respath='/simulation/results/G_omega', what=listobs, verbose=False)
@@ -297,4 +297,4 @@ Running CT-HYB and CT-INT on the same paramagnetic metallic point and comparing 
 1. [DMFT-07 Hirsch-Fye](../dmft07) runs the same physical point with the discrete-time solver. Reproduce that run at a few different values of `N` (number of time slices) and extrapolate $\Delta\tau=\beta/N\to0$: how does the extrapolated result compare to the CT-HYB/CT-INT curves obtained here?
 2. Compare the error bars of the two converged self-energies at fixed total wall-clock time: which solver reaches a given statistical precision faster at this particular $U$ and $\beta$?
 3. The low-frequency slope of $\mathrm{Im}\,\Sigma(i\omega_n)$ is related to the quasiparticle weight $Z$. Extract $Z$ from your converged self-energy and compare it to the value quoted in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) for this $U/D$.
-4. [DMFT-09 Néel Transition](../dmft09) revisits the same lattice and solvers but with `ANTIFERROMAGNET=1`; compare how the self-consistency and convergence behavior differ once magnetic order is allowed.
+4. [DMFT-09 Néel Transition](../dmft09) revisits the same lattice and solvers but with `ANTIFERROMAGNET=true`; compare how the self-consistency and convergence behavior differ once magnetic order is allowed.

@@ -31,8 +31,8 @@ with nearest-neighbor hopping $t$, on-site interaction $U$, and chemical potenti
 | `MU` | chemical potential | $0$ (half filling) |
 | `H`, `H_INIT` | quantization-axis field / symmetry-breaking seed field for the initial Weiss field | $0$ / $0.05$ |
 | `FLAVORS` | number of spin flavors | $2$ |
-| `ANTIFERROMAGNET` | enable the Néel (two-sublattice) self-consistency | $1$ |
-| `SYMMETRIZATION` | enforce a paramagnetic solution | $0$ (we want to allow AFM order) |
+| `ANTIFERROMAGNET` | enable the Néel (two-sublattice) self-consistency | `true` |
+| `SYMMETRIZATION` | enforce a paramagnetic solution | `false` (we want to allow AFM order) |
 | `N`, `NMATSUBARA` | imaginary-time / Matsubara discretization of $G$ and $G_0$ | $500$ |
 | `OMEGA_LOOP` | run the self-consistency in Matsubara frequencies | $1$ |
 | `MAX_IT`, `CONVERGED` | maximum self-consistency iterations / convergence threshold | $10$, $0.005$ (short); $18$, $0.003$ (long) |
@@ -56,7 +56,7 @@ parms=[]
 for b in [6., 12.]:
     parms.append(
             {
-              'ANTIFERROMAGNET'         : 1,
+              'ANTIFERROMAGNET'         : True,
               'CONVERGED'               : 0.005,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -70,7 +70,7 @@ for b in [6., 12.]:
               'SEED'                    : 0,
               'SITES'                   : 1,
               'SOLVER'                  : 'Interaction Expansion',
-              'SYMMETRIZATION'          : 0,
+              'SYMMETRIZATION'          : False,
               'U'                       : 3,
               't'                       : 0.707106781186547,
               'SWEEPS'                  : 100000000,
@@ -102,13 +102,13 @@ The input file `parm_beta_6.0` produced by the script above, with comments added
 
 ```
 H_INIT = 0.05                        // seed field for the initial Weiss field, breaks the up/down symmetry
-ANTIFERROMAGNET = 1                  // allow Neel order; meaningful for bipartite lattices in single-site DMFT
+ANTIFERROMAGNET = true               // allow Neel order; meaningful for bipartite lattices in single-site DMFT
 SEED = 0                             // Monte Carlo random number seed
 CONVERGED = 0.005                    // convergence criterion for the self-consistency iteration
 MAX_IT = 10                          // maximum number of self-consistency iterations
 SWEEPS = 100000000                   // upper bound on sweeps; in practice MAX_TIME stops the run first
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
-SYMMETRIZATION = 0                   // paramagnetic self-consistency is NOT enforced (we want AFM order)
+SYMMETRIZATION = false               // paramagnetic self-consistency is NOT enforced (we want AFM order)
 NMATSUBARA = 500                     // cutoff for Matsubara frequencies
 H = 0                                // magnetic field along the quantization axis
 OMEGA_LOOP = 1                       // self-consistency runs in Matsubara frequencies

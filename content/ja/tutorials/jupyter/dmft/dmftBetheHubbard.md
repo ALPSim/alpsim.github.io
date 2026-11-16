@@ -38,7 +38,7 @@ $$
 | `MU` | 化学ポテンシャル（半充填） | `0` |
 | `FLAVORS` | フェルミオンのフレーバー数（スピンアップ/ダウン） | `2` |
 | `SITES` | 不純物格子点数 | `1` |
-| `ANTIFERROMAGNET` | 対称性の破れた反強磁性解を許可 | `1` |
+| `ANTIFERROMAGNET` | 対称性の破れた反強磁性解を許可 | `true` |
 | `H_INIT` | 反強磁性状態の種となる初期対称性破れ場 | `0.05` |
 | `N`, `NMATSUBARA` | 虚時間・松原振動数点の数 | `500` |
 | `SWEEPS`, `THERMALIZATION` | モンテカルロのスイープ数と熱化ステップ数 | `1e8`, `1000` |
@@ -80,7 +80,7 @@ parms=[]
 for b in [6., 12.]: 
     parms.append(
             {                         
-              'ANTIFERROMAGNET'         : 1,
+              'ANTIFERROMAGNET'         : True,
               'CONVERGED'               : 0.005,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -94,7 +94,7 @@ for b in [6., 12.]:
               'SEED'                    : 0, 
               'SITES'                   : 1,
               'SOLVER'                  : 'Interaction Expansion',
-              'SYMMETRIZATION'          : 0,
+              'SYMMETRIZATION'          : False,
               'U'                       : 3,
               't'                       : 0.707106781186547,
               'SWEEPS'                  : 100000000,

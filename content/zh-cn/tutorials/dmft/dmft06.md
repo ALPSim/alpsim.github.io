@@ -17,7 +17,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-处于贝特格子上、半满（$\mu=0$）情形，取 $t=0.707106781186547=1/\sqrt{2}$（半带宽 $D=2t=\sqrt{2}$）、$U=3$，使得 $U=3D/\sqrt{2}$，与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 一致。与教程 02、03 不同，这里在 $\beta=32$ 下强制采用*顺磁*自洽（`ANTIFERROMAGNET=0`、`SYMMETRIZATION=1`），这样得到的金属态自能就可以直接与该综述文章图 15 中同样针对顺磁相计算的 Hirsch-Fye 与精确对角化基准结果进行比较。
+处于贝特格子上、半满（$\mu=0$）情形，取 $t=0.707106781186547=1/\sqrt{2}$（半带宽 $D=2t=\sqrt{2}$）、$U=3$，使得 $U=3D/\sqrt{2}$，与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 一致。与教程 02、03 不同，这里在 $\beta=32$ 下强制采用*顺磁*自洽（`ANTIFERROMAGNET=false`、`SYMMETRIZATION=true`），这样得到的金属态自能就可以直接与该综述文章图 15 中同样针对顺磁相计算的 Hirsch-Fye 与精确对角化基准结果进行比较。
 
 ### 参数
 
@@ -31,8 +31,8 @@ $$
 | `MU` | 化学势 | $0$（半满） |
 | `H`, `H_INIT` | 量子化轴方向的磁场／初始外斯场的种子场 | $0$ / $0$ |
 | `FLAVORS` | 自旋味的数目 | $2$ |
-| `ANTIFERROMAGNET` | 启用 Néel 自洽 | $0$（禁用——强制顺磁解） |
-| `SYMMETRIZATION` | 强制顺磁解 | $1$ |
+| `ANTIFERROMAGNET` | 启用 Néel 自洽 | `false`（禁用——强制顺磁解） |
+| `SYMMETRIZATION` | 强制顺磁解 | `true` |
 | `OMEGA_LOOP` | 在松原频率下进行自洽计算 | $1$ |
 | `SITES` | 杂质格点数 | $1$ |
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $12$、$0.0025$ |
@@ -46,7 +46,7 @@ $$
 | `SWEEPS`, `THERMALIZATION` | 蒙特卡洛扫描数上限、热化扫描数 | $2500$、$500$ | $10^8$、$1000$ |
 | `MAX_TIME` | 每次迭代的实际时间上限（秒） | $600$ | $120$ |
 | `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $10000$ | ─ |
-| `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ | ─ |
+| `N_HISTOGRAM_ORDERS` | 杂化展开阶数直方图的大小 | $50$ | ─ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ | ─ |
 | `ALPHA` | CT-INT 辅助伊辛场的偏移量 | ─ | $-0.01$ |
 | `HISTOGRAM_MEASUREMENT` | 记录 CT-INT 展开阶数的直方图 | ─ | $1$ |
@@ -78,7 +78,7 @@ import pyalps
 parms=[]
 parms.append(
         {
-          'ANTIFERROMAGNET'     : 0,
+          'ANTIFERROMAGNET'     : False,
           'CHECKPOINT'          : 'dump_hyb',
           'CONVERGED'           : 0.0025,
           'FLAVORS'             : 2,
@@ -90,13 +90,13 @@ parms.append(
           'N'                   : 1000,
           'NMATSUBARA'          : 1000,
           'N_MEAS'              : 10000,
-          'N_ORDER'             : 50,
+          'N_HISTOGRAM_ORDERS'  : 50,
           'OMEGA_LOOP'          : 1,
           'SEED'                : 0,
           'SITES'               : 1,
           'SOLVER'              : 'hybridization',
           'SC_WRITE_DELTA'      : 1,
-          'SYMMETRIZATION'      : 1,
+          'SYMMETRIZATION'      : True,
           'U'                   : 3,
           't'                   : 0.707106781186547,
           'SWEEPS'              : 2500,
@@ -122,7 +122,7 @@ import pyalps
 parms=[]
 parms.append(
         { 
-          'ANTIFERROMAGNET'         : 0,
+          'ANTIFERROMAGNET'         : False,
           'CHECKPOINT'              : 'dump_int',
           'CONVERGED'               : 0.0025,
           'CONVERGENCE_CHECK_PERIOD': 500,
@@ -141,7 +141,7 @@ parms.append(
           'SEED'                    : 0, 
           'SITES'                   : 1,
           'SOLVER'                  : 'Interaction Expansion',
-          'SYMMETRIZATION'          : 1,
+          'SYMMETRIZATION'          : True,
           'U'                       : 3,
           't'                       : 0.707106781186547,
           'RECALC_PERIOD'           : 3000,
@@ -175,7 +175,7 @@ res = pyalps.runDMFT(input_file)
 `parm_hyb` 文件，附有注释：
 
 ```
-ANTIFERROMAGNET = 0        // paramagnetic self-consistency (no Neel order)
+ANTIFERROMAGNET = false    // paramagnetic self-consistency (no Neel order)
 CHECKPOINT = dump_hyb      // filename prefix for checkpoint/restart files
 CONVERGED = 0.0025         // convergence criterion for the self-consistency iteration
 FLAVORS = 2                // flavors 0 and 1 correspond to spin up and down
@@ -187,13 +187,13 @@ MU = 0                     // chemical potential; MU=0 is half filling
 N = 1000                   // discretization of the imaginary-time Green's function
 NMATSUBARA = 1000          // cutoff for Matsubara frequencies
 N_MEAS = 10000             // number of updates between measurements
-N_ORDER = 50               // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50    // histogram size for the hybridization expansion order
 OMEGA_LOOP = 1             // self-consistency runs in Matsubara frequencies
 SEED = 0                   // Monte Carlo random number seed
 SITES = 1                  // one impurity site, as in single-site DMFT
 SOLVER = "hybridization"   // the CT-HYB solver
 SC_WRITE_DELTA = 1         // write out the hybridization function for the solver
-SYMMETRIZATION = 1         // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
+SYMMETRIZATION = true      // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
 U = 3                      // interaction strength
 t = 0.707106781186547      // hopping; for the Bethe lattice considered here $W=2D=4t$
 SWEEPS = 2500               // total sweeps
@@ -204,7 +204,7 @@ BETA = 32                  // inverse temperature
 `parm_int` 文件，附有注释：
 
 ```
-ANTIFERROMAGNET = 0                  // paramagnetic self-consistency (no Neel order)
+ANTIFERROMAGNET = false              // paramagnetic self-consistency (no Neel order)
 CHECKPOINT = dump_int                // filename prefix for checkpoint/restart files
 CONVERGED = 0.0025                   // convergence criterion for the self-consistency iteration
 CONVERGENCE_CHECK_PERIOD = 500       // how often (in sweeps) convergence is checked
@@ -223,7 +223,7 @@ OMEGA_LOOP = 1                       // self-consistency runs in Matsubara frequ
 SEED = 0                             // Monte Carlo random number seed
 SITES = 1                            // one impurity site, as in single-site DMFT
 SOLVER = "Interaction Expansion"     // the CT-INT solver
-SYMMETRIZATION = 1                   // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
+SYMMETRIZATION = true                // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
 U = 3                                // interaction strength
 t = 0.707106781186547                // hopping; for the Bethe lattice considered here $W=2D=4t$
 RECALC_PERIOD = 3000                 // sweeps between recomputation of the weight from scratch
@@ -267,7 +267,7 @@ import matplotlib.pyplot as plt
 import pyalps.plot
 from math import pi
 
-listobs=['0']   # SYMMETRIZATION=1, so flavor 0 already represents both spins
+listobs=['0']   # SYMMETRIZATION=true, so flavor 0 already represents both spins
 
 ## load the converged (final) G and G0 in Matsubara representation for both solvers
 data_G = pyalps.loadMeasurements(pyalps.getResultFiles(pattern='parm_*.h5'), respath='/simulation/results/G_omega', what=listobs, verbose=False)
@@ -297,4 +297,4 @@ plt.show()
 1. [DMFT-07 Hirsch-Fye](../dmft07) 用离散时间求解器运行了相同的物理点。在几个不同的 `N`（时间片数）取值下重复该计算，并外推 $\Delta\tau=\beta/N\to0$：外推结果与这里得到的 CT-HYB／CT-INT 曲线相比如何？
 2. 在固定总运行时间的情况下，比较两个收敛自能的误差棒：在这一特定的 $U$ 和 $\beta$ 下，哪个求解器更快达到给定的统计精度？
 3. $\mathrm{Im}\,\Sigma(i\omega_n)$ 在低频处的斜率与准粒子权重 $Z$ 相关。从你收敛得到的自能中提取 $Z$，并与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 中给出的此 $U/D$ 对应的数值进行比较。
-4. [DMFT-09 Néel Transition](../dmft09) 在相同的格子和求解器上重新考察这一问题，但设置 `ANTIFERROMAGNET=1`；比较一下允许磁性序出现后，自洽与收敛行为有何不同。
+4. [DMFT-09 Néel Transition](../dmft09) 在相同的格子和求解器上重新考察这一问题，但设置 `ANTIFERROMAGNET=true`；比较一下允许磁性序出现后，自洽与收敛行为有何不同。

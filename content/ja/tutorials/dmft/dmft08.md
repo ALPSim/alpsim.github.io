@@ -31,14 +31,14 @@ $$
 | `H`, `H_INIT` | 量子化軸方向の磁場／初期外斯場の種となる磁場 | $0$ / $0.05$ |
 | `FLAVORS` | スピンフレーバー数 | $2$ |
 | `SITES` | 不純物サイト数 | $1$ |
-| `ANTIFERROMAGNET` | ネール自己無撞着を有効化 | $1$ |
-| `SYMMETRIZATION` | 常磁性解を強制するか | $0$ |
+| `ANTIFERROMAGNET` | ネール自己無撞着を有効化 | `true` |
+| `SYMMETRIZATION` | 常磁性解を強制するか | `false` |
 | `N`, `NMATSUBARA` | $G$ と $G_0$ の虚時間／松原周波数離散化数 | $500$ |
 | `OMEGA_LOOP` | 自己無撞着計算を松原周波数で行う | $1$ |
 | `G0OMEGA_INPUT` | 空文字列を指定し、初期外斯場を非相互作用グリーン関数から強制的に計算させる | `""` |
 | `MAX_IT`, `CONVERGED` | 自己無撞着反復の最大回数／収束判定基準 | $10$、$0.005$ |
 | `SOLVER` | 不純物ソルバー | `"hybridization"`（CT-HYB） |
-| `SC_WRITE_DELTA`, `N_MEAS`, `N_ORDER` | ハイブリダイゼーション関数の出力／測定間のモンテカルロ更新回数／展開次数のヒストグラムサイズ | $1$、$5000$、$50$ |
+| `SC_WRITE_DELTA`, `N_MEAS`, `N_HISTOGRAM_ORDERS` | ハイブリダイゼーション関数の出力／測定間のモンテカルロ更新回数／展開次数のヒストグラムサイズ | $1$、$5000$、$50$ |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | モンテカルロスイープ数の上限／熱化スイープ数／1反復あたりの実時間上限（秒） | $10^4$、$500$、$60$ |
 
 ### 格子
@@ -109,8 +109,8 @@ for u in [3.]:
                 'H' : 0.0,           # there is no magnetic field
                 'H_INIT' : 0.05,     #  we set initial field to split spin up/down in order to trigger AF phase
                 'OMEGA_LOOP' : 1,        # the selfconsistency runs in Matsubara frequencies
-                'ANTIFERROMAGNET' : 1,   # allow Neel order
-                'SYMMETRIZATION' : 0,    # do not enforce paramagnetic solution
+                'ANTIFERROMAGNET' : True,   # allow Neel order
+                'SYMMETRIZATION' : False,    # do not enforce paramagnetic solution
                 'NMATSUBARA' : 500,      # number of Matsubara frequencies
                 'N' : 500,               # bins in imaginary time
                 'CONVERGED' : 0.005,     # criterion for convergency
@@ -123,9 +123,8 @@ for u in [3.]:
                 'SOLVER' : "hybridization",   # we take the hybridization impurity solver
                 'SC_WRITE_DELTA' : 1,         # input for the hybridization impurity solver is the hybridization function Delta, which has to be written by the selfconsistency
                 'N_MEAS' : 5000,              # number of Monte Carlo steps between measurements
-                'N_ORDER' : 50,               # histogram size
+                'N_HISTOGRAM_ORDERS' : 50,               # histogram size
                 'DOSFILE' : "DOS/DOS_Square_GRID4000", # specification of the file with density of states
-                'GENERAL_FOURIER_TRANSFORMER' : 1,  # Fourier transformer for a general bandstructure
                 'EPS_0' : 0,                        # potential shift for the flavor 0
                 'EPS_1' : 0,                        # potential shift for the flavor 1
                 'EPSSQ_0' : 4,                      # the second moment of the bandstructure for the flavor 0
@@ -164,7 +163,6 @@ plt.show()
 
 ```
 DOSFILE = DOS/DOS_Square_GRID4000; // specification of the file with density of states
-GENERAL_FOURIER_TRANSFORMER = 1;  // Fourier transformer for a general bandstructure
 EPS_0 = 0;                        // potential shift for the flavor 0
 EPS_1 = 0;                        // potential shift for the flavor 1
 EPSSQ_0 = 4;                      // the second moment of the bandstructure for the flavor 0
@@ -214,8 +212,8 @@ for u in [3.]:
                 'H' : 0.0,           # there is no magnetic field
                 'H_INIT' : 0.05,     #  we set initial field to split spin up/down in order to trigger AF phase
                 'OMEGA_LOOP' : 1,        # the selfconsistency runs in Matsubara frequencies
-                'ANTIFERROMAGNET' : 1,   # allow Neel order
-                'SYMMETRIZATION' : 0,    # do not enforce paramagnetic solution
+                'ANTIFERROMAGNET' : True,   # allow Neel order
+                'SYMMETRIZATION' : False,    # do not enforce paramagnetic solution
                 'NMATSUBARA' : 500,      # number of Matsubara frequencies
                 'N' : 500,               # bins in imaginary time
                 'CONVERGED' : 0.005,     # criterion for convergency
@@ -228,12 +226,11 @@ for u in [3.]:
                 'SOLVER' : "hybridization",   # we take the hybridization impurity solver
                 'SC_WRITE_DELTA' : 1,         # input for the hybridization impurity solver is the hybridization function Delta, which has to be written by the selfconsistency
                 'N_MEAS' : 5000,              # number of Monte Carlo steps between measurements
-                'N_ORDER' : 50,               # histogram size
+                'N_HISTOGRAM_ORDERS' : 50,               # histogram size
                 'TWODBS' : 1,     # the Hilbert transformation integral runs in k-space, sets square lattice
                 't' : 1,          # the nearest-neighbor hopping
                 'tprime' : 0,     # the second nearest-neighbor hopping
                 'L' : 64,         # discretization in k-space in the Hilbert transformation
-                'GENERAL_FOURIER_TRANSFORMER' : 1,  # Fourier transformer for a general bandstructure
                 'EPS_0' : 0,                        # potential shift for the flavor 0
                 'EPS_1' : 0,                        # potential shift for the flavor 1
                 'EPSSQ_0' : 4,                      # the second moment of the bandstructure for the flavor 0
@@ -273,7 +270,6 @@ TWODBS = 1;     // the Hilbert transformation integral runs in k-space; sets squ
 t = 1;          // the nearest-neighbor hopping
 tprime = 0;     // the second nearest-neighbor hopping
 L = 64;         // discretization in k-space in the Hilbert transformation
-GENERAL_FOURIER_TRANSFORMER = 1;  // Fourier transformer for a general bandstructure
 EPS_0 = 0;                        // potential shift for the flavor 0
 EPS_1 = 0;                        // potential shift for the flavor 1
 EPSSQ_0 = 4;                   // the second moment of the bandstructure for the flavor 0
