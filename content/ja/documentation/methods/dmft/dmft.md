@@ -100,7 +100,6 @@ weight: 9
 | NMATSUBARA_MEASUREMENTS | （デフォルト：NMATSUBARA） |
 | HISTOGRAM_MEASUREMENT | （デフォルト：false） |
 | GET_COMPACTED_MEASUREMENTS | |
-| ATOMIC | |
 | TAU_DISCRETIZATION_FOR_EXP | |
 | CHECKPOINT | チェックポイントファイルおよび最終的な h5 と xml 出力のファイル名接頭辞 |
 

@@ -101,7 +101,6 @@ weight: 9
 | NMATSUBARA_MEASUREMENTS | (default: NMATSUBARA) |
 | HISTOGRAM_MEASUREMENT | (default: false) |
 | GET_COMPACTED_MEASUREMENTS | |
-| ATOMIC | |
 | TAU_DISCRETIZATION_FOR_EXP | |
 | CHECKPOINT | filename prefix for the checkpointing files and for the final h5 and xml output |
 
