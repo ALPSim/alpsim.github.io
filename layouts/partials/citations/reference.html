@@ -114,8 +114,13 @@
 {{- with $arxiv -}}
   {{- $buttons = $buttons | append (dict "text" "arXiv" "icon" "science" "link" (printf "https://arxiv.org/abs/%s" .)) -}}
 {{- end -}}
-{{- $scholar := cond (ne $doi "") (printf "doi:%s" $doi) (printf "\"%s\"" $title) -}}
-{{- $buttons = $buttons | append (dict "text" "Scholar" "icon" "manage_search" "link" (printf "https://scholar.google.com/scholar?q=%s" (urlquery $scholar))) -}}
+{{- /* Scholar does not index arXiv DOIs and is slow to index new preprints; an
+     unmatched query silently returns a different paper (for alps30 it returned
+     the ALPS 2.0 paper), so omit the button until the record has a journal DOI. */ -}}
+{{- if not $isPreprint -}}
+  {{- $scholar := cond (ne $doi "") (printf "doi:%s" $doi) (printf "\"%s\"" $title) -}}
+  {{- $buttons = $buttons | append (dict "text" "Scholar" "icon" "manage_search" "link" (printf "https://scholar.google.com/scholar?q=%s" (urlquery $scholar))) -}}
+{{- end -}}
 {{- $buttons = $buttons | append (dict "text" "BibTeX" "icon" "format_quote" "link" $bibfile.RelPermalink) -}}
 
 <p class="alps-citation" id="ref-{{ $key | anchorize }}">{{ $authors }}, <em>{{ $title }}</em>, {{ $venue | safeHTML }}.</p>
