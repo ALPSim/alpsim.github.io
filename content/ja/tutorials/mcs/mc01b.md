@@ -85,7 +85,8 @@ parms_cluster = [dict(parms[0], UPDATE="cluster")]
 ```
 
 `UPDATE` は局所的な単一スピン更新（`"local"`）とクラスター更新（`"cluster"`）を選択します。
-省略すると `spinmc` はクラスター更新を使うため、ここでは明示的に指定し、更新方法だけが異なる 2 つ目のパラメータセットをクラスター更新の実行用に定義します。
+このイジング模型のようなフラストレーションのない模型では、省略すると `spinmc` はクラスター更新を使うため、ここでは明示的に指定し、更新方法だけが異なる 2 つ目のパラメータセットをクラスター更新の実行用に定義します。
+ステップ数の意味に注意してください。局所更新では 1 ステップがすべての格点にわたる 1 スイープですが、クラスター更新では `SWEEPS` は 1 回の Wolff クラスター反転（それぞれ 1 回測定）を数えます。`THERMALIZATION` はどちらの場合も、反転したスピン数を格点数で割った値で数えます。
 
 2 つのパラメータセットをそれぞれ XML 入力ファイルに書き出し、`spinmc` を実行します。
 
@@ -99,7 +100,7 @@ pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 
 `Tmin` は、シミュレーションが終了したかどうかをスケジューラが確認する間隔の最小値（秒）です。
 シミュレーションは次の確認まで測定を続けるため、1 回の実行で `SWEEPS` より多くの測定が行われることがあります。
-私たちの実行では、局所更新で約 $1.5 \times 10^5$ 回、クラスター更新で約 $2.5 \times 10^5$ 回の測定が得られました。そのため、以下の図の時間軸は 50000 スイープを超えています。
+私たちの実行では、局所更新で約 $1.5 \times 10^5$ 回、クラスター更新で約 $2.5 \times 10^5$ 回の測定が得られました。そのため、以下の図の時間軸は 50000 ステップを超えています。
 
 ### 時系列の確認
 
@@ -122,9 +123,12 @@ for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
     plt.plot(sweeps, ts_M / binsize, 'o-')
     plt.axhline(M, ls='--', color='gray', label='mean')
     plt.ylim(0, 1)
-    plt.xlabel('Monte Carlo sweep')
+    # spinmc counts one step as a full sweep for local updates,
+    # but as a single Wolff cluster flip for cluster updates
+    unit = 'sweeps' if update == 'local' else 'cluster updates'
+    plt.xlabel('Monte Carlo ' + unit)
     plt.ylabel('|Magnetization| per site')
-    plt.title('T = T_c, %s updates (each point: mean over %d sweeps)' % (update, binsize))
+    plt.title('T = T_c, %s updates (each point: mean over %d %s)' % (update, binsize, unit))
     plt.legend()
 plt.show()
 ```
@@ -142,7 +146,7 @@ plt.show()
 
 ![](/figs/mcs01btimeseries_cluster.png)
 
-クラスター更新は相関したクラスター全体を反転させ、数ステップで相関が失われるため、各ビンの平均値は平均 $\langle |M| \rangle \approx 0.62$ の近くにとどまります。
+クラスター更新は相関したクラスター全体を反転させ、数回のクラスター更新で相関が失われるため、各ビンの平均値は平均 $\langle |M| \rangle \approx 0.62$ の近くにとどまります。
 個々の測定値は依然として大きく揺らぎます（1 回の測定あたりの標準偏差は約 0.17 で、これは本物の臨界揺らぎです）が、その揺らぎは各ビンの中で平均化されます。
 2 つの実行の平均値は誤差の範囲内で一致します（私たちの実行では、局所更新で $0.611 \pm 0.010$、クラスター更新で $0.622 \pm 0.001$）。ただし、クラスター更新の誤差棒は 10 分の 1 以下です。
 

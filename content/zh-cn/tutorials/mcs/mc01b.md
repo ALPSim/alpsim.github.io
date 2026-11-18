@@ -85,7 +85,8 @@ parms_cluster = [dict(parms[0], UPDATE="cluster")]
 ```
 
 `UPDATE` 用于选择局域单自旋更新（`"local"`）或团簇更新（`"cluster"`）。
-如果省略该参数，`spinmc` 会使用团簇更新，因此这里显式地设定它，并定义第二组除更新方式外完全相同的参数，用于团簇更新的模拟。
+对于像这里的伊辛模型这样无阻挫的模型，如果省略该参数，`spinmc` 会使用团簇更新，因此这里显式地设定它，并定义第二组除更新方式外完全相同的参数，用于团簇更新的模拟。
+注意步数的含义：局域更新时一步是对所有格点的一次扫描，而团簇更新时 `SWEEPS` 计数的是单次 Wolff 团簇翻转（每次翻转测量一次）；在两种情况下，`THERMALIZATION` 都按翻转的自旋数除以格点数来计数。
 
 把两组参数分别写入 XML 输入文件并运行 `spinmc`：
 
@@ -99,7 +100,7 @@ pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 
 `Tmin` 是调度器两次检查模拟是否结束之间的最短时间（单位：秒）。
 在下一次检查之前模拟会继续测量，因此一次运行得到的测量次数可能多于 `SWEEPS`。
-在我们的运行中，局域更新得到约 $1.5 \times 10^5$ 次测量，团簇更新得到约 $2.5 \times 10^5$ 次测量，所以下图的时间轴超过了 50000 次扫描。
+在我们的运行中，局域更新得到约 $1.5 \times 10^5$ 次测量，团簇更新得到约 $2.5 \times 10^5$ 次测量，所以下图的时间轴超过了 50000 步。
 
 ### 检查时间序列
 
@@ -122,9 +123,12 @@ for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
     plt.plot(sweeps, ts_M / binsize, 'o-')
     plt.axhline(M, ls='--', color='gray', label='mean')
     plt.ylim(0, 1)
-    plt.xlabel('Monte Carlo sweep')
+    # spinmc counts one step as a full sweep for local updates,
+    # but as a single Wolff cluster flip for cluster updates
+    unit = 'sweeps' if update == 'local' else 'cluster updates'
+    plt.xlabel('Monte Carlo ' + unit)
     plt.ylabel('|Magnetization| per site')
-    plt.title('T = T_c, %s updates (each point: mean over %d sweeps)' % (update, binsize))
+    plt.title('T = T_c, %s updates (each point: mean over %d %s)' % (update, binsize, unit))
     plt.legend()
 plt.show()
 ```
@@ -142,7 +146,7 @@ plt.show()
 
 ![](/figs/mcs01btimeseries_cluster.png)
 
-团簇更新一次翻转整个关联的团簇，几步之内就能去关联，因此各分箱的平均值都接近均值 $\langle |M| \rangle \approx 0.62$。
+团簇更新一次翻转整个关联的团簇，几次团簇更新之内就能去关联，因此各分箱的平均值都接近均值 $\langle |M| \rangle \approx 0.62$。
 单次测量本身仍有很大的涨落（每次测量的标准差约为 0.17，这是真实的临界涨落），但这些涨落在每个分箱内被平均掉了。
 两次运行给出的均值在误差范围内一致——在我们的运行中，局域更新为 $0.611 \pm 0.010$，团簇更新为 $0.622 \pm 0.001$——但团簇更新的误差棒要小十倍以上。
 

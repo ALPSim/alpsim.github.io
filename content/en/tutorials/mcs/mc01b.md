@@ -85,7 +85,8 @@ parms_cluster = [dict(parms[0], UPDATE="cluster")]
 ```
 
 `UPDATE` selects local single-spin updates (`"local"`) or cluster updates (`"cluster"`).
-If it is omitted, `spinmc` uses cluster updates, so we set it explicitly and define a second, otherwise identical, parameter set for a cluster-update run.
+If it is omitted, `spinmc` uses cluster updates for unfrustrated models such as this Ising model, so we set it explicitly and define a second, otherwise identical, parameter set for a cluster-update run.
+Note what the step counts mean: with local updates one step is a sweep over all sites, but with cluster updates `SWEEPS` counts single Wolff cluster flips (one measurement each), while `THERMALIZATION` counts flipped spins divided by the number of sites in both cases.
 
 Write both parameter sets to XML input files and run `spinmc`:
 
@@ -99,7 +100,7 @@ pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 
 `Tmin` is the minimum time in seconds between the scheduler's checks of whether a simulation has finished.
 The simulation keeps measuring until the next check, so a run can contain more than `SWEEPS` measurements.
-In our runs this gave about $1.5 \times 10^5$ measurements with local updates and $2.5 \times 10^5$ with cluster updates, which is why the time axes in the figures below extend beyond 50000 sweeps.
+In our runs this gave about $1.5 \times 10^5$ measurements with local updates and $2.5 \times 10^5$ with cluster updates, which is why the time axes in the figures below extend beyond 50000 steps.
 
 ### Inspecting the time series
 
@@ -122,9 +123,12 @@ for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
     plt.plot(sweeps, ts_M / binsize, 'o-')
     plt.axhline(M, ls='--', color='gray', label='mean')
     plt.ylim(0, 1)
-    plt.xlabel('Monte Carlo sweep')
+    # spinmc counts one step as a full sweep for local updates,
+    # but as a single Wolff cluster flip for cluster updates
+    unit = 'sweeps' if update == 'local' else 'cluster updates'
+    plt.xlabel('Monte Carlo ' + unit)
     plt.ylabel('|Magnetization| per site')
-    plt.title('T = T_c, %s updates (each point: mean over %d sweeps)' % (update, binsize))
+    plt.title('T = T_c, %s updates (each point: mean over %d %s)' % (update, binsize, unit))
     plt.legend()
 plt.show()
 ```
@@ -142,7 +146,7 @@ Consecutive bins are therefore strongly correlated, and the run contains compara
 
 ![](/figs/mcs01btimeseries_cluster.png)
 
-Cluster updates flip whole correlated clusters and decorrelate within a few steps, so the bin averages stay close to the mean, $\langle |M| \rangle \approx 0.62$.
+Cluster updates flip whole correlated clusters and decorrelate within a few cluster updates, so the bin averages stay close to the mean, $\langle |M| \rangle \approx 0.62$.
 Individual measurements still fluctuate strongly (a standard deviation of about 0.17 per measurement, a genuine critical fluctuation), but these fluctuations average out within each bin.
 Both runs give the same mean within their error bars — in our runs $0.611 \pm 0.010$ with local updates and $0.622 \pm 0.001$ with cluster updates — but the cluster-update error bar is more than ten times smaller.
 
