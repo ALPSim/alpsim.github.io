@@ -152,7 +152,8 @@ Rather than judging equilibration by eye, `pyalps.checkSteadyState` tests the ti
 It fits a straight line to the time series and passes if the fitted slope is compatible with zero, i.e. if $|\text{slope}| / \sigma_\text{slope} < z_0$, where $z_0$ is the two-sided normal quantile for the chosen `confidenceInterval`.
 It returns the data annotated with a flag indicating whether each observable has passed the test.
 The default `confidenceInterval` is 68.27%, giving $z_0 = 1$ (one sigma).
-Raising it widens the acceptance region (90% gives $z_0 \approx 1.64$), so a larger value makes the check *more lenient*, not stricter:
+Raising it widens the acceptance region (90% gives $z_0 \approx 1.64$), so a larger value makes the check *more lenient*, not stricter.
+This describes pyalps after [ALPS #159](https://github.com/ALPSim/ALPS/pull/159); in pyalps 3.0.0 and earlier the cutoff used the complementary level, $z_0 = \Phi^{-1}(1 - \texttt{confidenceInterval}/2)$ (about 0.41 at the default and 0.13 at 90%), so there a larger value made the check stricter:
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')

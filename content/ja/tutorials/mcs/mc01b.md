@@ -153,6 +153,7 @@ plt.show()
 各物理量が検定に合格したかどうかを示すフラグを付けたデータを返します。
 `confidenceInterval` の既定値は 68.27% で、$z_0 = 1$（1 シグマ）に対応します。
 この値を上げると受容域が広がる（90% では $z_0 \approx 1.64$）ため、値を大きくするとチェックは厳しくなるのではなく*緩く*なります。
+これは [ALPS #159](https://github.com/ALPSim/ALPS/pull/159) 以降の pyalps の動作です。pyalps 3.0.0 以前ではカットオフに補完的な水準 $z_0 = \Phi^{-1}(1 - \texttt{confidenceInterval}/2)$（既定値で約 0.41、90% で約 0.13）が使われていたため、これらのバージョンでは値を大きくするとチェックは厳しくなります。
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')

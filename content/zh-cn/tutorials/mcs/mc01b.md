@@ -152,7 +152,8 @@ plt.show()
 它对时间序列做直线拟合，如果拟合斜率与零相容，即 $|\text{slope}| / \sigma_\text{slope} < z_0$，则通过检验，其中 $z_0$ 是所选 `confidenceInterval` 对应的双侧正态分位数。
 它返回带有标记的数据，指明每个可观测量是否通过了检验。
 `confidenceInterval` 的默认值是 68.27%，对应 $z_0 = 1$（一个标准差）。
-提高这个值会扩大接受区域（90% 对应 $z_0 \approx 1.64$），因此数值越大，检验越*宽松*，而不是越严格：
+提高这个值会扩大接受区域（90% 对应 $z_0 \approx 1.64$），因此数值越大，检验越*宽松*，而不是越严格。
+以上描述的是 [ALPS #159](https://github.com/ALPSim/ALPS/pull/159) 之后的 pyalps；在 pyalps 3.0.0 及更早的版本中，截断值使用的是互补的置信水平，$z_0 = \Phi^{-1}(1 - \texttt{confidenceInterval}/2)$（默认值下约为 0.41，90% 时约为 0.13），因此在这些版本中数值越大检验越严格：
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
