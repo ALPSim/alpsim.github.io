@@ -148,19 +148,23 @@ Both runs give the same mean within their error bars — in our runs $0.611 \pm 
 
 ### Automated check: `pyalps.checkSteadyState`
 
-Rather than judging equilibration by eye, `pyalps.checkSteadyState` applies a statistical test to determine whether a time series has reached a stationary distribution.
+Rather than judging equilibration by eye, `pyalps.checkSteadyState` tests the time series for a linear drift.
+It fits a straight line to the time series and passes if the fitted slope is compatible with zero, i.e. if $|\text{slope}| / \sigma_\text{slope} < z_0$, where $z_0$ is the two-sided normal quantile for the chosen `confidenceInterval`.
 It returns the data annotated with a flag indicating whether each observable has passed the test.
-The default confidence level is 68.27% (one sigma); this can be raised:
+The default `confidenceInterval` is 68.27%, giving $z_0 = 1$ (one sigma).
+Raising it widens the acceptance region (90% gives $z_0 \approx 1.64$), so a larger value makes the check *more lenient*, not stricter:
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# Default: 68.27% confidence interval
+# Default: 68.27%, passes if |slope| < 1.0 sigma
 data = pyalps.checkSteadyState(data)
 
-# Stricter: 90% confidence interval
+# More lenient: 90%, passes if |slope| < 1.64 sigma
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
+
+Passing this check does not prove equilibration: it only detects a linear trend, so autocorrelation and a chain stuck in one region of configuration space have to be inspected separately, for example with the time-series plots above.
 
 ## Convergence
 

@@ -148,19 +148,23 @@ plt.show()
 
 ### 自動チェック：`pyalps.checkSteadyState`
 
-平衡化を目視で判断する代わりに、`pyalps.checkSteadyState` は統計的検定を適用して、時系列が定常分布に達したかどうかを判定します。
+平衡化を目視で判断する代わりに、`pyalps.checkSteadyState` を使って時系列に線形な漂動がないかを検定できます。
+時系列に直線をフィットし、フィットした傾きがゼロと矛盾しない場合、すなわち $|\text{slope}| / \sigma_\text{slope} < z_0$ のときに合格とします。ここで $z_0$ は指定した `confidenceInterval` に対応する両側正規分位点です。
 各物理量が検定に合格したかどうかを示すフラグを付けたデータを返します。
-既定の信頼水準は 68.27%（1 シグマ）ですが、これを引き上げることもできます。
+`confidenceInterval` の既定値は 68.27% で、$z_0 = 1$（1 シグマ）に対応します。
+この値を上げると受容域が広がる（90% では $z_0 \approx 1.64$）ため、値を大きくするとチェックは厳しくなるのではなく*緩く*なります。
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# 既定：68.27% 信頼区間
+# 既定：68.27%、|slope| < 1.0 sigma なら合格
 data = pyalps.checkSteadyState(data)
 
-# より厳しく：90% 信頼区間
+# より緩く：90%、|slope| < 1.64 sigma なら合格
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
+
+このチェックに合格しても平衡化が証明されるわけではありません。検出できるのは線形な傾向だけなので、自己相関や、マルコフ連鎖が配位空間の一部に閉じ込められている状況は、上の時系列プロットなどを使って別途確認する必要があります。
 
 ## 収束
 

@@ -148,19 +148,23 @@ plt.show()
 
 ### 自动检查：`pyalps.checkSteadyState`
 
-与其用肉眼判断平衡化，不如使用 `pyalps.checkSteadyState`，它通过统计检验来判定时间序列是否已经达到稳定分布。
+与其用肉眼判断平衡化，不如使用 `pyalps.checkSteadyState` 检验时间序列中是否存在线性漂移。
+它对时间序列做直线拟合，如果拟合斜率与零相容，即 $|\text{slope}| / \sigma_\text{slope} < z_0$，则通过检验，其中 $z_0$ 是所选 `confidenceInterval` 对应的双侧正态分位数。
 它返回带有标记的数据，指明每个可观测量是否通过了检验。
-默认的置信水平是 68.27%（一个标准差）；这个值可以提高：
+`confidenceInterval` 的默认值是 68.27%，对应 $z_0 = 1$（一个标准差）。
+提高这个值会扩大接受区域（90% 对应 $z_0 \approx 1.64$），因此数值越大，检验越*宽松*，而不是越严格：
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# 默认：68.27% 置信区间
+# 默认：68.27%，|slope| < 1.0 sigma 时通过
 data = pyalps.checkSteadyState(data)
 
-# 更严格：90% 置信区间
+# 更宽松：90%，|slope| < 1.64 sigma 时通过
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
+
+通过这项检验并不能证明已经达到平衡：它只能发现线性趋势，因此自相关以及马尔可夫链困在构型空间某一区域的情况需要另行检查，例如借助上面的时间序列图。
 
 ## 收敛性
 
