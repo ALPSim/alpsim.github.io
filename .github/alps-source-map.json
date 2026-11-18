@@ -84,6 +84,15 @@
       ]
     },
     {
+      "name": "tutorial intro-01",
+      "sources": [
+        "tutorials/intro-01-basics/**"
+      ],
+      "pages": [
+        "documentation/intro/runalps/usepython.md"
+      ]
+    },
+    {
       "name": "pyalps: evaluation and plots",
       "sources": [
         "python/pyalps/src/pyalps/tools.py",
@@ -259,8 +268,7 @@
         "src/apps/qmc/sse/SSE*.cpp",
         "src/apps/qmc/sse/evaluate.C",
         "src/apps/qmc/sse2/SSE*.cpp",
-        "src/apps/qmc/sse4/model.h",
-        "src/apps/qmc/sse4/sse.h"
+        "src/apps/qmc/sse4/*.h"
       ],
       "pages": [
         "documentation/methods/qmc/sse.md",
@@ -280,6 +288,16 @@
       "pages": [
         "documentation/methods/qmc/worm.md",
         "documentation/methods/qmc/boseglass.md"
+      ]
+    },
+    {
+      "name": "tutorial optical-lattice",
+      "sources": [
+        "tutorials/optical-lattice-01-bandstructure/**",
+        "tutorials/optical-lattice-02-density-profile/**"
+      ],
+      "pages": [
+        "documentation/methods/qmc/bhol.md"
       ]
     },
     {
@@ -387,6 +405,13 @@
       "name": "tutorial alpsize-00",
       "sources": [
         "tutorials/alpsize-00-make/**",
+        "tutorials/alpsize-01-cmake/**",
+        "tutorials/alpsize-02-original-c/**",
+        "tutorials/alpsize-03-basic-cpp/**",
+        "tutorials/alpsize-04-stl/**",
+        "tutorials/alpsize-05-boost/**",
+        "tutorials/alpsize-06-parameters/**",
+        "tutorials/alpsize-07-alea/**",
         "tutorials/alpsize-08-lattice/**",
         "tutorials/alpsize-09-scheduler/**"
       ],
