@@ -115,7 +115,7 @@ for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
     ts_M = np.array(pyalps.loadTimeSeries(files[0], '|Magnetization|'))
     M = pyalps.loadMeasurements(files, '|Magnetization|')[0][0].y[0].mean
 
-    # each entry of ts_M is the sum of |M| per site over one bin of measurements
+    # ts_M 的每个元素是一个分箱内每格点 |M| 测量值的总和
     binsize = 2 ** int(round(np.log2(ts_M.mean() / M)))
     sweeps = (np.arange(len(ts_M)) + 0.5) * binsize
 
@@ -123,8 +123,8 @@ for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
     plt.plot(sweeps, ts_M / binsize, 'o-')
     plt.axhline(M, ls='--', color='gray', label='mean')
     plt.ylim(0, 1)
-    # spinmc counts one step as a full sweep for local updates,
-    # but as a single Wolff cluster flip for cluster updates
+    # spinmc 在局域更新时把一步计为对整个格子的一次扫描，
+    # 而在团簇更新时把一步计为单次 Wolff 团簇翻转
     unit = 'sweeps' if update == 'local' else 'cluster updates'
     plt.xlabel('Monte Carlo ' + unit)
     plt.ylabel('|Magnetization| per site')
