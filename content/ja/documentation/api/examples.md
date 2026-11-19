@@ -207,18 +207,20 @@ plt.yscale('log')
 plt.xlabel('distance $r$')
 plt.ylabel('correlation')
 plt.legend()
+plt.tight_layout()
 
-plt.figure()
+plt.figure(figsize=(4.8, 4))
 qx, qy = sq.x[:, 0], sq.x[:, 1]
-plt.scatter(qx / np.pi, qy / np.pi, c=S, s=600, marker='s', cmap='viridis')
+plt.scatter(qx / np.pi, qy / np.pi, c=S, s=250, marker='s', cmap='viridis')
 plt.colorbar(label=r'$S(\mathbf{q})$')
 plt.xlabel(r'$q_x/\pi$')
 plt.ylabel(r'$q_y/\pi$')
 plt.gca().set_aspect('equal')
+plt.tight_layout()
 plt.show()
 ```
 
-構造因子は $\mathbf{q} = (\pi, \pi)$ で最大となり、その値は約 $3.70 \pm 0.01$ です。これは反強磁性（Néel）相関の特徴です。
+構造因子は $\mathbf{q} = (\pi, \pi)$ で最大となり、その値は約 3.7 です。これは反強磁性（Néel）相関の特徴です。
 相関関数の符号は距離とともに交互に変わり、スピン回転対称性から要求されるとおり $|\langle S^+_0 S^-_r\rangle| = 2|\langle S^z_0 S^z_r\rangle|$ が成り立ちます。
 
 ![](/figs/api_examples_qmc.png)

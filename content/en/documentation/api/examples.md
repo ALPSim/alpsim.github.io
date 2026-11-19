@@ -207,18 +207,20 @@ plt.yscale('log')
 plt.xlabel('distance $r$')
 plt.ylabel('correlation')
 plt.legend()
+plt.tight_layout()
 
-plt.figure()
+plt.figure(figsize=(4.8, 4))
 qx, qy = sq.x[:, 0], sq.x[:, 1]
-plt.scatter(qx / np.pi, qy / np.pi, c=S, s=600, marker='s', cmap='viridis')
+plt.scatter(qx / np.pi, qy / np.pi, c=S, s=250, marker='s', cmap='viridis')
 plt.colorbar(label=r'$S(\mathbf{q})$')
 plt.xlabel(r'$q_x/\pi$')
 plt.ylabel(r'$q_y/\pi$')
 plt.gca().set_aspect('equal')
+plt.tight_layout()
 plt.show()
 ```
 
-The structure factor is largest at $\mathbf{q} = (\pi, \pi)$, about $3.70 \pm 0.01$, the signature of antiferromagnetic (Néel) correlations.
+The structure factor is largest at $\mathbf{q} = (\pi, \pi)$, about 3.7, the signature of antiferromagnetic (Néel) correlations.
 The correlations alternate in sign with distance, and $|\langle S^+_0 S^-_r\rangle| = 2|\langle S^z_0 S^z_r\rangle|$ as required by spin-rotation symmetry:
 
 ![](/figs/api_examples_qmc.png)

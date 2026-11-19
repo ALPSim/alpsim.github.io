@@ -207,18 +207,20 @@ plt.yscale('log')
 plt.xlabel('distance $r$')
 plt.ylabel('correlation')
 plt.legend()
+plt.tight_layout()
 
-plt.figure()
+plt.figure(figsize=(4.8, 4))
 qx, qy = sq.x[:, 0], sq.x[:, 1]
-plt.scatter(qx / np.pi, qy / np.pi, c=S, s=600, marker='s', cmap='viridis')
+plt.scatter(qx / np.pi, qy / np.pi, c=S, s=250, marker='s', cmap='viridis')
 plt.colorbar(label=r'$S(\mathbf{q})$')
 plt.xlabel(r'$q_x/\pi$')
 plt.ylabel(r'$q_y/\pi$')
 plt.gca().set_aspect('equal')
+plt.tight_layout()
 plt.show()
 ```
 
-结构因子在 $\mathbf{q} = (\pi, \pi)$ 处最大，约为 $3.70 \pm 0.01$，这是反铁磁（Néel）关联的特征。
+结构因子在 $\mathbf{q} = (\pi, \pi)$ 处最大，约为 3.7，这是反铁磁（Néel）关联的特征。
 关联函数的符号随距离交替变化，并且如自旋旋转对称性所要求的那样，$|\langle S^+_0 S^-_r\rangle| = 2|\langle S^z_0 S^z_r\rangle|$：
 
 ![](/figs/api_examples_qmc.png)
