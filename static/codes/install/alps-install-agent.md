@@ -3,6 +3,11 @@
 **Audience:** a CLI coding agent (Claude Code or similar) driving an ALPS source install.
 Step 0 asks whether the user has root; everything after that branches on the answer.
 
+**Version.** This procedure builds the **v3.0.0 release** and clones that tag. It does not
+work for the `master` branch, which needs an installed Boost and CMake ≥ 3.27; for `master`
+follow https://alps.comp-phys.org/install/source-master/ instead. If the user already has a
+clone on `master`, run `git -C alps-src checkout v3.0.0` before Step 7.
+
 **Provenance.** Two paths have been performed end to end on real hardware, both on Rocky
 Linux 8 and both reaching 162/162 `ctest`: distro packages unpacked into a prefix, and a
 micromamba environment. The Ubuntu, macOS and cluster sections are reasoned from those runs
@@ -393,7 +398,7 @@ silence during configure):
 cd "$HOME/src"
 curl -LO https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz
 tar xf boost_1_87_0.tar.gz
-git clone https://github.com/alpsim/ALPS alps-src
+git clone --branch v3.0.0 https://github.com/alpsim/ALPS alps-src
 ```
 
 ```bash

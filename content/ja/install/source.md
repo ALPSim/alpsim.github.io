@@ -1,5 +1,5 @@
 ---
-title: ソースからのMac/LinuxへのALPSインストール
+title: ソースからのMac/LinuxへのALPSインストール（リリース版）
 description: "ALPSインストールガイド"
 weight: 2
 toc: true
@@ -8,6 +8,19 @@ cascade:
 ---
 
 多くの場合、[バイナリからのALPSインストール](../binary)が推奨されます。ただし、より高度な制御と設定が必要な場合は、ソースからのインストールが適切な選択肢となります。
+> **このページはv3.0.0リリースのビルド手順です。** 以下のコマンドは`v3.0.0`タグをチェックアウトします。
+> 開発ブランチ（`master`）はその後大きく変更されており、インストール済みのBoost、CMake 3.27以上、
+> 異なるビルドオプションが必要です。そのため、この手順は`master`では**動作しません**。
+> ALPSへの貢献などで最新の`master`をビルドする場合は、
+> [最新の開発版のビルド](../source-master)を参照してください。
+>
+> **すでにクローン済みの場合：** 以前にALPSをクローンして`git pull`した場合、`master`になっています。
+> この手順に従う前に、既存のクローンをリリースに切り替えてください：
+> ```ShellSession
+> git -C alps-src fetch --tags
+> git -C alps-src checkout v3.0.0
+> ```
+
 {{% steps %}}
 
 ### 必要な依存関係のインストール
@@ -122,7 +135,7 @@ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scip
 
 ### ダウンロードとビルド
 
-ALPSライブラリのダウンロードとビルドを開始します。
+ALPS v3.0.0リリースのダウンロードとビルドを開始します。
 以下のコマンドでは、`</path/to/install/dir>`を実際のインストールディレクトリに置き換えてください。
 
 > **これらのコマンドを実行する前に、次の2か所で待ち時間が発生することに注意してください：**
@@ -130,7 +143,7 @@ ALPSライブラリのダウンロードとビルドを開始します。
 > 2. **`cmake --build`（5〜20分）：** ALPSとBoostをソースからコンパイルするには、全CPUコアを使用しても数分かかります。ターミナルはコンパイラの出力で埋め尽くされます — これも正常です。
 
 ```ShellSession
-git clone https://github.com/alpsim/ALPS alps-src
+git clone --branch v3.0.0 https://github.com/alpsim/ALPS alps-src
 cmake -S alps-src -B alps-build                                     \
        -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
        -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \
