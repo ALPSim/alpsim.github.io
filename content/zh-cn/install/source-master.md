@@ -55,7 +55,7 @@ export CMAKE_PREFIX_PATH="$(brew --prefix boost):$(brew --prefix hdf5):$(brew --
 sudo port install cmake boost hdf5 OpenBLAS eigen3
 ls /opt/local/libexec/boost/       # 记下版本目录，例如 1.87
 ```
-然后在下面的 `cmake` 命令中加入 `-DBoost_ROOT=/opt/local/libexec/boost/<version>`。
+然后在用于构建的 shell 中执行 `export Boost_ROOT=/opt/local/libexec/boost/<version>`。以环境变量方式设置（而不是向 `cmake` 传入 `-DBoost_ROOT`），C++ 构建和下面的 `pyalps` 构建都能找到 Boost。
 
 > **较旧发行版自带的 CMake 版本过低。** Ubuntu 22.04（CMake 3.22）和 Rocky/RHEL 9（CMake 3.26）
 > 均低于 3.27。请用 `python3 -m pip install "cmake>=3.27"` 在 Python 环境中安装较新的 CMake。
@@ -84,10 +84,9 @@ DMFT 和 MaxEnt 的每个编译单元约需 1 GB 内存，内存较少的机器�
 
 ### 构建 `pyalps`（可选）
 
-`pyalps` 通过 pip 基于刚安装的 SDK 构建。在 Python 虚拟环境中：
+`pyalps` 通过 pip 基于刚安装的 SDK 构建。请使用您运行 ALPS 时所用的 Python（下文中的 `python`）：
 
 ```ShellSession
-python3 -m venv .venv && . .venv/bin/activate
 python -m pip install "scikit-build-core>=1.0" "nanobind==2.15.0" \
                       "patchelf>=0.14; sys_platform == 'linux'"
 export ALPS_DIR=</path/to/install/dir>/share/alps

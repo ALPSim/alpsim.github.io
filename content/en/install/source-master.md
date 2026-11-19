@@ -57,7 +57,7 @@ export CMAKE_PREFIX_PATH="$(brew --prefix boost):$(brew --prefix hdf5):$(brew --
 sudo port install cmake boost hdf5 OpenBLAS eigen3
 ls /opt/local/libexec/boost/       # note the version directory, e.g. 1.87
 ```
-Then add `-DBoost_ROOT=/opt/local/libexec/boost/<version>` to the `cmake` command below.
+Then run `export Boost_ROOT=/opt/local/libexec/boost/<version>` in the shell you build in. Exporting it, rather than passing `-DBoost_ROOT` to `cmake`, lets both the C++ build and the `pyalps` build below find Boost.
 
 > **Older distributions ship a CMake that is too old.** Ubuntu 22.04 (CMake 3.22) and Rocky/RHEL 9
 > (CMake 3.26) are below 3.27. Install a newer CMake into a Python environment with
@@ -90,10 +90,9 @@ about 1 GB of memory, so lower `--parallel` on machines with little RAM.
 
 ### Build `pyalps` (optional)
 
-`pyalps` is built with pip against the SDK you just installed. In a Python virtual environment:
+`pyalps` is built with pip against the SDK you just installed. Use the Python you want to run ALPS with (`python` below):
 
 ```ShellSession
-python3 -m venv .venv && . .venv/bin/activate
 python -m pip install "scikit-build-core>=1.0" "nanobind==2.15.0" \
                       "patchelf>=0.14; sys_platform == 'linux'"
 export ALPS_DIR=</path/to/install/dir>/share/alps
