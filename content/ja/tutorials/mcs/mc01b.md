@@ -42,6 +42,24 @@ parameter2xml parm1a
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
+クラスター更新と比較するため、2 つ目のパラメータファイル `parm1b` を用意します。更新方法以外は `parm1a` と同じです。
+
+```
+LATTICE="square lattice"
+T=2.269186
+J=1
+THERMALIZATION=10000
+SWEEPS=50000
+UPDATE="cluster"
+MODEL="Ising"
+{L=48;}
+```
+
+```
+parameter2xml parm1b
+spinmc --Tmin 10 --write-xml parm1b.in.xml
+```
+
 ### Python でのシミュレーションの準備と実行
 
 完全なスクリプトは <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" data-filename="tutorial1a.py" target="_blank" rel="noopener">`tutorial1a.py`</a> として入手できます。
@@ -49,6 +67,7 @@ spinmc --Tmin 10 --write-xml parm1a.in.xml
 
 ```Python
 import pyalps
+import numpy as np
 import matplotlib.pyplot as plt
 
 parms = [{
@@ -59,53 +78,98 @@ parms = [{
     'T'               : 2.269186,
     'THERMALIZATION'  : 10000,
     'SWEEPS'          : 50000,
+    'UPDATE'          : "local",
     }]
+
+parms_cluster = [dict(parms[0], UPDATE="cluster")]
 ```
 
-パラメータを XML 入力ファイルに書き出し、`spinmc` を実行します。
+`UPDATE` は局所的な単一スピン更新（`"local"`）とクラスター更新（`"cluster"`）を選択します。
+このイジング模型のようなフラストレーションのない模型では、省略すると `spinmc` はクラスター更新を使うため、ここでは明示的に指定し、更新方法だけが異なる 2 つ目のパラメータセットをクラスター更新の実行用に定義します。
+ステップ数の意味に注意してください。局所更新では 1 ステップがすべての格点にわたる 1 スイープですが、クラスター更新では `SWEEPS` は 1 回の Wolff クラスター反転（それぞれ 1 回測定）を数えます。`THERMALIZATION` はどちらの場合も、反転したスピン数を格点数で割った値で数えます。
+
+2 つのパラメータセットをそれぞれ XML 入力ファイルに書き出し、`spinmc` を実行します。
 
 ```Python
 input_file = pyalps.writeInputFiles('parm1a', parms)
 pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
+
+input_file = pyalps.writeInputFiles('parm1b', parms_cluster)
+pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 ```
+
+`Tmin` は、シミュレーションが終了したかどうかをスケジューラが確認する間隔の最小値（秒）です。
+シミュレーションは次の確認まで測定を続けるため、1 回の実行で `SWEEPS` より多くの測定が行われることがあります。
+私たちの実行では、局所更新で約 $1.5 \times 10^5$ 回、クラスター更新で約 $2.5 \times 10^5$ 回の測定が得られました。そのため、以下の図の時間軸は 50000 ステップを超えています。
 
 ### 時系列の確認
 
 平衡化を確認する最も直接的な方法は、測定した物理量の時系列をプロットすることです。
-出力ファイルから磁化の時系列を読み込んでプロットします。
+2 つの実行の磁化の時系列を読み込んでプロットします。
+ALPS は時系列にすべての測定値を保存するわけではなく、最大で約 128 個のビンを保持し、実行が進むにつれてビンの大きさを倍にしていきます。
+`loadTimeSeries` が返す各要素は 1 つのビン内の測定値の*和*なので、ビンの大きさ（2 のべき乗。ここでは平均値から求めます）で割って格子点あたりの $|M|$ を求め、各点をビンの中央に置きます。
 
 ```Python
-files = pyalps.getResultFiles(prefix='parm1a')
-ts_M = pyalps.loadTimeSeries(files[0], '|Magnetization|')
+for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
+    files = pyalps.getResultFiles(prefix=prefix)
+    ts_M = np.array(pyalps.loadTimeSeries(files[0], '|Magnetization|'))
+    M = pyalps.loadMeasurements(files, '|Magnetization|')[0][0].y[0].mean
 
-plt.plot(ts_M)
-plt.xlabel('Monte Carlo sweep')
-plt.ylabel('|Magnetization|')
-plt.title('Magnetization time series')
+    # ts_M の各要素は、1 つのビン内の格点あたり |M| の測定値の和
+    binsize = 2 ** int(round(np.log2(ts_M.mean() / M)))
+    sweeps = (np.arange(len(ts_M)) + 0.5) * binsize
+
+    plt.figure()
+    plt.plot(sweeps, ts_M / binsize, 'o-')
+    plt.axhline(M, ls='--', color='gray', label='mean')
+    plt.ylim(0, 1)
+    # spinmc は局所更新では 1 ステップを格子全体の 1 スイープとして数え、
+    # クラスター更新では 1 回の Wolff クラスター反転として数える
+    unit = 'sweeps' if update == 'local' else 'cluster updates'
+    plt.xlabel('Monte Carlo ' + unit)
+    plt.ylabel('|Magnetization| per site')
+    plt.title('T = T_c, %s updates (each point: mean over %d %s)' % (update, binsize, unit))
+    plt.legend()
 plt.show()
 ```
 
 得られた図を確認してください。物理量は初期の過渡的な振る舞いのあと、ほぼ定常な値に落ち着くはずです。
 実行の終わりになっても時系列がまだ漂動している場合、あるいは最初のスイープで明らかな傾向が見られ、それが測定段階まで続いている場合は、熱化期間（`THERMALIZATION`）が短すぎるので長くする必要があります。
-上記のパラメータ（`THERMALIZATION=10000`）では、時系列はすでに安定した平均値のまわりで揺らいでおり、目立った漂動は見られません。熱化が十分であったことを示しています。
+上記のパラメータ（`THERMALIZATION=10000`）では、どちらの実行も安定した平均値のまわりで揺らいでおり、目立った漂動は見られません。熱化が十分であったことを示しています。
+しかし、2 つの時系列の見え方は大きく異なります。
 
-![](/figs/mcs01btimeseries.png)
+![](/figs/mcs01btimeseries_local.png)
+
+局所更新では、2048 スイープにわたって平均しても、$|M|$ は約 0.3 から 0.7 の間で大きく揺れ動きます。
+これは平衡化の失敗ではなく（漂動はありません）、*臨界減速*によるものです。$T_c$ では単一スピン更新の自己相関時間が数百スイープ以上になります（[MC-01a](../mc01a) を参照）。
+そのため隣り合うビンどうしは強く相関しており、実行全体に含まれる独立なサンプルは比較的少なくなります。
+
+![](/figs/mcs01btimeseries_cluster.png)
+
+クラスター更新は相関したクラスター全体を反転させ、数回のクラスター更新で相関が失われるため、各ビンの平均値は平均 $\langle |M| \rangle \approx 0.62$ の近くにとどまります。
+個々の測定値は依然として大きく揺らぎます（1 回の測定あたりの標準偏差は約 0.17 で、これは本物の臨界揺らぎです）が、その揺らぎは各ビンの中で平均化されます。
+2 つの実行の平均値は誤差の範囲内で一致します（私たちの実行では、局所更新で $0.611 \pm 0.010$、クラスター更新で $0.622 \pm 0.001$）。ただし、クラスター更新の誤差棒は 10 分の 1 以下です。
 
 ### 自動チェック：`pyalps.checkSteadyState`
 
-平衡化を目視で判断する代わりに、`pyalps.checkSteadyState` は統計的検定を適用して、時系列が定常分布に達したかどうかを判定します。
+平衡化を目視で判断する代わりに、`pyalps.checkSteadyState` を使って時系列に線形な漂動がないかを検定できます。
+時系列に直線をフィットし、フィットした傾きがゼロと矛盾しない場合、すなわち $|\text{slope}| / \sigma_\text{slope} < z_0$ のときに合格とします。ここで $z_0$ は指定した `confidenceInterval` に対応する両側正規分位点です。
 各物理量が検定に合格したかどうかを示すフラグを付けたデータを返します。
-既定の信頼水準は 68.27%（1 シグマ）ですが、これを引き上げることもできます。
+`confidenceInterval` の既定値は 68.27% で、$z_0 = 1$（1 シグマ）に対応します。
+この値を上げると受容域が広がる（90% では $z_0 \approx 1.64$）ため、値を大きくするとチェックは厳しくなるのではなく*緩く*なります。
+pyalps 3.0.0 以前ではカットオフに補完的な水準 $z_0 = \Phi^{-1}(1 - \texttt{confidenceInterval}/2)$（既定値で約 0.41、90% で約 0.13）が使われていたため、これらのバージョンでは値を大きくするとチェックは厳しくなります。
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# 既定：68.27% 信頼区間
+# 既定：68.27%、|slope| < 1.0 sigma なら合格
 data = pyalps.checkSteadyState(data)
 
-# より厳しく：90% 信頼区間
+# より緩く：90%、|slope| < 1.64 sigma なら合格
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
+
+このチェックに合格しても平衡化が証明されるわけではありません。検出できるのは線形な傾向だけなので、自己相関や、マルコフ連鎖が配位空間の一部に閉じ込められている状況は、上の時系列プロットなどを使って別途確認する必要があります。
 
 ## 収束
 
