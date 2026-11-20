@@ -19,7 +19,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-をベーテ格子上、半充填（$\mu=0$）で解きます。$t=0.707106781186547=1/\sqrt{2}$（半バンド幅 $D=2t=\sqrt{2}$）、$U=3$ とすることで、[Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) と同様に $U=3D/\sqrt{2}$ となります。`ANTIFERROMAGNET=1` によりネール自己無撞着が可能になっているため、この点を様々な $\beta$ にわたって冷却することで、どの不純物ソルバーを使っても同じ図11の金属-反強磁性絶縁体クロスオーバーが再現されます。
+をベーテ格子上、半充填（$\mu=0$）で解きます。$t=0.707106781186547=1/\sqrt{2}$（半バンド幅 $D=2t=\sqrt{2}$）、$U=3$ とすることで、[Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) と同様に $U=3D/\sqrt{2}$ となります。`ANTIFERROMAGNET=true` によりネール自己無撞着が可能になっているため、この点を様々な $\beta$ にわたって冷却することで、どの不純物ソルバーを使っても同じ図11の金属-反強磁性絶縁体クロスオーバーが再現されます。
 
 ### パラメータ
 
@@ -29,7 +29,7 @@ $$
 | :-------- | :------ | :----------------------------- | :----------------------------- | :---------------------------------- |
 | `SOLVER` | 不純物ソルバー | `"hybridization"` | `"Interaction Expansion"` | `"hirschfye"` |
 | `N` | 虚時間離散化数 | $250$ | $500$ | $16$（意図的に小さい。[DMFT-07](../dmft07#手法の選択) 参照） |
-| ソルバー固有 | 追加パラメータ | `N_MEAS`、`N_ORDER`、`SC_WRITE_DELTA` | `ALPHA`、`HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
+| ソルバー固有 | 追加パラメータ | `N_MEAS`、`N_HISTOGRAM_ORDERS`、`SC_WRITE_DELTA` | `ALPHA`、`HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
 | 共通 | `U`、`t`、`BETA`、`MU`、`H`、`FLAVORS`、`ANTIFERROMAGNET`、`SYMMETRIZATION`、`NMATSUBARA`、`OMEGA_LOOP`、`SITES`、`SEED` | 3つのソルバーすべてで共通（上の「模型」を参照） | | |
 
 ### シミュレーションの実行

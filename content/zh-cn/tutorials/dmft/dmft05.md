@@ -36,14 +36,13 @@ $$
 | `MU` | 化学势 | $0$（半满） |
 | `H`, `H_INIT` | 量子化轴方向的磁场／初始外斯场的种子场 | $0$ / $0$ |
 | `FLAVORS` | 味的数目：2 个轨道 $\times$ 2 个自旋 | $4$（味 0,1 = 窄带的 $\uparrow,\downarrow$；味 2,3 = 宽带的 $\uparrow,\downarrow$） |
-| `SYMMETRIZATION` | 在每个轨道内强制自旋对称的解（味 0$\leftrightarrow$1、2$\leftrightarrow$3） | $1$ |
+| `SYMMETRIZATION` | 在每个轨道内强制自旋对称的解（味 0$\leftrightarrow$1、2$\leftrightarrow$3） | `true` |
 | `N`, `NMATSUBARA` | $G$ 与 $G_0$ 的虚时间／松原频率离散化数目 | $500$ |
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $15$、$0.001$ |
 | `SOLVER` | 杂质求解器 | `"hybridization"`（CT-HYB，段表示） |
-| `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ |
+| `N_HISTOGRAM_ORDERS` | 杂化展开阶数直方图的大小 | $50$ |
 | `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $2000$ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ |
-| `CHECKPOINT` | 检查点／重启文件的文件名前缀 | `dump` |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限／热化扫描数／每次迭代的实际时间上限（秒） | $10000$、$500$、$600$ |
 
 ### 运行模拟
@@ -74,11 +73,11 @@ for u,j in [[1.8,0.45],[2.2,0.55],[2.8,0.7]]:
               'N'                   : 500,
               'NMATSUBARA'          : 500,
               'N_MEAS'              : 2000,
-              'N_ORDER'             : 50,
+              'N_HISTOGRAM_ORDERS'  : 50,
               'SEED'                : 0,
               'SOLVER'              : 'hybridization',
               'SC_WRITE_DELTA'      : 1,
-              'SYMMETRIZATION'      : 1,
+              'SYMMETRIZATION'      : True,
               'SWEEPS'              : 10000,
               'BETA'                : 30,
               'THERMALIZATION'      : 500,
@@ -86,7 +85,6 @@ for u,j in [[1.8,0.45],[2.2,0.55],[2.8,0.7]]:
               'J'                   : j,
               't0'                  : 0.5,
               't1'                  : 1,
-              'CHECKPOINT'          : 'dump'
         }
         )
 
@@ -121,11 +119,11 @@ MU = 0                            // chemical potential; MU=0 is half filling
 N = 500                           // discretization of the imaginary-time Green's function
 NMATSUBARA = 500                  // cutoff for Matsubara frequencies
 N_MEAS = 2000                     // number of updates between measurements
-N_ORDER = 50                      // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50           // histogram size for the hybridization expansion order
 SEED = 0                          // Monte Carlo random number seed
 SOLVER = "hybridization"          // the CT-HYB solver (segment representation, requires density-density interactions)
 SC_WRITE_DELTA = 1                // write out the hybridization function for the solver
-SYMMETRIZATION = 1                // enforce spin-symmetric solutions within each orbital (flavors 0<->1 and 2<->3)
+SYMMETRIZATION = true             // enforce spin-symmetric solutions within each orbital (flavors 0<->1 and 2<->3)
 SWEEPS = 10000                    // total sweeps
 BETA = 30                         // inverse temperature
 THERMALIZATION = 500              // thermalization sweeps
@@ -133,7 +131,6 @@ U = 1.8                           // intra-orbital (Hubbard) interaction
 J = 0.45                          // Hund's coupling
 t0 = 0.5                          // hopping of the narrow band (half-bandwidth D0=2t0=1)
 t1 = 1                            // hopping of the wide band (half-bandwidth D1=2t1=2)
-CHECKPOINT = dump                 // filename prefix for checkpoint/restart files
 ```
 
 注意 $U'$ 并未显式设置：如 [DMFT 参数参考](../../../documentation/methods/dmft) 中所述，未指定时它默认取 $U-2J$。

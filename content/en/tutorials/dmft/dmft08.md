@@ -31,14 +31,14 @@ Parameters shared by both approaches below (values as used in `tutorial8a.py`/`t
 | `H`, `H_INIT` | quantization-axis field / seed field for the initial Weiss field | $0$ / $0.05$ |
 | `FLAVORS` | number of spin flavors | $2$ |
 | `SITES` | number of impurity sites | $1$ |
-| `ANTIFERROMAGNET` | enable the Néel self-consistency | $1$ |
-| `SYMMETRIZATION` | enforce a paramagnetic solution | $0$ |
+| `ANTIFERROMAGNET` | enable the Néel self-consistency | `true` |
+| `SYMMETRIZATION` | enforce a paramagnetic solution | `false` |
 | `N`, `NMATSUBARA` | imaginary-time / Matsubara discretization of $G$ and $G_0$ | $500$ |
 | `OMEGA_LOOP` | run the self-consistency in Matsubara frequencies | $1$ |
 | `G0OMEGA_INPUT` | set to an empty string to force the initial Weiss field to be computed from the non-interacting Green's function | `""` |
 | `MAX_IT`, `CONVERGED` | maximum self-consistency iterations / convergence threshold | $10$, $0.005$ |
 | `SOLVER` | impurity solver | `"hybridization"` (CT-HYB) |
-| `SC_WRITE_DELTA`, `N_MEAS`, `N_ORDER` | write the hybridization function / MC updates between measurements / expansion-order histogram size | $1$, $5000$, $50$ |
+| `SC_WRITE_DELTA`, `N_MEAS`, `N_HISTOGRAM_ORDERS` | write the hybridization function / MC updates between measurements / expansion-order histogram size | $1$, $5000$, $50$ |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | Monte Carlo sweep budget, thermalization sweeps, wall-clock cutoff per iteration (seconds) | $10^4$, $500$, $60$ |
 
 ### Lattice
@@ -109,8 +109,8 @@ for u in [3.]:
                 'H' : 0.0,           # there is no magnetic field
                 'H_INIT' : 0.05,     #  we set initial field to split spin up/down in order to trigger AF phase
                 'OMEGA_LOOP' : 1,        # the selfconsistency runs in Matsubara frequencies
-                'ANTIFERROMAGNET' : 1,   # allow Neel order
-                'SYMMETRIZATION' : 0,    # do not enforce paramagnetic solution
+                'ANTIFERROMAGNET' : True,   # allow Neel order
+                'SYMMETRIZATION' : False,    # do not enforce paramagnetic solution
                 'NMATSUBARA' : 500,      # number of Matsubara frequencies
                 'N' : 500,               # bins in imaginary time
                 'CONVERGED' : 0.005,     # criterion for convergency
@@ -123,9 +123,8 @@ for u in [3.]:
                 'SOLVER' : "hybridization",   # we take the hybridization impurity solver
                 'SC_WRITE_DELTA' : 1,         # input for the hybridization impurity solver is the hybridization function Delta, which has to be written by the selfconsistency
                 'N_MEAS' : 5000,              # number of Monte Carlo steps between measurements
-                'N_ORDER' : 50,               # histogram size
+                'N_HISTOGRAM_ORDERS' : 50,               # histogram size
                 'DOSFILE' : "DOS/DOS_Square_GRID4000", # specification of the file with density of states
-                'GENERAL_FOURIER_TRANSFORMER' : 1,  # Fourier transformer for a general bandstructure
                 'EPS_0' : 0,                        # potential shift for the flavor 0
                 'EPS_1' : 0,                        # potential shift for the flavor 1
                 'EPSSQ_0' : 4,                      # the second moment of the bandstructure for the flavor 0
@@ -164,7 +163,6 @@ The input file `hybrid_DOS_beta_6.0_U_3.0` produced by the script above has the 
 
 ```
 DOSFILE = DOS/DOS_Square_GRID4000; // specification of the file with density of states
-GENERAL_FOURIER_TRANSFORMER = 1;  // Fourier transformer for a general bandstructure
 EPS_0 = 0;                        // potential shift for the flavor 0
 EPS_1 = 0;                        // potential shift for the flavor 1
 EPSSQ_0 = 4;                      // the second moment of the bandstructure for the flavor 0
@@ -214,8 +212,8 @@ for u in [3.]:
                 'H' : 0.0,           # there is no magnetic field
                 'H_INIT' : 0.05,     #  we set initial field to split spin up/down in order to trigger AF phase
                 'OMEGA_LOOP' : 1,        # the selfconsistency runs in Matsubara frequencies
-                'ANTIFERROMAGNET' : 1,   # allow Neel order
-                'SYMMETRIZATION' : 0,    # do not enforce paramagnetic solution
+                'ANTIFERROMAGNET' : True,   # allow Neel order
+                'SYMMETRIZATION' : False,    # do not enforce paramagnetic solution
                 'NMATSUBARA' : 500,      # number of Matsubara frequencies
                 'N' : 500,               # bins in imaginary time
                 'CONVERGED' : 0.005,     # criterion for convergency
@@ -228,12 +226,11 @@ for u in [3.]:
                 'SOLVER' : "hybridization",   # we take the hybridization impurity solver
                 'SC_WRITE_DELTA' : 1,         # input for the hybridization impurity solver is the hybridization function Delta, which has to be written by the selfconsistency
                 'N_MEAS' : 5000,              # number of Monte Carlo steps between measurements
-                'N_ORDER' : 50,               # histogram size
+                'N_HISTOGRAM_ORDERS' : 50,               # histogram size
                 'TWODBS' : 1,     # the Hilbert transformation integral runs in k-space, sets square lattice
                 't' : 1,          # the nearest-neighbor hopping
                 'tprime' : 0,     # the second nearest-neighbor hopping
                 'L' : 64,         # discretization in k-space in the Hilbert transformation
-                'GENERAL_FOURIER_TRANSFORMER' : 1,  # Fourier transformer for a general bandstructure
                 'EPS_0' : 0,                        # potential shift for the flavor 0
                 'EPS_1' : 0,                        # potential shift for the flavor 1
                 'EPSSQ_0' : 4,                      # the second moment of the bandstructure for the flavor 0
@@ -273,7 +270,6 @@ TWODBS = 1;     // the Hilbert transformation integral runs in k-space; sets squ
 t = 1;          // the nearest-neighbor hopping
 tprime = 0;     // the second nearest-neighbor hopping
 L = 64;         // discretization in k-space in the Hilbert transformation
-GENERAL_FOURIER_TRANSFORMER = 1;  // Fourier transformer for a general bandstructure
 EPS_0 = 0;                        // potential shift for the flavor 0
 EPS_1 = 0;                        // potential shift for the flavor 1
 EPSSQ_0 = 4;                   // the second moment of the bandstructure for the flavor 0

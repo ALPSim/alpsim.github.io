@@ -28,7 +28,7 @@ parms=[]
 for b in [6., 12.]:
     parms.append(
         {
-             'ANTIFERROMAGNET'     : 1,
+             'ANTIFERROMAGNET'     : True,
              'CONVERGED'           : 0.003,
              'FLAVORS'             : 2,
              'H'                   : 0,
@@ -44,7 +44,7 @@ for b in [6., 12.]:
              'SITES'               : 1,
              'SOLVER'              : 'hybridization',
              'SC_WRITE_DELTA'      : 1,
-             'SYMMETRIZATION'      : 0,
+             'SYMMETRIZATION'      : False,
              'U'                   : 3,
              't'                   : 0.707106781186547,
              'SWEEPS'              : int(10000*b/16.),
@@ -66,13 +66,13 @@ for p in parms:
 
 ```
 H_INIT = 0.0225   //  initial magnetic field in the direction of quantization axis, to produce the initial Weiss field
-ANTIFERROMAGNET = 1   // allow antiferromagnetic ordering; in single site DMFT it is meaningfull only for bipartite lattices
+ANTIFERROMAGNET = true // allow antiferromagnetic ordering; in single site DMFT it is meaningfull only for bipartite lattices
 SEED = 0   // Monte Carlo Random Number Seed 
 CONVERGED = 0.003   // criterion for the convergency of the iterations
 MAX_IT = 6   // upper limit on the number of iterations (the selfconsistency may be stopped before if criterion based on CONVERGED is reached)
 SWEEPS = 3750   // Total number of sweeps to be computed (the solver may be stopped before reaching this limit on run-time limit set by MAX_TIME)
 FLAVORS = 2   // flavors 0 and 1 correspond to spin up and down
-SYMMETRIZATION = 0   // We are not enforcing a paramagnetic self consistency condition (symmetry in flavor 0 and 1)
+SYMMETRIZATION = false // We are not enforcing a paramagnetic self consistency condition (symmetry in flavor 0 and 1)
 NMATSUBARA = 250   // The cut-off for Matsubara frequencies 
 H = 0   // Magnetic field in the direction of quantization axis
 OMEGA_LOOP = 1   // the selfconsistency runs in Matsubara frequencies

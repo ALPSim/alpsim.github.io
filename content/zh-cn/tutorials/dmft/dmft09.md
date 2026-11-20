@@ -19,7 +19,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-处于贝特格子上、半满（$\mu=0$）情形，取 $t=0.707106781186547=1/\sqrt{2}$（半带宽 $D=2t=\sqrt{2}$）、$U=3$，使得 $U=3D/\sqrt{2}$，与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 一致。`ANTIFERROMAGNET=1` 允许 Néel 自洽，因此在一系列 $\beta$ 下冷却这一物理点，无论使用哪种杂质求解器，都会重现图 11 中金属到反铁磁绝缘体的交叉。
+处于贝特格子上、半满（$\mu=0$）情形，取 $t=0.707106781186547=1/\sqrt{2}$（半带宽 $D=2t=\sqrt{2}$）、$U=3$，使得 $U=3D/\sqrt{2}$，与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 一致。`ANTIFERROMAGNET=true` 允许 Néel 自洽，因此在一系列 $\beta$ 下冷却这一物理点，无论使用哪种杂质求解器，都会重现图 11 中金属到反铁磁绝缘体的交叉。
 
 ### 参数
 
@@ -29,7 +29,7 @@ $$
 | :-------- | :------ | :----------------------------- | :----------------------------- | :---------------------------------- |
 | `SOLVER` | 杂质求解器 | `"hybridization"` | `"Interaction Expansion"` | `"hirschfye"` |
 | `N` | 虚时间离散化数 | $250$ | $500$ | $16$（刻意取小值，见 [DMFT-07](../dmft07#方法选择)） |
-| 求解器专属 | 附加参数 | `N_MEAS`、`N_ORDER`、`SC_WRITE_DELTA` | `ALPHA`、`HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
+| 求解器专属 | 附加参数 | `N_MEAS`、`N_HISTOGRAM_ORDERS`、`SC_WRITE_DELTA` | `ALPHA`、`HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
 | 共有 | `U`、`t`、`BETA`、`MU`、`H`、`FLAVORS`、`ANTIFERROMAGNET`、`SYMMETRIZATION`、`NMATSUBARA`、`OMEGA_LOOP`、`SITES`、`SEED` | 三个求解器完全相同（见上文“模型”） | | |
 
 ### 运行模拟

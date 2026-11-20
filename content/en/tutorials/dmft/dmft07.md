@@ -19,7 +19,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqrt{2}$ (half-bandwidth $D=2t=\sqrt{2}$) and $U=3$, so that $U=3D/\sqrt{2}$ as in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). As in Tutorial 02, `ANTIFERROMAGNET=1` allows the Néel self-consistency, so cooling the same physical point through a range of $\beta$ reproduces the same metal-to-antiferromagnetic-insulator crossover — this time with the discrete-time Hirsch-Fye solver of [Hirsch and Fye (1986)](https://doi.org/10.1103/PhysRevLett.56.2521) rather than a continuous-time one.
+on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqrt{2}$ (half-bandwidth $D=2t=\sqrt{2}$) and $U=3$, so that $U=3D/\sqrt{2}$ as in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). As in Tutorial 02, `ANTIFERROMAGNET=true` allows the Néel self-consistency, so cooling the same physical point through a range of $\beta$ reproduces the same metal-to-antiferromagnetic-insulator crossover — this time with the discrete-time Hirsch-Fye solver of [Hirsch and Fye (1986)](https://doi.org/10.1103/PhysRevLett.56.2521) rather than a continuous-time one.
 
 ### Parameters
 
@@ -31,8 +31,8 @@ on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqr
 | `MU` | chemical potential | $0$ (half filling) |
 | `H`, `H_INIT` | quantization-axis field / seed field for the initial Weiss field | $0$ / $0.05$ |
 | `FLAVORS` | number of spin flavors | $2$ |
-| `ANTIFERROMAGNET` | enable the Néel self-consistency | $1$ |
-| `SYMMETRIZATION` | enforce a paramagnetic solution | $0$ (we want to allow AFM order) |
+| `ANTIFERROMAGNET` | enable the Néel self-consistency | `true` |
+| `SYMMETRIZATION` | enforce a paramagnetic solution | `false` (we want to allow AFM order) |
 | `N` | number of imaginary-time slices, $\Delta\tau=\beta/N$ | $16$ — deliberately small, see Method choice |
 | `NMATSUBARA` | Matsubara cutoff used for the self-consistency | $500$ |
 | `OMEGA_LOOP` | run the self-consistency in Matsubara frequencies | $1$ |
@@ -57,7 +57,7 @@ parms=[]
 for b in [6., 12.]:
     parms.append(
             { 
-              'ANTIFERROMAGNET'     : 1,
+              'ANTIFERROMAGNET'     : True,
               'CONVERGED'           : 0.005,
               'FLAVORS'             : 2,
               'H'                   : 0,
@@ -71,7 +71,7 @@ for b in [6., 12.]:
               'SEED'                : 0, 
               'SITES'               : 1,
               'SOLVER'              : 'hirschfye',
-              'SYMMETRIZATION'      : 0,
+              'SYMMETRIZATION'      : False,
               'TOLERANCE'           : 0.001,
               'U'                   : 3,
               't'                   : 0.707106781186547,
@@ -116,7 +116,7 @@ Internally, `pyalps.runDMFT` invokes the `dmft` application directly on the gene
 The input file `parm_beta_6.0` produced by the script above, with comments added:
 
 ```
-ANTIFERROMAGNET = 1                  // allow Neel order; meaningful for bipartite lattices in single-site DMFT
+ANTIFERROMAGNET = true               // allow Neel order; meaningful for bipartite lattices in single-site DMFT
 CONVERGED = 0.005                    // convergence criterion for the self-consistency iteration
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
 H = 0                                // magnetic field along the quantization axis
@@ -130,7 +130,7 @@ OMEGA_LOOP = 1                        // self-consistency runs in Matsubara freq
 SEED = 0                              // Monte Carlo random number seed
 SITES = 1                             // one impurity site, as in single-site DMFT
 SOLVER = "hirschfye"                  // the discrete-time Hirsch-Fye solver
-SYMMETRIZATION = 0                    // paramagnetic self-consistency is NOT enforced (we want AFM order)
+SYMMETRIZATION = false                // paramagnetic self-consistency is NOT enforced (we want AFM order)
 TOLERANCE = 0.001                     // internal convergence tolerance of the Hirsch-Fye solver
 U = 3                                 // interaction strength
 t = 0.707106781186547                 // hopping; for the Bethe lattice considered here $W=2D=4t$

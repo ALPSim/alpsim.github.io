@@ -38,7 +38,7 @@ $$
 | `MU` | 化学势（半填充） | `0` |
 | `FLAVORS` | 费米子味的数目（自旋向上/向下） | `2` |
 | `SITES` | 杂质格点数 | `1` |
-| `ANTIFERROMAGNET` | 允许对称性破缺的反铁磁解 | `1` |
+| `ANTIFERROMAGNET` | 允许对称性破缺的反铁磁解 | `true` |
 | `H_INIT` | 初始对称性破缺场，用于引发反铁磁态 | `0.05` |
 | `N`, `NMATSUBARA` | 虚时间/松原频率点的数目 | `500` |
 | `SWEEPS`, `THERMALIZATION` | 蒙特卡洛扫描次数与热化步数 | `1e8`, `1000` |
@@ -80,7 +80,7 @@ parms=[]
 for b in [6., 12.]: 
     parms.append(
             {                         
-              'ANTIFERROMAGNET'         : 1,
+              'ANTIFERROMAGNET'         : True,
               'CONVERGED'               : 0.005,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -94,7 +94,7 @@ for b in [6., 12.]:
               'SEED'                    : 0, 
               'SITES'                   : 1,
               'SOLVER'                  : 'Interaction Expansion',
-              'SYMMETRIZATION'          : 0,
+              'SYMMETRIZATION'          : False,
               'U'                       : 3,
               't'                       : 0.707106781186547,
               'SWEEPS'                  : 100000000,
