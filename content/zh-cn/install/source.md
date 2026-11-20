@@ -1,5 +1,5 @@
 ---
-title: 在 Mac/Linux 上从源码安装 ALPS
+title: 在 Mac/Linux 上从源码安装 ALPS（正式版）
 description: "ALPS 安装指南"
 weight: 2
 toc: true
@@ -8,6 +8,19 @@ cascade:
 ---
 
 在大多数情况下，建议[通过二进制包安装 ALPS](../binary)。但若需更多用户控制和配置，从源码安装可能是更好的选择。
+> **本页面用于构建 v3.0.0 正式版。** 以下命令会检出 `v3.0.0` 标签。
+> 开发分支（`master`）此后已有较大变化：需要预先安装 Boost、CMake ≥ 3.27 以及不同的构建选项，
+> 因此本页面的步骤**不适用于** `master`。
+> 如需构建最新的 `master`（例如为 ALPS 贡献代码），请参阅
+> [构建最新开发版本](../source-master)。
+>
+> **已经克隆过？** 如果您之前克隆了 ALPS 并执行过 `git pull`，那么您当前位于 `master`。
+> 请在按照本页面操作之前，先将已有的克隆切换到正式版：
+> ```ShellSession
+> git -C alps-src fetch --tags
+> git -C alps-src checkout v3.0.0
+> ```
+
 {{% steps %}}
 
 ### 安装必要依赖项
@@ -20,7 +33,7 @@ ALPS 依赖多个外部库。
 | HDF5       | 1.10.0         | `libhdf5-dev`           |
 | CMake      | 3.22           | `cmake`                 |
 | C++ 编译器 | GCC 10.5.0 或 Clang 13.0.1 | `build-essential`      |
-| Boost      | 1.76 <br>*(若 NumPy ≥ 2.0 需 1.87)* | 见下文 |
+| Boost      | 1.76 <br>*(若针对 NumPy ≥ 2.0 构建 ALPS Python 绑定，需 1.87；不适用于 PyPI 上的 `pyalps` wheel)* | 见下文 |
 | MPI        | OpenMPI 4.0 **或** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
 | BLAS       | 0.3            | `libopenblas-dev`       |
 | Python     | 3.10           | [python.org](https://www.python.org/) |
@@ -121,14 +134,14 @@ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scip
 
 ### 下载与编译
 
-现在可以下载并编译 ALPS 库。在以下命令中，请将 `</path/to/install/dir>` 替换为您系统的实际安装目录。
+现在可以下载并编译 ALPS v3.0.0 正式版。在以下命令中，请将 `</path/to/install/dir>` 替换为您系统的实际安装目录。
 
 > **运行这些命令之前，请注意以下两个预期等待：**
 > 1. **`cmake` 配置（约 1–3 分钟）：** CMake 在配置时会静默下载 Boost 1.87（约 130 MB）。下载完成前终端将无任何输出，等待一两分钟是正常的，请勿中断。
 > 2. **`cmake --build`（5–20 分钟）：** 即使使用全部 CPU 核心，从源码编译 ALPS 和 Boost 也需要数分钟。终端将持续打印编译输出——这也是正常现象。
 
 ```ShellSession
-git clone https://github.com/alpsim/ALPS alps-src
+git clone --branch v3.0.0 https://github.com/alpsim/ALPS alps-src
 cmake -S alps-src -B alps-build                                     \
      -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
      -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \

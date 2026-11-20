@@ -1,5 +1,5 @@
 ---
-title: ALPS Installation on Mac/Linux from Sources
+title: ALPS Installation on Mac/Linux from Sources (Release)
 description: "ALPS Installation"
 weight: 2
 toc: true
@@ -8,6 +8,19 @@ cascade:
 ---
 
 For most cases, it is preferred to [install ALPS from Binaries](../binary). However, for more user control and configuration, installing from Sources could be a better approach. An [agent install](#assisted-install) is below; the <a class="alps-download" href="/codes/install/no_root_guide.pdf" data-filename="no_root_guide.pdf" target="_blank" rel="noopener">`no_root_guide.pdf`</a> it uses also covers a local install without root — for when a local environment breaks the build (see [Common Errors](#common-errors)), or to keep `sudo` away from an agent.
+> **This page builds the v3.0.0 release.** The commands below check out the `v3.0.0` tag.
+> The development branch (`master`) has changed substantially since then: it needs an installed
+> Boost, CMake ≥ 3.27, and different build options, so these instructions do **not** work for it.
+> To build the latest `master`, for example to contribute to ALPS, follow
+> [Build the latest development version](../source-master) instead.
+>
+> **Already have a clone?** If you cloned ALPS earlier and ran `git pull`, you are on `master`.
+> Switch your existing clone to the release before following this page:
+> ```ShellSession
+> git -C alps-src fetch --tags
+> git -C alps-src checkout v3.0.0
+> ```
+
 {{% steps %}}
 
 ### Install Required Dependencies
@@ -21,7 +34,7 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 | CMake    | 3.22 | `cmake` | `cmake` |
 | C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` | `gcc gcc-c++ make` |
 | Fortran Compiler | *(any; needed for LAPACK detection)* | `gfortran` | `gcc-gfortran` |
-| Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0)* | see below | see below |
+| Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0; does not apply to the `pyalps` wheel from PyPI)* | see below | see below |
 | MPI | OpenMPI 4.0 **or** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` | `openmpi-devel` / `mpich-devel` |
 | BLAS | 0.3 | `libopenblas-dev` | `openblas-devel` |
 | Python | 3.10 | [python.org](https://www.python.org/) | [python.org](https://www.python.org/) |
@@ -256,7 +269,7 @@ python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scip
 > for whichever Python CMake will use.
 
 ### Download and Build
-We can now proceed to download and build the `ALPS` library.
+We can now proceed to download and build the `ALPS` v3.0.0 release.
 In the snippet below, replace `</path/to/install/dir>` with the directory where you want ALPS installed.
 
 > **Before you run these commands, note two expected pauses:**
@@ -268,7 +281,7 @@ In the snippet below, replace `</path/to/install/dir>` with the directory where 
 >    throughout — also normal.
 
   ```ShellSession
-  git clone https://github.com/alpsim/ALPS alps-src
+  git clone --branch v3.0.0 https://github.com/alpsim/ALPS alps-src
   cmake -S alps-src -B alps-build                                       \
          -DCMAKE_INSTALL_PREFIX=</path/to/install/dir>                  \
          -DCMAKE_CXX_FLAGS="-DBOOST_NO_AUTO_PTR                         \

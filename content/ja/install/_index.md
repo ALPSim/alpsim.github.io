@@ -11,13 +11,16 @@ ALPSはMacおよびLinux上で3つのインストール方法に対応してい�
 
 **ほとんどのユーザーにはバイナリパッケージのインストールを推奨します。** コンパイル不要で特別なシステム権限も必要なく、最も手軽にALPSを導入できます。
 
-**開発者や上級ユーザー**で、カスタムライブラリへのリンク、ソースコードの変更、ALPSへの貢献など、ビルドを細かく制御したい場合はソースインストールをご利用ください。
+**上級ユーザー**で、カスタムライブラリへのリンクなど、ビルドを細かく制御したい場合は、リリース版をソースからビルドしてください。
+
+**開発者**で、ALPSへの貢献などのために`master`ブランチの最新の未リリースコードを使いたい場合は、開発版のビルド手順に従ってください。リリース版のビルドとは必要条件が異なります。
 
 **HPCシステムの管理者やHPCクラスター利用者**にはSpackによるインストールを推奨します。特にシステムがすでにSpackでソフトウェア管理を行っている場合に適しています。
 
 <div class="btn-grid">
 {{< cta-button text="バイナリインストール" link="binary" icon="download" >}}
-{{< cta-button text="ソースインストール" link="source" icon="code" >}}
+{{< cta-button text="ソースインストール（リリース版）" link="source" icon="code" >}}
+{{< cta-button text="開発版（master）" link="source-master" icon="build" >}}
 {{< cta-button text="Spackインストール" link="spack" icon="storage" >}}
 </div>
 
