@@ -34,7 +34,7 @@ Choose **one** MPI and **one** BLAS provider that fit your system:
 | CMake    | 3.22 | `cmake` | `cmake` |
 | C++ Compiler | GCC 10.5.0 & Clang 13.0.1 | `build-essential` | `gcc gcc-c++ make` |
 | Fortran Compiler | *(any; needed for LAPACK detection)* | `gfortran` | `gcc-gfortran` |
-| Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0)* | see below | see below |
+| Boost | 1.76 <br>*(1.87 required to build ALPS Python bindings against NumPy ≥ 2.0; does not apply to the `pyalps` wheel from PyPI)* | see below | see below |
 | MPI | OpenMPI 4.0 **or** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` | `openmpi-devel` / `mpich-devel` |
 | BLAS | 0.3 | `libopenblas-dev` | `openblas-devel` |
 | Python | 3.10 | [python.org](https://www.python.org/) | [python.org](https://www.python.org/) |

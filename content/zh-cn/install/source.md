@@ -33,7 +33,7 @@ ALPS 依赖多个外部库。
 | HDF5       | 1.10.0         | `libhdf5-dev`           |
 | CMake      | 3.22           | `cmake`                 |
 | C++ 编译器 | GCC 10.5.0 或 Clang 13.0.1 | `build-essential`      |
-| Boost      | 1.76 <br>*(若 NumPy ≥ 2.0 需 1.87)* | 见下文 |
+| Boost      | 1.76 <br>*(若针对 NumPy ≥ 2.0 构建 ALPS Python 绑定，需 1.87；不适用于 PyPI 上的 `pyalps` wheel)* | 见下文 |
 | MPI        | OpenMPI 4.0 **或** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
 | BLAS       | 0.3            | `libopenblas-dev`       |
 | Python     | 3.10           | [python.org](https://www.python.org/) |

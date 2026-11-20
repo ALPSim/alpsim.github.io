@@ -28,6 +28,7 @@ cascade:
 | Eigen | 不需要 | Eigen ≥ 3.3（应用程序中的 MaxEnt 需要） |
 | MPI | 默认开启（找到时使用） | 默认关闭；使用 `-DALPS_ENABLE_MPI=ON` 开启 |
 | Python（`pyalps`） | 与 C++ 代码一同构建（Boost.Python） | `python/pyalps` 中独立的 pip 包，基于已安装的 C++ SDK 构建 |
+| NumPy ≥ 2.0 | 需要 Boost ≥ 1.87（Boost.Python 的限制） | 任何受支持的 Boost 均可；绑定使用 nanobind |
 | 已移除的选项 | | `ALPS_USE_SYSTEM_BOOST`、`Boost_SRC_DIR`、`ALPS_BUILD_TESTS`、`ALPS_BUILD_LIBS_ONLY` 等会打印 “no longer supported” 警告；详见 [CHANGELOG](https://github.com/ALPSim/ALPS/blob/master/CHANGELOG.md) |
 
 {{% steps %}}

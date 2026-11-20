@@ -30,6 +30,7 @@ lists what differs from the release.
 | Eigen | Not needed | Eigen ≥ 3.3, needed for the applications (MaxEnt) |
 | MPI | On by default, used when found | Off by default; pass `-DALPS_ENABLE_MPI=ON` |
 | Python (`pyalps`) | Built with the C++ code (Boost.Python) | A separate pip package in `python/pyalps`, built against the installed C++ SDK |
+| NumPy ≥ 2.0 | Needs Boost ≥ 1.87 (a Boost.Python limit) | Works with any supported Boost; the bindings use nanobind |
 | Removed options | | `ALPS_USE_SYSTEM_BOOST`, `Boost_SRC_DIR`, `ALPS_BUILD_TESTS`, `ALPS_BUILD_LIBS_ONLY` and others print a "no longer supported" warning; see the [CHANGELOG](https://github.com/ALPSim/ALPS/blob/master/CHANGELOG.md) |
 
 {{% steps %}}

@@ -33,7 +33,7 @@ ALPSはいくつかの外部ライブラリに依存しています。<br>
 | HDF5     | 1.10.0 | `libhdf5-dev` |
 | CMake | 3.22 | `cmake` |
 | C++ コンパイラ | GCC 10.5.0 または Clang 13.0.1 | `build-essential` |
-| Boost | 1.76 <br>*(NumPy ≥ 2.0 向けに ALPS Python バインディングをビルドする場合は 1.87 が必要)* | 下記参照 |
+| Boost | 1.76 <br>*(NumPy ≥ 2.0 向けに ALPS Python バインディングをビルドする場合は 1.87 が必要。PyPI の `pyalps` wheel には該当しません)* | 下記参照 |
 | MPI | OpenMPI 4.0 **または** MPICH 4.0 | `libopenmpi-dev` / `libmpich-dev` |
 | BLAS | 0.3 | `libopenblas-dev` |
 | Python | 3.10 | [python.org](https://www.python.org/) |

@@ -30,6 +30,7 @@ ALPSへの貢献や、リリース前の修正を試す場合などが該当し�
 | Eigen | 不要 | Eigen 3.3以上（アプリケーションのMaxEntに必要） |
 | MPI | デフォルトで有効（見つかれば使用） | デフォルトで無効。`-DALPS_ENABLE_MPI=ON`で有効化 |
 | Python（`pyalps`） | C++コードと一緒にビルド（Boost.Python） | `python/pyalps`の独立したpipパッケージ。インストール済みのC++ SDKに対してビルド |
+| NumPy 2.0以上 | Boost 1.87以上が必要（Boost.Pythonの制約） | サポートされているどのBoostでも動作（バインディングはnanobindを使用） |
 | 削除されたオプション | | `ALPS_USE_SYSTEM_BOOST`、`Boost_SRC_DIR`、`ALPS_BUILD_TESTS`、`ALPS_BUILD_LIBS_ONLY`などは「no longer supported」という警告を表示します。[CHANGELOG](https://github.com/ALPSim/ALPS/blob/master/CHANGELOG.md)を参照してください |
 
 {{% steps %}}
