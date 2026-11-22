@@ -106,6 +106,33 @@
       ]
     },
     {
+      "name": "observable names and measurement output",
+      "sources": [
+        "src/apps/mc/spins/abstractspinsim.h",
+        "src/apps/mc/spins/spinsim.h",
+        "src/apps/mc/spins/spinmc_evaluate.C",
+        "src/apps/qmc/looper/looper/correlation.h",
+        "src/apps/qmc/looper/looper/custom.h",
+        "src/apps/qmc/looper/looper/measurement.h",
+        "src/apps/qmc/looper/looper/stiffness.h",
+        "src/apps/qmc/looper/looper/susceptibility.h",
+        "src/apps/qmc/qmc.h",
+        "src/apps/qmc/sse4/measurement.h",
+        "src/apps/qmc/worms/Wmeas.C",
+        "src/apps/qmc/worms/evaluate.C",
+        "src/apps/qmc/qwl/qwl_evaluate.C",
+        "src/apps/diag/diag.h",
+        "src/apps/diag/fulldiag/fulldiag_evaluate.C",
+        "src/apps/dmrg/dmrg/dmrg.h",
+        "src/alps/scheduler/src/scheduler/measurement_operators.C",
+        "python/pyalps/src/pyalps/tools.py",
+        "python/pyalps/src/pyalps/load.py"
+      ],
+      "pages": [
+        "documentation/api/examples.md"
+      ]
+    },
+    {
       "name": "common parameters",
       "sources": [
         "src/alps/lattice/src/lattice/latticelibrary.C",

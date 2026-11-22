@@ -28,7 +28,7 @@ weight: 4
 |---|---|---|---|
 | 古典モンテカルロ（`spinmc`） | エネルギー、磁化、帯磁率。`pyalps.evaluateSpinMC` の後は比熱と Binder キュムラントも | — | `loadMeasurements` |
 | 量子モンテカルロ、ループアルゴリズム（`loop`） | エネルギー、比熱、（スタッガード）磁化と帯磁率、Binder 比、スティッフネス | スピン相関、構造因子、グリーン関数（3.0.0 では失敗する。[既知の問題](#alps-300-の既知の問題)を参照） | `loadMeasurements` |
-| 量子モンテカルロ、有向ループ（`dirloop_sse`） | エネルギー、運動エネルギー、（スタッガード）磁化、帯磁率、スティッフネス。粒子模型では密度も | スピンまたは密度の相関、構造因子、グリーン関数 | `loadMeasurements` |
+| 量子モンテカルロ、有向ループ（`dirloop_sse`） | エネルギー、運動エネルギー、（スタッガード）磁化、帯磁率、スティッフネス。粒子模型では密度も | スピンまたは密度の相関、構造因子、グリーン関数（注意点あり。[既知の問題](#alps-300-の既知の問題)を参照） | `loadMeasurements` |
 | 量子モンテカルロ、ワームアルゴリズム（`worm`） | エネルギー、密度、スティッフネス、巻き付き数、電荷秩序 | 密度相関、構造因子、グリーン関数 | `loadMeasurements` |
 | 量子 Wang–Landau（`qwl`） | エネルギー、自由エネルギー、エントロピー、比熱、帯磁率を $T$ の連続関数として | 一様およびスタッガード構造因子 | `evaluateQWL` |
 | 完全対角化（`fulldiag`） | エネルギー、自由エネルギー、エントロピー、比熱、帯磁率、磁化を $T$ または $h$ の関数として | 固有状態ごとのカスタム `MEASURE_*` | `evaluateFulldiagVersusT`、`evaluateFulldiagVersusH`、`loadSpectra`、`loadEigenstateMeasurements` |
@@ -226,6 +226,7 @@ plt.show()
 ![](/figs/api_examples_qmc.png)
 
 同じ模型の 8 格点の鎖では、`Spin Correlations` と `Green's Function` の絶対値は誤差の範囲で厳密対角化と一致します。
+絶対値だけを比べるのは、3.0.0 では反強磁性体での `Green's Function` の符号が誤っているためです（[既知の問題](#alps-300-の既知の問題)を参照）。
 
 ## 例 3：fulldiag と QWL による熱力学量
 
@@ -371,9 +372,11 @@ $S^z_{\mathrm{total}} = 1$ の状態では磁化が交互に変わり、開放�
 
 ## ALPS 3.0.0 の既知の問題
 
-- `loop` で `MEASURE[Green Function]=true` とした場合：計算終了時の評価が `scalar - vector conflict in path: .../Green's Function/labels` というエラーで失敗し、結果ファイルが書き出されません。グリーン関数には `dirloop_sse` を使ってください。
-- 反強磁性体での `dirloop_sse` の `Green's Function` には符号 $(-1)^{r}$ が欠けています。絶対値は正しいものの、すべての値が正になります（[ALPS #390](https://github.com/ALPSim/ALPS/issues/390)）。
-- `worm`：観測量名を指定せずに `pyalps.loadMeasurements(files)` を呼ぶと、内部の観測量（`Time interval`）が読めないため空のリストが返ります。必要な名前を渡してください。例：`pyalps.loadMeasurements(files, ['Density', 'Stiffness'])`。
-- `fulldiag` で `MEASURE_CORRELATIONS` または `MEASURE_STRUCTURE_FACTOR` を使った場合：`fulldiag_evaluate`（`evaluateFulldiagVersusT` から呼ばれる）がクラッシュします。`MEASURE_AVERAGE` と `MEASURE_LOCAL` は問題ありません。熱力学量と相関関数は別々のジョブで計算してください。
+以下の問題は、このページの測定に影響します。各項目には修正版が出るまでの対処法を記しています。修正の状況はリンク先の issue で追跡され、修正はリリースノートに記載されます。
+
+- `loop` で `MEASURE[Green Function]=true` とした場合：計算終了時の評価が `scalar - vector conflict in path: .../Green's Function/labels` というエラーで失敗し、結果ファイルが書き出されません。グリーン関数は代わりに `dirloop_sse` で測定してください（[ALPS #420](https://github.com/ALPSim/ALPS/issues/420)）。
+- `dirloop_sse` の `Green's Function` は、設定によっては誤った値になります（[ALPS #390](https://github.com/ALPSim/ALPS/issues/390)）。反強磁性体では符号 $(-1)^{r}$ が欠けているので、例 2 のように絶対値を使ってください。`SKIP` を指定すると値が `SKIP` 倍大きくなり、`RESTRICT_MEASUREMENTS` や、ソフトコアボソンでの `NO_WORMWEIGHT=1` でも誤った値になります。グリーン関数を測定するときは、これらのパラメータを指定しないでください。
+- `worm`：観測量名を指定せずに `pyalps.loadMeasurements(files)` を呼ぶと、内部の観測量（`Time interval`）が読めないため空のリストが返ります。必要な名前を渡してください。例：`pyalps.loadMeasurements(files, ['Density', 'Stiffness'])`（[ALPS #421](https://github.com/ALPSim/ALPS/issues/421)）。
+- `fulldiag` で `MEASURE_CORRELATIONS` または `MEASURE_STRUCTURE_FACTOR` を使った場合：`fulldiag_evaluate`（`evaluateFulldiagVersusT` から呼ばれる）がクラッシュします。`MEASURE_AVERAGE` と `MEASURE_LOCAL` は問題ありません。熱力学量と相関関数は別々のジョブで計算してください（[ALPS #422](https://github.com/ALPSim/ALPS/issues/422)）。
 - 周期格子やラダーでは、`dmrg` の `MEASURE_CORRELATIONS` が誤った値を返します（[ALPS #390](https://github.com/ALPSim/ALPS/issues/390)）。例 4 のような開放端鎖では、結果は厳密対角化と一致します。
-- 評価関数（`evaluateSpinMC`、`evaluateQWL`、`evaluateFulldiagVersusT` など）は、同じ Python セッションで先に `runApplication` を呼んでいる場合にしか補助プログラムを見つけられません。別の解析スクリプトでは、`pyalps` パッケージの `bin` ディレクトリを `PATH` に追加してください。これは master ブランチで修正済みです。
+- 評価関数（`evaluateSpinMC`、`evaluateQWL`、`evaluateFulldiagVersusT` など）は、同じ Python セッションで先に `runApplication` を呼んでいる場合にしか補助プログラムを見つけられません。別の解析スクリプトでは、`pyalps` パッケージの `bin` ディレクトリを `PATH` に追加してください。これは 3.0.0 以降、[ALPS #158](https://github.com/ALPSim/ALPS/pull/158) で修正されています。

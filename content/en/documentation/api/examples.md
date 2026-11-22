@@ -28,7 +28,7 @@ The names below are the ones the applications write.
 |---|---|---|---|
 | Classical Monte Carlo (`spinmc`) | energy, magnetization, susceptibility; specific heat and Binder cumulant after `pyalps.evaluateSpinMC` | — | `loadMeasurements` |
 | QMC, loop algorithm (`loop`) | energy, specific heat, (staggered) magnetization and susceptibility, Binder ratios, stiffness | spin correlations, structure factor, Green function (fails in 3.0.0, see [known issues](#known-issues-in-alps-300)) | `loadMeasurements` |
-| QMC, directed loops (`dirloop_sse`) | energy, kinetic energy, (staggered) magnetization, susceptibility, stiffness; density for particle models | spin or density correlations, structure factor, Green function | `loadMeasurements` |
+| QMC, directed loops (`dirloop_sse`) | energy, kinetic energy, (staggered) magnetization, susceptibility, stiffness; density for particle models | spin or density correlations, structure factor, Green function (with caveats, see [known issues](#known-issues-in-alps-300)) | `loadMeasurements` |
 | QMC, worm algorithm (`worm`) | energy, density, stiffness, winding number, charge order | density correlations, structure factor, Green function | `loadMeasurements` |
 | Quantum Wang–Landau (`qwl`) | energy, free energy, entropy, specific heat, susceptibility, as continuous functions of $T$ | uniform and staggered structure factor | `evaluateQWL` |
 | Full diagonalization (`fulldiag`) | energy, free energy, entropy, specific heat, susceptibility, magnetization versus $T$ or $h$ | custom `MEASURE_*` per eigenstate | `evaluateFulldiagVersusT`, `evaluateFulldiagVersusH`, `loadSpectra`, `loadEigenstateMeasurements` |
@@ -226,6 +226,7 @@ The correlations alternate in sign with distance, and $|\langle S^+_0 S^-_r\rang
 ![](/figs/api_examples_qmc.png)
 
 For the same model on an 8-site chain, `Spin Correlations` and the magnitude of `Green's Function` agree with exact diagonalization within the error bars.
+Only the magnitude is compared because in 3.0.0 the sign of `Green's Function` is wrong on an antiferromagnet (see [known issues](#known-issues-in-alps-300)).
 
 ## Example 3: thermodynamics from fulldiag and QWL
 
@@ -371,9 +372,11 @@ On an 8-site open chain the DMRG correlations are identical to those from `spars
 
 ## Known issues in ALPS 3.0.0
 
-- `loop` with `MEASURE[Green Function]=true`: the evaluation at the end of the run fails with `scalar - vector conflict in path: .../Green's Function/labels` and no result file is written. Use `dirloop_sse` for the Green function.
-- `dirloop_sse` `Green's Function` on an antiferromagnet is missing the sign $(-1)^{r}$: the magnitudes are right but all values are positive ([ALPS #390](https://github.com/ALPSim/ALPS/issues/390)).
-- `worm`: `pyalps.loadMeasurements(files)` without observable names returns an empty list because an internal observable (`Time interval`) cannot be read. Pass the names you need, for example `pyalps.loadMeasurements(files, ['Density', 'Stiffness'])`.
-- `fulldiag` with `MEASURE_CORRELATIONS` or `MEASURE_STRUCTURE_FACTOR`: `fulldiag_evaluate` (called by `evaluateFulldiagVersusT`) crashes. `MEASURE_AVERAGE` and `MEASURE_LOCAL` work. Run the thermodynamics and the correlations as separate jobs.
+These problems affect the measurements on this page. Each item says what to do until a fix is released; the linked issues track the fixes, and the release notes list them.
+
+- `loop` with `MEASURE[Green Function]=true`: the evaluation at the end of the run fails with `scalar - vector conflict in path: .../Green's Function/labels` and no result file is written. Measure the Green function with `dirloop_sse` instead ([ALPS #420](https://github.com/ALPSim/ALPS/issues/420)).
+- `dirloop_sse` `Green's Function` is wrong in some configurations ([ALPS #390](https://github.com/ALPSim/ALPS/issues/390)). On an antiferromagnet the sign $(-1)^{r}$ is missing, so use the magnitudes, as in Example 2. With `SKIP` the values are `SKIP` times too large, and `RESTRICT_MEASUREMENTS` and, for soft-core bosons, `NO_WORMWEIGHT=1` also give wrong values: leave these parameters unset when you measure the Green function.
+- `worm`: `pyalps.loadMeasurements(files)` without observable names returns an empty list because an internal observable (`Time interval`) cannot be read. Pass the names you need, for example `pyalps.loadMeasurements(files, ['Density', 'Stiffness'])` ([ALPS #421](https://github.com/ALPSim/ALPS/issues/421)).
+- `fulldiag` with `MEASURE_CORRELATIONS` or `MEASURE_STRUCTURE_FACTOR`: `fulldiag_evaluate` (called by `evaluateFulldiagVersusT`) crashes. `MEASURE_AVERAGE` and `MEASURE_LOCAL` work. Run the thermodynamics and the correlations as separate jobs ([ALPS #422](https://github.com/ALPSim/ALPS/issues/422)).
 - `dmrg` `MEASURE_CORRELATIONS` on periodic lattices and ladders gives wrong values ([ALPS #390](https://github.com/ALPSim/ALPS/issues/390)). On open chains, as in Example 4, the values match exact diagonalization.
-- The evaluation functions (`evaluateSpinMC`, `evaluateQWL`, `evaluateFulldiagVersusT`, ...) only find their helper programs if `runApplication` was called earlier in the same Python session. In a separate analysis script, add the `bin` directory of the `pyalps` package to `PATH`. This is fixed on the master branch.
+- The evaluation functions (`evaluateSpinMC`, `evaluateQWL`, `evaluateFulldiagVersusT`, ...) only find their helper programs if `runApplication` was called earlier in the same Python session. In a separate analysis script, add the `bin` directory of the `pyalps` package to `PATH`. This is fixed after 3.0.0 by [ALPS #158](https://github.com/ALPSim/ALPS/pull/158).

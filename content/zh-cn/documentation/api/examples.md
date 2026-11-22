@@ -28,7 +28,7 @@ weight: 4
 |---|---|---|---|
 | 经典蒙特卡罗（`spinmc`） | 能量、磁化强度、磁化率；调用 `pyalps.evaluateSpinMC` 后还有比热和 Binder 累积量 | — | `loadMeasurements` |
 | 量子蒙特卡罗，loop 算法（`loop`） | 能量、比热、（交错）磁化强度与磁化率、Binder 比、刚度 | 自旋关联、结构因子、格林函数（在 3.0.0 中失败，见[已知问题](#alps-300-中的已知问题)） | `loadMeasurements` |
-| 量子蒙特卡罗，有向圈（`dirloop_sse`） | 能量、动能、（交错）磁化强度、磁化率、刚度；粒子模型还有密度 | 自旋或密度关联、结构因子、格林函数 | `loadMeasurements` |
+| 量子蒙特卡罗，有向圈（`dirloop_sse`） | 能量、动能、（交错）磁化强度、磁化率、刚度；粒子模型还有密度 | 自旋或密度关联、结构因子、格林函数（有注意事项，见[已知问题](#alps-300-中的已知问题)） | `loadMeasurements` |
 | 量子蒙特卡罗，worm 算法（`worm`） | 能量、密度、刚度、缠绕数、电荷序 | 密度关联、结构因子、格林函数 | `loadMeasurements` |
 | 量子 Wang–Landau（`qwl`） | 能量、自由能、熵、比热、磁化率，均为 $T$ 的连续函数 | 均匀与交错结构因子 | `evaluateQWL` |
 | 完全对角化（`fulldiag`） | 能量、自由能、熵、比热、磁化率、磁化强度随 $T$ 或 $h$ 的变化 | 每个本征态的自定义 `MEASURE_*` | `evaluateFulldiagVersusT`、`evaluateFulldiagVersusH`、`loadSpectra`、`loadEigenstateMeasurements` |
@@ -226,6 +226,7 @@ plt.show()
 ![](/figs/api_examples_qmc.png)
 
 对于 8 格点链上的同一模型，`Spin Correlations` 以及 `Green's Function` 的绝对值在误差范围内与精确对角化一致。
+这里只比较绝对值，因为在 3.0.0 中反铁磁体上 `Green's Function` 的符号是错的（见[已知问题](#alps-300-中的已知问题)）。
 
 ## 示例 3：用 fulldiag 和 QWL 计算热力学量
 
@@ -371,9 +372,11 @@ plt.show()
 
 ## ALPS 3.0.0 中的已知问题
 
-- `loop` 设置 `MEASURE[Green Function]=true` 时：运行结束时的评估失败，报错 `scalar - vector conflict in path: .../Green's Function/labels`，并且不写出结果文件。请用 `dirloop_sse` 测量格林函数。
-- 反铁磁体上 `dirloop_sse` 的 `Green's Function` 缺少符号 $(-1)^{r}$：绝对值正确，但所有值都为正（[ALPS #390](https://github.com/ALPSim/ALPS/issues/390)）。
-- `worm`：不指定观测量名称调用 `pyalps.loadMeasurements(files)` 会返回空列表，因为一个内部观测量（`Time interval`）无法读取。请传入所需的名称，例如 `pyalps.loadMeasurements(files, ['Density', 'Stiffness'])`。
-- `fulldiag` 配合 `MEASURE_CORRELATIONS` 或 `MEASURE_STRUCTURE_FACTOR` 时：`fulldiag_evaluate`（由 `evaluateFulldiagVersusT` 调用）会崩溃。`MEASURE_AVERAGE` 和 `MEASURE_LOCAL` 可以正常使用。请把热力学量和关联函数分成两个任务运行。
+以下问题会影响本页的测量。每一项都给出了在修复发布之前的处理办法；修复进度见所链接的 issue，修复内容会列在发布说明中。
+
+- `loop` 设置 `MEASURE[Green Function]=true` 时：运行结束时的评估失败，报错 `scalar - vector conflict in path: .../Green's Function/labels`，并且不写出结果文件。请改用 `dirloop_sse` 测量格林函数（[ALPS #420](https://github.com/ALPSim/ALPS/issues/420)）。
+- `dirloop_sse` 的 `Green's Function` 在某些设置下是错误的（[ALPS #390](https://github.com/ALPSim/ALPS/issues/390)）。在反铁磁体上缺少符号 $(-1)^{r}$，因此请像示例 2 那样使用绝对值。设置 `SKIP` 时数值会大 `SKIP` 倍；`RESTRICT_MEASUREMENTS` 以及软核玻色子的 `NO_WORMWEIGHT=1` 也会给出错误的值。测量格林函数时请不要设置这些参数。
+- `worm`：不指定观测量名称调用 `pyalps.loadMeasurements(files)` 会返回空列表，因为一个内部观测量（`Time interval`）无法读取。请传入所需的名称，例如 `pyalps.loadMeasurements(files, ['Density', 'Stiffness'])`（[ALPS #421](https://github.com/ALPSim/ALPS/issues/421)）。
+- `fulldiag` 配合 `MEASURE_CORRELATIONS` 或 `MEASURE_STRUCTURE_FACTOR` 时：`fulldiag_evaluate`（由 `evaluateFulldiagVersusT` 调用）会崩溃。`MEASURE_AVERAGE` 和 `MEASURE_LOCAL` 可以正常使用。请把热力学量和关联函数分成两个任务运行（[ALPS #422](https://github.com/ALPSim/ALPS/issues/422)）。
 - 在周期晶格和梯子晶格上，`dmrg` 的 `MEASURE_CORRELATIONS` 给出错误的值（[ALPS #390](https://github.com/ALPSim/ALPS/issues/390)）。在开链上（如示例 4），其结果与精确对角化一致。
-- 评估函数（`evaluateSpinMC`、`evaluateQWL`、`evaluateFulldiagVersusT` 等）只有在同一 Python 会话中先调用过 `runApplication` 时才能找到所需的辅助程序。在单独的分析脚本中，请把 `pyalps` 包的 `bin` 目录加入 `PATH`。master 分支已修复此问题。
+- 评估函数（`evaluateSpinMC`、`evaluateQWL`、`evaluateFulldiagVersusT` 等）只有在同一 Python 会话中先调用过 `runApplication` 时才能找到所需的辅助程序。在单独的分析脚本中，请把 `pyalps` 包的 `bin` 目录加入 `PATH`。3.0.0 之后已由 [ALPS #158](https://github.com/ALPSim/ALPS/pull/158) 修复。
