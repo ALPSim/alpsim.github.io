@@ -9,7 +9,7 @@ toc: true
 
 Mott transitions are metal insulator transitions (MIT) that occur in many materials, e.g. transition metal compounds, as a function of pressure or doping. The review by [Imada, Fujimori, and Tokura, Rev. Mod. Phys. 70, 1039 (1998)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.70.1039) gives an excellent introduction to the subject and mentions $V_2O_3$ and the organics as typical examples.
 
-MIT are easily investigated by DMFT as the relevant physics is essentially local (or k-independent): At half filling the MIT can be modeled by a self energy with a pole at $\omega=0$ which splits the noninteracting band into an upper and a lower Hubbard band. In this context it is instructive to suppress antiferromagnetic long range order and enforce a paramagnetic solution in the DMFT simulation, to mimic the paramagnetic insulating phase. For this, the up and down spin components of the Green's functions are symmetrized (parameter `SYMMETRIZATION = 1;`).
+MIT are easily investigated by DMFT as the relevant physics is essentially local (or k-independent): At half filling the MIT can be modeled by a self energy with a pole at $\omega=0$ which splits the noninteracting band into an upper and a lower Hubbard band. In this context it is instructive to suppress antiferromagnetic long range order and enforce a paramagnetic solution in the DMFT simulation, to mimic the paramagnetic insulating phase. For this, the up and down spin components of the Green's functions are symmetrized (parameter `SYMMETRIZATION = true;`).
 
 ### Model
 
@@ -31,16 +31,15 @@ on the Bethe lattice, at half filling ($\mu=0$). Here the interaction $U$ is swe
 | `MU` | chemical potential | $0$ (half filling) |
 | `H`, `H_INIT` | quantization-axis field / seed field for the initial Weiss field | $0$ / $0$ (no symmetry breaking — see Method choice) |
 | `FLAVORS` | number of spin flavors | $2$ |
-| `ANTIFERROMAGNET` | enable the Néel self-consistency | $0$ (disabled — see Method choice) |
-| `SYMMETRIZATION` | enforce a paramagnetic solution (symmetrize flavors 0 and 1) | $1$ |
+| `ANTIFERROMAGNET` | enable the Néel self-consistency | `false` (disabled — see Method choice) |
+| `SYMMETRIZATION` | enforce a paramagnetic solution (symmetrize flavors 0 and 1) | `true` |
 | `N`, `NMATSUBARA` | imaginary-time / Matsubara discretization of $G$ and $G_0$ | $500$ |
 | `OMEGA_LOOP` | run the self-consistency in Matsubara frequencies | $1$ |
 | `MAX_IT`, `CONVERGED` | maximum self-consistency iterations / convergence threshold | $20$, $0.001$ |
 | `SOLVER` | impurity solver | `"hybridization"` (CT-HYB) |
-| `N_ORDER` | histogram size for the hybridization expansion order | $50$ |
+| `N_HISTOGRAM_ORDERS` | histogram size for the hybridization expansion order | $50$ |
 | `N_MEAS` | number of Monte Carlo updates between measurements | $1000$ |
 | `SC_WRITE_DELTA` | write the hybridization function for the solver | $1$ |
-| `CHECKPOINT` | filename prefix for checkpoint/restart files | `solverdump_U_`+`U` |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | Monte Carlo sweep budget (scaled with $U$), thermalization sweeps, wall-clock cutoff per iteration (seconds) | $1500\,U$, $500$, $600$ |
 
 ### Running the simulation
@@ -58,8 +57,7 @@ parms=[]
 for u in [4.,5.,6.,8.]: 
     parms.append(
             { 
-              'ANTIFERROMAGNET'         : 0,
-              'CHECKPOINT'              : 'solverdump_U_'+str(u),
+              'ANTIFERROMAGNET'         : False,
               'CONVERGED'               : 0.001,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -70,13 +68,13 @@ for u in [4.,5.,6.,8.]:
               'N'                       : 500,
               'NMATSUBARA'              : 500, 
               'N_MEAS'                  : 1000,
-              'N_ORDER'                 : 50,
+              'N_HISTOGRAM_ORDERS'      : 50,
               'OMEGA_LOOP'              : 1,
               'SEED'                    : 0, 
               'SITES'                   : 1,              
               'SOLVER'                  : 'hybridization',
               'SC_WRITE_DELTA'          : 1,
-              'SYMMETRIZATION'          : 1,
+              'SYMMETRIZATION'          : True,
               't'                       : 1,
               'SWEEPS'                  : 1500*u,
               'BETA'                    : 20.0,
@@ -105,8 +103,7 @@ As in the earlier tutorials, `pyalps.runDMFT` invokes the `dmft` application dir
 The input file `parm_u_4.0` produced by the script above, with comments added:
 
 ```
-ANTIFERROMAGNET = 0                  // suppress Neel order to access the paramagnetic Mott solution
-CHECKPOINT = solverdump_U_4.0        // filename prefix for checkpoint/restart files
+ANTIFERROMAGNET = false              // suppress Neel order to access the paramagnetic Mott solution
 CONVERGED = 0.001                    // convergence criterion for the self-consistency iteration
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
 H = 0                                // magnetic field along the quantization axis
@@ -117,13 +114,13 @@ MU = 0                               // chemical potential; MU=0 is half filling
 N = 500                              // discretization of the imaginary-time Green's function
 NMATSUBARA = 500                     // cutoff for Matsubara frequencies
 N_MEAS = 1000                        // number of updates between measurements
-N_ORDER = 50                         // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50              // histogram size for the hybridization expansion order
 OMEGA_LOOP = 1                       // self-consistency runs in Matsubara frequencies
 SEED = 0                             // Monte Carlo random number seed
 SITES = 1                            // one impurity site, as in single-site DMFT
 SOLVER = "hybridization"             // the CT-HYB solver
 SC_WRITE_DELTA = 1                   // write out the hybridization function for the solver
-SYMMETRIZATION = 1                   // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
+SYMMETRIZATION = true                // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
 t = 1                                // hopping; for the Bethe lattice considered here $W=2D=4t$
 SWEEPS = 6000                        // total sweeps (1500*U at U=4)
 BETA = 20.0                          // inverse temperature
@@ -153,7 +150,7 @@ See [DMFT-08 Lattices](../dmft08) for running the self-consistency on other latt
 
 We use the hybridization-expansion solver CT-HYB (as in [DMFT-02 Hybridization](../dmft02)) rather than the interaction-expansion solver CT-INT (as in [DMFT-03 Interaction](../dmft03)). CT-INT's average perturbation order grows roughly linearly with $\beta U$; at $\beta t=20$ and $U/t$ up to $8$, this would make CT-INT expensive. CT-HYB, by contrast, expands in the hybridization to the bath: deep in the insulating phase, the effective low-energy coupling to the bath is suppressed (the impurity approaches the atomic limit), so the average hybridization order stays manageable even as $U$ increases — the opposite scaling from CT-INT. This makes CT-HYB the natural choice for tracking a solution from the metal into the Mott insulator.
 
-We also deliberately set `ANTIFERROMAGNET = 0` and `SYMMETRIZATION = 1`. On the (bipartite) Bethe lattice at half filling, antiferromagnetic order wins at low temperature for essentially any $U>0$, which would preempt the paramagnetic Mott transition studied here. Suppressing the Néel self-consistency and enforcing a symmetric (paramagnetic) solution isolates the interaction-driven MIT, mimicking the effect of geometric frustration that suppresses magnetic order in real Mott materials.
+We also deliberately set `ANTIFERROMAGNET = false` and `SYMMETRIZATION = true`. On the (bipartite) Bethe lattice at half filling, antiferromagnetic order wins at low temperature for essentially any $U>0$, which would preempt the paramagnetic Mott transition studied here. Suppressing the Néel self-consistency and enforcing a symmetric (paramagnetic) solution isolates the interaction-driven MIT, mimicking the effect of geometric frustration that suppresses magnetic order in real Mott materials.
 
 ### Identifying the metal-insulator transition
 
@@ -227,7 +224,7 @@ plt.show()
 
 By suppressing antiferromagnetic order and scanning $U$ at fixed $\beta t=20$, we located the paramagnetic Mott transition of the half-filled Hubbard model on the Bethe lattice between $U/t=4.5$ and $U/t=5$, consistent with the DMFT phase diagram reviewed by [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13).
 
-1. Set `ANTIFERROMAGNET = 1` (as in [DMFT-02 Hybridization](../dmft02)) and rerun at the same $U$ values: does the antiferromagnetic instability preempt the paramagnetic solution studied here?
+1. Set `ANTIFERROMAGNET = true` (as in [DMFT-02 Hybridization](../dmft02)) and rerun at the same $U$ values: does the antiferromagnetic instability preempt the paramagnetic solution studied here?
 2. The Mott transition is first-order at low temperature, so metallic and insulating solutions can coexist. Starting from a converged insulating run, copy its `G0omega_output` into a new `G0OMEGA_INPUT` and try to converge a smaller-$U$ point from the insulating side — how far below $U/t\approx4.5$ does the insulating solution survive?
 3. Repeat the scan at a higher temperature (smaller `BETA`): does the apparent transition become smoother, consistent with the first-order line ending in a finite-temperature critical point?
 4. Compare the CT-HYB run at $U=8$ to a CT-INT run (Tutorial 03 solver) at the same point: which solver converges faster, given the scaling arguments in the Method choice section above?

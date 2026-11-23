@@ -36,14 +36,13 @@ $$
 | `MU` | 化学ポテンシャル | $0$（半充填） |
 | `H`, `H_INIT` | 量子化軸方向の磁場／初期外斯場の種となる磁場 | $0$ / $0$ |
 | `FLAVORS` | フレーバー数：2軌道 $\times$ 2スピン | $4$（フレーバー0,1 = 狭いバンドの $\uparrow,\downarrow$；フレーバー2,3 = 広いバンドの $\uparrow,\downarrow$） |
-| `SYMMETRIZATION` | 各軌道内でスピン対称な解を強制（フレーバー0$\leftrightarrow$1、2$\leftrightarrow$3） | $1$ |
+| `SYMMETRIZATION` | 各軌道内でスピン対称な解を強制（フレーバー0$\leftrightarrow$1、2$\leftrightarrow$3） | `true` |
 | `N`, `NMATSUBARA` | $G$ と $G_0$ の虚時間／松原周波数離散化数 | $500$ |
 | `MAX_IT`, `CONVERGED` | 自己無撞着反復の最大回数／収束判定基準 | $15$、$0.001$ |
 | `SOLVER` | 不純物ソルバー | `"hybridization"`（CT-HYB、セグメント表示） |
-| `N_ORDER` | ハイブリダイゼーション展開次数のヒストグラムサイズ | $50$ |
+| `N_HISTOGRAM_ORDERS` | ハイブリダイゼーション展開次数のヒストグラムサイズ | $50$ |
 | `N_MEAS` | 測定間のモンテカルロ更新回数 | $2000$ |
 | `SC_WRITE_DELTA` | ソルバー用にハイブリダイゼーション関数を出力する | $1$ |
-| `CHECKPOINT` | チェックポイント／再開用ファイルのファイル名接頭辞 | `dump` |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | モンテカルロスイープ数の上限／熱化スイープ数／1反復あたりの実時間上限（秒） | $10000$、$500$、$600$ |
 
 ### シミュレーションの実行
@@ -74,11 +73,11 @@ for u,j in [[1.8,0.45],[2.2,0.55],[2.8,0.7]]:
               'N'                   : 500,
               'NMATSUBARA'          : 500,
               'N_MEAS'              : 2000,
-              'N_ORDER'             : 50,
+              'N_HISTOGRAM_ORDERS'  : 50,
               'SEED'                : 0,
               'SOLVER'              : 'hybridization',
               'SC_WRITE_DELTA'      : 1,
-              'SYMMETRIZATION'      : 1,
+              'SYMMETRIZATION'      : True,
               'SWEEPS'              : 10000,
               'BETA'                : 30,
               'THERMALIZATION'      : 500,
@@ -86,7 +85,6 @@ for u,j in [[1.8,0.45],[2.2,0.55],[2.8,0.7]]:
               'J'                   : j,
               't0'                  : 0.5,
               't1'                  : 1,
-              'CHECKPOINT'          : 'dump'
         }
         )
 
@@ -121,11 +119,11 @@ MU = 0                             // chemical potential; MU=0 is half filling
 N = 500                           // discretization of the imaginary-time Green's function
 NMATSUBARA = 500                  // cutoff for Matsubara frequencies
 N_MEAS = 2000                     // number of updates between measurements
-N_ORDER = 50                      // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50           // histogram size for the hybridization expansion order
 SEED = 0                          // Monte Carlo random number seed
 SOLVER = "hybridization"          // the CT-HYB solver (segment representation, requires density-density interactions)
 SC_WRITE_DELTA = 1                // write out the hybridization function for the solver
-SYMMETRIZATION = 1                // enforce spin-symmetric solutions within each orbital (flavors 0<->1 and 2<->3)
+SYMMETRIZATION = true             // enforce spin-symmetric solutions within each orbital (flavors 0<->1 and 2<->3)
 SWEEPS = 10000                    // total sweeps
 BETA = 30                         // inverse temperature
 THERMALIZATION = 500              // thermalization sweeps
@@ -133,7 +131,6 @@ U = 1.8                           // intra-orbital (Hubbard) interaction
 J = 0.45                          // Hund's coupling
 t0 = 0.5                          // hopping of the narrow band (half-bandwidth D0=2t0=1)
 t1 = 1                            // hopping of the wide band (half-bandwidth D1=2t1=2)
-CHECKPOINT = dump                 // filename prefix for checkpoint/restart files
 ```
 
 $U'$ は明示的には指定されていないことに注意してください。[DMFT パラメータリファレンス](../../../documentation/methods/dmft) に記載の通り、指定しない場合は既定で $U-2J$ になります。

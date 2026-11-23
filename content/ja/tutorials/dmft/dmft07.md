@@ -19,7 +19,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-をベーテ格子上、半充填（$\mu=0$）で解きます。$t=0.707106781186547=1/\sqrt{2}$（半バンド幅 $D=2t=\sqrt{2}$）、$U=3$ とすることで、[Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) と同様に $U=3D/\sqrt{2}$ となります。チュートリアル02と同様、`ANTIFERROMAGNET=1` によりネール自己無撞着を有効にしているため、同じ物理的な点を様々な $\beta$ にわたって冷却することで、同じ金属-反強磁性絶縁体クロスオーバーが再現されます──今回は連続時間ソルバーではなく、[Hirsch and Fye (1986)](https://doi.org/10.1103/PhysRevLett.56.2521) による離散時間の Hirsch-Fye ソルバーを用いています。
+をベーテ格子上、半充填（$\mu=0$）で解きます。$t=0.707106781186547=1/\sqrt{2}$（半バンド幅 $D=2t=\sqrt{2}$）、$U=3$ とすることで、[Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) と同様に $U=3D/\sqrt{2}$ となります。チュートリアル02と同様、`ANTIFERROMAGNET=true` によりネール自己無撞着を有効にしているため、同じ物理的な点を様々な $\beta$ にわたって冷却することで、同じ金属-反強磁性絶縁体クロスオーバーが再現されます──今回は連続時間ソルバーではなく、[Hirsch and Fye (1986)](https://doi.org/10.1103/PhysRevLett.56.2521) による離散時間の Hirsch-Fye ソルバーを用いています。
 
 ### パラメータ
 
@@ -31,8 +31,8 @@ $$
 | `MU` | 化学ポテンシャル | $0$（半充填） |
 | `H`, `H_INIT` | 量子化軸方向の磁場／初期外斯場を生成するための種となる磁場 | $0$ / $0.05$ |
 | `FLAVORS` | スピンフレーバー数 | $2$ |
-| `ANTIFERROMAGNET` | ネール自己無撞着を有効化 | $1$ |
-| `SYMMETRIZATION` | 常磁性解を強制するか | $0$（反強磁性秩序を許すため） |
+| `ANTIFERROMAGNET` | ネール自己無撞着を有効化 | `true` |
+| `SYMMETRIZATION` | 常磁性解を強制するか | `false`（反強磁性秩序を許すため） |
 | `N` | 虚時間スライス数、$\Delta\tau=\beta/N$ | $16$──意図的に小さく設定。「手法の選択」参照 |
 | `NMATSUBARA` | 自己無撞着計算で用いる松原周波数の上限 | $500$ |
 | `OMEGA_LOOP` | 自己無撞着計算を松原周波数で行う | $1$ |
@@ -57,7 +57,7 @@ parms=[]
 for b in [6., 12.]:
     parms.append(
             { 
-              'ANTIFERROMAGNET'     : 1,
+              'ANTIFERROMAGNET'     : True,
               'CONVERGED'           : 0.005,
               'FLAVORS'             : 2,
               'H'                   : 0,
@@ -71,7 +71,7 @@ for b in [6., 12.]:
               'SEED'                : 0, 
               'SITES'               : 1,
               'SOLVER'              : 'hirschfye',
-              'SYMMETRIZATION'      : 0,
+              'SYMMETRIZATION'      : False,
               'TOLERANCE'           : 0.001,
               'U'                   : 3,
               't'                   : 0.707106781186547,
@@ -116,7 +116,7 @@ plt.show()
 上記のスクリプトによって生成される入力ファイル `parm_beta_6.0` に、コメントを加えたものです。
 
 ```
-ANTIFERROMAGNET = 1                  // allow Neel order; meaningful for bipartite lattices in single-site DMFT
+ANTIFERROMAGNET = true               // allow Neel order; meaningful for bipartite lattices in single-site DMFT
 CONVERGED = 0.005                    // convergence criterion for the self-consistency iteration
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
 H = 0                                // magnetic field along the quantization axis
@@ -130,7 +130,7 @@ OMEGA_LOOP = 1                        // self-consistency runs in Matsubara freq
 SEED = 0                              // Monte Carlo random number seed
 SITES = 1                             // one impurity site, as in single-site DMFT
 SOLVER = "hirschfye"                  // the discrete-time Hirsch-Fye solver
-SYMMETRIZATION = 0                    // paramagnetic self-consistency is NOT enforced (we want AFM order)
+SYMMETRIZATION = false                // paramagnetic self-consistency is NOT enforced (we want AFM order)
 TOLERANCE = 0.001                     // internal convergence tolerance of the Hirsch-Fye solver
 U = 3                                 // interaction strength
 t = 0.707106781186547                 // hopping; for the Bethe lattice considered here $W=2D=4t$

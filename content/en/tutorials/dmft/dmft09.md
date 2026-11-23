@@ -19,7 +19,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqrt{2}$ (half-bandwidth $D=2t=\sqrt{2}$) and $U=3$, so that $U=3D/\sqrt{2}$ as in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). `ANTIFERROMAGNET=1` allows the Néel self-consistency, so cooling this point through a range of $\beta$ reproduces the metal-to-antiferromagnetic-insulator crossover of Fig. 11, independently of which impurity solver is used.
+on the Bethe lattice at half filling ($\mu=0$), with $t=0.707106781186547=1/\sqrt{2}$ (half-bandwidth $D=2t=\sqrt{2}$) and $U=3$, so that $U=3D/\sqrt{2}$ as in [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13). `ANTIFERROMAGNET=true` allows the Néel self-consistency, so cooling this point through a range of $\beta$ reproduces the metal-to-antiferromagnetic-insulator crossover of Fig. 11, independently of which impurity solver is used.
 
 ### Parameters
 
@@ -29,7 +29,7 @@ Full annotated parameter files for each solver are given in the corresponding tu
 | :-------- | :------ | :----------------------------- | :----------------------------- | :---------------------------------- |
 | `SOLVER` | impurity solver | `"hybridization"` | `"Interaction Expansion"` | `"hirschfye"` |
 | `N` | imaginary-time discretization | $250$ | $500$ | $16$ (small by construction, see [DMFT-07](../dmft07#method-choice)) |
-| solver-specific | additional parameters | `N_MEAS`, `N_ORDER`, `SC_WRITE_DELTA` | `ALPHA`, `HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
+| solver-specific | additional parameters | `N_MEAS`, `N_HISTOGRAM_ORDERS`, `SC_WRITE_DELTA` | `ALPHA`, `HISTOGRAM_MEASUREMENT` | `TOLERANCE` |
 | shared | `U`, `t`, `BETA`, `MU`, `H`, `FLAVORS`, `ANTIFERROMAGNET`, `SYMMETRIZATION`, `NMATSUBARA`, `OMEGA_LOOP`, `SITES`, `SEED` | identical across all three solvers (see Model above) | | |
 
 ### Running the simulations

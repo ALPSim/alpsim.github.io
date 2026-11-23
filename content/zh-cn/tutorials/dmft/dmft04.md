@@ -9,7 +9,7 @@ toc: true
 
 Mott 转变是发生在许多材料中的金属-绝缘体转变（MIT），例如过渡金属化合物中，随压力或掺杂而发生。[Imada、Fujimori 与 Tokura 的综述文章，Rev. Mod. Phys. 70, 1039 (1998)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.70.1039) 对这一主题作了极好的介绍，并以 $V_2O_3$ 和有机化合物作为典型例子。
 
-由于相关物理本质上是局域的（或与动量 k 无关的），MIT 可以很容易地用 DMFT 来研究：在半满情形下，MIT 可以用一个在 $\omega=0$ 处存在极点的自能来描述，该极点将非相互作用能带劈裂为上、下两个 Hubbard 带。在此背景下，抑制反铁磁长程序、在 DMFT 模拟中强制得到顺磁解，以此来模拟顺磁绝缘相，是很有启发意义的。为此，将格林函数的自旋向上和自旋向下分量对称化（参数 `SYMMETRIZATION = 1;`）。
+由于相关物理本质上是局域的（或与动量 k 无关的），MIT 可以很容易地用 DMFT 来研究：在半满情形下，MIT 可以用一个在 $\omega=0$ 处存在极点的自能来描述，该极点将非相互作用能带劈裂为上、下两个 Hubbard 带。在此背景下，抑制反铁磁长程序、在 DMFT 模拟中强制得到顺磁解，以此来模拟顺磁绝缘相，是很有启发意义的。为此，将格林函数的自旋向上和自旋向下分量对称化（参数 `SYMMETRIZATION = true;`）。
 
 ### 模型
 
@@ -31,16 +31,15 @@ $$
 | `MU` | 化学势 | $0$（半满） |
 | `H`, `H_INIT` | 量子化轴方向的磁场／用于产生初始外斯场的种子场 | $0$ / $0$（不破坏对称性——见“方法选择”） |
 | `FLAVORS` | 自旋味的数目 | $2$ |
-| `ANTIFERROMAGNET` | 启用 Néel 自洽 | $0$（禁用——见“方法选择”） |
-| `SYMMETRIZATION` | 强制顺磁解（对味 0 和 1 做对称化） | $1$ |
+| `ANTIFERROMAGNET` | 启用 Néel 自洽 | `false`（禁用——见“方法选择”） |
+| `SYMMETRIZATION` | 强制顺磁解（对味 0 和 1 做对称化） | `true` |
 | `N`, `NMATSUBARA` | $G$ 与 $G_0$ 的虚时间／松原频率离散化数目 | $500$ |
 | `OMEGA_LOOP` | 在松原频率下进行自洽计算 | $1$ |
 | `MAX_IT`, `CONVERGED` | 自洽迭代的最大次数／收敛判据 | $20$、$0.001$ |
 | `SOLVER` | 杂质求解器 | `"hybridization"`（CT-HYB） |
-| `N_ORDER` | 杂化展开阶数直方图的大小 | $50$ |
+| `N_HISTOGRAM_ORDERS` | 杂化展开阶数直方图的大小 | $50$ |
 | `N_MEAS` | 测量之间的蒙特卡洛更新次数 | $1000$ |
 | `SC_WRITE_DELTA` | 为求解器写出杂化函数 | $1$ |
-| `CHECKPOINT` | 检查点／重启文件的文件名前缀 | `solverdump_U_`+`U` |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | 蒙特卡洛扫描数上限（随 $U$ 缩放）／热化扫描数／每次迭代的实际时间上限（秒） | $1500\,U$、$500$、$600$ |
 
 ### 运行模拟
@@ -58,8 +57,7 @@ parms=[]
 for u in [4.,5.,6.,8.]: 
     parms.append(
             { 
-              'ANTIFERROMAGNET'         : 0,
-              'CHECKPOINT'              : 'solverdump_U_'+str(u),
+              'ANTIFERROMAGNET'         : False,
               'CONVERGED'               : 0.001,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -70,13 +68,13 @@ for u in [4.,5.,6.,8.]:
               'N'                       : 500,
               'NMATSUBARA'              : 500, 
               'N_MEAS'                  : 1000,
-              'N_ORDER'                 : 50,
+              'N_HISTOGRAM_ORDERS'      : 50,
               'OMEGA_LOOP'              : 1,
               'SEED'                    : 0, 
               'SITES'                   : 1,              
               'SOLVER'                  : 'hybridization',
               'SC_WRITE_DELTA'          : 1,
-              'SYMMETRIZATION'          : 1,
+              'SYMMETRIZATION'          : True,
               't'                       : 1,
               'SWEEPS'                  : 1500*u,
               'BETA'                    : 20.0,
@@ -105,8 +103,7 @@ for p in parms:
 上述脚本生成的输入文件 `parm_u_4.0`，并附有注释：
 
 ```
-ANTIFERROMAGNET = 0                  // suppress Neel order to access the paramagnetic Mott solution
-CHECKPOINT = solverdump_U_4.0        // filename prefix for checkpoint/restart files
+ANTIFERROMAGNET = false              // suppress Neel order to access the paramagnetic Mott solution
 CONVERGED = 0.001                    // convergence criterion for the self-consistency iteration
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
 H = 0                                // magnetic field along the quantization axis
@@ -117,13 +114,13 @@ MU = 0                               // chemical potential; MU=0 is half filling
 N = 500                              // discretization of the imaginary-time Green's function
 NMATSUBARA = 500                     // cutoff for Matsubara frequencies
 N_MEAS = 1000                        // number of updates between measurements
-N_ORDER = 50                         // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50              // histogram size for the hybridization expansion order
 OMEGA_LOOP = 1                       // self-consistency runs in Matsubara frequencies
 SEED = 0                             // Monte Carlo random number seed
 SITES = 1                            // one impurity site, as in single-site DMFT
 SOLVER = "hybridization"             // the CT-HYB solver
 SC_WRITE_DELTA = 1                   // write out the hybridization function for the solver
-SYMMETRIZATION = 1                   // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
+SYMMETRIZATION = true                // enforce a paramagnetic solution (flavors 0 and 1 symmetrized)
 t = 1                                // hopping; for the Bethe lattice considered here $W=2D=4t$
 SWEEPS = 6000                        // total sweeps (1500*U at U=4)
 BETA = 20.0                          // inverse temperature
@@ -153,7 +150,7 @@ U = 4                                // interaction strength
 
 这里我们使用杂化展开求解器 CT-HYB（与 [DMFT-02 Hybridization](../dmft02) 相同），而不是相互作用展开求解器 CT-INT（[DMFT-03 Interaction](../dmft03) 中所用）。CT-INT 的平均展开阶数大致随 $\beta U$ 线性增长；在 $\beta t=20$ 且 $U/t$ 最高达到 $8$ 的情况下，这会使 CT-INT 的计算代价变得很高。相比之下，CT-HYB 对与浴的杂化做展开：在绝缘相深处，有效的低能杂质-浴耦合被抑制（杂质趋近原子极限），因此即使 $U$ 增大，平均杂化阶数也能保持在可控范围内——这与 CT-INT 的标度行为正好相反。因此，从金属相追踪解一直到 Mott 绝缘体，CT-HYB 是自然的选择。
 
-我们还刻意设置了 `ANTIFERROMAGNET = 0` 和 `SYMMETRIZATION = 1`。在（二分的）贝特格子上、半满情形下，对几乎任意 $U>0$，低温下反铁磁序都会占主导，从而掩盖本教程所研究的顺磁 Mott 转变。抑制 Néel 自洽并强制得到对称的（顺磁）解，可以把相互作用驱动的 MIT 单独分离出来，这模拟了真实 Mott 材料中几何阻挫抑制磁序的效果。
+我们还刻意设置了 `ANTIFERROMAGNET = false` 和 `SYMMETRIZATION = true`。在（二分的）贝特格子上、半满情形下，对几乎任意 $U>0$，低温下反铁磁序都会占主导，从而掩盖本教程所研究的顺磁 Mott 转变。抑制 Néel 自洽并强制得到对称的（顺磁）解，可以把相互作用驱动的 MIT 单独分离出来，这模拟了真实 Mott 材料中几何阻挫抑制磁序的效果。
 
 ### 识别金属-绝缘体转变
 
@@ -227,7 +224,7 @@ plt.show()
 
 通过抑制反铁磁序并在固定 $\beta t=20$ 下扫描 $U$，我们确定了贝特格子上半满 Hubbard 模型的顺磁 Mott 转变位于 $U/t=4.5$ 到 $U/t=5$ 之间，这与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 综述的 DMFT 相图一致。
 
-1. 将 `ANTIFERROMAGNET` 设为 $1$（如 [DMFT-02 Hybridization](../dmft02) 中那样），在相同的 $U$ 值下重新运行：反铁磁不稳定性是否会掩盖本教程所研究的顺磁解？
+1. 将 `ANTIFERROMAGNET` 设为 `true`（如 [DMFT-02 Hybridization](../dmft02) 中那样），在相同的 $U$ 值下重新运行：反铁磁不稳定性是否会掩盖本教程所研究的顺磁解？
 2. Mott 转变在低温下是一级转变，因此金属解与绝缘解可以共存。从一个已收敛的绝缘解出发，将其 `G0omega_output` 复制为新的 `G0OMEGA_INPUT`，尝试从绝缘体一侧收敛到更小的 $U$：绝缘解能在低于 $U/t\approx4.5$ 的范围内存续到多远？
 3. 在更高的温度（更小的 `BETA`）下重复该扫描：表观转变是否会变得更加平滑，从而与一条终止于有限温度临界点的一级转变线相符？
 4. 将 $U=8$ 处的 CT-HYB 计算与同一点处的 CT-INT（教程 03 所用求解器）计算进行比较：根据上文“方法选择”一节中的标度论证，哪个求解器收敛得更快？

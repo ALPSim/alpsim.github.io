@@ -31,8 +31,8 @@ $$
 | `MU` | 化学ポテンシャル | $0$（半充填） |
 | `H`, `H_INIT` | 量子化軸方向の磁場／初期外斯場を生成するための対称性破れの種となる磁場 | $0$ / $0.05$ |
 | `FLAVORS` | スピンフレーバー数 | $2$ |
-| `ANTIFERROMAGNET` | ネール型（2副格子）自己無撞着を有効化 | $1$ |
-| `SYMMETRIZATION` | 常磁性解を強制するか | $0$（反強磁性秩序を許すため） |
+| `ANTIFERROMAGNET` | ネール型（2副格子）自己無撞着を有効化 | `true` |
+| `SYMMETRIZATION` | 常磁性解を強制するか | `false`（反強磁性秩序を許すため） |
 | `N`, `NMATSUBARA` | $G$ と $G_0$ の虚時間／松原周波数離散化数 | $500$ |
 | `OMEGA_LOOP` | 自己無撞着計算を松原周波数で行う | $1$ |
 | `MAX_IT`, `CONVERGED` | 自己無撞着反復の最大回数／収束判定基準 | $10$、$0.005$（短縮版）；$18$、$0.003$（完全版） |
@@ -56,7 +56,7 @@ parms=[]
 for b in [6., 12.]:
     parms.append(
             {
-              'ANTIFERROMAGNET'         : 1,
+              'ANTIFERROMAGNET'         : True,
               'CONVERGED'               : 0.005,
               'FLAVORS'                 : 2,
               'H'                       : 0,
@@ -70,7 +70,7 @@ for b in [6., 12.]:
               'SEED'                    : 0,
               'SITES'                   : 1,
               'SOLVER'                  : 'Interaction Expansion',
-              'SYMMETRIZATION'          : 0,
+              'SYMMETRIZATION'          : False,
               'U'                       : 3,
               't'                       : 0.707106781186547,
               'SWEEPS'                  : 100000000,
@@ -102,13 +102,13 @@ for p in parms:
 
 ```
 H_INIT = 0.05                        // seed field for the initial Weiss field, breaks the up/down symmetry
-ANTIFERROMAGNET = 1                  // allow Neel order; meaningful for bipartite lattices in single-site DMFT
+ANTIFERROMAGNET = true               // allow Neel order; meaningful for bipartite lattices in single-site DMFT
 SEED = 0                             // Monte Carlo random number seed
 CONVERGED = 0.005                    // convergence criterion for the self-consistency iteration
 MAX_IT = 10                          // maximum number of self-consistency iterations
 SWEEPS = 100000000                   // upper bound on sweeps; in practice MAX_TIME stops the run first
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
-SYMMETRIZATION = 0                   // paramagnetic self-consistency is NOT enforced (we want AFM order)
+SYMMETRIZATION = false               // paramagnetic self-consistency is NOT enforced (we want AFM order)
 NMATSUBARA = 500                     // cutoff for Matsubara frequencies
 H = 0                                // magnetic field along the quantization axis
 OMEGA_LOOP = 1                       // self-consistency runs in Matsubara frequencies
