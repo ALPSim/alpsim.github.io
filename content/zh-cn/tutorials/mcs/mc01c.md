@@ -10,7 +10,7 @@ weight: 4
 本教程详细考察这个检验：它计算什么，它的截断值 $z_0$ 如何由标准正态分布 $\Phi$ 得到，在一切正常时它有多大概率通过，以及它能和不能发现哪些非平衡情形。
 
 我们把这个检验用于两个程序：用 `spinmc` 对二维伊辛模型做经典蒙特卡洛模拟，以及用有向圈随机级数展开程序 `dirloop_sse` 对自旋 1/2 海森堡反铁磁体做量子蒙特卡洛模拟。
-两者的主要结论相同：这个检验能发现持续了模拟大部分时间的漂移，会漏掉开始时短暂的暂态，而且只要时间序列存在自关联，它的误报就比其置信水平所暗示的更频繁。
+两者的主要结论相同：这个检验能发现持续了模拟大部分时间的漂移，对开始时幅度大但短暂的暂态反应很弱，而且只要时间序列存在自关联，它的误报就比其置信水平所暗示的更频繁。
 
 ## 稳态检验
 
@@ -68,6 +68,7 @@ ALPS 的 master 分支使用 $\Phi^{-1}((1+c)/2)$。
 
 ```Python
 import numpy as np
+from scipy.signal import lfilter
 from scipy.stats import norm
 
 def steady_state_z(ts):
@@ -77,6 +78,8 @@ def steady_state_z(ts):
     t = np.arange(1, N + 1)
     slope = np.polyfit(t, ts, 1)[0]
     error = np.std(ts, ddof=1) * np.sqrt(12. / (N * (N**2 - 1)))
+    if error == 0.:
+        return slope, error, 0.  # 常数序列，与 pyalps.checkSteadyState 相同
     return slope, error, abs(slope) / error
 
 def cutoff(c):
@@ -109,14 +112,10 @@ rng = np.random.default_rng(2026)
 N, samples = 128, 10000
 z0 = cutoff(0.6827)
 for a in [0., 0.5, 0.8, 0.95]:
-    z = np.empty(samples)
-    for k in range(samples):
-        noise = rng.normal(size=N)
-        series = np.empty(N)
-        series[0] = noise[0] / np.sqrt(1 - a**2)
-        for i in range(1, N):
-            series[i] = a * series[i - 1] + noise[i]
-        z[k] = steady_state_z(series)[2]
+    noise = rng.normal(size=(samples, N))
+    noise[:, 0] /= np.sqrt(1 - a**2)
+    series = lfilter([1.], [1., -a], noise, axis=1)
+    z = np.array([steady_state_z(s)[2] for s in series])
     tau = (1 + a) / (2 * (1 - a))
     print('%7.1f   %.3f' % (tau, np.mean(z < z0)))
 ```
@@ -241,7 +240,7 @@ parameter2xml parm1c_drift
 spinmc --Tmin 1 --write-xml parm1c_drift.in.xml
 
 parameter2xml parm1c_sse
-dirloop_sse --Tmin 1 parm1c_sse.in.xml
+dirloop_sse --Tmin 1 --write-xml parm1c_sse.in.xml
 ```
 
 然后在 Python 中对结果做检验（使用 pyalps 3.0.0 时，请先阅读末尾的说明）：
@@ -281,10 +280,14 @@ print('drift run: %d bins, z = %.2f, cutoff z0 = %.2f, passes: %s'
       % (len(ts), z, cutoff(0.6827), z < cutoff(0.6827)))
 
 data = pyalps.loadMeasurements(files, '|Magnetization|')
-for d in pyalps.checkSteadyState(data):
-    s = d.props['checkSteadyState']
-    print('pyalps.checkSteadyState: z = %.2f, z0 = %.2f, passes: %s'
-          % (s['statistics']['z'], s['statistics']['z0'], s['value']))
+try:
+    for d in pyalps.checkSteadyState(data):
+        s = d.props['checkSteadyState']
+        print('pyalps.checkSteadyState: z = %.2f, z0 = %.2f, passes: %s'
+              % (s['statistics']['z'], s['statistics']['z0'], s['value']))
+except AttributeError as error:
+    # pyalps 3.0.0 调用了当前 SciPy 中已不存在的 scipy.linspace
+    print('pyalps.checkSteadyState failed with this pyalps and SciPy:', error)
 ```
 
 在我们的运行中，输出如下：
@@ -370,10 +373,10 @@ parms = [{
     'INITIAL_CUTOFF' : 40000,
     'SWEEPS'         : 2000,
 } for run in range(NSTART)]
-input_file = pyalps.writeInputFiles('parm1c_sse', parms)
-pyalps.runApplication('dirloop_sse', input_file, Tmin=1)
+input_file = pyalps.writeInputFiles('parm1c_start_sse', parms)
+pyalps.runApplication('dirloop_sse', input_file, Tmin=1, writexml=True)
 
-files = pyalps.getResultFiles(prefix='parm1c_sse')
+files = pyalps.getResultFiles(prefix='parm1c_start_sse')
 series = [np.array(pyalps.loadTimeSeries(f, 'Energy')) for f in files]
 z = np.array([steady_state_z(ts)[2] for ts in series])
 z_rest = np.array([steady_state_z(ts[1:])[2] for ts in series])
@@ -391,9 +394,9 @@ fraction passing at c = 0.95 (z0 = 1.96): 0.6 with the first bin, 0.9 without
 ![](/figs/mc01c_sse_transient.png)
 
 能量在包含 16 次扫描的第一个分箱内就弛豫下来，这期间算符序列从空的初始状态增长起来。
-第一个分箱比平衡能量高出约 300，约为后面各分箱涨落的四十倍，然而图中这次模拟的 $z$ 只有 1.6：它以很小的差距没有通过默认的检验，而在 $c = 0.95$ 时通过。
+第一个分箱比平衡能量高出约 300，约为后面各分箱涨落的四十倍，然而图中这次模拟的 $z$ 只有 1.6：它没有通过 $z_0 = 1$ 的默认检验，但在 $c = 0.95$ 时通过。
 开头单独一个偏离的点只会产生显著性不高的斜率，而且它还会增大斜率所除的标准差 $s$。
-在 $c = 0.6827$ 时，十次模拟全都通不过，其中大多数只差一点；在 $c = 0.95$ 时，十次中有六次通过。
+在 $c = 0.6827$ 时，十次模拟全都通不过，所以在默认水平下检验确实发现了这个暂态，但 $z$ 只在 1.2 到 2.5 之间，远不如漂移模拟那样大；在 $c = 0.95$ 时，十次中有六次通过。
 这个检验是为发现整个序列上的线性趋势而设计的；局限在前几个分箱中的暂态，最好通过查看时间序列来发现，或者干脆热化几百次扫描来避免。
 
 ### 多次已平衡的模拟
@@ -414,7 +417,7 @@ fraction passing at c = 0.95 (z0 = 1.96): 0.6 with the first bin, 0.9 without
 **pyalps 3.0.0 及更早的版本。** `checkSteadyState` 使用截断值 $\Phi^{-1}(1 - c/2)$，默认值下约为 0.41，因此约有三分之二的无漂移序列通不过，而且 `confidenceInterval` 越大检验越严格。
 它还会调用 `scipy.linspace`，而较新的 SciPy 版本已经不再提供这个函数，因此会以 `AttributeError: Module 'scipy' has no attribute 'linspace'` 停止。
 这两个问题都已在 ALPS 的 master 分支中修复。
-本教程的脚本自己计算 $z$ 和 $z_0$，不受这两个问题的影响；如果要在 pyalps 3.0.0 中调用 `checkSteadyState`，请在导入 pyalps 之前运行以下代码：
+本教程的脚本自己计算 $z$ 和 $z_0$；如果 `tutorial1c_spinmc.py` 中唯一一次对 `checkSteadyState` 的调用失败，脚本会打印一条消息并继续运行。如果要在 pyalps 3.0.0 中调用 `checkSteadyState`，请在导入 pyalps 之前运行以下代码：
 
 ```Python
 # 仅适用于 pyalps 3.0.0：恢复较新 SciPy 版本中已移除的 NumPy 别名
@@ -433,7 +436,7 @@ for name in dir(np):
 ## 总结与展望
 
 `checkSteadyState` 把分箱后时间序列的拟合斜率除以假设分箱独立时的标准误差，如果比值小于 $z_0 = \Phi^{-1}((1+c)/2)$ 就通过。
-它能发现持续了模拟大部分时间的漂移，几乎察觉不到局限在前几个分箱中的暂态，而当相邻分箱相互关联时（例如 $T_c$ 处的局域更新），它让已平衡模拟不通过的频率远高于 $1 - c$。
+它能发现持续了模拟大部分时间的漂移，对局限在前几个分箱中的暂态，无论其多大，都只有很弱的反应，而当相邻分箱相互关联时（例如 $T_c$ 处的局域更新），它让已平衡模拟不通过的频率远高于 $1 - c$。
 请把它当作一种警告，与时间序列本身以及 [MC-01a](../mc01a) 中的分箱分析一起使用，而不是当作已经平衡的证明。
 
 1. 用 $c = 0.95$ 重新运行 `tutorial1c_spinmc.py` 的第二部分。局域更新和团簇更新的通过比例与 0.95 有多接近？

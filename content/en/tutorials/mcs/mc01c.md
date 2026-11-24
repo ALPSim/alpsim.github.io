@@ -10,7 +10,7 @@ A Monte Carlo simulation produces a Markov chain of configurations, and only aft
 This tutorial looks at that test in detail: what it computes, how its cutoff $z_0$ follows from the standard normal distribution $\Phi$, how often it passes when nothing is wrong, and which kinds of non-equilibrium it can and cannot detect.
 
 The test is applied to two applications: classical Monte Carlo of the 2D Ising model with `spinmc`, and quantum Monte Carlo of the spin-1/2 Heisenberg antiferromagnet with the directed-loop stochastic series expansion code `dirloop_sse`.
-In both, the main finding is the same: the test detects a drift that lasts a large part of the run, misses a short transient at the start, and raises false alarms more often than its confidence level suggests whenever the time series is autocorrelated.
+In both, the main finding is the same: the test detects a drift that lasts a large part of the run, reacts only weakly to a large but short transient at the start, and raises false alarms more often than its confidence level suggests whenever the time series is autocorrelated.
 
 ## The steady-state test
 
@@ -68,6 +68,7 @@ Its two functions reproduce `checkSteadyState`:
 
 ```Python
 import numpy as np
+from scipy.signal import lfilter
 from scipy.stats import norm
 
 def steady_state_z(ts):
@@ -77,6 +78,8 @@ def steady_state_z(ts):
     t = np.arange(1, N + 1)
     slope = np.polyfit(t, ts, 1)[0]
     error = np.std(ts, ddof=1) * np.sqrt(12. / (N * (N**2 - 1)))
+    if error == 0.:
+        return slope, error, 0.  # a constant series, as in pyalps.checkSteadyState
     return slope, error, abs(slope) / error
 
 def cutoff(c):
@@ -109,14 +112,10 @@ rng = np.random.default_rng(2026)
 N, samples = 128, 10000
 z0 = cutoff(0.6827)
 for a in [0., 0.5, 0.8, 0.95]:
-    z = np.empty(samples)
-    for k in range(samples):
-        noise = rng.normal(size=N)
-        series = np.empty(N)
-        series[0] = noise[0] / np.sqrt(1 - a**2)
-        for i in range(1, N):
-            series[i] = a * series[i - 1] + noise[i]
-        z[k] = steady_state_z(series)[2]
+    noise = rng.normal(size=(samples, N))
+    noise[:, 0] /= np.sqrt(1 - a**2)
+    series = lfilter([1.], [1., -a], noise, axis=1)
+    z = np.array([steady_state_z(s)[2] for s in series])
     tau = (1 + a) / (2 * (1 - a))
     print('%7.1f   %.3f' % (tau, np.mean(z < z0)))
 ```
@@ -241,7 +240,7 @@ parameter2xml parm1c_drift
 spinmc --Tmin 1 --write-xml parm1c_drift.in.xml
 
 parameter2xml parm1c_sse
-dirloop_sse --Tmin 1 parm1c_sse.in.xml
+dirloop_sse --Tmin 1 --write-xml parm1c_sse.in.xml
 ```
 
 Then apply the test to the results in Python (with pyalps 3.0.0, see the note at the end first):
@@ -281,10 +280,14 @@ print('drift run: %d bins, z = %.2f, cutoff z0 = %.2f, passes: %s'
       % (len(ts), z, cutoff(0.6827), z < cutoff(0.6827)))
 
 data = pyalps.loadMeasurements(files, '|Magnetization|')
-for d in pyalps.checkSteadyState(data):
-    s = d.props['checkSteadyState']
-    print('pyalps.checkSteadyState: z = %.2f, z0 = %.2f, passes: %s'
-          % (s['statistics']['z'], s['statistics']['z0'], s['value']))
+try:
+    for d in pyalps.checkSteadyState(data):
+        s = d.props['checkSteadyState']
+        print('pyalps.checkSteadyState: z = %.2f, z0 = %.2f, passes: %s'
+              % (s['statistics']['z'], s['statistics']['z0'], s['value']))
+except AttributeError as error:
+    # pyalps 3.0.0 calls scipy.linspace, which current SciPy no longer has
+    print('pyalps.checkSteadyState failed with this pyalps and SciPy:', error)
 ```
 
 In our run this printed:
@@ -370,10 +373,10 @@ parms = [{
     'INITIAL_CUTOFF' : 40000,
     'SWEEPS'         : 2000,
 } for run in range(NSTART)]
-input_file = pyalps.writeInputFiles('parm1c_sse', parms)
-pyalps.runApplication('dirloop_sse', input_file, Tmin=1)
+input_file = pyalps.writeInputFiles('parm1c_start_sse', parms)
+pyalps.runApplication('dirloop_sse', input_file, Tmin=1, writexml=True)
 
-files = pyalps.getResultFiles(prefix='parm1c_sse')
+files = pyalps.getResultFiles(prefix='parm1c_start_sse')
 series = [np.array(pyalps.loadTimeSeries(f, 'Energy')) for f in files]
 z = np.array([steady_state_z(ts)[2] for ts in series])
 z_rest = np.array([steady_state_z(ts[1:])[2] for ts in series])
@@ -391,9 +394,9 @@ fraction passing at c = 0.95 (z0 = 1.96): 0.6 with the first bin, 0.9 without
 ![](/figs/mc01c_sse_transient.png)
 
 The energy relaxes within the first bin of 16 sweeps, while the operator string grows from its empty initial state.
-That first bin lies about 300 above the equilibrium energy, some forty times the scatter of the later bins, yet the run plotted here has only $z = 1.6$: it fails the default test narrowly and passes at $c = 0.95$.
+That first bin lies about 300 above the equilibrium energy, some forty times the scatter of the later bins, yet the run plotted here has only $z = 1.6$: it fails the default test, where $z_0 = 1$, but passes at $c = 0.95$.
 A single outlying point at the start produces a slope of only modest significance, and it also raises the standard deviation $s$ that the slope is divided by.
-At $c = 0.6827$ all ten runs fail, most of them narrowly, and at $c = 0.95$ six of the ten pass.
+At $c = 0.6827$ all ten runs fail, so at the default level the test does flag the transient, but with $z$ between 1.2 and 2.5 rather than the large value of the drift run; at $c = 0.95$ six of the ten pass.
 The test is built to detect a linear trend over the whole series; a transient confined to the first bins is better found by looking at the time series, or simply avoided by thermalizing for a few hundred sweeps.
 
 ### Many equilibrated runs
@@ -414,7 +417,7 @@ Here each bin averages 32 sweeps, already longer than the autocorrelation time o
 **pyalps 3.0.0 and earlier.** `checkSteadyState` uses the cutoff $\Phi^{-1}(1 - c/2)$, about 0.41 at the default, so it fails about two thirds of series without drift, and a larger `confidenceInterval` makes it stricter.
 It also calls `scipy.linspace`, which newer SciPy releases no longer provide, so it stops with `AttributeError: Module 'scipy' has no attribute 'linspace'`.
 Both are fixed in the ALPS master branch.
-The scripts of this tutorial compute $z$ and $z_0$ themselves and do not depend on either; to call `checkSteadyState` with pyalps 3.0.0, run the following before importing pyalps:
+The scripts of this tutorial compute $z$ and $z_0$ themselves; if the one call of `checkSteadyState` in `tutorial1c_spinmc.py` fails, the script prints a message and goes on. To call `checkSteadyState` with pyalps 3.0.0, run the following before importing pyalps:
 
 ```Python
 # pyalps 3.0.0 only: restore the NumPy aliases that newer SciPy releases removed
@@ -433,7 +436,7 @@ This changes the number of bins, not the behavior of the test.
 ## Summary and outlook
 
 `checkSteadyState` divides the fitted slope of the binned time series by its standard error for independent bins and passes if the ratio is below $z_0 = \Phi^{-1}((1+c)/2)$.
-It catches a drift that lasts a large part of the run, barely notices a transient confined to the first bins, and fails equilibrated runs far more often than $1 - c$ when consecutive bins are correlated, as for local updates at $T_c$.
+It catches a drift that lasts a large part of the run, reacts only weakly to a transient confined to the first bins, however large, and fails equilibrated runs far more often than $1 - c$ when consecutive bins are correlated, as for local updates at $T_c$.
 Use it as a warning, together with the time series itself and the binning analysis of [MC-01a](../mc01a), not as proof of equilibration.
 
 1. Rerun Part 2 of `tutorial1c_spinmc.py` with $c = 0.95$. How close are the pass fractions of local and cluster updates to 0.95?

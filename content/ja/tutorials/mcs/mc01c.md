@@ -10,7 +10,7 @@ weight: 4
 このチュートリアルでは、この検定を詳しく見ていきます。何を計算しているのか、カットオフ $z_0$ が標準正規分布 $\Phi$ からどのように決まるのか、何も問題がないときにどれくらいの割合で合格するのか、そしてどのような非平衡を検出でき、どのようなものを検出できないのかを調べます。
 
 検定は 2 つのアプリケーションに適用します。`spinmc` による 2 次元イジング模型の古典モンテカルロと、有向ループの確率級数展開コード `dirloop_sse` によるスピン 1/2 ハイゼンベルク反強磁性体の量子モンテカルロです。
-どちらでも主な結論は同じです。この検定は実行の大部分にわたって続くドリフトは検出しますが、開始直後の短い過渡的な振る舞いは見逃し、時系列に自己相関があると、信頼水準から予想されるよりも頻繁に誤検出を起こします。
+どちらでも主な結論は同じです。この検定は実行の大部分にわたって続くドリフトは検出しますが、開始直後の大きく短い過渡的な振る舞いには弱くしか反応せず、時系列に自己相関があると、信頼水準から予想されるよりも頻繁に誤検出を起こします。
 
 ## 定常状態の検定
 
@@ -71,6 +71,7 @@ ALPS の master ブランチでは $\Phi^{-1}((1+c)/2)$ を使っています。
 
 ```Python
 import numpy as np
+from scipy.signal import lfilter
 from scipy.stats import norm
 
 def steady_state_z(ts):
@@ -80,6 +81,8 @@ def steady_state_z(ts):
     t = np.arange(1, N + 1)
     slope = np.polyfit(t, ts, 1)[0]
     error = np.std(ts, ddof=1) * np.sqrt(12. / (N * (N**2 - 1)))
+    if error == 0.:
+        return slope, error, 0.  # 定数の系列。pyalps.checkSteadyState と同じ扱い
     return slope, error, abs(slope) / error
 
 def cutoff(c):
@@ -112,14 +115,10 @@ rng = np.random.default_rng(2026)
 N, samples = 128, 10000
 z0 = cutoff(0.6827)
 for a in [0., 0.5, 0.8, 0.95]:
-    z = np.empty(samples)
-    for k in range(samples):
-        noise = rng.normal(size=N)
-        series = np.empty(N)
-        series[0] = noise[0] / np.sqrt(1 - a**2)
-        for i in range(1, N):
-            series[i] = a * series[i - 1] + noise[i]
-        z[k] = steady_state_z(series)[2]
+    noise = rng.normal(size=(samples, N))
+    noise[:, 0] /= np.sqrt(1 - a**2)
+    series = lfilter([1.], [1., -a], noise, axis=1)
+    z = np.array([steady_state_z(s)[2] for s in series])
     tau = (1 + a) / (2 * (1 - a))
     print('%7.1f   %.3f' % (tau, np.mean(z < z0)))
 ```
@@ -244,7 +243,7 @@ parameter2xml parm1c_drift
 spinmc --Tmin 1 --write-xml parm1c_drift.in.xml
 
 parameter2xml parm1c_sse
-dirloop_sse --Tmin 1 parm1c_sse.in.xml
+dirloop_sse --Tmin 1 --write-xml parm1c_sse.in.xml
 ```
 
 続いて、Python で結果に検定を適用します（pyalps 3.0.0 を使う場合は、先に最後の注意を読んでください）。
@@ -284,10 +283,14 @@ print('drift run: %d bins, z = %.2f, cutoff z0 = %.2f, passes: %s'
       % (len(ts), z, cutoff(0.6827), z < cutoff(0.6827)))
 
 data = pyalps.loadMeasurements(files, '|Magnetization|')
-for d in pyalps.checkSteadyState(data):
-    s = d.props['checkSteadyState']
-    print('pyalps.checkSteadyState: z = %.2f, z0 = %.2f, passes: %s'
-          % (s['statistics']['z'], s['statistics']['z0'], s['value']))
+try:
+    for d in pyalps.checkSteadyState(data):
+        s = d.props['checkSteadyState']
+        print('pyalps.checkSteadyState: z = %.2f, z0 = %.2f, passes: %s'
+              % (s['statistics']['z'], s['statistics']['z0'], s['value']))
+except AttributeError as error:
+    # pyalps 3.0.0 は現在の SciPy にない scipy.linspace を呼び出す
+    print('pyalps.checkSteadyState failed with this pyalps and SciPy:', error)
 ```
 
 私たちの実行では次のように出力されました。
@@ -373,10 +376,10 @@ parms = [{
     'INITIAL_CUTOFF' : 40000,
     'SWEEPS'         : 2000,
 } for run in range(NSTART)]
-input_file = pyalps.writeInputFiles('parm1c_sse', parms)
-pyalps.runApplication('dirloop_sse', input_file, Tmin=1)
+input_file = pyalps.writeInputFiles('parm1c_start_sse', parms)
+pyalps.runApplication('dirloop_sse', input_file, Tmin=1, writexml=True)
 
-files = pyalps.getResultFiles(prefix='parm1c_sse')
+files = pyalps.getResultFiles(prefix='parm1c_start_sse')
 series = [np.array(pyalps.loadTimeSeries(f, 'Energy')) for f in files]
 z = np.array([steady_state_z(ts)[2] for ts in series])
 z_rest = np.array([steady_state_z(ts[1:])[2] for ts in series])
@@ -394,9 +397,9 @@ fraction passing at c = 0.95 (z0 = 1.96): 0.6 with the first bin, 0.9 without
 ![](/figs/mc01c_sse_transient.png)
 
 エネルギーは 16 スイープからなる最初のビンの中で緩和し、その間に演算子列は空の初期状態から成長します。
-最初のビンは平衡エネルギーよりおよそ 300 高く、後のビンのばらつきの 40 倍ほどですが、図に示した実行の $z$ は 1.6 にすぎません。既定の検定にはわずかの差で不合格となり、$c = 0.95$ では合格します。
+最初のビンは平衡エネルギーよりおよそ 300 高く、後のビンのばらつきの 40 倍ほどですが、図に示した実行の $z$ は 1.6 にすぎません。$z_0 = 1$ の既定の検定には不合格ですが、$c = 0.95$ では合格します。
 開始時の外れた点が 1 つだけでは、傾きはそれほど有意になりません。しかもその点は、傾きを割る標準偏差 $s$ も大きくします。
-$c = 0.6827$ では 10 回すべてが不合格ですが、その多くはわずかの差であり、$c = 0.95$ では 10 回のうち 6 回が合格します。
+$c = 0.6827$ では 10 回すべてが不合格で、既定の水準では検定は過渡的な振る舞いを捉えています。ただし $z$ は 1.2 から 2.5 にとどまってドリフトする実行のような大きな値にはならず、$c = 0.95$ では 10 回のうち 6 回が合格します。
 この検定は系列全体にわたる線形な傾向を検出するためのものです。最初のいくつかのビンに限られた過渡的な振る舞いは、時系列を見て見つけるか、単に数百スイープ熱化して避けるのがよいでしょう。
 
 ### 平衡化済みの多数の実行
@@ -417,7 +420,7 @@ $c = 0.6827$ では 10 回すべてが不合格ですが、その多くはわず
 **pyalps 3.0.0 以前。** `checkSteadyState` はカットオフ $\Phi^{-1}(1 - c/2)$ を使います。これは既定値で約 0.41 なので、ドリフトのない系列のおよそ 3 分の 2 が不合格になり、`confidenceInterval` を大きくすると検定は厳しくなります。
 また `scipy.linspace` を呼び出しますが、新しい SciPy にはこの関数がもうないため、`AttributeError: Module 'scipy' has no attribute 'linspace'` で停止します。
 どちらも ALPS の master ブランチで修正済みです。
-このチュートリアルのスクリプトは $z$ と $z_0$ を自分で計算するので、どちらの影響も受けません。pyalps 3.0.0 で `checkSteadyState` を呼び出すには、pyalps を import する前に次のコードを実行してください。
+このチュートリアルのスクリプトは $z$ と $z_0$ を自分で計算します。`tutorial1c_spinmc.py` で 1 回だけ呼び出す `checkSteadyState` が失敗した場合は、メッセージを表示して先に進みます。pyalps 3.0.0 で `checkSteadyState` を呼び出すには、pyalps を import する前に次のコードを実行してください。
 
 ```Python
 # pyalps 3.0.0 のみ：新しい SciPy で削除された NumPy の別名を復元する
@@ -436,7 +439,7 @@ for name in dir(np):
 ## まとめと展望
 
 `checkSteadyState` は、ビンにまとめた時系列のあてはめの傾きを、ビンが独立だと仮定した標準誤差で割り、その比が $z_0 = \Phi^{-1}((1+c)/2)$ より小さければ合格とします。
-実行の大部分にわたって続くドリフトは検出しますが、最初のいくつかのビンに限られた過渡的な振る舞いにはほとんど気づかず、連続するビンが相関しているとき（たとえば $T_c$ での局所更新）には、平衡化済みの実行を $1 - c$ よりはるかに高い頻度で不合格にします。
+実行の大部分にわたって続くドリフトは検出しますが、最初のいくつかのビンに限られた過渡的な振る舞いには、それがどれほど大きくても弱くしか反応せず、連続するビンが相関しているとき（たとえば $T_c$ での局所更新）には、平衡化済みの実行を $1 - c$ よりはるかに高い頻度で不合格にします。
 平衡化の証明としてではなく、時系列そのものや [MC-01a](../mc01a) のビニング解析と組み合わせた警告として使ってください。
 
 1. `tutorial1c_spinmc.py` の第 2 部を $c = 0.95$ で実行し直してください。局所更新とクラスター更新の合格割合は 0.95 にどれくらい近いでしょうか。
