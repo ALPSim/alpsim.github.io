@@ -106,8 +106,7 @@ In our runs this gave about $1.5 \times 10^5$ measurements with local updates an
 
 The most direct way to check equilibration is to plot the time series of a measured observable.
 We load the magnetization time series of both runs and plot them.
-ALPS does not store every single measurement in the time series: it keeps at most about 128 bins, and the bin size doubles as the run grows.
-Each entry returned by `loadTimeSeries` is the *sum* of the measurements in one bin, so we divide by the bin size (a power of two, recovered here from the mean) to obtain $|M|$ per site, and place each point at the middle of its bin:
+Each point is the average of $|M|$ over one bin of consecutive measurements:
 
 ```Python
 for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
@@ -132,6 +131,11 @@ for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
     plt.legend()
 plt.show()
 ```
+
+{{< callout type="info" >}}
+**How the time series is stored.** ALPS does not store every single measurement in the time series: it keeps at most about 128 bins, and the bin size doubles as the run grows.
+Each entry returned by `loadTimeSeries` is the *sum* of the measurements in one bin, so the script divides by the bin size (a power of two, recovered here from the mean) to obtain $|M|$ per site, and places each point at the middle of its bin.
+{{< /callout >}}
 
 Inspect the resulting plot: the observable should settle to a roughly stationary value after an initial transient.
 If the time series is still drifting at the end of the run, or if it shows a clear trend in the early sweeps that extends well into the measurement phase, the thermalization period (`THERMALIZATION`) is too short and must be increased.
