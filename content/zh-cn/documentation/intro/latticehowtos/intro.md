@@ -35,6 +35,8 @@ weight: 1
 | 8 | `simple cubic lattice` | `L`（长度）、`W`（宽度，默认为 `L`）、`H`（高度，默认为 `W`） | 周期性、均匀 |
 | 9 | `inhomogeneous simple cubic lattice` | `L`（长度）、`W`（宽度，默认为 `L`）、`H`（高度，默认为 `W`） | 开放、非均匀 |
 
+非均匀晶格（7 和 9）可以让 `mu` 等耦合随每个格点的位置变化；参见[随位置变化的耦合](../../modeldef/inhomogeneous)。
+
 ![ALPS 中常用的晶格（图）](../figs/commonalpslattices.jpg)
 
 ### 晶格（图）的完整存档

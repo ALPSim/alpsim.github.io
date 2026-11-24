@@ -16,7 +16,7 @@ ALPS applications on lattices specify the lattice with the following three param
 | :------------ | :---------- | :---------- |
 | LATTICE_LIBRARY | lattices.xml | path to a file containing lattice descriptions |
 | LATTICE | | name of the lattice, specified by dimensionality, extent and unit cell |
-| GRAPH | | as an alternative to LATTICE, a specific arbitrary graph defined in the lattice library can be referenced directly |
+| GRAPH | | as an alternative to LATTICE, a specific arbitrary graph defined in the lattice library can be referenced directly. `worm` does not accept a GRAPH; see [Position-Dependent Couplings](../modeldef/inhomogeneous) |
 
 In addition, the lattice description can require further parameters (e.g. L or W) as specified in the lattice description file.
 
@@ -30,6 +30,8 @@ ALPS quantum lattice models can be specified using the following parameters (see
 | MODEL | | name of the model (for example "spin" or "boson") |
 
 The model description can also require further parameters (e.g. S=1/2 or S=1, h=0.5 for spin models, t=1.5 or mu=0.5 for boson models) as specified in the model description file.
+
+Parameter values can also be expressions in other parameters. On an inhomogeneous lattice they can depend on the position of each site or bond, for example `mu="mu_left - slope*x"` for a tilted chemical potential, or be random; see [Position-Dependent Couplings](../modeldef/inhomogeneous).
 
 ## Parameters for finite temperature simulations
 

@@ -19,7 +19,7 @@ $$
 \hat{H} = -t\sum_{\langle i,j\rangle,\sigma} \left(\hat{c}^\dagger_{i\sigma}\hat{c}_{j\sigma} + \text{h.c.}\right) + U\sum_i \hat{n}_{i\uparrow}\hat{n}_{i\downarrow} - \mu\sum_{i,\sigma}\hat{n}_{i\sigma}
 $$
 
-处于贝特格子上、半满（$\mu=0$）情形，取 $t=0.707106781186547=1/\sqrt{2}$（半带宽 $D=2t=\sqrt{2}$）、$U=3$，使得 $U=3D/\sqrt{2}$，与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 一致。与教程 02 一样，`ANTIFERROMAGNET=1` 允许 Néel 自洽，因此在一系列 $\beta$ 下冷却同一物理点，会重现相同的金属到反铁磁绝缘体的转变——只不过这次使用的是 [Hirsch and Fye (1986)](https://doi.org/10.1103/PhysRevLett.56.2521) 提出的离散时间 Hirsch-Fye 求解器，而非连续时间求解器。
+处于贝特格子上、半满（$\mu=0$）情形，取 $t=0.707106781186547=1/\sqrt{2}$（半带宽 $D=2t=\sqrt{2}$）、$U=3$，使得 $U=3D/\sqrt{2}$，与 [Georges et al. (1996)](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.68.13) 一致。与教程 02 一样，`ANTIFERROMAGNET=true` 允许 Néel 自洽，因此在一系列 $\beta$ 下冷却同一物理点，会重现相同的金属到反铁磁绝缘体的转变——只不过这次使用的是 [Hirsch and Fye (1986)](https://doi.org/10.1103/PhysRevLett.56.2521) 提出的离散时间 Hirsch-Fye 求解器，而非连续时间求解器。
 
 ### 参数
 
@@ -31,8 +31,8 @@ $$
 | `MU` | 化学势 | $0$（半满） |
 | `H`, `H_INIT` | 量子化轴方向的磁场／用于产生初始外斯场的种子场 | $0$ / $0.05$ |
 | `FLAVORS` | 自旋味的数目 | $2$ |
-| `ANTIFERROMAGNET` | 启用 Néel 自洽 | $1$ |
-| `SYMMETRIZATION` | 是否强制顺磁解 | $0$（我们希望允许反铁磁序） |
+| `ANTIFERROMAGNET` | 启用 Néel 自洽 | `true` |
+| `SYMMETRIZATION` | 是否强制顺磁解 | `false`（我们希望允许反铁磁序） |
 | `N` | 虚时间片数，$\Delta\tau=\beta/N$ | $16$——刻意取小值，见“方法选择” |
 | `NMATSUBARA` | 自洽计算中使用的松原频率截断 | $500$ |
 | `OMEGA_LOOP` | 在松原频率下进行自洽计算 | $1$ |
@@ -57,7 +57,7 @@ parms=[]
 for b in [6., 12.]:
     parms.append(
             { 
-              'ANTIFERROMAGNET'     : 1,
+              'ANTIFERROMAGNET'     : True,
               'CONVERGED'           : 0.005,
               'FLAVORS'             : 2,
               'H'                   : 0,
@@ -71,7 +71,7 @@ for b in [6., 12.]:
               'SEED'                : 0, 
               'SITES'               : 1,
               'SOLVER'              : 'hirschfye',
-              'SYMMETRIZATION'      : 0,
+              'SYMMETRIZATION'      : False,
               'TOLERANCE'           : 0.001,
               'U'                   : 3,
               't'                   : 0.707106781186547,
@@ -116,7 +116,7 @@ plt.show()
 上述脚本生成的输入文件 `parm_beta_6.0`，并附有注释：
 
 ```
-ANTIFERROMAGNET = 1                  // allow Neel order; meaningful for bipartite lattices in single-site DMFT
+ANTIFERROMAGNET = true               // allow Neel order; meaningful for bipartite lattices in single-site DMFT
 CONVERGED = 0.005                    // convergence criterion for the self-consistency iteration
 FLAVORS = 2                          // flavors 0 and 1 correspond to spin up and down
 H = 0                                // magnetic field along the quantization axis
@@ -130,7 +130,7 @@ OMEGA_LOOP = 1                        // self-consistency runs in Matsubara freq
 SEED = 0                              // Monte Carlo random number seed
 SITES = 1                             // one impurity site, as in single-site DMFT
 SOLVER = "hirschfye"                  // the discrete-time Hirsch-Fye solver
-SYMMETRIZATION = 0                    // paramagnetic self-consistency is NOT enforced (we want AFM order)
+SYMMETRIZATION = false                // paramagnetic self-consistency is NOT enforced (we want AFM order)
 TOLERANCE = 0.001                     // internal convergence tolerance of the Hirsch-Fye solver
 U = 3                                 // interaction strength
 t = 0.707106781186547                 // hopping; for the Bethe lattice considered here $W=2D=4t$

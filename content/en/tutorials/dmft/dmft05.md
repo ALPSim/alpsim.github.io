@@ -36,14 +36,13 @@ with orbital index $m=0,1$, intra-orbital hopping $t_m$, intra-orbital (Hubbard)
 | `MU` | chemical potential | $0$ (half filling) |
 | `H`, `H_INIT` | quantization-axis field / seed field for the initial Weiss field | $0$ / $0$ |
 | `FLAVORS` | number of flavors: 2 orbitals $\times$ 2 spins | $4$ (flavors 0,1 = narrow band $\uparrow,\downarrow$; flavors 2,3 = wide band $\uparrow,\downarrow$) |
-| `SYMMETRIZATION` | enforce spin-symmetric solutions within each orbital (flavor 0$\leftrightarrow$1, 2$\leftrightarrow$3) | $1$ |
+| `SYMMETRIZATION` | enforce spin-symmetric solutions within each orbital (flavor 0$\leftrightarrow$1, 2$\leftrightarrow$3) | `true` |
 | `N`, `NMATSUBARA` | imaginary-time / Matsubara discretization of $G$ and $G_0$ | $500$ |
 | `MAX_IT`, `CONVERGED` | maximum self-consistency iterations / convergence threshold | $15$, $0.001$ |
 | `SOLVER` | impurity solver | `"hybridization"` (CT-HYB, segment representation) |
-| `N_ORDER` | histogram size for the hybridization expansion order | $50$ |
+| `N_HISTOGRAM_ORDERS` | histogram size for the hybridization expansion order | $50$ |
 | `N_MEAS` | number of Monte Carlo updates between measurements | $2000$ |
 | `SC_WRITE_DELTA` | write the hybridization function for the solver | $1$ |
-| `CHECKPOINT` | filename prefix for checkpoint/restart files | `dump` |
 | `SWEEPS`, `THERMALIZATION`, `MAX_TIME` | Monte Carlo sweep budget, thermalization sweeps, wall-clock cutoff per iteration (seconds) | $10000$, $500$, $600$ |
 
 ### Running the simulation
@@ -74,11 +73,11 @@ for u,j in [[1.8,0.45],[2.2,0.55],[2.8,0.7]]:
               'N'                   : 500,
               'NMATSUBARA'          : 500,
               'N_MEAS'              : 2000,
-              'N_ORDER'             : 50,
+              'N_HISTOGRAM_ORDERS'  : 50,
               'SEED'                : 0,
               'SOLVER'              : 'hybridization',
               'SC_WRITE_DELTA'      : 1,
-              'SYMMETRIZATION'      : 1,
+              'SYMMETRIZATION'      : True,
               'SWEEPS'              : 10000,
               'BETA'                : 30,
               'THERMALIZATION'      : 500,
@@ -86,7 +85,6 @@ for u,j in [[1.8,0.45],[2.2,0.55],[2.8,0.7]]:
               'J'                   : j,
               't0'                  : 0.5,
               't1'                  : 1,
-              'CHECKPOINT'          : 'dump'
         }
         )
 
@@ -121,11 +119,11 @@ MU = 0                            // chemical potential; MU=0 is half filling
 N = 500                           // discretization of the imaginary-time Green's function
 NMATSUBARA = 500                  // cutoff for Matsubara frequencies
 N_MEAS = 2000                     // number of updates between measurements
-N_ORDER = 50                      // histogram size for the hybridization expansion order
+N_HISTOGRAM_ORDERS = 50           // histogram size for the hybridization expansion order
 SEED = 0                          // Monte Carlo random number seed
 SOLVER = "hybridization"          // the CT-HYB solver (segment representation, requires density-density interactions)
 SC_WRITE_DELTA = 1                // write out the hybridization function for the solver
-SYMMETRIZATION = 1                // enforce spin-symmetric solutions within each orbital (flavors 0<->1 and 2<->3)
+SYMMETRIZATION = true             // enforce spin-symmetric solutions within each orbital (flavors 0<->1 and 2<->3)
 SWEEPS = 10000                    // total sweeps
 BETA = 30                         // inverse temperature
 THERMALIZATION = 500              // thermalization sweeps
@@ -133,7 +131,6 @@ U = 1.8                           // intra-orbital (Hubbard) interaction
 J = 0.45                          // Hund's coupling
 t0 = 0.5                          // hopping of the narrow band (half-bandwidth D0=2t0=1)
 t1 = 1                            // hopping of the wide band (half-bandwidth D1=2t1=2)
-CHECKPOINT = dump                 // filename prefix for checkpoint/restart files
 ```
 
 Note that $U'$ is not set explicitly: as documented in the [DMFT parameter reference](../../../documentation/methods/dmft), it defaults to $U-2J$ whenever it is not given.

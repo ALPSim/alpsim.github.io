@@ -42,6 +42,24 @@ parameter2xml parm1a
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
+为了与团簇更新作比较，第二个参数文件 `parm1b` 除更新方式外与 `parm1a` 完全相同：
+
+```
+LATTICE="square lattice"
+T=2.269186
+J=1
+THERMALIZATION=10000
+SWEEPS=50000
+UPDATE="cluster"
+MODEL="Ising"
+{L=48;}
+```
+
+```
+parameter2xml parm1b
+spinmc --Tmin 10 --write-xml parm1b.in.xml
+```
+
 ### 在 Python 中准备并运行模拟
 
 完整脚本见 <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" data-filename="tutorial1a.py" target="_blank" rel="noopener">`tutorial1a.py`</a>。
@@ -49,6 +67,7 @@ spinmc --Tmin 10 --write-xml parm1a.in.xml
 
 ```Python
 import pyalps
+import numpy as np
 import matplotlib.pyplot as plt
 
 parms = [{
@@ -59,60 +78,105 @@ parms = [{
     'T'               : 2.269186,
     'THERMALIZATION'  : 10000,
     'SWEEPS'          : 50000,
+    'UPDATE'          : "local",
     }]
+
+parms_cluster = [dict(parms[0], UPDATE="cluster")]
 ```
 
-把参数写入 XML 输入文件并运行 `spinmc`：
+`UPDATE` 用于选择局域单自旋更新（`"local"`）或团簇更新（`"cluster"`）。
+对于像这里的伊辛模型这样无阻挫的模型，如果省略该参数，`spinmc` 会使用团簇更新，因此这里显式地设定它，并定义第二组除更新方式外完全相同的参数，用于团簇更新的模拟。
+注意步数的含义：局域更新时一步是对所有格点的一次扫描，而团簇更新时 `SWEEPS` 计数的是单次 Wolff 团簇翻转（每次翻转测量一次）；在两种情况下，`THERMALIZATION` 都按翻转的自旋数除以格点数来计数。
+
+把两组参数分别写入 XML 输入文件并运行 `spinmc`：
 
 ```Python
 input_file = pyalps.writeInputFiles('parm1a', parms)
 pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
+
+input_file = pyalps.writeInputFiles('parm1b', parms_cluster)
+pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 ```
+
+`Tmin` 是调度器两次检查模拟是否结束之间的最短时间（单位：秒）。
+在下一次检查之前模拟会继续测量，因此一次运行得到的测量次数可能多于 `SWEEPS`。
+在我们的运行中，局域更新得到约 $1.5 \times 10^5$ 次测量，团簇更新得到约 $2.5 \times 10^5$ 次测量，所以下图的时间轴超过了 50000 步。
 
 ### 检查时间序列
 
 检验平衡化最直接的办法是画出某个可观测量的时间序列。
-我们从输出文件中载入磁化强度的时间序列并作图：
+我们载入两次运行的磁化强度时间序列并作图。
+每个点是一个分箱内连续测量值的 $|M|$ 平均值：
 
 ```Python
-files = pyalps.getResultFiles(prefix='parm1a')
-ts_M = pyalps.loadTimeSeries(files[0], '|Magnetization|')
+for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
+    files = pyalps.getResultFiles(prefix=prefix)
+    ts_M = np.array(pyalps.loadTimeSeries(files[0], '|Magnetization|'))
+    M = pyalps.loadMeasurements(files, '|Magnetization|')[0][0].y[0].mean
 
-plt.plot(ts_M)
-plt.xlabel('Monte Carlo sweep')
-plt.ylabel('|Magnetization|')
-plt.title('Magnetization time series')
+    # ts_M 的每个元素是一个分箱内每格点 |M| 测量值的总和
+    binsize = 2 ** int(round(np.log2(ts_M.mean() / M)))
+    sweeps = (np.arange(len(ts_M)) + 0.5) * binsize
+
+    plt.figure()
+    plt.plot(sweeps, ts_M / binsize, 'o-')
+    plt.axhline(M, ls='--', color='gray', label='mean')
+    plt.ylim(0, 1)
+    # spinmc 在局域更新时把一步计为对整个格子的一次扫描，
+    # 而在团簇更新时把一步计为单次 Wolff 团簇翻转
+    unit = 'sweeps' if update == 'local' else 'cluster updates'
+    plt.xlabel('Monte Carlo ' + unit)
+    plt.ylabel('|Magnetization| per site')
+    plt.title('T = T_c, %s updates (each point: mean over %d %s)' % (update, binsize, unit))
+    plt.legend()
 plt.show()
 ```
 
+{{< callout type="info" >}}
+**时间序列的存储方式。** ALPS 并不在时间序列中保存每一次测量：它最多保留约 128 个分箱，分箱大小随运行的进行而加倍。
+`loadTimeSeries` 返回的每个元素是一个分箱内所有测量值的*总和*，因此脚本将其除以分箱大小（2 的幂，这里由平均值求出）才能得到每格点的 $|M|$，并把每个点放在其分箱的中点。
+{{< /callout >}}
+
 检查所得的图：可观测量应当在经过初始的暂态之后稳定到一个大致不变的数值。
 如果时间序列在模拟结束时仍在漂移，或者在最初的若干扫描中呈现出明显的趋势并一直延伸到测量阶段，那就说明热化期（`THERMALIZATION`）太短，必须加长。
-对于上面的参数（`THERMALIZATION=10000`），时间序列已经围绕一个稳定的均值涨落，没有可见的漂移，说明热化是充分的：
+对于上面的参数（`THERMALIZATION=10000`），两次运行都围绕一个稳定的均值涨落，没有可见的漂移，说明热化是充分的。
+不过这两条时间序列看起来非常不同：
 
-![](/figs/mcs01btimeseries.png)
+![](/figs/mcs01btimeseries_local.png)
+
+使用局域更新时，即使在 2048 次扫描上取平均，$|M|$ 仍在约 0.3 到 0.7 之间大幅摆动。
+这并不是没有达到平衡——序列没有漂移——而是*临界慢化*：在 $T_c$ 处，单自旋更新的自相关时间达到数百次扫描甚至更长（参见 [MC-01a](../mc01a)）。
+因此相邻分箱之间强烈相关，整个运行中独立样本的数目相对较少。
+
+![](/figs/mcs01btimeseries_cluster.png)
+
+团簇更新一次翻转整个关联的团簇，几次团簇更新之内就能去关联，因此各分箱的平均值都接近均值 $\langle |M| \rangle \approx 0.62$。
+单次测量本身仍有很大的涨落（每次测量的标准差约为 0.17，这是真实的临界涨落），但这些涨落在每个分箱内被平均掉了。
+两次运行给出的均值在误差范围内一致——在我们的运行中，局域更新为 $0.611 \pm 0.010$，团簇更新为 $0.622 \pm 0.001$——但团簇更新的误差棒要小十倍以上。
 
 ### 自动检查：`pyalps.checkSteadyState`
 
-与其用肉眼判断平衡化，不如使用 `pyalps.checkSteadyState`，它通过统计检验来判定时间序列是否已经达到稳定分布。
+与其用肉眼判断平衡化，不如使用 `pyalps.checkSteadyState` 检验时间序列中是否存在线性漂移。
+它对时间序列做直线拟合，如果拟合斜率与零相容，即 $|\text{slope}| / \sigma_\text{slope} < z_0$，则通过检验，其中 $z_0$ 是所选 `confidenceInterval` 对应的双侧正态分位数。
 它返回带有标记的数据，指明每个可观测量是否通过了检验。
-默认的置信水平是 68.27%（一个标准差）；这个值可以提高：
+`confidenceInterval` 的默认值是 68.27%，对应 $z_0 = 1$（一个标准差）。
+提高这个值会扩大接受区域（90% 对应 $z_0 \approx 1.64$），因此数值越大，检验越*宽松*，而不是越严格。
+在 pyalps 3.0.0 及更早的版本中，截断值使用的是互补的置信水平，$z_0 = \Phi^{-1}(1 - \texttt{confidenceInterval}/2)$（默认值下约为 0.41，90% 时约为 0.13），因此在这些版本中数值越大检验越严格：
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# 默认：68.27% 置信区间
+# 默认：68.27%，|slope| < 1.0 sigma 时通过
 data = pyalps.checkSteadyState(data)
 
-# 更严格：90% 置信区间
+# 更宽松：90%，|slope| < 1.64 sigma 时通过
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
 
-pyalps 3.0.0 中的 `checkSteadyState` 会调用 `scipy.linspace`，而较新的 SciPy 版本已经不再提供这个函数，因此会报错：
+通过这项检验并不能证明已经达到平衡：它只能发现线性趋势，因此自相关以及马尔可夫链困在构型空间某一区域的情况需要另行检查，例如借助上面的时间序列图。
 
-```
-AttributeError: Module 'scipy' has no attribute 'linspace'
-```
-
+{{< callout type="warning" >}}
+**pyalps 3.0.0 与 SciPy。** pyalps 3.0.0 中的 `checkSteadyState` 会调用 `scipy.linspace`，而较新的 SciPy 版本已经不再提供这个函数，因此会报错 `AttributeError: Module 'scipy' has no attribute 'linspace'`。
 这个问题已在 ALPS 的 master 分支中修复。在修复发布之前，请在导入 pyalps 之前运行以下代码：
 
 ```Python
@@ -124,6 +188,7 @@ for name in dir(np):
     if not hasattr(scipy, name):
         setattr(scipy, name, getattr(np, name))
 ```
+{{< /callout >}}
 
 ## 收敛性
 
@@ -148,9 +213,7 @@ data = pyalps.checkConvergence(data)
 <summary style="font-weight: 600; cursor: pointer">1. 把 <code>THERMALIZATION</code> 期大幅缩短（例如缩短到 100 次扫描）。你能在时间序列中看到初始的暂态吗？<code>checkSteadyState</code> 会把它标记出来吗？</summary>
 <div style="margin: 0.6rem 0 0 1.2rem; padding-left: 0.9rem; border-left: 3px solid rgba(128,128,128,0.35)">
 
-上面的 Python 参数没有设置 `UPDATE`，在这种情况下 `spinmc` 对这个模型使用团簇更新。
-团簇更新只需几次更新就能完成热化，因此 100 步的热化已经绰绰有余。
-为了让这个问题更有意义，请使用局域更新：
+请像 `parm1a` 那样使用局域更新：团簇更新只需几次更新就能完成热化，对它们来说 100 步的热化已经绰绰有余。
 
 ```Python
 # 仅适用于 pyalps 3.0.0：参见 checkSteadyState 一节中关于 SciPy 的说明
@@ -204,15 +267,14 @@ plt.show()
 看不到初始暂态，原因有三：
 
 - 测量在热化阶段结束之后才开始，因此前 100 次扫描根本不会出现在时间序列中。
-- ALPS 最多只保留约 128 个分箱，并随着模拟的进行把分箱大小加倍。这里每个点是 1024 次扫描的平均值，因此前一千次扫描内发生的任何变化都被平均进了第一个点。
+- 每个点是一个包含 1024 次扫描的分箱的平均值（见上文的“时间序列的存储方式”），因此前一千次扫描内发生的任何变化都被平均进了第一个点。
 - `spinmc` 从所有自旋朝上的状态出发。在 $T_c$ 处，磁化强度大约在前一千次扫描内从这个状态弛豫下来（见问题 2 中的图），这同样落在第一个点之内。
 
 图中较深的下凹也不是暂态，而是局域更新在 $T_c$ 处缓慢的临界涨落（临界慢化，参见 [MC-01a](../mc01a)）。
 要看到暂态本身，请把 `THERMALIZATION` 设为 0 并减少 `SWEEPS`，使分箱变短，就像问题 2 那样。
 
 在我们的运行中，`checkSteadyState` 输出了 `False`，但这并不能说明 100 次扫描太少。
-这项检查对时间序列拟合一条直线，只有当斜率与零相容时才算通过。
-在 pyalps 3.0.0 中，默认的判据是 $|\text{slope}| / \sigma_\text{slope} < 0.41$，因此即使是充分平衡的模拟，大多数时候也通不过（问题 4 展示了这一点）。
+在 pyalps 3.0.0 中，默认的判据是 $|\text{slope}| / \sigma_\text{slope} < 0.41$（见上文 `checkSteadyState` 一节），因此即使是充分平衡的模拟，大多数时候也通不过，问题 4 展示了这一点。
 反过来，通过检查也不能证明已经平衡，因为它只能检测线性漂移。
 请务必同时查看时间序列。
 </div>
@@ -264,7 +326,7 @@ plt.legend(loc='center right')
 plt.show()
 ```
 
-由于 `Tmin` 的缘故（见问题 3），模拟会远远超过 1000 次扫描。
+由于 `Tmin` 的缘故（见上文关于 `Tmin` 的说明），模拟会远远超过 1000 次扫描。
 
 ![](/figs/mc01b_q2_relaxation.png)
 
@@ -336,7 +398,7 @@ SWEEPS = 500000   measurements = 509100   |M| = 0.04106 +/- 0.00010   error * sq
 ```
 
 `SWEEPS` 并不是测量次数。
-当 `Tmin=1` 时，调度器每秒检查一次模拟是否已经完成，而模拟会一直测量到下一次检查为止，因此 5000 次扫描的运行实际进行了约 26000 次测量。
+正如上文关于 `Tmin` 的说明，模拟会一直测量到调度器的下一次检查为止（这里每秒检查一次），因此 5000 次扫描的运行实际进行了约 26000 次测量。
 如果按 `SWEEPS` 比较，误差棒看不出明显的规律。
 如果按实际测量次数比较，三次运行的 $\text{error} \cdot \sqrt{N}$ 都约为 0.07，正如 $1/\sqrt{N}$ 标度所预言的那样。
 

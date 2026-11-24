@@ -29,8 +29,8 @@ weight: 9
 | **名称** | **说明** |
 | :------- | :-------------- |
 | OMEGA_LOOP | 设为 1，除非你想使用半圆形态密度（对应于无穷维的 Bethe 晶格） |
-| ANTIFERROMAGNET | 若为 1，则采用反铁磁自洽循环（A.Georges 等人 1996 年综述中的公式 97） |
-|SYMMETRIZATION | 若为 1，则强制得到顺磁解（在 2.1 之前的版本中：有几处误拼为 SYMMATRIZATION，并且两者都被使用，因此需要把 SYMMETRIZATION 和它设为相同的值） |
+| ANTIFERROMAGNET | 若为 true，则采用反铁磁（奈尔）自洽循环（A.Georges 等人 1996 年综述中的公式 97）；此时 `H` 和 `H_INIT` 作为交错场起作用。不能与 `SYMMETRIZATION = true` 同时使用 |
+|SYMMETRIZATION | 若为 true，则通过对味 0 和 1 取平均来强制得到顺磁解；由于平均会消除任何磁场，要求 `H = 0` 且 `H_INIT = 0`（在 2.1 之前的版本中：有几处误拼为 SYMMATRIZATION，并且两者都被使用，因此需要把 SYMMETRIZATION 和它设为相同的值） |
 | MAX_IT | 自洽循环的最大迭代次数（通常 10-20 次就足够了） |
 | CONVERGED | 在达到 MAX_IT 之前停止自洽循环的判据——如果松原表示下格林函数的最大变化小于 CONVERGED，循环将停止 |
 | TOLERANCE | （仅用于 hirschfyesim）同上 |
@@ -40,9 +40,8 @@ weight: 9
 
 | **名称** | **说明** |
 | :------- | :-------------- |
-| GENERAL_FOURIER_TRANFORMER | 如果使用 OMEGA_LOOP 且晶格不是 Bethe 晶格，请打开此选项 |
-| EPS_i (i=0,1,...,FLAVORS-1) | 味 i 的势能平移（GENERAL_FOURIER_TRANSFORMER 所必需） |
-| EPSSQ_i (i=0,1,...,FLAVORS-1) | 味 i 的能带结构二阶矩（GENERAL_FOURIER_TRANSFORMER 所必需） |
+| EPS_i (i=0,1,...,FLAVORS-1) | 味 i 的势能平移，用于傅里叶变换的高频尾部 |
+| EPSSQ_i (i=0,1,...,FLAVORS-1) | 味 i 的能带结构二阶矩，用于傅里叶变换的高频尾部 |
 | DOSFILE | 设定包含态密度的文件名（应有 2 列，分别为能量值和该能量处对应的态密度；要求能量等间距；由于采用 Simpson 积分，要求行数为奇数） |
 | TWODBS | 打开二维体系的希尔伯特变换，目前支持正方晶格（含最近邻和次近邻跃迁）和六角晶格（含最近邻跃迁）\[注：可以很容易地添加其他二维晶格\] |
 | L | 在 TWODBS 打开时可用的可选参数；定义自洽中积分的线性离散化点数的一半（默认：200） |
@@ -52,14 +51,15 @@ weight: 9
 
 | **名称** | **说明** |
 | :------- | :-------------- |
-| H_INIT | 沿量子化轴（通常为 $z$）方向的磁场，用于计算无相互作用的初始 G0（若未加载） |
+| H | 沿量子化轴（通常为 $z$）方向的磁场：味 0 感受到 $\mu-h$，味 1 感受到 $\mu+h$。当 `ANTIFERROMAGNET = true` 时为交错场，否则为均匀场。ALPS 3.0.0 在自洽循环中对均匀场的处理有误，因此在该版本中仅在 `ANTIFERROMAGNET = true` 时使用磁场 |
+| H_INIT | 在计算初始 G0（若未加载）和第一次迭代时代替 `H` 使用的磁场，用于在开始时打破自旋对称性 |
 | G0OMEGA_INPUT | 指定松原频率 $i\omega_n$ 下 Weiss 场的文本文件名（应有 1+FLAVORS 列，共 NMATSUBARA 行，仅与 OMEGA_LOOP 一起使用） |
 | G0TAU_INPUT | 指定虚时间表示下 Weiss 场的文本文件名（应有 1+FLAVORS 列，共 $N+1$ 行，仅在 OMEGA_LOOP 关闭时使用） |
 | GOMEGA_input | 指定写入松原表示下初始 G0 的文本文件名（默认不写出，因为它与 G0_omega_1 相同） |
 | G0TAU_input | 用于输出虚时间下初始 G0 的文本文件名（默认不写出，因为它与 G0_tau_1 相同） |
 | G0OMEGA_output | 包含松原频率下最终 Weiss 场的输出文件名（默认为 G0omega_output）（与 OMEGA_LOOP 一起使用） |
 | G0TAU_output | 包含松原频率下最终 Weiss 场的输出文件名（默认为 G0tau_output）（OMEGA_LOOP 关闭时） |
-| INSULATING | 如果指定了此选项，初始 G0 将按绝缘极限设定 |
+| INSULATING | 若为 true，初始 G0 取原子极限 $1/(i\omega_n+\mu\pm h)$，作为在金属解与绝缘解共存区域得到绝缘解的出发点。不要与 `G0OMEGA_INPUT` 或 `G0TAU_INPUT` 同时使用；ALPS 3.0.0 会忽略输入文件。ALPS 3.0.0 中只要给出该参数（即使取值为 false）就会从原子极限开始，因此要关闭它请直接省略该参数 |
 
 ### 设定格林函数和 Weiss 场表示精度的参数
 
@@ -76,12 +76,11 @@ weight: 9
 | SWEEPS | 计算中希望执行的扫描次数（建议：设得非常大，例如 $10^9$，求解器将在 MAX_TIME 给出的时间限制处停止） |
 | THERMALIZATION | 在蒙特卡洛测量之前、为使构型接近平衡所进行的扫描次数（约为 1000 量级） |
 | EPSSQAV | 能带结构的二阶矩（如果你指定了自己的 DOSFILE，则必须设置） |
-| N_ORDER | 设定直方图大小（若杂化阶数更大，则不会存入直方图）（取 100 量级的值可能比较合理） |
+| N_HISTOGRAM_ORDERS | 设定直方图大小（若杂化阶数更大，则不会存入直方图）（默认值 50） |
 | N_MEAS | 两次测量之间的蒙特卡洛步数（约为 10000 量级） |
 | N_SHIFT | 单个蒙特卡洛步中链段平移的次数（似乎未被使用，因此设为 0） |
 | MEASURE_FOURPOINT | 若打开，则测量四点关联函数 |
 | N4point | （仅在 MEASURE_FOURPOINT 打开时使用）目前暂无说明 |
-| CHECKPOINT | 检查点文件以及最终 h5 和 xml 输出的文件名前缀 |
 
 ### 相互作用展开1杂质求解器参数 
 
@@ -101,7 +100,7 @@ weight: 9
 | NMATSUBARA_MEASUREMENTS | （默认：NMATSUBARA） |
 | HISTOGRAM_MEASUREMENT | （默认：false） |
 | GET_COMPACTED_MEASUREMENTS | |
-| ATOMIC | |
+| ATOMIC | 不要在 `dmft` 中设置：它会在每次迭代中用原子极限替换浴，使自洽循环的结果错误。若要从原子极限开始循环，请使用 `INSULATING` |
 | TAU_DISCRETIZATION_FOR_EXP | |
 | CHECKPOINT | 检查点文件以及最终 h5 和 xml 输出的文件名前缀 |
 
