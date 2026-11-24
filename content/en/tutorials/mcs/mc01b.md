@@ -86,7 +86,7 @@ parms_cluster = [dict(parms[0], UPDATE="cluster")]
 
 `UPDATE` selects local single-spin updates (`"local"`) or cluster updates (`"cluster"`).
 If it is omitted, `spinmc` uses cluster updates for unfrustrated models such as this Ising model, so we set it explicitly and define a second, otherwise identical, parameter set for a cluster-update run.
-Note what the step counts mean: with local updates one step is a sweep over all sites, but with cluster updates `SWEEPS` counts single Wolff cluster flips (one measurement each), while `THERMALIZATION` counts flipped spins divided by the number of sites in both cases.
+Note what the step counts mean: with local updates one step is a sweep over all sites, but with cluster updates `SWEEPS` counts single Wolff cluster flips (one measurement each), while `THERMALIZATION` counts sweeps for local updates and the summed cluster size divided by the number of sites for cluster updates.
 
 Write both parameter sets to XML input files and run `spinmc`:
 
@@ -99,8 +99,8 @@ pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 ```
 
 `Tmin` is the minimum time in seconds between the scheduler's checks of whether a simulation has finished.
-The simulation keeps measuring until the next check, so a run can contain more than `SWEEPS` measurements.
-In our runs this gave about $1.5 \times 10^5$ measurements with local updates and $2.5 \times 10^5$ with cluster updates, which is why the time axes in the figures below extend beyond 50000 steps.
+With ALPS 3.0.0 the simulation keeps measuring until the next check, so a run can contain more than `SWEEPS` measurements; the ALPS master branch stops after exactly `SWEEPS`.
+In our runs, made with ALPS 3.0.0, this gave about $1.5 \times 10^5$ measurements with local updates and $2.5 \times 10^5$ with cluster updates, which is why the time axes in the figures below extend beyond 50000 steps.
 
 ### Inspecting the time series
 
