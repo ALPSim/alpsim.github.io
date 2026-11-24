@@ -326,7 +326,7 @@ plt.legend(loc='center right')
 plt.show()
 ```
 
-The runs go on well past 1000 sweeps because of `Tmin` (see the note on `Tmin` above).
+With ALPS 3.0.0, which produced these figures, the runs go on well past 1000 sweeps because of `Tmin` (see the note on `Tmin` above).
 
 ![](/figs/mc01b_q2_relaxation.png)
 
@@ -398,7 +398,7 @@ SWEEPS = 500000   measurements = 509100   |M| = 0.04106 +/- 0.00010   error * sq
 ```
 
 `SWEEPS` is not the number of measurements.
-As explained above for `Tmin`, a run keeps measuring until the scheduler's next check, once per second here, so the 5000-sweep run actually took about 26000 measurements.
+As explained above for `Tmin`, with ALPS 3.0.0 a run keeps measuring until the scheduler's next check, once per second here, so the 5000-sweep run actually took about 26000 measurements. On the ALPS master branch it takes exactly 5000.
 Compared by `SWEEPS`, the error bars seem to follow no clear rule.
 Compared by the actual number of measurements, $\text{error} \cdot \sqrt{N}$ is about 0.07 for all three runs, as $1/\sqrt{N}$ scaling predicts.
 
