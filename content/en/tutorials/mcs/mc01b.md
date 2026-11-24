@@ -42,6 +42,24 @@ parameter2xml parm1a
 spinmc --Tmin 10 --write-xml parm1a.in.xml
 ```
 
+To compare with cluster updates, a second parameter file `parm1b` is identical except for the update scheme:
+
+```
+LATTICE="square lattice"
+T=2.269186
+J=1
+THERMALIZATION=10000
+SWEEPS=50000
+UPDATE="cluster"
+MODEL="Ising"
+{L=48;}
+```
+
+```
+parameter2xml parm1b
+spinmc --Tmin 10 --write-xml parm1b.in.xml
+```
+
 ### Preparing and running the simulation in Python
 
 The full script is available as <a class="alps-download" href="https://raw.githubusercontent.com/ALPSim/ALPS/master/tutorials/mc-01b-equilibration-and-convergence/tutorial1a.py" data-filename="tutorial1a.py" target="_blank" rel="noopener">`tutorial1a.py`</a>.
@@ -49,6 +67,7 @@ It begins by importing the required modules and defining the simulation paramete
 
 ```Python
 import pyalps
+import numpy as np
 import matplotlib.pyplot as plt
 
 parms = [{
@@ -59,53 +78,102 @@ parms = [{
     'T'               : 2.269186,
     'THERMALIZATION'  : 10000,
     'SWEEPS'          : 50000,
+    'UPDATE'          : "local",
     }]
+
+parms_cluster = [dict(parms[0], UPDATE="cluster")]
 ```
 
-Write the parameters to an XML input file and run `spinmc`:
+`UPDATE` selects local single-spin updates (`"local"`) or cluster updates (`"cluster"`).
+If it is omitted, `spinmc` uses cluster updates for unfrustrated models such as this Ising model, so we set it explicitly and define a second, otherwise identical, parameter set for a cluster-update run.
+Note what the step counts mean: with local updates one step is a sweep over all sites, but with cluster updates `SWEEPS` counts single Wolff cluster flips (one measurement each), while `THERMALIZATION` counts flipped spins divided by the number of sites in both cases.
+
+Write both parameter sets to XML input files and run `spinmc`:
 
 ```Python
 input_file = pyalps.writeInputFiles('parm1a', parms)
 pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
+
+input_file = pyalps.writeInputFiles('parm1b', parms_cluster)
+pyalps.runApplication('spinmc', input_file, Tmin=10, writexml=True)
 ```
+
+`Tmin` is the minimum time in seconds between the scheduler's checks of whether a simulation has finished.
+The simulation keeps measuring until the next check, so a run can contain more than `SWEEPS` measurements.
+In our runs this gave about $1.5 \times 10^5$ measurements with local updates and $2.5 \times 10^5$ with cluster updates, which is why the time axes in the figures below extend beyond 50000 steps.
 
 ### Inspecting the time series
 
 The most direct way to check equilibration is to plot the time series of a measured observable.
-We load the magnetization time series from the output file and plot it:
+We load the magnetization time series of both runs and plot them.
+Each point is the average of $|M|$ over one bin of consecutive measurements:
 
 ```Python
-files = pyalps.getResultFiles(prefix='parm1a')
-ts_M = pyalps.loadTimeSeries(files[0], '|Magnetization|')
+for prefix, update in [('parm1a', 'local'), ('parm1b', 'cluster')]:
+    files = pyalps.getResultFiles(prefix=prefix)
+    ts_M = np.array(pyalps.loadTimeSeries(files[0], '|Magnetization|'))
+    M = pyalps.loadMeasurements(files, '|Magnetization|')[0][0].y[0].mean
 
-plt.plot(ts_M)
-plt.xlabel('Monte Carlo sweep')
-plt.ylabel('|Magnetization|')
-plt.title('Magnetization time series')
+    # each entry of ts_M is the sum of |M| per site over one bin of measurements
+    binsize = 2 ** int(round(np.log2(ts_M.mean() / M)))
+    sweeps = (np.arange(len(ts_M)) + 0.5) * binsize
+
+    plt.figure()
+    plt.plot(sweeps, ts_M / binsize, 'o-')
+    plt.axhline(M, ls='--', color='gray', label='mean')
+    plt.ylim(0, 1)
+    # spinmc counts one step as a full sweep for local updates,
+    # but as a single Wolff cluster flip for cluster updates
+    unit = 'sweeps' if update == 'local' else 'cluster updates'
+    plt.xlabel('Monte Carlo ' + unit)
+    plt.ylabel('|Magnetization| per site')
+    plt.title('T = T_c, %s updates (each point: mean over %d %s)' % (update, binsize, unit))
+    plt.legend()
 plt.show()
 ```
 
+{{< callout type="info" >}}
+**How the time series is stored.** ALPS does not store every single measurement in the time series: it keeps at most about 128 bins, and the bin size doubles as the run grows.
+Each entry returned by `loadTimeSeries` is the *sum* of the measurements in one bin, so the script divides by the bin size (a power of two, recovered here from the mean) to obtain $|M|$ per site, and places each point at the middle of its bin.
+{{< /callout >}}
+
 Inspect the resulting plot: the observable should settle to a roughly stationary value after an initial transient.
 If the time series is still drifting at the end of the run, or if it shows a clear trend in the early sweeps that extends well into the measurement phase, the thermalization period (`THERMALIZATION`) is too short and must be increased.
-For the parameters above (`THERMALIZATION=10000`), the time series already fluctuates around a stable mean with no visible drift, indicating that thermalization was sufficient:
+For the parameters above (`THERMALIZATION=10000`), both runs fluctuate around a stable mean with no visible drift, indicating that thermalization was sufficient.
+The two time series nevertheless look very different:
 
-![](/figs/mcs01btimeseries.png)
+![](/figs/mcs01btimeseries_local.png)
+
+With local updates, $|M|$ still swings between about 0.3 and 0.7 even after averaging over 2048 sweeps.
+This is not a failure to equilibrate — there is no drift — but *critical slowing down*: at $T_c$ the autocorrelation time of single-spin updates is hundreds of sweeps or more (see [MC-01a](../mc01a)).
+Consecutive bins are therefore strongly correlated, and the run contains comparatively few independent samples.
+
+![](/figs/mcs01btimeseries_cluster.png)
+
+Cluster updates flip whole correlated clusters and decorrelate within a few cluster updates, so the bin averages stay close to the mean, $\langle |M| \rangle \approx 0.62$.
+Individual measurements still fluctuate strongly (a standard deviation of about 0.17 per measurement, a genuine critical fluctuation), but these fluctuations average out within each bin.
+Both runs give the same mean within their error bars — in our runs $0.611 \pm 0.010$ with local updates and $0.622 \pm 0.001$ with cluster updates — but the cluster-update error bar is more than ten times smaller.
 
 ### Automated check: `pyalps.checkSteadyState`
 
-Rather than judging equilibration by eye, `pyalps.checkSteadyState` applies a statistical test to determine whether a time series has reached a stationary distribution.
+Rather than judging equilibration by eye, `pyalps.checkSteadyState` tests the time series for a linear drift.
+It fits a straight line to the time series and passes if the fitted slope is compatible with zero, i.e. if $|\text{slope}| / \sigma_\text{slope} < z_0$, where $z_0$ is the two-sided normal quantile for the chosen `confidenceInterval`.
 It returns the data annotated with a flag indicating whether each observable has passed the test.
-The default confidence level is 68.27% (one sigma); this can be raised:
+The default `confidenceInterval` is 68.27%, giving $z_0 = 1$ (one sigma).
+Raising it widens the acceptance region (90% gives $z_0 \approx 1.64$), so a larger value makes the check *more lenient*, not stricter.
+In pyalps 3.0.0 and earlier the cutoff used the complementary level, $z_0 = \Phi^{-1}(1 - \texttt{confidenceInterval}/2)$ (about 0.41 at the default and 0.13 at 90%), so there a larger value made the check stricter:
 
 ```Python
 data = pyalps.loadMeasurements(pyalps.getResultFiles(prefix='parm1a'), '|Magnetization|')
 
-# Default: 68.27% confidence interval
+# Default: 68.27%, passes if |slope| < 1.0 sigma
 data = pyalps.checkSteadyState(data)
 
-# Stricter: 90% confidence interval
+# More lenient: 90%, passes if |slope| < 1.64 sigma
 data = pyalps.checkSteadyState(data, confidenceInterval=0.9)
 ```
+
+Passing this check does not prove equilibration: it only detects a linear trend, so autocorrelation and a chain stuck in one region of configuration space have to be inspected separately, for example with the time-series plots above.
 
 ## Convergence
 
