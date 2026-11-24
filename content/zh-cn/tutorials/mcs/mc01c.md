@@ -290,17 +290,17 @@ for d in pyalps.checkSteadyState(data):
 在我们的运行中，输出如下：
 
 ```
-drift run: 111 bins, z = 7.09, cutoff z0 = 1.00, passes: False
-pyalps.checkSteadyState: z = 7.09, z0 = 0.41, passes: False
+drift run: 124 bins, z = 8.45, cutoff z0 = 1.00, passes: False
+pyalps.checkSteadyState: z = 8.45, z0 = 1.00, passes: False
 ```
 
-手工计算的 $z$ 与库函数的结果一致。
-库函数输出 $z_0 = 0.41$，是因为这次运行用的是 pyalps 3.0.0；使用 ALPS 的 master 分支时它输出 $z_0 = 1.00$，无论哪种情况这次模拟都通不过。
+手工计算的 $z$ 和 $z_0$ 与库函数的结果一致。
+使用 pyalps 3.0.0 时，库函数会输出 $z_0 = 0.41$（见末尾的说明），这次模拟同样通不过。
 
 ![](/figs/mc01c_spinmc_drift.png)
 
 `spinmc` 从所有自旋朝上的状态出发，磁化强度先在几百次扫描内从 1 弛豫到约 0.6。
-此后它一直在约 0.45 到 0.75 之间缓慢游荡：在 $T_c$ 处，$128 \times 128$ 晶格上局域更新的自关联时间远长于这次模拟。
+此后它一直在约 0.35 到 0.75 之间缓慢游荡：在 $T_c$ 处，$128 \times 128$ 晶格上局域更新的自关联时间远长于这次模拟。
 检验不通过是正确的：在这次模拟的时间尺度上，磁化强度并不处于稳态，无论把这种缓慢游荡称为初始弛豫的尾声还是临界慢化。
 
 ### 多次已平衡的模拟
@@ -332,14 +332,14 @@ for update in ['local', 'cluster']:
 ```
 
 ```
-local   updates: 100 runs, fraction passing at c = 0.6827: 0.43 (expected 0.68)
-cluster updates: 100 runs, fraction passing at c = 0.6827: 0.64 (expected 0.68)
+local   updates: 100 runs, fraction passing at c = 0.6827: 0.41 (expected 0.68)
+cluster updates: 100 runs, fraction passing at c = 0.6827: 0.72 (expected 0.68)
 ```
 
 | 更新方式 | 模拟次数 | $c = 0.6827$ 时的通过比例 | 分箱独立时的预期值 |
 |---|---|---|---|
-| 局域 | 100 | 0.43 | 0.68 |
-| 团簇 | 100 | 0.64 | 0.68 |
+| 局域 | 100 | 0.41 | 0.68 |
+| 团簇 | 100 | 0.72 | 0.68 |
 
 模拟 100 次时，这些比例的统计不确定度约为 $\pm 0.05$。
 团簇更新的模拟以名义通过率通过，它们的 $z$ 值服从标准正态变量 $Z$ 的 $|Z|$ 的分布。
@@ -382,18 +382,18 @@ z_rest = np.array([steady_state_z(ts[1:])[2] for ts in series])
 在我们的运行中，输出如下：
 
 ```
-runs without thermalization: z = 1.0 2.2 1.8 1.9 0.9 1.7 1.9 1.2 2.1 1.8
-the same runs without the first bin: z = 1.3 1.8 0.7 0.8 1.5 0.3 0.9 0.7 1.4 0.6
-fraction passing at c = 0.6827 (z0 = 1.00): 0.1 with the first bin, 0.6 without
-fraction passing at c = 0.95 (z0 = 1.96): 0.8 with the first bin, 1.0 without
+runs without thermalization: z = 1.6 2.1 1.8 2.5 1.2 2.1 1.8 1.8 2.1 1.4
+the same runs without the first bin: z = 0.3 1.4 0.3 3.1 1.6 1.8 0.4 0.4 1.5 0.6
+fraction passing at c = 0.6827 (z0 = 1.00): 0.0 with the first bin, 0.5 without
+fraction passing at c = 0.95 (z0 = 1.96): 0.6 with the first bin, 0.9 without
 ```
 
 ![](/figs/mc01c_sse_transient.png)
 
-能量在包含 64 次扫描的第一个分箱内就弛豫下来，这期间算符序列从空的初始状态增长起来。
-第一个分箱比平衡能量高出约 75，约为后面各分箱涨落的十五倍，然而图中这次模拟的 $z = 1.0$，通过了默认的检验。
+能量在包含 16 次扫描的第一个分箱内就弛豫下来，这期间算符序列从空的初始状态增长起来。
+第一个分箱比平衡能量高出约 300，约为后面各分箱涨落的四十倍，然而图中这次模拟的 $z$ 只有 1.6：它以很小的差距没有通过默认的检验，而在 $c = 0.95$ 时通过。
 开头单独一个偏离的点只会产生显著性不高的斜率，而且它还会增大斜率所除的标准差 $s$。
-在 $c = 0.6827$ 时，这些模拟大多通不过，但只差一点；在 $c = 0.95$ 时，十次中有八次通过。
+在 $c = 0.6827$ 时，十次模拟全都通不过，其中大多数只差一点；在 $c = 0.95$ 时，十次中有六次通过。
 这个检验是为发现整个序列上的线性趋势而设计的；局限在前几个分箱中的暂态，最好通过查看时间序列来发现，或者干脆热化几百次扫描来避免。
 
 ### 多次已平衡的模拟
@@ -406,7 +406,7 @@ fraction passing at c = 0.95 (z0 = 1.96): 0.8 with the first bin, 1.0 without
 
 ![](/figs/mc01c_sse_z.png)
 
-这里每个分箱平均了 128 次扫描，远长于 SSE 能量的自关联时间，因此各分箱几乎独立，检验以名义通过率通过，与团簇更新的伊辛模拟相同。
+这里每个分箱平均了 32 次扫描，已经长于 SSE 能量的自关联时间，因此各分箱几乎独立，检验以名义通过率通过，与团簇更新的伊辛模拟相同。
 
 ## pyalps 3.0.0
 
@@ -426,7 +426,7 @@ for name in dir(np):
         setattr(scipy, name, getattr(np, name))
 ```
 
-本页的结果是用 pyalps 3.0.0 得到的，在这个版本中，一次模拟会一直测量到调度器的下一次检查，因而测量次数可能多于 `SWEEPS`（见 [MC-01b](../mc01b) 中的 `Tmin`）；在 ALPS 的 master 分支中，一次模拟恰好进行 `SWEEPS` 次测量。
+本页的结果是用 ALPS 的 master 分支得到的，在这个分支中，一次模拟恰好进行 `SWEEPS` 次测量。使用 pyalps 3.0.0 时，一次模拟会一直测量到调度器的下一次检查（见 [MC-01b](../mc01b) 中的 `Tmin`），因而测量次数可能更多。
 这改变的是分箱的数目，而不是检验的行为。
 {{< /callout >}}
 

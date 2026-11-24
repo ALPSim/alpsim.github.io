@@ -290,17 +290,17 @@ for d in pyalps.checkSteadyState(data):
 In our run this printed:
 
 ```
-drift run: 111 bins, z = 7.09, cutoff z0 = 1.00, passes: False
-pyalps.checkSteadyState: z = 7.09, z0 = 0.41, passes: False
+drift run: 124 bins, z = 8.45, cutoff z0 = 1.00, passes: False
+pyalps.checkSteadyState: z = 8.45, z0 = 1.00, passes: False
 ```
 
-The hand-computed $z$ agrees with the library's.
-The library printed $z_0 = 0.41$ because this run used pyalps 3.0.0; with the ALPS master branch it prints $z_0 = 1.00$, and the run fails either way.
+The hand-computed $z$ and $z_0$ agree with the library's.
+With pyalps 3.0.0 the library prints $z_0 = 0.41$ instead (see the note at the end), and the run fails as well.
 
 ![](/figs/mc01c_spinmc_drift.png)
 
 `spinmc` starts with all spins up, and the magnetization first relaxes from 1 to about 0.6 within a few hundred sweeps.
-After that it keeps wandering slowly between about 0.45 and 0.75: at $T_c$ the autocorrelation time of local updates on a $128 \times 128$ lattice is far longer than this run.
+After that it keeps wandering slowly between about 0.35 and 0.75: at $T_c$ the autocorrelation time of local updates on a $128 \times 128$ lattice is far longer than this run.
 The test is right to fail: on the time scale of this run, the magnetization is not in a steady state, whether one calls the slow wandering the end of the initial relaxation or critical slowing down.
 
 ### Many equilibrated runs
@@ -332,14 +332,14 @@ for update in ['local', 'cluster']:
 ```
 
 ```
-local   updates: 100 runs, fraction passing at c = 0.6827: 0.43 (expected 0.68)
-cluster updates: 100 runs, fraction passing at c = 0.6827: 0.64 (expected 0.68)
+local   updates: 100 runs, fraction passing at c = 0.6827: 0.41 (expected 0.68)
+cluster updates: 100 runs, fraction passing at c = 0.6827: 0.72 (expected 0.68)
 ```
 
 | Update | Runs | Fraction passing at $c = 0.6827$ | Expected for independent bins |
 |---|---|---|---|
-| local | 100 | 0.43 | 0.68 |
-| cluster | 100 | 0.64 | 0.68 |
+| local | 100 | 0.41 | 0.68 |
+| cluster | 100 | 0.72 | 0.68 |
 
 With 100 runs the fractions carry a statistical uncertainty of about $\pm 0.05$.
 The cluster-update runs pass at the nominal rate, and their values of $z$ follow the distribution of $|Z|$ for a standard normal $Z$.
@@ -382,18 +382,18 @@ z_rest = np.array([steady_state_z(ts[1:])[2] for ts in series])
 In our run this printed:
 
 ```
-runs without thermalization: z = 1.0 2.2 1.8 1.9 0.9 1.7 1.9 1.2 2.1 1.8
-the same runs without the first bin: z = 1.3 1.8 0.7 0.8 1.5 0.3 0.9 0.7 1.4 0.6
-fraction passing at c = 0.6827 (z0 = 1.00): 0.1 with the first bin, 0.6 without
-fraction passing at c = 0.95 (z0 = 1.96): 0.8 with the first bin, 1.0 without
+runs without thermalization: z = 1.6 2.1 1.8 2.5 1.2 2.1 1.8 1.8 2.1 1.4
+the same runs without the first bin: z = 0.3 1.4 0.3 3.1 1.6 1.8 0.4 0.4 1.5 0.6
+fraction passing at c = 0.6827 (z0 = 1.00): 0.0 with the first bin, 0.5 without
+fraction passing at c = 0.95 (z0 = 1.96): 0.6 with the first bin, 0.9 without
 ```
 
 ![](/figs/mc01c_sse_transient.png)
 
-The energy relaxes within the first bin of 64 sweeps, while the operator string grows from its empty initial state.
-That first bin lies about 75 above the equilibrium energy, some fifteen times the scatter of the later bins, yet the run plotted here has $z = 1.0$ and passes the default test.
+The energy relaxes within the first bin of 16 sweeps, while the operator string grows from its empty initial state.
+That first bin lies about 300 above the equilibrium energy, some forty times the scatter of the later bins, yet the run plotted here has only $z = 1.6$: it fails the default test narrowly and passes at $c = 0.95$.
 A single outlying point at the start produces a slope of only modest significance, and it also raises the standard deviation $s$ that the slope is divided by.
-At $c = 0.6827$ most of these runs fail, but only by a small margin, and at $c = 0.95$ eight of the ten pass.
+At $c = 0.6827$ all ten runs fail, most of them narrowly, and at $c = 0.95$ six of the ten pass.
 The test is built to detect a linear trend over the whole series; a transient confined to the first bins is better found by looking at the time series, or simply avoided by thermalizing for a few hundred sweeps.
 
 ### Many equilibrated runs
@@ -406,7 +406,7 @@ With 1000 sweeps of thermalization, 100 repeated runs give:
 
 ![](/figs/mc01c_sse_z.png)
 
-Here each bin averages 128 sweeps, far longer than the autocorrelation time of the SSE energy, so the bins are nearly independent and the test passes at its nominal rate, as for the cluster-update Ising runs.
+Here each bin averages 32 sweeps, already longer than the autocorrelation time of the SSE energy, so the bins are nearly independent and the test passes at its nominal rate, as for the cluster-update Ising runs.
 
 ## pyalps 3.0.0
 
@@ -426,7 +426,7 @@ for name in dir(np):
         setattr(scipy, name, getattr(np, name))
 ```
 
-The results on this page were produced with pyalps 3.0.0, in which a run can take more than `SWEEPS` measurements until the scheduler's next check (see `Tmin` in [MC-01b](../mc01b)); in the ALPS master branch a run takes exactly `SWEEPS`.
+The results on this page were produced with the ALPS master branch, in which a run takes exactly `SWEEPS` measurements. With pyalps 3.0.0 a run keeps measuring until the scheduler's next check (see `Tmin` in [MC-01b](../mc01b)), so it can take more.
 This changes the number of bins, not the behavior of the test.
 {{< /callout >}}
 
