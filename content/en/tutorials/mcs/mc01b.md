@@ -267,7 +267,7 @@ plt.show()
 No initial transient is visible, for three reasons:
 
 - Measurements only start after the thermalization phase, so the first 100 sweeps never appear in the time series.
-- Each point is the mean over a bin of 1024 sweeps (see *How the time series is stored* above), so anything that happens within the first thousand sweeps is averaged into the first point.
+- In our run, made with ALPS 3.0.0, each point is the mean over a bin of 1024 sweeps (see *How the time series is stored* above), so anything that happens within the first thousand sweeps is averaged into the first point. On the ALPS master branch, which stops after exactly 50000 sweeps, the bins hold 512 sweeps, and the first thousand sweeps fall into the first two points.
 - `spinmc` starts with all spins up. At $T_c$ the magnetization relaxes from that state within roughly the first thousand sweeps (see the figure in question 2), which again falls inside the first point.
 
 The deep dips are not a transient either: they are the slow critical fluctuations of local updates at $T_c$ (critical slowing down, see [MC-01a](../mc01a)).
