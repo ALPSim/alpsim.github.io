@@ -3,7 +3,7 @@
 title: MC-09 量子蒙特卡洛
 math: true
 toc: true
-weight: 11
+weight: 12
 ---
 
 ```

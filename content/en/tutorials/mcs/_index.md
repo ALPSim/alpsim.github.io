@@ -22,11 +22,12 @@ The guide below compares the four QMC representations available in ALPS — `loo
 ## Classical Monte Carlo (`spinmc`)
 
 The `spinmc` application implements classical Monte Carlo with local Metropolis updates and cluster updates for classical spin models.
-The first two tutorials introduce the most important diagnostics for any MC run — autocorrelation time and equilibration — laying the groundwork for all subsequent work.
+The first three tutorials introduce the most important diagnostics for any MC run — autocorrelation time, equilibration, and the steady-state test, which MC-01(c) also applies to the directed-loop QMC code — laying the groundwork for all subsequent work.
 The method is revisited later to study finite-size scaling and the second-order phase transition of the 2D Ising model.
 
 - [MC-01(a) Classical Monte Carlo simulations and autocorrelations](mc01a)
 - [MC-01(b) Classical Monte Carlo simulations and equilibration/convergence](mc01b)
+- [MC-01(c) The steady-state test in classical and quantum Monte Carlo](mc01c)
 - [MC-07 Phase transition in the Ising model](mc07)
 
 ## Loop and Directed-Loop QMC (`looper`, `dirloop_sse`)

@@ -656,6 +656,15 @@
       ]
     },
     {
+      "name": "tutorial mc-01c",
+      "sources": [
+        "tutorials/mc-01c-steady-state/**"
+      ],
+      "pages": [
+        "tutorials/mcs/mc01c.md"
+      ]
+    },
+    {
       "name": "tutorial mc-02",
       "sources": [
         "tutorials/mc-02-susceptibilities/**"
